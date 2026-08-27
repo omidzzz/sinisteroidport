@@ -1,0 +1,211 @@
+[
+  {
+    "category": "Frontend Development",
+    "skills": [
+      {
+        "name": "REST APIs",
+        "level": 4
+      },
+      {
+        "name": "HTML5",
+        "level": 4
+      },
+      {
+        "name": "React",
+        "level": 3
+      },
+      {
+        "name": "JavaScript",
+        "level": 3
+      },
+      {
+        "name": "TypeScript",
+        "level": 3
+      },
+      {
+        "name": "Vue.js",
+        "level": 2
+      },
+      {
+        "name": "Angular",
+        "level": 2
+      },
+      {
+        "name": "Redux",
+        "level": 2
+      },
+      {
+        "name": "Gatsby",
+        "level": 2
+      },
+      {
+        "name": "Vite",
+        "level": 1
+      },
+      {
+        "name": "GraphQL",
+        "level": 1
+      }
+    ]
+  },
+  {
+    "category": "Backend Development",
+    "skills": [
+      {
+        "name": "PHP",
+        "level": 2
+      },
+      {
+        "name": "Python",
+        "level": 1
+      },
+      {
+        "name": "Rust",
+        "level": 1
+      },
+      {
+        "name": "Node.js",
+        "level": 1
+      },
+      {
+        "name": "Express.js",
+        "level": 1
+      }
+    ]
+  },
+  {
+    "category": "Styling",
+    "skills": [
+      {
+        "name": "TailwindCSS",
+        "level": 4
+      },
+      {
+        "name": "CSS3/Sass",
+        "level": 3
+      },
+      {
+        "name": "Bootstrap",
+        "level": 3
+      },
+      {
+        "name": "Bulma",
+        "level": 3
+      },
+      {
+        "name": "Semantic UI",
+        "level": 3
+      },
+      {
+        "name": "Material-UI",
+        "level": 2
+      },
+      {
+        "name": "styled-components",
+        "level": 2
+      }
+    ]
+  },
+  {
+    "category": "CMS",
+    "skills": [
+      {
+        "name": "WordPress",
+        "level": 4
+      },
+      {
+        "name": "Elementor Pro",
+        "level": 4
+      },
+      {
+        "name": "WooCommerce",
+        "level": 3
+      },
+      {
+        "name": "Rank Math",
+        "level": 3
+      }
+    ]
+  },
+  {
+    "category": "Database Expertise",
+    "skills": [
+      {
+        "name": "MySQL",
+        "level": 3
+      },
+      {
+        "name": "MariaDB",
+        "level": 3
+      },
+      {
+        "name": "MongoDB",
+        "level": 3
+      },
+      {
+        "name": "Firebase",
+        "level": 2
+      }
+    ]
+  },
+  {
+    "category": "Tools & Workflow",
+    "skills": [
+      {
+        "name": "ESLint + Prettier",
+        "level": 3
+      },
+      {
+        "name": "Git/GitHub",
+        "level": 2
+      }
+    ]
+  },
+  {
+    "category": "AI Prompting",
+    "skills": [
+      {
+        "name": "Software Development",
+        "level": 4
+      },
+      {
+        "name": "Content Creation",
+        "level": 4
+      },
+      {
+        "name": "Creative Problem-Solving",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "category": "Media Editing",
+    "skills": [
+      {
+        "name": "Adobe Photoshop (Editing)",
+        "level": 3
+      },
+      {
+        "name": "Adobe Illustrator (Vector Editing)",
+        "level": 2
+      },
+      {
+        "name": "SVG Code Editing",
+        "level": 2
+      }
+    ]
+  },
+  {
+    "category": "Social Skills",
+    "skills": [
+      {
+        "name": "Brainstorming / Ideation",
+        "level": 4
+      },
+      {
+        "name": "Adaptability",
+        "level": 4
+      }
+    ]
+  }
+]

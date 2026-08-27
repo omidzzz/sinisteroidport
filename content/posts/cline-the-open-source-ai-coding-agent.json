@@ -1,0 +1,754 @@
+{
+  "slug": "cline-the-open-source-ai-coding-agent",
+  "title": "Cline: The Open-Source AI Coding Agent Redefining Developer Workflows",
+  "date": "2026-06-19 21:00:00",
+  "tags": [
+    "cline",
+    "ai-coding-assistant",
+    "local-llm",
+    "vs-code-extension",
+    "agentic-ai",
+    "open-source-ai",
+    "developer-tools",
+    "llm-integration",
+    "ai-engineering",
+    "productivity-tools"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/1781891974-cline-ai-coding-agent-cover.webp",
+    "alt": {
+      "en": "Cline: Open-Source AI Coding Agent in Action",
+      "fa": "کلاین: عامل هوش مصنوعی متن‌باز کدنویسی در عمل"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "Cline: The Open-Source AI Coding Agent Redefining Developer Workflows",
+      "excerpt": "Cline brings autonomous, context-aware AI coding directly into VS Code and your terminal. Explore its architecture, Plan/Act modes, local LLM integration with Ollama, and why it stands out in the 2026 AI developer tooling landscape.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What Cline Actually Is"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline is an open-source AI coding agent that operates as a VS Code extension, CLI tool, and embeddable SDK. Unlike traditional autocomplete tools or simple chat interfaces, Cline functions as a true collaborative agent: it reads your entire project context, plans multi-step tasks, executes file edits, runs terminal commands, browses the web when needed, and iterates based on feedback — all with explicit human-in-the-loop approval."
+        },
+        {
+          "type": "paragraph",
+          "text": "Built as a model-agnostic platform, Cline supports everything from frontier cloud models (Claude, GPT, Gemini) to fully local inference via Ollama or LM Studio. This flexibility makes it one of the most versatile tools for developers who want both cutting-edge capability and complete data privacy."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Open-source (Apache 2.0) AI coding agent",
+            "Native VS Code extension with deep IDE integration",
+            "CLI for terminal and scripting workflows",
+            "SDK for embedding in custom tools and products",
+            "Full support for local models via Ollama and LM Studio"
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1781892109-cline-vs-code-screenshot.webp",
+          "alt": "Cline interface in VS Code showing Plan mode",
+          "caption": "Cline in action within VS Code — Plan and Act modes visible"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Why Agentic Coding Tools Matter in 2026"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The evolution from code completion (Copilot-style) to full agentic workflows represents a fundamental shift in developer productivity. Cline excels here by combining persistent project memory, multi-file editing with linter awareness, version checkpoints, and one-click undo — turning vague prompts into production-ready implementations."
+        },
+        {
+          "type": "paragraph",
+          "text": "In an era of increasingly complex codebases, tools like Cline reduce context-switching and boilerplate work, allowing engineers to focus on architecture and problem-solving. Its open-source nature and local-first capabilities address growing concerns around vendor lock-in, data privacy, and API costs."
+        },
+        {
+          "type": "highlight",
+          "label": "KEY ADVANTAGE",
+          "text": "Cline doesn't just write code — it understands your project's structure, coding standards, and iterates autonomously while keeping you in control."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Evolution of AI Coding Tools"
+        },
+        {
+          "type": "paragraph",
+          "text": "To understand Cline's significance, it helps to see where we've been. The first generation of AI coding tools were essentially autocomplete on steroids — they predicted the next token based on patterns, useful but limited. The second generation introduced chat interfaces, letting developers ask questions and get code snippets. Cline represents the third generation: autonomous agents that can plan, execute, and iterate."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "Generation 1: Autocomplete and inline suggestions (Copilot, TabNine)",
+            "Generation 2: Chat-based assistants (ChatGPT, Claude in IDE)",
+            "Generation 3: Autonomous agents with tool use (Cline, Devika, OpenHands)"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Explore Modern Frontend Design Techniques",
+          "text": "Learn how modern frontend design has evolved from static pages to interactive applications.",
+          "buttonText": "Read the Article",
+          "buttonUrl": "/blog/modern-frontend-design-techniques"
+        },
+        {
+          "type": "quote",
+          "text": "The best developer tools don't just automate tasks — they amplify human capability while preserving human judgment.",
+          "author": "Software Engineering Philosophy"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Architecture: How Cline Works"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "At its core, Cline uses a Plan/Act cycle. In Plan mode, the agent analyzes the task, breaks it down into steps, and proposes a strategy. Once approved, it moves to Act mode to implement changes. This separation prevents hallucinated actions and improves reliability on complex tasks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline maintains rich context through project indexing, file relationships, and conversation history. It can execute shell commands, read/write files with precise diffs, handle git operations, and even use browser tools for research. The MCP (Model Context Protocol) integration allows extending capabilities with custom tools and plugins."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "8M+",
+              "label": "Developers worldwide"
+            },
+            {
+              "value": "250+",
+              "label": "Model contributors"
+            },
+            {
+              "value": "100%",
+              "label": "Local model support"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Plan/Act modes for structured reasoning",
+            "Deep filesystem and terminal access with approval gates",
+            "Persistent memory and project-aware context",
+            "Linter-aware multi-file edits with checkpoints",
+            "MCP for custom tool extensions"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Plan Mode vs Act Mode: Understanding the Workflow"
+        },
+        {
+          "type": "paragraph",
+          "text": "The Plan/Act distinction is more than a UI pattern — it's a fundamental architectural decision that dramatically improves reliability. In Plan mode, Cline thinks before it acts. It analyzes your codebase, identifies dependencies, considers edge cases, and presents a clear roadmap. This gives you, the developer, a chance to course-correct before any changes are made."
+        },
+        {
+          "type": "paragraph",
+          "text": "Act mode is where execution happens. Cline implements the plan step-by-step, showing you each change before applying it. It runs tests, checks for linting errors, and validates that its changes don't break existing functionality. If something goes wrong, you can roll back to any checkpoint with a single click."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "info",
+          "title": "How It Works",
+          "text": "Think of Plan mode as an architect drawing blueprints, and Act mode as the construction team building according to those plans. You review the blueprints before breaking ground."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Integration with Local LLMs and Ollama"
+        },
+        {
+          "type": "cta",
+          "title": "Discover Ollama: The Engine Behind Local AI",
+          "text": "Learn how to set up and use Ollama for private, offline AI development with Cline.",
+          "buttonText": "Read the Guide",
+          "buttonUrl": "/blog/ollama-the-engine-behind-local-ai"
+        },
+        {
+          "type": "paragraph",
+          "text": "Setup is straightforward: install Ollama, pull a model like Qwen2.5-Coder or DeepSeek-Coder, then configure Cline to use the local endpoint. This combination delivers a completely offline, high-performance coding agent. Performance scales with hardware — Apple Silicon users benefit from unified memory, while GPU users see significant speedups through layer offloading."
+        },
+        {
+          "type": "paragraph",
+          "text": "The local-first approach isn't just about privacy — it's about reliability and cost. Cloud APIs can go down, rate-limit you, or charge you per token. A local model runs at your pace, on your hardware, with no external dependencies. For teams working on sensitive codebases or iterating rapidly on prompt design, this independence is invaluable."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "Pro Tip",
+          "text": "For coding tasks, specialized models like coding variants of Qwen or DeepSeek often outperform general-purpose models in Cline. Check out our guide on choosing the right model for the job to learn more about model selection strategies."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Practical Use Cases and Workflows"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline shines in real-world scenarios: large-scale refactoring, implementing new features from specs, debugging complex issues, generating tests, and even full application scaffolding. Developers report dramatic productivity gains when using it for boilerplate-heavy or exploratory coding."
+        },
+        {
+          "type": "paragraph",
+          "text": "Consider a typical refactoring task: updating a legacy authentication system to use modern JWT patterns. This might involve touching dozens of files across multiple directories, updating type definitions, modifying API endpoints, and ensuring backward compatibility. A human developer might spend hours navigating the codebase, understanding dependencies, and making careful edits. Cline can plan the entire transformation, execute it file by file, run tests after each change, and present you with a complete diff for review."
+        },
+        {
+          "type": "quote",
+          "text": "Cline turned a five-hour manual refactoring task into a 30-minute guided session where I stayed in the driver’s seat.",
+          "author": "AI Engineering Practitioner"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Large-scale refactoring with dependency awareness",
+            "Feature implementation from specification documents",
+            "Automated test generation and coverage improvement",
+            "Bug investigation across multiple files and modules",
+            "Documentation generation from code analysis"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Human-in-the-Loop Advantage"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "What sets Cline apart from fully autonomous coding agents is its commitment to human oversight. Every significant action requires your approval. This isn't a limitation — it's a feature. In a world where AI tools increasingly make decisions without human input, Cline's approach ensures you remain the architect while the AI handles the implementation details."
+        },
+        {
+          "type": "cta",
+          "title": "Read: Design Without Words is Decoration",
+          "text": "Explore the philosophy that form without function is just decoration.",
+          "buttonText": "Read the Article",
+          "buttonUrl": "/blog/design-without-words-is-decoration"
+        },
+        {
+          "type": "cta",
+          "title": "Ready to Try Cline?",
+          "text": "Install the VS Code extension and connect it to your local Ollama setup for private, powerful AI coding.",
+          "buttonText": "Get Started with Cline",
+          "buttonUrl": "https://cline.bot/"
+        },
+        {
+          "type": "code",
+          "code": "// Example: Prompt Cline to implement a feature\n// Cline will plan, edit multiple files, run tests, and iterate\n\n// 1. Describe your goal in plain language\n// 2. Review the proposed plan in Plan mode\n// 3. Approve to enter Act mode\n// 4. Review each change as it's applied\n// 5. Roll back if needed using checkpoints"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Choosing the Right Model for Cline"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Model selection is critical. For speed and cost, smaller local models work well for routine tasks. For complex reasoning, frontier models via API or larger local quantizations deliver better results. Cline's flexibility lets you switch providers mid-task."
+        },
+        {
+          "type": "paragraph",
+          "text": "The model you choose should match the task at hand. Simple refactoring, boilerplate generation, and documentation tasks can run efficiently on smaller models like Qwen2.5-Coder-7B or DeepSeek-Coder-6.7B. Complex architectural decisions, algorithm design, and debugging intricate issues benefit from larger models like Claude 3.5 Sonnet or GPT-4o via API, or their local equivalents at higher quantization levels."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Local (Ollama): Privacy, zero cost, offline capability",
+            "Cloud (Claude/GPT): Superior reasoning on hard problems",
+            "Hybrid: Use small local model for routine tasks, large models for complex steps"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Security, Operational Considerations, and Best Practices"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "While local deployment minimizes external risks, treat Cline like any powerful tool. Review changes carefully, especially when granting terminal or filesystem access. Use checkpoints and git integration for safety."
+        },
+        {
+          "type": "paragraph",
+          "text": "The approval gates Cline provides are your first line of defense, but they work best when combined with good operational practices. Always review diffs before applying changes, especially for security-sensitive code. Combine Cline with git for easy rollbacks — each checkpoint creates a natural commit point. Monitor resource usage when running multiple large models concurrently, as memory pressure can affect performance."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Always review diffs before applying changes",
+            "Combine with git for easy rollbacks",
+            "Monitor resource usage with multiple large models",
+            "Use local models for sensitive codebases",
+            "Set appropriate approval gates for terminal commands"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Business Case for Agentic Coding"
+        },
+        {
+          "type": "paragraph",
+          "text": "Beyond individual productivity, Cline represents a shift in how teams approach software development. The cumulative time saved across a team — reduced boilerplate, faster onboarding, consistent code quality — translates to significant business value. But the real advantage is cognitive: developers spend less mental energy on routine tasks and more on creative problem-solving."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "5x",
+              "label": "Faster refactoring cycles"
+            },
+            {
+              "value": "60%",
+              "label": "Reduced boilerplate work"
+            },
+            {
+              "value": "3x",
+              "label": "Faster new developer onboarding"
+            }
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Explore Modern Frontend Design Techniques",
+          "text": "Learn how modern frontend design emphasizes component reusability and design systems.",
+          "buttonText": "Read the Article",
+          "buttonUrl": "/blog/modern-frontend-design-techniques"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Conclusion: The Future of Coding is Agentic and Open"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline represents the maturation of AI coding tools — open, flexible, and deeply integrated into developer environments. Whether you're running fully local with Ollama or leveraging the best cloud models, it empowers a new level of productivity without sacrificing control or privacy."
+        },
+        {
+          "type": "paragraph",
+          "text": "As the ecosystem evolves, tools like Cline that prioritize openness and local-first design will define the next generation of software development. The teams that adopt these tools early won't just be faster — they'll have better code, better documentation, and better developer experience. That's the real competitive advantage."
+        }
+      ],
+      "faq": [
+        {
+          "question": "What is Cline AI?",
+          "answer": "Cline is an open-source autonomous coding agent available as a VS Code extension, CLI, and SDK. It supports Plan/Act workflows and works with any LLM, including local models via Ollama."
+        },
+        {
+          "question": "Does Cline work with local LLMs?",
+          "answer": "Yes. It integrates natively with Ollama and LM Studio for fully private, offline AI coding."
+        },
+        {
+          "question": "How does Cline compare to Cursor or GitHub Copilot?",
+          "answer": "Cline offers more agentic capabilities (file editing, terminal execution, planning) and superior openness/local support compared to many commercial alternatives."
+        },
+        {
+          "question": "Is Cline free?",
+          "answer": "Yes, the core is open-source and free. Cloud model usage may incur API costs depending on your provider."
+        },
+        {
+          "question": "What models work best with Cline?",
+          "answer": "For coding tasks, specialized models like Qwen2.5-Coder or DeepSeek-Coder often outperform general-purpose models. For complex reasoning, Claude or GPT-4 via API deliver excellent results."
+        }
+      ],
+      "seo": {
+        "title": "Cline: Open-Source AI Coding Agent for VS Code & Local LLMs | 2026 Guide",
+        "metaDescription": "Deep dive into Cline — the powerful open-source AI coding agent. Learn about its Plan/Act modes, Ollama integration, architecture, use cases, and why it's a game-changer for developers.",
+        "canonical": "https://sinisteroid.ir/blog/cline-the-open-source-ai-coding-agent",
+        "openGraph": {
+          "title": "Cline: The Open-Source AI Coding Agent",
+          "description": "Transform your coding workflow with Cline — agentic AI that plans, acts, and integrates with local models like Ollama.",
+          "image": "./cline-ai-coding-agent-cover.webp"
+        },
+        "twitter": {
+          "title": "Cline AI Coding Agent",
+          "description": "Open-source, local-first AI for VS Code. The future of agentic coding is here.",
+          "image": "./cline-ai-coding-agent-cover.webp"
+        },
+        "focusKeyword": "Cline AI",
+        "keywords": "Cline, AI coding assistant, VS Code AI, local LLM coding, Ollama Cline, agentic AI, open source coding agent"
+      }
+    },
+    "fa": {
+      "title": "کلاین: عامل هوش مصنوعی متن‌باز کدنویسی که جریان کاری توسعه‌دهندگان را بازتعریف می‌کند",
+      "excerpt": "کلاین عامل هوش مصنوعی خودکار و آگاه از context را مستقیماً به VS Code و ترمینال شما می‌آورد. معماری، حالت‌های Plan/Act، یکپارچه‌سازی با مدل‌های محلی Ollama و دلایل برتری آن در اکوسیستم ابزارهای توسعه هوش مصنوعی سال ۲۰۲۶ را بررسی کنید.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کلاین واقعاً چیست؟"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کلاین یک عامل هوش مصنوعی کدنویسی متن‌باز است که به صورت افزونه VS Code، ابزار CLI و SDK قابل جاسازی عمل می‌کند. برخلاف ابزارهای تکمیل خودکار سنتی یا رابط‌های چت ساده، کلاین به عنوان یک همکار واقعی عمل می‌کند: کل پروژه را می‌خواند، وظایف چندمرحله‌ای را برنامه‌ریزی می‌کند، ویرایش فایل انجام می‌دهد، دستورات ترمینال اجرا می‌کند و بر اساس بازخورد تکرار می‌کند — همه با تأیید صریح انسان."
+        },
+        {
+          "type": "paragraph",
+          "text": "به عنوان پلتفرمی مستقل از مدل ساخته شده، کلاین از مدل‌های ابری پیشرفته تا inference کاملاً محلی از طریق Ollama یا LM Studio پشتیبانی می‌کند. این انعطاف‌پذیری آن را به یکی از همه‌کاره‌ترین ابزارها برای توسعه‌دهندگانی تبدیل کرده که هم قابلیت پیشرفته و هم حریم خصوصی کامل می‌خواهند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "عامل هوش مصنوعی کدنویسی متن‌باز (Apache 2.0)",
+            "افزونه بومی VS Code با یکپارچه‌سازی عمیق",
+            "CLI برای جریان‌های کاری ترمینال و اسکریپت",
+            "SDK برای جاسازی در ابزارها و محصولات سفارشی",
+            "پشتیبانی کامل از مدل‌های محلی از طریق Ollama و LM Studio"
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1781892242-cline-vs-code-screenshot.webp",
+          "alt": "رابط کلاین در VS Code با حالت Plan",
+          "caption": "کلاین در حال اجرا در VS Code — حالت‌های Plan و Act قابل مشاهده"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چرا ابزارهای کدنویسی agentic در سال ۲۰۲۶ اهمیت دارند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "تکامل از تکمیل کد به جریان‌های کاری agentic کامل، تغییری اساسی در بهره‌وری توسعه‌دهندگان ایجاد کرده است. کلاین در این زمینه برتر است زیرا حافظه مداوم پروژه، ویرایش چندفایلی آگاه از linter، نقاط بازبینی و undo یک‌کلیکی را ترکیب می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "در عصر کدبیس‌های پیچیده‌تر و پیچیده‌تر، ابزارهایی مانند کلاین تعویض context و کارهای تکراری را کاهش می‌دهند و به مهندسان اجازه می‌دهند بر معماری و حل مسئله تمرکز کنند. طبیعت متن‌باز و قابلیت‌های محلی-اول آن نگرانی‌های فزاینده در مورد قفل شدن فروشنده، حریم خصوصی داده و هزینه‌های API را پاسخ می‌دهد."
+        },
+        {
+          "type": "highlight",
+          "label": "مزیت کلیدی",
+          "text": "کلاین فقط کد نمی‌نویسد — ساختار پروژه، استانداردهای کدنویسی شما را درک می‌کند و به صورت خودکار تکرار می‌کند در حالی که کنترل را به شما می‌دهد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "تکامل ابزارهای کدنویسی هوش مصنوعی"
+        },
+        {
+          "type": "paragraph",
+          "text": "برای درک اهمیت کلاین، مفید است به مسیری که در آن بوده‌ایم نگاه کنیم. نسل اول ابزارهای کدنویسی هوش مصنوعی اساساً تکمیل خودکار با استروئید بودند — توکن بعدی را بر اساس الگوها پیش‌بینی می‌کردند، مفید اما محدود. نسل دوم رابط‌های چت را معرفی کرد و به توسعه‌دهندگان اجازه داد سوال بپرسند و قطعات کد دریافت کنند. کلاین نماینده نسل سوم است: عوامل خودمختار که می‌توانند برنامه‌ریزی، اجرا و تکرار کنند."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "نسل ۱: تکمیل خودکار و پیشنهادات درون‌خطی (Copilot، TabNine)",
+            "نسل ۲: دستیاران مبتنی بر چت (ChatGPT، Claude در IDE)",
+            "نسل ۳: عوامل خودمختار با استفاده از ابزار (Cline، Devika، OpenHands)"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "کشف تکنیک‌های مدرن در طراحی فرانت‌اند",
+          "text": "یاد بگیرید چگونه طراحی فرانت‌اند از صفحات ایستا به اپلیکیشن‌های تعاملی تکامل یافته است.",
+          "buttonText": "خواندن مقاله",
+          "buttonUrl": "/blog/modern-frontend-design-techniques"
+        },
+        {
+          "type": "quote",
+          "text": "بهترین ابزارهای توسعه فقط وظایف را اتوماتیک نمی‌کنند — آن‌ها قابلیت انسانی را تقویت می‌کنند در حالی که قضاوت انسانی را حفظ می‌کنند.",
+          "author": "فلسفه مهندسی نرم‌افزار"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "معماری: کلاین چگونه کار می‌کند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "در هسته، کلاین از چرخه Plan/Act استفاده می‌کند. در حالت Plan، عامل وظیفه را تحلیل می‌کند، به گام‌ها تقسیم می‌کند و استراتژی پیشنهاد می‌دهد. پس از تأیید، به حالت Act می‌رود تا تغییرات را پیاده کند. این تفکیک از اقدامات توهم‌آلود جلوگیری می‌کند و قابلیت اطمینان را در وظایف پیچیده بهبود می‌بخشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "کلاین context غنی را از طریق ایندکس پروژه، روابط فایل و تاریخچه گفتگو حفظ می‌کند. می‌تواند دستورات shell را اجرا کند، فایل‌ها را با diffهای دقیق بخواند/بنویسد، عملیات git را مدیریت کند و حتی برای تحقیق از ابزارهای مرورگر استفاده کند. یکپارچه‌سازی MCP (Model Context Protocol) امکان گسترش قابلیت‌ها با ابزارها و پلاگین‌های سفارشی را فراهم می‌کند."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۸ میلیون+",
+              "label": "توسعه‌دهنده در جهان"
+            },
+            {
+              "value": "۲۵۰+",
+              "label": "مشارکت‌کننده مدل"
+            },
+            {
+              "value": "۱۰۰٪",
+              "label": "پشتیبانی از مدل محلی"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "حالت‌های Plan/Act برای استدلال ساختاریافته",
+            "دسترسی عمیق به filesystem و ترمینال با دروازه‌های تأیید",
+            "حافظه مداوم و context آگاه از پروژه",
+            "ویرایش‌های چندفایلی آگاه از linter با نقاط بازبینی",
+            "MCP برای گسترش ابزارهای سفارشی"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "حالت Plan در مقابل Act: درک جریان کاری"
+        },
+        {
+          "type": "paragraph",
+          "text": "تمایز Plan/Act بیشتر از یک الگوی UI است — یک تصمیم معماری بنیادی است که قابلیت اطمینان را به طور چشمگیری بهبود می‌بخشد. در حالت Plan، کلاین قبل از عمل فکر می‌کند. کدبیس شما را تحلیل می‌کند، وابستگی‌ها را شناسایی می‌کند، موارد لبه را در نظر می‌گیرد و یک نقشه راه واضح ارائه می‌دهد. این به شما، توسعه‌دهنده، فرصت می‌دهد قبل از ایجاد هر تغییری، مسیر را تصحیح کنید."
+        },
+        {
+          "type": "paragraph",
+          "text": "حالت Act جایی است که اجرا اتفاق می‌افتد. کلاین طرح را گام به گام پیاده می‌کند و هر تغییر را قبل از اعمال به شما نشان می‌دهد. تست‌ها را اجرا می‌کند، خطاهای linting را بررسی می‌کند و اعتبارسنجی می‌کند که تغییراتش کارکرد موجود را نشکنند. اگر چیزی اشتباه رفت، می‌توانید به هر نقطه بازبینی با یک کلیک بازگردید."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "info",
+          "title": "نحوه کار",
+          "text": "حالت Plan را به عنوان معمار که نقشه‌های ساختمان می‌کند و حالت Act را به عنوان تیم ساخت و ساز که طبق آن نقشه‌ها می‌سازد، در نظر بگیرید. شما قبل از شکستن زمین، نقشه‌ها را بررسی می‌کنید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "یکپارچه‌سازی با مدل‌های محلی و Ollama"
+        },
+        {
+          "type": "cta",
+          "title": "کشف Ollama: موتور پشت هوش مصنوعی محلی",
+          "text": "یاد بگیرید چگونه Ollama را برای توسعه هوش مصنوعی خصوصی و آفلاین با کلاین تنظیم کنید.",
+          "buttonText": "خواندن راهنما",
+          "buttonUrl": "/blog/ollama-the-engine-behind-local-ai"
+        },
+        {
+          "type": "paragraph",
+          "text": "راه‌اندازی ساده است: Ollama را نصب کنید، مدلی مانند Qwen2.5-Coder یا DeepSeek-Coder را دانلود کنید، سپس کلاین را برای استفاده از endpoint محلی پیکربندی کنید. این ترکیب یک عامل کدنویسی کاملاً آفلاین و با عملکرد بالا ارائه می‌دهد. عملکرد با سخت‌افزار مقیاس می‌شود — کاربران Apple Silicon از حافظه یکپارچه بهره می‌برند، در حالی که کاربران GPU افزایش‌های سرعت قابل توجهی از طریق انتقال لایه مشاهده می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "رویکرد محلی-اول فقط در مورد حریم خصوصی نیست — در مورد قابلیت اطمینان و هزینه است. APIهای ابری می‌توانند از کار بیفتند، نرخ تحمیل شما را محدود کنند یا به ازای هر توکن هزینه بگیرند. یک مدل محلی با سرعت شما، روی سخت‌افزار شما و بدون وابستگی خارجی اجرا می‌شود. برای تیم‌هایی که روی کدبیس‌های حساس کار می‌کنند یا به سرعت در حال تکرار روی طراحی prompt هستند، این استقلال بی‌قیمت است."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "نکته حرفه‌ای",
+          "text": "برای وظایف کدنویسی، مدل‌های تخصصی مانند نسخه‌های coding Qwen یا DeepSeek اغلب عملکرد بهتری در کلاین دارند. برای یادگیری بیشتر در مورد استراتژی‌های انتخاب مدل، به راهنمای ما در مورد انتخاب مدل مناسب برای کار مراجعه کنید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "موارد استفاده عملی و جریان‌های کاری"
+        },
+        {
+          "type": "paragraph",
+          "text": "کلاین در سناریوهای واقعی درخشان است: بازنویسی در مقیاس بزرگ، پیاده‌سازی ویژگی‌های جدید از مشخصات، رفع اشکال مسائل پیچیده، تولید تست و حتی اسکافولدینگ کامل اپلیکیشن. توسعه‌دهندگان از افزایش‌های چشمگیر بهره‌وری هنگام استفاده از آن برای کارهای پر از boilerplate یا کدنویسی اکتشافی گزارش می‌دهند."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک وظیفه بازنویسی معمولی را در نظر بگیرید: به‌روزرسانی یک سیستم احراز هویت قدیمی برای استفاده از الگوهای JWT مدرن. این ممکن است شامل لمس ده‌ها فایل در چندین دایرکتوری، به‌روزرسانی تعاریف نوع، تغییر endpoints API و اطمینان از سازگاری عقب باشد. یک توسعه‌دهنده انسانی ممکن است ساعت‌ها صرف پیمایش کدبیس، درک وابستگی‌ها و ایجاد ویرایش‌های دقیق کند. کلاین می‌تواند کل تبدیل را برنامه‌ریزی کند، آن را فایل به فایل پیاده کند، بعد از هر تغییر تست را اجرا کند و یک diff کامل برای بررسی به شما ارائه دهد."
+        },
+        {
+          "type": "quote",
+          "text": "کلاین یک وظیفه بازنویسی دستی پنج ساعته را به جلسه‌ای ۳۰ دقیقه‌ای تبدیل کرد که من در صندلی راننده بودم.",
+          "author": "کارشناس مهندسی هوش مصنوعی"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "بازنویسی در مقیاس بزرگ با آگاهی از وابستگی",
+            "پیاده‌سازی ویژگی از اسناد مشخصات",
+            "تولید خودکار تست و بهبود پوشش",
+            "تحقیق باگ در چند فایل و ماژول",
+            "تولید مستندات از تحلیل کد"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "مزیت انسان در حلقه: چرا نظارت انسانی مهم است"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "آنچه کلاین را از عوامل کدنویسی کاملاً خودمختار متمایز می‌کند، تعهد آن به نظارت انسانی است. هر عمل مهم نیاز به تأیید شما دارد. این یک محدودیت نیست — یک ویژگی است. در دنیایی که ابزارهای هوش مصنوعی به طور فزاینده‌ای بدون ورودی انسانی تصمیم می‌گیرند، رویکرد کلاین اطمینان حاصل می‌کند که شما همچنان معمار هستید در حالی که هوش مصنوعی جزئیات پیاده‌سازی را مدیریت می‌کند."
+        },
+        {
+          "type": "cta",
+          "title": "خواندن: طراحی بدون حرف، چیزی جز دکور نیست",
+          "text": "فلسفه‌ای که فرم بدون عملکرد، چیزی جز دکور نیست را کاوش کنید.",
+          "buttonText": "خواندن مقاله",
+          "buttonUrl": "/blog/design-without-words-is-decoration"
+        },
+        {
+          "type": "cta",
+          "title": "آماده امتحان کلاین هستید؟",
+          "text": "افزونه VS Code را نصب کنید و آن را به Ollama محلی متصل کنید.",
+          "buttonText": "شروع با کلاین",
+          "buttonUrl": "https://cline.bot/"
+        },
+        {
+          "type": "code",
+          "code": "// مثال: درخواست از کلاین برای پیاده‌سازی یک ویژگی\n// کلاین برنامه‌ریزی می‌کند، چند فایل را ویرایش می‌کند، تست‌ها را اجرا می‌کند و تکرار می‌کند\n\n// ۱. هدف خود را به زبان ساده توصیف کنید\n// ۲. طرح پیشنهادی را در حالت Plan بررسی کنید\n// ۳. برای ورود به حالت Act تأیید کنید\n// ۴. هر تغییر را هنگام اعمال بررسی کنید\n// ۵. در صورت نیاز با استفاده از نقاط بازبینی بازگردید"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "انتخاب مدل مناسب برای کلاین"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "انتخاب مدل بحرانی است. برای سرعت و هزینه، مدل‌های محلی کوچک‌تر برای وظایف معمول خوب کار می‌کنند. برای استدلال پیچیده، مدل‌های فرانتیر از طریق API یا کوانتیزاسیون‌های محلی بزرگ‌تر نتایج بهتری ارائه می‌دهند. انعطاف‌پذیری کلاین به شما اجازه می‌دهد در میانه وظیفه ارائه‌دهنده را تغییر دهید."
+        },
+        {
+          "type": "paragraph",
+          "text": "مدلی که انتخاب می‌کنید باید با وظیفه در دست هماهنگ باشد. بازنویسی ساده، تولید boilerplate و وظایف مستندسازی می‌توانند به طور کارآمد روی مدل‌های کوچک‌تر مانند Qwen2.5-Coder-7B یا DeepSeek-Coder-6.7B اجرا شوند. تصمیمات معماری پیچیده، طراحی الگوریتم و رفع اشکال مسائل پیچیده از مدل‌های بزرگ‌تر مانند Claude 3.5 Sonnet یا GPT-4o از طریق API، یا معادل‌های محلی آن‌ها در سطوح کوانتیزاسیون بالاتر بهره می‌برند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "محلی (Ollama): حریم خصوصی، هزینه صفر، قابلیت آفلاین",
+            "ابر (Claude/GPT): استدلال برتر روی مسائل سخت",
+            "هیبریدی: از مدل محلی کوچک برای وظایف معمول، مدل بزرگ برای گام‌های پیچیده استفاده کنید"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "امنیت، ملاحظات عملیاتی و بهترین روش‌ها"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اگرچه استقرار محلی ریسک‌های خارجی را به حداقل می‌رساند، کلاین را مانند هر ابزار قدرتمندی در نظر بگیرید. تغییرات را به دقت بررسی کنید، به خصوص هنگام اعطای دسترسی به ترمینال یا filesystem. از نقاط بازبینی و یکپارچه‌سازی git برای ایمنی استفاده کنید."
+        },
+        {
+          "type": "paragraph",
+          "text": "دروازه‌های تأییدی که کلاین ارائه می‌دهد، خط دفاع اول شما هستند، اما بهترین عملکرد را وقتی دارند که با روش‌های عملیاتی خوب ترکیب شوند. همیشه diffها را قبل از اعمال تغییرات بررسی کنید، به خصوص برای کد حساس از نظر امنیتی. کلاین را با git برای بازگشت‌های آسان ترکیب کنید — هر نقطه بازبینی یک نقطه commit طبیعی ایجاد می‌کند. استفاده از منابع را هنگام اجرای چندین مدل بزرگ همزمان پایش کنید، زیرا فشار حافظه می‌تواند بر عملکرد تأثیر بگذارد."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "همیشه diffها را قبل از اعمال تغییرات بررسی کنید",
+            "با git برای بازگشت‌های آسان ترکیب کنید",
+            "استفاده از منابع را با چندین مدل بزرگ همزمان پایش کنید",
+            "از مدل‌های محلی برای کدبیس‌های حساس استفاده کنید",
+            "دروازه‌های تأیید مناسب برای دستورات ترمینال تنظیم کنید"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "دلایل تجاری برای کدنویسی agentic"
+        },
+        {
+          "type": "paragraph",
+          "text": "فراتر از بهره‌وری فردی، کلاین نماینده تغییر در نحوه approached تیم‌ها به توسعه نرم‌افزار است. زمان تجمعی صرف‌شده در سراسر تیم — کاهش boilerplate، ورود سریع‌تر اعضای جدید، کیفیت کد ثابت — به ارزش تجاری قابل توجهی تبدیل می‌شود. اما مزیت واقعی شناختی است: توسعه‌دهندگان انرژی ذهنی کمتری روی وظایف معمول صرف می‌کنند و بیشتر بر حل مسئله خلاقانه تمرکز می‌کنند."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۵ برابر",
+              "label": "چرخه‌های بازنویسی سریع‌تر"
+            },
+            {
+              "value": "۶۰٪",
+              "label": "کاهش کار boilerplate"
+            },
+            {
+              "value": "۳ برابر",
+              "label": "ورود سریع‌تر توسعه‌دهنده جدید"
+            }
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "کشف تکنیک‌های مدرن در طراحی فرانت‌اند",
+          "text": "یاد بگیرید چگونه طراحی فرانت‌اند مدرن بر استفاده مجدد کامپوننت و سیستم‌های طراحی تأکید می‌کند.",
+          "buttonText": "خواندن مقاله",
+          "buttonUrl": "/blog/modern-frontend-design-techniques"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی: آینده کدنویسی agentic و باز است"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کلاین نماینده بلوغ ابزارهای کدنویسی هوش مصنوعی است — باز، انعطاف‌پذیر و عمیقاً یکپارچه با محیط توسعه‌دهندگان. چه کاملاً محلی با Ollama اجرا کنید و چه از بهترین مدل‌های ابری استفاده کنید، بهره‌وری جدیدی بدون قربانی کنترل یا حریم خصوصی به ارمغان می‌آورد."
+        },
+        {
+          "type": "paragraph",
+          "text": "با تکامل اکوسیستم، ابزارهایی مانند کلاین که باز بودن و طراحی محلی-اول را اولویت می‌دهند، نسل بعدی توسعه نرم‌افزار را تعریف خواهند کرد. تیم‌هایی که این ابزارها را زودتر به کار می‌گیرند، فقط سریع‌تر نیستند — کد بهتر، مستندات بهتر و تجربه توسعه‌دهنده بهتری خواهند داشت. این مزیت رقابتی واقعی است."
+        }
+      ],
+      "faq": [
+        {
+          "question": "کلاین چیست؟",
+          "answer": "کلاین یک عامل کدنویسی هوش مصنوعی متن‌باز است که به عنوان افزونه VS Code، CLI و SDK در دسترس است و از مدل‌های محلی Ollama پشتیبانی می‌کند."
+        },
+        {
+          "question": "آیا کلاین با مدل‌های محلی کار می‌کند؟",
+          "answer": "بله. با Ollama و LM Studio به صورت بومی یکپارچه می‌شود و کدنویسی کاملاً خصوصی و آفلاین ارائه می‌دهد."
+        },
+        {
+          "question": "کلاین با Cursor یا GitHub Copilot چه تفاوتی دارد؟",
+          "answer": "کلاین قابلیت‌های agentic بیشتری (ویرایش فایل، اجرای ترمینال، برنامه‌ریزی) و باز بودن/پشتیبانی محلی برتر نسبت به بسیاری از جایگزین‌های تجاری ارائه می‌دهد."
+        },
+        {
+          "question": "آیا کلاین رایگان است؟",
+          "answer": "بله، هسته اصلی متن‌باز و رایگان است. استفاده از مدل‌های ابری بسته به ارائه‌دهنده شما ممکن است با هزینه‌های API همراه باشد."
+        },
+        {
+          "question": "چه مدل‌هایی با کلاین بهترین عملکرد را دارند؟",
+          "answer": "برای وظایف کدنویسی، مدل‌های تخصصی مانند Qwen2.5-Coder یا DeepSeek-Coder اغلب از مدل‌های عمومی عملکرد بهتری دارند. برای استدلال پیچیده، Claude یا GPT-4 از طریق API نتایج عالی ارائه می‌دهند."
+        }
+      ],
+      "seo": {
+        "title": "کلاین: عامل هوش مصنوعی متن‌باز کدنویسی برای VS Code و مدل‌های محلی | راهنمای ۲۰۲۶",
+        "metaDescription": "نگاه عمیق به کلاین — عامل قدرتمند هوش مصنوعی کدنویسی متن‌باز. معماری، حالت‌های Plan/Act، یکپارچه‌سازی Ollama، موارد استفاده و دلایل تبدیل آن به یک game-changer برای توسعه‌دهندگان را بیاموزید.",
+        "canonical": "https://sinisteroid.ir/blog/cline-the-open-source-ai-coding-agent",
+        "openGraph": {
+          "title": "کلاین: عامل هوش مصنوعی متن‌باز کدنویسی",
+          "description": "جریان کاری کدنویسی خود را با کلاین — هوش مصنوعی agentic که برنامه‌ریزی و اجرا می‌کند — متحول کنید.",
+          "image": "./cline-ai-coding-agent-cover.webp"
+        },
+        "twitter": {
+          "title": "کلاین عامل هوش مصنوعی کدنویسی",
+          "description": "متن‌باز، محلی-محور برای VS Code. آینده کدنویسی agentic فرا رسیده.",
+          "image": "./cline-ai-coding-agent-cover.webp"
+        },
+        "focusKeyword": "کلاین هوش مصنوعی",
+        "keywords": "کلاین, دستیار کدنویسی هوش مصنوعی, VS Code AI, کدنویسی مدل محلی, Ollama Cline, هوش مصنوعی agentic, ابزار توسعه‌دهنده"
+      }
+    }
+  }
+}

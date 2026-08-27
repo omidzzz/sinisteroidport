@@ -1,0 +1,675 @@
+{
+  "slug": "the-death-of-traditional-websites-designing-for-ai-agents",
+  "title": "The Death of Traditional Websites: Designing for AI Agents",
+  "date": "2026-06-22 00:00:00",
+  "tags": [
+    "ai-agents",
+    "future-of-web-design",
+    "ai-search",
+    "llm-optimization",
+    "geo",
+    "generative-engine-optimization",
+    "llms-txt",
+    "structured-data",
+    "web-architecture",
+    "content-strategy"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/the-death-of-traditional-websites-designing-for-ai-agents-cover.webp",
+    "alt": {
+      "en": "The Death of Traditional Websites: Designing for AI Agents",
+      "fa": "مرگ وب‌سایت‌های سنتی: طراحی برای ایجنت‌های هوش مصنوعی"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "The Death of Traditional Websites: Designing for AI Agents",
+      "excerpt": "Over 60% of searches now end without a single click. AI agents browse your website without seeing it. The visual hierarchy you spent months refining, the hover states, the scroll animations — none of it registers. What does register is your content architecture, your structured data, and whether a machine can extract a useful answer from your HTML in under a second.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Your Next Visitor Won't Have Eyes"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The web was designed for humans. Every visual decision — the hero image, the color hierarchy, the smooth page transition — assumes a pair of eyes moving across a screen. That assumption is breaking down. In 2026, a growing share of web traffic comes from AI agents: autonomous systems that browse, read, and extract information from websites on behalf of users who never visit at all."
+        },
+        {
+          "type": "paragraph",
+          "text": "When an AI agent visits your site, it does not render your design. It parses your HTML, strips the navigation, ignores the JavaScript animations, and extracts the text your server returns. A 500 KB page of layout code and tracking scripts becomes noise. A Gartner-cited projection suggests that by 2026, up to 25% of searches are being delegated to AI assistants rather than typed into a search engine directly. The user asks ChatGPT a question; ChatGPT visits your site and decides whether you are worth citing. You never appear in the loop at all."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is not a hypothetical future. It is the present condition of the web. And it demands a fundamental rethink of what a website is for, how content is structured, and what 'good design' means when your most important visitor is a language model operating in inference mode."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "60%+",
+              "label": "of searches now end without a click to any website"
+            },
+            {
+              "value": "83%",
+              "label": "zero-click rate when an AI Overview appears in results"
+            },
+            {
+              "value": "40%",
+              "label": "visibility lift from structured, GEO-optimized content (Princeton research)"
+            },
+            {
+              "value": "90%",
+              "label": "reduction in token usage from clean llms.txt implementation"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "How AI Agents Read Your Website"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Understanding the technical reality of how AI agents consume web content is the starting point for designing with them in mind. The process is fundamentally different from how a human or even a traditional search bot engages with a page."
+        },
+        {
+          "type": "paragraph",
+          "text": "When a system like Perplexity, ChatGPT Search, or an autonomous browser agent visits a URL, it fetches the server-rendered HTML and converts it to a token-efficient format — usually Markdown or plain text. Raw HTML is expensive: a single web page can contain 500 KB of code, the vast majority of which is styling, layout divs, tracking scripts, and navigation boilerplate that contributes zero information value to the model. Tools like Firecrawl convert websites into clean Markdown that is 5 to 10 times more token-efficient than raw HTML, which is why clean semantic structure is now directly tied to whether an AI agent can extract your content within its context window budget."
+        },
+        {
+          "type": "paragraph",
+          "text": "AI agents do not browse linearly. They are executing a plan. The agent receives a user query, fans it out into sub-queries, fetches relevant pages, extracts the passages with the highest information density, and synthesizes them into a response. Your content competes not for a click, but for inclusion in that synthesis. The agent decides in milliseconds whether your page contains something worth injecting into its context. If your key information is buried behind a JavaScript accordion, locked behind a login, or scattered across navigation-dependent multi-page flows, the agent leaves empty-handed."
+        },
+        {
+          "type": "cta",
+          "title": "Ollama: The Engine Behind Local AI",
+          "text": "Understanding the infrastructure that powers AI agents is essential. Our deep dive into Ollama covers the inference engine behind many local AI systems.",
+          "buttonText": "Read About Ollama",
+          "buttonUrl": "/blog/ollama-the-engine-behind-local-ai"
+        },
+        {
+          "type": "cta",
+          "title": "Open WebUI: The Missing Interface for Local AI",
+          "text": "See how AI interfaces are evolving with Open WebUI — the open-source platform that wraps Ollama in a ChatGPT-class experience.",
+          "buttonText": "Explore Open WebUI",
+          "buttonUrl": "/blog/open-webui-the-missing-interface-for-local-ai"
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "Client-Side Rendering Is an AI Crawlability Problem",
+          "text": "AI crawlers do not execute JavaScript the way a browser does. Content rendered client-side — through React, Vue, or Angular hydration — may be completely invisible to the models reading your site. If your key content only appears after JavaScript runs, it effectively does not exist for any AI agent visiting your server-rendered HTML. Server-side rendering or static generation is no longer just a performance decision; it is a visibility decision."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Zero-Click Economy and What It Means for Your Traffic"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The data on zero-click search is no longer a trend to monitor — it is the current operating condition of the web. By early 2026, over 60% of all standard search queries end without a single click to any external website. When an AI Overview appears in results, that rate spikes to 83%. Google's AI Overviews now appear on roughly 55% of all search queries globally."
+        },
+        {
+          "type": "paragraph",
+          "text": "The impact is concrete. Businesses holding top-three organic positions on competitive keywords reported 30 to 60% traffic declines in 2025 — not because their rankings dropped, but because the AI intercepted the answer and the user never needed to click. The $80 billion global SEO industry is being restructured around a new objective: not the click, but the citation. If a language model cites your content as the source for an answer, your brand appears in front of the user without a visit. The metric that matters is no longer position one — it is mention rate across thousands of AI-generated responses."
+        },
+        {
+          "type": "highlight",
+          "label": "PARADIGM SHIFT",
+          "text": "Traditional SEO optimized pages to rank for keywords. Generative Engine Optimization (GEO) optimizes your information so large language models can understand, reuse, and cite it. The target is no longer a position in a list — it is a citation in a synthesized answer. You are not competing for clicks. You are competing to become the answer."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Generative Engine Optimization: The New Design Requirement"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Generative Engine Optimization is the practice of structuring content so it is retrieved, understood, and cited by large language models. GEO builds on traditional SEO's technical foundations — crawlability, authority, relevance — but adds a layer of requirements that have no equivalent in the old playbook."
+        },
+        {
+          "type": "paragraph",
+          "text": "The first requirement is information density over keyword density. LLMs are trained to prioritize what researchers call 'Information Gain' — new, unique, verifiable insights that cannot be found elsewhere on the web. A page that restates commonly available information and buries it in marketing language is less likely to be cited than a page that leads with a specific, citable fact in its first paragraph. The Princeton and Georgia Tech research team found that content strategies optimized for information density increased AI search visibility by up to 40%."
+        },
+        {
+          "type": "paragraph",
+          "text": "The second requirement is hierarchical clarity. LLMs parse heading structure as a content map. A page with clear H1, H2, and H3 hierarchies — one topic per section, a direct answer leading each section before context follows — gives a model a reliable extraction grid. A page where important information is embedded in long prose blocks with no structural signaling requires the model to work harder, consuming more tokens, and risks the key content being missed or misattributed."
+        },
+        {
+          "type": "paragraph",
+          "text": "The third requirement is factual verifiability. AI models treat user-generated content, third-party citations, and external references as 'ground truth' signals that reduce the probability of their own hallucination. A page that supports its claims with specific statistics, named sources, and external links builds what GEO practitioners call a 'source stack' — a trust hierarchy that makes the model more confident in extracting and citing your content."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Lead every section with a direct answer — context follows, it does not precede",
+            "Use H1/H2/H3 hierarchies with one topic per heading, not decorative headings",
+            "Write in scannable formats: bullet points, numbered lists, short declarative paragraphs",
+            "Support every claim with a specific statistic, date, or named source",
+            "Ensure all key content is server-side rendered, not JavaScript-dependent",
+            "Verify AI crawlers are not blocked in robots.txt or by Cloudflare default rules",
+            "Build FAQ sections — these map directly to how LLMs process conversational queries"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Structured Data: Schema Markup as Machine Grammar"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Structured data is not a new concept — JSON-LD schema markup has been part of technical SEO practice for a decade. In the context of AI agents, it has become something closer to essential infrastructure. Schema markup removes the ambiguity that forces a language model to guess. When your FAQ items are tagged with FAQPage schema, the model does not have to infer they are questions. When your product has an offer price tagged with Product schema, the model does not risk inventing a number."
+        },
+        {
+          "type": "paragraph",
+          "text": "The schema types with the highest practical impact for AI visibility in 2026 are FAQPage (for conversational query matching), Article and BlogPosting (for editorial authority signals), Organization and Person (for entity disambiguation), Product and Offer (for commercial queries), and BreadcrumbList (for contextualizing where a page sits within a site's information hierarchy). Each of these gives the model a structured fact it can extract without inference — and facts that require no inference are the ones that end up in citations."
+        },
+        {
+          "type": "code",
+          "code": "<!-- Example: FAQPage JSON-LD for GEO optimization -->\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"FAQPage\",\n  \"mainEntity\": [\n    {\n      \"@type\": \"Question\",\n      \"name\": \"What is Generative Engine Optimization?\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"GEO is the practice of structuring web content so it is retrieved, understood, and cited by large language models in AI-generated search answers.\"\n      }\n    },\n    {\n      \"@type\": \"Question\",\n      \"name\": \"What is a zero-click search?\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"A zero-click search is one where the user receives a complete answer within the search interface — from an AI Overview or chatbot — and never clicks through to any external website.\"\n      }\n    }\n  ]\n}\n</script>"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "llms.txt: The robots.txt of the AI Era"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The llms.txt standard is a Markdown file placed at the root of your website — yoursite.com/llms.txt — that tells large language models what your site is, what its most important pages are, and how to represent your content accurately. Think of it as robots.txt for intent rather than access: robots.txt tells crawlers where not to go; llms.txt tells models where the most valuable content lives."
+        },
+        {
+          "type": "paragraph",
+          "text": "The format is intentionally lean. An H1 with the site name. A blockquote with a two-to-three sentence description that becomes the model's 'mental model' of your brand. Sections for key content areas, each with links and brief descriptions of what the model will find. An FAQ section embedded directly in the file, so the model can answer common queries about your business without even fetching sub-pages. Companies like Anthropic, Stripe, Vercel, and Cloudflare have already implemented llms.txt. Implementation case studies show that a well-structured llms.txt file can reduce an AI agent's token consumption by up to 90% while dramatically increasing the accuracy of how models represent the site — reducing hallucinations about pricing, policies, and product details."
+        },
+        {
+          "type": "paragraph",
+          "text": "The file is not yet a W3C or IETF official standard, but adoption has been rapid enough that practitioners in the GEO space describe it as becoming as foundational as sitemap.xml within the next year. The strategic logic is straightforward: without llms.txt, a language model builds its understanding of your site from whatever fragments it finds. With it, you control the narrative your site projects into the AI layer of the web."
+        },
+        {
+          "type": "quote",
+          "text": "Just as designers learned to design for the web, then for mobile, we now have to design for the generative interface. Your first impression is no longer your homepage — it is how a model decides to compress you into a sentence.",
+          "author": "Andrew Coyle, GEO and the llms.txt File"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Content Architecture for Machine Readers"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The most significant change AI agents impose on web design is not visual — it is architectural. Information that was previously buried behind navigation menus, progressive disclosure patterns, or multi-step user flows becomes inaccessible to a machine that cannot click, scroll, or wait for a hover state to reveal content."
+        },
+        {
+          "type": "paragraph",
+          "text": "For web designers, this creates a productive constraint: the best architecture for an AI agent is also the best architecture for a human who is in a hurry. Content that leads with the answer, uses clear hierarchy, avoids burying key facts in interstitial modals, and does not require ten clicks to reach a policy page is simply better content — for both audiences. The discipline of designing for machine readers tends to produce pages that are faster, clearer, and more useful for human readers too."
+        },
+        {
+          "type": "paragraph",
+          "text": "The specific patterns that degrade machine readability are worth naming explicitly: infinite scroll that delays content loading, JavaScript-gated content that only appears after interaction, navigation-dependent information hierarchies where the context required to interpret a page only exists in the site's menu structure, and dark patterns that bury key information (pricing, limitations, policy terms) behind multiple steps. All of these were already problems for human readers. AI agents have simply made the cost of them measurable."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/ai-agent-content-extraction-diagram.webp",
+          "alt": "Diagram comparing how a human user and an AI agent interact with the same web page — the human navigates visually while the agent extracts structured text from server-rendered HTML",
+          "caption": "Figure 1: An AI agent extracts structured text from server-rendered HTML, ignoring visual hierarchy, animations, and any content requiring JavaScript execution or user interaction to appear."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What This Means for Visual Web Design"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "A reasonable conclusion from everything above is that visual web design no longer matters. That conclusion is wrong — but the argument for it contains a real insight worth engaging with directly."
+        },
+        {
+          "type": "paragraph",
+          "text": "Visual design matters profoundly for the users who do arrive on your site. As zero-click search filters out the users who only needed a quick answer, the visitors who click through to a page are increasingly in a decision or evaluation phase. Research suggests that AI-referred visitors convert at up to 4.4 times the rate of traditional organic search visitors. The quality of the visual and interaction design that greets those visitors directly affects whether that conversion happens. A site that is GEO-optimized to be cited but visually incoherent when visited is only solving half the problem."
+        },
+        {
+          "type": "paragraph",
+          "text": "What changes is the priority order. Visual design is now downstream of content architecture. A beautiful site with content that AI agents cannot read will become invisible faster than a plain site with clearly structured, citable information. The design discipline that is hardest to separate from GEO is not visual — it is structural. Information architecture, content hierarchy, semantic HTML, and the elimination of extraction barriers are the design decisions that determine AI visibility. Visual execution determines what happens after a user arrives."
+        },
+        {
+          "type": "cta",
+          "title": "Design Without Words Is Decoration",
+          "text": "Explore the philosophical side of design decisions and why visual communication must serve a purpose beyond aesthetics.",
+          "buttonText": "Read About Design Principles",
+          "buttonUrl": "/blog/design-without-words-is-decoration"
+        },
+        {
+          "type": "cta",
+          "title": "Modern Techniques in Frontend Design",
+          "text": "Learn the technical patterns that make content both human-readable and machine-accessible in modern web development.",
+          "buttonText": "Explore Frontend Techniques",
+          "buttonUrl": "/blog/modern-frontend-design-techniques"
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "GEO Audit Checklist — Start Here",
+          "text": "Check robots.txt: ensure AI crawlers (GPTBot, ClaudeBot, PerplexityBot) are not blocked. Audit Cloudflare settings — its 2025 default configuration began blocking AI bots. Verify your key content is server-side rendered. Create an llms.txt at your root. Implement FAQPage and Article JSON-LD schema. Add a clear H1/H2/H3 heading hierarchy with one topic per section. Check that pricing, policy, and key factual content is accessible without login or interaction."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Conclusion: Design for Both Audiences"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The web now has two distinct audiences with fundamentally different reading patterns. Human users interpret visual hierarchy, respond to emotional design, and navigate through progressive disclosure. AI agents parse semantic structure, extract factual density, and evaluate machine readability in milliseconds."
+        },
+        {
+          "type": "paragraph",
+          "text": "The websites that will survive and compound in the AI-first web are those designed for both simultaneously. Semantically clean HTML that renders beautifully. Information that leads with answers and follows with context. Structured data that removes ambiguity for models and adds rich snippets for human scanners. An llms.txt that controls the narrative projected into AI systems. Visual design that converts the high-intent visitors who click through from an AI citation."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is not the death of web design. It is its expansion into a dimension that was always there but never mattered until now. The designers and developers who understand both audiences will build the most durable, visible, and effective sites of the next decade. Those who optimize for only one will find themselves progressively invisible to the other."
+        },
+        {
+          "type": "cta",
+          "title": "Schema.org — Structured Data Vocabulary",
+          "text": "The official schema.org documentation provides the complete vocabulary for JSON-LD structured data. Understanding these types is essential for implementing the FAQPage, Article, and BreadcrumbList schemas discussed in this article.",
+          "buttonText": "Visit Schema.org",
+          "buttonUrl": "https://schema.org/"
+        },
+        {
+          "type": "cta",
+          "title": "llms.txt Specification",
+          "text": "The llms.txt standard is gaining adoption across the web. Learn how to implement this token-efficient Markdown file that gives AI models a clear map of your site's most valuable content.",
+          "buttonText": "Learn About llms.txt",
+          "buttonUrl": "https://llmstxt.org/"
+        },
+        {
+          "type": "cta",
+          "title": "Open WebUI — Open Source AI Interface",
+          "text": "Open WebUI is the most actively maintained open-source frontend for local LLM inference. See how it wraps Ollama with RAG, multi-user access control, and a ChatGPT-class interface.",
+          "buttonText": "Explore Open WebUI",
+          "buttonUrl": "https://github.com/open-webui/open-webui"
+        },
+        {
+          "type": "cta",
+          "title": "Firecrawl — Convert Websites to Clean Markdown",
+          "text": "Firecrawl is the tool that converts any website into clean, token-efficient Markdown. It is the practical implementation of the extraction principles discussed in this article — 5 to 10 times more efficient than raw HTML for AI consumption.",
+          "buttonText": "Try Firecrawl",
+          "buttonUrl": "https://firecrawl.dev/"
+        },
+        {
+          "type": "cta",
+          "title": "Princeton Research on AI Search",
+          "text": "The Princeton and Georgia Tech research on information density and AI search visibility provides the empirical foundation for the GEO strategies outlined in this article.",
+          "buttonText": "Read the Research",
+          "buttonUrl": "https://www.cs.princeton.edu/"
+        }
+      ],
+      "faq": [
+        {
+          "question": "What is Generative Engine Optimization (GEO)?",
+          "answer": "GEO is the practice of structuring web content so it is retrieved, understood, and cited by large language models in AI-generated search answers. Unlike traditional SEO, which optimizes for keyword rankings in a list of links, GEO optimizes for citation frequency in synthesized AI responses from systems like ChatGPT, Perplexity, and Google AI Overviews."
+        },
+        {
+          "question": "What is a zero-click search?",
+          "answer": "A zero-click search is one where the user receives a complete answer within the search interface — from an AI Overview, a chatbot, or a generative answer engine — without clicking through to any external website. By 2026, over 60% of all searches end this way, with the rate rising to 83% when an AI Overview appears in results."
+        },
+        {
+          "question": "What is llms.txt and why does it matter?",
+          "answer": "llms.txt is a Markdown file placed at the root of a website that provides large language models with a structured, token-efficient map of the site's content and identity. It functions like robots.txt — but rather than controlling access, it controls representation. Implementing it can reduce AI token consumption by up to 90% and dramatically improve how accurately models describe your brand, reducing hallucinations about pricing, policies, and products."
+        },
+        {
+          "question": "Does visual web design still matter in the age of AI agents?",
+          "answer": "Yes — but its role has shifted. Visual design is now downstream of content architecture. AI agents that cannot read your content will not cite it, making GEO optimization the prerequisite. But the human visitors who do arrive via AI citations are typically high-intent, and research shows they convert at up to 4.4 times the rate of traditional search visitors — making visual and interaction design more consequential, not less, for the users who actually see it."
+        },
+        {
+          "question": "Why does client-side rendering hurt AI visibility?",
+          "answer": "AI crawlers read the HTML your server returns. Content that only appears after JavaScript executes — common in React, Vue, and Angular applications using client-side rendering — may be completely invisible to the model. Key content, headings, and structured data need to be present in the server-rendered HTML to be accessible to AI agents visiting your site."
+        }
+      ],
+      "seo": {
+        "title": "The Death of Traditional Websites: Designing for AI Agents | GEO & AI Search 2026",
+        "metaDescription": "Over 60% of searches end without a click. AI agents browse your site without seeing your design. Learn how GEO, llms.txt, structured data, and content architecture determine whether language models cite or ignore your website in 2026.",
+        "canonical": "https://sinisteroid.ir/blog/the-death-of-traditional-websites-designing-for-ai-agents",
+        "openGraph": {
+          "image": "/api/uploads/the-death-of-traditional-websites-designing-for-ai-agents-cover.webp"
+        },
+        "twitter": {
+          "image": "/api/uploads/the-death-of-traditional-websites-designing-for-ai-agents-cover.webp"
+        },
+        "keywords": "AI agents web design, future of web design, AI search optimization, LLM optimization, GEO generative engine optimization, llms.txt, structured data for AI, zero-click search, AI crawler, designing for AI agents",
+        "focusKeyword": "designing for AI agents"
+      }
+    },
+    "fa": {
+      "title": "مرگ وب‌سایت‌های سنتی: طراحی برای ایجنت‌های هوش مصنوعی",
+      "excerpt": "بیش از ۶۰٪ از جستجوها اکنون بدون یک کلیک به جایی پایان می‌یابند. ایجنت‌های هوش مصنوعی وب‌سایت شما را بدون دیدن آن مرور می‌کنند. سلسله‌مراتب بصری که ماه‌ها صرف اصلاح آن کردید، hover stateها، انیمیشن‌های اسکرول — هیچ‌کدام ثبت نمی‌شوند. آنچه ثبت می‌شود معماری محتوای شما، داده‌های ساختارمند و این است که آیا یک ماشین می‌تواند در کمتر از یک ثانیه یک پاسخ مفید از HTML شما استخراج کند.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "بازدیدکننده بعدی شما چشم نخواهد داشت"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "وب برای انسان‌ها طراحی شده بود. هر تصمیم بصری — تصویر hero، سلسله‌مراتب رنگ، انتقال نرم صفحه — یک جفت چشم در حال حرکت روی نمایشگر را فرض می‌کند. این فرض در حال فروپاشی است. در سال ۲۰۲۶، بخش رو‌به‌رشدی از ترافیک وب از ایجنت‌های هوش مصنوعی می‌آید: سیستم‌های خودمختاری که از طرف کاربرانی که اصلاً ویزیت نمی‌کنند وب‌سایت‌ها را مرور، می‌خوانند و اطلاعات را استخراج می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی یک ایجنت هوش مصنوعی به سایت شما می‌آید، طراحی شما را رندر نمی‌کند. HTML شما را تجزیه می‌کند، ناوبری را حذف می‌کند، انیمیشن‌های JavaScript را نادیده می‌گیرد، و متن بازگشتی سرور شما را استخراج می‌کند. یک صفحه ۵۰۰ کیلوبایتی از کد لایه‌بندی و اسکریپت‌های ردیابی تبدیل به نویز می‌شود. یک پیش‌بینی مورد استناد گارتنر نشان می‌دهد که تا سال ۲۰۲۶، تا ۲۵٪ از جستجوها به جای تایپ در موتور جستجو، به ایجنت‌های هوش مصنوعی واگذار می‌شوند. کاربر از ChatGPT سوال می‌پرسد؛ ChatGPT سایت شما را مرور می‌کند و تصمیم می‌گیرد که آیا ارزش استناد دارید. شما اصلاً در این حلقه ظاهر نمی‌شوید."
+        },
+        {
+          "type": "paragraph",
+          "text": "این آینده‌ای فرضی نیست. این وضعیت فعلی وب است. و این موضوع نیاز به بازنگری اساسی دارد در اینکه یک وب‌سایت برای چیست، چگونه محتوا ساختار می‌یابد، و 'طراحی خوب' چه معنایی دارد وقتی مهم‌ترین بازدیدکننده شما یک مدل زبانی در حال inference است."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۶۰٪+",
+              "label": "جستجوها اکنون بدون کلیک به هیچ وب‌سایتی پایان می‌یابند"
+            },
+            {
+              "value": "۸۳٪",
+              "label": "نرخ zero-click زمانی که AI Overview در نتایج ظاهر می‌شود"
+            },
+            {
+              "value": "۴۰٪",
+              "label": "افزایش دیده‌شدن از محتوای ساختارمند GEO (تحقیق پرینستون)"
+            },
+            {
+              "value": "۹۰٪",
+              "label": "کاهش مصرف توکن از پیاده‌سازی تمیز llms.txt"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "ایجنت‌های هوش مصنوعی چگونه وب‌سایت شما را می‌خوانند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "درک واقعیت فنی نحوه مصرف محتوای وب توسط ایجنت‌های هوش مصنوعی، نقطه شروع طراحی با در نظر گرفتن آن‌هاست. این فرآیند اساساً با نحوه تعامل یک انسان یا حتی یک ربات جستجوی سنتی با یک صفحه متفاوت است."
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی سیستمی مثل Perplexity، ChatGPT Search، یا یک ایجنت مرورگر خودمختار از یک URL بازدید می‌کند، HTML رندرشده سرور را می‌گیرد و آن را به فرمتی توکن‌کارآمد — معمولاً Markdown یا متن ساده — تبدیل می‌کند. HTML خام گران است: یک صفحه وب می‌تواند حاوی ۵۰۰ کیلوبایت کد باشد که اکثریت آن استایل، divهای لایه‌بندی، اسکریپت‌های ردیابی و boilerplate ناوبری است که هیچ ارزش اطلاعاتی برای مدل ندارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "ایجنت‌های هوش مصنوعی به‌صورت خطی مرور نمی‌کنند. آن‌ها یک برنامه را اجرا می‌کنند. ایجنت یک query کاربر دریافت می‌کند، آن را به sub-queryها تقسیم می‌کند، صفحات مرتبط را می‌گیرد، passages با بالاترین تراکم اطلاعاتی را استخراج می‌کند و آن‌ها را در یک پاسخ ترکیب می‌کند. محتوای شما نه برای یک کلیک، بلکه برای گنجاندن در آن ترکیب رقابت می‌کند."
+        },
+        {
+          "type": "cta",
+          "title": "اولاما: موتور پشت هوش مصنوعی محلی",
+          "text": "درک زیرساختی که ایجنت‌های هوش مصنوعی را راه‌اندازی می‌کند ضروری است. مقاله ما در مورد اولاما، موتور استنتاج پشت بسیاری از سیستم‌های هوش مصنوعی محلی را پوشش می‌دهد.",
+          "buttonText": "خواندن درباره اولاما",
+          "buttonUrl": "/blog/ollama-the-engine-behind-local-ai"
+        },
+        {
+          "type": "cta",
+          "title": "اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی",
+          "text": "ببینید چگونه رابط‌های هوش مصنوعی با اوپن وب‌یوآی تکامل می‌یابند — پلتفرم متن‌بازی که اولاما را در یک تجربه کاربری در سطح ChatGPT می‌پوشاند.",
+          "buttonText": "کشف اوپن وب‌یوآی",
+          "buttonUrl": "/blog/open-webui-the-missing-interface-for-local-ai"
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "رندرینگ سمت کلاینت یک مشکل خزیدن AI است",
+          "text": "خزنده‌های هوش مصنوعی JavaScript را مثل یک مرورگر اجرا نمی‌کنند. محتوایی که سمت کلاینت رندر می‌شود — از طریق hydration در React، Vue یا Angular — ممکن است برای مدل‌هایی که HTML رندرشده سرور سایت شما را می‌خوانند کاملاً نامرئی باشد. اگر محتوای کلیدی شما فقط پس از اجرای JavaScript ظاهر می‌شود، برای هر ایجنت هوش مصنوعی که از HTML سرور شما بازدید می‌کند عملاً وجود ندارد. Server-side rendering دیگر فقط یک تصمیم عملکردی نیست؛ یک تصمیم دیده‌شدن است."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "اقتصاد zero-click و معنای آن برای ترافیک شما"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "داده‌های مربوط به جستجوی zero-click دیگر یک روند برای پایش نیست — این وضعیت عملیاتی فعلی وب است. تا اوایل سال ۲۰۲۶، بیش از ۶۰٪ از تمام جستجوهای استاندارد بدون یک کلیک به هیچ وب‌سایت خارجی پایان می‌یابند. وقتی AI Overview در نتایج ظاهر می‌شود، این نرخ به ۸۳٪ می‌رسد. AI Overview گوگل اکنون در حدود ۵۵٪ از تمام جستجوهای جهانی ظاهر می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "تأثیر ملموس است. کسب‌وکارهایی که جایگاه‌های اول تا سوم ارگانیک را در کلمات کلیدی رقابتی در اختیار داشتند، کاهش ترافیک ۳۰ تا ۶۰ درصدی در سال ۲۰۲۵ گزارش دادند — نه چون رتبه‌هایشان افت کرد، بلکه چون هوش مصنوعی پاسخ را رهگیری کرد و کاربر هرگز نیازی به کلیک نداشت. صنعت ۸۰ میلیارد دلاری SEO در حال بازساختار شدن حول یک هدف جدید است: نه کلیک، بلکه استناد."
+        },
+        {
+          "type": "highlight",
+          "label": "تغییر پارادایم",
+          "text": "SEO سنتی صفحات را برای رتبه‌بندی در کلمات کلیدی بهینه می‌کرد. بهینه‌سازی موتور مولد (GEO) اطلاعات شما را بهینه می‌کند تا مدل‌های زبانی بتوانند آن را درک، استفاده مجدد و استناد کنند. هدف دیگر جایگاه در یک لیست نیست — یک استناد در یک پاسخ ترکیب‌شده است. شما برای کلیک رقابت نمی‌کنید. برای تبدیل شدن به پاسخ رقابت می‌کنید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "بهینه‌سازی موتور مولد: نیاز طراحی جدید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "بهینه‌سازی موتور مولد (GEO) عمل ساختاردهی به محتوا است به گونه‌ای که توسط مدل‌های زبانی بزرگ بازیابی، درک و استناد شود. GEO بر پایه‌های فنی SEO سنتی می‌سازد — خزیدن‌پذیری، اقتدار، ارتباط — اما لایه‌ای از الزامات اضافه می‌کند که معادلی در کتاب بازی قدیمی ندارند."
+        },
+        {
+          "type": "paragraph",
+          "text": "اولین الزام تراکم اطلاعات به جای تراکم کلیدواژه است. مدل‌های زبانی آموزش دیده‌اند تا آنچه محققان 'اطلاعات جدید' می‌نامند را اولویت دهند — بینش‌های منحصربه‌فرد و قابل تأیید که در هیچ جای دیگری در وب یافت نمی‌شود. تیم تحقیقاتی پرینستون و Georgia Tech دریافت که استراتژی‌های محتوایی بهینه‌شده برای تراکم اطلاعاتی دیده‌شدن در جستجوی هوش مصنوعی را تا ۴۰٪ افزایش می‌دهند."
+        },
+        {
+          "type": "paragraph",
+          "text": "دومین الزام وضوح سلسله‌مراتبی است. مدل‌های زبانی ساختار heading را به عنوان یک نقشه محتوا تجزیه می‌کنند. یک صفحه با سلسله‌مراتب H1، H2 و H3 روشن — یک موضوع به ازای هر بخش، یک پاسخ مستقیم در ابتدای هر بخش قبل از اینکه context دنبال شود — به مدل یک شبکه استخراج قابل اعتماد می‌دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "سومین الزام قابل تأیید بودن واقعی است. مدل‌های هوش مصنوعی محتوای تولیدشده توسط کاربر، استنادهای شخص ثالث و مراجع خارجی را به عنوان سیگنال‌های 'حقیقت زمینه‌ای' می‌بینند که احتمال توهم خودشان را کاهش می‌دهد. صفحه‌ای که ادعاهایش را با آمار خاص، منابع نام‌برده و لینک‌های خارجی پشتیبانی می‌کند، چیزی می‌سازد که متخصصان GEO 'پشته منبع' می‌نامند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "هر بخش را با یک پاسخ مستقیم شروع کنید — context دنبال می‌شود، پیشی نمی‌گیرد",
+            "از سلسله‌مراتب H1/H2/H3 با یک موضوع به ازای هر heading استفاده کنید",
+            "به شکل‌های قابل اسکن بنویسید: گلوله‌ها، لیست‌های شماره‌دار، پاراگراف‌های کوتاه",
+            "هر ادعا را با یک آماره، تاریخ یا منبع نام‌برده پشتیبانی کنید",
+            "اطمینان حاصل کنید که تمام محتوای کلیدی server-side رندر می‌شود",
+            "تأیید کنید که خزنده‌های هوش مصنوعی در robots.txt یا تنظیمات Cloudflare مسدود نشده‌اند",
+            "بخش‌های FAQ بسازید — این‌ها مستقیماً به نحوه پردازش query‌های مکالمه‌ای توسط مدل‌های زبانی نگاشت می‌شوند"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "داده ساختارمند: Schema Markup به عنوان دستور زبان ماشین"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "داده ساختارمند یک مفهوم جدید نیست — Schema markup با JSON-LD بخشی از رویه فنی SEO برای یک دهه بوده است. در زمینه ایجنت‌های هوش مصنوعی، به چیزی نزدیک به زیرساخت اساسی تبدیل شده است. Schema markup ابهامی را که مدل را مجبور می‌کند حدس بزند حذف می‌کند. وقتی آیتم‌های FAQ شما با schema فراگیر FAQPage تگ شده‌اند، مدل مجبور نیست استنتاج کند که آن‌ها سوال هستند. وقتی محصول شما قیمت پیشنهادی با Product schema دارد، مدل در معرض خطر اختراع عدد نیست."
+        },
+        {
+          "type": "paragraph",
+          "text": "انواع schema با بالاترین تأثیر عملی برای دیده‌شدن در هوش مصنوعی در سال ۲۰۲۶ عبارتند از: FAQPage (برای تطابق query مکالمه‌ای)، Article و BlogPosting (برای سیگنال‌های اقتدار ویراستاری)، Organization و Person (برای رفع ابهام موجودیت)، Product و Offer (برای query‌های تجاری)، و BreadcrumbList (برای زمینه‌بندی جایگاه یک صفحه در سلسله‌مراتب اطلاعاتی سایت)."
+        },
+        {
+          "type": "code",
+          "code": "<!-- مثال: JSON-LD برای FAQPage بهینه‌شده برای GEO -->\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"FAQPage\",\n  \"mainEntity\": [\n    {\n      \"@type\": \"Question\",\n      \"name\": \"بهینه‌سازی موتور مولد (GEO) چیست؟\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"GEO عمل ساختاردهی به محتوای وب است به شکلی که توسط مدل‌های زبانی بزرگ در پاسخ‌های جستجوی تولیدشده توسط هوش مصنوعی بازیابی، درک و استناد شود.\"\n      }\n    },\n    {\n      \"@type\": \"Question\",\n      \"name\": \"جستجوی zero-click چیست؟\",\n      \"acceptedAnswer\": {\n        \"@type\": \"Answer\",\n        \"text\": \"جستجوی zero-click جستجویی است که در آن کاربر یک پاسخ کامل در داخل رابط جستجو دریافت می‌کند — از AI Overview یا chatbot — و هرگز به هیچ وب‌سایت خارجی کلیک نمی‌کند.\"\n      }\n    }\n  ]\n}\n</script>"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "llms.txt: robots.txt عصر هوش مصنوعی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "استاندارد llms.txt یک فایل Markdown است که در ریشه وب‌سایت شما قرار می‌گیرد — yoursite.com/llms.txt — و به مدل‌های زبانی بزرگ می‌گوید سایت شما چیست، مهم‌ترین صفحاتش کدامند، و چگونه محتوای شما را به دقت نمایش دهند. به آن به عنوان robots.txt برای قصد به جای دسترسی فکر کنید: robots.txt به خزنده‌ها می‌گوید کجا نروند؛ llms.txt به مدل‌ها می‌گوید ارزشمندترین محتوا کجاست."
+        },
+        {
+          "type": "paragraph",
+          "text": "فرمت عمداً ساده است. یک H1 با نام سایت. یک blockquote با یک توصیف دو تا سه جمله‌ای که 'مدل ذهنی' برند شما در مدل می‌شود. بخش‌هایی برای حوزه‌های محتوای کلیدی، هر کدام با لینک‌ها و توصیفات کوتاه از آنچه مدل پیدا خواهد کرد. یک بخش FAQ جاسازی‌شده مستقیماً در فایل، تا مدل بتواند query‌های رایج درباره کسب‌وکار شما را بدون واکشی sub-pageها پاسخ دهد. شرکت‌هایی مثل Anthropic، Stripe، Vercel و Cloudflare از پیش llms.txt را پیاده‌سازی کرده‌اند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این فایل هنوز یک استاندارد رسمی W3C یا IETF نیست، اما پذیرش آن به اندازه کافی سریع بوده که متخصصان حوزه GEO آن را در حال تبدیل شدن به همان اندازه پایه‌ای توصیف می‌کنند که sitemap.xml در سال آینده خواهد بود. منطق استراتژیک روشن است: بدون llms.txt، یک مدل زبانی درکش از سایت شما را از هر تکه‌ای که پیدا کند می‌سازد. با آن، شما روایتی که سایتتان در لایه هوش مصنوعی وب منتشر می‌کند را کنترل می‌کنید."
+        },
+        {
+          "type": "quote",
+          "text": "درست مثل اینکه طراحان یاد گرفتند برای وب، سپس برای موبایل طراحی کنند، اکنون باید برای رابط مولد طراحی کنیم. اولین تأثیر شما دیگر صفحه اصلی‌تان نیست — این است که یک مدل تصمیم می‌گیرد شما را در یک جمله چطور فشرده کند.",
+          "author": "اندرو کویل، GEO و فایل llms.txt"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "معماری محتوا برای خوانندگان ماشینی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "مهم‌ترین تغییری که ایجنت‌های هوش مصنوعی بر طراحی وب تحمیل می‌کنند بصری نیست — معماری است. اطلاعاتی که پیش از این پشت منوهای ناوبری، الگوهای افشای تدریجی، یا جریان‌های کاربری چندمرحله‌ای پنهان بود، برای ماشینی که نمی‌تواند کلیک کند، اسکرول کند یا منتظر بماند تا یک hover state محتوا را نشان دهد، غیرقابل دسترس می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "برای طراحان وب، این یک محدودیت سازنده ایجاد می‌کند: بهترین معماری برای یک ایجنت هوش مصنوعی همچنین بهترین معماری برای انسانی است که عجله دارد. محتوایی که با پاسخ پیشروی می‌کند، از سلسله‌مراتب روشن استفاده می‌کند، از پنهان کردن حقایق کلیدی در modalهای بینابین اجتناب می‌کند، و نیاز به ده کلیک برای رسیدن به یک صفحه خط‌مشی ندارد، فقط محتوای بهتر است — برای هر دو مخاطب."
+        },
+        {
+          "type": "paragraph",
+          "text": "الگوهای خاصی که خوانایی ماشینی را کاهش می‌دهند ارزش نام بردن صریح دارند: اسکرول بی‌نهایت که بارگذاری محتوا را به تأخیر می‌اندازد، محتوای دروازه‌بندی‌شده با JavaScript که فقط پس از تعامل ظاهر می‌شود، سلسله‌مراتب اطلاعاتی وابسته به ناوبری، و dark patternهایی که اطلاعات کلیدی را پشت مراحل متعدد پنهان می‌کنند. همه اینها از پیش برای خوانندگان انسانی مشکل بودند. ایجنت‌های هوش مصنوعی فقط هزینه آن‌ها را قابل اندازه‌گیری کرده‌اند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/ai-agent-content-extraction-diagram.webp",
+          "alt": "نمودار مقایسه نحوه تعامل یک کاربر انسانی و یک ایجنت هوش مصنوعی با همان صفحه وب — انسان به‌صورت بصری ناوبری می‌کند در حالی که ایجنت متن ساختاریافته را از HTML رندرشده سرور استخراج می‌کند",
+          "caption": "شکل ۱: یک ایجنت هوش مصنوعی متن ساختاریافته را از HTML رندرشده سرور استخراج می‌کند و سلسله‌مراتب بصری، انیمیشن‌ها و هر محتوایی که نیاز به اجرای JavaScript یا تعامل کاربر برای ظاهر شدن دارد را نادیده می‌گیرد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "این چه معنایی برای طراحی بصری وب دارد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "یک نتیجه‌گیری معقول از همه موارد بالا این است که طراحی بصری وب دیگر اهمیتی ندارد. این نتیجه‌گیری اشتباه است — اما استدلال برای آن حاوی یک بینش واقعی است که ارزش دارد مستقیماً با آن درگیر شوید."
+        },
+        {
+          "type": "paragraph",
+          "text": "طراحی بصری برای کاربرانی که به سایت شما می‌رسند به شدت اهمیت دارد. همان‌طور که جستجوی zero-click کاربرانی را که فقط به یک پاسخ سریع نیاز داشتند فیلتر می‌کند، بازدیدکنندگانی که کلیک می‌کنند به طور فزاینده در مرحله تصمیم‌گیری یا ارزیابی هستند. تحقیقات نشان می‌دهد بازدیدکنندگان ارجاع‌یافته از هوش مصنوعی با نرخی تا ۴.۴ برابر بیشتر از بازدیدکنندگان سنتی ارگانیک تبدیل می‌شوند. کیفیت طراحی بصری و تعاملی که این بازدیدکنندگان را استقبال می‌کند مستقیماً بر تبدیل تأثیر می‌گذارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "آنچه تغییر می‌کند ترتیب اولویت است. طراحی بصری اکنون پایین‌دست معماری محتوا است. یک سایت زیبا با محتوایی که ایجنت‌های هوش مصنوعی نمی‌توانند بخوانند سریع‌تر از یک سایت ساده با اطلاعات ساختارمند و قابل‌استناد نامرئی می‌شود. رشته طراحی که سخت‌ترین جداسازی از GEO را دارد بصری نیست — ساختاری است."
+        },
+        {
+          "type": "cta",
+          "title": "طراحی بدون حرف، چیزی جز دکور نیست",
+          "text": "اگر به جنبه فلسفی تصمیمات طراحی علاقه‌مندید، این مقاله بررسی می‌کند که چرا ارتباط بصری باید فراتر از زیبایی‌شناسی هدفی داشته باشد.",
+          "buttonText": "خواندن درباره طراحی",
+          "buttonUrl": "/blog/design-without-words-is-decoration"
+        },
+        {
+          "type": "cta",
+          "title": "تکنیک‌های مدرن در طراحی فرانت‌اند",
+          "text": "الگوهای فنی که محتوا را هم برای انسان‌ها قابل خواندن و هم برای ماشین‌ها قابل دسترس می‌کنند را در این مقاله بیاموزید.",
+          "buttonText": "کشف تکنیک‌های فرانت‌اند",
+          "buttonUrl": "/blog/modern-frontend-design-techniques"
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "چک‌لیست ممیزی GEO — اینجا شروع کنید",
+          "text": "robots.txt را بررسی کنید: اطمینان حاصل کنید که خزنده‌های هوش مصنوعی (GPTBot، ClaudeBot، PerplexityBot) مسدود نشده‌اند. تنظیمات Cloudflare را ممیزی کنید — پیکربندی پیش‌فرض سال ۲۰۲۵ آن شروع به مسدود کردن ربات‌های هوش مصنوعی کرده است. تأیید کنید که محتوای کلیدی شما server-side رندر می‌شود. یک llms.txt در ریشه‌تان ایجاد کنید. FAQPage و Article JSON-LD schema را پیاده‌سازی کنید. یک سلسله‌مراتب heading H1/H2/H3 روشن با یک موضوع به ازای هر بخش اضافه کنید. بررسی کنید که قیمت‌گذاری، خط‌مشی و محتوای واقعی کلیدی بدون ورود به سیستم یا تعامل قابل دسترس هستند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی: برای هر دو مخاطب طراحی کنید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "وب اکنون دو مخاطب متمایز با الگوهای خواندن اساساً متفاوت دارد. کاربران انسانی سلسله‌مراتب بصری را تفسیر می‌کنند، به طراحی احساسی پاسخ می‌دهند، و از طریق افشای تدریجی ناوبری می‌کنند. ایجنت‌های هوش مصنوعی ساختار معنایی را تجزیه می‌کنند، تراکم واقعی را استخراج می‌کنند، و خوانایی ماشینی را در میلی‌ثانیه‌ها ارزیابی می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "وب‌سایت‌هایی که در وب هوش‌مصنوعی‌اول دوام خواهند آورد و رشد خواهند کرد، آن‌هایی هستند که برای هر دو به‌طور همزمان طراحی شده‌اند. HTML از نظر معنایی تمیز که زیباست. اطلاعاتی که با پاسخ‌ها پیشروی می‌کند و با context دنبال می‌شود. داده ساختارمندی که ابهام را برای مدل‌ها حذف می‌کند. یک llms.txt که روایت سایت شما را در سیستم‌های هوش مصنوعی کنترل می‌کند. طراحی بصری که بازدیدکنندگان با قصد بالا را که از طریق یک استناد هوش مصنوعی کلیک می‌کنند تبدیل می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این مرگ طراحی وب نیست. این گسترش آن به بُعدی است که همیشه آنجا بود اما تا حالا اهمیتی نداشت. طراحان و توسعه‌دهندگانی که هر دو مخاطب را درک می‌کنند پایدارترین، مرئی‌ترین و مؤثرترین سایت‌های دهه بعد را خواهند ساخت."
+        },
+        {
+          "type": "cta",
+          "title": "Schema.org — واژگان داده ساختارمند",
+          "text": "مستندات رسمی schema.org کامل‌ترین واژگان برای داده ساختارمند JSON-LD را ارائه می‌دهد. درک این انواع برای پیاده‌سازی schemaهای FAQPage، Article و BreadcrumbList که در این مقاله بحث شد، ضروری است.",
+          "buttonText": "بازدید از Schema.org",
+          "buttonUrl": "https://schema.org/"
+        },
+        {
+          "type": "cta",
+          "title": "مشخصات llms.txt",
+          "text": "استاندارد llms.txt در حال پذیرش سریع در وب است. یاد بگیرید چگونه این فایل Markdown توکن‌کارآمد را پیاده‌سازی کنید که به مدل‌های هوش مصنوعی نقشه‌ای واضح از ارزشمندترین محتوای سایت شما می‌دهد.",
+          "buttonText": "آشنایی با llms.txt",
+          "buttonUrl": "https://llmstxt.org/"
+        },
+        {
+          "type": "cta",
+          "title": "اوپن وب‌یوآی — رابط هوش مصنوعی متن‌باز",
+          "text": "اوپن وب‌یوآی فعال‌ترین رابط کاربری متن‌باز برای استنتاج LLM محلی است. ببینید چگونه Ollama را با RAG، کنترل دسترسی چندکاربری و رابط کاربری در سطح ChatGPT می‌پوشاند.",
+          "buttonText": "کشف اوپن وب‌یوآی",
+          "buttonUrl": "https://github.com/open-webui/open-webui"
+        },
+        {
+          "type": "cta",
+          "title": "Firecrawl — تبدیل وب‌سایت‌ها به Markdown تمیز",
+          "text": "Firecrawl ابزاری است که هر وب‌سایتی را به Markdown تمیز و توکن‌کارآمد تبدیل می‌کند. این پیاده‌سازی عملی اصول استخراج که در این مقاله بحث شد — ۵ تا ۱۰ بار کارآمدتر از HTML خام برای مصرف هوش مصنوعی.",
+          "buttonText": "امتحان Firecrawl",
+          "buttonUrl": "https://firecrawl.dev/"
+        }
+      ],
+      "faq": [
+        {
+          "question": "بهینه‌سازی موتور مولد (GEO) چیست؟",
+          "answer": "GEO عمل ساختاردهی به محتوای وب است به شکلی که توسط مدل‌های زبانی بزرگ در پاسخ‌های جستجوی تولیدشده توسط هوش مصنوعی بازیابی، درک و استناد شود. برخلاف SEO سنتی که برای رتبه‌بندی کلیدواژه‌ها در لیستی از لینک‌ها بهینه‌سازی می‌کند، GEO برای فرکانس استناد در پاسخ‌های هوش مصنوعی ترکیب‌شده از سیستم‌هایی مثل ChatGPT، Perplexity و Google AI Overviews بهینه‌سازی می‌کند."
+        },
+        {
+          "question": "جستجوی zero-click چیست؟",
+          "answer": "جستجوی zero-click جستجویی است که در آن کاربر یک پاسخ کامل در داخل رابط جستجو دریافت می‌کند — از AI Overview، یک chatbot، یا یک موتور پاسخ مولد — بدون کلیک به هیچ وب‌سایت خارجی. تا سال ۲۰۲۶، بیش از ۶۰٪ از تمام جستجوها به این شکل پایان می‌یابند و این نرخ به ۸۳٪ می‌رسد وقتی AI Overview در نتایج ظاهر می‌شود."
+        },
+        {
+          "question": "llms.txt چیست و چرا اهمیت دارد؟",
+          "answer": "llms.txt یک فایل Markdown است که در ریشه یک وب‌سایت قرار می‌گیرد و به مدل‌های زبانی بزرگ یک نقشه ساختارمند و توکن‌کارآمد از محتوا و هویت سایت ارائه می‌دهد. مثل robots.txt عمل می‌کند — اما به جای کنترل دسترسی، نمایش را کنترل می‌کند. پیاده‌سازی آن می‌تواند مصرف توکن هوش مصنوعی را تا ۹۰٪ کاهش دهد و به طور چشمگیری دقت توصیف مدل‌ها از برند شما را بهبود دهد."
+        },
+        {
+          "question": "آیا طراحی بصری وب در عصر ایجنت‌های هوش مصنوعی هنوز اهمیت دارد؟",
+          "answer": "بله — اما نقشش تغییر کرده است. طراحی بصری اکنون پایین‌دست معماری محتوا است. ایجنت‌های هوش مصنوعی که نمی‌توانند محتوای شما را بخوانند آن را استناد نخواهند داد، بنابراین بهینه‌سازی GEO پیش‌نیاز است. اما بازدیدکنندگان انسانی که از طریق استنادهای هوش مصنوعی می‌رسند معمولاً با قصد بالا هستند و با نرخ‌های تا ۴.۴ برابر بالاتر تبدیل می‌شوند — که طراحی بصری را نه کمتر بلکه بیشتر پیامدمند می‌کند."
+        },
+        {
+          "question": "چرا رندرینگ سمت کلاینت به دیده‌شدن در هوش مصنوعی آسیب می‌زند؟",
+          "answer": "خزنده‌های هوش مصنوعی HTML بازگشتی سرور شما را می‌خوانند. محتوایی که تنها پس از اجرای JavaScript ظاهر می‌شود — رایج در اپلیکیشن‌های React، Vue و Angular که از رندرینگ سمت کلاینت استفاده می‌کنند — ممکن است برای مدل کاملاً نامرئی باشد. محتوای کلیدی، headingها و داده ساختارمند باید در HTML رندرشده سرور موجود باشند تا برای ایجنت‌های هوش مصنوعی که از سایت شما بازدید می‌کنند قابل دسترس باشند."
+        }
+      ],
+      "seo": {
+        "title": "مرگ وب‌سایت‌های سنتی: طراحی برای ایجنت‌های هوش مصنوعی | GEO و جستجوی هوش مصنوعی ۲۰۲۶",
+        "metaDescription": "بیش از ۶۰٪ از جستجوها بدون کلیک پایان می‌یابند. ایجنت‌های هوش مصنوعی سایت شما را بدون دیدن طراحی‌تان مرور می‌کنند. یاد بگیرید چگونه GEO، llms.txt، داده ساختارمند و معماری محتوا تعیین می‌کنند که آیا مدل‌های زبانی در سال ۲۰۲۶ وب‌سایت شما را استناد می‌کنند یا نادیده می‌گیرند.",
+        "canonical": "https://sinisteroid.ir/blog/the-death-of-traditional-websites-designing-for-ai-agents",
+        "openGraph": {
+          "image": "/api/uploads/the-death-of-traditional-websites-designing-for-ai-agents-cover.webp"
+        },
+        "twitter": {
+          "image": "/api/uploads/the-death-of-traditional-websites-designing-for-ai-agents-cover.webp"
+        },
+        "keywords": "طراحی وب برای ایجنت‌های هوش مصنوعی، آینده طراحی وب، بهینه‌سازی جستجوی هوش مصنوعی، بهینه‌سازی LLM، GEO بهینه‌سازی موتور مولد، llms.txt، داده ساختارمند برای هوش مصنوعی، جستجوی zero-click، خزنده هوش مصنوعی، طراحی برای ایجنت‌های هوش مصنوعی",
+        "focusKeyword": "طراحی برای ایجنت‌های هوش مصنوعی"
+      }
+    }
+  }
+}

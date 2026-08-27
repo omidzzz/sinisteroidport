@@ -1,0 +1,645 @@
+{
+  "slug": "claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026",
+  "status": "published",
+  "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+  "date": "2026-08-15 01:39:34",
+  "tags": [
+    "claude-code",
+    "cline",
+    "ai-coding-agent",
+    "ai-coding-assistant",
+    "developer-tools",
+    "agentic-ai",
+    "vs-code-extension",
+    "open-source-ai",
+    "ai-engineering",
+    "anthropic"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/1786757603-claude-code-vs-cline-2026-cover--2-.webp",
+    "alt": {
+      "en": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+      "fa": "کلود کد در برابر کلاین: کدام عامل کدنویسی هوش مصنوعی را در ۲۰۲۶ انتخاب کنیم؟"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+      "excerpt": "Claude Code and Cline are two of the most capable agentic coding tools of 2026 — one a polished, subscription-based product from Anthropic, the other a free, open-source, model-agnostic extension. Here's a full head-to-head on pricing, models, platforms, autonomy, and which one actually fits your workflow.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "In 2026, \"Claude Code or Cline?\" has become as common a question in developer circles as \"tabs or spaces\" once was. Both are agentic coding tools that go far beyond autocomplete — they read your codebase, write and edit files directly, run your test suite, and work through multi-step tasks with minimal hand-holding. But they are built on almost opposite philosophies: one is a polished, single-vendor subscription product; the other is a free, open-source, bring-your-own-model extension. Picking the wrong one for your situation means either overpaying or fighting your tools."
+        },
+        {
+          "type": "paragraph",
+          "text": "This guide breaks down exactly how Claude Code and Cline differ — pricing, supported models, IDE and platform coverage, autonomy and safety controls, and enterprise readiness — so you can pick the one (or the combination) that actually fits how you build software."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "$0",
+              "label": "Cline's own price tag — you only pay for the model tokens you use"
+            },
+            {
+              "value": "$20–$200/mo",
+              "label": "Claude Code's Pro-to-Max 20x subscription range, bundled with Claude.ai usage"
+            },
+            {
+              "value": "60,000+",
+              "label": "GitHub stars on Cline's open-source repository"
+            },
+            {
+              "value": "12+",
+              "label": "LLM providers Cline can connect to, from Claude to local Ollama models"
+            },
+            {
+              "value": "1",
+              "label": "Model family Claude Code runs on — Anthropic's own Claude models, exclusively"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786757711-claude-code-vs-cline-overview--2-.webp",
+          "alt": "Split illustration comparing Claude Code terminal interface on one side and Cline VS Code sidebar on the other",
+          "caption": "Figure 1: Two different philosophies for the same job — an integrated, single-vendor agent versus a free, model-agnostic extension."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What Is Claude Code?"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Claude Code is Anthropic's official agentic coding tool, built to read an entire codebase, plan a change, and then execute it directly — writing files, running commands, and iterating until the task is done."
+        },
+        {
+          "type": "paragraph",
+          "text": "It ships across more surfaces than most competitors: a terminal CLI, a desktop app, extensions for VS Code and JetBrains, a web version, and even a Slack integration for triggering agent runs from a channel. Under the hood it runs exclusively on Anthropic's Claude models, which gives it tight integration with features like large context windows, prompt caching, and Anthropic's own Model Context Protocol (MCP) for connecting to GitHub, databases, browsers, and other tools."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Ships in the terminal, a desktop app, VS Code, JetBrains, the web, and Slack",
+            "Plan Mode — Claude proposes an approach and lets you review it before touching any files",
+            "Checkpoints — automatic snapshots before changes, so you can rewind with a keystroke if something breaks",
+            "Native MCP and plugin support — bundle skills, commands, subagents, and hooks into one install",
+            "Subagents — spin off parallel, focused agents for larger multi-part tasks",
+            "Runs exclusively on Anthropic's Claude models, bundled into a Claude Pro or Max subscription"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code — Official Product Page",
+          "text": "See current features, supported platforms, and how to install Claude Code directly from Anthropic.",
+          "buttonText": "Visit Claude Code",
+          "buttonUrl": "https://claude.com/product/claude-code"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What Is Cline?"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline started life as an extension called \"Claude Dev\" and has grown into one of the most widely adopted open-source coding agents around — free, model-agnostic, and built to run wherever you already work."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline is Apache-2.0 licensed and completely free; you bring your own API key and pay only for the model inference you use. It runs as a VS Code extension (its original home), a JetBrains plugin, a standalone terminal CLI, a Kanban board for orchestrating multiple agents in parallel, and an embeddable SDK for teams building their own tools on top of it. Because it is model-agnostic, you can point it at Claude, GPT, Gemini, DeepSeek, or a fully local Ollama model — including switching models mid-project, or using a cheaper model for planning and a stronger one for execution."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Free and open source (Apache-2.0), with a large, active community",
+            "Bring-your-own-key: connect Claude, GPT, Gemini, DeepSeek, or a fully local Ollama model",
+            "Plan Mode / Act Mode — review the proposed plan before any file is touched, then approve execution",
+            "Ships as a VS Code and JetBrains extension, a terminal CLI, a Kanban board, and an embeddable SDK",
+            "Human-in-the-loop approval on file edits and terminal commands by default",
+            "Built-in spend-limit controls so a runaway agent can't quietly drain your API budget"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Cline: The Open-Source AI Coding Agent",
+          "text": "Our full breakdown of how Cline works, recommended models, and why developers are adopting it.",
+          "buttonText": "Read the Cline Guide",
+          "buttonUrl": "https://sinisteroid.ir/blog/cline-the-open-source-ai-coding-agent"
+        },
+        {
+          "type": "cta",
+          "title": "Cline — Official Website",
+          "text": "Install instructions, supported providers, and the open-source repository straight from the Cline team.",
+          "buttonText": "Visit cline.bot",
+          "buttonUrl": "https://cline.bot/"
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786757485-claude-code-vs-cline-architecture--2-.webp",
+          "alt": "Diagram showing Claude Code connected only to Claude models versus Cline connected to multiple LLM providers and a local Ollama instance",
+          "caption": "Figure 2: Claude Code is a single-vendor stack built around Claude. Cline is a thin, model-agnostic layer you point at whatever provider — or local model — you choose."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Claude Code vs Cline: Head-to-Head"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Pricing and Cost Model"
+        },
+        {
+          "type": "paragraph",
+          "text": "Claude Code isn't priced as a standalone product — it's bundled into a Claude subscription. Pro runs $20/month (or roughly $17/month billed annually) and covers light-to-moderate use; Max 5x is $100/month and Max 20x is $200/month for heavier workloads. Team plans require Premium seats at $100/seat/month with a five-seat minimum, and Enterprise pricing is negotiated directly with Anthropic. Because Claude Code shares its token budget with regular Claude.ai chat usage, a rolling 5-hour session window and a weekly cap both apply."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline itself costs nothing. You pay only for the model inference you actually use, through whichever provider you connect — Anthropic, OpenAI, Google, DeepSeek, OpenRouter, and others — or you pay nothing at all by running a local Ollama model. Cline also offers an Enterprise tier for centralized billing and governance at organizations that want that layer without giving up model flexibility."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "Compare the real cost, not the sticker price",
+          "text": "Claude Code's monthly fee already includes model access, so a $20 Pro plan can be cheaper than expected for light use. Cline's $0 license fee can still add up fast on heavy days if you're paying per token for a frontier model — track your spend, or set a cap, either way."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Model Flexibility"
+        },
+        {
+          "type": "paragraph",
+          "text": "Claude Code runs exclusively on Anthropic's Claude models. That's a deliberate trade-off: you get deep integration between the agent and the model it was designed around, but no option to swap in a different vendor's model for a specific task."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline is model-agnostic by design, with support for a dozen-plus providers. You can use Claude for the toughest reasoning, a cheaper open-weight model for routine edits, or a fully local model through Ollama when the code can't leave your machine at all. That flexibility is Cline's single biggest structural advantage over Claude Code."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "IDE and Platform Coverage"
+        },
+        {
+          "type": "paragraph",
+          "text": "Claude Code covers the terminal, a desktop app, VS Code, JetBrains, the web, and Slack — a broad, officially maintained surface. Cline covers VS Code (its original home) and JetBrains too, plus a standalone terminal CLI, a Kanban board for running several agents in parallel across worktrees, and an SDK for embedding the same engine into custom tools. Cline's open-source codebase has also been forked into other well-known agents, including Roo Code and Kilo Code, extending its reach further."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Autonomy, Control, and Safety"
+        },
+        {
+          "type": "paragraph",
+          "text": "Both tools default to asking before making changes, but the mechanics differ. Claude Code offers Plan Mode for reviewing an approach up front, automatic checkpoints so you can rewind with a keystroke, granular permission modes, and an Auto Mode research preview that runs a separate safety classifier over each action before it executes."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline splits work into Plan Mode and Act Mode: you approve the plan first, then Cline executes it with human approval at each file edit and terminal command by default. It also ships a dedicated spend-limit interface, letting you cap daily or monthly spend so an agent loop can't run away with your API budget."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Enterprise and Compliance"
+        },
+        {
+          "type": "paragraph",
+          "text": "Claude Code's Enterprise tier (through a Claude Enterprise plan) adds a much larger context window, HIPAA readiness, SSO, and custom data retention terms — the kind of paperwork regulated industries usually need. Cline Enterprise adds OIDC, SCIM provisioning, and air-gapped deployment options, but as of mid-2026 it does not carry third-party certifications like SOC 2, HIPAA, or ISO 27001 on any tier. That's worth flagging directly to your compliance team before standardizing on it in a regulated environment."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786758005-claude-code-vs-cline-comparison-table.webp",
+          "alt": "Side-by-side comparison chart of Claude Code and Cline across pricing, model support, platforms, and enterprise features",
+          "caption": "Figure 3: The core trade-off in one picture — an integrated single-vendor product versus a free, flexible, bring-your-own-model extension."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Which One Should You Actually Choose?"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Choose Claude Code if you're already on a Claude Pro or Max plan, want the most polished out-of-the-box experience, and like having plan mode, checkpoints, and MCP tightly integrated in one product.",
+            "Choose Cline if you want zero licensing cost, the freedom to switch models per task, or the ability to run coding agents fully offline against a local model for maximum privacy.",
+            "Choose Cline if you live in VS Code or JetBrains already and want agentic coding without adding a new subscription on top of your existing tools.",
+            "Choose Claude Code if you want official support, a single vendor to troubleshoot with, and the largest context windows Anthropic offers on Enterprise plans.",
+            "Consider running both: many teams use Claude Code for deep, interactive sessions and Cline for cost-sensitive CI/CD automation or privacy-constrained projects run on local models."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "If privacy is your primary driver rather than cost, Cline's ability to run entirely against a local Ollama model is worth a closer look — it's the same open-source stack we cover in our local AI guides."
+        },
+        {
+          "type": "cta",
+          "title": "Ollama: The Engine Behind Local AI",
+          "text": "Pair Cline with a fully offline model using Ollama — installation, model picks, and real-world performance.",
+          "buttonText": "Read the Ollama Guide",
+          "buttonUrl": "https://sinisteroid.ir/blog/ollama-the-engine-behind-local-ai"
+        },
+        {
+          "type": "cta",
+          "title": "Your AI Tools Are Spying on You. Here's the Fix.",
+          "text": "The broader privacy case for local inference — and how to build a fully private AI stack, coding agents included.",
+          "buttonText": "Read the Privacy Guide",
+          "buttonUrl": "https://sinisteroid.ir/blog/your-ai-tools-are-spying-on-you-heres-the-fix"
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786757329-claude-code-vs-cline-decision-flow.webp",
+          "alt": "Simple decision flowchart guiding a developer to Claude Code or Cline based on budget, privacy needs, and existing tools",
+          "caption": "Figure 4: A quick way to decide — start with your budget and privacy requirements, and the right agent usually becomes obvious."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Conclusion: Two Strong Answers to the Same Problem"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Claude Code and Cline aren't really competing on capability alone — they're competing on philosophy: an integrated, single-vendor product versus a free, open, bring-your-own-model layer."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you want the most cohesive experience and already value Claude, Claude Code is the straightforward choice. If you want maximum flexibility, zero licensing cost, or a private, fully local setup, Cline is hard to beat. Plenty of developers in 2026 end up using both, matching the tool to the task rather than picking a single winner."
+        },
+        {
+          "type": "paragraph",
+          "text": "Whichever you start with, both tools are moving fast — check their official changelogs before committing a whole team to one workflow."
+        }
+      ],
+      "faq": [
+        {
+          "question": "Is Cline really free to use?",
+          "answer": "Yes. Cline itself is free and open source under the Apache-2.0 license. Your only cost is the inference you consume from whichever model provider you connect — or nothing at all if you run a local Ollama model."
+        },
+        {
+          "question": "Can Cline use Claude models?",
+          "answer": "Yes. Cline is model-agnostic and supports Anthropic's Claude models alongside OpenAI, Google Gemini, DeepSeek, and a dozen-plus other providers, including local models through Ollama."
+        },
+        {
+          "question": "Does Claude Code work outside the terminal?",
+          "answer": "Yes. Beyond the terminal CLI, Claude Code ships as a desktop app, extensions for VS Code and JetBrains, a web version, and a Slack integration."
+        },
+        {
+          "question": "Which one is better for enterprise teams?",
+          "answer": "It depends on your compliance requirements. Claude Code's Enterprise tier offers HIPAA readiness and a larger context window through Anthropic. Cline Enterprise offers OIDC, SCIM, and air-gapped deployment, but does not currently hold SOC 2, HIPAA, or ISO 27001 certifications, so regulated teams should check with their compliance function first."
+        },
+        {
+          "question": "Can I run Cline fully offline?",
+          "answer": "Yes. Point Cline at a local Ollama instance and inference happens entirely on your own machine, with no code or prompts sent to a third-party API."
+        },
+        {
+          "question": "Does Claude Code support MCP (Model Context Protocol)?",
+          "answer": "Yes. Claude Code has native MCP support for connecting to tools like GitHub, databases, and browsers, along with a plugin system for bundling skills, commands, and subagents."
+        },
+        {
+          "question": "What's the real cost difference between the two?",
+          "answer": "Claude Code's subscription ($20–$200/month) includes model access and support, while Cline is free but bills you directly for model inference. For light, occasional use Claude Code's flat fee can be simpler; for variable or high-volume use, Cline lets you shop for the cheapest model that gets the job done — including free local models."
+        }
+      ],
+      "seo": {
+        "title": "Claude Code vs Cline (2026): Full AI Coding Agent Comparison",
+        "metaDescription": "Claude Code vs Cline compared for 2026: pricing, supported models, IDE support, autonomy controls, and enterprise readiness — plus which one fits your workflow.",
+        "canonical": "https://sinisteroid.ir/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026",
+        "openGraph": {
+          "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+          "description": "A full head-to-head between Anthropic's Claude Code and the open-source Cline agent — pricing, models, platforms, and which one wins for your workflow.",
+          "image": "/api/uploads/REPLACE-claude-code-vs-cline-2026-cover.webp"
+        },
+        "twitter": {
+          "title": "Claude Code vs Cline: Which AI Coding Agent Wins in 2026?",
+          "description": "Subscription-based and single-vendor vs free, open-source, and model-agnostic. Here's exactly how Claude Code and Cline compare in 2026.",
+          "image": "/api/uploads/REPLACE-claude-code-vs-cline-2026-cover.webp"
+        },
+        "keywords": "Claude Code vs Cline, Claude Code, Cline AI, AI coding agent, agentic coding, best AI coding assistant 2026, Claude Code pricing, Cline VS Code extension, open source AI coding agent, AI pair programmer comparison, Anthropic Claude Code, Cline vs Claude Code",
+        "focusKeyword": "Claude Code vs Cline"
+      }
+    },
+    "fa": {
+      "title": "کلود کد در برابر کلاین: توسعه‌دهندگان در ۲۰۲۶ کدام عامل کدنویسی هوش مصنوعی را انتخاب کنند؟",
+      "excerpt": "کلود کد و کلاین دو تا از قابل‌اعتمادترین ابزارهای عامل‌محور کدنویسی در سال ۲۰۲۶ هستند؛ یکی محصولی حرفه‌ای و اشتراکی از آنتروپیک، دیگری یک افزونهٔ رایگان، متن‌باز و مستقل از مدل. در این مقاله قیمت، مدل‌ها، پلتفرم‌ها، میزان خودمختاری و اینکه کدام‌یک واقعاً با روند کاری شما هم‌خوانی دارد را بررسی می‌کنیم.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "کلود کد در برابر کلاین: توسعه‌دهندگان در ۲۰۲۶ کدام عامل کدنویسی هوش مصنوعی را انتخاب کنند؟"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "در سال ۲۰۲۶، سؤال «کلود کد یا کلاین؟» در میان توسعه‌دهندگان به‌اندازهٔ «تب یا اسپیس؟» رایج شده است. هر دو ابزارهای عامل‌محور کدنویسی هستند که فراتر از تکمیل خودکار عمل می‌کنند: کدبیس شما را می‌خوانند، مستقیماً فایل‌ها را می‌نویسند و ویرایش می‌کنند، تست‌های شما را اجرا می‌کنند و وظایف چندمرحله‌ای را با حداقل دخالت شما پیش می‌برند. اما فلسفهٔ ساخت آن‌ها تقریباً معکوس یکدیگر است: یکی محصولی حرفه‌ای و تک‌فروشنده با اشتراک ماهانه است؛ دیگری افزونه‌ای رایگان، متن‌باز و با امکان انتخاب آزادانهٔ مدل. انتخاب اشتباه در این میان یعنی یا هزینهٔ اضافه می‌پردازید یا با ابزار خود درگیر می‌شوید."
+        },
+        {
+          "type": "paragraph",
+          "text": "در این راهنما دقیقاً بررسی می‌کنیم که کلود کد و کلاین از نظر قیمت، مدل‌های پشتیبانی‌شده، پوشش IDE و پلتفرم، خودمختاری و کنترل‌های ایمنی، و آمادگی سازمانی چه تفاوتی دارند — تا بتوانید ابزاری (یا ترکیبی) را انتخاب کنید که واقعاً با روش کدنویسی شما هم‌خوانی دارد."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۰ دلار",
+              "label": "قیمت خود کلاین — فقط هزینهٔ توکن‌های مدلی که استفاده می‌کنید پرداخت می‌شود"
+            },
+            {
+              "value": "۲۰ تا ۲۰۰ دلار در ماه",
+              "label": "بازهٔ اشتراک کلود کد از Pro تا Max ۲۰x، همراه با استفادهٔ Claude.ai"
+            },
+            {
+              "value": "بیش از ۶۰,۰۰۰",
+              "label": "ستاره گیت‌هاب روی مخزن متن‌باز کلاین"
+            },
+            {
+              "value": "بیش از ۱۲",
+              "label": "ارائه‌دهندهٔ مدل زبانی که کلاین می‌تواند به آن‌ها متصل شود، از کلود تا مدل‌های محلی Ollama"
+            },
+            {
+              "value": "۱",
+              "label": "خانوادهٔ مدلی که کلود کد روی آن اجرا می‌شود — منحصراً مدل‌های کلود از آنتروپیک"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786758027-claude-code-vs-cline-overview--2-.webp",
+          "alt": "تصویری دوبخشی که رابط ترمینال کلود کد را در یک سمت و نوار کناری کلاین در VS Code را در سمت دیگر نشان می‌دهد",
+          "caption": "شکل ۱: دو فلسفهٔ متفاوت برای یک هدف — یک عامل یکپارچه و تک‌فروشنده در برابر یک افزونهٔ رایگان و مستقل از مدل."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کلود کد چیست؟"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کلود کد ابزار رسمی کدنویسی عامل‌محور آنتروپیک است که برای خواندن کل کدبیس، برنامه‌ریزی یک تغییر و سپس اجرای مستقیم آن — نوشتن فایل، اجرای دستورات و تکرار تا پایان کار — طراحی شده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "این ابزار روی بیشتر از اکثر رقبا عرضه می‌شود: یک CLI ترمینالی، یک اپلیکیشن دسکتاپ، افزونه برای VS Code و JetBrains، نسخهٔ وب، و حتی یکپارچگی با Slack برای اجرای عامل از داخل یک کانال. در پس‌زمینه، این ابزار منحصراً روی مدل‌های کلود آنتروپیک اجرا می‌شود، که یکپارچگی محکمی با ویژگی‌هایی مثل پنجره‌های زمینهٔ بزرگ، کش کردن پرامپت و پروتکل زمینهٔ مدل (MCP) خود آنتروپیک برای اتصال به گیت‌هاب، پایگاه‌های داده، مرورگرها و ابزارهای دیگر فراهم می‌کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "روی ترمینال، اپلیکیشن دسکتاپ، VS Code، JetBrains، وب و Slack عرضه می‌شود",
+            "حالت برنامه‌ریزی (Plan Mode) — کلود رویکردی پیشنهاد می‌دهد و پیش از دست‌زدن به هر فایلی، اجازهٔ بازبینی به شما می‌دهد",
+            "چک‌پوینت‌ها — عکس‌های خودکار پیش از تغییرات، تا در صورت خرابکاری با یک کلید بتوانید به عقب برگردید",
+            "پشتیبانی بومی از MCP و پلاگین‌ها — مهارت‌ها، دستورات، ساب‌ایجنت‌ها و هوک‌ها را در یک نصب بسته‌بندی می‌کند",
+            "ساب‌ایجنت‌ها — برای وظایف بزرگ و چندبخشی، عامل‌های موازی و متمرکز راه‌اندازی می‌کند",
+            "منحصراً روی مدل‌های کلود آنتروپیک اجرا می‌شود و در اشتراک Claude Pro یا Max گنجانده شده است"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "کلود کد — صفحهٔ رسمی محصول",
+          "text": "ویژگی‌های فعلی، پلتفرم‌های پشتیبانی‌شده و روش نصب کلود کد را مستقیماً از آنتروپیک ببینید.",
+          "buttonText": "مشاهدهٔ کلود کد",
+          "buttonUrl": "https://claude.com/product/claude-code"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کلاین چیست؟"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کلاین کار خود را به‌عنوان افزونه‌ای به نام «Claude Dev» آغاز کرد و اکنون به یکی از پرکاربردترین عامل‌های متن‌باز کدنویسی تبدیل شده است — رایگان، مستقل از مدل، و طراحی‌شده برای اجرا در هر جایی که از قبل کار می‌کنید."
+        },
+        {
+          "type": "paragraph",
+          "text": "کلاین با مجوز Apache-2.0 منتشر شده و کاملاً رایگان است؛ شما کلید API خود را وارد می‌کنید و فقط بابت استنتاج مدلی که استفاده می‌کنید پرداخت می‌کنید. این ابزار به‌صورت افزونهٔ VS Code (خاستگاه اصلی‌اش)، پلاگین JetBrains، یک CLI مستقل در ترمینال، یک تختهٔ کانبان برای هماهنگی چند عامل به‌صورت موازی، و یک SDK قابل‌جاسازی برای تیم‌هایی که می‌خواهند ابزار خود را روی آن بسازند، عرضه می‌شود. از آنجا که مستقل از مدل است، می‌توانید آن را به کلود، GPT، Gemini، DeepSeek یا حتی یک مدل کاملاً محلی از طریق Ollama متصل کنید — از جمله تعویض مدل در میانهٔ پروژه یا استفاده از یک مدل ارزان‌تر برای برنامه‌ریزی و مدلی قوی‌تر برای اجرا."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "رایگان و متن‌باز (Apache-2.0) با جامعه‌ای بزرگ و فعال",
+            "با کلید خودتان: به کلود، GPT، Gemini، DeepSeek یا یک مدل کاملاً محلی از طریق Ollama متصل شوید",
+            "حالت برنامه‌ریزی / حالت اجرا (Plan Mode / Act Mode) — پیش از دست‌زدن به هر فایلی، طرح پیشنهادی را بازبینی و سپس اجرای آن را تأیید کنید",
+            "به‌صورت افزونهٔ VS Code و JetBrains، یک CLI ترمینالی، یک تختهٔ کانبان و یک SDK قابل‌جاسازی عرضه می‌شود",
+            "به‌طور پیش‌فرض، تأیید انسانی برای ویرایش فایل‌ها و اجرای دستورات ترمینال لازم است",
+            "کنترل‌های محدودیت هزینهٔ داخلی، تا یک عامل خارج از کنترل نتواند بی‌سروصدا بودجهٔ API شما را خالی کند"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "کلاین: عامل کدنویسی متن‌باز هوش مصنوعی",
+          "text": "بررسی کامل ما از نحوهٔ کار کلاین، مدل‌های پیشنهادی و دلیل روی‌آوردن توسعه‌دهندگان به آن.",
+          "buttonText": "مطالعهٔ راهنمای کلاین",
+          "buttonUrl": "https://sinisteroid.ir/fa/blog/cline-the-open-source-ai-coding-agent"
+        },
+        {
+          "type": "cta",
+          "title": "کلاین — وب‌سایت رسمی",
+          "text": "راهنمای نصب، ارائه‌دهندگان پشتیبانی‌شده و مخزن متن‌باز، مستقیماً از تیم کلاین.",
+          "buttonText": "مشاهدهٔ cline.bot",
+          "buttonUrl": "https://cline.bot/"
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786758039-claude-code-vs-cline-architecture--2-.webp",
+          "alt": "نموداری که کلود کد را فقط متصل به مدل‌های کلود، و کلاین را متصل به چند ارائه‌دهندهٔ مدل و یک نمونهٔ محلی Ollama نشان می‌دهد",
+          "caption": "شکل ۲: کلود کد یک پشتهٔ تک‌فروشنده و ساخته‌شده حول کلود است. کلاین لایه‌ای نازک و مستقل از مدل است که آن را به هر ارائه‌دهنده — یا مدل محلی — که انتخاب کنید متصل می‌کنید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کلود کد در برابر کلاین: مقایسهٔ رودررو"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "قیمت و مدل هزینه"
+        },
+        {
+          "type": "paragraph",
+          "text": "کلود کد به‌عنوان محصولی مستقل قیمت‌گذاری نشده — بلکه در اشتراک کلود گنجانده شده است. پلن Pro ماهانه ۲۰ دلار (یا حدود ۱۷ دلار در صورت پرداخت سالانه) است و استفادهٔ سبک تا متوسط را پوشش می‌دهد؛ Max ۵x ماهانه ۱۰۰ دلار و Max ۲۰x ماهانه ۲۰۰ دلار برای بارهای کاری سنگین‌تر است. پلن‌های تیمی نیازمند صندلی‌های Premium با قیمت ۱۰۰ دلار در ماه به ازای هر صندلی (حداقل پنج صندلی) هستند و قیمت‌گذاری Enterprise مستقیماً با آنتروپیک مذاکره می‌شود. از آنجا که کلود کد بودجهٔ توکن خود را با استفادهٔ عادی از چت Claude.ai به اشتراک می‌گذارد، هم یک پنجرهٔ نشست ۵ ساعتهٔ چرخشی و هم یک سقف هفتگی روی آن اعمال می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "خود کلاین هیچ هزینه‌ای ندارد. شما فقط بابت استنتاج مدلی که واقعاً استفاده می‌کنید — از طریق هر ارائه‌دهنده‌ای که متصل کنید، از جمله آنتروپیک، OpenAI، گوگل، DeepSeek، OpenRouter و دیگران — پرداخت می‌کنید، یا با اجرای یک مدل محلی Ollama اصلاً چیزی پرداخت نمی‌کنید. کلاین همچنین یک لایهٔ Enterprise برای صورتحساب متمرکز و حاکمیت سازمانی ارائه می‌دهد، برای سازمان‌هایی که این لایه را می‌خواهند بدون اینکه انعطاف‌پذیری مدل را از دست بدهند."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "هزینهٔ واقعی را مقایسه کنید، نه برچسب قیمت",
+          "text": "هزینهٔ ماهانهٔ کلود کد از قبل شامل دسترسی به مدل است، پس یک پلن Pro با ۲۰ دلار برای استفادهٔ سبک می‌تواند ارزان‌تر از حد انتظار باشد. هزینهٔ صفر لایسنس کلاین هم می‌تواند در روزهای پرمصرف، اگر بابت هر توکن یک مدل پیشرو پرداخت می‌کنید، سریع بالا برود — در هر دو حالت، هزینه‌های خود را رصد کنید یا سقفی برایشان تعیین کنید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "انعطاف‌پذیری مدل"
+        },
+        {
+          "type": "paragraph",
+          "text": "کلود کد منحصراً روی مدل‌های کلود آنتروپیک اجرا می‌شود. این یک معاملهٔ آگاهانه است: یکپارچگی عمیقی میان عامل و مدلی که برای آن طراحی شده به دست می‌آورید، اما امکان جایگزینی مدل فروشندهٔ دیگر برای یک وظیفهٔ خاص وجود ندارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "کلاین از ابتدا مستقل از مدل طراحی شده و از بیش از دوازده ارائه‌دهنده پشتیبانی می‌کند. می‌توانید از کلود برای سخت‌ترین استدلال‌ها، یک مدل باز و ارزان‌تر برای ویرایش‌های معمول، یا یک مدل کاملاً محلی از طریق Ollama وقتی کد اصلاً نباید از دستگاه شما خارج شود، استفاده کنید. این انعطاف‌پذیری بزرگ‌ترین مزیت ساختاری کلاین نسبت به کلود کد است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "پوشش IDE و پلتفرم"
+        },
+        {
+          "type": "paragraph",
+          "text": "کلود کد ترمینال، اپلیکیشن دسکتاپ، VS Code، JetBrains، وب و Slack را پوشش می‌دهد — سطحی گسترده و رسماً نگهداری‌شده. کلاین هم VS Code (خاستگاه اصلی‌اش) و JetBrains را پوشش می‌دهد، به‌علاوهٔ یک CLI مستقل در ترمینال، یک تختهٔ کانبان برای اجرای چند عامل به‌صورت موازی روی worktreeهای مختلف، و یک SDK برای جاسازی همان موتور در ابزارهای سفارشی. کدبیس متن‌باز کلاین همچنین به عامل‌های شناخته‌شدهٔ دیگری مثل Roo Code و Kilo Code فورک شده و دسترسی آن را گسترده‌تر کرده است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "خودمختاری، کنترل و ایمنی"
+        },
+        {
+          "type": "paragraph",
+          "text": "هر دو ابزار به‌طور پیش‌فرض پیش از اعمال تغییرات، از شما اجازه می‌گیرند، اما سازوکارشان متفاوت است. کلود کد حالت برنامه‌ریزی برای بازبینی رویکرد از پیش، چک‌پوینت‌های خودکار برای بازگشت با یک کلید، حالت‌های مجوز دقیق، و یک پیش‌نمایش تحقیقاتی به نام Auto Mode ارائه می‌دهد که پیش از اجرای هر اقدام، یک دسته‌بند ایمنی جداگانه آن را بررسی می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "کلاین کار را به حالت برنامه‌ریزی و حالت اجرا تقسیم می‌کند: ابتدا طرح را تأیید می‌کنید، سپس کلاین آن را با تأیید انسانی برای هر ویرایش فایل و دستور ترمینال (به‌طور پیش‌فرض) اجرا می‌کند. همچنین یک رابط اختصاصی محدودیت هزینه دارد که به شما اجازه می‌دهد سقف روزانه یا ماهانه تعیین کنید تا یک حلقهٔ عامل نتواند بودجهٔ API شما را خالی کند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "سازمان و انطباق قانونی"
+        },
+        {
+          "type": "paragraph",
+          "text": "لایهٔ Enterprise کلود کد (از طریق پلن Claude Enterprise) پنجرهٔ زمینهٔ بسیار بزرگ‌تر، آمادگی HIPAA، SSO و شرایط سفارشی نگهداری داده را اضافه می‌کند — همان نوع مستنداتی که صنایع تحت مقررات معمولاً به آن نیاز دارند. Cline Enterprise هم OIDC، تدارک SCIM و گزینه‌های استقرار ایزوله (air-gapped) را اضافه می‌کند، اما تا اواسط ۲۰۲۶ در هیچ لایه‌ای گواهی‌های شخص‌ثالث مثل SOC 2، HIPAA یا ISO 27001 ندارد. این نکته را پیش از استانداردسازی روی آن در یک محیط تحت مقررات، حتماً با تیم انطباق خود مطرح کنید."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786758048-claude-code-vs-cline-comparison-table.webp",
+          "alt": "جدول مقایسهٔ کنار هم کلود کد و کلاین از نظر قیمت، پشتیبانی مدل، پلتفرم‌ها و ویژگی‌های سازمانی",
+          "caption": "شکل ۳: معاملهٔ اصلی در یک تصویر — یک محصول یکپارچهٔ تک‌فروشنده در برابر یک افزونهٔ رایگان، انعطاف‌پذیر و مستقل از مدل."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "واقعاً کدام‌یک را انتخاب کنیم؟"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "اگر از قبل عضو پلن Claude Pro یا Max هستید، بهترین تجربهٔ آماده را می‌خواهید و به یکپارچگی محکم حالت برنامه‌ریزی، چک‌پوینت‌ها و MCP در یک محصول علاقه دارید، کلود کد را انتخاب کنید.",
+            "اگر هزینهٔ لایسنس صفر، آزادی تعویض مدل بر اساس وظیفه، یا امکان اجرای کامل آفلاین عامل‌های کدنویسی روی مدل محلی برای حداکثر حریم خصوصی را می‌خواهید، کلاین را انتخاب کنید.",
+            "اگر از قبل در VS Code یا JetBrains کار می‌کنید و می‌خواهید کدنویسی عامل‌محور را بدون افزودن اشتراک جدید روی ابزارهای فعلی‌تان داشته باشید، کلاین را انتخاب کنید.",
+            "اگر پشتیبانی رسمی، یک فروشندهٔ واحد برای عیب‌یابی، و بزرگ‌ترین پنجره‌های زمینه‌ای که آنتروپیک در پلن‌های Enterprise ارائه می‌دهد را می‌خواهید، کلود کد را انتخاب کنید.",
+            "استفادهٔ همزمان از هر دو را هم در نظر بگیرید: بسیاری از تیم‌ها از کلود کد برای نشست‌های عمیق و تعاملی و از کلاین برای اتوماسیون حساس به هزینه در CI/CD یا پروژه‌های محدود از نظر حریم خصوصی روی مدل‌های محلی استفاده می‌کنند."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "اگر حریم خصوصی محرک اصلی شماست نه هزینه، توانایی کلاین برای اجرای کامل روی مدل محلی Ollama ارزش بررسی دقیق‌تری دارد — همان پشتهٔ متن‌بازی که در راهنماهای هوش مصنوعی محلی ما پوشش داده‌ایم."
+        },
+        {
+          "type": "cta",
+          "title": "اولاما: موتور پشت هوش مصنوعی محلی",
+          "text": "کلاین را با یک مدل کاملاً آفلاین از طریق Ollama جفت کنید — نصب، انتخاب مدل و عملکرد واقعی.",
+          "buttonText": "مطالعهٔ راهنمای اولاما",
+          "buttonUrl": "https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai"
+        },
+        {
+          "type": "cta",
+          "title": "ابزارهای هوش مصنوعی شما در حال جاسوسی از شما هستند. راه‌حل اینجاست.",
+          "text": "استدلال گسترده‌تر برای استنتاج محلی — و چگونگی ساخت یک پشتهٔ هوش مصنوعی کاملاً خصوصی، شامل عامل‌های کدنویسی.",
+          "buttonText": "مطالعهٔ راهنمای حریم خصوصی",
+          "buttonUrl": "https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix"
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786758059-claude-code-vs-cline-decision-flow.webp",
+          "alt": "نمودار جریان تصمیم‌گیری ساده که بر اساس بودجه، نیازهای حریم خصوصی و ابزارهای موجود، توسعه‌دهنده را به سمت کلود کد یا کلاین راهنمایی می‌کند",
+          "caption": "شکل ۴: یک راه سریع برای تصمیم‌گیری — از بودجه و نیازهای حریم خصوصی خود شروع کنید، معمولاً عامل مناسب مشخص می‌شود."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی: دو پاسخ قوی برای یک مسئله"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کلود کد و کلاین واقعاً فقط بر سر قابلیت رقابت نمی‌کنند — آن‌ها بر سر فلسفه رقابت می‌کنند: یک محصول یکپارچهٔ تک‌فروشنده در برابر یک لایهٔ رایگان، باز و مستقل از مدل."
+        },
+        {
+          "type": "paragraph",
+          "text": "اگر منسجم‌ترین تجربه را می‌خواهید و از قبل به کلود اهمیت می‌دهید، کلود کد انتخاب سرراستی است. اگر حداکثر انعطاف‌پذیری، هزینهٔ لایسنس صفر یا یک راه‌اندازی کاملاً خصوصی و محلی می‌خواهید، شکست دادن کلاین سخت است. بسیاری از توسعه‌دهندگان در ۲۰۲۶ سرانجام از هر دو استفاده می‌کنند و ابزار را با وظیفه هماهنگ می‌کنند تا اینکه یک برندهٔ واحد انتخاب کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "با هرکدام که شروع کنید، هر دو ابزار به سرعت در حال پیشرفت هستند — پیش از متعهد کردن کل تیم به یک روند کاری، حتماً تغییرات رسمی آن‌ها را بررسی کنید."
+        }
+      ],
+      "faq": [
+        {
+          "question": "آیا کلاین واقعاً رایگان است؟",
+          "answer": "بله. خود کلاین رایگان و متن‌باز است و با مجوز Apache-2.0 منتشر شده. تنها هزینهٔ شما استنتاجی است که از هر ارائه‌دهندهٔ مدلی که متصل می‌کنید مصرف می‌کنید — یا هیچ هزینه‌ای اگر یک مدل محلی Ollama اجرا کنید."
+        },
+        {
+          "question": "آیا کلاین می‌تواند از مدل‌های کلود استفاده کند؟",
+          "answer": "بله. کلاین مستقل از مدل است و از مدل‌های کلود آنتروپیک در کنار OpenAI، Google Gemini، DeepSeek و بیش از دوازده ارائه‌دهندهٔ دیگر، از جمله مدل‌های محلی از طریق Ollama، پشتیبانی می‌کند."
+        },
+        {
+          "question": "آیا کلود کد خارج از ترمینال هم کار می‌کند؟",
+          "answer": "بله. کلود کد فراتر از CLI ترمینالی، به‌صورت اپلیکیشن دسکتاپ، افزونه برای VS Code و JetBrains، نسخهٔ وب و یکپارچگی با Slack هم عرضه می‌شود."
+        },
+        {
+          "question": "کدام‌یک برای تیم‌های سازمانی بهتر است؟",
+          "answer": "بستگی به نیازهای انطباق قانونی شما دارد. لایهٔ Enterprise کلود کد آمادگی HIPAA و پنجرهٔ زمینهٔ بزرگ‌تری از طریق آنتروپیک ارائه می‌دهد. Cline Enterprise هم OIDC، SCIM و استقرار ایزوله ارائه می‌دهد، اما در حال حاضر گواهی‌های SOC 2، HIPAA یا ISO 27001 ندارد، پس تیم‌های تحت مقررات باید ابتدا با واحد انطباق خود مشورت کنند."
+        },
+        {
+          "question": "آیا می‌توانم کلاین را کاملاً آفلاین اجرا کنم؟",
+          "answer": "بله. کلاین را به یک نمونهٔ محلی Ollama متصل کنید تا استنتاج کاملاً روی دستگاه خودتان انجام شود و هیچ کد یا پرامپتی به API شخص‌ثالث ارسال نشود."
+        },
+        {
+          "question": "آیا کلود کد از MCP (پروتکل زمینهٔ مدل) پشتیبانی می‌کند؟",
+          "answer": "بله. کلود کد پشتیبانی بومی از MCP برای اتصال به ابزارهایی مثل گیت‌هاب، پایگاه‌های داده و مرورگرها دارد، همراه با یک سیستم پلاگین برای بسته‌بندی مهارت‌ها، دستورات و ساب‌ایجنت‌ها."
+        },
+        {
+          "question": "تفاوت هزینهٔ واقعی میان این دو چیست؟",
+          "answer": "اشتراک کلود کد (۲۰ تا ۲۰۰ دلار در ماه) شامل دسترسی به مدل و پشتیبانی است، در حالی که کلاین رایگان است اما مستقیماً بابت استنتاج مدل از شما صورتحساب می‌گیرد. برای استفادهٔ سبک و گاه‌به‌گاه، هزینهٔ ثابت کلود کد می‌تواند ساده‌تر باشد؛ برای استفادهٔ متغیر یا حجم بالا، کلاین به شما اجازه می‌دهد ارزان‌ترین مدلی که کار را انجام می‌دهد — از جمله مدل‌های محلی رایگان — را انتخاب کنید."
+        }
+      ],
+      "seo": {
+        "title": "کلود کد در برابر کلاین (۲۰۲۶): مقایسهٔ کامل عامل کدنویسی هوش مصنوعی",
+        "metaDescription": "مقایسهٔ کلود کد و کلاین در ۲۰۲۶: قیمت، مدل‌های پشتیبانی‌شده، پشتیبانی IDE، کنترل‌های خودمختاری و آمادگی سازمانی — و اینکه کدام‌یک با روند کاری شما هم‌خوانی دارد.",
+        "canonical": "https://sinisteroid.ir/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026",
+        "openGraph": {
+          "title": "کلود کد در برابر کلاین: توسعه‌دهندگان در ۲۰۲۶ کدام را انتخاب کنند؟",
+          "description": "مقایسهٔ کامل کلود کد آنتروپیک با عامل متن‌باز کلاین — قیمت، مدل‌ها، پلتفرم‌ها و اینکه کدام‌یک برای روند کاری شما برنده است.",
+          "image": "/api/uploads/REPLACE-claude-code-vs-cline-2026-cover.webp"
+        },
+        "twitter": {
+          "title": "کلود کد در برابر کلاین: کدام عامل کدنویسی در ۲۰۲۶ برنده است؟",
+          "description": "اشتراکی و تک‌فروشنده در برابر رایگان، متن‌باز و مستقل از مدل. مقایسهٔ دقیق کلود کد و کلاین در ۲۰۲۶.",
+          "image": "/api/uploads/REPLACE-claude-code-vs-cline-2026-cover.webp"
+        },
+        "keywords": "کلود کد در برابر کلاین, کلود کد, کلاین هوش مصنوعی, عامل کدنویسی هوش مصنوعی, کدنویسی عامل‌محور, بهترین دستیار کدنویسی هوش مصنوعی ۲۰۲۶, قیمت کلود کد, افزونهٔ کلاین VS Code, عامل کدنویسی متن‌باز, مقایسهٔ دستیار برنامه‌نویسی هوش مصنوعی, کلود کد آنتروپیک, کلاین در برابر کلود کد",
+        "focusKeyword": "کلود کد در برابر کلاین"
+      }
+    }
+  }
+}

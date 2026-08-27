@@ -1,0 +1,62 @@
+# robots.txt for sinisteroid.ir
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+Allow: /api/*.json
+Allow: /api/get_post.php
+Allow: /api/uploads/
+Crawl-delay: 0
+
+# Disallow admin and API routes (but keep static article JSON + images accessible)
+Disallow: /api/
+Disallow: /admin/
+
+# Allow AI crawlers explicitly for GEO
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+# Sitemaps
+Sitemap: https://sinisteroid.ir/sitemap.xml

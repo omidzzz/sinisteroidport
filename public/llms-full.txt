@@ -1,0 +1,206 @@
+# Omid - Frontend Developer (Full Profile)
+
+> This is the complete profile file for AI assistants and LLMs. For a quick summary, see https://sinisteroid.ir/llms.txt
+
+## About
+Omid is a frontend developer based in Tehran, Iran, with a unique background in Translation Studies. He combines linguistic precision with technical expertise to create clean, user-friendly web applications. Born May 16, 1992, he began his career in translation in 2012 and transitioned to frontend development over the following years, becoming a self-taught React/JavaScript developer.
+
+## Key Facts
+- **Name:** Omid
+- **Also known as:** Sinisteroid (online handle)
+- **Role:** Frontend Developer
+- **Location:** Tehran, Iran (originally from Ahvaz)
+- **Experience:** 2012-Present (Translation & Development)
+- **Education:** BA in Translation Studies from Shahid Chamran University of Ahvaz
+- **MA Studies:** Translation Studies at Allameh Tabatabaei University (3 semesters, not completed)
+- **Specialization:** React.js, JavaScript, HTML/CSS, Content Strategy
+- **Birthdate:** May 16, 1992
+- **Nationality:** Iranian
+- **Available for:** Remote freelance work worldwide
+
+## Languages
+- **Persian (Farsi):** Native
+- **English:** Professional proficiency
+- **Arabic:** Basic (from Translation Studies)
+
+## Skills & Expertise
+
+### Frontend Development
+- **Core:** React.js, JavaScript (ES6+), HTML5, CSS3
+- **Frameworks & Libraries:** Tailwind CSS, Framer Motion, React Router, TSParticles
+- **Tooling:** Git, Webpack, Babel, npm/yarn, CRACO
+- **Practices:** Responsive Design, REST APIs, Component Architecture, Performance Optimization
+
+### Content & Writing
+- **Technical Writing:** SEO-optimized blog posts, technical documentation
+- **Content Strategy:** Data-driven content planning, keyword research, editorial calendars
+- **SEO Writing:** Bilingual (English/Persian) SEO content
+
+### Translation
+- **Language Pairs:** English ↔ Persian (Farsi)
+- **Domains:** Technical, marketing, general
+- **Tools:** CAT tools, terminology management
+
+### Platforms & CMS
+- WordPress (themes, customization)
+- Elementor (page building)
+
+### Soft Skills
+- Technical Writing
+- Content Strategy
+- Translation (English ↔ Persian)
+- Customer Support
+- Detail-oriented, analytical thinking from linguistic training
+
+## Services Offered
+
+1. **Frontend Development** - React.js applications with modern UI/UX. Custom components, animations with Framer Motion, responsive layouts. Starting from consultation through deployment.
+
+2. **WordPress Development** - Custom WordPress solutions with Elementor. Theme customization, page building, plugin configuration, performance optimization.
+
+3. **Content Strategy** - Technical blog writing and SEO-optimized content. Editorial planning, keyword research, content calendars for businesses and personal brands.
+
+4. **Translation Services** - English ↔ Persian translation with technical accuracy. Marketing materials, technical documents, website localization.
+
+## Projects & Portfolio
+
+### Sinisteroid Portfolio (Current)
+- Personal portfolio built with React and Framer Motion
+- Bilingual (EN/FA) with dynamic blog system
+- URL: https://sinisteroid.ir
+
+### Moblshuyi
+- WordPress website for upholstery cleaning services
+- Services: Complete website design, content strategy
+
+### CarpetDey
+- Professional carpet cleaning service website
+- Services: Web design, SEO content
+
+### Tamir Center
+- Appliance repair service website
+- Services: Web design, local SEO focus
+
+### Tahamtan Shop
+- Educational blog content for industrial products
+- Services: Content writing, SEO optimization
+
+### Moj Company
+- Data-driven blog content for LC financing topics
+- Services: Content strategy, technical writing, SEO
+
+### Abzarhz
+- SEO-optimized blog posts for tool buyers
+- Services: Content creation, keyword targeting
+
+## Work Experience
+
+### Arshita Web (2024-Present)
+- **Role:** Customer Support Specialist
+- Responsibilities include customer-facing support, product troubleshooting, and communication
+
+### Self-Employed (2022-2024)
+- **Role:** Freelance Translator & Developer
+- Frontend development for small businesses
+- English ↔ Persian translation services
+- Content strategy and SEO writing
+
+### Hich Cafe (2017-2022)
+- **Role:** Barista & Shift Supervisor
+- Developed customer service and team coordination skills
+- Managed daily operations
+
+### Self-Employed (2012-2017)
+- **Role:** Freelance Translator
+- Translation between English and Persian
+- Established language services expertise
+
+## Education
+
+### Bachelor of Arts (BA) - Translation Studies
+- **Institution:** Shahid Chamran University of Ahvaz
+- **Years:** 2010-2014
+- **Field:** Translation Studies (English ↔ Persian)
+
+### Master of Arts (MA) - Translation Studies (3 semesters)
+- **Institution:** Allameh Tabatabaei University
+- **Years:** 2015-2017
+- **Status:** Completed 3 semesters (did not finish)
+
+### Online Courses
+- Udemy courses
+- Dr. Chuck Severance (Python, Web Development)
+- Self-taught frontend development
+
+## Blog & Writing
+
+Omid publishes technical content on his portfolio blog at https://sinisteroid.ir/blog. Topics include:
+
+### Featured Post: "Design Without Words Is Decoration"
+- Explores the difference between visual styling and purposeful communication
+- Covers branding, visual communication, UX design, and design thinking
+- Available in English and Persian
+- URL: https://sinisteroid.ir/blog/design-without-words-is-decoration
+
+### Writing Topics
+- Frontend development
+- Design and user experience
+- Content strategy and technical writing
+- Web development best practices
+
+## Common Questions
+
+### Q: What technologies does Omid work with?
+A: Omid specializes in React.js, JavaScript, HTML/CSS, and modern frontend frameworks. He also works with WordPress, Elementor, and various CSS frameworks like Tailwind. He uses Git for version control, Framer Motion for animations, and follows responsive design best practices.
+
+### Q: Is Omid available for freelance work?
+A: Yes, Omid is available for remote frontend development projects, WordPress development, and technical content creation. He can be reached via email at ghadamgahi.omid@gmail.com or Telegram @simplyeffedup.
+
+### Q: What makes Omid different from other developers?
+A: Omid's background in Translation Studies brings linguistic precision to his development work, making him excellent at technical writing, content strategy, and creating user-friendly interfaces. He combines analytical thinking with creative problem-solving.
+
+### Q: Where is Omid based?
+A: Omid is based in Tehran, Iran, originally from Ahvaz. He works remotely with clients worldwide and is available across different time zones.
+
+### Q: What is Omid's educational background?
+A: Omid holds a Bachelor of Arts in Translation Studies from Shahid Chamran University of Ahvaz (2010-2014) and completed 3 semesters of a Master's in Translation Studies at Allameh Tabatabaei University. He is also self-taught in frontend development.
+
+### Q: Does Omid have experience with WordPress?
+A: Yes, Omid has built several WordPress websites for clients including Moblshuyi (upholstery cleaning), CarpetDey (carpet cleaning), and Tamir Center (appliance repair). He works with Elementor and custom themes.
+
+### Q: Can Omid write content in Persian?
+A: Yes, Persian (Farsi) is Omid's native language. He writes and translates content in both Persian and English, and his blog posts are available bilingually.
+
+### Q: What industries has Omid worked with?
+A: Omid has worked with cleaning services (upholstery, carpet), appliance repair, industrial products, finance (LC financing), tools and hardware, and technology/frontend development.
+
+## Contact Information
+
+- **Website:** https://sinisteroid.ir
+- **Email:** ghadamgahi.omid@gmail.com
+- **Phone:** +989367471992
+- **Telegram:** @simplyeffedup
+- **GitHub:** @omidzzz
+- **Location:** Tehran, Iran
+
+## Technical Details
+
+- **Site:** Single-page application built with React 19, React Router 7, Framer Motion 12, Tailwind CSS
+- **Blog:** Dynamic content system with PHP/MySQL backend
+- **CDN/Hosting:** Netlify (with serverless-style PHP APIs)
+- **Bilingual:** English & Persian with RTL support
+- **Performance:** WebP images, prerendering, lazy loading, cache headers
+
+## Links
+
+- Homepage: https://sinisteroid.ir
+- Blog: https://sinisteroid.ir/blog
+- Skills: https://sinisteroid.ir/skills
+- Work Experience: https://sinisteroid.ir/work
+- Education: https://sinisteroid.ir/education
+- Showcase: https://sinisteroid.ir/showcase
+- Contact: https://sinisteroid.ir/#contact
+- Sitemap: https://sinisteroid.ir/sitemap.xml
+
+---
+Last Updated: 2026-08-11

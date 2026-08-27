@@ -1,0 +1,843 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0a0b;
+  --color-panel: #131315;
+  --color-line: rgba(237, 236, 230, 0.09);
+  --color-ink: #edece6;
+  --color-muted: #8b8b82;
+  --color-accent: #d9ff3f;
+  /* Warning/alert hue — theme-aware (raw orange is unreadable on paper) */
+  --warn: #fb923c;
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, sfmono, monospace;
+}
+
+/* ---------- Display face ----------
+   Latin headings get Syne (variable 400–800 — kinetic-weight compatible);
+   Persian headings get Noto Kufi Arabic (variable 100–900), whose geometric
+   Kufi letterforms match the same brutalist voice. Applied via .font-display. */
+:root {
+  --font-display: var(--font-syne), var(--font-space-grotesk), ui-sans-serif,
+    system-ui, sans-serif;
+}
+
+html[lang="fa"] {
+  --font-display: var(--font-kufi), var(--font-vazirmatn), Tahoma, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+/* Custom cursor takes over on precise pointers */
+@media (pointer: fine) {
+  body,
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #0a0a0b;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #232327;
+  border-radius: 0;
+}
+
+/* ---------- Typography helpers ---------- */
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(237, 236, 230, 0.4);
+}
+
+/* ---------- Film grain ---------- */
+
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+}
+
+/* ---------- Scroll-reveal (IntersectionObserver-driven) ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.prose-post p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.prose-post a {
+  color: var(--color-accent);
+}
+
+/* ---------- Post prose: justified text everywhere ----------
+   All paragraphs and list items are justified at every viewport width,
+   per request: "all text should be justified in blogposts". */
+.prose-post p,
+.prose-post li {
+  text-align: justify;
+  text-align-last: start;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+/* Balanced, safer wrapping for headings and long content */
+.prose-post h2,
+.prose-post h3,
+.prose-post h4 {
+  scroll-margin-top: 6rem; /* sticky navbar offset for anchor links */
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.prose-post p {
+  text-wrap: pretty;
+}
+
+/* Emphasised words inside paragraphs pop in ink, not muted */
+.prose-post strong,
+.prose-post b {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+/* Inline code inside posts */
+.prose-post code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-accent);
+  background: var(--color-panel);
+  border: 1px solid var(--line);
+  padding: 0.1em 0.35em;
+  word-break: break-word;
+}
+
+/* Nothing in a post may stretch the page on narrow screens */
+.prose-post img,
+.prose-post video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- Persian (RTL) prose adjustments ----------
+   hyphens:auto has no Arabic-script dictionary, so justification in Farsi
+   produces large word gaps. Keep justification (per request) but disable
+   hyphenation and give lines more breathing room. */
+[dir="rtl"] .prose-post p,
+[dir="rtl"] .prose-post li {
+  hyphens: manual;
+  -webkit-hyphens: manual;
+  word-spacing: 0.05em;
+  line-height: 1.95;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- Cross-document View Transitions (MPA, Chromium 126+) ----------
+   Pure-CSS page-to-page cross-fade — zero JS, zero bundle cost.
+   Browsers without support simply navigate instantly. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* ---------- Light theme ----------
+   Overrides the @theme tokens on the html element; the no-flash inline
+   script in the locale layout sets data-theme before first paint. */
+html[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #f4f2ec;
+  --color-panel: #eae7dd;
+  --color-line: rgba(22, 22, 26, 0.12);
+  --color-ink: #17171b;
+  --color-muted: #60605a;
+  --color-accent: #65a30d; /* olive-lime: keeps brand hue, readable on paper */
+  --warn: #b45309; /* darkened amber: WCAG-readable on light backgrounds */
+}
+
+/* ---------- Light theme: opacity-tinted utilities ----------
+   Tailwind generates `color:color-mix(...)` for opacity-modified color
+   utilities, but ALSO bakes the DEFAULT (dark) theme value in as the
+   fallback for browsers that do not support color-mix(). On a light
+   background that dark baked value stays light/medium → light-on-light
+   text and dark smudges behind panels.
+
+   These overrides match the two competing cases for the tinted panel
+   backgrounds used around prose (quote / TL;DR / highlights / alerts /
+   tables / FAQ). They re-apply the LIGHT panel colour with the same
+   alpha so text (ink/muted) stays readable on paper, while leaving the
+   dark theme untouched. Written to win over the baked fallback AND the
+   color-mix rule, so light mode is consistent in every browser. */
+html[data-theme="light"] .bg-panel\/40 {
+  background-color: rgba(234, 231, 221, 0.4);
+}
+html[data-theme="light"] .bg-panel\/50 {
+  background-color: rgba(234, 231, 221, 0.5);
+}
+html[data-theme="light"] .bg-panel\/60 {
+  background-color: rgba(234, 231, 221, 0.6);
+}
+
+html[data-theme="light"] ::selection {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+html[data-theme="light"] .noise {
+  opacity: 0.03;
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #c9c6ba;
+}
+
+html[data-theme="light"] .text-outline {
+  -webkit-text-stroke-color: rgba(23, 23, 27, 0.4);
+}
+
+/* ---------- Perf: skip rendering offscreen sections ----------
+   Applied to below-the-fold containers; the browser skips layout/paint
+   until they scroll near the viewport. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
+}
+
+/* ---------- Reading progress bar (scroll-driven animation) ----------
+   Chrome/Edge 115+: driven entirely by the CSS scroll timeline — no JS
+   runs while scrolling. Elsewhere a tiny rAF-throttled scroll listener
+   sets the same --progress custom property as a fallback. */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 90;
+  background: var(--color-accent);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--progress, 0));
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    animation: rp-grow linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes rp-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress {
+    display: none;
+  }
+}
+
+/* ---------- Scroll-driven flourishes (animation-timeline: view()) ----------
+   All effects are progressive enhancement: without view()-timeline support
+   the elements simply render in their final state. Transform-only keyframes
+   keep everything on the compositor. */
+
+/* Hairline rules draw themselves as their section enters the viewport */
+.x-rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-line);
+}
+
+@keyframes x-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .x-rule {
+    transform-origin: left center;
+  }
+  [dir="rtl"] .x-rule {
+    transform-origin: right center;
+  }
+  @supports (animation-timeline: view()) {
+    .x-rule {
+      animation: x-grow ease-out both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 55%;
+    }
+  }
+}
+
+/* Gentle parallax drift inside an overflow-clipped frame */
+@keyframes drift {
+  from {
+    transform: translateY(-4%) scale(1.08);
+  }
+  to {
+    transform: translateY(4%) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .parallax-frame {
+      overflow: hidden;
+    }
+    .parallax-frame > * {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  }
+}
+
+/* Infinite editorial ticker between home sections. Two identical halves
+   and a -50% translate loop seamlessly; pauses on hover; reverses
+   naturally in RTL via a mirrored keyframe. */
+.ticker {
+  border-block: 1px solid var(--color-line);
+  padding-block: 0.9rem;
+  overflow: hidden;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  /* The strip is decorative — keep it unconditionally LTR so one seamless
+     -50% loop works in both languages (Persian words render correctly via
+     per-item bidi; only the strip's flow direction is fixed). */
+  direction: ltr;
+  animation: ticker-move 45s linear infinite;
+}
+
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-move {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Footer email: accent ink wipes across the glyphs on hover using a
+   two-tone gradient clipped to the text (no extra DOM, compositor-only). */
+.fill-hover {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-accent) 0 50%,
+    var(--color-ink) 50% 100%
+  );
+  background-size: 200% 100%;
+  background-position-x: 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: background-position-x 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .fill-hover,
+.fill-hover:hover {
+  background-position-x: 0%;
+}
+
+/* Theme-toggle icons: both are in the SSR HTML; visibility is driven purely
+   by data-theme, so the correct icon is present without waiting for JS.
+   When the attribute flips, the newly-visible icon plays a spin-pop because
+   it starts matching its animation rule at that moment. */
+.icon-toggle .icon-sun,
+.icon-toggle .icon-moon {
+  display: none;
+}
+
+html:not([data-theme="light"]) .icon-toggle .icon-sun {
+  display: inline-flex;
+}
+
+html[data-theme="light"] .icon-toggle .icon-moon {
+  display: inline-flex;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-theme="light"]) .icon-toggle .icon-sun,
+  html[data-theme="light"] .icon-toggle .icon-moon {
+    animation: icon-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@keyframes icon-pop {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+  .fill-hover {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   BRAND — SINISTER[OID] logotype.
+   Bold refusal register (Unbounded) + an "electronic suffix"
+   (OID) in the mono voice with an outlined ring-O. ASCII brand,
+   so it is pinned LTR and reads correctly in Persian too.
+   ============================================================ */
+
+:root {
+  --font-logo: var(--font-unbounded), var(--font-syne), var(--font-space),
+    ui-sans-serif, system-ui, sans-serif;
+}
+
+.logo-type {
+  display: inline-flex;
+  align-items: baseline;
+  direction: ltr;
+  font-family: var(--font-logo);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  user-select: none;
+}
+
+.logo-type:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* SINISTER register — acid-fill wipe on hover (reuses .fill-hover idea,
+   scoped to the lockup so it works from any theme) */
+.logo-sinister {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-accent) 0 50%,
+    var(--color-ink) 50% 100%
+  );
+  background-size: 200% 100%;
+  background-position-x: 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: background-position-x 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.logo-type:hover .logo-sinister,
+.logo-type:focus-within .logo-sinister {
+  background-position-x: 0%;
+}
+
+.logo-glyph {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  margin: 0 0.08em;
+}
+
+/* OID register in the mono voice; the O is a live acid ring */
+.logo-oid {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-ink);
+  direction: ltr;
+}
+.logo-ring {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-accent);
+}
+.logo-id {
+  color: var(--color-ink);
+  margin-inline-start: 0.06em;
+}
+
+.logo-cursor {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  animation: logo-blink 1.1s step-end infinite;
+}
+
+@keyframes logo-blink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo-type:hover .logo-glyph,
+  .logo-type:hover .logo-ring {
+    animation: oid-scan 0.6s steps(3) infinite;
+  }
+}
+@keyframes oid-scan {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(-1px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-cursor {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   ZINE — "paper inversion" panels. A brutalist editorial flip:
+   on dark surfaces these read as paper with ink type; when the
+   site is light the panel inverts to ink/smoke. The stock
+   --color-* tokens are rescoped so adjacent Tailwind utilities
+   (text-ink/muted/accent, border-line, bg-*) adapt inside it.
+   ============================================================ */
+
+:root {
+  --paper: #ede8dd;
+  --paper-ink: #18181c;
+  --paper-muted: #56564e;
+  --paper-accent: #5a7d0e;
+  --paper-line: rgba(24, 24, 28, 0.16);
+  --paper-panel: rgba(24, 24, 28, 0.05);
+}
+html[data-theme="light"] {
+  --paper: #15161a;
+  --paper-ink: #f2f0ea;
+  --paper-muted: #9ba095;
+  --paper-accent: #d9ff3f;
+  --paper-line: rgba(242, 240, 234, 0.2);
+  --paper-panel: rgba(242, 240, 234, 0.05);
+}
+
+.zine-panel {
+  position: relative;
+  background: var(--paper);
+  color: var(--paper-ink);
+  --color-ink: var(--paper-ink);
+  --color-muted: var(--paper-muted);
+  --color-accent: var(--paper-accent);
+  --color-line: var(--paper-line);
+  --color-panel: var(--paper-panel);
+  opacity: 0;
+  transform: translateY(6%);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.zine-panel.is-in {
+  opacity: 1;
+  transform: none;
+}
+.zine-panel .zine-row {
+  transition: background 0.25s ease;
+}
+.zine-panel .zine-row:hover {
+  background: var(--paper-panel);
+}
+.zine-panel .zine-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--paper-line);
+}
+@media (prefers-reduced-motion: reduce) {
+  .zine-panel {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============================================================
+   COMMAND PALETTE — assistive-only helpers (layout is inline)
+   ============================================================ */
+@keyframes palette-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.palette-pop {
+  animation: palette-pop 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.overlay-fade {
+  animation: fade-in 0.2s ease-out;
+}
+
+/* ============================================================
+   TERMINAL / EASTER EGG
+   ============================================================ */
+.term-scan {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.3) 0 1px,
+    transparent 1px 3px
+  );
+  animation: term-scan-move 9s linear infinite;
+}
+@keyframes term-scan-move {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 6px;
+  }
+}
+.term-flicker {
+  animation: term-flicker 4s linear infinite;
+}
+@keyframes term-flicker {
+  0%,
+  91%,
+  94%,
+  97%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.5;
+  }
+  95% {
+    opacity: 0.8;
+  }
+}
+.term-blink {
+  animation: logo-blink 1s step-end infinite;
+}
+.term-prompt::after {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  vertical-align: text-bottom;
+  background: #d9ff3f;
+  margin-left: 0.3em;
+  animation: logo-blink 1s step-end infinite;
+}
+
+/* ============================================================
+   project preview — active shot slams up from the bottom (wipe)
+   ============================================================ */
+.project-wipe {
+  animation: project-wipe 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes project-wipe {
+  from {
+    opacity: 0.4;
+    transform: translateY(30%) scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-wipe {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   HERO — "offset print-plate" editorial portrait.
+   The hero image reads as a grayscale offset "plate" with an acid
+   misregistration block behind it, mono annotations, corner
+   crosshair ticks, a subtle scan overlay, and color-on-hover.
+   Pure CSS (motion-reduce safe); the kinetic type overlays it.
+   ============================================================ */
+.hero-plate {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 340px);
+  margin-inline: auto;
+}
+.hero-plate-frame {
+  position: relative;
+  border: 1px solid var(--color-line);
+  background: var(--color-panel);
+  padding: 0.75rem;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hero-plate:hover .hero-plate-frame {
+  transform: translate(-4px, -4px);
+}
+/* misregistered acid plate behind the frame */
+.hero-plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translate(14px, 14px);
+  border: 1px solid var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  z-index: -1;
+}
+.hero-plate-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.06);
+  transition: filter 0.5s ease;
+}
+.hero-plate:hover .hero-plate-img {
+  filter: grayscale(0) contrast(1);
+}
+/* soft vignette + scanlines over the plate */
+.hero-plate-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.12) 0 1px,
+    transparent 1px 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+}
+.hero-plate:hover .hero-plate-scan {
+  opacity: 0.2;
+}
+/* corner crosshair ticks */
+.hero-plate-frame::before,
+.hero-plate-frame::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--color-accent);
+  pointer-events: none;
+}
+.hero-plate-frame::before {
+  top: -7px;
+  left: -7px;
+  border-right: none;
+  border-bottom: none;
+}
+.hero-plate-frame::after {
+  bottom: -7px;
+  right: -7px;
+  border-left: none;
+  border-top: none;
+}
+.hero-plate-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  gap: 1rem;
+}
+.hero-plate-meta .label {
+  margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-plate:hover .hero-plate-frame {
+    transform: none;
+  }
+  .hero-plate:hover .hero-plate-img {
+    filter: grayscale(0) contrast(1);
+  }
+  .hero-plate-scan {
+    display: none;
+  }
+}

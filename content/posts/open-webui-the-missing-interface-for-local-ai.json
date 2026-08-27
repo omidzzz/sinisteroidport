@@ -1,0 +1,582 @@
+{
+  "slug": "open-webui-the-missing-interface-for-local-ai",
+  "title": "Open WebUI: The Missing Interface for Local AI",
+  "date": "2026-06-21 00:00:00",
+  "tags": [
+    "open-webui",
+    "ollama",
+    "local-ai",
+    "self-hosted-ai",
+    "llm-interface",
+    "ai-tools",
+    "rag",
+    "open-source-ai",
+    "developer-tools",
+    "ai-engineering"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/open-webui-the-missing-interface-for-local-ai-cover.webp",
+    "alt": {
+      "en": "Open WebUI: The Missing Interface for Local AI",
+      "fa": "اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "Open WebUI: The Missing Interface for Local AI",
+      "excerpt": "Ollama gives you the inference engine. Open WebUI gives you everything else — conversation history, document RAG, multi-user access control, voice, image generation, and a pipeline system for custom Python logic. This is how you turn a local model into a complete AI platform.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Gap Ollama Leaves Open"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Running a model with Ollama from the terminal is powerful, but it is a point solution. You get inference and nothing else. No conversation history. No file upload. No way to share access with a colleague. No persistent context across sessions. The moment your workflow moves beyond single-turn testing, the terminal interface breaks down — and that is exactly the gap Open WebUI was built to fill."
+        },
+        {
+          "type": "paragraph",
+          "text": "Open WebUI (originally released as 'Ollama WebUI' in late 2023) is an extensible, self-hosted AI platform that wraps Ollama — and any other OpenAI-compatible inference backend — in a ChatGPT-class browser interface. As of version 0.9.5 in May 2026, it has grown well past a basic frontend into a platform with native RAG, a Python pipelines framework, role-based access control, voice I/O, image generation integrations, and a tool-calling layer that lets models act autonomously on your data."
+        },
+        {
+          "type": "paragraph",
+          "text": "The project has over 90,000 GitHub stars, making it the most actively maintained open-source frontend for local LLM inference. It runs as a lightweight Docker container — using roughly 500 MB of RAM — that proxies all inference requests to the Ollama API running on the host or on a separate server. The models stay where they are. Open WebUI adds the session and context layer on top."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "90K+",
+              "label": "GitHub stars"
+            },
+            {
+              "value": "~500 MB",
+              "label": "Container RAM footprint"
+            },
+            {
+              "value": "15+",
+              "label": "Web search providers supported"
+            },
+            {
+              "value": "9",
+              "label": "Vector databases supported for RAG"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Installation: Docker in Three Minutes"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The recommended and fastest deployment path is a single Docker command. Open WebUI publishes official images on the GitHub Container Registry, and the setup assumes Ollama is already running on the host machine. If you have not yet set up Ollama, that is the prerequisite step — the inference engine needs to exist before the interface has anything to connect to."
+        },
+        {
+          "type": "code",
+          "code": "# Assumes Ollama is already running on localhost:11434\ndocker run -d \\\n  -p 3000:8080 \\\n  --add-host=host.docker.internal:host-gateway \\\n  -v open-webui:/app/backend/data \\\n  --name open-webui \\\n  --restart always \\\n  ghcr.io/open-webui/open-webui:main\n\n# Then open http://localhost:3000\n# First user to register automatically becomes admin\n\n# Alternative: pip install (no Docker required)\npip install open-webui\nopen-webui serve"
+        },
+        {
+          "type": "paragraph",
+          "text": "The --add-host flag is required on Linux to allow the container to reach Ollama running on the host network. The -v flag persists conversations, settings, and user accounts across container restarts. Once the container initializes (about 30 seconds), the first account created at http://localhost:3000 automatically receives admin privileges. All subsequent accounts require admin approval unless you configure open registration explicitly — which you should not do on a network-accessible deployment."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "Security Before You Share Access",
+          "text": "Before exposing Open WebUI to anyone beyond localhost, disable open registration in Admin Panel → Settings → Users and set the default user role to 'pending'. Deploy behind a reverse proxy with TLS. An unauthenticated Open WebUI instance gives anyone on the network full access to your models and any documents you have uploaded."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Chat Interface: What ChatGPT Looks Like Locally"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The chat experience is deliberately familiar. Conversations appear in a collapsible sidebar, markdown renders with syntax-highlighted code blocks, and model selection lives in a dropdown at the top of the chat window. Switching models mid-conversation is a single click. Running the same prompt through multiple models simultaneously requires nothing more than opening parallel tabs — no ceremony, no configuration."
+        },
+        {
+          "type": "paragraph",
+          "text": "System prompts and personas are a first-class feature. You can define reusable characters — a code reviewer that always checks for security issues, a document summarizer that outputs only bullet points, a JSON extractor that refuses to produce prose — and load them at the start of any conversation from a persistent library. These personas are stored locally and scoped to your account, invisible to other users on a shared deployment."
+        },
+        {
+          "type": "paragraph",
+          "text": "Conversation history is saved, searchable, and manageable. Every chat is indexed, can be renamed, archived, shared via a link, or exported. If you have used ChatGPT's interface and found yourself wishing it ran on your own hardware, Open WebUI is as close as the open-source ecosystem currently gets."
+        },
+        {
+          "type": "highlight",
+          "label": "KEY INSIGHT",
+          "text": "Open WebUI is not a thin wrapper around Ollama. It is a full application layer that handles session state, user identity, document indexing, and tool orchestration — responsibilities that Ollama's API deliberately does not cover. The two are complementary, not redundant."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "RAG: Talking to Your Documents Locally"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Retrieval-Augmented Generation is Open WebUI's most practically useful capability for most teams. Upload a PDF, a text file, or a directory of documents and the system chunks, embeds, and indexes them into a local vector store — ChromaDB by default, with support for eight other backends including Qdrant, PGVector, Milvus, and Elasticsearch. Ask a question in chat and the relevant chunks are retrieved and injected into the context window before the model generates a response."
+        },
+        {
+          "type": "paragraph",
+          "text": "The default embedding model is nomic-embed-text, pulled through Ollama the same way any chat model is pulled. The chunk size defaults to 1,500 tokens with a Top K of 5, meaning five chunks are retrieved per query. For a 7B model with an 8,192-token context window, that retrieval budget leaves roughly 3,000 tokens for the conversation itself — a practical limit that requires attention when indexing dense technical documents or legal PDFs."
+        },
+        {
+          "type": "paragraph",
+          "text": "For large-context cloud models connected through Open WebUI's OpenAI-compatible endpoint, Full Context Mode bypasses chunked retrieval entirely and injects the complete document into the context window. This produces noticeably better answers for single-document analysis tasks where the model needs to reason across the full content rather than a retrieved subset. The tradeoff is token cost and latency, both of which are significant for documents over fifty pages."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "Context Length Is the Hidden RAG Variable",
+          "text": "Ollama models default to a 2,048-token context window. Web pages and retrieved document chunks easily exceed this. Before using RAG with any Ollama model, navigate to Admin Panel → Models → Advanced Parameters and set the context length to 8,192 or higher. Missing this step is the single most common reason RAG answers feel incomplete or disconnected from the source material."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Web Search Integration"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Open WebUI integrates web search directly into the RAG pipeline rather than implementing agent-style browsing. Toggle search on per-conversation using the globe icon, and Open WebUI queries your configured search provider, extracts the top results, and prepends them to the model's context before generation. The model responds as if it has just read those pages, without any tool-calling loop in between."
+        },
+        {
+          "type": "paragraph",
+          "text": "More than fifteen search providers are supported, including SearXNG for fully self-hosted search with no external dependency, DuckDuckGo, Brave, Perplexity, Kagi, Tavily, Bing, and Jina. For teams with strict data-residency requirements, running SearXNG locally means the full stack — model, embeddings, search — operates without a single request leaving the internal network."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "SearXNG — fully self-hosted, zero external data exposure",
+            "DuckDuckGo and Brave — privacy-respecting public options with no API key required",
+            "Perplexity, Kagi, Tavily — higher-quality results with API key setup",
+            "Jina and Exa — neural search options optimized for semantic relevance",
+            "Bing and Google PSE — familiar index coverage for general-purpose queries"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Multi-User Deployment and RBAC"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Open WebUI's role-based access control turns a single inference server into a shared AI platform for a team. The permission model has three tiers: admin, who configures the system and manages users; user, who has full access to chat, RAG, and tools; and pending, who has registered but cannot do anything until an admin approves their account. Enterprise deployments extend this with LDAP, Active Directory, SCIM 2.0, and SSO via OAuth providers including Okta, Azure AD, and Google Workspace."
+        },
+        {
+          "type": "paragraph",
+          "text": "Conversation isolation is enforced at the account level. One user's conversation history, uploaded documents, and custom personas are invisible to other users. A shared knowledge base — a company wiki, an internal policy library, a product specification — can be created by an admin and made available to all users without exposing the underlying documents directly. This architecture makes Open WebUI viable for small teams that want to share one powerful local inference server without compromising individual privacy or data hygiene."
+        },
+        {
+          "type": "quote",
+          "text": "The combination is hard to beat: Ollama handles model management and inference, Open WebUI handles the user experience. Add RAG, multi-user support, and conversation history, and you have a setup that rivals commercial offerings — without sending a single byte to the cloud.",
+          "author": "aimadetools.com, 2026"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Pipelines: Custom Python Logic in the Inference Path"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Pipelines are Open WebUI's extensibility layer for developers who need custom logic in the inference path. A pipeline is a Python script that runs as a filter (modifying messages before or after they reach the model), an action (adding custom buttons to the chat interface), or a full pipeline (replacing the model call entirely with custom logic). Pipelines are installed from the admin panel or written from scratch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Practical pipeline use cases include automatic prompt injection for specific knowledge bases, content moderation filters that intercept outputs before they reach the user, cost-control logic that routes expensive queries to a cheaper model, logging and audit trails for compliance, and integration with internal APIs that the model cannot reach directly. The Python function calling feature also allows models to invoke pure Python functions as tools natively, without MCP or an agent framework."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Hardware Requirements and Deployment Sizing"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Open WebUI itself is computationally lightweight. The interface container requires approximately 500 MB of RAM and a single CPU core. All compute-intensive work — embedding, inference, chunking — happens in Ollama. The practical hardware floor for a useful local setup is 16 GB of system RAM when running Open WebUI and Ollama on the same machine, sized for a 7B model at Q4_K_M quantization."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "Open WebUI container: ~500 MB RAM, 1 CPU core — negligible overhead",
+            "7B model at Q4_K_M: ~4–6 GB VRAM, or ~8 GB system RAM for CPU-only inference",
+            "Embedding model (nomic-embed-text): ~300 MB VRAM or RAM",
+            "ChromaDB vector store: scales with document collection size, minimal at under 10,000 chunks",
+            "Recommended minimum: 16 GB system RAM for a combined Ollama + Open WebUI machine"
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/open-webui-architecture-diagram.webp",
+          "alt": "Open WebUI architecture diagram showing the relationship between the browser client, Open WebUI container, Ollama inference backend, ChromaDB vector store, and connected search providers",
+          "caption": "Figure 1: Open WebUI sits between the user's browser and the Ollama inference backend, adding session management, RAG, and multi-user access control without modifying the underlying inference stack."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Backend Agnosticism: Beyond Ollama"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Despite its origins as an Ollama frontend, Open WebUI is backend-agnostic. It connects to any OpenAI-compatible API endpoint, which in practice means it works with vLLM, LM Studio, LocalAI, Text Generation WebUI, and actual cloud providers including OpenAI, Anthropic, and Google. A single Open WebUI instance can proxy requests to a local Ollama server for routine tasks and route expensive or complex queries to a cloud model — a hybrid architecture that gives teams both cost control and access to frontier reasoning."
+        },
+        {
+          "type": "paragraph",
+          "text": "This backend flexibility also means Open WebUI can serve as the unified interface for development teams that use different models for different purposes — a local coding model for everyday work, a cloud model for architecture reviews, a specialized local embedding model for RAG — while presenting a consistent chat experience to every user regardless of which backend is actually handling the request."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Conclusion"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Open WebUI is the interface layer that the local AI ecosystem needed. Ollama solved the inference problem: pulling, quantizing, and serving open-weight models with minimal configuration. Open WebUI solves the usability problem: giving those models a persistent, multi-user, document-aware interface that does not require the command line to operate."
+        },
+        {
+          "type": "paragraph",
+          "text": "For an individual developer, the combination of Ollama and Open WebUI produces a local AI setup that is functionally comparable to a ChatGPT subscription — with full data privacy, zero per-token cost after the hardware investment, and the ability to swap models freely. For a small team, the multi-user RBAC and shared knowledge base features turn one inference server into a private AI platform available to everyone in the organization."
+        },
+        {
+          "type": "cta",
+          "title": "Start with the Inference Engine",
+          "text": "Before setting up Open WebUI, you need Ollama running locally. Our deep-dive covers the architecture, quantization tradeoffs, GPU offloading, and model selection that make Ollama the backbone of any local AI stack.",
+          "buttonText": "Read: Ollama — The Engine Behind Local AI",
+          "buttonUrl": "https://sinisteroid.ir/blog/ollama-the-engine-behind-local-ai"
+        },
+        {
+          "type": "cta",
+          "title": "Take Local AI Into Your Editor",
+          "text": "Once your local stack is running, Cline connects it directly to VS Code as an autonomous coding agent — file editing, terminal execution, and MCP tool access, all routed through your own Ollama instance.",
+          "buttonText": "Read: Cline — The Autonomous AI Coding Agent",
+          "buttonUrl": "https://sinisteroid.ir/blog/cline-the-open-source-ai-coding-agent"
+        }
+      ],
+      "faq": [
+        {
+          "question": "Is Open WebUI free to use?",
+          "answer": "Yes. Open WebUI is open-source and free for personal and team use under the MIT license (with an enterprise license available for organizations requiring SLA support, custom branding, and long-term support versions). The software itself has no cost; you pay for the compute used by the underlying model backend."
+        },
+        {
+          "question": "Does Open WebUI work without Docker?",
+          "answer": "Yes. You can install it with pip using 'pip install open-webui && open-webui serve'. Docker is recommended for production deployments because it isolates the container environment and simplifies updates, but the pip path works well for local development and testing."
+        },
+        {
+          "question": "Can Open WebUI connect to cloud models like OpenAI or Anthropic?",
+          "answer": "Yes. Open WebUI connects to any OpenAI-compatible API endpoint, including actual OpenAI, Anthropic's API, Google Gemini, and others. You can mix local Ollama models and cloud models in the same interface, routing different conversations to different backends."
+        },
+        {
+          "question": "What vector databases does Open WebUI support for RAG?",
+          "answer": "Open WebUI supports nine vector databases: ChromaDB (default), PGVector, Qdrant, Milvus, Elasticsearch, OpenSearch, Pinecone, S3Vector, and Oracle 23ai. ChromaDB requires no external setup and works out of the box; the others are configurable for teams with existing database infrastructure."
+        },
+        {
+          "question": "How many users can Open WebUI support?",
+          "answer": "Open WebUI's multi-user system has no hard user limit. Performance at scale depends on the inference backend — a single Ollama instance handles concurrent requests sequentially, which creates queuing under simultaneous load. For teams larger than 10–15 active concurrent users, a more powerful inference server or multiple backend instances behind a load balancer becomes necessary."
+        }
+      ],
+      "seo": {
+        "title": "Open WebUI: The Best Interface for Ollama and Local AI Models | 2026 Guide",
+        "metaDescription": "Learn how Open WebUI transforms Ollama into a complete local AI platform with chat history, document RAG, model management, multi-user RBAC, and Python pipelines. Full setup guide for 2026.",
+        "canonical": "https://sinisteroid.ir/blog/open-webui-the-missing-interface-for-local-ai",
+        "openGraph": {
+          "image": "/api/uploads/open-webui-the-missing-interface-for-local-ai-cover.webp"
+        },
+        "twitter": {
+          "image": "/api/uploads/open-webui-the-missing-interface-for-local-ai-cover.webp"
+        },
+        "keywords": "Open WebUI, Ollama interface, local AI interface, self-hosted ChatGPT, Open WebUI RAG, Open WebUI Ollama, local LLM frontend, Open WebUI multi-user, Open WebUI Docker, Open WebUI pipelines",
+        "focusKeyword": "Open WebUI Ollama interface"
+      }
+    },
+    "fa": {
+      "title": "اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی",
+      "excerpt": "اولاما موتور inference را در اختیار شما می‌گذارد. اوپن وب‌یوآی همه چیز دیگر را — تاریخچه مکالمه، RAG اسناد، کنترل دسترسی چند‌کاربره، صدا، تولید تصویر، و یک سیستم pipeline برای منطق Python سفارشی. این روشی است که یک مدل محلی را به یک پلتفرم هوش مصنوعی کامل تبدیل می‌کند.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خلأیی که اولاما باز می‌گذارد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اجرای یک مدل با اولاما از ترمینال قدرتمند است، اما یک راه‌حل نقطه‌ای است. فقط inference دریافت می‌کنید و نه چیز دیگری. نه تاریخچه مکالمه. نه آپلود فایل. نه راهی برای اشتراک‌گذاری دسترسی با یک همکار. نه context پایدار بین جلسات. در لحظه‌ای که جریان کاری شما از تست تک‌نوبتی فراتر می‌رود، رابط ترمینال شکست می‌خورد — و این دقیقاً همان خلأیی است که اوپن وب‌یوآی برای پر کردن آن ساخته شده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "اوپن وب‌یوآی (که در اواخر سال ۲۰۲۳ با نام 'Ollama WebUI' منتشر شد) یک پلتفرم هوش مصنوعی قابل توسعه و خودمیزبان است که اولاما — و هر backend inference سازگار با OpenAI دیگری — را در یک رابط مرورگری در سطح ChatGPT می‌پوشاند. از نسخه ۰.۹.۵ در می ۲۰۲۶، بسیار فراتر از یک frontend اولیه رشد کرده و به یک پلتفرم با RAG بومی، یک چارچوب Python pipelines، کنترل دسترسی مبتنی بر نقش، ورودی/خروجی صوتی، یکپارچه‌سازی‌های تولید تصویر، و یک لایه tool-calling تبدیل شده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "این پروژه بیش از ۹۰ هزار ستاره گیت‌هاب دارد و فعال‌ترین frontend متن‌باز برای inference محلی LLM است. به صورت یک کانتینر Docker سبک — با مصرف تقریباً ۵۰۰ مگابایت RAM — اجرا می‌شود که همه درخواست‌های inference را به API اولاما در حال اجرا روی هاست یا یک سرور جداگانه پروکسی می‌کند. مدل‌ها همان‌جایی که هستند می‌مانند. اوپن وب‌یوآی لایه session و context را روی آن‌ها اضافه می‌کند."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۹۰K+",
+              "label": "ستاره گیت‌هاب"
+            },
+            {
+              "value": "~۵۰۰ MB",
+              "label": "مصرف RAM کانتینر"
+            },
+            {
+              "value": "۱۵+",
+              "label": "ارائه‌دهنده جستجوی وب پشتیبانی‌شده"
+            },
+            {
+              "value": "۹",
+              "label": "پایگاه داده برداری برای RAG"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "نصب: Docker در سه دقیقه"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "مسیر استقرار توصیه‌شده و سریع‌ترین مسیر یک دستور Docker واحد است. اوپن وب‌یوآی imageهای رسمی را در GitHub Container Registry منتشر می‌کند و راه‌اندازی فرض می‌کند اولاما از پیش روی دستگاه میزبان در حال اجرا است. اگر اولاما را هنوز راه‌اندازی نکرده‌اید، این گام پیش‌نیاز است — موتور inference باید پیش از اینکه رابط کاربری چیزی برای اتصال داشته باشد وجود داشته باشد."
+        },
+        {
+          "type": "code",
+          "code": "# فرض می‌شود اولاما روی localhost:11434 در حال اجرا است\ndocker run -d \\\n  -p 3000:8080 \\\n  --add-host=host.docker.internal:host-gateway \\\n  -v open-webui:/app/backend/data \\\n  --name open-webui \\\n  --restart always \\\n  ghcr.io/open-webui/open-webui:main\n\n# سپس http://localhost:3000 را باز کنید\n# اولین کاربری که ثبت‌نام می‌کند به‌طور خودکار admin می‌شود\n\n# جایگزین: نصب با pip (بدون Docker)\npip install open-webui\nopen-webui serve"
+        },
+        {
+          "type": "paragraph",
+          "text": "فلگ --add-host روی Linux برای اینکه کانتینر بتواند به اولاما در حال اجرا روی شبکه هاست دسترسی داشته باشد ضروری است. فلگ -v مکالمات، تنظیمات و حساب‌های کاربری را در طول راه‌اندازی مجدد کانتینر حفظ می‌کند. پس از اینکه کانتینر initialize شد (حدود ۳۰ ثانیه)، اولین حسابی که در http://localhost:3000 ایجاد می‌شود به‌طور خودکار امتیازات admin دریافت می‌کند."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "امنیت قبل از اشتراک‌گذاری دسترسی",
+          "text": "قبل از اینکه اوپن وب‌یوآی را در اختیار کسی فراتر از localhost قرار دهید، در Admin Panel → Settings → Users ثبت‌نام آزاد را غیرفعال کنید و نقش کاربر پیش‌فرض را روی 'pending' تنظیم کنید. پشت یک reverse proxy با TLS مستقر کنید. یک نمونه اوپن وب‌یوآی بدون احراز هویت به هر کسی در شبکه دسترسی کامل به مدل‌ها و اسناد آپلودشده می‌دهد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "رابط چت: ChatGPT به شکل محلی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "تجربه چت عمداً آشنا طراحی شده است. مکالمات در یک نوار کناری قابل جمع‌شدن نمایش داده می‌شوند، markdown با بلوک‌های کد syntax-highlighted رندر می‌شود، و انتخاب مدل در یک dropdown در بالای پنجره چت قرار دارد. تغییر مدل در میانه مکالمه یک کلیک است. اجرای یک prompt از طریق چند مدل به‌صورت همزمان نیازی به کار بیشتری از باز کردن tab‌های موازی ندارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "System promptها و شخصیت‌ها یک ویژگی اصلی هستند. می‌توانید کاراکترهای قابل استفاده مجدد تعریف کنید — یک بازبین کد که همیشه مسائل امنیتی را بررسی می‌کند، یک خلاصه‌ساز سند که فقط گلوله‌ها را خروجی می‌دهد، یک استخراج‌کننده JSON که از تولید متن امتناع می‌کند — و آن‌ها را از یک کتابخانه پایدار در شروع هر مکالمه بارگذاری کنید. این شخصیت‌ها به‌صورت محلی ذخیره می‌شوند و در یک استقرار مشترک برای سایر کاربران نامرئی هستند."
+        },
+        {
+          "type": "paragraph",
+          "text": "تاریخچه مکالمه ذخیره، جستجوپذیر و قابل مدیریت است. هر چت ایندکس می‌شود، می‌تواند تغییر نام یابد، آرشیو شود، از طریق لینک به اشتراک گذاشته شود یا export شود. اگر از رابط ChatGPT استفاده کرده‌اید و آرزو کرده‌اید روی سخت‌افزار خودتان اجرا شود، اوپن وب‌یوآی تا آنجا که اکوسیستم متن‌باز فعلاً می‌رسد، نزدیک‌ترین چیز به آن است."
+        },
+        {
+          "type": "highlight",
+          "label": "بینش کلیدی",
+          "text": "اوپن وب‌یوآی یک wrapper نازک دور اولاما نیست. یک لایه اپلیکیشن کامل است که حالت session، هویت کاربر، ایندکس‌سازی اسناد و هماهنگی ابزار را مدیریت می‌کند — مسئولیت‌هایی که API اولاما عمداً پوشش نمی‌دهد. این دو مکمل یکدیگرند، نه اضافی."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "RAG: صحبت با اسناد به‌صورت محلی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Retrieval-Augmented Generation عملاً مفیدترین قابلیت اوپن وب‌یوآی برای اکثر تیم‌هاست. یک PDF، یک فایل متنی یا یک دایرکتوری از اسناد را آپلود کنید و سیستم آن‌ها را تقطیع، embed و در یک vector store محلی ایندکس می‌کند — به‌طور پیش‌فرض ChromaDB، با پشتیبانی از هشت backend دیگر از جمله Qdrant، PGVector، Milvus و Elasticsearch. در چت سوال بپرسید و chunk‌های مرتبط قبل از اینکه مدل پاسخ تولید کند بازیابی و به context window تزریق می‌شوند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل embedding پیش‌فرض nomic-embed-text است که از طریق اولاما مشابه هر مدل چت دیگری pull می‌شود. اندازه chunk به‌طور پیش‌فرض ۱۵۰۰ توکن با Top K برابر ۵ است؛ به این معنا که پنج chunk به ازای هر query بازیابی می‌شود. برای یک مدل ۷B با پنجره context ۸۱۹۲ توکنی، آن بودجه بازیابی تقریباً ۳۰۰۰ توکن برای خود مکالمه باقی می‌گذارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "برای مدل‌های ابری با context بزرگ که از طریق endpoint سازگار با OpenAI اوپن وب‌یوآی متصل می‌شوند، حالت Full Context بازیابی chunk‌شده را کاملاً دور می‌زند و سند کامل را به پنجره context تزریق می‌کند. این روش برای وظایف تحلیل تک‌سند که مدل باید در کل محتوا استدلال کند نتایج به طور قابل توجهی بهتری تولید می‌کند."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "طول Context متغیر پنهان RAG است",
+          "text": "مدل‌های اولاما به‌طور پیش‌فرض یک پنجره context ۲۰۴۸ توکنی دارند. صفحات وب و chunk‌های اسناد بازیابی‌شده به‌راحتی از این حد فراتر می‌روند. قبل از استفاده از RAG با هر مدل اولاما، به Admin Panel → Models → Advanced Parameters بروید و طول context را روی ۸۱۹۲ یا بیشتر تنظیم کنید. از دست دادن این مرحله رایج‌ترین دلیلی است که پاسخ‌های RAG ناقص یا بی‌ربط به منبع به نظر می‌رسند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "یکپارچه‌سازی جستجوی وب"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اوپن وب‌یوآی جستجوی وب را مستقیماً در pipeline RAG ادغام می‌کند نه به شکل مرور agent-style. جستجو را برای هر مکالمه با آیکون کره زمین فعال کنید و اوپن وب‌یوآی ارائه‌دهنده جستجوی پیکربندی‌شده شما را query می‌کند، نتایج برتر را استخراج می‌کند و آن‌ها را قبل از تولید به context مدل اضافه می‌کند. مدل گویی همان صفحات را تازه خوانده پاسخ می‌دهد، بدون هیچ حلقه tool-calling در بین."
+        },
+        {
+          "type": "paragraph",
+          "text": "بیش از پانزده ارائه‌دهنده جستجو پشتیبانی می‌شوند، از جمله SearXNG برای جستجوی کاملاً خودمیزبان بدون هیچ وابستگی خارجی، DuckDuckGo، Brave، Perplexity، Kagi، Tavily، Bing و Jina. برای تیم‌هایی با الزامات سخت‌گیرانه مکان نگهداری داده، اجرای SearXNG به‌صورت محلی به این معناست که کل stack — مدل، embeddings، جستجو — بدون یک درخواست به شبکه داخلی کار می‌کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "SearXNG — کاملاً خودمیزبان، بدون هیچ افشای داده خارجی",
+            "DuckDuckGo و Brave — گزینه‌های عمومی حافظ حریم خصوصی بدون نیاز به کلید API",
+            "Perplexity، Kagi، Tavily — نتایج با کیفیت بالاتر با راه‌اندازی کلید API",
+            "Jina و Exa — گزینه‌های جستجوی عصبی بهینه‌شده برای ارتباط معنایی",
+            "Bing و Google PSE — پوشش ایندکس آشنا برای query‌های عمومی"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "استقرار چند‌کاربره و RBAC"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کنترل دسترسی مبتنی بر نقش اوپن وب‌یوآی یک سرور inference واحد را به یک پلتفرم هوش مصنوعی مشترک برای یک تیم تبدیل می‌کند. مدل مجوز سه لایه دارد: admin که سیستم را پیکربندی و کاربران را مدیریت می‌کند؛ user که دسترسی کامل به چت، RAG و ابزارها دارد؛ و pending که ثبت‌نام کرده اما تا زمانی که admin حساب را تأیید نکند نمی‌تواند کاری انجام دهد. استقرارهای Enterprise این را با LDAP، Active Directory، SCIM 2.0 و SSO از طریق ارائه‌دهندگان OAuth از جمله Okta، Azure AD و Google Workspace گسترش می‌دهند."
+        },
+        {
+          "type": "paragraph",
+          "text": "جداسازی مکالمه در سطح حساب اعمال می‌شود. تاریخچه مکالمه، اسناد آپلودشده و شخصیت‌های سفارشی یک کاربر برای سایر کاربران نامرئی است. یک پایگاه دانش مشترک — یک ویکی شرکت، یک کتابخانه خط‌مشی داخلی، یک مشخصات محصول — می‌تواند توسط admin ایجاد شود و بدون افشای مستقیم اسناد زیربنایی برای همه کاربران در دسترس قرار گیرد."
+        },
+        {
+          "type": "quote",
+          "text": "ترکیب سختی نیست که بزنید: اولاما مدیریت مدل و inference را مدیریت می‌کند، اوپن وب‌یوآی تجربه کاربری را. RAG، پشتیبانی چند‌کاربره و تاریخچه مکالمه را اضافه کنید و یک راه‌اندازی دارید که با پیشنهادهای تجاری رقابت می‌کند — بدون ارسال یک بایت به ابر.",
+          "author": "aimadetools.com، ۲۰۲۶"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Pipelines: منطق Python سفارشی در مسیر Inference"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Pipelines لایه قابلیت توسعه اوپن وب‌یوآی برای توسعه‌دهندگانی است که به منطق سفارشی در مسیر inference نیاز دارند. یک pipeline یک اسکریپت Python است که به عنوان filter (تغییر پیام‌ها قبل یا بعد از رسیدن به مدل)، action (اضافه کردن دکمه‌های سفارشی به رابط چت) یا pipeline کامل (جایگزینی فراخوانی مدل با منطق سفارشی) اجرا می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "موارد استفاده عملی pipeline شامل تزریق خودکار prompt برای پایگاه‌های دانش خاص، فیلترهای تعدیل محتوا که خروجی‌ها را قبل از رسیدن به کاربر رهگیری می‌کنند، منطق کنترل هزینه که query‌های گران‌قیمت را به یک مدل ارزان‌تر هدایت می‌کند، لاگ‌گیری و ردیابی audit برای انطباق، و یکپارچه‌سازی با APIهای داخلی که مدل نمی‌تواند مستقیماً به آن‌ها دسترسی داشته باشد می‌شود."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "نیازمندی‌های سخت‌افزاری و اندازه‌گذاری استقرار"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اوپن وب‌یوآی به لحاظ محاسباتی سبک است. کانتینر رابط تقریباً به ۵۰۰ مگابایت RAM و یک هسته CPU نیاز دارد. تمام کارهای محاسباتی سنگین — embedding، inference، تقطیع — در اولاما اتفاق می‌افتد. کف سخت‌افزاری عملی برای یک راه‌اندازی محلی مفید ۱۶ گیگابایت RAM سیستم است وقتی اوپن وب‌یوآی و اولاما روی یک دستگاه اجرا می‌شوند، برای یک مدل ۷B در کوانتیزاسیون Q4_K_M."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "کانتینر اوپن وب‌یوآی: ~۵۰۰ مگابایت RAM، ۱ هسته CPU — سربار ناچیز",
+            "مدل ۷B در Q4_K_M: ~۴ تا ۶ گیگابایت VRAM، یا ~۸ گیگابایت RAM سیستم برای inference با CPU",
+            "مدل embedding (nomic-embed-text): ~۳۰۰ مگابایت VRAM یا RAM",
+            "vector store ChromaDB: با اندازه مجموعه اسناد مقیاس می‌شود، در کمتر از ۱۰ هزار chunk حداقلی است",
+            "حداقل توصیه‌شده: ۱۶ گیگابایت RAM سیستم برای یک دستگاه ترکیبی اولاما + اوپن وب‌یوآی"
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/open-webui-architecture-diagram.webp",
+          "alt": "نمودار معماری اوپن وب‌یوآی که رابطه بین client مرورگر، کانتینر اوپن وب‌یوآی، backend inference اولاما، vector store ChromaDB و ارائه‌دهندگان جستجوی متصل را نشان می‌دهد",
+          "caption": "شکل ۱: اوپن وب‌یوآی بین مرورگر کاربر و backend inference اولاما قرار می‌گیرد و مدیریت session، RAG و کنترل دسترسی چند‌کاربره را بدون تغییر stack inference زیرین اضافه می‌کند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "عدم وابستگی به Backend: فراتر از اولاما"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "علی‌رغم ریشه‌هایش به عنوان یک frontend اولاما، اوپن وب‌یوآی به backend وابسته نیست. به هر endpoint API سازگار با OpenAI متصل می‌شود، که در عمل یعنی با vLLM، LM Studio، LocalAI، Text Generation WebUI، و ارائه‌دهندگان ابری واقعی از جمله OpenAI، Anthropic و Google کار می‌کند. یک نمونه اوپن وب‌یوآی می‌تواند درخواست‌ها را برای کارهای معمولی به یک سرور اولاما محلی پروکسی کند و query‌های گران‌قیمت یا پیچیده را به یک مدل ابری هدایت کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این انعطاف backend همچنین به این معناست که اوپن وب‌یوآی می‌تواند به عنوان رابط یکپارچه برای تیم‌های توسعه‌ای که از مدل‌های مختلف برای اهداف مختلف استفاده می‌کنند عمل کند — یک مدل کدنویسی محلی برای کار روزمره، یک مدل ابری برای بررسی‌های معماری، یک مدل embedding محلی تخصصی برای RAG — در حالی که تجربه چت یکپارچه‌ای به هر کاربر ارائه می‌دهد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اوپن وب‌یوآی لایه رابط کاربری‌ای است که اکوسیستم هوش مصنوعی محلی به آن نیاز داشت. اولاما مشکل inference را حل کرد: کشیدن، کوانتیزه کردن و سرویس‌دهی مدل‌های وزن‌باز با حداقل پیکربندی. اوپن وب‌یوآی مشکل قابلیت استفاده را حل می‌کند: به آن مدل‌ها یک رابط پایدار، چندکاربره و آگاه از اسناد می‌دهد که نیازی به خط فرمان برای کارکردن ندارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "برای یک توسعه‌دهنده منفرد، ترکیب اولاما و اوپن وب‌یوآی یک راه‌اندازی هوش مصنوعی محلی تولید می‌کند که از نظر عملکردی قابل مقایسه با یک اشتراک ChatGPT است — با حریم خصوصی کامل داده، هزینه صفر به ازای توکن پس از سرمایه‌گذاری سخت‌افزاری، و توانایی تعویض آزادانه مدل‌ها. برای یک تیم کوچک، ویژگی‌های RBAC چندکاربره و پایگاه دانش مشترک یک سرور inference را به یک پلتفرم هوش مصنوعی خصوصی در دسترس همه در سازمان تبدیل می‌کند."
+        },
+        {
+          "type": "cta",
+          "title": "با موتور Inference شروع کنید",
+          "text": "قبل از راه‌اندازی اوپن وب‌یوآی، باید اولاما به‌صورت محلی در حال اجرا باشد. بررسی عمیق ما معماری، trade-offهای کوانتیزاسیون، انتقال بار به GPU و انتخاب مدل را پوشش می‌دهد که اولاما را ستون فقرات هر stack هوش مصنوعی محلی می‌کند.",
+          "buttonText": "بخوانید: اولاما — موتور پشت هوش مصنوعی محلی",
+          "buttonUrl": "https://sinisteroid.ir/blog/ollama-the-engine-behind-local-ai"
+        },
+        {
+          "type": "cta",
+          "title": "هوش مصنوعی محلی را به ویرایشگر خود ببرید",
+          "text": "هنگامی که stack محلی شما در حال اجرا است، کلاین آن را مستقیماً به VS Code به عنوان یک ایجنت کدنویسی خودمختار متصل می‌کند — ویرایش فایل، اجرای ترمینال و دسترسی به ابزار MCP، همه از طریق نمونه اولاما خودتان هدایت می‌شود.",
+          "buttonText": "بخوانید: کلاین — ایجنت کدنویسی هوش مصنوعی خودمختار",
+          "buttonUrl": "https://sinisteroid.ir/blog/cline-the-open-source-ai-coding-agent"
+        }
+      ],
+      "faq": [
+        {
+          "question": "آیا استفاده از اوپن وب‌یوآی رایگان است؟",
+          "answer": "بله. اوپن وب‌یوآی متن‌باز و برای استفاده شخصی و تیمی رایگان است. نرم‌افزار خودش هیچ هزینه‌ای ندارد؛ برای compute استفاده‌شده توسط backend مدل زیربنایی هزینه پرداخت می‌کنید. یک مجوز Enterprise برای سازمان‌هایی که به پشتیبانی SLA، برندینگ سفارشی و نسخه‌های پشتیبانی بلندمدت نیاز دارند در دسترس است."
+        },
+        {
+          "question": "آیا اوپن وب‌یوآی بدون Docker کار می‌کند؟",
+          "answer": "بله. می‌توانید آن را با pip با دستور 'pip install open-webui && open-webui serve' نصب کنید. Docker برای استقرارهای production توصیه می‌شود زیرا محیط کانتینر را ایزوله می‌کند و به‌روزرسانی‌ها را ساده می‌کند، اما مسیر pip برای توسعه محلی و آزمایش به خوبی کار می‌کند."
+        },
+        {
+          "question": "آیا اوپن وب‌یوآی می‌تواند به مدل‌های ابری مثل OpenAI یا Anthropic متصل شود؟",
+          "answer": "بله. اوپن وب‌یوآی به هر endpoint API سازگار با OpenAI متصل می‌شود، از جمله OpenAI واقعی، API Anthropic، Google Gemini و دیگران. می‌توانید مدل‌های اولاما محلی و مدل‌های ابری را در یک رابط ترکیب کنید و مکالمات مختلف را به backend‌های مختلف هدایت کنید."
+        },
+        {
+          "question": "اوپن وب‌یوآی از چه پایگاه‌های داده برداری برای RAG پشتیبانی می‌کند؟",
+          "answer": "اوپن وب‌یوآی از نه پایگاه داده برداری پشتیبانی می‌کند: ChromaDB (پیش‌فرض)، PGVector، Qdrant، Milvus، Elasticsearch، OpenSearch، Pinecone، S3Vector و Oracle 23ai. ChromaDB نیاز به هیچ راه‌اندازی خارجی ندارد و از همان ابتدا کار می‌کند؛ بقیه برای تیم‌هایی با زیرساخت پایگاه داده موجود قابل پیکربندی هستند."
+        },
+        {
+          "question": "اوپن وب‌یوآی چند کاربر را می‌تواند پشتیبانی کند؟",
+          "answer": "سیستم چندکاربره اوپن وب‌یوآی محدودیت سخت کاربری ندارد. عملکرد در مقیاس به backend inference بستگی دارد — یک نمونه اولاما درخواست‌های همزمان را به‌صورت متوالی مدیریت می‌کند که تحت بار همزمان صف ایجاد می‌کند. برای تیم‌های بزرگ‌تر از ۱۰ تا ۱۵ کاربر فعال همزمان، یک سرور inference قدرتمندتر یا چندین نمونه backend پشت یک load balancer ضروری می‌شود."
+        }
+      ],
+      "seo": {
+        "title": "اوپن وب‌یوآی: بهترین رابط برای اولاما و مدل‌های هوش مصنوعی محلی | راهنمای ۲۰۲۶",
+        "metaDescription": "یاد بگیرید چگونه اوپن وب‌یوآی اولاما را به یک پلتفرم هوش مصنوعی محلی کامل با تاریخچه چت، RAG اسناد، مدیریت مدل، RBAC چندکاربره و Python pipelines تبدیل می‌کند. راهنمای کامل راه‌اندازی ۲۰۲۶.",
+        "canonical": "https://sinisteroid.ir/blog/open-webui-the-missing-interface-for-local-ai",
+        "openGraph": {
+          "image": "/api/uploads/open-webui-the-missing-interface-for-local-ai-cover.webp"
+        },
+        "twitter": {
+          "image": "/api/uploads/open-webui-the-missing-interface-for-local-ai-cover.webp"
+        },
+        "keywords": "اوپن وب‌یوآی، رابط اولاما، رابط هوش مصنوعی محلی، ChatGPT خودمیزبان، RAG اوپن وب‌یوآی، اوپن وب‌یوآی اولاما، frontend LLM محلی، اوپن وب‌یوآی چندکاربره، اوپن وب‌یوآی Docker، pipelines اوپن وب‌یوآی",
+        "focusKeyword": "رابط اوپن وب‌یوآی اولاما"
+      }
+    }
+  }
+}
