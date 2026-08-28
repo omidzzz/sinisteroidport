@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import BlogListLive from "@/components/BlogListLive";
+import PostsCountStat from "@/components/PostsCountStat";
 import { getAllPosts } from "@/lib/posts";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
@@ -45,7 +46,10 @@ export default async function BlogPage({
           title={t.blog.title}
           intro={t.blog.intro}
           stats={[
-            { n: String(posts.length), label: locale === "fa" ? "نوشته" : "issues" },
+            {
+              n: <PostsCountStat initial={posts.length} />,
+              label: locale === "fa" ? "نوشته" : "issues",
+            },
           ]}
         />
       </Reveal>

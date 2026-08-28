@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 /* Shared interior page hero — asymmetric header with a ghost numeral,
    an accent eyebrow, a mixed solid/outline display title, intro copy and
    an optional stats row. Server-safe (no hooks). */
@@ -12,7 +13,7 @@ export default function PageHero({
   kicker: string;
   title: string;
   intro?: string;
-  stats?: { n: string; label: string }[];
+  stats?: { n: React.ReactNode; label: string }[];
 }) {
   const [head, ...rest] = title.trim().split(/\s+/);
   return (

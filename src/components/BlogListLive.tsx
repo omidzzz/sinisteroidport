@@ -44,14 +44,17 @@ export default function BlogListLive({
       .then((rows: ApiRow[]) => {
         if (cancelled || !Array.isArray(rows) || !rows.length) return;
         if (rows[0] && (rows[0].translations || rows[0].slug)) {
-          setItems(
-            (rows as unknown as Post[]).map((r) => ({
-              ...r,
-              // API rows may omit the cover — keep the prerendered one by slug
-              featuredImage:
-                r.featuredImage ??
-                initial.find((p) => p.slug === r.slug)?.featuredImage,
-            }))
+          const synced = (rows as unknown as Post[]).map((r) => ({
+            ...r,
+            // API rows may omit the cover — keep the prerendered one by slug
+            featuredImage:
+              r.featuredImage ??
+              initial.find((p) => p.slug === r.slug)?.featuredImage,
+          }));
+          setItems(synced);
+          // Broadcast the live published-count so hero stats stay in sync
+          window.dispatchEvent(
+            new CustomEvent("posts-synced", { detail: synced.length })
           );
         }
       })

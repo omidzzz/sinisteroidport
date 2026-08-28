@@ -54,6 +54,10 @@ export default function LatestPostsLive({
               initial.find((p) => p.slug === r.slug)?.featuredImage,
           }));
         setItems(latest as unknown as Post[]);
+        // Broadcast the live published-count so hero stats stay in sync
+        window.dispatchEvent(
+          new CustomEvent("posts-synced", { detail: usable.length })
+        );
       })
       .catch(() => {
         /* keep prerendered/fallback data */
