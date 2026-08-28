@@ -59,6 +59,10 @@ export function personJsonLd(locale: Locale) {
       "Content Strategy",
       "English-Persian Translation",
     ],
+    sameAs: [
+      "https://github.com/omidzzz",
+      "https://t.me/simplyeffedup",
+    ],
   };
 }
 
@@ -70,6 +74,33 @@ export function websiteJsonLd(locale: Locale) {
     url: `${SITE}/${locale}/`,
     inLanguage: locale,
     publisher: AUTHOR,
+  };
+}
+
+/** ItemList of selected projects (CreativeWork) — helps LLMs enumerate work. */
+export function itemListJsonLd(
+  items: { name: string; description: string; url?: string; tags?: string[] }[],
+  locale: Locale
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: locale === "fa" ? "نمونه‌کارهای منتخب" : "Selected projects",
+    inLanguage: locale,
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: item.name,
+        description: item.description,
+        ...(item.url ? { url: item.url } : {}),
+        ...(Array.isArray(item.tags) && item.tags.length
+          ? { keywords: item.tags.join(", ") }
+          : {}),
+        inLanguage: locale,
+      },
+    })),
   };
 }
 

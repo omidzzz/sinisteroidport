@@ -1,19 +1,41 @@
 import Link from "next/link";
-import Image from "next/image";
-import KineticTitle from "@/components/KineticTitle";
-import Magnetic from "@/components/Magnetic";
+import type { ReactNode } from "react";
 import Reveal from "@/components/Reveal";
-import ZinePanel from "@/components/ZinePanel";
+import Magnetic from "@/components/Magnetic";
+import Tilt from "@/components/Tilt";
+import Spotlight from "@/components/Spotlight";
+import CountUp from "@/components/CountUp";
+import KineticTitle from "@/components/KineticTitle";
+import HeroPlate from "@/components/HeroPlate";
 import LatestPostsLive from "@/components/LatestPostsLive";
-import { ArrowIcon, SparkIcon } from "@/components/icons";
-import { getAllPosts } from "@/lib/posts";
+import { ArrowIcon, SparkIcon, GaugeIcon, OrbitIcon, SignalIcon } from "@/components/icons";
+import { getAllPosts, type FaqItem } from "@/lib/posts";
 import { getDict, loc, isLocale, type Locale } from "@/lib/i18n";
-
+import { JsonLd, faqJsonLd } from "@/lib/schema";
+import skillsData from "@/data/skills.json";
 
 export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "fa" }];
 }
 
+/* ── shared bits ── */
+const Seam = ({ flip, cyan }: { flip?: boolean; cyan?: boolean }) => (
+  <div aria-hidden className={`seam ${flip ? "flip" : ""} ${cyan ? "cyan" : ""}`} />
+);
+const Rail = ({ label, icon }: { label: string; icon?: ReactNode }) => (
+  <div className="sec-label">
+    <span className="sec-ico" aria-hidden>{icon}</span>
+    <span className="vert">{label}</span>
+  </div>
+);
+
+/**
+ * HOME — PSIONIC ORBIT // ACID RAVE (v6)
+ * Asymmetric acts: overlap hero (kinetic name × portrait plate),
+ * skewed seams, sticky rails w/ section icons, scrub outline words,
+ * scattered telemetry, mirrored bento modules, zigzag transmissions,
+ * spotlight manifesto. No coordinates, no star chart.
+ */
 export default async function HomePage({
   params,
 }: {
@@ -23,156 +45,269 @@ export default async function HomePage({
   const locale = (isLocale(raw) ? raw : "en") as Locale;
   const t = getDict(locale);
   const latest = getAllPosts().slice(0, 3);
+  const skillTotal = skillsData.reduce((n, g) => n + g.skills.length, 0);
+  const fa = locale === "fa";
+
+  const STATS = (
+    fa
+      ? [
+          { n: 12, label: "سال تجربه" },
+          { n: 7, label: "پروژه منتخب" },
+          { n: 2, label: "زبان" },
+          { n: skillTotal, label: "توانمندی" },
+        ]
+      : [
+          { n: 12, label: "Years of craft" },
+          { n: 7, label: "Selected projects" },
+          { n: 2, label: "Languages" },
+          { n: skillTotal, label: "Capabilities" },
+        ]
+  ).map((s) => ({ ...s, v: Math.round((s.n / Math.max(skillTotal, s.n)) * 100) }));
+
+  const K = {
+    tel: fa ? "تلمتری · وضعیت پرواز" : "Telemetry · flight status",
+    bay: fa ? "ماهواره‌ها · مهارت‌ها" : "Modules · capability deck",
+    sig: fa ? "فرکانس ورودی · نوشته‌ها" : "Incoming frequency · writing",
+    man: fa ? "مانیفست · حوزه سیگنال" : "Manifesto · signal domain",
+  };
+
+  const w = t.quote.split(" ");
+  const mid = Math.ceil(w.length / 2);
+  const qHead = w.slice(0, mid).join(" ");
+  const qTail = w.slice(mid).join(" ");
+
+  // GEO/SEO: machine-readable FAQ (also great for AI crawlers + rich results)
+  const faq: FaqItem[] = fa
+    ? [
+        {
+          question: "امید کیست و چه می‌سازد؟",
+          answer:
+            "امید توسعه‌دهنده فرانت‌اندی است که از سال ۲۰۱۲ در ری‌اکت، جاوااسکریپت، وردپرس و استراتژی محتوا کار می‌کند و از سابقه ترجمه برای تولید وب‌سایت‌های دقیق و کاربرپسند بهره می‌برد.",
+        },
+        {
+          question: "چه خدماتی ارائه می‌شود؟",
+          answer:
+            "توسعه فرانت‌اند (ری‌اکت/جاوااسکریپت)، توسعه وردپرس، استراتژی محتوا و ترجمه تخصصی انگلیسی–فارسی.",
+        },
+        {
+          question: "آیا همکاری دورکار ممکن است؟",
+          answer:
+            "بله، امید برای همکاری دورکاری در سراسر جهان در دسترس است.",
+        },
+      ]
+    : [
+        {
+          question: "Who is Omid and what does Omid build?",
+          answer:
+            "Omid is an adaptive frontend developer working since 2012 in React, JavaScript, WordPress and content strategy, applying a translation-studies background to build precise, user-friendly websites.",
+        },
+        {
+          question: "What services does Omid offer?",
+          answer:
+            "Frontend development (React/JavaScript), WordPress development, content strategy, and professional English–Persian translation.",
+        },
+        {
+          question: "Is remote collaboration available?",
+          answer:
+            "Yes — Omid is available for remote work worldwide.",
+        },
+      ];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6">
-      {/* ——— Hero: kinetic type + offset "print-plate" portrait ——— */}
-      <section className="relative flex min-h-[88vh] flex-col justify-end pb-12 pt-28">
-        <div className={`absolute top-6 hidden text-right sm:block ${locale === "fa" ? "left-0 text-left" : "right-0"}`}>
-          <p className="label">{t.coords}</p>
-          <p className="label mt-1">{t.city}</p>
-        </div>
-
-        <div className="grid grid-cols-1 items-end gap-x-10 gap-y-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] lg:items-end">
+    <div className="overflow-x-clip">
+      <JsonLd data={faqJsonLd(faq)} />
+      {/* ══ ACT I · TRANSMISSION HERO ══════════════════════ */}
+      <section className="tx-hero !pb-0">
+        <span className="scanlines" aria-hidden />
+        <div className="relative z-10 mx-auto grid max-w-[84rem] items-center gap-12 px-6 pt-10 sm:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,21rem)]">
           <div>
             <Reveal>
-              <p className="label mb-4">{t.heroKicker}</p>
+              <p className="mb-5 flex items-center gap-3">
+                <span className="live-dot" aria-hidden />
+                <span className="label">{t.heroKicker}</span>
+              </p>
             </Reveal>
-            <KineticTitle
-              text={t.heroName}
-              className="font-display select-none text-[clamp(2.6rem,10.5vw,8.5rem)] font-bold uppercase leading-[0.88] tracking-tight text-ink"
-            />
-            <Reveal delay={150}>
-              <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-                <p className="max-w-md leading-relaxed text-muted">{t.heroDesc}</p>
-                <div className="flex flex-wrap items-center gap-5">
-                  <Magnetic>
-                    <Link
-                      href={loc(locale, "/showcase")}
-                      className="group inline-flex items-center gap-3 bg-accent px-7 py-3 font-mono text-xs font-bold uppercase tracking-[0.15em] text-bg transition-opacity hover:opacity-85"
-                    >
-                      {t.ctaWork}
-                      <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
-                    </Link>
-                  </Magnetic>
-                  <Magnetic>
-                    <Link
-                      href={loc(locale, "/blog")}
-                      className="font-mono text-xs uppercase tracking-[0.15em] text-muted underline-offset-8 transition-colors hover:text-accent hover:underline"
-                    >
-                      {t.ctaWriting}
-                    </Link>
-                  </Magnetic>
-                </div>
+            <div className="tx-name">
+              <KineticTitle
+                text={t.heroName}
+                className="font-display anaglyph-strong select-none text-[clamp(3.4rem,12.5vw,10.5rem)] font-black uppercase leading-[0.84] tracking-tight text-ink"
+              />
+              <span
+                dir="ltr"
+                className="tx-line-2 glitchy font-display mt-2 block select-none text-[clamp(1.25rem,4vw,2.9rem)] font-extrabold uppercase leading-none tracking-[0.08em]"
+              >
+                SINISTEROID
+              </span>
+            </div>
+            <Reveal delay={120} variant="right">
+              <p className="tx-roles mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-[0.72rem]">
+                {t.services.map((s, i) => (
+                  <span key={s.title} className="flex items-center gap-3">
+                    {i > 0 && <SparkIcon className="text-acid opacity-80" />}
+                    {s.title}
+                  </span>
+                ))}
+                <span className="tx-cursor">▌</span>
+              </p>
+            </Reveal>
+            <Reveal delay={180}>
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted">
+                {t.heroDesc.split(".")[0]}.
+              </p>
+            </Reveal>
+            <Reveal delay={240}>
+              <div className="mt-9 flex flex-wrap items-center gap-5">
+                <Magnetic>
+                  <Link href={loc(locale, "/showcase")} className="btn-neon group">
+                    {t.ctaWork}
+                    <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+                  </Link>
+                </Magnetic>
+                <Magnetic strength={0.1} maxShift={6}>
+                  <Link href={loc(locale, "/blog")} className="btn-ghost group">
+                    {t.ctaWriting}
+                    <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+                  </Link>
+                </Magnetic>
               </div>
             </Reveal>
           </div>
-
-          {/* Offset print-plate portrait — desktop, beside the type */}
-          <Reveal delay={220} className="hidden lg:block">
-            <figure className="hero-plate">
-              <div className="hero-plate-frame">
-                <img
-                  src="/hero-image.webp"
-                  alt="Omid — portrait"
-                  className="hero-plate-img"
-                />
-                <span aria-hidden className="hero-plate-scan" />
-              </div>
-            </figure>
-          </Reveal>
+          <div className="justify-self-center lg:justify-self-end">
+            <HeroPlate locale={locale} />
+          </div>
         </div>
-
-        {/* Offset print-plate portrait — mobile/tablet, below the type */}
-        <Reveal delay={260} className="mt-10 lg:hidden">
-          <figure className="hero-plate">
-            <div className="hero-plate-frame">
-              <img
-                src="/hero-image.webp"
-                alt="Omid — portrait"
-                className="hero-plate-img"
-              />
-              <span aria-hidden className="hero-plate-scan" />
-            </div>
-          </figure>
-        </Reveal>
       </section>
 
-      {/* ——— Ticker: infinite editorial strip ——— */}
-      <div aria-hidden className="ticker mt-24 select-none">
-        <div className="ticker-track">
-          {[0, 1].map((half) => (
-            <div key={half} className="flex shrink-0 items-center">
-              {[...t.services.map((s) => s.title), "Sinisteroid"].map(
-                (word, i) => (
-                  <span
-                    key={i}
-                    className="flex items-center gap-8 pe-8 font-mono text-xs uppercase tracking-[0.25em] text-muted"
-                  >
-                    {word}
-                    <SparkIcon className="shrink-0 text-accent" />
-                  </span>
-                )
-              )}
+      {/* hazard ticker lives OUTSIDE the hero so nothing clips it */}
+      <div aria-hidden className="relative z-30 -mt-8 select-none pb-6">
+        <div className="hazard-band">
+          <div className="hazard-tape absolute inset-x-0 -top-[9px] h-[9px]" />
+          <div className="ticker ticker-band">
+            <div className="ticker-track">
+              {[0, 1].map((copy) => (
+                <div key={copy} className="flex">
+                  {t.services.map((s) => (
+                    <span
+                      key={`${copy}-${s.title}`}
+                      className="flex items-center gap-6 whitespace-nowrap px-6 py-3.5 font-display text-sm font-bold uppercase tracking-[0.18em]"
+                    >
+                      <SparkIcon className="shrink-0 opacity-70" />
+                      {s.title}
+                    </span>
+                  ))}
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <div className="hazard-tape absolute inset-x-0 -bottom-[9px] h-[9px]" />
         </div>
       </div>
+      <Seam cyan />
 
-      {/* ——— Services: inverted zine "edition" ——— */}
-      <ZinePanel className="mt-24 px-5 py-12 sm:px-8" kicker={t.servicesLabel}>
-        {t.services.map((service, i) => (
-          <div
-            key={service.title}
-            className="zine-row group grid grid-cols-[auto_1fr] items-baseline gap-x-5 gap-y-1 border-t border-line py-7 sm:grid-cols-[4rem_auto_1fr] sm:gap-x-8"
-          >
-            <span className="font-mono text-xs text-accent">0{i + 1}</span>
-            <h3 className="text-2xl font-semibold tracking-tight transition-transform duration-300 group-hover:translate-x-2 rtl:group-hover:-translate-x-2 sm:text-3xl">
-              {service.title}
-            </h3>
-            <p className="col-span-2 max-w-md text-sm leading-relaxed text-muted sm:col-span-1 sm:justify-self-end sm:text-right">
-              {service.description}
-            </p>
+      {/* ══ ACT II · TELEMETRY ═══════════════════════════ */}
+      <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+        <Rail label={K.tel} icon={<GaugeIcon />} />
+        <div className="relative">
+          <span aria-hidden dir="ltr" className="scrub-word rev-dir top-[-0.45em]">
+            TELEMETRY
+          </span>
+          <div className="scatter mt-2 grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {STATS.map((s, i) => (
+              <Reveal key={s.label} delay={i * 80} variant={i % 2 ? "left" : "scale"}>
+                <div className="gauge-cell">
+                  <span className="gauge-num block text-[clamp(1.9rem,3.2vw,2.7rem)] leading-none">
+                    <CountUp to={s.n} suffix="+" />
+                  </span>
+                  <p className="mt-2 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">
+                    {s.label}
+                  </p>
+                  <span className="gauge-meter">
+                    <span className="gauge-fill" style={{ ["--v" as string]: `${s.v}%` }} />
+                  </span>
+                </div>
+              </Reveal>
+            ))}
           </div>
-        ))}
-      </ZinePanel>
-
-      {/* ——— Latest writing ——— */}
-      <section className="relative mt-24 pt-10">
-        <span aria-hidden className="x-rule" />
-        <Reveal>
-          <div className="mb-8 flex items-baseline justify-between">
-            <h2 className="label">{t.latestLabel}</h2>
-            <Link
-              href={loc(locale, "/blog")}
-              className="font-mono text-xs text-muted transition-colors hover:text-accent"
-            >
-              {t.allPosts}
-              <ArrowIcon className="ms-2 inline align-[-2px] transition-transform duration-300 hover:translate-x-1 rtl:-scale-x-100" />
-            </Link>
-          </div>
-        </Reveal>
-        {/* Prerendered rows refresh from MySQL via /api/get_posts.php */}
-        <LatestPostsLive locale={locale} initial={latest} />
+        </div>
       </section>
 
-      {/* ——— Philosophy strip, now a paper-inverted zine ——— */}
-      <ZinePanel className="mt-24 px-5 py-12 sm:px-10" kicker={t.quoteLabel}>
-        <div className="grid grid-cols-1 items-center gap-10 sm:grid-cols-[auto_1fr]">
-          <div className="parallax-frame">
-            <Image
-              src="/homePic.webp"
-              alt="Omid"
-              width={220}
-              height={220}
-              className="grayscale transition duration-500 hover:grayscale-0"
-            />
+      <Seam flip />
+
+      {/* ══ ACT III · MODULE BAY ═════════════════════════ */}
+      <section className="shell-grid rev relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+        <Spotlight className="min-w-0">
+          <div className="bay-grid relative">
+            {t.services.map((service, i) => (
+              <Tilt key={service.title} maxTilt={7}>
+                <article
+                  className={`module-card ${i % 2 ? "rotate-1 md:-translate-y-6" : "-rotate-1"}`}
+                  data-hue={i % 2 ? "cyan" : "acid"}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="mod-idx">M.{String(i + 1).padStart(2, "0")}</span>
+                    <ArrowIcon className="size-5 text-muted transition-all duration-300 group-hover:text-acid" />
+                  </div>
+                  <h3 className="mod-title text-[clamp(1.05rem,2vw,1.45rem)]">{service.title}</h3>
+                  <p className="mod-desc">{service.description}</p>
+                </article>
+              </Tilt>
+            ))}
           </div>
-          <blockquote className="max-w-xl text-xl font-light leading-relaxed text-muted sm:text-2xl">
-            {t.quote}
-          </blockquote>
+        </Spotlight>
+        <Rail label={K.bay} icon={<OrbitIcon />} />
+      </section>
+
+      <Seam cyan flip />
+
+      {/* ══ ACT IV · INCOMING TRANSMISSIONS ══════════════ */}
+      <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+        <Rail label={K.sig} icon={<SignalIcon />} />
+        <div className="sig-zone relative min-w-0">
+          <span aria-hidden dir="ltr" className="scrub-word bottom-0">
+            SIGNALS
+          </span>
+          <div className="mb-6 flex justify-end">
+            <Link
+              href={loc(locale, "/blog")}
+              className="group font-mono text-xs text-muted transition-colors hover:text-acid"
+            >
+              {t.allPosts}
+              <ArrowIcon className="ms-2 inline align-[-2px] transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+            </Link>
+          </div>
+          <LatestPostsLive locale={locale} initial={latest} />
         </div>
-      </ZinePanel>
+      </section>
+
+      <Seam />
+
+      {/* ══ ACT V · MANIFESTO ════════════════════════════ */}
+      <section className="shell-grid relative mx-auto my-20 max-w-[86rem] px-5 sm:px-8">
+        <Rail label={K.man} />
+        <Spotlight className="relative min-w-0 py-6">
+          <span aria-hidden dir="ltr" className="scrub-word top-[-0.35em]">
+            PHILOSOPHY
+          </span>
+          <Reveal delay={100} variant="left">
+            <p className="mani-block anaglyph-strong relative">{qHead}</p>
+          </Reveal>
+          <Reveal delay={220} variant="right">
+            <p
+              className={`mani-block anaglyph-strong relative mt-6 ${
+                fa ? "mani-offset-end text-start" : "mani-offset-end text-end"
+              }`}
+            >
+              {qTail}
+            </p>
+          </Reveal>
+          <Reveal delay={320}>
+            <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-muted">
+              <span>{t.quoteLabel}</span>
+              <span dir="ltr" className="text-acid">SIG.OK ▸ VOID-FREE</span>
+            </div>
+          </Reveal>
+        </Spotlight>
+      </section>
     </div>
   );
 }

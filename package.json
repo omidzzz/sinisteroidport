@@ -1,6 +1,6 @@
 {
   "name": "sinisteroid-next",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "description": "Omid – Frontend Developer Portfolio (Next.js)",
   "scripts": {
@@ -10,7 +10,9 @@
     "lint": "next lint",
     "extract-posts": "node scripts/extract-posts.mjs",
     "import-posts": "node scripts/import-posts.mjs",
-    "prepare-cpanel": "node scripts/prepare-cpanel.mjs"
+    "prepare-cpanel": "node scripts/prepare-cpanel.mjs",
+    "zip-out": "node scripts/zip-out.mjs",
+    "deploy": "npm run build && npm run prepare-cpanel && npm run zip-out"
   },
   "dependencies": {
     "next": "^15.3.0",

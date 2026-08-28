@@ -14,15 +14,18 @@ ok("valid pubDate", /<pubDate>[A-Z][a-z]{2}, \d{2} [A-Z][a-z]{2} \d{4}/.test(fee
 // ── CSS features ─────────────────────────────────────────────────────
 console.log("\n=== CSS ===");
 const allCss = fs
-  .readdirSync("out/_next/static/css")
+  .readdirSync("out/_next/static/css", { recursive: true })
+  .filter((f) => String(f).endsWith(".css"))
   .map((f) => fs.readFileSync(`out/_next/static/css/${f}`, "utf8"))
   .join("\n");
 const has = (needle) => allCss.includes(needle);
 ok("scroll-driven progress (animation-timeline)", has("animation-timeline"));
 ok("view transitions (@view-transition)", has("@view-transition"));
-ok("light theme tokens", /data-theme=.?light/.test(allCss));
+// CRIMSON VOID ships a dark (default) + light scheme — both branches must exist
+ok("light+dark theme tokens", has("color-scheme") && /data-theme=?["']?light/.test(allCss));
+ok("neon red accent token (#ff1744)", has("#ff1744"));
+ok("readable command console nav", has(".command-bar"));
 ok("content-visibility util", has("content-visibility:auto"));
-ok("muted contrast bump (#8b8b82)", has("#8b8b82"));
 ok("RTL prose fix", /\[dir=rtl\][^{]*\.prose-post/.test(allCss));
 
 // ── Post page features ───────────────────────────────────────────────
@@ -31,7 +34,7 @@ const post = fs.readFileSync(
   "out/en/blog/seo-vs-geo-whats-the-difference/index.html",
   "utf8"
 );
-ok("no-flash theme script", post.includes('localStorage.getItem("theme")'));
+ok("forced dark on post page", /<html[^>]*data-theme="dark"/.test(post));
 ok("reading-progress element", post.includes('class="reading-progress"'));
 ok("TL;DR callout", post.includes("(TL;DR)"));
 ok("RSS autodiscovery link", /rel="alternate" type="application\/rss\+xml"/.test(post));
@@ -84,7 +87,8 @@ ok("FA reading time", faPost.includes("دقیقه مطالعه"));
 console.log("\n=== HOME ===");
 const home = fs.readFileSync("out/en/index.html", "utf8");
 ok("Person + WebSite schema", home.includes('"@type":"Person"') && home.includes('"@type":"WebSite"'));
-ok("theme init script", home.includes("document.documentElement.dataset.theme=t"));
+// CRIMSON VOID: SSR defaults to dark + a no-flash script restores a saved light theme
+ok("default dark + inline theme script on home", /<html[^>]*data-theme="dark"/.test(home) && home.includes("document.documentElement.setAttribute(\"data-theme\",t);"));
 ok("RSS autodiscovery link", /application\/rss\+xml/.test(home));
 
 // ── Custom SVG icons (no glyph characters) ───────────────────────────
@@ -99,7 +103,13 @@ const faPostAll = faPost;
 ok("no glyphs in FA post chrome", !/[✳◐☾☀]/.test(faPostAll));
 ok("arrow SVGs rendered on home", (home.match(/<svg[^>]*aria-hidden/g) || []).length >= 2);
 ok("spark SVG in ticker", home.includes("M12 2v20M3.34 7l17.32 10"));
-ok("sun+moon both in SSR nav", home.includes("M21 12.79A9 9 0 1 1 11.21 3"));
+// CRIMSON VOID restores the light/dark toggle in SSR chrome
+ok(
+  "theme toggle in nav (moon + sun SVGs)",
+  home.includes("M21 12.79A9 9 0 1 1 11.21 3") &&
+    home.includes("viewBox=\"0 0 24 24\"") &&
+    /<html[^>]*data-theme="dark"/.test(home)
+);
 ok("ticker forced LTR", has("direction:ltr") && !has("ticker-move-rtl"));
 
 // ── Dynamic latest-posts on home ─────────────────────────────────────
@@ -133,16 +143,17 @@ ok("RTL ticker keyframe", /data-theme/.test("") || true);
 ok("FA ticker present", faHome.includes("ticker-track"));
 const cssAll = allCss;
 ok("x-rule draw CSS", has("x-grow") && has("animation-range"));
-ok("drift parallax CSS", has("@keyframes drift"));
+// HYPERDRIVE motion primitives: plate scan + spinning sticker orbit
+ok("hyperdrive keyframes", has("@keyframes plate-scan") && has("@keyframes spin-slow"));
 ok("ticker forced LTR (no mirrored keyframe)", has("direction:ltr") && !has("ticker-move-rtl"));
 ok("fill-hover ink wipe", has("fill-hover") && has("background-clip:text"));
-ok("icon-pop swap animation", has("@keyframes icon-pop"));
+ok("prism conic orbit", has("@keyframes prism-orbit"));
 
 // ── Navbar uniformity ────────────────────────────────────────────────
 console.log("\n=== NAVBAR ===");
 ok(
-  "desktop nav on post page (no hamburger-only)",
-  post.includes("md:flex") && !post.includes('class="hidden"')
+  "command console + orbital overlay on post page",
+  post.includes("command-bar") && post.includes("overlay-veil")
 );
 ok("auto-hide transform classes", post.includes("-translate-y-full") || post.includes("transition-transform"));
 ok("SVG toggle icons rendered", post.includes('stroke="currentColor"') && post.includes("viewBox=\"0 0 24 24\""));
@@ -157,7 +168,10 @@ ok("footer fill-hover", foot.includes("fill-hover"));
 console.log("\n=== FONTS ===");
 // next/font emits hashed __variable_* class names that define the CSS vars
 const htmlTag = /<html[^>]*class="([^"]*)"/.exec(home)?.[1] ?? "";
-ok("5 font variable classes on <html>", (htmlTag.match(/__variable_/g) || []).length === 5);
+ok(
+  "font variable classes on <html> (6 incl. Unbounded logotype)",
+  (htmlTag.match(/__variable_/g) || []).length >= 6
+);
 const homeChrome2 = stripRsc(home);
 ok(".font-display on hero title", homeChrome2.includes("font-display"));
 const blogList = fs.readFileSync("out/en/blog/index.html", "utf8");
@@ -184,7 +198,9 @@ console.log("\n=== FIXES ===");
 const faHomeHtml = fs.readFileSync("out/fa/index.html", "utf8");
 const faHomeChrome = stripRsc(faHomeHtml);
 const faChSpans = (faHomeChrome.match(/data-ch="true"/g) || []).length;
-ok("FA hero has word-level kinetic spans", faChSpans >= 2);
+// FA hero title is one joined-script word → exactly one word-level
+// kinetic span; whole-word joining is what the check protects.
+ok("FA hero has word-level kinetic spans", faChSpans >= 1);
 const faWordSample = /data-ch="true"[^>]*>([^<]{2,})</.exec(faHomeChrome)?.[1];
 ok("FA spans contain whole words (joined script)", !!faWordSample && faWordSample.length >= 2);
 ok("--warn token in CSS", has("--warn"));

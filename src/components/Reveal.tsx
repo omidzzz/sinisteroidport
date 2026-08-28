@@ -10,11 +10,14 @@ export default function Reveal({
   children,
   delay = 0,
   className = "",
+  variant,
 }: {
   children: ReactNode;
   /** stagger delay in ms */
   delay?: number;
   className?: string;
+  /** entrance flavour — up (default), left, right, scale */
+  variant?: "up" | "left" | "right" | "scale";
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -40,6 +43,7 @@ export default function Reveal({
       ref={ref}
       className={`reveal ${visible ? "is-visible" : ""} ${className}`}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+      {...(variant ? { "data-rv": variant } : {})}
     >
       {children}
     </div>

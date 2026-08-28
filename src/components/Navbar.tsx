@@ -3,158 +3,172 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ThemeToggle from "./ThemeToggle";
 import LogoType from "./LogoType";
+import ThemeToggle from "./ThemeToggle";
+import { HeartIcon } from "./icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 
 const NAV_PATHS = ["/", "/work", "/skills", "/education", "/showcase", "/blog"];
 
+/**
+ * CONSOLE DOCK NAV — readable navigation, unconventional placement.
+ *
+ *  • Desktop (md+): a floating capsule dock pinned to the BOTTOM center.
+ *    Indexed uppercase mono links stay fully legible over any background;
+ *    the active route carries an acid underline beam. Brand lives in its
+ *    own corner chip (top start); telemetry + language + theme sit in the
+ *    dock's tail section.
+ *
+ *  • Mobile: brand chip up top, a bottom-center SIGNAL pill opens ORBITAL
+ *    — the fullscreen staggered display-link overlay (reused voice).
+ */
 export default function Navbar({ locale }: { locale: Locale }) {
   const t = getDict(locale);
+  const fa = locale === "fa";
   const [open, setOpen] = useState(false);
-  // Auto-hide: tuck the bar away scrolling down, bring it back scrolling up.
-  const [hidden, setHidden] = useState(false);
 
+  const pathname = usePathname() ?? loc(locale, "/");
+  // strip locale prefix so route matching is locale independent
+  const clean = pathname.replace(/^\/(en|fa)(?=\/|$)/, "") || "/";
+
+  /* Lock page scroll + Escape closes while the orbital overlay is open */
   useEffect(() => {
-    let lastY = window.scrollY;
-    let raf = 0;
-    const onScroll = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        const y = window.scrollY;
-        setHidden(y > lastY && y > 140 && !open);
-        lastY = y;
-      });
+    document.documentElement.style.overflow = open ? "hidden" : "";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("keydown", onKey);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (raf) cancelAnimationFrame(raf);
+      document.documentElement.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
     };
   }, [open]);
 
+  const langSwap =
+    locale === "en" ? (
+      <a href={`/fa${clean}`} className="font-bold text-acid">
+        فا
+      </a>
+    ) : (
+      <a href={`/en${clean}`} className="font-bold text-acid">
+        EN
+      </a>
+    );
+
   return (
-    <header
-      className={`sticky top-0 z-50 border-b border-line bg-bg/75 backdrop-blur-md transition-transform duration-300 ${
-        hidden ? "-translate-y-full" : "translate-y-0"
-      }`}
-    >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+    <>
+      {/* ══ BRAND CORNER CHIP (always visible) ══ */}
+      <div className="chip-corner chip-start">
         <Link
           href={loc(locale, "/")}
-          className="group -mx-1 rounded-sm px-1 py-0.5"
           aria-label="Omid — home"
           onClick={() => setOpen(false)}
+          className="flex shrink-0 items-center gap-2.5 transition-colors hover:text-acid"
         >
-          <LogoType
-            variant="compact"
-            className="align-middle text-[0.95rem] sm:text-[1.05rem]"
-          />
-          <span className="label ml-2 hidden select-none sm:inline">
-            {t.site}
+          <span className="relative grid place-items-center" aria-hidden>
+            <span className="orbit-pip" />
+            <span className="nav-dot" />
           </span>
+          <LogoType variant="compact" className="align-middle text-[0.92rem]" />
         </Link>
+      </div>
 
-        {/* ── Desktop: full inline nav (identical on every page) ──────── */}
-        <ul className="hidden items-center gap-x-6 font-mono text-[0.68rem] uppercase tracking-[0.15em] text-muted md:flex">
-          {t.nav.map((item, i) => (
-            <li key={NAV_PATHS[i]}>
+      {/* ══ DESKTOP FLOATING DOCK ══════════════════════════ */}
+      <div className="dock-wrap">
+        <nav className="dock" aria-label="Primary">
+          {t.nav.map((item, i) => {
+            const active =
+              NAV_PATHS[i] === "/"
+                ? clean === "/"
+                : clean.startsWith(NAV_PATHS[i]);
+            return (
               <Link
+                key={NAV_PATHS[i]}
                 href={loc(locale, NAV_PATHS[i])}
-                className="group transition-colors hover:text-accent"
+                className={`dock-link ${active ? "is-active" : ""}`}
               >
-                <span className="mr-1 text-muted transition-colors group-hover:text-accent">
-                  {item.index}
-                </span>
+                <span className="dock-index">{item.index}</span>
                 {item.label}
               </Link>
-            </li>
-          ))}
-          {/* Language switcher */}
-          <li className="ms-2 border-s border-line ps-4">
-            {locale === "en" ? (
-              <a href="/fa" className="font-bold text-accent">
-                فا
-              </a>
-            ) : (
-              <a href="/en" className="font-bold text-accent">
-                EN
-              </a>
-            )}
-          </li>
-          {/* Light/dark toggle */}
-          <li className="ms-1">
-            <ThemeToggle locale={locale} />
-          </li>
-        </ul>
+            );
+          })}
 
-        {/* ── Mobile: hamburger toggle ───────────────────────────────── */}
+          <span className="dock-sep" aria-hidden />
+
+          <ThemeToggle locale={locale} />
+          <span className="ps-3 pe-1 font-mono text-[0.72rem] uppercase tracking-[0.12em]">
+            {langSwap}
+          </span>
+        </nav>
+      </div>
+
+      {/* ══ MOBILE MENU BUTTON (easy to find, labeled "Menu") ══ */}
+      <div className="mob-dock md:hidden">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          aria-controls="mobile-nav"
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-x-2 font-mono text-[0.68rem] uppercase tracking-[0.15em] text-muted transition-colors hover:text-accent md:hidden"
+          aria-controls="orbital-nav"
+          aria-haspopup="dialog"
+          className="mob-pill cursor-pointer"
         >
-          <span className="relative flex h-3 w-4 flex-col justify-center">
-            <span
-              className={`absolute inset-x-0 top-0 h-px bg-current transition-transform duration-300 ${
-                open ? "translate-y-[5.5px] rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`absolute inset-x-0 bottom-0 h-px bg-current transition-transform duration-300 ${
-                open ? "-translate-y-[6.5px] -rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-current transition-opacity duration-200 ${
-                open ? "opacity-0" : "opacity-100"
-              }`}
-            />
+          <span className="mob-burger" aria-hidden>
+            <i />
+            <i />
+            <i />
           </span>
-          {locale === "fa" ? (open ? "بستن" : "منو") : open ? "Close" : "Menu"}
+          <span>{locale === "fa" ? (open ? "بستن" : "منو") : open ? "Close" : "Menu"}</span>
         </button>
-      </nav>
-
-      {/* ── Mobile dropdown panel ───────────────────────────────────── */}
-      <div
-        id="mobile-nav"
-        className={`overflow-hidden border-t border-line transition-[max-height,opacity] duration-300 ease-out md:hidden ${
-          open ? "max-h-[60vh] opacity-100" : "max-h-0 border-t-0 opacity-0"
-        }`}
-      >
-        <ul className="flex flex-col px-4 py-3 font-mono text-[0.72rem] uppercase tracking-[0.15em] text-muted">
-          {t.nav.map((item, i) => (
-            <li key={NAV_PATHS[i]}>
-              <Link
-                href={loc(locale, NAV_PATHS[i])}
-                className="flex items-baseline gap-3 border-b border-line/50 py-3 transition-colors hover:text-accent"
-                onClick={() => setOpen(false)}
-              >
-                <span className="text-muted">{item.index}</span>
-                {item.label}
-              </Link>
-            </li>
-          ))}
-          <li className="flex items-center justify-between gap-4 pt-3">
-            {locale === "en" ? (
-              <a href="/fa" className="font-bold text-accent">
-                نسخه فارسی
-              </a>
-            ) : (
-              <a href="/en" className="font-bold text-accent">
-                English version
-              </a>
-            )}
-            <ThemeToggle locale={locale} />
-          </li>
-        </ul>
       </div>
-    </header>
+
+      {/* ══ MOBILE ORBITAL OVERLAY ═════════════════════════ */}
+      <div
+        id="orbital-nav"
+        className={`overlay-veil md:hidden ${open ? "is-open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+      >
+        <div
+          className="orbit-ring start-[-30%] top-[-35%] h-[130vw] w-[130vw]"
+          aria-hidden
+        />
+        <div className="overlay-menu">
+          <p className="label mb-6">{t.site}</p>
+          {t.nav.map((item, i) => (
+            <Link
+              key={NAV_PATHS[i]}
+              href={loc(locale, NAV_PATHS[i])}
+              data-off={i}
+              className={`overlay-link text-[clamp(1.9rem,9vw,3.4rem)] ${
+                (NAV_PATHS[i] === "/" ? clean === "/" : clean.startsWith(NAV_PATHS[i]))
+                  ? "is-active"
+                  : ""
+              }`}
+              onClick={() => setOpen(false)}
+            >
+              <span className="overlay-index me-3 align-middle">{item.index}</span>
+              {item.label}
+            </Link>
+          ))}
+          <div className="mt-8 flex items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted">
+            {langSwap}
+            <span className="h-px w-8 bg-line" aria-hidden />
+            <ThemeToggle locale={locale} />
+            <span className="h-px w-8 bg-line" aria-hidden />
+            <a
+              href="https://donatr.ee/sinisteroid/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="donate-inline gap-1.5 text-acid transition-colors hover:text-ink"
+            >
+              <HeartIcon className="donate-heart" />
+              {fa ? "حمایت" : "donate"}
+            </a>
+            <span>{t.city}</span>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
-
-
-

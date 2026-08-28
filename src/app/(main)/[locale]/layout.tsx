@@ -4,6 +4,7 @@ import {
   Space_Grotesk,
   JetBrains_Mono,
   Vazirmatn,
+  Orbitron,
   Syne,
   Noto_Kufi_Arabic,
   Unbounded,
@@ -11,6 +12,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GLBackground from "@/components/GLBackground";
+import ProgressThread from "@/components/ProgressThread";
 import GridLines from "@/components/GridLines";
 import Cursor from "@/components/Cursor";
 import CommandPalette, { type CmdEntry } from "@/components/CommandPalette";
@@ -29,6 +31,14 @@ const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!==
 // With output: "export", only render locales listed in generateStaticParams.
 // Any other value (e.g. /admin/) → 404 instead of a runtime crash.
 export const dynamicParams = false;
+
+// Display face for the ACID RAVE identity — a wide techno variable face
+// (400–900) driving --font-display for Latin headings; Kufi mirrors it in Persian.
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron-var",
+  display: "swap",
+});
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -111,7 +121,7 @@ export async function generateMetadata({
       siteName: "Sinisteroid",
       type: "website",
       url: "https://sinisteroid.ir",
-      // Dedicated 1200x630 social card (homePic.webp is a 960x1280 portrait)
+      // Dedicated 1200x630 social card (og-default.jpg lives in /public)
       images: [{ url: "/og-default.jpg", width: 1200, height: 630 }],
     },
     twitter: { card: "summary_large_image", site: "@sinisteroid" },
@@ -169,7 +179,7 @@ export default async function LocaleRootLayout({
     <html
       lang={locale}
       dir={locale === "fa" ? "rtl" : "ltr"}
-      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${vazirmatn.variable} ${syne.variable} ${notoKufiArabic.variable} ${unbounded.variable}`}
+      className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${vazirmatn.variable} ${syne.variable} ${notoKufiArabic.variable} ${unbounded.variable}`}
       suppressHydrationWarning
     >
       <body
@@ -178,8 +188,10 @@ export default async function LocaleRootLayout({
             ? "[font-family:var(--font-vazirmatn),Tahoma,sans-serif]"
             : "font-sans"
         }`}
+        suppressHydrationWarning
       >
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        <ProgressThread />
         <GLBackground />
         <GridLines />
         <div aria-hidden className="noise" />
@@ -189,7 +201,7 @@ export default async function LocaleRootLayout({
         {/* Structured data: site + owner entity, visible on every page */}
         <JsonLd data={[personJsonLd(locale), websiteJsonLd(locale)]} />
         <Navbar locale={locale} />
-        <main className="relative z-10">{children}</main>
+        <main id="top" className="relative z-10">{children}</main>
         <Footer locale={locale} />
       </body>
     </html>

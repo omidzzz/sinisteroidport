@@ -282,5 +282,12 @@
         }
       ]
     }
+  },
+  "featuredImage": {
+    "src": "/api/uploads/1780346163845-cover.webp",
+    "alt": {
+      "en": "Design Without Words Is Decoration",
+      "fa": "Design Without Words Is Decoration"
+    }
   }
 }

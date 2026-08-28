@@ -1,6 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import Reveal from "./Reveal";
+import { ArrowIcon } from "./icons";
+
+/**
+ * Showcase — asymmetric bento "broadcast wall".
+ * A 4-column interlocking patchwork: tiles span 1–2 columns and drift
+ * up/down so the columns break into a dynamic, slightly off-register wall.
+ * Giant ghost indices bleed behind each tile; compact frames keep the
+ * low-res animated webps small; hover raises a tile to acid and sweeps a
+ * scanline. RTL-safe, tileable, reduced-motion inert.
+ */
 
 export interface Project {
   name: string;
@@ -9,107 +19,69 @@ export interface Project {
   tags: string[];
 }
 
-/**
- * Editorial project index with a cursor-following image preview
- * (desktop / fine-pointer only). The preview lerps toward the pointer
- * and crossfades between preloaded images.
- */
-export default function ProjectIndex({ projects }: { projects: Project[] }) {
-  const [active, setActive] = useState<number | null>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const fine = useRef(true);
+/* Per-project grid config: span (1|2 cols) + drift */
+const SPANS = [2, 1, 1, 2, 1, 2, 1] as const;
+const DRIFT: Array<"up" | "down" | ""> = ["down", "up", "down", "up", "", "down", "up"];
 
-  useEffect(() => {
-    fine.current = window.matchMedia("(pointer: fine)").matches;
-    if (!fine.current) return;
+const driftClass = (d: string) =>
+  d === "up" ? "bento-up" : d === "down" ? "bento-down" : "";
 
-    let mx = 0;
-    let my = 0;
-    let px = 0;
-    let py = 0;
-    let raf = 0;
-
-    const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-    };
-
-    const loop = () => {
-      raf = requestAnimationFrame(loop);
-      px += (mx - px) * 0.11;
-      py += (my - py) * 0.11;
-      const el = previewRef.current;
-      if (el) {
-        el.style.transform = `translate3d(${px + 28}px, ${py - 140}px, 0) rotate(${((mx - px) * 0.02).toFixed(2)}deg)`;
-        el.style.opacity = active === null ? "0" : "1";
-      }
-    };
-
-    window.addEventListener("mousemove", onMove, { passive: true });
-    raf = requestAnimationFrame(loop);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-    };
-  }, [active]);
-
+function ProjectTags({ tags }: { tags: string[] }) {
+  const shown = tags.slice(0, 2);
+  const extra = tags.length - shown.length;
   return (
-    <>
-      {/* Floating preview — desktop only */}
-      <div
-        ref={previewRef}
-        aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-40 hidden h-56 w-80 overflow-hidden border border-line opacity-0 transition-opacity duration-300 lg:block"
-      >
-        {projects.map((p, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={`${p.name}-${active === i ? "on" : "off"}`}
-            src={p.image}
-            alt=""
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-              active === i ? "project-wipe opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
-      </div>
+    <div className="bento-tags">
+      {shown.map((tag) => (
+        <span key={tag} className="bento-tag">
+          {tag}
+        </span>
+      ))}
+      {extra > 0 && <span className="bento-tag bento-tag-dim">+{extra}</span>}
+      <ArrowIcon className="bento-arrow" />
+    </div>
+  );
+}
 
-      <ul className="mt-16">
-        {projects.map((project, i) => (
-          <li key={project.name}>
-            <article
-              data-cursor
-              onMouseEnter={() => fine.current && setActive(i)}
-              onMouseLeave={() => setActive(null)}
-              className="group grid cursor-none grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-3 border-t border-line py-8 transition-colors duration-300 last:border-b hover:bg-panel/40 lg:grid-cols-[4rem_1fr_1fr]"
-            >
-              <span className="font-mono text-xs text-muted transition-colors group-hover:text-accent">
-                {String(i + 1).padStart(2, "0")}
+export default function ProjectIndex({ projects }: { projects: Project[] }) {
+  return (
+    <div className="bento-wall mt-16 sm:mt-20">
+      {projects.map((project, i) => {
+        const span = `bento-s${SPANS[i] ?? 1}`;
+        const drift = driftClass(DRIFT[i] ?? "");
+        const n = String(i + 1).padStart(2, "0");
+        return (
+          <Reveal
+            key={project.name}
+            variant={i % 2 ? "right" : "left"}
+            className={`bento-cellwrap ${span} ${drift}`}
+          >
+            <article className="bento">
+              <span aria-hidden className="bento-ghost">
+                {n}
               </span>
-              <h2 className="text-3xl font-semibold tracking-tight transition-all duration-300 group-hover:translate-x-3 group-hover:text-accent sm:text-5xl">
-                {project.name}
-              </h2>
-              <div>
-                <p className="max-w-md text-sm leading-relaxed text-muted">
-                  {project.description}
-                </p>
-                <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[0.65rem] uppercase tracking-wider text-muted">
-                  {project.tags.map((tag) => (
-                    <li key={tag}>{tag}</li>
-                  ))}
-                </ul>
-                {/* inline thumbnail on touch layouts */}
+              <div className="bento-head">
+                <span className="bento-index">{n}</span>
+                <span className="bento-type">{project.tags[0] ?? "case"}</span>
+              </div>
+              <div className="bento-frame">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={project.image}
                   alt={`${project.name} preview`}
+                  width={424}
+                  height={240}
+                  decoding="async"
                   loading="lazy"
-                  className="mt-5 aspect-video w-full object-cover lg:hidden"
                 />
+                <span aria-hidden className="bento-scan" />
               </div>
+              <h3 className="bento-name">{project.name}</h3>
+              <p className="bento-desc">{project.description}</p>
+              <ProjectTags tags={project.tags} />
             </article>
-          </li>
-        ))}
-      </ul>
-    </>
+          </Reveal>
+        );
+      })}
+    </div>
   );
 }

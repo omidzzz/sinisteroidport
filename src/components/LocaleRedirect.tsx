@@ -36,11 +36,11 @@ export default function LocaleRedirect({
       }}
     >
       <p>
-        <a href={`/en${path}`} style={{ color: "#d9ff3f" }}>
+        <a href={`/en${path}`} style={{ color: "#ff2b55" }}>
           English
         </a>{" "}
         ·{" "}
-        <a href={`/fa${path}`} style={{ color: "#d9ff3f" }}>
+        <a href={`/fa${path}`} style={{ color: "#ff2b55" }}>
           فارسی
         </a>
       </p>

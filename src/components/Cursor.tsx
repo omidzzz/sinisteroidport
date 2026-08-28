@@ -3,8 +3,10 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Custom cursor: an instant dot + a lerped ring that expands over
- * interactive elements. Only mounts on fine-pointer devices.
+ * Custom cursor: an instant neon dot + a lerped glass ring that ignites over
+ * interactive elements. Mounts only on fine-pointer devices without
+ * reduced-motion (which keeps the native cursor). Adds a click-squish and
+ * hides both while the pointer leaves the window.
  */
 export default function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -12,6 +14,7 @@ export default function Cursor() {
 
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
@@ -22,15 +25,32 @@ export default function Cursor() {
     let ry = my;
     let scale = 1;
     let targetScale = 1;
+    let shown = false;
     let raf = 0;
+
+    const set = (interactive: boolean) => {
+      targetScale = interactive ? 1.55 : 1;
+      ring.classList.toggle("cursor-hot", !!interactive);
+};
 
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
       const t = e.target as HTMLElement | null;
-      const interactive = t?.closest("a, button, [data-cursor]");
-      targetScale = interactive ? 2.1 : 1;
-      dot.style.opacity = interactive ? "0" : "1";
+      set(!!t?.closest("a, button, [data-cursor]"));
+      if (!shown) {
+        shown = true;
+        dot.style.opacity = "1";
+        ring.style.opacity = "1";
+      }
+    };
+
+    const onDown = () => ring.classList.add("cursor-click");
+    const onUp = () => ring.classList.remove("cursor-click");
+    const onLeave = () => {
+      shown = false;
+      dot.style.opacity = "0";
+      ring.style.opacity = "0";
     };
 
     const loop = () => {
@@ -43,25 +63,23 @@ export default function Cursor() {
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("mouseup", onUp);
+    document.documentElement.addEventListener("mouseleave", onLeave);
     raf = requestAnimationFrame(loop);
     return () => {
       window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mouseup", onUp);
+      document.documentElement.removeEventListener("mouseleave", onLeave);
       cancelAnimationFrame(raf);
     };
   }, []);
 
   return (
     <>
-      <div
-        ref={dotRef}
-        aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-1.5 w-1.5 rounded-full bg-white mix-blend-difference md:block"
-      />
-      <div
-        ref={ringRef}
-        aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-9 w-9 rounded-full border border-white mix-blend-difference md:block"
-      />
+      <div ref={dotRef} aria-hidden className="cursor-dot" style={{ opacity: 0 }} />
+      <div ref={ringRef} aria-hidden className="cursor-ring" style={{ opacity: 0 }} />
     </>
   );
 }

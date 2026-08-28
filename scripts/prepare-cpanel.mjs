@@ -39,8 +39,8 @@ location.replace(/(^|,)\\s*fa/.test(langs) ? "/fa/" : "/en/");
 </script>
 <meta http-equiv="refresh" content="1;url=/en/">
 </head>
-<body style="background:#0a0a0b;color:#edece6;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0">
-<p>Redirecting to <a href="/en/" style="color:#d9ff3f">English</a> or <a href="/fa/" style="color:#d9ff3f">فارسی</a></p>
+<body style="background:#05050f;color:#edece6;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0">
+<p>Redirecting to <a href="/en/" style="color:#ff2b55">English</a> or <a href="/fa/" style="color:#ff2b55">فارسی</a></p>
 </body>
 </html>`;
 fs.writeFileSync(path.join(out, "index.html"), rootRedirect);
@@ -174,10 +174,10 @@ console.log("✓ wrote .htaccess (static export rules)");
 const notFoundHtml = `<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head><meta charset="utf-8"><title>404 — Not Found</title>
-<style>body{background:#0a0a0b;color:#edece6;font-family:'Space Grotesk',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center}
+<style>body{background:#05050f;color:#edece6;font-family:'Space Grotesk',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center}
 h1{font-size:clamp(6rem,20vw,16rem);font-weight:900;line-height:1;color:transparent;-webkit-text-stroke:2px rgba(237,236,230,.35);margin:0}
 p{color:#7d7d74;font-size:1rem;max-width:24rem;margin:1rem 0 2rem}
-a{display:inline-block;background:#d9ff3f;color:#0a0a0b;padding:.75rem 1.75rem;border-radius:99px;font-family:monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;text-decoration:none;font-weight:700}
+a{display:inline-block;background:#ff2b55;color:#04121a;padding:.75rem 1.75rem;border-radius:99px;font-family:monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;text-decoration:none;font-weight:700}
 a:hover{opacity:.85}</style></head>
 <body><p style="font-family:monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#7d7d74">(Error) — route not resolved</p>
 <h1>404</h1><p>The page you're looking for doesn't exist or has been moved.</p>
@@ -194,12 +194,25 @@ for (const f of ["_redirects", "_headers", "robots.txt", "sitemap.xml", "llms.tx
   }
 }
 
-// 4. Copy uploads referenced by the DB (api/uploads from the reference build)
-const uploadsSrc = path.join(build, "api", "uploads");
+// 4. Copy uploads referenced by the DB (api/uploads from the reference build
+// AND any cover checked into public/uploads), so list thumbnails resolve.
 const uploadsOut = path.join(out, "api", "uploads");
+fs.mkdirSync(uploadsOut, { recursive: true });
+const uploadsSrc = path.join(build, "api", "uploads");
 if (fs.existsSync(uploadsSrc)) {
   fs.cpSync(uploadsSrc, uploadsOut, { recursive: true });
   console.log("✓ copied api/uploads/");
+}
+const publicUploads = path.join(root, "public", "uploads");
+if (fs.existsSync(publicUploads)) {
+  for (const f of fs.readdirSync(publicUploads)) {
+    const src = path.join(publicUploads, f);
+    const dst = path.join(uploadsOut, f);
+    if (!fs.existsSync(dst)) {
+      fs.copyFileSync(src, dst);
+      console.log(`  merged public/uploads/${f} → api/uploads/`);
+    }
+  }
 }
 
 // 5. Config samples so the user knows what to fill in
@@ -231,6 +244,12 @@ const deployDoc = `════════════════════�
 3) Upload the CONTENTS of this folder to public_html:
    - Everything here goes directly into public_html
    - .htaccess must be uploaded (enable "show hidden files" in cPanel)
+   - ⚠ IMPORTANT: do NOT delete or overwrite the folder
+     public_html/api/uploads on the server — it contains the post
+     cover images (uploaded via the admin) and this package only
+     carries a small subset. Use plain "overwrite/merge" mode in
+     your FTP client, not "mirror/sync" (which can delete extra
+     server files).
 
 4) The blog now reads from MySQL live via /api/get_posts.php and
    /api/get_post.php?slug=...

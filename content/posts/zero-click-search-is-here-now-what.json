@@ -119,5 +119,12 @@
         }
       ]
     }
+  },
+  "featuredImage": {
+    "src": "/api/uploads/zero-click-search-is-here-now-what-cover.webp",
+    "alt": {
+      "en": "Zero-Click Search Is Here. Now What?",
+      "fa": "Zero-Click Search Is Here. Now What?"
+    }
   }
 }

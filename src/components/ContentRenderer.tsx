@@ -135,7 +135,7 @@ export default function ContentRenderer({ blocks }: { blocks: ContentBlock[] }) 
             return (
               <aside
                 key={i}
-                className="my-10 border border-accent/40 bg-panel/60 p-5 shadow-[0_0_24px_rgba(217,255,63,0.08)]"
+                className="my-10 border border-accent/40 bg-panel/60 p-5 shadow-[0_0_24px_rgba(60,226,255,0.08)]"
               >
                 {block.label && (
                   <p className="mb-2 font-mono text-xs font-bold uppercase tracking-widest text-accent">
@@ -172,7 +172,7 @@ export default function ContentRenderer({ blocks }: { blocks: ContentBlock[] }) 
             /* eslint-disable @next/next/no-img-element */
             return (
               <figure key={i} className="group my-10">
-                <div className="border border-line bg-panel p-1.5 transition-all duration-300 group-hover:border-accent/40 group-hover:shadow-[0_0_30px_rgba(217,255,63,0.07)]">
+                <div className="border border-line bg-panel p-1.5 transition-all duration-300 group-hover:border-accent/40 group-hover:shadow-[0_0_30px_rgba(60,226,255,0.07)]">
                   <img
                     src={src}
                     alt={altText(block.altText)}

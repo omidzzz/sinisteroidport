@@ -130,7 +130,7 @@ export default function EasterEgg({ locale }: { locale: "en" | "fa" }) {
   if (!open) return null;
   return (
     <div
-      className="fixed inset-0 z-[90] flex flex-col overflow-hidden bg-[#0a0c0a] text-[#d9ff3f]"
+      className="fixed inset-0 z-[90] flex flex-col overflow-hidden bg-[#07081c] text-[#ff2b55]"
       role="dialog"
       aria-modal="true"
       aria-label="SINISTEROID terminal"
@@ -145,7 +145,7 @@ export default function EasterEgg({ locale }: { locale: "en" | "fa" }) {
       <span className="term-scan" aria-hidden />
 
       {/* close */}
-      <div className="flex items-center justify-between border-b border-[#d9ff3f]/25 px-5 py-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#d9ff3f]/80">
+      <div className="flex items-center justify-between border-b border-[#ff2b55]/25 px-5 py-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#ff2b55]/80">
         <span className="term-blink">● REC</span>
         <button
           type="button"
@@ -159,7 +159,7 @@ export default function EasterEgg({ locale }: { locale: "en" | "fa" }) {
 
       {/* body */}
       <div
-        className="term-scan relative flex-1 overflow-y-auto px-5 py-6 sm:px-10"
+        className="relative flex-1 overflow-y-auto px-5 py-6 sm:px-10"
         onMouseDown={(e) => e.stopPropagation()}
       >
         {/* boot banner */}
@@ -170,7 +170,7 @@ export default function EasterEgg({ locale }: { locale: "en" | "fa" }) {
               revealed === 0 ? "opacity-0" : ""
             }`}
           />
-          <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#d9ff3f]/60">
+          <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#ff2b55]/60">
             system console — type `help` for commands
           </p>
         </div>
@@ -178,7 +178,7 @@ export default function EasterEgg({ locale }: { locale: "en" | "fa" }) {
         {/* init log */}
         <div className="font-mono text-sm leading-relaxed">
           {BOOT.slice(0, revealed).map((line, i) => (
-            <p key={i} className="text-[#d9ff3f]/85">
+            <p key={i} className="text-[#ff2b55]/85">
               {line}
             </p>
           ))}
@@ -187,7 +187,7 @@ export default function EasterEgg({ locale }: { locale: "en" | "fa" }) {
         {/* session log */}
         <div className="mt-3 font-mono text-sm leading-relaxed">
           {log.map((l, i) => (
-            <p key={i} className="text-[#d9ff3f]">
+            <p key={i} className="text-[#ff2b55]">
               {l.t}
             </p>
           ))}
@@ -209,14 +209,14 @@ export default function EasterEgg({ locale }: { locale: "en" | "fa" }) {
             value={input}
             onChange={(ev) => setInput(ev.target.value)}
             aria-label="terminal command input"
-            className="w-full bg-transparent font-mono text-sm text-[#d9ff3f] caret-[#d9ff3f] focus:outline-none"
+            className="w-full bg-transparent font-mono text-sm text-[#ff2b55] caret-[#ff2b55] focus:outline-none"
             placeholder="type a command…"
           />
         </form>
       </div>
 
       {/* footer status */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#d9ff3f]/25 px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-[#d9ff3f]/60">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#ff2b55]/25 px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-[#ff2b55]/60">
         <span>SINISTER[OID] // {locale === "fa" ? "فارسی" : "en"}</span>
         <span>↑↑↓↓←→←→BA</span>
       </div>

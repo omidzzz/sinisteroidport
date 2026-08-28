@@ -4,7 +4,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://sinisteroid.ir/en/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/" />
@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/" />
@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/showcase/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/showcase/" />
@@ -31,7 +31,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/skills/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/skills/" />
@@ -40,7 +40,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/education/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/education/" />
@@ -49,7 +49,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/work/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/work/" />
@@ -88,6 +88,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/" />
     <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/" />
+    <image:image>
+      <image:loc>https://sinisteroid.ir/api/uploads/1786200000-content-clusters-for-geo-cover.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/design-without-words-is-decoration/</loc>
@@ -97,6 +100,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/design-without-words-is-decoration/" />
     <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/blog/design-without-words-is-decoration/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/blog/design-without-words-is-decoration/" />
+    <image:image>
+      <image:loc>https://sinisteroid.ir/api/uploads/1780346163845-cover.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/</loc>
@@ -106,6 +112,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/" />
     <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/" />
+    <image:image>
+      <image:loc>https://sinisteroid.ir/api/uploads/1782681993-zero-click-search-is-here-now-what-cover.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/modern-frontend-design-techniques/</loc>
@@ -115,6 +124,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/modern-frontend-design-techniques/" />
     <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/blog/modern-frontend-design-techniques/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/blog/modern-frontend-design-techniques/" />
+    <image:image>
+      <image:loc>https://sinisteroid.ir/api/uploads/1780426069-modern-frontend-design-techniques-cover.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/ollama-the-engine-behind-local-ai/</loc>
@@ -124,6 +136,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/ollama-the-engine-behind-local-ai/" />
     <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/blog/ollama-the-engine-behind-local-ai/" />
+    <image:image>
+      <image:loc>https://sinisteroid.ir/api/uploads/1781729383-ollama-the-engine-behind-local-ai-cover.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/open-webui-the-missing-interface-for-local-ai/</loc>
@@ -145,6 +160,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/seo-vs-geo-whats-the-difference/" />
     <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/blog/seo-vs-geo-whats-the-difference/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/blog/seo-vs-geo-whats-the-difference/" />
+    <image:image>
+      <image:loc>https://sinisteroid.ir/api/uploads/seo-vs-geo-whats-the-difference-cover.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/the-death-of-traditional-websites-designing-for-ai-agents/</loc>
@@ -166,6 +184,9 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/" />
     <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/" />
+    <image:image>
+      <image:loc>https://sinisteroid.ir/api/uploads/1786500001-your-ai-tools-are-spying-on-you-cover.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/zero-click-search-is-here-now-what/</loc>
@@ -175,5 +196,8 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/zero-click-search-is-here-now-what/" />
     <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/blog/zero-click-search-is-here-now-what/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/blog/zero-click-search-is-here-now-what/" />
+    <image:image>
+      <image:loc>https://sinisteroid.ir/api/uploads/zero-click-search-is-here-now-what-cover.webp</image:loc>
+    </image:image>
   </url>
 </urlset>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n";
 
 export interface CmdEntry {
@@ -9,6 +10,7 @@ export interface CmdEntry {
   sub?: string;
   group: string;
   href?: string;
+  external?: boolean;
   action?: "theme";
 }
 
@@ -30,6 +32,11 @@ export default function CommandPalette({
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // current route without the locale prefix — so the language switch keeps
+  // the same page instead of jumping to the homepage
+  const pathname = usePathname() ?? "";
+  const clean = pathname.replace(/^\/(en|fa)(?=\/|$)/, "") || "/";
+
   // action rows, appended ahead of the content entries
   const actions = useMemo<CmdEntry[]>(() => {
     const toggleTheme: CmdEntry = {
@@ -44,10 +51,18 @@ export default function CommandPalette({
       label: locale === "fa" ? "English version" : "نسخهٔ فارسی",
       sub: locale === "fa" ? "en" : "fa",
       group: locale === "fa" ? "عملیات" : "Action",
-      href: locale === "fa" ? "/en" : "/fa",
+      href: `${locale === "fa" ? "/en" : "/fa"}${clean}`,
     };
-    return [toggleTheme, switchLang];
-  }, [locale]);
+    const donate: CmdEntry = {
+      id: "a-donate",
+      label: locale === "fa" ? "حمایت مالی — دونیت" : "Donate — support the work",
+      sub: "donatr.ee/sinisteroid",
+      group: locale === "fa" ? "عملیات" : "Action",
+      href: "https://donatr.ee/sinisteroid/",
+      external: true,
+    };
+    return [toggleTheme, switchLang, donate];
+  }, [locale, clean]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -105,7 +120,8 @@ export default function CommandPalette({
       return;
     }
     if (e.href) {
-      window.location.assign(e.href);
+      if (e.external) window.open(e.href, "_blank", "noopener,noreferrer");
+      else window.location.assign(e.href);
       setOpen(false);
     }
   };
@@ -186,6 +202,9 @@ export default function CommandPalette({
                 {e.href ? (
                   <a
                     href={e.href}
+                    {...(e.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
                     onClick={() => setOpen(false)}
                     className={`flex items-baseline gap-3 px-4 py-2 transition-colors ${
                       isActive ? "bg-accent text-bg" : "text-ink"

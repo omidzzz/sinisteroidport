@@ -19,9 +19,14 @@ type ApiRow = {
   title?: string;
   date?: string;
   tags?: string[];
+  featuredImage?: Post["featuredImage"];
   translations?: Post["translations"];
 };
 
+/**
+ * Blog list — an editorial "issue grid" (2-col cards with big outline index,
+ * tags, excerpt). Prerendered for SEO, refreshed from the live API.
+ */
 export default function BlogListLive({
   locale,
   initial,
@@ -38,69 +43,79 @@ export default function BlogListLive({
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not ok"))))
       .then((rows: ApiRow[]) => {
         if (cancelled || !Array.isArray(rows) || !rows.length) return;
-        if (
-          // only take over when the API actually returned usable rows
-          rows[0] &&
-          (rows[0].translations || rows[0].slug)
-        ) {
-          setItems(rows as unknown as Post[]);
+        if (rows[0] && (rows[0].translations || rows[0].slug)) {
+          setItems(
+            (rows as unknown as Post[]).map((r) => ({
+              ...r,
+              // API rows may omit the cover — keep the prerendered one by slug
+              featuredImage:
+                r.featuredImage ??
+                initial.find((p) => p.slug === r.slug)?.featuredImage,
+            }))
+          );
         }
       })
-      .catch(() => {
-        /* keep prerendered/fallback data */
-      })
-      .finally(() => {
-        if (!cancelled) {
-          // nothing else needed
-        }
-      });
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
   }, []);
 
   return (
-    <div className="mt-16">
+    <div className="issue-grid">
       {items.map((post, i) => {
         const title = postTitle(post, locale);
         const excerpt = postExcerpt(post, locale);
         const date = formatPostDate(post.date);
         const fallback = isFallbackTranslation(post, locale);
         const tags = Array.isArray(post.tags) ? post.tags : [];
+        const cover = post.featuredImage?.src || "";
         return (
           <Reveal key={post.slug} delay={(i % 4) * 50}>
             <Link
               href={loc(locale, `/blog/${post.slug}`)}
-              className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-x-6 border-t border-line py-7 transition-colors duration-300 last:border-b hover:bg-panel/40"
+              className="issue-card group"
             >
-              <span className="font-mono text-xs text-muted transition-colors group-hover:text-accent">
+              {cover && (
+                <div className="bento-frame post-thumb">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={cover}
+                    alt=""
+                    width={424}
+                    height={240}
+                    decoding="async"
+                    loading="lazy"
+                    onError={(e) =>
+                      (e.currentTarget.closest(".post-thumb") as HTMLElement | null)?.classList.add(
+                        "no-cover"
+                      )
+                    }
+                  />
+                  <span aria-hidden className="bento-scan" />
+                </div>
+              )}
+              <span className="issue-number" aria-hidden>
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span>
-                <span
-                  className="block font-mono text-[0.65rem] uppercase tracking-widest text-muted"
-                  dir="ltr"
-                >
-                  {fallback && (
-                    <span className="me-2 text-accent">{t.fallbackNote}</span>
-                  )}
-                  {date}
-                </span>
-                <span className="mt-1 block text-xl font-medium leading-snug tracking-tight transition-colors duration-300 group-hover:text-accent sm:text-2xl">
-                  {title}
-                </span>
-                <span className="mt-2 hidden max-w-2xl text-sm leading-relaxed text-muted md:block">
-                  {excerpt.length > 160
-                    ? `${excerpt.slice(0, 160)}…`
-                    : excerpt}
-                </span>
-              </span>
-              <span
-                aria-hidden
-                className="font-mono text-muted transition-all duration-300 group-hover:text-accent group-hover:translate-x-1 group-hover:-translate-y-1 rtl:group-hover:-translate-x-1"
-              >
-                <ArrowIcon className="-rotate-45 rtl:-scale-x-100" />
-              </span>
+              <ArrowIcon className="issue-arrow" />
+              <div className="issue-meta">
+                <span dir="ltr">{date}</span>
+                {fallback && <span className="text-accent">{t.fallbackNote}</span>}
+              </div>
+              <h2 className="issue-title">{title}</h2>
+              {excerpt && (
+                <p className="issue-excerpt">
+                  {excerpt.length > 150 ? `${excerpt.slice(0, 150)}…` : excerpt}
+                </p>
+              )}
+              {tags.length > 0 && (
+                <div className="issue-tags">
+                  {tags.slice(0, 3).map((tag) => (
+                    <i key={tag}>{tag}</i>
+                  ))}
+                </div>
+              )}
             </Link>
           </Reveal>
         );

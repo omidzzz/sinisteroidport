@@ -13,6 +13,7 @@ import {
 } from "@/lib/post-helpers";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import FaqAccordion from "./FaqAccordion";
+import { ArrowIcon } from "./icons";
 
 type Status = "loading" | "ready" | "missing" | "error";
 
@@ -95,16 +96,24 @@ export default function BlogPostDynamic({ locale }: { locale: Locale }) {
 
   return (
     <ArticleShell locale={locale}>
-      <time
-        className="mt-8 block font-mono text-xs tracking-[0.2em] text-accent"
-        dir="ltr"
-      >
-        {formatPostDate(post.date)}
-      </time>
-      <h1 className="mt-2 text-3xl font-bold leading-tight text-ink sm:text-4xl">
+      <div className="mt-10 flex flex-wrap items-center gap-3">
+        <span className="live-dot" aria-hidden />
+        <span className="label">{locale === "fa" ? "(فرستنده)" : "(Transmission)"}</span>
+        <span className="h-px w-8 bg-line" aria-hidden />
+        <time
+          className="font-mono text-xs tracking-[0.2em] text-acid"
+          dir="ltr"
+        >
+          {formatPostDate(post.date)}
+        </time>
+      </div>
+      <h1 className="font-display anaglyph-strong mt-3 text-[clamp(1.9rem,5vw,3.1rem)] font-extrabold leading-[1.08] tracking-tight text-ink">
         {title}
       </h1>
-      <p className="mt-4 text-lg leading-relaxed text-muted">{excerpt}</p>
+      <aside className="post-tldr mt-6">
+        <span className="label mb-2 block">(TL;DR)</span>
+        {excerpt}
+      </aside>
 
       {fallback && (
         <p className="label mt-4 inline-block border border-line px-3 py-1">
@@ -117,7 +126,7 @@ export default function BlogPostDynamic({ locale }: { locale: Locale }) {
           {tags.map((tag) => (
             <span
               key={tag}
-              className="bg-panel px-3 py-0.5 font-mono text-xs text-muted"
+              className="bento-tag"
             >
               #{tag}
             </span>
@@ -126,25 +135,37 @@ export default function BlogPostDynamic({ locale }: { locale: Locale }) {
       )}
 
       {cover && (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
-          src={cover}
-          alt=""
-          className="mt-8 aspect-video w-full border border-line object-cover"
-        />
+        <div className="post-cover mt-9">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={cover}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            width={1024}
+            height={576}
+            className="post-cover-img"
+          />
+          <span aria-hidden className="post-cover-scan" />
+        </div>
       )}
 
-      <div className="mt-10">
+      <div className="mt-12">
         <ContentRenderer blocks={translation.content ?? []} />
       </div>
 
       {translation.faq && translation.faq.length > 0 && (
         <section className="mt-16 border-t border-line pt-10">
-          <h2 className="label mb-8">
-            {locale === "fa"
-              ? "(سؤالات متداول)"
-              : "(Frequently asked questions)"}
-          </h2>
+          <div className="mb-8 flex items-center gap-3">
+            <span className="sig-wave" aria-hidden>
+              <i /><i /><i /><i /><i />
+            </span>
+            <h2 className="label">
+              {locale === "fa"
+                ? "(سؤالات متداول)"
+                : "(Frequently asked questions)"}
+            </h2>
+          </div>
           <FaqAccordion items={translation.faq} />
         </section>
       )}
@@ -164,9 +185,10 @@ function ArticleShell({
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <Link
         href={loc(locale, "/blog")}
-        className="font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-accent"
+        className="post-back group"
       >
-        {locale === "fa" ? "← بازگشت به نوشته‌ها" : "← Back to writing"}
+        <ArrowIcon className="rotate-180 transition-transform duration-300 group-hover:-translate-x-1 rtl:rotate-0 rtl:group-hover:translate-x-1" />
+        {locale === "fa" ? "بازگشت به نوشته‌ها" : "Back to writing"}
       </Link>
       {children}
     </article>

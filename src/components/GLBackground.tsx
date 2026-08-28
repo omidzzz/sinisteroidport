@@ -9,14 +9,19 @@ void main() {
 }
 `;
 
-/* Domain-warped fBm smoke. Monochrome with a faint acid tint that
-   follows the pointer — cheap enough to run at 60fps on integrated GPUs. */
+/* PSIONIC ORBIT NEBULA — ACID RAVE background.
+   Two domain-warped fBm cloud fields drift through the void: an
+   acid-lime layer and an electric-cyan layer crossing each other
+   diagonally, dusted with twinkling stardust. The pointer adds a
+   soft parallax pull. Light theme washes everything to a faint
+   lab-whiteout. One loop, transform-free fullscreen quad, DPR-cap
+   in host code below; reduced motion paints a single frame. */
 const FRAG = `
 precision highp float;
 uniform vec2 uRes;
 uniform float uTime;
 uniform vec2 uMouse;
-uniform float uLight; // 0 = dark theme, 1 = light theme
+uniform float uLight;
 
 vec2 hash2(vec2 p) {
   p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
@@ -46,49 +51,75 @@ float fbm(vec2 p) {
   return v;
 }
 
+float stars(vec2 frag, vec2 res, float t) {
+  vec2 gp = (frag / res.y) * 30.0;
+  vec2 id = floor(gp);
+  float h = fract(sin(dot(id, vec2(41.3, 289.1))) * 43758.5453);
+  vec2 gv = fract(gp) - 0.5;
+  float core = smoothstep(0.09, 0.0, length(gv));
+  float gate = step(0.986, h);
+  float tw = 0.4 + 0.6 * sin(t * 2.1 + h * 87.0);
+  return core * gate * tw;
+}
+
 void main() {
-  vec2 uv = (gl_FragCoord.xy * 2.0 - uRes) / min(uRes.x, uRes.y);
-  float t = uTime * 0.05;
+  vec2 uvRaw = (gl_FragCoord.xy * 2.0 - uRes) / min(uRes.x, uRes.y);
 
-  vec2 q = uv * 1.35;
-  float f1 = fbm(q + vec2(t * 0.35, -t * 0.22));
-  float f2 = fbm(q * 1.6 + vec2(f1 * 1.9, -f1 * 1.4) + t * 0.15);
+  /* Pointer parallax pull */
+  vec2 uv = uvRaw + uMouse * 0.05;
 
-  // theme-aware palette: dark smoke on charcoal / light smoke on paper
-  vec3 baseD = vec3(0.030, 0.031, 0.034);
-  vec3 smokeD = vec3(0.078, 0.081, 0.088);
-  vec3 baseL = vec3(0.957, 0.949, 0.925);
-  vec3 smokeL = vec3(0.878, 0.871, 0.843);
-  vec3 base = mix(baseD, baseL, uLight);
-  vec3 smoke = mix(smokeD, smokeL, uLight);
-  vec3 col = mix(base, smoke, smoothstep(-0.4, 0.9, f2));
+  float t = uTime * 0.055;
 
-  // faint acid tint in the dense folds
-  col += mix(vec3(0.10, 0.13, 0.02), vec3(0.16, 0.20, 0.04), uLight)
-       * smoothstep(0.55, 1.15, f2) * 0.35;
+  /* Acid cloud field */
+  vec2 q = uv * 1.22;
+  float f1 = fbm(q + vec2(t * 0.34, -t * 0.22));
+  float f2 = fbm(q * 1.65 - vec2(f1 * 1.9, f1 * 1.4) + t * 0.12);
+  float nebA = smoothstep(-0.52, 0.86, f2);
 
-  // pointer torch (darker olive stroke on light surfaces)
-  float d = length(uv - uMouse);
-  col += mix(vec3(0.85, 1.0, 0.25), vec3(0.38, 0.48, 0.06), uLight)
-       * smoothstep(0.85, 0.0, d) * 0.10;
+  /* Cyan counter-field, offset drift */
+  float c1 = fbm(q * 0.78 + vec2(-t * 0.26, t * 0.18) + 31.7);
+  float nebB = smoothstep(-0.44, 0.94, c1);
 
-  // vignette
-  float vig = smoothstep(1.9, 0.4, length(uv));
-  col *= mix(0.72, 1.0, vig);
+  bool lightMode = uLight > 0.5;
+  vec3 voidC = lightMode ? vec3(0.952, 0.968, 0.936)
+                         : vec3(0.008, 0.020, 0.012);
+  vec3 acidC = lightMode ? vec3(0.400, 0.560, 0.080)
+                         : vec3(0.700, 1.000, 0.000);
+  vec3 cyanC = lightMode ? vec3(0.120, 0.480, 0.540)
+                         : vec3(0.000, 0.900, 1.000);
+
+  vec3 col = voidC;
+  col = mix(col, cyanC * 0.60, nebB * (lightMode ? 0.30 : 0.46));
+  col = mix(col, acidC * 0.62, nebA * (lightMode ? 0.26 : 0.40));
+
+  if (!lightMode) {
+    /* Deepen the void between clouds for type contrast */
+    col *= 0.78 + 0.42 * nebB * (1.0 - nebA * 0.5);
+  }
+
+  /* Stardust */
+  float st = stars(gl_FragCoord.xy, uRes, uTime * 0.9);
+  vec3 stC = mix(cyanC, acidC, 0.5 + 0.5 * sin(uvRaw.x * 3.1 + uvRaw.y * 1.7));
+  col += st * (lightMode ? vec3(0.25, 0.34, 0.30) : stC * 0.85);
+
+  /* Gentle vignette */
+  float vig = smoothstep(1.55, 0.35, length(uvRaw * vec2(0.85, 1.0)));
+  col = mix(col * (lightMode ? 1.0 : 0.72), col, vig);
 
   gl_FragColor = vec4(col, 1.0);
 }
 `;
 
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
-  const shader = gl.createShader(type)!;
-  gl.shaderSource(shader, src);
-  gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(shader));
+  const sh = gl.createShader(type)!;
+  gl.shaderSource(sh, src);
+  gl.compileShader(sh);
+  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+    console.error(gl.getShaderInfoLog(sh));
+    gl.deleteShader(sh);
     return null;
   }
-  return shader;
+  return sh;
 }
 
 export default function GLBackground() {
@@ -127,15 +158,10 @@ export default function GLBackground() {
     const uTime = gl.getUniformLocation(prog, "uTime");
     const uMouse = gl.getUniformLocation(prog, "uMouse");
     const uLight = gl.getUniformLocation(prog, "uLight");
-
-    const applyTheme = () => {
-      gl.uniform1f(
-        uLight,
-        document.documentElement.dataset.theme === "light" ? 1 : 0
-      );
-    };
+    const applyTheme = () => gl.uniform1f(uLight, document.documentElement.dataset.theme === "light" ? 1 : 0);
     applyTheme();
-    window.addEventListener("themechange", applyTheme);
+    const onTheme = () => applyTheme();
+    window.addEventListener("themechange", onTheme);
 
     let mx = 0;
     let my = 0;
@@ -153,10 +179,8 @@ export default function GLBackground() {
     window.addEventListener("resize", resize);
 
     const onMove = (e: MouseEvent) => {
-      // map to same normalized space as uv (aspect-corrected)
-      const aspect = canvas.clientWidth / canvas.clientHeight;
-      tx = ((e.clientX / canvas.clientWidth) * 2 - 1) * Math.max(aspect, 1);
-      ty = -(((e.clientY / canvas.clientHeight) * 2 - 1) * Math.max(1 / aspect, 1));
+      tx = (e.clientX / window.innerWidth) * 2 - 1;
+      ty = -((e.clientY / window.innerHeight) * 2 - 1);
     };
     if (!reduced) window.addEventListener("mousemove", onMove, { passive: true });
 
@@ -165,8 +189,8 @@ export default function GLBackground() {
     const frame = () => {
       raf = requestAnimationFrame(frame);
       if (document.hidden) return;
-      mx += (tx - mx) * 0.045;
-      my += (ty - my) * 0.045;
+      mx += (tx - mx) * 0.04;
+      my += (ty - my) * 0.04;
       gl.uniform1f(uTime, (performance.now() - start) / 1000);
       gl.uniform2f(uMouse, mx, my);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -174,7 +198,7 @@ export default function GLBackground() {
 
     if (reduced) {
       // single static frame, no loop
-      gl.uniform1f(uTime, 12.0);
+      gl.uniform1f(uTime, 21.0);
       gl.uniform2f(uMouse, 99, 99);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     } else {
@@ -185,7 +209,7 @@ export default function GLBackground() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("themechange", applyTheme);
+      window.removeEventListener("themechange", onTheme);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, []);

@@ -302,5 +302,12 @@
         }
       ]
     }
+  },
+  "featuredImage": {
+    "src": "/api/uploads/seo-vs-geo-whats-the-difference-cover.webp",
+    "alt": {
+      "en": "SEO vs GEO: What's the Difference?",
+      "fa": "SEO vs GEO: What's the Difference?"
+    }
   }
 }

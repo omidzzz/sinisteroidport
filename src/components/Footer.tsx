@@ -1,68 +1,209 @@
-import { getDict, type Locale } from "@/lib/i18n";
+import Link from "next/link";
 import Magnetic from "./Magnetic";
 import LogoType from "./LogoType";
-import ZinePanel from "./ZinePanel";
+import { ArrowIcon, SparkIcon, HeartIcon } from "./icons";
+import { getDict, loc, type Locale } from "@/lib/i18n";
 
+const FOOT_PATHS = ["/", "/work", "/skills", "/education", "/showcase", "/blog"];
+
+/* Brand-voice meta strip — ASCII/pinned-LTR like the logotype so it reads
+   identically inside the Persian layout. */
+const META = [
+  "UPLINK STABLE",
+  "ACID RAVE",
+  "SIGNAL DOMAIN",
+  "EST.2012",
+  "NEXT.JS × REACT",
+  "PURE CSS ORNAMENT",
+];
+
+/**
+ * FOOTER — SIGNAL TOWER (v6).
+ *
+ * Three misaligned columns under two crossed marquee bands:
+ *   rail     vertical act index (sitemap)
+ *   channel  giant magnetic LET'S TALK + bracket reach-chips
+ *   tower    glowing status panel (LEDs, city, uplink, mini holo-core)
+ * Floor bar carries © , build tag and a dashed-ring BACK-TO-TOP (#top,
+ * zero-JS smooth anchor since <html> scrolls smoothly).
+ */
 export default function Footer({ locale }: { locale: Locale }) {
   const t = getDict(locale);
+  const fa = locale === "fa";
+  const year = new Date().getFullYear();
+
+  const reach: Array<[string, string, boolean]> = [
+    ["Email", "mailto:ghadamgahi.omid@gmail.com", false],
+    ["GitHub", "https://github.com/omidzzz", true],
+    ["Telegram", "https://t.me/simplyeffedup", true],
+    ["Tel · +98 936 747 1992", "tel:+989367471992", false],
+  ];
+
   return (
-    <footer className="relative z-10 mt-20 border-t border-line sm:mt-28">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-        {/* Inverted "edition" colophon — brand masthead + call to action */}
-        <ZinePanel
-          className="px-5 py-12 sm:px-10"
-          kicker={t.contactLabel}
-        >
-          <div className="flex flex-col items-center gap-10 text-center">
-            <LogoType
-              variant="full"
-              activate
-              className="footer-masthead text-[clamp(2rem,9vw,6rem)] leading-none"
-            />
-            <p className="max-w-md text-sm leading-relaxed text-muted">
-              {locale === "fa"
-                ? "هم‌توانی ترجمه و برنامه‌نویسی را در یک ویژگی ترکیب می‌کنم — هر رابط، استدلال است و هر کلمه جای خود را دارد."
-                : "Translation precision meets engineering — every interface is an argument, and every word earns its place. Click the mark above seven times to open the console."}
+    <footer className="relative mt-32 overflow-hidden border-t border-line">
+      {/* crossed meta bands */}
+      <div aria-hidden className="cross-strip my-10 select-none">
+        {[false, true].map((rev) => (
+          <div
+            key={String(rev)}
+            dir="ltr"
+            className={`ticker ticker-band ${rev ? "ticker-rev row-b" : "row-a"}`}
+          >
+            <div className="ticker-track">
+              {[0, 1].map((copy) => (
+                <div key={copy} className="flex">
+                  {META.map((w) => (
+                    <span
+                      key={`${copy}-${w}`}
+                      className="flex items-center gap-5 whitespace-nowrap px-6 py-3.5 font-mono text-[0.6rem] uppercase tracking-[0.3em]"
+                    >
+                      <SparkIcon className="shrink-0 opacity-70" />
+                      {w}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mx-auto max-w-[86rem] px-5 pb-14 pt-10 sm:px-8">
+        <div className="grid items-start gap-14 lg:grid-cols-[auto_minmax(0,1fr)_minmax(15rem,17rem)] lg:gap-12">
+          {/* ── sitemap rail ── */}
+          <nav aria-label={fa ? "پیوندها" : "Footer navigation"} className="min-w-max">
+            <p className="label mb-7">{fa ? "فهرست" : "Index"}</p>
+            <ul className="space-y-4">
+              {t.nav.map((item, i) => (
+                <li key={FOOT_PATHS[i]}>
+                  <Link
+                    href={loc(locale, FOOT_PATHS[i])}
+                    className="group inline-flex items-baseline gap-3 font-display text-base font-bold uppercase tracking-wide text-ink transition-colors hover:text-acid"
+                  >
+                    <span className="font-mono text-[0.58rem] tracking-[0.2em] text-acid/80">
+                      {item.index}
+                    </span>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* ── open channel ── */}
+          <div className="min-w-0">
+            <p className="mb-8 flex flex-wrap items-center gap-3">
+              <span className="live-dot" aria-hidden />
+              <span className="label">{t.contactLabel}</span>
             </p>
-            <Magnetic strength={0.15} maxShift={8}>
+
+            <Magnetic strength={0.13} maxShift={9}>
               <a
                 href="mailto:ghadamgahi.omid@gmail.com"
-                className="group font-display inline-block break-words text-[clamp(1.75rem,9vw,5.5rem)] font-bold leading-none tracking-tight sm:text-[clamp(2rem,7vw,5.5rem)]"
+                className="glitchy stroke-line block w-fit font-display font-black uppercase leading-[0.92] tracking-tight text-[clamp(2.3rem,6.6vw,5.4rem)]"
               >
-                <span className="fill-hover">{t.letsTalk}</span>
+                {t.letsTalk}
               </a>
             </Magnetic>
-          </div>
-        </ZinePanel>
+<div className="mt-8">
+              <Magnetic strength={0.18} maxShift={10}>
+                <a
+                  href="https://donatr.ee/sinisteroid/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={fa ? "حمایت مالی" : "Donate"}
+                  className="donate-cta group"
+                >
+                  <span className="donate-ring" aria-hidden />
+                  <HeartIcon className="donate-heart" />
+                  <span>{t.donate}</span>
+                  <ArrowIcon className="size-3.5 -rotate-45 rtl:rotate-45 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
+              </Magnetic>
+              <p
+                aria-hidden
+                dir="ltr"
+                className="mt-3 select-none font-mono text-[0.6rem] uppercase tracking-[0.24em] text-muted"
+              >
+                BEEP_BOOP <span className="text-acid">♥</span> DONATR.EE/SINISTEROID
+              </p>
+            </div>
+            <p
+              aria-hidden
+              dir="ltr"
+              className="mt-4 select-none font-mono text-[0.64rem] uppercase tracking-[0.3em] text-muted"
+            >
+              OPEN CHANNEL ▸ UPLINK<span className="tx-cursor ms-1">▌</span>
+            </p>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-line pt-6 font-mono text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} {t.rights}</p>
-          <div className="flex flex-wrap gap-x-6 gap-y-1 uppercase tracking-widest">
-            <a href="mailto:ghadamgahi.omid@gmail.com" className="transition-colors hover:text-accent">
-              Email
-            </a>
-            <a
-              href="https://t.me/simplyeffedup"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-accent"
-            >
-              Telegram
-            </a>
-            <a
-              href="https://github.com/omidzzz"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-accent"
-            >
-              GitHub
-            </a>
-            <span>+98 936 747 1992</span>
+            {/* easter egg lives here too — logo accepts 7 secret clicks */}
+            <div className="mt-10 opacity-90">
+              <LogoType variant="full" activate className="text-lg" />
+            </div>
+
+            <ul className="mt-10 flex flex-wrap gap-3">
+              {reach.map(([label, href, ext]) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    {...(ext ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="chip-brk inline-flex items-center gap-2.5 border border-line font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted transition-all duration-300 hover:border-acid/60 hover:text-acid"
+                  >
+                    {label}
+                    <ArrowIcon
+                      className={`size-3.5 transition-transform duration-300 ${ext ? (fa ? "rotate-45" : "-rotate-45") : ""}`}
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
+
+          {/* ── status tower ── */}
+          <aside className="status-panel p-6 lg:p-7">
+            <p className="stat-row">
+              <span>Status</span>
+              <b className="inline-flex items-center gap-2">
+                <span className="live-dot" />
+                Live
+              </b>
+            </p>
+            <div className="mt-6 space-y-3.5">
+              <p className="stat-row"><span>{fa ? "شهر" : "City"}</span><b>{t.city}</b></p>
+              <p className="stat-row"><span>{fa ? "سال" : "Year"}</span><b>{year}</b></p>
+              <p className="stat-row"><span dir="ltr">Domain</span><b dir="ltr">sinisteroid.ir</b></p>
+              <p className="stat-row"><span>{fa ? "حالت" : "Mode"}</span><b>RAVE / VOID</b></p>
+            </div>
+            <div className="my-7 border-t border-line" />
+            <div className="holo-core mx-auto !w-24 scale-90">
+              <span className="holo-ring r1" aria-hidden />
+              <span className="holo-sq" aria-hidden />
+              <span className="holo-sigil !text-sm">OM</span>
+            </div>
+            <p aria-hidden dir="ltr" className="mt-5 text-center font-mono text-[0.6rem] uppercase tracking-[0.24em] text-muted">
+              CORE STABLE
+            </p>
+          </aside>
+        </div>
+
+        {/* ── floor bar ── */}
+        <div className="mt-16 flex flex-col items-start justify-between gap-5 border-t border-line pt-6 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-muted sm:flex-row sm:items-center">
+          <p>
+            © {year} {t.rights}
+          </p>
+          <span aria-hidden className="hidden tracking-[0.3em] md:inline">
+            ✦ BUILT ON THE VOID ✦
+          </span>
+          <a
+            href="#top"
+            aria-label={fa ? "بازگشت به بالای صفحه" : "Back to top"}
+            className="ring-top grid h-11 w-11 place-items-center rounded-full border border-line text-acid transition-colors hover:border-acid/70"
+          >
+            <i aria-hidden />
+            <ArrowIcon className="size-4 -rotate-90" />
+          </a>
         </div>
       </div>
     </footer>
   );
 }
-
-

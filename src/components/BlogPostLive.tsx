@@ -34,16 +34,20 @@ export default function BlogPostLive({
   const tags = Array.isArray(effective.tags) ? effective.tags : [];
   const cover = effective.featuredImage?.src || null;
 
-  // Mini TOC — mirrors the deterministic sec-<i> ids set by ContentRenderer
+  // Mini TOC — only real headings, mirroring the deterministic sec-<i> ids
+  // that ContentRenderer gives to H2/H3 elements (never body content).
+  // The id must keep the ORIGINAL block index (i) because ContentRenderer
+  // keys headings as `sec-${blockIndexInContent}`.
   const toc = useMemo(
     () =>
       (translation?.content ?? [])
-        .map((b, i) => ({
+        .map((b, i) => ({ b, i }))
+        .filter(({ b }) => b.type === "heading" && (b.level ?? 2) >= 2 && (b.level ?? 2) <= 3)
+        .map(({ b, i }) => ({
           id: `sec-${i}`,
           text: (b.text ?? "").trim(),
           level: b.level ?? 2,
-        }))
-        .filter((h) => h.text && h.level >= 2 && h.level <= 3),
+        })),
     [translation]
   );
 
@@ -165,15 +169,19 @@ export default function BlogPostLive({
       <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
         <Link
           href={loc(locale, "/blog")}
-          className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-accent"
+          className="post-back group"
         >
-          <ArrowIcon className="rotate-180 transition-transform duration-300 group-hover:-translate-x-0.5 rtl:rotate-0 rtl:group-hover:translate-x-0.5" />
+          <ArrowIcon className="rotate-180 transition-transform duration-300 group-hover:-translate-x-1 rtl:rotate-0 rtl:group-hover:translate-x-1" />
           {locale === "fa" ? "بازگشت به نوشته‌ها" : "Back to writing"}
         </Link>
 
-        <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+        {/* transmission kicker */}
+        <div className="mt-10 flex flex-wrap items-center gap-3">
+          <span className="live-dot" aria-hidden />
+          <span className="label">{locale === "fa" ? "(فرستنده)" : "(Transmission)"}</span>
+          <span className="h-px w-8 bg-line" aria-hidden />
           <time
-            className="font-mono text-xs tracking-[0.2em] text-accent"
+            className="font-mono text-xs tracking-[0.2em] text-acid"
             dir="ltr"
           >
             {formatPostDate(effective.date)}
@@ -185,14 +193,16 @@ export default function BlogPostLive({
               : `${readMinutes} min read`}
           </span>
         </div>
-        <h1 className="font-display mt-2 text-3xl font-bold leading-tight text-ink sm:text-4xl">
+
+        <h1 className="font-display anaglyph-strong mt-3 text-[clamp(1.9rem,5vw,3.1rem)] font-extrabold leading-[1.08] tracking-tight text-ink">
           {title}
         </h1>
+
       {/* TL;DR callout — answer-first summary, citable by AI engines */}
-      <p className="mt-5 border-s-2 border-accent bg-panel/50 p-4 text-base leading-relaxed text-muted">
-        <span className="label mb-1.5 block">(TL;DR)</span>
+      <aside className="post-tldr mt-6">
+        <span className="label mb-2 block">(TL;DR)</span>
         {excerpt}
-      </p>
+      </aside>
 
       {fallback && (
         <p className="label mt-4 inline-block border border-line px-3 py-1">
@@ -205,7 +215,7 @@ export default function BlogPostLive({
           {tags.map((tag) => (
             <span
               key={tag}
-              className="bg-panel px-3 py-0.5 font-mono text-xs text-muted"
+              className="bento-tag"
             >
               #{tag}
             </span>
@@ -214,29 +224,37 @@ export default function BlogPostLive({
       )}
 
       {cover && (
-        <div className="parallax-frame mt-8 aspect-video w-full border border-line">
+        <div className="post-cover mt-9">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={cover}
             alt=""
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover"
+            width={1024}
+            height={576}
+            className="post-cover-img"
           />
+          <span aria-hidden className="post-cover-scan" />
         </div>
       )}
 
-      <div className="mt-10">
+      <div className="mt-12">
         <ContentRenderer blocks={translation.content} />
       </div>
 
       {translation.faq && translation.faq.length > 0 && (
         <section className="mt-16 border-t border-line pt-10">
-          <h2 className="label mb-8">
-            {locale === "fa"
-              ? "(سؤالات متداول)"
-              : "(Frequently asked questions)"}
-          </h2>
+          <div className="mb-8 flex items-center gap-3">
+            <span className="sig-wave" aria-hidden>
+              <i /><i /><i /><i /><i />
+            </span>
+            <h2 className="label">
+              {locale === "fa"
+                ? "(سؤالات متداول)"
+                : "(Frequently asked questions)"}
+            </h2>
+          </div>
           <FaqAccordion items={translation.faq} />
         </section>
       )}

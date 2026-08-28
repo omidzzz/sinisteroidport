@@ -8,8 +8,9 @@
  * Open Graph, hreflang, canonical and JSON-LD — so search engines and
  * social crawlers see the finished article immediately.
  *
- * Posts published through /api/admin.php are therefore live at their
- * final URL the moment they are saved.
+ * THEME: PSIONIC ORBIT // ACID RAVE (v7) — mirrors the React site by
+ * linking the compiled Next.js CSS bundle (tokens + all component
+ * classes) and reusing the exact same markup class names.
  */
 
 require_once __DIR__ . '/db.php';
@@ -21,8 +22,7 @@ function esc($s) {
 
 /** Custom monoline arrow (matches src/components/icons.tsx). */
 function svg_arrow($back = false) {
-    $cls = $back ? 'arr-back' : 'arr-fwd';
-    return '<svg class="' . $cls . '" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg>';
+    return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg>';
 }
 
 function svg_sun() {
@@ -46,9 +46,9 @@ function not_found($locale = 'en') {
     $back  = $fa ? 'بازگشت به نوشته‌ها' : 'Back to writing';
     echo '<!DOCTYPE html><html lang="' . ($fa ? 'fa" dir="rtl' : 'en" dir="ltr') . '"><meta charset="utf-8">'
         . '<meta name="viewport" content="width=device-width, initial-scale=1"><title>' . esc($title) . '</title>'
-        . '<style>body{background:#0a0a0b;color:#edece6;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center}'
-        . 'h1{font-size:2rem}p{color:#7d7d74}a{color:#d9ff3f;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}</style></head><body>'
-        . '<h1>' . esc($title) . '</h1><p>' . esc($msg) . '</p><a href="/' . $locale . '/blog/">' . svg_arrow(true) . esc($back) . '</a></body></html>';
+        . '<style>body{background:#020503;color:#ecffe9;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center}'
+        . 'h1{font-size:2rem}p{color:#8fa294}a{color:#b8ff00;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}</style></head><body>'
+        . '<h1>' . esc($title) . '</h1><p>' . esc($msg) . '</p><a href="/' . $locale . '/blog/">' . esc($back) . '</a></body></html>';
     exit;
 }
 
@@ -84,18 +84,39 @@ $cover    = is_array($feat) && !empty($feat['src']) ? $feat['src'] : '';
 $blocks   = is_array($t['content']) ? $t['content'] : [];
 $faq      = (isset($t['faq']) && is_array($t['faq'])) ? $t['faq'] : [];
 
+/* Reading time — mirrors the React post components (words / 210). */
+$words = 0;
+foreach ($blocks as $b) {
+    if (!is_array($b)) continue;
+    if (isset($b['text']) && is_string($b['text'])) $words += str_word_count(preg_replace('/\s+/u', ' ', $b['text']));
+    if (!empty($b['items']) && is_array($b['items']))
+        foreach ($b['items'] as $it) if (is_string($it)) $words += str_word_count($it);
+    if (!empty($b['code']) && is_string($b['code'])) $words += (int)(str_word_count($b['code']) / 2);
+}
+$readMinutes = max(2, (int)round($words / 210));
+$readLabel   = ($locale === 'fa') ? "دقیقه مطالعه" : "min read";
+
 $url      = "https://sinisteroid.ir/{$locale}/blog/{$slug}/";
 $urlEn    = "https://sinisteroid.ir/en/blog/{$slug}/";
 $urlFa    = "https://sinisteroid.ir/fa/blog/{$slug}/";
 $siteName = 'Sinisteroid';
 $fa       = ($locale === 'fa');
 
+/* ---------- compiled CSS bundle (tokens + component classes) ---------- */
+$cssLinks = '';
+$cssDir   = __DIR__ . '/../_next/static/css';
+if (is_dir($cssDir)) {
+    foreach (glob($cssDir . '/*.css') as $cssFile) {
+        $cssLinks .= '<link rel="stylesheet" href="/_next/static/css/' . basename($cssFile) . '">' . "\n";
+    }
+}
+
 /* ---------- block renderer (mirrors src/components/ContentRenderer.tsx) ---------- */
 
 function render_blocks(array $blocks, string $locale): string {
     $html = '';
     $fig = 0;
-    foreach ($blocks as $b) {
+    foreach ($blocks as $bi => $b) {
         if (!is_array($b)) continue;
         $type = $b['type'] ?? '';
         $text = isset($b['text']) ? esc($b['text']) : '';
@@ -103,9 +124,9 @@ function render_blocks(array $blocks, string $locale): string {
             case 'heading':
                 $lvl = max(2, min(4, (int)($b['level'] ?? 2)));
                 if ($lvl === 2) {
-                    $html .= '<h2 class="pp-h2"><span class="pp-mk">#</span><span>' . $text . '</span></h2>';
+                    $html .= '<h2 id="sec-' . $bi . '" class="pp-h2"><span class="pp-mk">#</span><span>' . $text . '</span></h2>';
                 } elseif ($lvl === 3) {
-                    $html .= '<h3 class="pp-h3"><span class="pp-mk2">//</span><span>' . $text . '</span></h3>';
+                    $html .= '<h3 id="sec-' . $bi . '" class="pp-h3"><span class="pp-mk2">//</span><span>' . $text . '</span></h3>';
                 } else {
                     $html .= '<h4 class="pp-h4"><span class="pp-mk2">—</span><span>' . $text . '</span></h4>';
                 }
@@ -216,6 +237,16 @@ function render_blocks(array $blocks, string $locale): string {
 }
 
 /* ---------- output ---------- */
+$toc = [];
+foreach ($blocks as $bi => $b) {
+    if (!is_array($b)) continue;
+    if (($b['type'] ?? '') !== 'heading') continue;
+    $lvl = (int)($b['level'] ?? 2);
+    if ($lvl < 2 || $lvl > 3) continue;
+    $toc[] = ['id' => 'sec-' . $bi, 'text' => (string)($b['text'] ?? ''), 'level' => $lvl];
+}
+$tocTitle = $fa ? '(فهرست)' : '(Contents)';
+
 $ogImg   = $cover ? abs_url($cover) : '';
 $fallbackNote = $isFall ? ($fa ? '— به انگلیسی منتشر شده' : '— published in English') : '';
 $backLabel    = $fa ? 'بازگشت به نوشته‌ها' : 'Back to writing';
@@ -223,7 +254,7 @@ $faqHeading   = $fa ? '(سؤالات متداول)' : '(Frequently asked questio
 $homeLabel    = $fa ? 'صفحه اصلی' : 'Home';
 ?>
 <!DOCTYPE html>
-<html lang="<?= $locale ?>" dir="<?= $fa ? 'rtl' : 'ltr' ?>">
+<html lang="<?= $locale ?>" dir="<?= $fa ? 'rtl' : 'ltr' ?>" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -254,10 +285,8 @@ $homeLabel    = $fa ? 'صفحه اصلی' : 'Home';
 <?php if ($ogImg): ?>
 <meta name="twitter:image" content="<?= esc($ogImg) ?>">
 <?php endif; ?>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400..800&family=Noto+Kufi+Arabic:wght@100..900&family=JetBrains+Mono:wght@400;700&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<?= $cssLinks ?>
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <script type="application/ld+json">
 <?= json_encode([
     '@context' => 'https://schema.org',
@@ -269,206 +298,125 @@ $homeLabel    = $fa ? 'صفحه اصلی' : 'Home';
     'inLanguage' => $locale,
     'mainEntityOfPage' => $url,
     'image' => $ogImg ?: null,
-    'author' => ['@type' => 'Person', 'name' => 'Omid Ghadamgahi', 'url' => 'https://sinisteroid.ir/en/'],
+    'author' => ['@type' => 'Person', 'name' => 'Omid', 'url' => 'https://sinisteroid.ir/en/'],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
 </script>
 <style>
-:root{--bg:#0a0a0b;--panel:#131315;--line:rgba(237,236,230,.09);--ink:#edece6;--muted:#8b8b82;--accent:#d9ff3f;--warn:#fb923c;--topbar:rgba(10,10,11,.75);--panel40:rgba(19,19,21,.4);--panel60:rgba(19,19,21,.6)}
-html[data-theme=light]{--bg:#f4f2ec;--panel:#eae7dd;--line:rgba(22,22,26,.12);--ink:#17171b;--muted:#60605a;--accent:#65a30d;--topbar:rgba(244,242,236,.78);--panel40:rgba(234,231,221,.55);--panel60:rgba(234,231,221,.6);color-scheme:light}
-*{box-sizing:border-box;margin:0;padding:0}
-html{color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font-family:<?= $fa ? "'Vazirmatn',Tahoma,'Space Grotesk'" : "'Space Grotesk'" ?>,ui-sans-serif,system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-::selection{background:var(--accent);color:var(--bg)}
-.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
-.wrap{max-width:48rem;margin:0 auto;padding:2.5rem 1rem 4rem}
-@media(min-width:640px){.wrap{padding:4rem 1rem 6rem}}
-.topbar{position:sticky;top:0;z-index:50;border-bottom:1px solid var(--line);background:var(--topbar);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .3s ease}
-body.nav-hidden .topbar{transform:translateY(-100%)}
-.topbar-in{max-width:72rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:1rem}
-.brand{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.875rem;letter-spacing:-.01em}
-.brand b{color:var(--accent);font-weight:400;padding:0 .1em}
-.brand-site{margin-inline-start:.5rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:400}
-@media(max-width:639px){.brand-site{display:none}}
-/* ── Desktop nav (identical to the Next.js app navbar) — hidden below md ── */
-.dnav{display:none;align-items:center;gap:1.5rem;list-style:none;font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted)}
-.dnav a{transition:color .2s}
-.dnav a:hover{color:var(--accent)}
-.dnav .idx{color:var(--muted);margin-inline-end:.25rem}
-.dnav .lang{margin-inline-start:.5rem;padding-inline-start:1rem;border-inline-start:1px solid var(--line);font-weight:700;color:var(--accent)}
-@media(min-width:768px){.topbar-in .dnav{display:flex}.topbar-in .mnav-btn{display:none}}
-/* theme toggle (CSS picks the icon from data-theme; no flash, both SVGs in HTML) */
-.theme-btn{display:inline-flex;min-width:44px;min-height:44px;align-items:center;justify-content:center;background:none;border:0;color:var(--muted);cursor:pointer;transition:color .2s;padding:0}
-.theme-btn:hover{color:var(--accent)}
-.theme-btn svg{line-height:0}
-.icon-sun,.icon-moon{display:none}
-html:not([data-theme=light]) .icon-sun{display:inline-flex}
-html[data-theme=light] .icon-moon{display:inline-flex}
-/* custom arrows */
-.arr-back,.arr-fwd{flex-shrink:0}
-.arr-back{transform:rotate(180deg)}
-[dir=rtl] .arr-back{transform:none}
-[dir=rtl] .arr-fwd{transform:scaleX(-1)}
-.navlink{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .2s}
-.navlink:hover{color:var(--accent)}
-/* hamburger (always available while reading a post) */
-.mnav-btn{display:flex;min-width:44px;min-height:44px;align-items:center;justify-content:center;gap:.5rem;background:none;border:0;font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);cursor:pointer;transition:color .2s}
-.mnav-btn:hover{color:var(--accent)}
-.burger{position:relative;width:1rem;height:.75rem;flex-shrink:0}
-.burger span{position:absolute;left:0;right:0;height:1px;background:currentColor;transition:transform .3s,opacity .2s}
-.burger span:nth-child(1){top:0}
-.burger span:nth-child(2){top:50%;transform:translateY(-50%)}
-.burger span:nth-child(3){bottom:0}
-body.menu-open .burger span:nth-child(1){transform:translateY(6px) rotate(45deg)}
-body.menu-open .burger span:nth-child(2){opacity:0}
-body.menu-open .burger span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
-.mpanel{overflow:hidden;max-height:0;opacity:0;border-top-width:0;border-top-style:solid;border-top-color:transparent;transition:max-height .3s ease-out,opacity .3s ease-out,border-top-color .3s,border-top-width .3s}
-body.menu-open .mpanel{max-height:60vh;opacity:1;border-top-width:1px;border-top-color:var(--line)}
-.mpanel ul{list-style:none;margin:0 auto;max-width:72rem;padding:.75rem 1rem;display:flex;flex-direction:column;font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted)}
-.mpanel a{display:flex;gap:.75rem;padding:.9rem 0;border-bottom:1px solid rgba(237,236,230,.05);color:inherit;transition:color .2s}
-.mpanel li:last-child a{border-bottom:0}
-.mpanel a:hover{color:var(--accent)}
-.mpanel .idx{color:var(--muted)}
-.mpanel .lang{color:var(--accent);font-weight:700}
-.back{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);transition:color .2s}
-.back:hover{color:var(--accent)}
-.date{display:block;margin-top:2rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.2em;color:var(--accent)}
-h1.title{margin-top:.5rem;font-family:'Syne','Space Grotesk',sans-serif;font-size:clamp(1.875rem,5vw,2.25rem);font-weight:700;line-height:1.15}
-[dir=rtl] .title{font-family:'Noto Kufi Arabic','Vazirmatn',Tahoma,sans-serif}
-.excerpt{margin-top:1rem;font-size:1.125rem;color:var(--muted);line-height:1.7}
-.fallnote{display:inline-block;margin-top:1rem;padding:.25rem .75rem;border:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem}
-.tag{background:var(--panel);padding:.125rem .75rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted)}
-.cover{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--line);margin-top:2rem}
-.body{margin-top:2.5rem;display:flex;flex-direction:column;gap:1.25rem}
-.body p{color:var(--muted);line-height:1.75}
-/* headings */
-.pp-h2{display:flex;align-items:baseline;gap:.75rem;margin:3rem 0 1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--line);font-size:clamp(1.25rem,3vw,1.5rem);font-weight:700;color:var(--ink)}
-.pp-h3{display:flex;align-items:baseline;gap:.5rem;margin:2.5rem 0 .75rem;font-size:1.125rem;font-weight:600;color:var(--ink)}
-.pp-h4{display:flex;align-items:baseline;gap:.5rem;margin:2rem 0 .5rem;font-weight:600;color:var(--ink)}
-.pp-mk,.pp-mk2{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);flex-shrink:0}
-.pp-mk{font-size:.875rem}.pp-mk2{font-size:.72rem}
-/* lead paragraph */
-p.pp-lead{border-inline-start:2px solid var(--accent);padding-inline-start:1.25rem;font-size:1.125rem;color:var(--ink)!important}
-@media(min-width:640px){p.pp-lead{font-size:1.25rem}}
-/* lists */
-ul.pp-ul,ol.pp-ol{list-style:none;margin-bottom:.5rem}
-ul.pp-ul li{display:flex;gap:.875rem;margin-bottom:.75rem}
-ul.pp-ul li>span:last-child{color:var(--muted);line-height:1.7}
-.pp-bullet{flex-shrink:0;margin-top:.55em;width:.375rem;height:.375rem;background:var(--accent);transform:rotate(45deg)}
-ol.pp-ol li{display:flex;gap:1rem;margin-bottom:.75rem}
-ol.pp-ol li>span:last-child{color:var(--muted);line-height:1.7}
-.pp-olnum{flex-shrink:0;padding-top:.125rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.18em;color:var(--accent)}
-</style>
-<style>
-/* highlight / quote / alert / cta */
-.pp-hl{margin:1rem 0;padding:1.25rem;border:1px solid rgba(217,255,63,.4);background:var(--panel60);box-shadow:0 0 24px rgba(217,255,63,.08)}
-.pp-hl-label{margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--accent)}
-.pp-hl p{color:var(--ink)!important}
-.pp-quote{position:relative;margin:1rem 0;padding:1.25rem 3rem 1.25rem;border-inline-start:2px solid var(--accent);background:var(--panel40);font-style:italic;color:var(--ink)}
-[dir=rtl] .pp-quote{padding:1.25rem}
-.pp-q-mark{position:absolute;inset-inline-start:1rem;top:.75rem;font-family:'JetBrains Mono',monospace;font-size:2.5rem;line-height:1;color:var(--accent)}
-.pp-q-author{margin-top:.75rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-style:normal;letter-spacing:.18em;color:var(--muted)}
-.pp-alert{margin:1rem 0;padding:1.25rem;border:1px solid var(--line);background:var(--panel60)}
-.pp-alert-w{border-color:rgba(251,146,60,.6);background:rgba(251,146,60,.06)}
-.pp-alert-t{border-color:rgba(217,255,63,.5);background:rgba(217,255,63,.04)}
-.pp-alert-i{border-style:dashed}
-.pp-alert-ttl{display:flex;align-items:center;gap:.625rem;margin-bottom:.75rem}
-.pp-alert-glyph{display:inline-flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;border:1px solid;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;flex-shrink:0}
-span.pp-alert-ttl span:last-child,span.pp-alert-glyph{font-size:.72rem}
-.pp-alert-ttl span:last-child{font-family:'JetBrains Mono',monospace;font-weight:700;text-transform:uppercase;letter-spacing:.18em}
-.pp-alert-w .pp-alert-ttl span:last-child,.pp-alert-w.pp-alert-glyph{color:var(--warn)}
-.pp-alert-t .pp-alert-ttl span:last-child,.pp-alert-t.pp-alert-glyph{color:var(--accent)}
-.pp-alert-i .pp-alert-ttl span:last-child,.pp-alert-i.pp-alert-glyph{color:var(--muted);border-color:var(--muted)}
-.pp-cta{position:relative;margin:1rem 0;padding:1.75rem;border:1px dashed rgba(217,255,63,.4);background:var(--panel60);text-align:center}
-.pp-cta-title{font-size:1.125rem;font-weight:700;color:var(--ink)}
-.pp-cta-text{max-width:42rem;margin:.5rem auto 0!important;font-size:.875rem!important}
-.pp-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.25rem;padding:.625rem 1.5rem;border:1px solid var(--accent);font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);transition:all .2s}
-.pp-btn:hover{background:var(--accent);color:#0a0a0b}
-/* figures */
-.pp-fig{margin:1rem 0}
-.pp-fig-frame{padding:.375rem;border:1px solid var(--line);background:var(--panel)}
-.pp-fig-frame img{width:100%;height:auto;display:block}
-.pp-cap{margin-top:.75rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)}
-.pp-cap-fig{color:var(--accent)}
-/* code */
-.pp-code{overflow:hidden;border:1px solid var(--line);border-radius:.5rem;background:var(--panel);margin:1rem 0}
-.pp-code-bar{display:flex;align-items:center;gap:.375rem;padding:.625rem 1rem;border-bottom:1px solid var(--line)}
-.pp-dot{width:.625rem;height:.625rem;border-radius:50%}
-.pp-d1{background:rgba(251,146,60,.7)}.pp-d2{background:rgba(125,125,116,.4)}.pp-d3{background:rgba(217,255,63,.7)}
-.pp-code-sh{margin-inline-start:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.pp-code pre{overflow-x:auto;padding:1rem}
-.pp-code code{font-family:'JetBrains Mono',monospace;font-size:.75rem;line-height:1.7;color:var(--muted)}
-/* table */
-.pp-tablewrap{overflow-x:auto;margin:1rem 0}
-.pp-table{width:100%;border-collapse:collapse;font-size:.875rem;border:1px solid var(--line)}
-.pp-table th{background:var(--panel);padding:.5rem .75rem;border:1px solid var(--line);text-align:start;font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
-.pp-table td{padding:.5rem .75rem;border:1px solid var(--line);color:var(--muted)}
-.pp-table tbody tr:nth-child(odd){background:var(--panel40)}
-/* stats */
-.pp-stats{display:grid;grid-template-columns:1fr;gap:1px;margin:1rem 0;border:1px solid var(--line);background:var(--line)}
-@media(min-width:640px){.pp-stats.c2{grid-template-columns:repeat(2,1fr)}.pp-stats.c4{grid-template-columns:repeat(4,1fr)}.pp-stats.c3{grid-template-columns:repeat(3,1fr)}}
-.pp-stat{position:relative;background:var(--panel);padding:1.25rem}
-.pp-stat::before{content:'';position:absolute;inset-inline-start:0;top:0;width:2rem;height:2px;background:var(--accent)}
-.pp-stat-v{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent)!important}
-.pp-stat-l{margin-top:.5rem!important;font-size:.875rem!important}
-/* faq + footer */
-.faq{margin-top:4rem;padding-top:2.5rem;border-top:1px solid var(--line)}
-.faq h2{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:2rem}
-/* dropdown FAQ items (native details/summary) */
-.faq-item{border:1px solid var(--line);background:var(--panel40)}
-.faq-item+.faq-item{margin-top:.75rem}
-.faq-item summary{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem;cursor:pointer;list-style:none;-webkit-user-select:none;user-select:none;font-weight:600;color:var(--accent);transition:color .2s}
+/* ── PHP-only chrome (everything else comes from the compiled bundle) ── */
+.wrap{max-width:48rem;margin:0 auto;padding:2rem 1rem 4rem}
+
+/* ── Restore the next/font variables the compiled bundle expects ── */
+:root{
+  --font-orbitron-var:"Orbitron","Orbitron Fallback";
+  --font-syne:"Syne","Syne Fallback";
+  --font-space-grotesk:"Space Grotesk","Space Grotesk Fallback";
+  --font-orbitron:var(--font-orbitron-var),var(--font-syne),var(--font-space-grotesk),ui-sans-serif,system-ui,sans-serif;
+  --font-display:var(--font-orbitron),var(--font-syne),var(--font-space-grotesk),ui-sans-serif,system-ui,sans-serif;
+  --font-unbounded:"Unbounded","Unbounded Fallback";
+  --font-logo:var(--font-unbounded),var(--font-space-grotesk),sans-serif;
+  --font-kufi:"Noto Kufi Arabic","Noto Kufi Arabic Fallback";
+  --font-vazirmatn:"Vazirmatn","Vazirmatn Fallback";
+  --font-jetbrains-mono:"JetBrains Mono","JetBrains Mono Fallback";
+  --font-mono:var(--font-jetbrains-mono),ui-monospace,sfmono,monospace;
+  --font-sans:var(--font-space-grotesk),ui-sans-serif,system-ui,sans-serif;
+}
+body{font-family:var(--font-vazirmatn),Tahoma,sans-serif;color:var(--color-ink)}
+/* soft nebula glow behind the content instead of flat black */
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(46rem 30rem at 10% -6%,rgba(var(--rgb-acid),.11),transparent 60%),
+  radial-gradient(52rem 36rem at 104% 112%,rgba(var(--rgb-accent),.10),transparent 60%),
+  radial-gradient(30rem 24rem at 88% 12%,rgba(var(--rgb-acid),.05),transparent 65%)}
+/* mini table of contents — mirrors the React sticky TOC */
+.post-toc{position:fixed;top:7rem;z-index:20;display:none;width:14rem;inset-inline-start:calc((100vw - 48rem)/2 - 15rem)}
+@media(min-width:1280px){.post-toc{display:block}}
+.post-toc .toc-list{list-style:none;margin:0;padding:0;padding-inline-start:1rem;border-inline-start:1px solid var(--color-line)}
+.post-toc .toc-link{display:block;padding:.16rem 0;font-family:var(--font-mono);font-size:.66rem;line-height:1.5;color:var(--color-muted);text-decoration:none;transition:color .2s,transform .2s}
+.post-toc .toc-link:hover{color:var(--color-ink)}
+.post-toc .toc-link.is-active{color:var(--color-accent);transform:translateX(.25rem)}
+[dir="rtl"] .post-toc .toc-link.is-active{transform:translateX(-.25rem)}
+.post-toc .toc-sub{padding-inline-start:.75rem}
+@media(min-width:640px){.wrap{padding:3rem 1.5rem 5rem}}
+.post-kicker{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin-top:2.5rem}
+.title{margin:.75rem 0 0;font-family:var(--font-display);font-weight:800;font-size:clamp(1.9rem,5vw,3.1rem);line-height:1.08;letter-spacing:-.01em;color:var(--color-ink);text-wrap:balance;overflow-wrap:break-word}
+.pp-lead{margin-bottom:1.6rem;border-inline-start:2px solid var(--color-acid);padding-inline-start:1.1rem;color:var(--color-ink);font-size:1.05rem;line-height:1.8}
+.pp-h2,.pp-h3,.pp-h4{scroll-margin-top:5rem;display:flex;align-items:baseline;gap:.6rem;text-wrap:balance;overflow-wrap:break-word}
+.pp-h2{margin:2.6rem 0 .9rem;padding-bottom:.55rem;border-bottom:1px solid var(--color-line);font-size:1.35rem;font-weight:800;color:var(--color-ink)}
+.pp-h3{margin:1.9rem 0 .6rem;font-size:1.1rem;font-weight:700;color:var(--color-ink)}
+.pp-h4{margin:1.5rem 0 .5rem;font-weight:700;color:var(--color-ink)}
+.pp-mk{font-family:var(--font-mono);font-size:.8em;font-weight:700;color:var(--color-accent)}
+.pp-mk2{font-family:var(--font-mono);font-size:.75em;font-weight:700;color:var(--color-accent)}
+.pp-fig,.pp-code,.pp-cta,.pp-hl,.pp-alert{margin-block:1.5rem}
+.pp-fig-frame{position:relative;overflow:hidden;border:1px solid var(--color-line);background:var(--color-panel)}
+.pp-fig-frame img{display:block;width:100%;height:auto}
+.pp-cap{margin-top:.5rem;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--color-muted)}
+.pp-cap-fig{color:var(--color-acid)}
+.pp-code{border:1px solid var(--color-line);border-radius:4px;background:rgba(2,8,6,.6);overflow:hidden}
+.pp-code-bar{display:flex;align-items:center;gap:.4rem;padding:.45rem .7rem;border-bottom:1px solid var(--color-line)}
+.pp-dot{width:8px;height:8px;border-radius:9999px;background:var(--color-line)}
+.pp-d1{background:rgba(var(--rgb-acid),.7)}.pp-d2{background:rgba(var(--rgb-accent),.6)}.pp-d3{background:var(--color-line)}
+.pp-code-sh{margin-inline-start:auto;font-family:var(--font-mono);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-muted)}
+.pp-code pre{margin:0;padding:1rem 1.1rem;overflow-x:auto;font-family:var(--font-mono);font-size:.8rem;line-height:1.6;color:var(--color-ink)}
+.pp-quote{margin-block:1.5rem;padding:.9rem 1.2rem;border-inline-start:2px solid var(--color-acid);background:rgba(var(--rgb-acid),.05);color:var(--color-ink);font-size:1.02rem;line-height:1.75;text-align:start}
+.pp-q-mark{display:block;font-size:1.6rem;line-height:1;color:var(--color-acid);opacity:.7}
+.pp-q-author{margin-top:.5rem;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--color-muted)}
+.pp-hl{padding:.9rem 1.1rem;border:1px dashed rgba(var(--rgb-acid),.4);background:rgba(var(--rgb-acid),.05)}
+.pp-hl-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--color-acid);margin-bottom:.4rem}
+.pp-cta{padding:1.2rem 1.3rem;border:1px solid rgba(var(--rgb-acid),.35);background:linear-gradient(155deg,rgba(var(--rgb-acid),.07),rgba(2,8,6,.4) 60%)}
+.pp-cta-title{font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:1.15rem;color:var(--color-ink);margin-bottom:.4rem}
+.pp-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:.8rem;padding:.5rem 1.05rem;border-radius:9999px;border:1px solid rgba(var(--rgb-acid),.5);font-family:var(--font-mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-acid);transition:background .25s,color .25s}
+.pp-btn:hover{background:var(--color-acid);color:#04110a}
+.pp-stats{display:grid;gap:.8rem;grid-template-columns:repeat(2,1fr)}
+@media(min-width:640px){.pp-stats.c3{grid-template-columns:repeat(3,1fr)}.pp-stats.c4{grid-template-columns:repeat(4,1fr)}}
+.pp-stat{padding:.9rem 1rem;border:1px solid var(--color-line);background:rgba(2,8,6,.35)}
+.pp-stat-v{font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--color-acid);line-height:1}
+.pp-stat-l{margin-top:.35rem;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-muted)}
+.pp-alert{padding:.9rem 1.1rem;border:1px solid var(--color-line);background:rgba(2,8,6,.4)}
+.pp-alert-ttl{display:flex;align-items:center;gap:.5rem;font-weight:700;margin-bottom:.35rem}
+.pp-alert-glyph{display:inline-grid;place-items:center;width:1.2rem;height:1.2rem;border-radius:9999px;font-family:var(--font-mono);font-size:.7rem;border:1px solid currentColor}
+.pp-alert-i{color:var(--color-accent)}.pp-alert-t{color:var(--color-acid)}.pp-alert-w{color:var(--warn)}
+.pp-tablewrap{overflow-x:auto;margin-block:1.4rem}
+.pp-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.pp-table th{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--color-acid);text-align:start;padding:.5rem .7rem;border:1px solid var(--color-line)}
+.pp-table td{padding:.5rem .7rem;border:1px solid var(--color-line);color:var(--color-muted)}
+.pp-ul,.pp-ol{margin-block:1rem;padding-inline-start:1.4rem;color:var(--color-muted)}
+.pp-ul{list-style:none}
+.pp-ul li{position:relative;margin-bottom:.45rem;display:flex;gap:.6rem}
+.pp-bullet{flex-shrink:0;margin-top:.55em;width:6px;height:6px;rotate:45deg;background:var(--color-acid);box-shadow:0 0 6px rgba(var(--rgb-acid),.6)}
+.pp-ol{list-style:none;counter-reset:ppol}
+.pp-ol li{counter-increment:ppol;margin-bottom:.5rem;display:flex;gap:.6rem}
+.pp-olnum{flex-shrink:0;font-family:var(--font-mono);font-size:.7rem;color:var(--color-acid);padding-top:.25em}
+.faq{margin-top:3.5rem;border-top:1px solid var(--color-line);padding-top:2rem}
+.faq-head{display:flex;align-items:center;gap:.75rem;margin-bottom:1.6rem}
+.faq-item{border:1px solid var(--color-line);background:rgba(2,8,6,.4)}
+.faq-item+.faq-item{margin-top:.7rem}
+.faq-item summary{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.95rem 1.05rem;cursor:pointer;list-style:none;user-select:none;font-weight:600;color:var(--color-acid)}
 .faq-item summary::-webkit-details-marker{display:none}
-.faq-item summary:hover{color:var(--ink)}
-.faq-x{position:relative;flex-shrink:0;width:.75rem;height:.75rem;margin-top:.15em;transition:transform .3s}
-.faq-x::before,.faq-x::after{content:'';position:absolute;background:currentColor}
-.faq-x::before{left:0;right:0;top:50%;height:1px;transform:translateY(-50%)}
-.faq-x::after{top:0;bottom:0;left:50%;width:1px;transform:translateX(-50%)}
+.faq-item summary:hover{color:var(--color-ink)}
+.faq-x{position:relative;flex-shrink:0;width:.7rem;height:.7rem;transition:transform .3s}
+.faq-x:before,.faq-x:after{content:'';position:absolute;background:currentColor}
+.faq-x:before{left:0;right:0;top:50%;height:1px;transform:translateY(-50%)}
+.faq-x:after{top:0;bottom:0;left:50%;width:1px;transform:translateX(-50%)}
 .faq-item[open] .faq-x{transform:rotate(45deg)}
-.faq-item>p{margin:0!important;padding:1rem;border-top:1px solid var(--line);color:var(--muted);line-height:1.75;text-align:justify;text-align-last:start}
-.pagefoot{display:flex;justify-content:space-between;align-items:center;margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--line);flex-wrap:wrap;gap:1rem}
-/* ---------- Reading comfort ---------- */
-strong,b{color:var(--ink);font-weight:600}
-h1.title,h2.pp-h2,h3.pp-h3,h2.pp-h2 span:last-child{text-wrap:balance;overflow-wrap:break-word}
-.body p{text-wrap:pretty}
-/* Justified text at every viewport width */
-.body p,.pp-ul li>span:last-child,.pp-ol li>span:last-child,.excerpt{text-align:justify;text-align-last:start;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
-/* Inline code chips inside paragraphs */
-p code{font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--accent);background:var(--panel);border:1px solid var(--line);padding:.1em .35em;word-break:break-word}
+.faq-item>p{margin:0;padding:.95rem 1.05rem;border-top:1px solid var(--color-line);color:var(--color-muted);line-height:1.75}
+.pagefoot{display:flex;justify-content:space-between;align-items:center;margin-top:3.5rem;padding-top:1.4rem;border-top:1px solid var(--color-line);flex-wrap:wrap;gap:1rem}
+.footline{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.8rem;margin-top:4rem;padding:1.2rem 0 0;border-top:1px solid var(--color-line);font-family:var(--font-mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-muted)}
+.footline b{color:var(--color-acid);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
-
-
 </head>
 <body>
-<header class="topbar" id="topbar">
-  <div class="topbar-in">
-    <a class="brand" href="/<?= $locale ?>/">O<b>—</b>G<span class="brand-site">/ sinisteroid.ir</span></a>
-    <ul class="dnav">
-      <?php
-      foreach ($navItems = ($fa
-        ? ['شروع', 'سوابق', 'مهارت‌ها', 'تحصیلات', 'نمونه‌کارها', 'نوشته‌ها']
-        : ['Index', 'Work', 'Skills', 'Education', 'Showcase', 'Writing']) as $ni => $navLabel):
-        $navPaths = ['', '/work/', '/skills/', '/education/', '/showcase/', '/blog/'];
-        $idx = str_pad((string)($ni + 1), 2, '0', STR_PAD_LEFT);
-      ?>
-      <li><a href="/<?= $locale . $navPaths[$ni] ?>"><span class="idx"><?= $idx ?></span><?= esc($navLabel) ?></a></li>
-      <?php endforeach; ?>
-      <li><a class="lang" href="/<?= $fa ? 'en' : 'fa' ?>/"><?= $fa ? 'EN' : 'فا' ?></a></li>
-      <li>
-        <button type="button" class="theme-btn" id="themeBtn" aria-label="<?= $fa ? 'تغییر حالت روشن/تیره' : 'Toggle light/dark mode' ?>">
-          <span class="icon-sun" aria-hidden="true"><?= svg_sun() ?></span>
-          <span class="icon-moon" aria-hidden="true"><?= svg_moon() ?></span>
-        </button>
-      </li>
-    </ul>
-    <button type="button" class="mnav-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav">
-      <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
-      <span class="mlabel" data-open="<?= $fa ? 'منو' : 'Menu' ?>" data-close="<?= $fa ? 'بستن' : 'Close' ?>"><?= $fa ? 'منو' : 'Menu' ?></span>
-    </button>
+<div class="reading-progress" aria-hidden="true"></div>
+
+<header>
+  <div class="chip-corner chip-start">
+    <a href="/<?= $locale ?>/" class="brandlink">
+      <span class="relative grid place-items-center" aria-hidden="true"><span class="orbit-pip"></span><span class="nav-dot"></span></span>
+      <span dir="ltr" class="font-display font-bold text-[0.92rem] tracking-tight text-ink">SINISTER<span class="text-acid">[OID]</span></span>
+    </a>
   </div>
-  <div class="mpanel" id="mobileNav">
-    <ul>
+
+  <div class="dock-wrap">
+    <nav class="dock" aria-label="Primary">
       <?php
       $navItems = $fa
         ? ['شروع', 'سوابق', 'مهارت‌ها', 'تحصیلات', 'نمونه‌کارها', 'نوشته‌ها']
@@ -476,74 +424,139 @@ p code{font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--accent
       $navPaths = ['', '/work/', '/skills/', '/education/', '/showcase/', '/blog/'];
       foreach ($navItems as $ni => $navLabel):
         $idx = str_pad((string)($ni + 1), 2, '0', STR_PAD_LEFT);
+        $active = ($ni === 5) ? ' is-active' : '';
       ?>
-      <li><a href="/<?= $locale . $navPaths[$ni] ?>"><span class="idx"><?= $idx ?></span><?= esc($navLabel) ?></a></li>
+      <a class="dock-link<?= $active ?>" href="/<?= $locale . $navPaths[$ni] ?>"><span class="dock-index"><?= $idx ?></span><?= esc($navLabel) ?></a>
       <?php endforeach; ?>
-      <li><a class="lang" href="/<?= $fa ? 'en' : 'fa' ?>/"><?= $fa ? 'English version' : 'نسخه فارسی' ?></a></li>
-    </ul>
+      <span class="dock-sep" aria-hidden="true"></span>
+      <button type="button" class="icon-toggle" id="themeBtn" aria-label="<?= $fa ? 'تغییر حالت روشن/تیره' : 'Toggle light/dark mode' ?>">
+        <span class="icon-sun" aria-hidden="true"><?= svg_sun() ?></span>
+        <span class="icon-moon" aria-hidden="true"><?= svg_moon() ?></span>
+      </button>
+      <a class="dock-link langswap" href="/<?= $fa ? 'en' : 'fa' ?>/blog/<?= $slug ?>/"><?= $fa ? 'EN' : 'فا' ?></a>
+    </nav>
+  </div>
+
+  <div class="mob-dock md">
+    <button type="button" class="mob-pill" id="menuBtn" aria-expanded="false" aria-controls="orbital-nav" aria-haspopup="dialog">
+      <span class="mob-burger" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><?= $fa ? 'منو' : 'Menu' ?></span>
+    </button>
+  </div>
+
+  <div class="overlay-veil md" id="orbital-nav" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="overlay-menu">
+      <p class="label mb-6">/ sinisteroid.ir</p>
+      <?php foreach ($navItems as $ni => $navLabel): ?>
+      <a class="overlay-link" data-off="<?= $ni ?>" href="/<?= $locale . $navPaths[$ni] ?>"><span class="overlay-index me-3"><?= str_pad((string)($ni + 1), 2, '0', STR_PAD_LEFT) ?></span><?= esc($navLabel) ?></a>
+      <?php endforeach; ?>
+      <div class="mt-8 flex items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted">
+        <a class="langswap" href="/<?= $fa ? 'en' : 'fa' ?>/blog/<?= $slug ?>/"><?= $fa ? 'EN' : 'فا' ?></a>
+        <span class="h-px w-8 bg-line" aria-hidden="true"></span>
+        <span><?= $fa ? 'تهران، ایران' : 'Tehran, Iran' ?></span>
+<a class="donate-inline" href="https://donatr.ee/sinisteroid/" target="_blank" rel="noopener noreferrer" style="color:var(--color-acid)">♥ <?= $fa ? 'حمایت' : 'donate' ?></a>
+      </div>
+    </div>
   </div>
 </header>
+
 <script>
 (function(){
-  /* mobile menu */
-  var btn=document.getElementById('menuBtn'),panel=document.getElementById('mobileNav');
-  if(btn&&panel){
-    btn.addEventListener('click',function(){
-      var open=document.body.classList.toggle('menu-open');
-      btn.setAttribute('aria-expanded',open?'true':'false');
-      var lbl=btn.querySelector('.mlabel');
-      if(lbl)lbl.textContent=open?lbl.getAttribute('data-close'):lbl.getAttribute('data-open');
-    });
-  }
-  /* theme toggle — persists and matches the static site's key */
+  /* theme toggle — same storage key as the React site */
   var tb=document.getElementById('themeBtn');
   if(tb)tb.addEventListener('click',function(){
     var next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
     document.documentElement.setAttribute('data-theme',next);
     try{localStorage.setItem('theme',next)}catch(e){}
   });
-  /* auto-hide: tuck away scrolling down, return scrolling up */
-  var lastY=window.scrollY,ticking=false;
-  window.addEventListener('scroll',function(){
-    if(ticking)return;
-    ticking=true;
-    requestAnimationFrame(function(){
-      ticking=false;
-      var y=window.scrollY;
-      document.body.classList.toggle('nav-hidden',y>lastY&&y>140&&!document.body.classList.contains('menu-open'));
-      lastY=y;
+  /* mobile orbital overlay */
+  var btn=document.getElementById('menuBtn'),panel=document.getElementById('orbital-nav');
+  function close(){panel.classList.remove('is-open');btn.setAttribute('aria-expanded','false');document.documentElement.style.overflow='';}
+  if(btn&&panel){
+    btn.addEventListener('click',function(){
+      var open=!panel.classList.contains('is-open');
+      panel.classList.toggle('is-open',open);
+      btn.setAttribute('aria-expanded',open?'true':'false');
+      document.documentElement.style.overflow=open?'hidden':'';
     });
-  },{passive:true});
+    window.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  }
+  /* reading progress (rAF fallback; browsers with scroll timelines use CSS) */
+  var bar=document.querySelector('.reading-progress');
+  if(bar && !(window.CSS&&CSS.supports&&CSS.supports('animation-timeline: scroll()'))){
+    var raf=0;
+    var upd=function(){raf=0;var max=document.documentElement.scrollHeight-window.innerHeight;bar.style.setProperty('--progress',max>0?String(Math.min(window.scrollY/max,1)):'0');};
+    window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(upd);},{passive:true});
+    upd();
+  }
+/* mini TOC scroll-spy — highlight the heading currently in view */
+  var tocLinks=[].slice.call(document.querySelectorAll('.post-toc .toc-link'));
+  if(tocLinks.length>=3 && 'IntersectionObserver' in window){
+    var tocMap={};
+    tocLinks.forEach(function(a){tocMap[a.getAttribute('href').slice(1)]=a});
+    var tocObs=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          var id=e.target.id;
+          tocLinks.forEach(function(a){a.classList.toggle('is-active',a.getAttribute('href')==='#'+id)});
+        }
+      });
+    },{rootMargin:'-90px 0px -70% 0px'});
+    Object.keys(tocMap).forEach(function(id){var el=document.getElementById(id);if(el)tocObs.observe(el);});
+  }
 })();
 </script>
 
 <main class="wrap">
+<?php if (count($toc) >= 3): ?>
+  <nav class="post-toc" aria-label="<?= esc($tocTitle) ?>" dir="<?= $fa ? 'rtl' : 'ltr' ?>">
+    <p class="label mb-3"><?= esc($tocTitle) ?></p>
+    <ul class="toc-list">
+      <?php foreach ($toc as $h): ?>
+      <li><a class="toc-link<?= $h['level'] === 3 ? ' toc-sub' : '' ?>" href="#<?= $h['id'] ?>"><?= esc($h['text']) ?></a></li>
+      <?php endforeach; ?>
+    </ul>
+  </nav>
+  <?php endif; ?>
   <article>
-    <a class="back" href="/<?= $locale ?>/blog/"><?= svg_arrow(true) ?><?= esc($backLabel) ?></a>
+    <a class="post-back group" href="/<?= $locale ?>/blog/"><?= svg_arrow(true) ?><?= esc($backLabel) ?></a>
 
-    <time class="date" datetime="<?= esc($date) ?>" dir="ltr"><?= esc($date) ?></time>
-    <h1 class="title"><?= esc($title) ?></h1>
-    <p class="excerpt"><?= esc($excerpt) ?></p>
+    <div class="post-kicker">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span class="label"><?= $fa ? '(فرستنده)' : '(Transmission)' ?></span>
+      <span class="h-px w-8 bg-line" aria-hidden="true"></span>
+      <time class="font-mono text-xs tracking-[0.2em] text-acid" datetime="<?= esc($date) ?>" dir="ltr"><?= esc($date) ?></time>
+      <span class="label">· <?= $readMinutes ?> <?= $readLabel ?></span>
+    </div>
 
-    <?php if ($fallbackNote): ?><p><span class="fallnote"><?= esc($fallbackNote) ?></span></p><?php endif; ?>
+    <h1 class="title anaglyph-strong"><?= esc($title) ?></h1>
+
+    <?php if ($excerpt): ?>
+    <aside class="post-tldr mt-6"><span class="label mb-2 block">(TL;DR)</span><?= nl2br(esc($excerpt)) ?></aside>
+    <?php endif; ?>
+
+    <?php if ($fallbackNote): ?><p class="label mt-4 inline-block border border-line px-3 py-1"><?= esc($fallbackNote) ?></p><?php endif; ?>
 
     <?php if ($tagsArr): ?>
-    <div class="tags">
-      <?php foreach ($tagsArr as $tag): ?><span class="tag">#<?= esc($tag) ?></span><?php endforeach; ?>
+    <div class="mt-5 flex flex-wrap gap-2">
+      <?php foreach ($tagsArr as $tag): ?><span class="bento-tag">#<?= esc($tag) ?></span><?php endforeach; ?>
     </div>
     <?php endif; ?>
 
     <?php if ($cover): ?>
-    <img class="cover" src="<?= esc($cover) ?>" alt="">
+    <div class="post-cover mt-9"><img class="post-cover-img" src="<?= esc($cover) ?>" alt="" loading="lazy" decoding="async"><span aria-hidden="true" class="post-cover-scan"></span></div>
     <?php endif; ?>
 
-    <div class="body">
+    <div class="mt-12 prose-post">
       <?= render_blocks($blocks, $locale) ?>
     </div>
 
     <?php if ($faq): ?>
     <section class="faq">
-      <h2><?= esc($faqHeading) ?></h2>
+      <div class="faq-head">
+        <span class="sig-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        <h2 class="label"><?= esc($faqHeading) ?></h2>
+      </div>
       <?php foreach ($faq as $item): ?>
       <details class="faq-item">
         <summary>
@@ -556,11 +569,19 @@ p code{font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--accent
     </section>
     <?php endif; ?>
 
-    <footer class="pagefoot">
-      <a class="back" href="/<?= $locale ?>/blog/"><?= svg_arrow(true) ?><?= esc($backLabel) ?></a>
-      <a class="navlink" href="/<?= $locale ?>/"><?= $homeLabel ?> <?= svg_arrow() ?></a>
-    </footer>
+    <div class="pagefoot">
+      <a class="post-back group" href="/<?= $locale ?>/blog/"><?= svg_arrow(true) ?><?= esc($backLabel) ?></a>
+      <a class="post-back group" href="/<?= $locale ?>/"><?= esc($homeLabel) ?> <?= svg_arrow() ?></a>
+    </div>
   </article>
 </main>
+
+<footer>
+  <div class="wrap footline">
+    <span>© <?= date('Y') ?> <?= $fa ? 'امید — تهران، ایران' : 'Omid — Tehran, Iran' ?></span>
+<a class="donate-inline" href="https://donatr.ee/sinisteroid/" target="_blank" rel="noopener noreferrer" style="color:var(--color-acid)">♥ <?= $fa ? 'حمایت' : 'DONATE' ?></a>
+    <span dir="ltr"><b>SIG.OK</b> ▸ VOID-FREE</span>
+  </div>
+</footer>
 </body>
 </html>

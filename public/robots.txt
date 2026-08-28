@@ -60,3 +60,7 @@ Allow: /
 
 # Sitemaps
 Sitemap: https://sinisteroid.ir/sitemap.xml
+
+# LLM/AI-readable plain-text indexes (GEO)
+Sitemap: https://sinisteroid.ir/llms.txt
+Sitemap: https://sinisteroid.ir/llms-full.txt

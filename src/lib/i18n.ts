@@ -87,6 +87,7 @@ const en = {
     back: "Return to index",
   },
   fallbackNote: "— published in English",
+  donate: "Donate",
 };
 
 export type Dictionary = typeof en;
@@ -171,6 +172,7 @@ const fa: Dictionary = {
     back: "بازگشت به صفحه اصلی",
   },
   fallbackNote: "— به انگلیسی منتشر شده",
+  donate: "حمایت",
 };
 
 export const dictionaries: Record<Locale, Dictionary> = { en, fa };
