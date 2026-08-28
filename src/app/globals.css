@@ -2899,6 +2899,20 @@ html .icon-moon { display: none; }
   background: rgba(255, 255, 255, 0.82);
   border-color: rgba(var(--rgb-accent-3), 0.25);
 }
+[data-theme="light"] .mob-pill {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(242, 246, 238, 0.9));
+  border-color: rgba(var(--rgb-acid), 0.55);
+  box-shadow:
+    0 0 22px rgba(var(--rgb-acid), 0.18),
+    0 10px 30px -12px rgba(20, 40, 24, 0.35);
+}
+[data-theme="light"] .overlay-index {
+  color: rgba(var(--rgb-accent), 0.9);
+}
+[data-theme="light"] .overlay-link:hover,
+[data-theme="light"] .overlay-link.is-active {
+  filter: drop-shadow(0 0 10px rgba(var(--rgb-acid), 0.3));
+}
 [data-theme="light"] .dock {
   background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(242, 246, 238, 0.9));
   border-color: rgba(var(--rgb-accent-3), 0.32);
