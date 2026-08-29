@@ -136,11 +136,23 @@ export default function GLBackground() {
     // the slow-drifting animation.
     const coarse = !window.matchMedia("(pointer: fine)").matches;
     const staticFrame = reduced || coarse;
-    const gl = canvas.getContext("webgl", { antialias: false, alpha: false });
+    const gl = canvas.getContext("webgl", {
+      antialias: false,
+      alpha: false,
+      /* Static single-frame canvases must retain the drawing buffer: some
+         mobile compositors re-present a CLEARED buffer (blank background)
+         when the fixed layer is evicted during scroll unless it persists. */
+      preserveDrawingBuffer: staticFrame,
+    });
     if (!gl) return; // CSS bg on the wrapper is the fallback
 
     const vs = compile(gl, gl.VERTEX_SHADER, VERT);
-    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+    // Coarse/low-end devices also drop one fBm octave (4 → 3): the nebula is
+    // soft cloud noise, so the lost high-frequency octave is invisible, and
+    // shader cost scales with per-pixel octave count. String-level
+    // specialization keeps the hot loop free of uniforms and branches.
+    const fragSrc = coarse ? FRAG.replace("i < 4", "i < 3") : FRAG;
+    const fs = compile(gl, gl.FRAGMENT_SHADER, fragSrc);
     if (!vs || !fs) return;
     const prog = gl.createProgram()!;
     gl.attachShader(prog, vs);
@@ -164,22 +176,45 @@ export default function GLBackground() {
     const uTime = gl.getUniformLocation(prog, "uTime");
     const uMouse = gl.getUniformLocation(prog, "uMouse");
     const uLight = gl.getUniformLocation(prog, "uLight");
-    const applyTheme = () => gl.uniform1f(uLight, document.documentElement.dataset.theme === "light" ? 1 : 0);
-    applyTheme();
-    const onTheme = () => applyTheme();
-    window.addEventListener("themechange", onTheme);
 
     let mx = 0;
     let my = 0;
     let tx = 0;
     let ty = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1);
+
+    /* One triangle-strip draw with explicit uniforms — shared by the static
+       painters (resize / theme flip) and the animation loop. */
+    const paint = (time: number, px: number, py: number) => {
+      gl.uniform1f(uTime, time);
+      gl.uniform2f(uMouse, px, py);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    };
+
+    const applyTheme = () => {
+      gl.uniform1f(uLight, document.documentElement.dataset.theme === "light" ? 1 : 0);
+      /* Static canvases never run the rAF loop: without this repaint the
+         stale dark-theme frame lingers under the light UI after toggling,
+         leaving the page stuck between the two themes. */
+      if (staticFrame) paint(21.0, 99, 99);
+    };
+    applyTheme();
+    const onTheme = () => applyTheme();
+    window.addEventListener("themechange", onTheme);
+    /* Coarse devices render at 0.75× native and upscale: the nebula is soft
+       fBm clouds, so sub-pixel detail is imperceptible while fragment cost
+       drops by ~44%. Fine-pointer desktops keep 1:1 (capped at DPR 1). */
+    const dpr = Math.min(window.devicePixelRatio || 1, 1) * (coarse ? 0.75 : 1);
 
     const resize = () => {
       canvas.width = Math.floor(canvas.clientWidth * dpr);
       canvas.height = Math.floor(canvas.clientHeight * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.uniform2f(uRes, canvas.width, canvas.height);
+      /* Assigning width/height WIPES the drawing buffer. The animated path
+         repaints on the next rAF, but the static path (mobile) draws once,
+         so it must repaint here — otherwise the nebula vanishes whenever
+         the mobile URL bar collapses/expands mid-scroll (a resize event). */
+      if (staticFrame) paint(21.0, 99, 99);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -208,9 +243,7 @@ export default function GLBackground() {
 
     if (staticFrame) {
       // single static frame, no loop
-      gl.uniform1f(uTime, 21.0);
-      gl.uniform2f(uMouse, 99, 99);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      paint(21.0, 99, 99);
     } else {
       raf = requestAnimationFrame(frame);
     }

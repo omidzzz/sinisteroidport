@@ -1699,6 +1699,18 @@ html .icon-moon { display: none; }
 [data-theme="light"] ::-webkit-scrollbar-track { background: #e9eee6; }
 [data-theme="light"] ::-webkit-scrollbar-thumb { border-color: #e9eee6; }
 
+/* Blog-post surfaces: the dark-void overlays baked into .post-tldr and
+   .prose-post pre must not bleed into light mode, or articles render as a
+   muddy half-dark hybrid (dark panels over the laboratory whiteout). */
+[data-theme="light"] .post-tldr {
+  background:
+    linear-gradient(155deg, rgba(var(--rgb-acid), 0.08), rgba(255, 255, 255, 0.75) 60%),
+    var(--color-bg);
+}
+[data-theme="light"] .prose-post pre {
+  background: rgba(255, 255, 255, 0.85);
+}
+
 [data-theme="light"] .glass {
   background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(246, 250, 242, 0.86));
   border-color: rgba(var(--rgb-accent-3), 0.16);
@@ -2907,6 +2919,7 @@ html .icon-moon { display: none; }
   z-index: 60;
   display: none;
   justify-content: flex-end;
+  gap: 0.5rem;
 }
 @media (max-width: 767px) {
   .mob-dock { display: flex; }
@@ -4062,3 +4075,131 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
 .donate-inline{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase}
 @media (prefers-reduced-motion:no-preference){.donate-cta .donate-ring{animation:donate-pulse 2.2s ease-out infinite}.donate-heart{animation:heart-beat 1.8s ease-in-out infinite}}
 @media (prefers-reduced-motion:reduce){.donate-cta,.donate-cta::after,.donate-ring,.donate-heart{transition:none!important;animation:none!important}}
+
+/* ═══════════════════════════════════════════════════════════════
+   V2.2 — PERF-SAFE ORNAMENT PASS
+   Additions are paint/composite-only, reduced-motion gated, and
+   reuse the existing token system. No new DOM, no new JS.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Balanced heading rag — one-time line calculation, zero runtime cost */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* Global neon keyboard-focus ring. Component-specific :focus-visible
+   rules (.dock-link, .kbd-hint, .planet…) already outrank this, so
+   only currently-unstyled focusables pick up the acid ring. */
+:focus-visible {
+  outline: 2px solid var(--color-acid);
+  outline-offset: 3px;
+}
+
+/* Site-wide CRT veil — a single static composited layer above the
+   nebula canvas. Deliberately no blend mode and no animation: nothing
+   repaints per frame, the GPU just stacks one more fixed layer. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.16) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.5;
+}
+[data-theme="light"] body::after { opacity: 0.22; }
+
+/* Conic charge-halo sweeping the back-to-top ring. Animates one
+   registered custom property on one 52px element — paint-only. */
+@property --ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.ring-top::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from var(--ring-angle),
+    transparent 0deg 295deg,
+    rgba(var(--rgb-acid), 0.9) 325deg,
+    transparent 360deg
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2.5px),
+    #000 calc(100% - 1.5px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2.5px),
+    #000 calc(100% - 1.5px)
+  );
+  opacity: 0.65;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ring-top::after {
+    animation: ring-top-spin 5.5s linear infinite;
+  }
+}
+@keyframes ring-top-spin {
+  to { --ring-angle: 360deg; }
+}
+
+/* Logo glitch flicker — hover/focus only, two quick steps then settles.
+   clip-path slices + 1px translate are paint-only (no layout), and the
+   existing oid-scan on [OID] runs alongside unchanged. */
+@keyframes logo-glitch {
+  0%, 100% { clip-path: inset(0); translate: 0 0; }
+  25% { clip-path: inset(12% -2% 56% -2%); translate: -2px 1px; }
+  50% { clip-path: inset(58% -2% 8% -2%); translate: 2px -1px; }
+  75% { clip-path: inset(34% -2% 38% -2%); translate: -1px 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .logo-type:hover .logo-sinister,
+  .logo-type:focus-visible .logo-sinister {
+    animation: logo-glitch 0.45s steps(2, jump-none) 2;
+  }
+}
+
+/* Gradient edge for blog cards — a masked 1px acid→cyan border glow that
+   ignites on hover. Opacity-only change, so it composites for free and
+   never touches the existing border-color/background hover mechanics. */
+.post-card::before,
+.issue-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    rgba(var(--rgb-acid), 0.65),
+    rgba(var(--rgb-accent), 0.25) 45%,
+    rgba(var(--rgb-accent-2), 0.55)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.post-card:hover::before,
+.issue-card:hover::before,
+.post-card:focus-visible::before,
+.issue-card:focus-visible::before {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .post-card::before,
+  .issue-card::before { transition: none !important; }
+}

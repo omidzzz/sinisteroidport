@@ -2,6 +2,12 @@
 
 import { useRef, type ReactNode } from "react";
 
+/* Cached once per bundle — matchMedia inside mousemove costs a style
+   recalc per pointer event. */
+const FINE_POINTER =
+  typeof window !== "undefined" &&
+  window.matchMedia("(pointer: fine)").matches;
+
 /**
  * Cursor spotlight — paints a soft radial glow that tracks the pointer across
  * a bounded section. Just writes two CSS variables from a single mousemove
@@ -21,7 +27,7 @@ export default function Spotlight({
   const ref = useRef<HTMLDivElement>(null);
 
   const onMove = (e: React.MouseEvent) => {
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (!FINE_POINTER) return;
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();

@@ -14,6 +14,12 @@ import {
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import FaqAccordion from "./FaqAccordion";
 import { ArrowIcon } from "./icons";
+import { getLivePost, preloadLivePost } from "@/lib/live-post";
+
+// Kick the DB refresh off at bundle-parse time — BEFORE React hydrates — so
+// the API round-trip overlaps hydration instead of starting after it. No-op
+// wherever the URL carries no post slug (blog index, non-post pages).
+preloadLivePost();
 
 export default function BlogPostLive({
   locale,
@@ -112,17 +118,13 @@ export default function BlogPostLive({
 
   useEffect(() => {
     let cancelled = false;
-    fetch(
-      `/api/get_post.php?slug=${encodeURIComponent(effective.slug)}`
-    )
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not ok"))))
-      .then((data) => {
-        if (cancelled || !data?.translations) return;
-        setLive(data);
-      })
-      .catch(() => {
-        /* keep prerendered/fallback data */
-      });
+    // Single-flight fetch shared with BlogPostDynamic: preloadLivePost()
+    // already started this request at bundle-parse time, so this reuses the
+    // in-flight promise instead of hitting the API a second time.
+    getLivePost(post.slug).then((data) => {
+      if (cancelled || !data?.translations) return;
+      setLive(data);
+    });
     return () => {
       cancelled = true;
     };

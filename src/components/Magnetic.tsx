@@ -2,6 +2,12 @@
 
 import { useRef, type ReactNode } from "react";
 
+/* Cached once per bundle — matchMedia allocates and queries style on every
+   call, so running it inside mousemove was a per-event style recalc. */
+const FINE_POINTER =
+  typeof window !== "undefined" &&
+  window.matchMedia("(pointer: fine)").matches;
+
 /**
  * Magnetic wrapper — the child gravitates toward the pointer while it is
  * nearby, then springs back. Pure transform; disabled on touch devices.
@@ -18,7 +24,7 @@ export default function Magnetic({
   const ref = useRef<HTMLSpanElement>(null);
 
   const onMove = (e: React.MouseEvent) => {
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (!FINE_POINTER) return;
     const el = ref.current;
     if (!el) return;
     el.style.transition = "transform 0.1s linear";

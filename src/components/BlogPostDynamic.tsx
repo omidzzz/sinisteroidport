@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { Post } from "@/lib/posts";
 import BlogPostLive from "./BlogPostLive";
 import { postTitle } from "@/lib/post-helpers";
+import { getLivePost } from "@/lib/live-post";
 import type { Locale } from "@/lib/i18n";
 
 type Status = "loading" | "ready" | "missing" | "error";
@@ -45,27 +46,27 @@ export default function BlogPostDynamic({ locale }: { locale: Locale }) {
       setStatus("missing");
       return;
     }
-    fetch(`/api/get_post.php?slug=${encodeURIComponent(slug)}`)
-      .then((r) =>
-        r.ok ? r.json() : Promise.reject(new Error(String(r.status)))
-      )
-      .then((data: Post) => {
-        if (cancelled) return;
-        if (!data?.translations) {
-          setStatus("missing");
-          return;
-        }
-        // Hide drafts fetched straight from the DB
-        if ((data.status ?? "published") === "draft") {
-          setStatus("missing");
-          return;
-        }
-        setPost(data);
-        setStatus("ready");
-      })
-      .catch(() => {
-        if (!cancelled) setStatus("error");
-      });
+    // getLivePost dedupes with the parse-time preload (see live-post.ts),
+    // so the article is fetched exactly once even though BlogPostLive also
+    // refreshes the same slug after mounting.
+    getLivePost(slug).then((data) => {
+      if (cancelled) return;
+      if (!data) {
+        setStatus("error");
+        return;
+      }
+      if (!data.translations) {
+        setStatus("missing");
+        return;
+      }
+      // Hide drafts fetched straight from the DB
+      if ((data.status ?? "published") === "draft") {
+        setStatus("missing");
+        return;
+      }
+      setPost(data);
+      setStatus("ready");
+    });
     return () => {
       cancelled = true;
     };

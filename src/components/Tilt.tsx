@@ -2,6 +2,12 @@
 
 import { useRef, type ReactNode } from "react";
 
+/* Cached once per bundle — matchMedia inside mousemove costs a style
+   recalc per pointer event. */
+const FINE_POINTER =
+  typeof window !== "undefined" &&
+  window.matchMedia("(pointer: fine)").matches;
+
 /**
  * Mouse-tilt card — rotates toward the pointer on a 3D perspective (transform
  * only, one transition on leave). Capped angles keep it tasteful. Fine pointers
@@ -19,7 +25,7 @@ export default function Tilt({
   const ref = useRef<HTMLDivElement>(null);
 
   const onMove = (e: React.MouseEvent) => {
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (!FINE_POINTER) return;
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();

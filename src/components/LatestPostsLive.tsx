@@ -36,7 +36,9 @@ export default function LatestPostsLive({
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/get_posts.php")
+    const start = () => {
+      if (cancelled) return;
+      fetch("/api/get_posts.php")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not ok"))))
       .then((rows: ApiRow[]) => {
         if (cancelled || !Array.isArray(rows)) return;
@@ -65,8 +67,21 @@ export default function LatestPostsLive({
       .catch(() => {
         /* keep prerendered/fallback data */
       });
+    };
+    // The prerendered strip is already on screen — defer the live sync off
+    // the hydration/LCP path until the main thread is idle (2.5s hard cap
+    // so busy CPUs still sync eventually).
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(start, { timeout: 2500 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback(id);
+      };
+    }
+    const t = window.setTimeout(start, 1200);
     return () => {
       cancelled = true;
+      window.clearTimeout(t);
     };
   }, []);
 

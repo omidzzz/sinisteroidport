@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import type { Locale } from "@/lib/i18n";
+import type { Post } from "@/lib/posts";
+import { postTitle } from "@/lib/post-helpers";
+import { loc, type Locale } from "@/lib/i18n";
 
 export interface CmdEntry {
   id: string;
@@ -37,6 +39,58 @@ export default function CommandPalette({
   const pathname = usePathname() ?? "";
   const clean = pathname.replace(/^\/(en|fa)(?=\/|$)/, "") || "/";
 
+  // DB-only posts: the static entry list is compiled at build time from the
+  // content snapshot, so posts published through the host (MySQL, surfaced
+  // by /api/get_posts.php) never show up until the next deploy. Merge them
+  // in client-side, skipping slugs the snapshot already covers.
+  const [dbEntries, setDbEntries] = useState<CmdEntry[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    const start = () => {
+      if (cancelled) return;
+      fetch("/api/get_posts.php")
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not ok"))))
+        .then((rows: Post[]) => {
+          if (cancelled || !Array.isArray(rows)) return;
+          const known = new Set(
+            entries
+              .filter((e) => e.id.startsWith("post-"))
+              .map((e) => e.id.slice("post-".length))
+          );
+          const group = locale === "fa" ? "نوشته" : "Posts";
+          setDbEntries(
+            rows
+              .filter((r) => r?.slug && !known.has(r.slug))
+              .map((r) => ({
+                id: `post-${r.slug}`,
+                label: postTitle(r, locale),
+                sub: r.date?.slice(0, 10),
+                group,
+                href: loc(locale, `/blog/${r.slug}`),
+              }))
+          );
+        })
+        .catch(() => {
+          /* palette keeps the build-time index */
+        });
+    };
+    // The prerendered index is already usable — keep the API call off the
+    // hydration/LCP path until the main thread is idle (2.5s hard cap),
+    // mirroring BlogListLive/LatestPostsLive.
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(start, { timeout: 2500 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback(id);
+      };
+    }
+    const t = window.setTimeout(start, 1200);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(t);
+    };
+  }, [locale, entries]);
+
   // action rows, appended ahead of the content entries
   const actions = useMemo<CmdEntry[]>(() => {
     const toggleTheme: CmdEntry = {
@@ -68,7 +122,7 @@ export default function CommandPalette({
     const q = query.trim().toLowerCase();
     const haystack = (e: CmdEntry) =>
       [e.label, e.sub ?? "", e.group].join(" ").toLowerCase();
-    const all = [...actions, ...entries];
+    const all = [...actions, ...entries, ...dbEntries];
     if (!q) return all;
     return all.filter((e) => haystack(e).includes(q));
   }, [query, actions, entries]);

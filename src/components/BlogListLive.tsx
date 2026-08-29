@@ -39,28 +39,42 @@ export default function BlogListLive({
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/get_posts.php")
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not ok"))))
-      .then((rows: ApiRow[]) => {
-        if (cancelled || !Array.isArray(rows) || !rows.length) return;
-        if (rows[0] && (rows[0].translations || rows[0].slug)) {
-          const synced = (rows as unknown as Post[]).map((r) => ({
-            ...r,
-            // API rows may omit the cover — keep the prerendered one by slug
-            featuredImage:
-              r.featuredImage ??
-              initial.find((p) => p.slug === r.slug)?.featuredImage,
-          }));
-          setItems(synced);
-          // Broadcast the live published-count so hero stats stay in sync
-          window.dispatchEvent(
-            new CustomEvent("posts-synced", { detail: synced.length })
-          );
-        }
-      })
-      .catch(() => {});
+    const start = () => {
+      if (cancelled) return;
+      fetch("/api/get_posts.php")
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not ok"))))
+        .then((rows: ApiRow[]) => {
+          if (cancelled || !Array.isArray(rows) || !rows.length) return;
+          if (rows[0] && (rows[0].translations || rows[0].slug)) {
+            const synced = (rows as unknown as Post[]).map((r) => ({
+              ...r,
+              // API rows may omit the cover — keep the prerendered one by slug
+              featuredImage:
+                r.featuredImage ??
+                initial.find((p) => p.slug === r.slug)?.featuredImage,
+            }));
+            setItems(synced);
+            // Broadcast the live published-count so hero stats stay in sync
+            window.dispatchEvent(
+              new CustomEvent("posts-synced", { detail: synced.length })
+            );
+          }
+        })
+        .catch(() => {});
+    };
+    // The prerendered grid is already on screen — defer the live sync off
+    // the hydration/LCP path until the main thread is idle (2.5s hard cap).
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(start, { timeout: 2500 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback(id);
+      };
+    }
+    const t = window.setTimeout(start, 1200);
     return () => {
       cancelled = true;
+      window.clearTimeout(t);
     };
   }, []);
 

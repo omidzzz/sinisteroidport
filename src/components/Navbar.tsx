@@ -122,8 +122,35 @@ export default function Navbar({ locale }: { locale: Locale }) {
         </nav>
       </div>
 
-      {/* ══ MOBILE MENU BUTTON (easy to find, labeled "Menu") ══ */}
-      <div className="mob-dock md:hidden">
+      {/* ══ MOBILE DOCK: search + menu (easy to find, top-end) ══ */}
+      <div className="mob-dock md:hidden gap-2">
+        {/* Command palette affordance — Ctrl+K is keyboard-only, so touch
+            users get a real button that opens the same palette. */}
+        <button
+          type="button"
+          onClick={() =>
+            window.dispatchEvent(new CustomEvent("open-command-palette"))
+          }
+          aria-haspopup="dialog"
+          aria-label={
+            locale === "fa" ? "جستجو (پالت فرمان)" : "Search (command palette)"
+          }
+          className="mob-pill cursor-pointer"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            aria-hidden
+          >
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+        </button>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
@@ -171,10 +198,38 @@ export default function Navbar({ locale }: { locale: Locale }) {
               {item.label}
             </Link>
           ))}
-          <div className="mt-8 flex items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted">
+          <div className="mt-8 flex flex-wrap items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted">
             {langSwap}
             <span className="h-px w-8 bg-line" aria-hidden />
             <ThemeToggle locale={locale} />
+            <span className="h-px w-8 bg-line" aria-hidden />
+            {/* Palette affordance — labeled access for touch users who never
+                see the desktop ctrl+K hint. Opens the palette above this
+                overlay, so the overlay must close (scroll re-locks there). */}
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                window.dispatchEvent(new CustomEvent("open-command-palette"));
+              }}
+              aria-haspopup="dialog"
+              className="inline-flex min-h-[44px] cursor-pointer items-center gap-1.5 text-acid transition-colors hover:text-ink"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                aria-hidden
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+              {locale === "fa" ? "جستجو" : "search"}
+            </button>
             <span className="h-px w-8 bg-line" aria-hidden />
             <a
               href="https://donatr.ee/sinisteroid/"
