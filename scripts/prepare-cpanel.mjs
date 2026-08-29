@@ -113,15 +113,28 @@ const htaccessContent = `<IfModule mod_rewrite.c>
   RewriteRule ^$ fa/index.html [L]
   RewriteRule ^$ en/index.html [L]
 
-  # ── Prefixed paths without trailing slash → with trailing slash ───
+  # ── Section pages without trailing slash → canonical slash 301 ────
+  # Fires ONLY for the section INDEX (en/blog, fa/work, …). Individual
+  # post URLs never get an external redirect here: a 301 in front of the
+  # dynamic renderer can resolve to a 404/500 (e.g. a post still a draft
+  # or not yet in MySQL when crawled) and Google records the whole crawl
+  # as a "Redirect error" — exactly what Search Console flagged for DB-only
+  # posts. Post URLs below are served with INTERNAL rewrites (200) only.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^(en|fa)/(blog|work|skills|education|showcase)$ $1/$2/ [R=301,L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(en|fa)/blog/([^./]+)$ $1/blog/$2/ [R=301,L]
 
-  # ── Locale-prefixed without trailing slash → serve index.html ──
-  RewriteRule ^en/blog/([^/]+)$ en/blog/$1/index.html [L]
-  RewriteRule ^fa/blog/([^/]+)$ fa/blog/$1/index.html [L]
+  # ── Static blog post w/o trailing slash → serve index.html (200) ─
+  # Internal rewrite, not a redirect. The page ships its own
+  # <link rel="canonical"> in trailing-slash form, so Google still
+  # consolidates the no-slash and slash variants into one URL.
+  RewriteCond %{REQUEST_URI} ^/en/blog/([^/]+)$
+  RewriteCond %{DOCUMENT_ROOT}/en/blog/%1/index.html -f
+  RewriteRule ^ /en/blog/%1/index.html [L]
+  RewriteCond %{REQUEST_URI} ^/fa/blog/([^/]+)$
+  RewriteCond %{DOCUMENT_ROOT}/fa/blog/%1/index.html -f
+  RewriteRule ^ /fa/blog/%1/index.html [L]
+
+  # ── Locale section index — serve index.html (internal) ──────────
   RewriteRule ^en/blog$ en/blog/index.html [L]
   RewriteRule ^fa/blog$ fa/blog/index.html [L]
   RewriteRule ^en/work$ en/work/index.html [L]
@@ -223,8 +236,20 @@ for (const f of ["_redirects", "_headers", "llms.txt", "llms-full.txt"]) {
 // Deploy dynamic sitemap that reads ALL posts from MySQL (includes DB-only posts).
 // The .htaccess rewrites sitemap.xml → sitemap.php so Google always sees a
 // fresh sitemap with every published post, even ones added after the last build.
-fs.copyFileSync(path.join(build, "sitemap.php"), path.join(out, "sitemap.php"));
-console.log("✓ deployed sitemap.php (dynamic, reads from MySQL)");
+// Patch the seed before copying: the root route must produce /en/ and /fa/,
+// never the malformed /en// (a double-slash <loc> Google flags as a crawl error).
+const sitemapSrc = fs.readFileSync(path.join(build, "sitemap.php"), "utf8");
+const sitemapFixed = sitemapSrc
+  .replace(
+    "$loc  = $hostname . '/en' . $path . '/';",
+    "$loc  = rtrim($hostname . '/en' . $path, '/') . '/';",
+  )
+  .replace(
+    "$locFa = $hostname . '/fa' . $path . '/';",
+    "$locFa = rtrim($hostname . '/fa' . $path, '/') . '/';",
+  );
+fs.writeFileSync(path.join(out, "sitemap.php"), sitemapFixed);
+console.log("✓ deployed sitemap.php (dynamic, reads from MySQL, clean root URLs)");
 // Copy static sitemap.xml from public/ as fallback (locale-prefixed URLs).
 // The .htaccess rewrite serves sitemap.php when PHP is available; this static
 // file is served only if PHP is not configured.
