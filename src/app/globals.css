@@ -652,6 +652,13 @@ body {
     transform: translateX(0);
   }
 }
+/* ── Lock dir="ltr" tickers to LTR animation even under <html dir="rtl"> ──
+   The [dir="rtl"] selector above matches ANY ancestor, so in the Persian
+   page it hijacks the footer ASCII bands (which set dir="ltr" on purpose).
+   These overrides — same specificity, later in source order — win the
+   cascade and guarantee crossed-band motion in both languages.            */
+[dir="ltr"] .ticker-track { animation-name: ticker-run; direction: ltr; }
+
 
 /* Inverted acid band used by diagonal marquees */
 .ticker-band {
@@ -1663,10 +1670,19 @@ html .icon-moon { display: none; }
   --color-line: rgba(16, 94, 76, 0.22);
   --color-ink: #0a140c;
   --color-muted: #55695c;
-  --color-accent: #007a8c;
-  --color-accent-2: #006376;
+  /* Accent darkened for AA: stock #007a8c is only ~4.5:1 on the light bg,
+     too close to the 4.5 bar once opacity/aliasing is applied (the footer
+     logo at 100% now lands ~6.6:1, links and labels ≥ 6:1). */
+  --color-accent: #005f73;
+  --color-accent-2: #005467;
   --color-accent-3: #24565c;
   --color-acid: #567d00;
+
+  /* AA-safe accent text variants (readable on --color-bg). The stock
+     acid/accent tones are only ~4.3–4.6:1, too close to the 4.5 bar for
+     small mono labels (hero sig-badge, footer rail indices, logo ID). */
+  --color-acid-ink: #3f5b00;
+  --color-accent-ink: #00596b;
 
   --rgb-accent: 0, 122, 140;
   --rgb-accent-2: 0, 99, 118;
@@ -1674,6 +1690,10 @@ html .icon-moon { display: none; }
   --rgb-acid: 86, 125, 0;
   --rgb-ink: 10, 20, 12;
 }
+
+/* AA-safe accent labels in light mode (7.1:1 acid, 6.3:1 cyan on #f2f6ee) */
+[data-theme="light"] .sig-badge { color: var(--color-acid-ink); }
+[data-theme="light"] .logo-id { color: var(--color-accent-ink); }
 
 [data-theme="light"] ::selection { color: #ffffff; }
 [data-theme="light"] ::-webkit-scrollbar-track { background: #e9eee6; }
@@ -2788,7 +2808,7 @@ html .icon-moon { display: none; }
   padding: 0.42rem 0.75rem;
   border-radius: 9999px;
   border: 1px solid var(--color-line);
-  background: rgba(2, 5, 3, 0.72);
+  background: var(--color-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -2837,6 +2857,41 @@ html .icon-moon { display: none; }
   box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.6);
 }
 .dock-index { font-size: 0.55rem; color: rgba(var(--rgb-accent), 0.85); }
+
+/* Footer rail index numbers — acid small-caps; light theme uses the
+   AA-safe acid-ink variant so the 4.5:1 contrast bar is always met. */
+.foot-idx { color: var(--color-acid); }
+[data-theme="light"] .foot-idx { color: var(--color-acid-ink); }
+
+/* Ctrl+K affordance in the dock — a real button that opens the palette.
+   Discovery for the keyboard-first palette; mirrors dock-link hover voice. */
+.kbd-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.28rem 0.5rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color 0.22s ease, border-color 0.22s ease;
+}
+.kbd-hint:hover,
+.kbd-hint:focus-visible {
+  color: var(--color-acid);
+  border-color: rgba(var(--rgb-acid), 0.55);
+}
+.kbd-hint:focus-visible {
+  outline: 2px solid var(--color-acid);
+  outline-offset: 2px;
+}
+.kbd-hint .kbd-key {
+  color: var(--color-acid);
+  border-bottom: 1px solid rgba(var(--rgb-acid), 0.5);
+}
 .dock-sep {
   width: 1px;
   align-self: stretch;
@@ -2963,10 +3018,13 @@ html .icon-moon { display: none; }
   animation: none;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .tx-cursor { animation: tx-blink 1.15s steps(2, start) infinite; }
+  .tx-cursor { animation: tx-blink 1.15s linear infinite; }
 }
 @keyframes tx-blink {
-  to { visibility: hidden; }
+  /* Discrete opacity blink — animating `visibility` is flagged by Lighthouse
+     as a non-composited animation; opacity runs on the compositor. */
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 /* Angled full-bleed hazard marquee band */
@@ -3455,6 +3513,9 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
 /* Reverse companion ticker */
 .ticker-rev .ticker-track { animation-direction: reverse; }
 [dir="rtl"] .ticker-rev .ticker-track { animation-direction: normal; }
+/* Re-lock dir="ltr" reversed bands to true reverse (opposite direction)
+   in RTL pages, so row-a and row-b always cross regardless of document dir. */
+[dir="ltr"] .ticker-rev .ticker-track { animation-direction: reverse; direction: ltr; }
 
 /* Hero portrait plate treatment */
 .plate-orbit { position: absolute; inset: -4.5% -7%; border-radius: 9999px; border: 1px dashed rgba(var(--rgb-accent), 0.4); pointer-events: none; }

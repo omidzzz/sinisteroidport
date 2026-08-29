@@ -130,6 +130,12 @@ export default function GLBackground() {
     if (!canvas) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Touch / coarse-pointer devices get a single painted frame: a full-page
+    // per-pixel shader loop is pure battery drain on phones and dominates the
+    // main thread in mobile performance audits. Desktop (fine pointer) keeps
+    // the slow-drifting animation.
+    const coarse = !window.matchMedia("(pointer: fine)").matches;
+    const staticFrame = reduced || coarse;
     const gl = canvas.getContext("webgl", { antialias: false, alpha: false });
     if (!gl) return; // CSS bg on the wrapper is the fallback
 
@@ -167,7 +173,7 @@ export default function GLBackground() {
     let my = 0;
     let tx = 0;
     let ty = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1);
 
     const resize = () => {
       canvas.width = Math.floor(canvas.clientWidth * dpr);
@@ -182,13 +188,17 @@ export default function GLBackground() {
       tx = (e.clientX / window.innerWidth) * 2 - 1;
       ty = -((e.clientY / window.innerHeight) * 2 - 1);
     };
-    if (!reduced) window.addEventListener("mousemove", onMove, { passive: true });
+    if (!staticFrame) window.addEventListener("mousemove", onMove, { passive: true });
 
     let raf = 0;
+    let last = 0;
     const start = performance.now();
-    const frame = () => {
+    const FPS = 30; // soft cap: the nebula drifts slowly, so 30fps reads identically
+    const frame = (ts: number) => {
       raf = requestAnimationFrame(frame);
       if (document.hidden) return;
+      if (ts - last < 1000 / FPS) return;
+      last = ts;
       mx += (tx - mx) * 0.04;
       my += (ty - my) * 0.04;
       gl.uniform1f(uTime, (performance.now() - start) / 1000);
@@ -196,7 +206,7 @@ export default function GLBackground() {
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
 
-    if (reduced) {
+    if (staticFrame) {
       // single static frame, no loop
       gl.uniform1f(uTime, 21.0);
       gl.uniform2f(uMouse, 99, 99);
@@ -208,7 +218,7 @@ export default function GLBackground() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMove);
+      if (!staticFrame) window.removeEventListener("mousemove", onMove);
       window.removeEventListener("themechange", onTheme);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };

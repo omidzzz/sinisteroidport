@@ -95,6 +95,26 @@ export default function Navbar({ locale }: { locale: Locale }) {
 
           <span className="dock-sep" aria-hidden />
 
+          {/* Command-palette affordance — the palette is keyboard-first
+              (Ctrl+K / /) but nothing advertised it. A real button keeps it
+              discoverable for pointer users and opens it on demand. */}
+          <button
+            type="button"
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("open-command-palette"))
+            }
+            aria-haspopup="dialog"
+            aria-label={
+              fa ? "باز کردن پالت فرمان (Ctrl+K)" : "Open command palette (Ctrl+K)"
+            }
+            className="kbd-hint cursor-pointer"
+          >
+            <span aria-hidden>ctrl</span>
+            <span aria-hidden className="kbd-key">
+              K
+            </span>
+          </button>
+
           <ThemeToggle locale={locale} />
           <span className="ps-3 pe-1 font-mono text-[0.72rem] uppercase tracking-[0.12em]">
             {langSwap}

@@ -40,7 +40,7 @@ export default function Footer({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <footer className="relative mt-32 overflow-hidden border-t border-line">
+    <footer className="relative mt-32 overflow-hidden border-t border-line bg-bg">
       {/* crossed meta bands */}
       <div aria-hidden className="cross-strip my-10 select-none">
         {[false, true].map((rev) => (
@@ -80,7 +80,7 @@ export default function Footer({ locale }: { locale: Locale }) {
                     href={loc(locale, FOOT_PATHS[i])}
                     className="group inline-flex items-baseline gap-3 font-display text-base font-bold uppercase tracking-wide text-ink transition-colors hover:text-acid"
                   >
-                    <span className="font-mono text-[0.58rem] tracking-[0.2em] text-acid/80">
+                    <span className="foot-idx font-mono text-[0.58rem] tracking-[0.2em]">
                       {item.index}
                     </span>
                     {item.label}
@@ -137,7 +137,7 @@ export default function Footer({ locale }: { locale: Locale }) {
             </p>
 
             {/* easter egg lives here too — logo accepts 7 secret clicks */}
-            <div className="mt-10 opacity-90">
+            <div className="mt-10">
               <LogoType variant="full" activate className="text-lg" />
             </div>
 
@@ -170,7 +170,7 @@ export default function Footer({ locale }: { locale: Locale }) {
             </p>
             <div className="mt-6 space-y-3.5">
               <p className="stat-row"><span>{fa ? "شهر" : "City"}</span><b>{t.city}</b></p>
-              <p className="stat-row"><span>{fa ? "سال" : "Year"}</span><b>{year}</b></p>
+              <p className="stat-row"><span>{fa ? "سال" : "Year"}</span><b suppressHydrationWarning>{year}</b></p>
               <p className="stat-row"><span dir="ltr">Domain</span><b dir="ltr">sinisteroid.ir</b></p>
               <p className="stat-row"><span>{fa ? "حالت" : "Mode"}</span><b>RAVE / VOID</b></p>
             </div>
@@ -188,7 +188,7 @@ export default function Footer({ locale }: { locale: Locale }) {
 
         {/* ── floor bar ── */}
         <div className="mt-16 flex flex-col items-start justify-between gap-5 border-t border-line pt-6 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-muted sm:flex-row sm:items-center">
-          <p>
+          <p suppressHydrationWarning>
             © {year} {t.rights}
           </p>
           <span aria-hidden className="hidden tracking-[0.3em] md:inline">

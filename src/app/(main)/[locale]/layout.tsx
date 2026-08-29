@@ -15,8 +15,11 @@ import GLBackground from "@/components/GLBackground";
 import ProgressThread from "@/components/ProgressThread";
 import GridLines from "@/components/GridLines";
 import Cursor from "@/components/Cursor";
-import CommandPalette, { type CmdEntry } from "@/components/CommandPalette";
-import EasterEgg from "@/components/EasterEgg";
+import {
+  CommandPaletteLazy,
+  EasterEggLazy,
+} from "@/components/CommandPaletteLazy";
+import type { CmdEntry } from "@/components/CommandPalette";
 import { getAllPosts } from "@/lib/posts";
 import { postTitle } from "@/lib/post-helpers";
 import skillsData from "@/data/skills.json";
@@ -109,6 +112,13 @@ export async function generateMetadata({
       "Personal portfolio of Omid – adaptive frontend developer with skills in React, CSS, and JavaScript. Based in Tehran, Iran.",
     authors: [{ name: "Omid" }],
     manifest: "/manifest.json",
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "48x48" },
+        { url: "/logo192.png", type: "image/png", sizes: "192x192" },
+      ],
+      apple: "/apple-touch-icon.png",
+    },
     ...(isLocale(locale)
       ? {
           alternates: {
@@ -196,8 +206,8 @@ export default async function LocaleRootLayout({
         <GridLines />
         <div aria-hidden className="noise" />
         <Cursor />
-        <CommandPalette locale={locale} entries={entries} />
-        <EasterEgg locale={locale} />
+        <CommandPaletteLazy locale={locale} entries={entries} />
+        <EasterEggLazy locale={locale} />
         {/* Structured data: site + owner entity, visible on every page */}
         <JsonLd data={[personJsonLd(locale), websiteJsonLd(locale)]} />
         <Navbar locale={locale} />

@@ -1,6 +1,6 @@
 {
   "name": "sinisteroid-next",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "Omid – Frontend Developer Portfolio (Next.js)",
   "scripts": {
@@ -29,5 +29,15 @@
   },
   "allowScripts": {
     "sharp@0.34.5": true
-  }
+  },
+  "browserslist": [
+    "chrome >= 100",
+    "edge >= 100",
+    "firefox >= 100",
+    "chromeandroid >= 100",
+    "firefoxandroid >= 100",
+    "samsung >= 17",
+    "safari >= 15.6",
+    "ios_saf >= 15.6"
+  ]
 }

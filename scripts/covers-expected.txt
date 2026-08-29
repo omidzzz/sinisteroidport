@@ -1,0 +1,14 @@
+/api/uploads/1780346163845-cover.webp
+/api/uploads/1780426069-modern-frontend-design-techniques-cover.webp
+/api/uploads/1781729383-ollama-the-engine-behind-local-ai-cover.webp
+/api/uploads/1781891974-cline-ai-coding-agent-cover.webp
+/api/uploads/1782044505-open-webui-the-missing-interface-for-local-ai-cover.webp
+/api/uploads/1782129443-the-death-of-traditional-websites-designing-for-ai-agents-cover.webp
+/api/uploads/1782220718-seo-vs-geo-whats-the-difference-cover.webp
+/api/uploads/1782681993-zero-click-search-is-here-now-what-cover.webp
+/api/uploads/1785959651-from-clicks-to-conversations-why-content-strategy-is-obsolete.webp
+/api/uploads/1786391602-Content-Clusters-for-GEO-How-to-Build-Topical-Authority-That-AI-Engines-Trust.webp
+/api/uploads/1786553310-1786500001-your-ai-tools-are-spying-on-you-cover.webp
+/api/uploads/1786757603-claude-code-vs-cline-2026-cover--2-.webp
+/api/uploads/1787457836-1787000001-is-chatgpt-search-killing-google-cover.webp
+/api/uploads/1787898426-ai-overviews-ctr-35-percent-cover.webp

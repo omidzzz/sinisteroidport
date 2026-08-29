@@ -247,7 +247,7 @@ export default async function HomePage({
                     <span className="mod-idx">M.{String(i + 1).padStart(2, "0")}</span>
                     <ArrowIcon className="size-5 text-muted transition-all duration-300 group-hover:text-acid" />
                   </div>
-                  <h3 className="mod-title text-[clamp(1.05rem,2vw,1.45rem)]">{service.title}</h3>
+                  <h2 className="mod-title text-[clamp(1.05rem,2vw,1.45rem)]">{service.title}</h2>
                   <p className="mod-desc">{service.description}</p>
                 </article>
               </Tilt>

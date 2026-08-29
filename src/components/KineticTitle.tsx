@@ -27,17 +27,36 @@ export default function KineticTitle({
     let mx = -9999;
     let my = -9999;
     let raf = 0;
+    // Only run a pass when the pointer actually moved — the effect is a pure
+    // function of pointer position, so a resting cursor needs zero per-frame
+    // layout reads (each frame previously cost letters.length forced reflows).
+    let dirty = true;
 
     const loop = () => {
       raf = requestAnimationFrame(loop);
-      for (const el of letters) {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < -80 || r.top > window.innerHeight + 80) continue;
+      if (!dirty) return;
+      dirty = false;
+
+      // READ phase: collect every rect before touching styles. Interleaving
+      // getBoundingClientRect() with style writes forces a synchronous
+      // reflow per letter (layout thrashing — the "Forced reflow" audit).
+      const rects: (DOMRect | null)[] = new Array(letters.length);
+      for (let i = 0; i < letters.length; i++) {
+        const r = letters[i].getBoundingClientRect();
+        rects[i] =
+          r.bottom < -80 || r.top > window.innerHeight + 80 ? null : r;
+      }
+
+      // WRITE phase: batch all style mutations after the reads.
+      for (let i = 0; i < letters.length; i++) {
+        const r = rects[i];
+        if (!r) continue;
         const dx = mx - (r.left + r.width / 2);
         const dy = my - (r.top + r.height / 2);
         const dist = Math.hypot(dx, dy);
         const influence = Math.max(0, 1 - dist / 200);
         const weight = 300 + influence * 600; // 300 → 900
+        const el = letters[i];
         el.style.fontVariationSettings = `"wght" ${weight.toFixed(0)}`;
         el.style.transform = `translateY(${(-influence * 6).toFixed(2)}px)`;
       }
@@ -46,10 +65,12 @@ export default function KineticTitle({
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
+      dirty = true;
     };
     const onLeave = () => {
       mx = -9999;
       my = -9999;
+      dirty = true;
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });

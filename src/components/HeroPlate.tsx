@@ -71,6 +71,7 @@ export default function HeroPlate({ locale }: { locale: Locale }) {
             width={720}
             height={900}
             priority
+            fetchPriority="high"
             sizes="(max-width: 1024px) 80vw, 22rem"
             className="hero-plate-img h-full w-full object-cover"
           />

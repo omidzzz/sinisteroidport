@@ -23,8 +23,8 @@ ok("scroll-driven progress (animation-timeline)", has("animation-timeline"));
 ok("view transitions (@view-transition)", has("@view-transition"));
 // CRIMSON VOID ships a dark (default) + light scheme — both branches must exist
 ok("light+dark theme tokens", has("color-scheme") && /data-theme=?["']?light/.test(allCss));
-ok("neon red accent token (#ff1744)", has("#ff1744"));
-ok("readable command console nav", has(".command-bar"));
+ok("brand accent tokens (acid + cyan)", has("--color-acid") && has("--color-accent"));
+ok("readable console-dock nav", has(".dock-wrap") && has(".dock-link"));
 ok("content-visibility util", has("content-visibility:auto"));
 ok("RTL prose fix", /\[dir=rtl\][^{]*\.prose-post/.test(allCss));
 
@@ -34,13 +34,13 @@ const post = fs.readFileSync(
   "out/en/blog/seo-vs-geo-whats-the-difference/index.html",
   "utf8"
 );
-ok("forced dark on post page", /<html[^>]*data-theme="dark"/.test(post));
+ok("dark SSR default + no-flash theme init", post.includes('localStorage.getItem("theme")') && has("color-scheme:dark"));
 ok("reading-progress element", post.includes('class="reading-progress"'));
 ok("TL;DR callout", post.includes("(TL;DR)"));
 ok("RSS autodiscovery link", /rel="alternate" type="application\/rss\+xml"/.test(post));
 ok("heading anchors (sec-*)", post.includes('id="sec-'));
 ok("related reading section", post.includes("(Related reading)"));
-ok("og:image default card", /property="og:image" content="https:\/\/sinisteroid\.ir\/og-default\.jpg"/.test(post));
+ok("og:image absolute for post cover", /property="og:image" content="https:\/\/sinisteroid\.ir\/api\/uploads\/seo-vs-geo/.test(post));
 ok("twitter:card", /name="twitter:card" content="summary_large_image"/.test(post));
 
 // JSON-LD on posts
@@ -88,7 +88,8 @@ console.log("\n=== HOME ===");
 const home = fs.readFileSync("out/en/index.html", "utf8");
 ok("Person + WebSite schema", home.includes('"@type":"Person"') && home.includes('"@type":"WebSite"'));
 // CRIMSON VOID: SSR defaults to dark + a no-flash script restores a saved light theme
-ok("default dark + inline theme script on home", /<html[^>]*data-theme="dark"/.test(home) && home.includes("document.documentElement.setAttribute(\"data-theme\",t);"));
+ok("dark SSR default + inline no-flash theme script", has("color-scheme:dark") && home.includes('localStorage.getItem("theme")'));
+ok("default og:image card (og-default.jpg)", /property="og:image" content="https:\/\/sinisteroid\.ir\/og-default\.jpg"/.test(home));
 ok("RSS autodiscovery link", /application\/rss\+xml/.test(home));
 
 // ── Custom SVG icons (no glyph characters) ───────────────────────────
@@ -107,8 +108,8 @@ ok("spark SVG in ticker", home.includes("M12 2v20M3.34 7l17.32 10"));
 ok(
   "theme toggle in nav (moon + sun SVGs)",
   home.includes("M21 12.79A9 9 0 1 1 11.21 3") &&
-    home.includes("viewBox=\"0 0 24 24\"") &&
-    /<html[^>]*data-theme="dark"/.test(home)
+    home.includes("icon-sun") &&
+    home.includes("icon-moon")
 );
 ok("ticker forced LTR", has("direction:ltr") && !has("ticker-move-rtl"));
 
@@ -136,8 +137,8 @@ ok("noindex meta", /name="robots" content="noindex[^"]*"/.test(redir));
 // ── Scroll-driven flourishes ─────────────────────────────────────────
 console.log("\n=== SCROLL FLOURISHES ===");
 ok("ticker on home", home.includes('class="ticker'));
-ok("x-rule elements on home", (home.match(/x-rule/g) || []).length >= 3);
-ok("parallax portrait frame", home.includes("parallax-frame"));
+ok("x-rule divider in blog-post related section", post.includes('class="x-rule"'));
+ok("parallax portrait frame (hero plate)", home.includes("hero-plate-frame") && home.includes("hero-plate-img"));
 const faHome = fs.readFileSync("out/fa/index.html", "utf8");
 ok("RTL ticker keyframe", /data-theme/.test("") || true);
 ok("FA ticker present", faHome.includes("ticker-track"));
@@ -152,17 +153,17 @@ ok("prism conic orbit", has("@keyframes prism-orbit"));
 // ── Navbar uniformity ────────────────────────────────────────────────
 console.log("\n=== NAVBAR ===");
 ok(
-  "command console + orbital overlay on post page",
-  post.includes("command-bar") && post.includes("overlay-veil")
+  "console dock + orbital overlay on post page",
+  post.includes("dock-wrap") && post.includes("chip-corner") && post.includes("overlay-veil")
 );
 ok("auto-hide transform classes", post.includes("-translate-y-full") || post.includes("transition-transform"));
 ok("SVG toggle icons rendered", post.includes('stroke="currentColor"') && post.includes("viewBox=\"0 0 24 24\""));
-ok("post cover parallax frame", long.includes("parallax-frame"));
-ok("related section x-rule", post.split("(Related reading)")[0].includes("x-rule") || true);
+ok("post cover frame", long.includes("post-cover"));
+ok("related section x-rule", post.includes('class="x-rule"'));
 
 // footer fill link
 const foot = fs.readFileSync("out/en/index.html", "utf8");
-ok("footer fill-hover", foot.includes("fill-hover"));
+ok("footer reach chips + back-to-top", foot.includes("chip-brk") && foot.includes("ring-top"));
 
 // ── Fonts ────────────────────────────────────────────────────────────
 console.log("\n=== FONTS ===");
@@ -181,17 +182,22 @@ ok("RTL display override", /\[lang=fa\][^{]*\{[^}]*--font-display/.test(allCss))
 ok("Syne @font-face self-hosted", /font-family:Syne,Syne Fallback/.test(allCss));
 ok("Kufi @font-face self-hosted", /font-family:Noto Kufi Arabic,Noto Kufi Arabic Fallback/.test(allCss));
 
-// PHP template parity (deployed dynamic post pages)
-console.log("\n=== PHP TEMPLATE ===");
+// blog-post-template.php is now a meta-swapper: it loads the prerendered
+// React shell and swaps its <head> for DB-backed SEO metadata, so DB-only
+// posts get the same chrome/theme/nav with real per-post metadata.
+console.log("\n=== PHP TEMPLATE (meta-swapper shell) ===");
 const php = fs.readFileSync("scripts/blog-post-template.php", "utf8");
-ok("desktop nav (.dnav)", php.includes('class="dnav"'));
-ok("desktop nav hidden below md", php.includes(".topbar-in .mnav-btn{display:none}"));
-ok("theme toggle with SVG icons", php.includes("theme-btn") && php.includes("svg_moon") && php.includes("svg_sun"));
-ok("no-flash theme script", php.includes('localStorage.getItem("theme")'));
-ok("auto-hide navbar JS", php.includes("nav-hidden"));
-ok("light theme vars", php.includes("html[data-theme=light]"));
+ok("loads prerendered React shell", php.includes("blog/live/index.html"));
+ok("strips shell generic headline head", php.includes("preg_replace('~<title>"));
+ok("injects real <title>", php.includes("— Sinisteroid</title>"));
+ok("locale-prefixed canonical", php.includes('rel="canonical"'));
+ok("hreflang en+fa alternates", php.includes('hreflang="en"') && php.includes('hreflang="fa"'));
+ok("og article metadata + locale", php.includes('property="og:type" content="article"') && php.includes('property="og:locale"'));
+ok("Article JSON-LD", php.includes("'@type' => 'Article'"));
+ok("404 on draft/missing, 500 on shell fail", php.includes("fail($locale, 404)") && php.includes("fail($locale, 500)"));
+ok("escapes all DB output", php.includes("htmlspecialchars"));
 ok("no glyph arrows left in template", !/[→←✳]/.test(php));
-ok("display font on .title", php.includes("'Syne','Space Grotesk',sans-serif") && php.includes("'Noto Kufi Arabic'"));
+ok("dynamic pages keep no-flash theme script", fs.readFileSync("out/en/blog/live/index.html", "utf8").includes('localStorage.getItem("theme")'));
 
 // ── Fixes: FA kinetics, light-mode alerts, PHP burger specificity ────
 console.log("\n=== FIXES ===");
@@ -205,6 +211,25 @@ const faWordSample = /data-ch="true"[^>]*>([^<]{2,})</.exec(faHomeChrome)?.[1];
 ok("FA spans contain whole words (joined script)", !!faWordSample && faWordSample.length >= 2);
 ok("--warn token in CSS", has("--warn"));
 ok("warn utilities generated", /text-\\\(--warn\\\)|border-\\\(--warn\\\)/.test(allCss));
-ok("PHP burger hidden with specificity", php.includes(".topbar-in .mnav-btn{display:none}"));
+ok("template strips + re-injects shell JSON-LD", php.includes("application/ld+json"));
+
+// ── Marquee: infinite in both LTR and RTL ─────────────────────────
+console.log("\n=== MARQUEE FIXES ===");
+ok("LTR ticker override in CSS", has("[dir=ltr] .ticker-track"));
+ok("LTR ticker-rev override in CSS", has("[dir=ltr] .ticker-rev .ticker-track"));
+ok("direction:ltr present in CSS", has("direction:ltr"));
+ok("no ticker-move-rtl (old class)", !has("ticker-move-rtl"));
+ok("FA page ticker-track rendered", faHome.includes("ticker-track"));
+ok("RTL ticker keyframe for FA pages", has("ticker-run-rtl"));
+
+// ── Sitemap: dynamic + static fallback ────────────────────────────
+console.log("\n=== SITEMAP FIXES ===");
+ok("sitemap.php deployed to out/", fs.existsSync("out/sitemap.php"));
+ok("sitemap rewrite rule in .htaccess", fs.readFileSync("out/.htaccess", "utf8").includes("sitemap.php"));
+ok("static sitemap.xml locale-prefixed", fs.readFileSync("out/sitemap.xml", "utf8").includes("/en/blog/"));
+ok("robots.txt has LLM sitemaps", fs.readFileSync("out/robots.txt", "utf8").includes("llms.txt"));
+ok("DB posts query includes status filter", fs.readFileSync("out/sitemap.php", "utf8").includes("status = 'published'"));
+ok("sitemap.php generates /en/ and /fa/ URLs", fs.readFileSync("out/sitemap.php", "utf8").includes("/en/blog/") && fs.readFileSync("out/sitemap.php", "utf8").includes("/fa/blog/"));
+ok("sitemap.php has image sitemap namespace", fs.readFileSync("out/sitemap.php", "utf8").includes("xmlns:image"));
 
 console.log("\nDone.");

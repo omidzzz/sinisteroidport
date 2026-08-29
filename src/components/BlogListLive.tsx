@@ -64,6 +64,8 @@ export default function BlogListLive({
     };
   }, []);
 
+  const staticSlugs = new Set(initial.map((p) => p.slug));
+
   return (
     <div className="issue-grid">
       {items.map((post, i) => {
@@ -73,53 +75,70 @@ export default function BlogListLive({
         const fallback = isFallbackTranslation(post, locale);
         const tags = Array.isArray(post.tags) ? post.tags : [];
         const cover = post.featuredImage?.src || "";
+        const href = loc(locale, `/blog/${post.slug}`);
+        const isStatic = staticSlugs.has(post.slug);
+        const cls = "issue-card group";
+        const card = (
+          <>
+            {cover && (
+              <div className="bento-frame post-thumb">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={cover}
+                  alt=""
+                  width={424}
+                  height={240}
+                  decoding="async"
+                  loading="lazy"
+                  onError={(e) =>
+                    (e.currentTarget.closest(".post-thumb") as HTMLElement | null)?.classList.add(
+                      "no-cover"
+                    )
+                  }
+                />
+                <span aria-hidden className="bento-scan" />
+              </div>
+            )}
+            <span className="issue-number" aria-hidden>
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <ArrowIcon className="issue-arrow" />
+            <div className="issue-meta">
+              <span dir="ltr">{date}</span>
+              {fallback && <span className="text-accent">{t.fallbackNote}</span>}
+            </div>
+            <h2 className="issue-title">{title}</h2>
+            {excerpt && (
+              <p className="issue-excerpt">
+                {excerpt.length > 150 ? `${excerpt.slice(0, 150)}…` : excerpt}
+              </p>
+            )}
+            {tags.length > 0 && (
+              <div className="issue-tags">
+                {tags.slice(0, 3).map((tag) => (
+                  <i key={tag}>{tag}</i>
+                ))}
+              </div>
+            )}
+          </>
+        );
+        // DB-only posts (not in the static export) have no RSC payload to
+        // prefetch — a plain anchor does a full load straight to the
+        // server-rendered page (api/post.php) and skips the 404 prefetch.
+        if (isStatic) {
+          return (
+            <Reveal key={post.slug} delay={(i % 4) * 50}>
+              <Link href={href} className={cls} prefetch>
+                {card}
+              </Link>
+            </Reveal>
+          );
+        }
         return (
           <Reveal key={post.slug} delay={(i % 4) * 50}>
-            <Link
-              href={loc(locale, `/blog/${post.slug}`)}
-              className="issue-card group"
-            >
-              {cover && (
-                <div className="bento-frame post-thumb">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={cover}
-                    alt=""
-                    width={424}
-                    height={240}
-                    decoding="async"
-                    loading="lazy"
-                    onError={(e) =>
-                      (e.currentTarget.closest(".post-thumb") as HTMLElement | null)?.classList.add(
-                        "no-cover"
-                      )
-                    }
-                  />
-                  <span aria-hidden className="bento-scan" />
-                </div>
-              )}
-              <span className="issue-number" aria-hidden>
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <ArrowIcon className="issue-arrow" />
-              <div className="issue-meta">
-                <span dir="ltr">{date}</span>
-                {fallback && <span className="text-accent">{t.fallbackNote}</span>}
-              </div>
-              <h2 className="issue-title">{title}</h2>
-              {excerpt && (
-                <p className="issue-excerpt">
-                  {excerpt.length > 150 ? `${excerpt.slice(0, 150)}…` : excerpt}
-                </p>
-              )}
-              {tags.length > 0 && (
-                <div className="issue-tags">
-                  {tags.slice(0, 3).map((tag) => (
-                    <i key={tag}>{tag}</i>
-                  ))}
-                </div>
-              )}
-            </Link>
+            <a href={href} className={cls}>
+              {card}
+            </a>
           </Reveal>
         );
       })}

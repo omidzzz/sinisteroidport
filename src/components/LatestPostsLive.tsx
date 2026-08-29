@@ -7,6 +7,7 @@ import type { Post } from "@/lib/posts";
 import {
   isFallbackTranslation,
   postTitle,
+  postDateKey,
 } from "@/lib/post-helpers";
 import { loc, type Locale } from "@/lib/i18n";
 import { ArrowIcon } from "./icons";
@@ -44,7 +45,9 @@ export default function LatestPostsLive({
         const latest = [...usable]
           .sort(
             (a, b) =>
-              new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
+              // String compare of "YYYY-MM-DD" keys — matches the build-side
+              // ordering and is timezone-independent (no Date parsing).
+              postDateKey(b.date).localeCompare(postDateKey(a.date))
           )
           .slice(0, 3)
           .map((r) => ({
@@ -67,21 +70,20 @@ export default function LatestPostsLive({
     };
   }, []);
 
+  const staticSlugs = new Set(initial.map((p) => p.slug));
+
   return (
     <div className="post-strip" dir="auto">
       {items.map((post, i) => {
         const title = postTitle(post, locale);
         const cover = post.featuredImage?.src || "";
         const fallback = isFallbackTranslation(post, locale);
-        const date = post.date
-          ? new Date(post.date).toISOString().slice(0, 10)
-          : "";
-        return (
-          <Link
-            key={post.slug}
-            href={loc(locale, `/blog/${post.slug}`)}
-            className="post-card group"
-          >
+        const date = postDateKey(post.date);
+        const href = loc(locale, `/blog/${post.slug}`);
+        const isStatic = staticSlugs.has(post.slug);
+        const cls = "post-card group";
+        const card = (
+          <>
             {cover && (
               <div className="bento-frame post-thumb">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -115,7 +117,22 @@ export default function LatestPostsLive({
             <span className="post-card-title">
               <ScrambleText text={title} />
             </span>
-          </Link>
+          </>
+        );
+        // DB-only posts (not in the static export) have no RSC payload to
+        // prefetch — a plain anchor does a full load straight to the
+        // server-rendered page (api/post.php) and skips the 404 prefetch.
+        if (isStatic) {
+          return (
+            <Link key={post.slug} href={href} className={cls} prefetch>
+              {card}
+            </Link>
+          );
+        }
+        return (
+          <a key={post.slug} href={href} className={cls}>
+            {card}
+          </a>
         );
       })}
     </div>

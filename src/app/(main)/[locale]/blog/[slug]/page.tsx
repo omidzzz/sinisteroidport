@@ -10,6 +10,7 @@ import {
   type Post,
 } from "@/lib/posts";
 import { isLocale, loc, type Locale } from "@/lib/i18n";
+import { formatPostDate } from "@/lib/post-helpers";
 import { seoAlternates, SITE } from "@/lib/seo";
 import {
   JsonLd,
@@ -41,8 +42,14 @@ function coverUrl(post: Post): string {
   return `${SITE}/og-default.jpg`;
 }
 
-/** Schema.org expects ISO 8601 dates; legacy data may carry "YYYY-MM-DD HH:mm:ss". */
+/** Schema.org expects ISO 8601 dates; legacy data may carry "YYYY-MM-DD HH:mm:ss".
+ * Those strings have no timezone — converting them via new Date()/toISOString()
+ * shifts the wall-clock instant and can roll the published date to the previous
+ * day (schema then disagrees with the visible date). Keep naive timestamps as
+ * timezone-less ISO local time instead. */
 function isoDate(value: string): string {
+  const m = value.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}(?::\d{2})?)$/);
+  if (m) return `${m[1]}T${m[2]}${m[2].length === 5 ? ":00" : ""}`;
   const t = new Date(value);
   return Number.isNaN(t.getTime()) ? value : t.toISOString();
 }
@@ -158,7 +165,7 @@ export default async function BlogPostPage({ params }: Props) {
                 className="w-28 shrink-0 font-mono text-xs text-muted"
                 dir="ltr"
               >
-                {new Date(rm.date).toISOString().slice(0, 10)}
+                {formatPostDate(rm.date)}
               </span>
               <span className="flex-1 text-lg font-medium tracking-tight transition-colors duration-300 group-hover:text-accent sm:text-xl">
                 {rm.isFallback && (

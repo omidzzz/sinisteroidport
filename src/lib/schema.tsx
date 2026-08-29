@@ -14,8 +14,13 @@ const AUTHOR = {
   url: SITE,
 } as const;
 
-/** Schema.org expects ISO 8601; legacy data may carry "YYYY-MM-DD HH:mm:ss". */
+/** Schema.org expects ISO 8601; legacy data may carry "YYYY-MM-DD HH:mm:ss".
+ * Naive timestamps (no timezone) are kept as timezone-less ISO local time so
+ * the published date can never roll to the previous day — the JSON-LD must
+ * agree with the date users see on the page. */
 function isoDate(value: string): string {
+  const m = value.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}(?::\d{2})?)$/);
+  if (m) return `${m[1]}T${m[2]}${m[2].length === 5 ? ":00" : ""}`;
   const t = new Date(value);
   return Number.isNaN(t.getTime()) ? value : t.toISOString();
 }

@@ -2,19 +2,19 @@
 
 > Professional frontend developer specializing in React.js, JavaScript, and modern web development based in Tehran, Iran.
 
-Full details: https://sinisteroid.ir/llms-full.txt
+Full details: [llms-full.txt](https://sinisteroid.ir/llms-full.txt)
 
 Last updated: 2026-08-26
 
 ## Key Pages
-- Home: https://sinisteroid.ir/en/
-- Writing (blog): https://sinisteroid.ir/en/blog/
-- Skills: https://sinisteroid.ir/en/skills/
-- Showcase (projects): https://sinisteroid.ir/en/showcase/
-- Work history: https://sinisteroid.ir/en/work/
-- Education: https://sinisteroid.ir/en/education/
-- RSS feed: https://sinisteroid.ir/feed.xml
-- Sitemap: https://sinisteroid.ir/sitemap.xml
+- [Home](https://sinisteroid.ir/en/)
+- [Writing / Blog](https://sinisteroid.ir/en/blog/)
+- [Skills](https://sinisteroid.ir/en/skills/)
+- [Showcase / Projects](https://sinisteroid.ir/en/showcase/)
+- [Work History](https://sinisteroid.ir/en/work/)
+- [Education](https://sinisteroid.ir/en/education/)
+- [RSS Feed](https://sinisteroid.ir/feed.xml)
+- [Sitemap](https://sinisteroid.ir/sitemap.xml)
 
 ## About
 Omid is a frontend developer with a unique background in Translation Studies. He combines linguistic precision with technical expertise to create clean, user-friendly web applications.

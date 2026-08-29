@@ -94,6 +94,14 @@ export default function CommandPalette({
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Dock chip / any external affordance can open the palette by dispatching
+  // this event — keeps the open state private to this component.
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener("open-command-palette", onOpen);
+    return () => window.removeEventListener("open-command-palette", onOpen);
+  }, []);
+
   useEffect(() => setActive(0), [query, open]);
 
   // focus the input on open
@@ -242,7 +250,8 @@ export default function CommandPalette({
 
         {/* footer hint */}
         <div className="flex items-center justify-between border-t border-line px-4 py-2.5 font-mono text-[0.6rem] uppercase tracking-widest text-muted">
-          <span>↑↓</span>
+          <span>ctrl+k · /</span>
+          <span>↑↓ pick</span>
           <span>↵ run</span>
           <span>esc close</span>
         </div>
