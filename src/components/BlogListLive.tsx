@@ -81,7 +81,10 @@ export default function BlogListLive({
   const staticSlugs = new Set(initial.map((p) => p.slug));
 
   return (
-    <div className="issue-grid">
+    // cv-auto: the issue grid is below the hero — skip layout/paint until
+    // the browser actually scrolls near it (contain-intrinsic-size keeps
+    // the scrollbar honest before first render).
+    <div className="cv-auto issue-grid">
       {items.map((post, i) => {
         const title = postTitle(post, locale);
         const excerpt = postExcerpt(post, locale);

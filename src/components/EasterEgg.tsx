@@ -39,8 +39,16 @@ const HELP: Record<string, string | undefined> = {
   date: undefined,
 };
 
-export default function EasterEgg({ locale }: { locale: "en" | "fa" }) {
-  const [open, setOpen] = useState(false);
+export default function EasterEgg({
+  locale,
+  autoOpen = false,
+}: {
+  locale: "en" | "fa";
+  /** Mount already-open — the lazy wrapper mounts the egg on its trigger
+   * (konami / 7 clicks), so the open state must survive into first render. */
+  autoOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(autoOpen);
   const [revealed, setRevealed] = useState(0);
   const [log, setLog] = useState<{ t: string; eol?: boolean }[]>([]);
   const [input, setInput] = useState("");

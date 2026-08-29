@@ -176,6 +176,16 @@ const htaccessContent = `<IfModule mod_rewrite.c>
   </FilesMatch>
 </IfModule>
 
+# ── Compression: smaller HTML/CSS/JS/JSON over the wire ──────────
+# PSI's throttled transfer directly reflects this: the inlined CSS makes
+# each HTML doc sizable, and get_posts.php JSON payloads compress ~80%.
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/javascript application/javascript application/json image/svg+xml application/xml application/rss+xml
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json image/svg+xml application/xml application/rss+xml
+</IfModule>
+
 Options -Indexes
 
 ErrorDocument 404 /404.html`;

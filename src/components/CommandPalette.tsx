@@ -25,11 +25,16 @@ export interface CmdEntry {
 export default function CommandPalette({
   locale,
   entries,
+  autoOpen = false,
 }: {
   locale: Locale;
   entries: CmdEntry[];
+  /** Mount already-open — used by the lazy wrapper when a keyboard shortcut
+   * or the dock chip is the very first interaction (the chunk loads on
+   * demand, so the open state must survive into the first render). */
+  autoOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(autoOpen);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);

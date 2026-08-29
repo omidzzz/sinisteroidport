@@ -241,12 +241,12 @@ export default function BlogPostLive({
         </div>
       )}
 
-      <div className="mt-12">
+      <div className="cv-auto mt-12">
         <ContentRenderer blocks={translation.content} />
       </div>
 
       {translation.faq && translation.faq.length > 0 && (
-        <section className="mt-16 border-t border-line pt-10">
+        <section className="cv-auto mt-16 border-t border-line pt-10">
           <div className="mb-8 flex items-center gap-3">
             <span className="sig-wave" aria-hidden>
               <i /><i /><i /><i /><i />

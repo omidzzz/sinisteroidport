@@ -11,6 +11,7 @@
     "extract-posts": "node scripts/extract-posts.mjs",
     "import-posts": "node scripts/import-posts.mjs",
     "prepare-cpanel": "node scripts/prepare-cpanel.mjs",
+    "audit": "node scripts/audit.mjs",
     "zip-out": "node scripts/zip-out.mjs",
     "deploy": "npm run build && npm run prepare-cpanel && npm run zip-out"
   },

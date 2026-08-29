@@ -25,6 +25,7 @@ yarn-error.log*
 server.log
 server-test.pid
 *.log
+/.lighthouse/
 
 # typescript
 *.tsbuildinfo

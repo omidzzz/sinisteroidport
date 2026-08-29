@@ -205,7 +205,7 @@ export default async function HomePage({
       <Seam cyan />
 
       {/* ══ ACT II · TELEMETRY ═══════════════════════════ */}
-      <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+      <section className="cv-auto shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Rail label={K.tel} icon={<GaugeIcon />} />
         <div className="relative">
           <span aria-hidden dir="ltr" className="scrub-word rev-dir top-[-0.45em]">
@@ -234,7 +234,7 @@ export default async function HomePage({
       <Seam flip />
 
       {/* ══ ACT III · MODULE BAY ═════════════════════════ */}
-      <section className="shell-grid rev relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+      <section className="cv-auto shell-grid rev relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Spotlight className="min-w-0">
           <div className="bay-grid relative">
             {t.services.map((service, i) => (
@@ -260,7 +260,7 @@ export default async function HomePage({
       <Seam cyan flip />
 
       {/* ══ ACT IV · INCOMING TRANSMISSIONS ══════════════ */}
-      <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+      <section className="cv-auto shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Rail label={K.sig} icon={<SignalIcon />} />
         <div className="sig-zone relative min-w-0">
           <span aria-hidden dir="ltr" className="scrub-word bottom-0">
@@ -282,7 +282,7 @@ export default async function HomePage({
       <Seam />
 
       {/* ══ ACT V · MANIFESTO ════════════════════════════ */}
-      <section className="shell-grid relative mx-auto my-20 max-w-[86rem] px-5 sm:px-8">
+      <section className="cv-auto shell-grid relative mx-auto my-20 max-w-[86rem] px-5 sm:px-8">
         <Rail label={K.man} />
         <Spotlight className="relative min-w-0 py-6">
           <span aria-hidden dir="ltr" className="scrub-word top-[-0.35em]">
