@@ -205,7 +205,12 @@ const htaccessContent = `<IfModule mod_rewrite.c>
   # Still blocks external/remote script injection, plugins, framing and
   # form hijacking. Not applied to /api/* (the admin panel embeds its
   # own inline app and is never a public page anyway).
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" env=!SINISTEROID_API
+  # Google Analytics tag carve-outs (gated to Google's measurement
+  # domains only): script-src allows the gtag.js loader from
+  # googletagmanager.com; connect-src allows GA4 collect beacons from
+  # google-analytics.com / analytics.google.com (incl. EU region
+  # subdomains such as region1.*).
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" env=!SINISTEROID_API
 
   # ── Keep the JSON endpoints out of search indexes ─────────────────
   Header set X-Robots-Tag "noindex, nofollow" env=SINISTEROID_API
