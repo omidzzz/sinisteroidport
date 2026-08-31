@@ -15,6 +15,8 @@ import GLBackground from "@/components/GLBackground";
 import ProgressThread from "@/components/ProgressThread";
 import GridLines from "@/components/GridLines";
 import Cursor from "@/components/Cursor";
+import { GoogleTag } from "@/components/GoogleTag";
+import { AnalyticsEvents } from "@/components/AnalyticsEvents";
 import {
   CommandPaletteLazy,
   EasterEggLazy,
@@ -206,6 +208,10 @@ export default async function LocaleRootLayout({
         suppressHydrationWarning
       >
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        {/* GA4: tag loads post-hydration (afterInteractive), event wiring is
+            delegated and renders nothing on screen. */}
+        <GoogleTag />
+        <AnalyticsEvents />
         <ProgressThread />
         <GLBackground />
         <GridLines />
