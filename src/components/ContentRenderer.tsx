@@ -63,7 +63,7 @@ export default function ContentRenderer({ blocks }: { blocks: ContentBlock[] }) 
                     aria-hidden
                     className="font-mono text-xs font-bold text-accent"
                   >
-                    //
+                    {"//"}
                   </span>
                   <span className="text-lg font-semibold text-ink">
                     {block.text}

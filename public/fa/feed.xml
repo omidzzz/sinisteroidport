@@ -6,14 +6,14 @@
     <atom:link href="https://sinisteroid.ir/fa/feed.xml" rel="self" type="application/rss+xml" />
     <description>توسعه فرانت‌اند، طراحی، ابزارهای هوش مصنوعی محلی و آینده جست‌وجو.</description>
     <language>fa-ir</language>
-    <lastBuildDate>Sat, 29 Aug 2026 15:26:20 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 31 Aug 2026 13:20:03 GMT</lastBuildDate>
     <item>
       <title>Content Clusters for GEO: How to Build Topical Authority That AI Engines Trust</title>
       <link>https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>Learn how to build content clusters for Generative Engine Optimization (GEO). Step-by-step framework to create topical authority that gets cited in AI Overviews, ChatGPT, and Perplexity — not just ranked in Google.</description>
-      <category>content</category><category>clusters</category><category>build</category><category>topical</category>
+      <category>content-strategy</category>
     </item>
     <item>
       <title>Design Without Words Is Decoration</title>
@@ -21,7 +21,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/design-without-words-is-decoration/</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>Discover why great design is more than aesthetics. Learn how visual communication, branding, UX design, and design thinking transform design from decoration into a powerful communication tool.</description>
-      <category>design</category><category>without</category><category>words</category><category>decoration</category>
+      <category>frontend-design</category>
     </item>
     <item>
       <title>From Clicks to Conversations: Why Your Content Strategy is Obsolete</title>
@@ -29,7 +29,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>64.82% of searches end without a click. AI agents are replacing clicks with conversations. Here's why your content strategy is obsolete and how to rebuild it for GEO, AI citations, and the conversational web.</description>
-      <category>clicks</category><category>conversations</category><category>content</category><category>strategy</category>
+      <category>content-strategy</category>
     </item>
     <item>
       <title>Modern Techniques in Frontend Design</title>
@@ -37,7 +37,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/modern-frontend-design-techniques/</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>Explore the techniques shaping modern frontend design — from design tokens and motion systems to fluid typography, spatial depth, accessibility, and adaptive color. Build interfaces that communicate and perform.</description>
-      <category>modern</category><category>techniques</category><category>frontend</category><category>design</category>
+      <category>frontend-design</category>
     </item>
     <item>
       <title>Ollama: The Engine Behind Local AI</title>
@@ -45,7 +45,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai/</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>A technical deep dive into Ollama — the open-source runtime powering local large language models. Learn its architecture, quantization tradeoffs, API design, model selection, and security considerations.</description>
-      <category>ollama</category><category>engine</category><category>behind</category><category>local</category>
+      <category>local-ai</category>
     </item>
     <item>
       <title>SEO vs GEO: What's the Difference?</title>
@@ -53,7 +53,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/seo-vs-geo-whats-the-difference/</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>SEO vs GEO explained: what's the difference, why both matter, and how to optimize for traditional search and AI-generated answers in 2026. Includes comparison table, strategies, and checklist.</description>
-      <category>whats</category><category>difference</category>
+      <category>seo-geo</category>
     </item>
     <item>
       <title>Your AI Tools Are Spying on You. Here’s the Fix.</title>
@@ -61,7 +61,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix/</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>Most AI chatbots train on your prompts by default. Learn how to run powerful private AI offline with Ollama and Open WebUI so your data never leaves your machine.</description>
-      <category>tools</category><category>spying</category><category>heres</category>
+      <category>ai-tools</category><category>ai-privacy</category>
     </item>
     <item>
       <title>Zero-Click Search Is Here. Now What?</title>
@@ -69,7 +69,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/zero-click-search-is-here-now-what/</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>64.82% of Google searches now end without a click. AI Overviews push that to 83%. Learn what zero-click search means for SEO, which query types still drive traffic, and the five strategies that work in 2026.</description>
-      <category>zero-click</category><category>search</category>
+      <category>seo-geo</category>
     </item>
     <item>
       <title>کلود کد در برابر کلاین: توسعه‌دهندگان در ۲۰۲۶ کدام عامل کدنویسی هوش مصنوعی را انتخاب کنند؟</title>
@@ -77,7 +77,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/</guid>
       <pubDate>Fri, 14 Aug 2026 22:09:34 GMT</pubDate>
       <description>کلود کد و کلاین دو تا از قابل‌اعتمادترین ابزارهای عامل‌محور کدنویسی در سال ۲۰۲۶ هستند؛ یکی محصولی حرفه‌ای و اشتراکی از آنتروپیک، دیگری یک افزونهٔ رایگان، متن‌باز و مستقل از مدل. در این مقاله قیمت، مدل‌ها، پلتفرم‌ها، میزان خودمختاری و اینکه کدام‌یک واقعاً با روند کاری شما هم‌خوانی دارد را بررسی می‌کنیم.</description>
-      <category>claude-code</category><category>cline</category><category>ai-coding-agent</category><category>ai-coding-assistant</category><category>developer-tools</category><category>agentic-ai</category><category>vs-code-extension</category><category>open-source-ai</category><category>ai-engineering</category><category>anthropic</category>
+      <category>ai-coding-agents</category><category>ai-tools</category><category>open-source-ai</category>
     </item>
     <item>
       <title>مرگ وب‌سایت‌های سنتی: طراحی برای ایجنت‌های هوش مصنوعی</title>
@@ -85,7 +85,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/the-death-of-traditional-websites-designing-for-ai-agents/</guid>
       <pubDate>Sun, 21 Jun 2026 20:30:00 GMT</pubDate>
       <description>بیش از ۶۰٪ از جستجوها اکنون بدون یک کلیک به جایی پایان می‌یابند. ایجنت‌های هوش مصنوعی وب‌سایت شما را بدون دیدن آن مرور می‌کنند. سلسله‌مراتب بصری که ماه‌ها صرف اصلاح آن کردید، hover stateها، انیمیشن‌های اسکرول — هیچ‌کدام ثبت نمی‌شوند. آنچه ثبت می‌شود معماری محتوای شما، داده‌های ساختارمند و این است که آیا یک ماشین می‌تواند در کمتر از یک ثانیه یک پاسخ مفید از HTML شما استخراج کند.</description>
-      <category>ai-agents</category><category>future-of-web-design</category><category>ai-search</category><category>llm-optimization</category><category>geo</category><category>generative-engine-optimization</category><category>llms-txt</category><category>structured-data</category><category>web-architecture</category><category>content-strategy</category>
+      <category>web-architecture</category><category>seo-geo</category><category>content-strategy</category>
     </item>
     <item>
       <title>اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی</title>
@@ -93,7 +93,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/open-webui-the-missing-interface-for-local-ai/</guid>
       <pubDate>Sat, 20 Jun 2026 20:30:00 GMT</pubDate>
       <description>اولاما موتور inference را در اختیار شما می‌گذارد. اوپن وب‌یوآی همه چیز دیگر را — تاریخچه مکالمه، RAG اسناد، کنترل دسترسی چند‌کاربره، صدا، تولید تصویر، و یک سیستم pipeline برای منطق Python سفارشی. این روشی است که یک مدل محلی را به یک پلتفرم هوش مصنوعی کامل تبدیل می‌کند.</description>
-      <category>open-webui</category><category>ollama</category><category>local-ai</category><category>self-hosted-ai</category><category>llm-interface</category><category>ai-tools</category><category>rag</category><category>open-source-ai</category><category>developer-tools</category><category>ai-engineering</category>
+      <category>local-ai</category><category>ai-tools</category><category>open-source-ai</category>
     </item>
     <item>
       <title>کلاین: عامل هوش مصنوعی متن‌باز کدنویسی که جریان کاری توسعه‌دهندگان را بازتعریف می‌کند</title>
@@ -101,7 +101,7 @@
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/cline-the-open-source-ai-coding-agent/</guid>
       <pubDate>Fri, 19 Jun 2026 17:30:00 GMT</pubDate>
       <description>کلاین عامل هوش مصنوعی خودکار و آگاه از context را مستقیماً به VS Code و ترمینال شما می‌آورد. معماری، حالت‌های Plan/Act، یکپارچه‌سازی با مدل‌های محلی Ollama و دلایل برتری آن در اکوسیستم ابزارهای توسعه هوش مصنوعی سال ۲۰۲۶ را بررسی کنید.</description>
-      <category>cline</category><category>ai-coding-assistant</category><category>local-llm</category><category>vs-code-extension</category><category>agentic-ai</category><category>open-source-ai</category><category>developer-tools</category><category>llm-integration</category><category>ai-engineering</category><category>productivity-tools</category>
+      <category>ai-coding-agents</category><category>local-ai</category><category>ai-tools</category><category>open-source-ai</category>
     </item>
   </channel>
 </rss>

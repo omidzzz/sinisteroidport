@@ -4076,6 +4076,14 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
 @media (prefers-reduced-motion:no-preference){.donate-cta .donate-ring{animation:donate-pulse 2.2s ease-out infinite}.donate-heart{animation:heart-beat 1.8s ease-in-out infinite}}
 @media (prefers-reduced-motion:reduce){.donate-cta,.donate-cta::after,.donate-ring,.donate-heart{transition:none!important;animation:none!important}}
 
+/* Dock donate pill — desktop nav CTA. Mirrors .kbd-hint geometry but stays
+   acid-tinted (pill shape, tinted border) so the one commercial link in the
+   dock reads as intentional. Light theme swaps text to the AA-safe acid-ink. */
+.donate-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .68rem;border:1px solid rgba(var(--rgb-acid),.45);border-radius:9999px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-acid);transition:color .22s ease,border-color .22s ease,background-color .22s ease}
+.donate-pill:hover,.donate-pill:focus-visible{border-color:rgba(var(--rgb-acid),.8);background:rgba(var(--rgb-acid),.12)}
+.donate-pill:focus-visible{outline:2px solid var(--color-acid);outline-offset:2px}
+[data-theme="light"] .donate-pill{color:var(--color-acid-ink)}
+
 /* ═══════════════════════════════════════════════════════════════
    V2.2 — PERF-SAFE ORNAMENT PASS
    Additions are paint/composite-only, reduced-motion gated, and

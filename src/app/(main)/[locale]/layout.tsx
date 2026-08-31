@@ -123,7 +123,10 @@ export async function generateMetadata({
       ? {
           alternates: {
             ...seoAlternates("", locale),
-            types: { "application/rss+xml": "/feed.xml" },
+            types: {
+              "application/rss+xml": "/feed.xml",
+              "application/feed+json": "/feed.json",
+            },
           },
         }
       : {}),
@@ -131,6 +134,8 @@ export async function generateMetadata({
       siteName: "Sinisteroid",
       type: "website",
       url: "https://sinisteroid.ir",
+      locale: isLocale(locale) && locale === "fa" ? "fa_IR" : "en_US",
+      alternateLocale: isLocale(locale) && locale === "fa" ? "en_US" : "fa_IR",
       // Dedicated 1200x630 social card (og-default.jpg lives in /public)
       images: [{ url: "/og-default.jpg", width: 1200, height: 630 }],
     },

@@ -1,0 +1,242 @@
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "Omid – Writing",
+  "home_page_url": "https://sinisteroid.ir/en/blog/",
+  "feed_url": "https://sinisteroid.ir/feed.json",
+  "description": "Frontend development, design, local AI tooling, and the shifting landscape of search.",
+  "language": "en-us",
+  "authors": [
+    {
+      "name": "Omid",
+      "url": "https://sinisteroid.ir"
+    }
+  ],
+  "items": [
+    {
+      "id": "https://sinisteroid.ir/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/",
+      "url": "https://sinisteroid.ir/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/",
+      "title": "Content Clusters for GEO: How to Build Topical Authority That AI Engines Trust",
+      "content_text": "Learn how to build content clusters for Generative Engine Optimization (GEO). Step-by-step framework to create topical authority that gets cited in AI Overviews, ChatGPT, and Perplexity — not just ranked in Google.",
+      "summary": "Learn how to build content clusters for Generative Engine Optimization (GEO). Step-by-step framework to create topical authority that gets cited in AI Overviews, ChatGPT, and Perplexity — not just ranked in Google.",
+      "date_published": "2026-08-25T00:00:00.000Z",
+      "tags": [
+        "content-strategy"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1786391602-Content-Clusters-for-GEO-How-to-Build-Topical-Authority-That-AI-Engines-Trust.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/design-without-words-is-decoration/",
+      "url": "https://sinisteroid.ir/en/blog/design-without-words-is-decoration/",
+      "title": "Design Without Words Is Decoration",
+      "content_text": "Discover why great design is more than aesthetics. Learn how visual communication, branding, UX design, and design thinking transform design from decoration into a powerful communication tool.",
+      "summary": "Discover why great design is more than aesthetics. Learn how visual communication, branding, UX design, and design thinking transform design from decoration into a powerful communication tool.",
+      "date_published": "2026-08-25T00:00:00.000Z",
+      "tags": [
+        "frontend-design"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1780346163845-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/",
+      "url": "https://sinisteroid.ir/en/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/",
+      "title": "From Clicks to Conversations: Why Your Content Strategy is Obsolete",
+      "content_text": "64.82% of searches end without a click. AI agents are replacing clicks with conversations. Here's why your content strategy is obsolete and how to rebuild it for GEO, AI citations, and the conversational web.",
+      "summary": "64.82% of searches end without a click. AI agents are replacing clicks with conversations. Here's why your content strategy is obsolete and how to rebuild it for GEO, AI citations, and the conversational web.",
+      "date_published": "2026-08-25T00:00:00.000Z",
+      "tags": [
+        "content-strategy"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1785959651-from-clicks-to-conversations-why-content-strategy-is-obsolete.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/modern-frontend-design-techniques/",
+      "url": "https://sinisteroid.ir/en/blog/modern-frontend-design-techniques/",
+      "title": "Modern Techniques in Frontend Design",
+      "content_text": "Explore the techniques shaping modern frontend design — from design tokens and motion systems to fluid typography, spatial depth, accessibility, and adaptive color. Build interfaces that communicate and perform.",
+      "summary": "Explore the techniques shaping modern frontend design — from design tokens and motion systems to fluid typography, spatial depth, accessibility, and adaptive color. Build interfaces that communicate and perform.",
+      "date_published": "2026-08-25T00:00:00.000Z",
+      "tags": [
+        "frontend-design"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1780426069-modern-frontend-design-techniques-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/ollama-the-engine-behind-local-ai/",
+      "url": "https://sinisteroid.ir/en/blog/ollama-the-engine-behind-local-ai/",
+      "title": "Ollama: The Engine Behind Local AI",
+      "content_text": "A technical deep dive into Ollama — the open-source runtime powering local large language models. Learn its architecture, quantization tradeoffs, API design, model selection, and security considerations.",
+      "summary": "A technical deep dive into Ollama — the open-source runtime powering local large language models. Learn its architecture, quantization tradeoffs, API design, model selection, and security considerations.",
+      "date_published": "2026-08-25T00:00:00.000Z",
+      "tags": [
+        "local-ai"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1781729383-ollama-the-engine-behind-local-ai-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/seo-vs-geo-whats-the-difference/",
+      "url": "https://sinisteroid.ir/en/blog/seo-vs-geo-whats-the-difference/",
+      "title": "SEO vs GEO: What's the Difference?",
+      "content_text": "SEO vs GEO explained: what's the difference, why both matter, and how to optimize for traditional search and AI-generated answers in 2026. Includes comparison table, strategies, and checklist.",
+      "summary": "SEO vs GEO explained: what's the difference, why both matter, and how to optimize for traditional search and AI-generated answers in 2026. Includes comparison table, strategies, and checklist.",
+      "date_published": "2026-08-25T00:00:00.000Z",
+      "tags": [
+        "seo-geo"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1782220718-seo-vs-geo-whats-the-difference-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/",
+      "url": "https://sinisteroid.ir/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/",
+      "title": "Your AI Tools Are Spying on You. Here’s the Fix.",
+      "content_text": "Most AI chatbots train on your prompts by default. Learn how to run powerful private AI offline with Ollama and Open WebUI so your data never leaves your machine.",
+      "summary": "Most AI chatbots train on your prompts by default. Learn how to run powerful private AI offline with Ollama and Open WebUI so your data never leaves your machine.",
+      "date_published": "2026-08-25T00:00:00.000Z",
+      "tags": [
+        "ai-tools",
+        "ai-privacy"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1786553310-1786500001-your-ai-tools-are-spying-on-you-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/zero-click-search-is-here-now-what/",
+      "url": "https://sinisteroid.ir/en/blog/zero-click-search-is-here-now-what/",
+      "title": "Zero-Click Search Is Here. Now What?",
+      "content_text": "64.82% of Google searches now end without a click. AI Overviews push that to 83%. Learn what zero-click search means for SEO, which query types still drive traffic, and the five strategies that work in 2026.",
+      "summary": "64.82% of Google searches now end without a click. AI Overviews push that to 83%. Learn what zero-click search means for SEO, which query types still drive traffic, and the five strategies that work in 2026.",
+      "date_published": "2026-08-25T00:00:00.000Z",
+      "tags": [
+        "seo-geo"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1782681993-zero-click-search-is-here-now-what-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/",
+      "url": "https://sinisteroid.ir/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/",
+      "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+      "content_text": "Claude Code and Cline are two of the most capable agentic coding tools of 2026 — one a polished, subscription-based product from Anthropic, the other a free, open-source, model-agnostic extension. Here's a full head-to-head on pricing, models, platforms, autonomy, and which one actually fits your workflow.",
+      "summary": "Claude Code and Cline are two of the most capable agentic coding tools of 2026 — one a polished, subscription-based product from Anthropic, the other a free, open-source, model-agnostic extension. Here's a full head-to-head on pricing, models, platforms, autonomy, and which one actually fits your workflow.",
+      "date_published": "2026-08-14T22:09:34.000Z",
+      "tags": [
+        "ai-coding-agents",
+        "ai-tools",
+        "open-source-ai"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1786757603-claude-code-vs-cline-2026-cover--2-.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/the-death-of-traditional-websites-designing-for-ai-agents/",
+      "url": "https://sinisteroid.ir/en/blog/the-death-of-traditional-websites-designing-for-ai-agents/",
+      "title": "The Death of Traditional Websites: Designing for AI Agents",
+      "content_text": "Over 60% of searches now end without a single click. AI agents browse your website without seeing it. The visual hierarchy you spent months refining, the hover states, the scroll animations — none of it registers. What does register is your content architecture, your structured data, and whether a machine can extract a useful answer from your HTML in under a second.",
+      "summary": "Over 60% of searches now end without a single click. AI agents browse your website without seeing it. The visual hierarchy you spent months refining, the hover states, the scroll animations — none of it registers. What does register is your content architecture, your structured data, and whether a machine can extract a useful answer from your HTML in under a second.",
+      "date_published": "2026-06-21T20:30:00.000Z",
+      "tags": [
+        "web-architecture",
+        "seo-geo",
+        "content-strategy"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1782129443-the-death-of-traditional-websites-designing-for-ai-agents-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/open-webui-the-missing-interface-for-local-ai/",
+      "url": "https://sinisteroid.ir/en/blog/open-webui-the-missing-interface-for-local-ai/",
+      "title": "Open WebUI: The Missing Interface for Local AI",
+      "content_text": "Ollama gives you the inference engine. Open WebUI gives you everything else — conversation history, document RAG, multi-user access control, voice, image generation, and a pipeline system for custom Python logic. This is how you turn a local model into a complete AI platform.",
+      "summary": "Ollama gives you the inference engine. Open WebUI gives you everything else — conversation history, document RAG, multi-user access control, voice, image generation, and a pipeline system for custom Python logic. This is how you turn a local model into a complete AI platform.",
+      "date_published": "2026-06-20T20:30:00.000Z",
+      "tags": [
+        "local-ai",
+        "ai-tools",
+        "open-source-ai"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1782044505-open-webui-the-missing-interface-for-local-ai-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    },
+    {
+      "id": "https://sinisteroid.ir/en/blog/cline-the-open-source-ai-coding-agent/",
+      "url": "https://sinisteroid.ir/en/blog/cline-the-open-source-ai-coding-agent/",
+      "title": "Cline: The Open-Source AI Coding Agent Redefining Developer Workflows",
+      "content_text": "Cline brings autonomous, context-aware AI coding directly into VS Code and your terminal. Explore its architecture, Plan/Act modes, local LLM integration with Ollama, and why it stands out in the 2026 AI developer tooling landscape.",
+      "summary": "Cline brings autonomous, context-aware AI coding directly into VS Code and your terminal. Explore its architecture, Plan/Act modes, local LLM integration with Ollama, and why it stands out in the 2026 AI developer tooling landscape.",
+      "date_published": "2026-06-19T17:30:00.000Z",
+      "tags": [
+        "ai-coding-agents",
+        "local-ai",
+        "ai-tools",
+        "open-source-ai"
+      ],
+      "image": "https://sinisteroid.ir/api/uploads/1781891974-cline-ai-coding-agent-cover.webp",
+      "authors": [
+        {
+          "name": "Omid",
+          "url": "https://sinisteroid.ir"
+        }
+      ]
+    }
+  ]
+}

@@ -23,10 +23,11 @@ export function seoAlternates(pathWithoutLocale: string, locale: Locale) {
       fa: `${SITE}${faPath}`,
       "x-default": `${SITE}${enPath}`,
     },
-    // RSS autodiscovery travels with every page that sets alternates
-    // (child pages replace the layout's alternates wholesale).
+    // RSS + JSON Feed autodiscovery travels with every page that sets
+    // alternates (child pages replace the layout's alternates wholesale).
     types: {
       "application/rss+xml": `${SITE}/feed.xml`,
+      "application/feed+json": `${SITE}/feed.json`,
     },
   };
 }

@@ -10,6 +10,9 @@ import { SITE } from "./seo";
 
 const AUTHOR = {
   "@type": "Person",
+  // Stable node id — unifies Person / BlogPosting author / WebSite publisher
+  // into a single knowledge-graph entity.
+  "@id": `${SITE}/#omid`,
   name: "Omid",
   url: SITE,
 } as const;
@@ -43,6 +46,7 @@ export function personJsonLd(locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": `${SITE}/#omid`,
     name: "Omid",
     ...(locale === "fa" ? { alternateName: "امید" } : {}),
     url: SITE,
@@ -114,6 +118,12 @@ export interface BlogPostingMeta {
   excerpt: string;
   /** Absolute URL of the best available cover image */
   imageUrl?: string;
+  /** Approximate body word count (drives wordCount + timeRequired) */
+  wordCount?: number;
+  /** Whole reading-time minutes, shown on the page */
+  readMinutes?: number;
+  /** Canonical taxonomy sections (normalized tags) */
+  sections?: string[];
 }
 
 export function blogPostingJsonLd(
@@ -134,6 +144,18 @@ export function blogPostingJsonLd(
     author: AUTHOR,
     publisher: AUTHOR,
     inLanguage: locale,
+    ...(meta.wordCount ? { wordCount: meta.wordCount } : {}),
+    ...(meta.readMinutes
+      ? { timeRequired: `PT${meta.readMinutes}M` }
+      : {}),
+    ...(Array.isArray(meta.sections) && meta.sections.length > 0
+      ? { articleSection: meta.sections }
+      : {}),
+    // Answer-first summary + headline — the blocks voice assistants read aloud
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".post-tldr", "article h1"],
+    },
     ...(Array.isArray(post.tags) && post.tags.length > 0
       ? { keywords: post.tags.join(", ") }
       : {}),

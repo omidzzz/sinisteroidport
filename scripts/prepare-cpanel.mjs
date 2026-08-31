@@ -46,8 +46,12 @@ location.replace(/(^|,)\\s*fa/.test(langs) ? "/fa/" : "/en/");
 fs.writeFileSync(path.join(out, "index.html"), rootRedirect);
 console.log("✓ wrote root index.html (locale redirect)");
 
-// 1. Copy PHP API from the reference build
-const apiSrc = path.join(build, "api");
+// 1. Copy PHP API. Source of truth: scripts/api/ (version-controlled —
+//    the old build/api location is gitignored, which risked losing the
+//    security-hardened endpoints). Falls back to build/api for legacy setups.
+const apiSrc = fs.existsSync(path.join(root, "scripts", "api"))
+  ? path.join(root, "scripts", "api")
+  : path.join(build, "api");
 const apiOut = path.join(out, "api");
 fs.cpSync(apiSrc, apiOut, { recursive: true });
 console.log("✓ copied api/ (PHP endpoints)");
@@ -73,6 +77,14 @@ const htaccess = path.join(out, ".htaccess");
 const htaccessContent = `<IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # ── Force HTTPS ───────────────────────────────────────────────────
+  # HSTS is only honoured AFTER the browser has seen one secure response;
+  # plain-HTTP requests must be redirected here. (If you serve the origin
+  # behind Cloudflare "Flexible" SSL, %{HTTPS} stays off server-side —
+  # switch to "Full" mode or remove this block to avoid a redirect loop.)
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
   # ── RSC payloads (index.txt) — if present, serve them untouched ──────
   # Next.js prefetches these files for instant client-side navigation.
@@ -160,9 +172,14 @@ const htaccessContent = `<IfModule mod_rewrite.c>
   <FilesMatch "\\.(env|sql|log|md)$">
     Deny from all
   </FilesMatch>
-  <Files "config.php.example">
+  <FilesMatch "^(config\\.php|config\\.php\\.example)$">
     Deny from all
-  </Files>
+  </FilesMatch>
+
+  # ── Mark /api/* so response headers can be scoped per-path ────────
+  <IfModule mod_setenvif.c>
+    SetEnvIf Request_URI "^/api/" SINISTEROID_API=1
+  </IfModule>
 
   # ── API requests pass through to PHP (no rewrite needed) ────────
   RewriteCond %{REQUEST_URI} ^/api/
@@ -181,6 +198,17 @@ const htaccessContent = `<IfModule mod_rewrite.c>
   Header set X-XSS-Protection "1; mode=block"
   Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
   Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+  # ── Content-Security-Policy ──────────────────────────────────────
+  # 'unsafe-inline' for scripts/styles is required by design: the theme
+  # bootstrap <script> and all CSS are inlined into the HTML for LCP.
+  # Still blocks external/remote script injection, plugins, framing and
+  # form hijacking. Not applied to /api/* (the admin panel embeds its
+  # own inline app and is never a public page anyway).
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" env=!SINISTEROID_API
+
+  # ── Keep the JSON endpoints out of search indexes ─────────────────
+  Header set X-Robots-Tag "noindex, nofollow" env=SINISTEROID_API
   <FilesMatch "\\.(css|js|webp|png|jpg|svg|woff2)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
@@ -287,6 +315,61 @@ if (fs.existsSync(publicUploads)) {
   }
 }
 
+// 4b. Lock down script execution inside api/uploads. admin.php now whitelists
+// image extensions + sniffs MIME content before saving, but defence in depth
+// says the uploads folder must never EXECUTE anything even if a script file
+// slips in through another path. (No `php_flag engine off` here on purpose —
+// it is mod_php-only and would 500 the whole folder on PHP-FPM hosts.)
+const uploadsHtaccess = [
+  "# Uploaded images only -- never execute scripts from this folder.",
+  "<FilesMatch \"\\.(php|php[0-9]?|phtml|phar|pl|py|cgi|sh)$\">",
+  "  Require all denied",
+  "</FilesMatch>",
+  "RemoveHandler .php .phtml .phar",
+  "RemoveType .php .phtml .phar",
+].join("\n");
+fs.writeFileSync(path.join(uploadsOut, ".htaccess"), uploadsHtaccess);
+console.log("✓ wrote api/uploads/.htaccess (script execution lockdown)");
+
+// 4c. Next 16 "segment prefetch" static-export compatibility.
+// Next's static export writes the per-segment prefetch payloads as NESTED
+// directories (routeDir/__next.!KG1haW4p/$d$locale/work/__PAGE__.txt) but the
+// client runtime in output:"export" mode requests them with a DOT-FLATTENED
+// filename (routeDir/__next.!KG1haW4p.$d$locale.work.__PAGE__.txt). On a
+// plain Apache host — no Node/Next server to translate — every one of those
+// requests 404s; prefetch dies and every client navigation falls back to a
+// full page load (plus hydration errors from the missing route tree).
+// Emit flat copies so the client's exact URLs resolve.
+function emitFlatSegmentPrefetch(startDir) {
+  for (const e of fs.readdirSync(startDir, { withFileTypes: true })) {
+    const abs = path.join(startDir, e.name);
+    if (!e.isDirectory()) continue;
+    if (e.name.startsWith("__next.")) {
+      const walk = (dir) => {
+        for (const f of fs.readdirSync(dir, { withFileTypes: true })) {
+          const fa = path.join(dir, f.name);
+          if (f.isDirectory()) walk(fa);
+          else if (f.name.endsWith(".txt")) {
+            // e.g. en/work/__next.!KG1haW4p + $d$locale/work/__PAGE__.txt
+            //  -> en/work/__next.!KG1haW4p.$d$locale.work.__PAGE__.txt
+            const rel = path.relative(abs, fa).split(path.sep).join("/");
+            const rest = rel.slice(0, -".txt".length);
+            const flatPath = path.join(startDir, e.name + "." + rest.replace(/\//g, ".") + ".txt");
+            if (!fs.existsSync(flatPath)) {
+              fs.copyFileSync(fa, flatPath);
+            }
+          }
+        }
+      };
+      walk(abs);
+    } else {
+      emitFlatSegmentPrefetch(abs);
+    }
+  }
+}
+emitFlatSegmentPrefetch(out);
+console.log("✓ wrote flat __next.*.txt segment-prefetch copies (Apache compatibility)");
+
 // 5. Config samples so the user knows what to fill in
 const configOut = path.join(out, "api", "config.php.example");
 if (fs.existsSync(path.join(out, "api", "config.sample.php"))) {
@@ -340,6 +423,29 @@ const deployDoc = `════════════════════�
    - Admin: /api/admin.php  (Basic Auth using config.php creds)
    - The prerendered pages still load instantly for SEO, then hydrate
      with the latest DB content.
+
+ ── SECURITY CHECKLIST (do these once per server) ────────────────────
+ - api/config.php must exist BEFORE the site goes live — admin.php
+   refuses to run without it (the sample fallback creds are never
+   valid, by design).
+ - Hash the admin password instead of storing it in plain text:
+       php -r "echo password_hash('YOUR-STRONG-PASSWORD', PASSWORD_DEFAULT), PHP_EOL;"
+   then in api/config.php define('ADMIN_PASS_HASH', '<hash>'); and
+   remove ADMIN_PASS. Login works exactly the same.
+ - The admin password is NOT your cPanel password. Make it long and
+   unique. Brute force is rate-limited (5 tries / 15 min / IP), but a
+   strong password is the real fix.
+ - Give the MySQL user LEAST PRIVILEGE (SELECT/INSERT/UPDATE/DELETE on
+   this one database only) — no DROP/ALTER/GRANT.
+ - api/uploads/.htaccess (included in this package) disables script
+   execution inside the uploads folder — upload it together with the
+   folder contents and never delete it on the server.
+ - The .htaccess in this package now forces HTTPS, sends a CSP, and
+   noindexes /api/*. Re-upload it on every deploy.
+ - Enable automated backups in cPanel for BOTH files and this MySQL
+   database — DB-only posts exist nowhere else until the next export.
+ - Never upload out.zip or the build/ folder to public_html; deploy
+   only the CONTENTS of this out/ folder.
 
 Done. Visit https://yourdomain.com
 ═══════════════════════════════════════════════════════════════

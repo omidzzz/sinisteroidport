@@ -5,9 +5,11 @@
   "description": "Omid – Frontend Developer Portfolio (Next.js)",
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/generate-sitemap.mjs && node scripts/generate-rss.mjs && next build",
+    "build": "node scripts/generate-og-cards.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-rss.mjs && next build --webpack",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
+    "indexnow": "node scripts/indexnow.mjs",
+    "normalize-tags": "node scripts/normalize-tags.mjs",
     "extract-posts": "node scripts/extract-posts.mjs",
     "import-posts": "node scripts/import-posts.mjs",
     "prepare-cpanel": "node scripts/prepare-cpanel.mjs",
@@ -16,15 +18,18 @@
     "deploy": "npm run build && npm run prepare-cpanel && npm run zip-out"
   },
   "dependencies": {
-    "next": "^15.3.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "next": "^16.3.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
     "@tailwindcss/postcss": "^4.1.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.3",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.7.0"
   },

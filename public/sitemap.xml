@@ -4,7 +4,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://sinisteroid.ir/en/</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/" />
@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/blog/</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/blog/" />
@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/showcase/</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/showcase/" />
@@ -31,7 +31,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/skills/</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/skills/" />
@@ -40,7 +40,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/education/</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/education/" />
@@ -49,7 +49,7 @@
   </url>
   <url>
     <loc>https://sinisteroid.ir/en/work/</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/work/" />
@@ -199,5 +199,86 @@
     <image:image>
       <image:loc>https://sinisteroid.ir/api/uploads/1782681993-zero-click-search-is-here-now-what-cover.webp</image:loc>
     </image:image>
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/ai-coding-agents/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/ai-coding-agents/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/ai-coding-agents/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/ai-coding-agents/" />
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/ai-tools/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/ai-tools/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/ai-tools/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/ai-tools/" />
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/open-source-ai/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/open-source-ai/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/open-source-ai/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/open-source-ai/" />
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/local-ai/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/local-ai/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/local-ai/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/local-ai/" />
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/content-strategy/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/content-strategy/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/content-strategy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/content-strategy/" />
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/frontend-design/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/frontend-design/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/frontend-design/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/frontend-design/" />
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/seo-geo/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/seo-geo/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/seo-geo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/seo-geo/" />
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/web-architecture/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/web-architecture/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/web-architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/web-architecture/" />
+  </url>
+  <url>
+    <loc>https://sinisteroid.ir/en/tags/ai-privacy/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sinisteroid.ir/en/tags/ai-privacy/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sinisteroid.ir/fa/tags/ai-privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sinisteroid.ir/en/tags/ai-privacy/" />
   </url>
 </urlset>

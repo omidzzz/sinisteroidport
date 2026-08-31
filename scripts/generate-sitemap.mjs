@@ -108,6 +108,41 @@ for (const p of posts) {
   );
 }
 
+// Tag archive pages (canonical taxonomy, both locales)
+const tagsPath = path.join(root, "src", "data", "tags.json");
+const postsRaw = fs
+  .readdirSync(postsDir)
+  .filter((f) => f.endsWith(".json"))
+  .map((f) => {
+    try {
+      return JSON.parse(fs.readFileSync(path.join(postsDir, f), "utf8"));
+    } catch {
+      return null;
+    }
+  })
+  .filter((p) => p && p.slug && (p.status ?? "published") !== "draft");
+const usedTagSlugs = new Set();
+if (fs.existsSync(tagsPath)) {
+  const tagData = JSON.parse(fs.readFileSync(tagsPath, "utf8"));
+  const canonical = new Set(tagData.canonical.map((t) => t.slug));
+  for (const p of postsRaw)
+    for (const t of p.tags ?? []) {
+      const slug = tagData.map[t] ?? (canonical.has(t) ? t : null);
+      if (slug) usedTagSlugs.add(slug);
+    }
+  for (const slug of usedTagSlugs) {
+    blocks.push(
+      urlBlock({
+        en: localeUrl("en", `tags/${slug}`),
+        fa: localeUrl("fa", `tags/${slug}`),
+        priority: "0.5",
+        changefreq: "weekly",
+        lastmod: today,
+      })
+    );
+  }
+}
+
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"

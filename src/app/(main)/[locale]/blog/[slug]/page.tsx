@@ -6,12 +6,19 @@ import {
   getAllPosts,
   getPostBySlug,
   getPostMeta,
+  postReadMinutes,
+  postWordCount,
+  ogCardSrc,
   publicAssetExists,
   type Post,
 } from "@/lib/posts";
 import { isLocale, loc, type Locale } from "@/lib/i18n";
 import { formatPostDate } from "@/lib/post-helpers";
 import { seoAlternates, SITE } from "@/lib/seo";
+import {
+  normalizeTags,
+  tagLabel,
+} from "@/lib/tags";
 import {
   JsonLd,
   blogPostingJsonLd,
@@ -66,7 +73,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(slug);
   if (!post) return {};
   const meta = getPostMeta(post, locale);
-  const image = coverUrl(post);
+  // Prefer the generated 1200x630 JPG card (branded, readable in every
+  // share surface); fall back to the raw cover, then the default card.
+  const card = ogCardSrc(slug);
+  const image = card ? `${SITE}${card}` : coverUrl(post);
   // Canonical scheme is always the locale-prefixed URL — never bare URLs
   // or ?lang= variants. The per-post seo.canonical field in the JSON points
   // at legacy bare URLs and is intentionally not used here.
@@ -81,12 +91,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "article",
       publishedTime: meta.date,
       modifiedTime: isoDate(post.updated ?? meta.date),
-      // Only declare dimensions we know — the generated default card is
-      // exactly 1200x630, post covers vary.
+      locale: locale === "fa" ? "fa_IR" : "en_US",
+      alternateLocale: locale === "fa" ? "en_US" : "fa_IR",
+      // The generated card is exactly 1200x630; raw covers vary.
       images: [
-        image === `${SITE}/og-default.jpg`
-          ? { url: image, width: 1200, height: 630 }
-          : { url: image },
+        card
+          ? { url: image, width: 1200, height: 630, alt: meta.title }
+          : image === `${SITE}/og-default.jpg`
+            ? { url: image, width: 1200, height: 630 }
+            : { url: image },
       ],
     },
     twitter: {
@@ -107,6 +120,8 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
   // ensure the prerendered file exists
   publicAssetExists(post.featuredImage?.src);
+  // Prefer the generated JPG card for schema too (same image as og:image)
+  const card = ogCardSrc(slug);
 
   const meta = getPostMeta(post, locale);
   // Same resolution rule as BlogPostLive/getPostMeta: locale first, EN fallback
@@ -127,7 +142,10 @@ export default async function BlogPostPage({ params }: Props) {
     blogPostingJsonLd(post, locale, {
       title: meta.title,
       excerpt: meta.excerpt,
-      imageUrl: coverUrl(post),
+      imageUrl: card ? `${SITE}${card}` : coverUrl(post),
+      wordCount: postWordCount(post, locale),
+      readMinutes: postReadMinutes(post, locale),
+      sections: normalizeTags(post.tags),
     }),
     breadcrumbJsonLd([
       { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },
@@ -145,6 +163,53 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       <BlogPostLive locale={locale} post={post} />
+
+      {/* Chronological prev/next — deepens the crawl path and keeps readers
+          moving; newest-first list, so idx-1 is newer, idx+1 is older */}
+      {(() => {
+        const all = getAllPosts();
+        const idx = all.findIndex((p) => p.slug === slug);
+        const newer = idx > 0 ? all[idx - 1] : undefined;
+        const older =
+          idx >= 0 && idx < all.length - 1 ? all[idx + 1] : undefined;
+        if (!newer && !older) return null;
+        const label = (dir: "newer" | "older") =>
+          locale === "fa"
+            ? dir === "newer"
+              ? "← جدیدتر"
+              : "قدیمی‌تر →"
+            : dir === "newer"
+              ? "← Newer post"
+              : "Older post →";
+        return (
+          <nav
+            aria-label={locale === "fa" ? "سایر نوشته‌ها" : "More posts"}
+            className="cv-auto mx-auto max-w-3xl px-4 pt-16 sm:px-6"
+          >
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                { dir: "newer" as const, p: newer },
+                { dir: "older" as const, p: older },
+              ].map(({ dir, p }) =>
+                p ? (
+                  <Link
+                    key={dir}
+                    href={loc(locale, `/blog/${p.slug}`)}
+                    className="group border border-line p-5 transition-colors hover:border-accent/60"
+                  >
+                    <span className="label block">{label(dir)}</span>
+                    <span className="mt-2 block text-base font-medium tracking-tight transition-colors duration-300 group-hover:text-accent sm:text-lg">
+                      {getPostMeta(p, locale).title}
+                    </span>
+                  </Link>
+                ) : (
+                  <span key={dir} aria-hidden className="hidden sm:block" />
+                )
+              )}
+            </div>
+          </nav>
+        );
+      })()}
 
       {/* Server-rendered related reading — descriptive anchors over a
           topical cluster, kept outside the client-hydrated component */}

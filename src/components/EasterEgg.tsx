@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import LogoType from "./LogoType";
 
 /**
@@ -32,11 +32,20 @@ const BOOT = [
 ];
 
 const HELP: Record<string, string | undefined> = {
-  help: "commands: whoami · who · ls · date · clear · exit",
+  help: "commands: whoami · who · ls · date · donate · clear · exit",
   whoami: "Omid — frontend developer / translator.",
   who: "one human, two registers: SINISTER code, OID refine.",
   ls: "index · work · skills · education · showcase · writing",
   date: undefined,
+};
+
+const DONATE_URL = "https://donatr.ee/sinisteroid/";
+
+/** Payoff line revealed once the boot log completes — the delight moment
+ * doubles as the softest possible ask (terminal lore, not a popup). */
+const PAYOFF: Record<"en" | "fa", { t: string; href: string }> = {
+  en: { t: "> secret found ♥ — buy the author a coffee?", href: DONATE_URL },
+  fa: { t: "> راز پیدا شد ♥ — نویسنده رو به یه قهوه مهمون کن؟", href: DONATE_URL },
 };
 
 export default function EasterEgg({
@@ -50,10 +59,16 @@ export default function EasterEgg({
 }) {
   const [open, setOpen] = useState(autoOpen);
   const [revealed, setRevealed] = useState(0);
-  const [log, setLog] = useState<{ t: string; eol?: boolean }[]>([]);
+  const [log, setLog] = useState<{ t: string; eol?: boolean; href?: string }[]>([]);
   const [input, setInput] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const clicks = useRef(0);
+
+  // boot log + locale-aware payoff line, revealed one line at a time
+  const boot = useMemo<{ t: string; href?: string }[]>(
+    () => [...BOOT.map((t) => ({ t })), PAYOFF[locale]],
+    [locale]
+  );
 
   // keyboard trigger: konami sequence + Esc to close
   useEffect(() => {
@@ -107,7 +122,7 @@ export default function EasterEgg({
     }
     const id = setInterval(() => {
       setRevealed((r) => {
-        if (r >= BOOT.length) {
+        if (r >= boot.length) {
           clearInterval(id);
           return r;
         }
@@ -115,14 +130,27 @@ export default function EasterEgg({
       });
     }, 130);
     return () => clearInterval(id);
-  }, [open]);
+  }, [open, boot]);
 
   const run = (raw: string) => {
     const cmd = raw.trim().toLowerCase();
     if (!cmd) return;
-    const next: { t: string }[] = [...log, { t: `$ ${raw.trim()}` }];
+    const next: { t: string; href?: string }[] = [...log, { t: `$ ${raw.trim()}` }];
     if (cmd === "clear") {
       setLog([]);
+      return;
+    }
+    if (cmd === "donate") {
+      setLog([
+        ...next,
+        {
+          t:
+            locale === "fa"
+              ? "♥ donatr.ee/sinisteroid — نویسنده رو به یه قهوه مهمون کن"
+              : "♥ donatr.ee/sinisteroid — fuel for the next build",
+          href: DONATE_URL,
+        },
+      ]);
       return;
     }
     if (cmd === "exit") {
@@ -185,9 +213,20 @@ export default function EasterEgg({
 
         {/* init log */}
         <div className="font-mono text-sm leading-relaxed">
-          {BOOT.slice(0, revealed).map((line, i) => (
+          {boot.slice(0, revealed).map((line, i) => (
             <p key={i} className="text-[#ff2b55]/85">
-              {line}
+              {line.href ? (
+                <a
+                  href={line.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-dotted underline-offset-4 transition-colors hover:text-white"
+                >
+                  {line.t}
+                </a>
+              ) : (
+                line.t
+              )}
             </p>
           ))}
         </div>
@@ -196,7 +235,18 @@ export default function EasterEgg({
         <div className="mt-3 font-mono text-sm leading-relaxed">
           {log.map((l, i) => (
             <p key={i} className="text-[#ff2b55]">
-              {l.t}
+              {l.href ? (
+                <a
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-dotted underline-offset-4 transition-colors hover:text-white"
+                >
+                  {l.t}
+                </a>
+              ) : (
+                l.t
+              )}
             </p>
           ))}
         </div>

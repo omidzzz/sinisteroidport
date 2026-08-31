@@ -119,6 +119,19 @@ export default function Navbar({ locale }: { locale: Locale }) {
           <span className="ps-3 pe-1 font-mono text-[0.72rem] uppercase tracking-[0.12em]">
             {langSwap}
           </span>
+
+          {/* Desktop donate CTA — the only commercial link in the dock; a
+              heart pill reads as intentional, a bare text label does not. */}
+          <a
+            href="https://donatr.ee/sinisteroid/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={fa ? "حمایت مالی" : "Support the work — donate"}
+            className="donate-pill"
+          >
+            <HeartIcon className="donate-heart" />
+            {fa ? "حمایت" : "donate"}
+          </a>
         </nav>
       </div>
 

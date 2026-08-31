@@ -10,7 +10,9 @@ import {
   postTitle,
   postExcerpt,
   formatPostDate,
+  postDateKey,
 } from "@/lib/post-helpers";
+import { normalizeTags, tagLabel } from "@/lib/tags";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import FaqAccordion from "./FaqAccordion";
 import { ArrowIcon } from "./icons";
@@ -37,8 +39,14 @@ export default function BlogPostLive({
   const title = postTitle(effective, locale);
   const excerpt = postExcerpt(effective, locale);
   const fallback = isFallbackTranslation(effective, locale);
-  const tags = Array.isArray(effective.tags) ? effective.tags : [];
+  const tags = normalizeTags(
+    Array.isArray(effective.tags) ? effective.tags : []
+  );
   const cover = effective.featuredImage?.src || null;
+  // Freshness signal — only shown when an update actually moved the date
+  const updatedKey = postDateKey(effective.updated);
+  const showUpdated =
+    !!updatedKey && updatedKey !== postDateKey(effective.date);
 
   // Mini TOC — only real headings, mirroring the deterministic sec-<i> ids
   // that ContentRenderer gives to H2/H3 elements (never body content).
@@ -194,6 +202,14 @@ export default function BlogPostLive({
               ? `${readMinutes} دقیقه مطالعه`
               : `${readMinutes} min read`}
           </span>
+          {showUpdated && (
+            <span className="label text-acid">
+              ·{" "}
+              {locale === "fa"
+                ? `به‌روزشده ${formatPostDate(effective.updated ?? "")}`
+                : `Updated ${formatPostDate(effective.updated ?? "")}`}
+            </span>
+          )}
         </div>
 
         <h1 className="font-display anaglyph-strong mt-3 text-[clamp(1.9rem,5vw,3.1rem)] font-extrabold leading-[1.08] tracking-tight text-ink">
@@ -215,12 +231,13 @@ export default function BlogPostLive({
       {tags.length > 0 && (
         <div className="mt-5 flex flex-wrap gap-2">
           {tags.map((tag) => (
-            <span
+            <Link
               key={tag}
-              className="bento-tag"
+              href={loc(locale, `/tags/${tag}`)}
+              className="bento-tag transition-colors duration-300 hover:text-accent"
             >
-              #{tag}
-            </span>
+              #{tagLabel(tag, locale)}
+            </Link>
           ))}
         </div>
       )}

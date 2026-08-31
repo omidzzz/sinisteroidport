@@ -14,6 +14,8 @@ Last updated: 2026-08-26
 - [Work History](https://sinisteroid.ir/en/work/)
 - [Education](https://sinisteroid.ir/en/education/)
 - [RSS Feed](https://sinisteroid.ir/feed.xml)
+- [JSON Feed](https://sinisteroid.ir/feed.json)
+- [Topics index](https://sinisteroid.ir/en/tags/)
 - [Sitemap](https://sinisteroid.ir/sitemap.xml)
 
 ## About

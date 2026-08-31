@@ -40,7 +40,8 @@ ok("TL;DR callout", post.includes("(TL;DR)"));
 ok("RSS autodiscovery link", /rel="alternate" type="application\/rss\+xml"/.test(post));
 ok("heading anchors (sec-*)", post.includes('id="sec-'));
 ok("related reading section", post.includes("(Related reading)"));
-ok("og:image absolute for post cover", /property="og:image" content="https:\/\/sinisteroid\.ir\/api\/uploads\/seo-vs-geo/.test(post));
+ok("og:image = generated 1200x630 JPG card", /property="og:image" content="https:\/\/sinisteroid\.ir\/og\/seo-vs-geo-whats-the-difference\.jpg/.test(post));
+ok("og:image dimensions declared", /property="og:image:width" content="1200"/.test(post));
 ok("twitter:card", /name="twitter:card" content="summary_large_image"/.test(post));
 
 // JSON-LD on posts
@@ -64,7 +65,7 @@ const long = fs.readFileSync(
 ok("TOC nav rendered", long.includes("(Contents)"));
 ok("reading time chip", /min read/.test(long));
 ok("lazy cover image", /loading="lazy"/.test(long));
-ok("cover used as og:image", /property="og:image" content="[^"]*api\/uploads\/open-webui/.test(long));
+ok("og:image = generated JPG card", /property="og:image" content="https:\/\/sinisteroid\.ir\/og\/open-webui-the-missing-interface-for-local-ai\.jpg/.test(long));
 types = [];
 for (const s of [...long.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]) {
   const j = JSON.parse(s[1]);
