@@ -1,257 +1,38 @@
 /**
- * LAPTOP DECK — isometric cyberpunk acid-rave neon laptop typing "npm run dev".
+ * LAPTOP DECK â€” isometric cyberpunk acid-rave neon laptop typing "npm run dev".
  * True 2:1 isometric projection (SVG matrix). Keys press + neon-strobe in sync
  * with the per-character typing on screen. The whole sequence loops forever:
  * type -> run -> backspace delete -> retype. Decorative, aria-hidden.
  *
- * POLISH NOTES:
- * - Keyboard centered inside the recessed keybed with symmetric margins
- * - Keycaps carry a soft top facet, bottom rim shade and F/J home-row nubs
- * - Complete casing: left / right / back / front walls with vents + ports
- * - No shadow under the chassis — floor light and grid only
- * - Taller screen (150u) lifts well above the deck back edge for presence
- * - RTL-proof: root div is dir="ltr", so fa/ar layouts render identically
- * - Text stays within screen bounds with clip-path; backspace deletes per char
- * - Multi-layer glow, bloom filters and cubic-bezier easing throughout
- * - Transform-based animation only; prefers-reduced-motion respected
- * - Screen flicker + scanlines for a subtle CRT aesthetic
+ * This component is the SVG render. The math/data layers live alongside it:
+ *   timing.ts      typing-loop timing engine (pure)
+ *   keyboard.ts    keycap layout (pure)
+ *   scene.ts       isometric projection + scene constants (pure)
+ *   animations.ts  generated keyframes/<style> payload (pure)
  */
 "use client";
 
-/* ============ timing engine — keys + screen stay in sync ============ */
-
-const STEP_T = 0.12;
-const PAUSE_T: Record<string, number> = { " ": 0.15 };
-
-const CHARS = ["n", "p", "m", " ", "r", "u", "n", " ", "d", "e", "v"];
-const CHAR_T: number[] = (() => {
-  const out: number[] = []; let t = 0.4;
-  for (const ch of CHARS) { out.push(t); t += STEP_T + (PAUSE_T[ch] ?? 0); }
-  return out;
-})();
-
-const ENTER_T = CHAR_T[10] + 0.4;
-const RUN_T   = ENTER_T + 0.8;
-const HOLD_T  = RUN_T + 2.5;
-
-/* Backspace timing: delete characters one by one from the end */
-const BACKSPACE_START = HOLD_T + 0.3;
-const BACKSPACE_STEP = 0.08; // Time between each backspace
-const BACKSPACE_T: number[] = (() => {
-  const out: number[] = [];
-  for (let i = CHARS.length - 1; i >= 0; i--) {
-    out.push(BACKSPACE_START + (CHARS.length - 1 - i) * BACKSPACE_STEP);
-  }
-  return out;
-})();
-
-const CYCLE   = BACKSPACE_T[0] + 0.5;
-const CYCLES  = `${CYCLE.toFixed(2)}s linear infinite`;
-const pct     = (t: number) => `${((t / CYCLE) * 100).toFixed(2)}%`;
-
-const CW = 5.8;    /* forced per-character advance on screen (via textLength) */
-const CH_X0 = 30;  /* x of the first typed character - adjusted for better fit */
-
-/* key -> press timestamps ("n" and "space" are pressed twice, Enter ends the line, Backspace deletes) */
-const PRESSED: Record<string, number[]> = {
-  N:     [CHAR_T[0], CHAR_T[6]],
-  P:     [CHAR_T[1]],
-  M:     [CHAR_T[2]],
-  Space: [CHAR_T[3], CHAR_T[7]],
-  R:     [CHAR_T[4]],
-  U:     [CHAR_T[5]],
-  D:     [CHAR_T[8]],
-  E:     [CHAR_T[9]],
-  V:     [CHAR_T[10]],
-  ENTER: [ENTER_T],
-  BACKSPACE: BACKSPACE_T,
-};
-
-type KeyD = { l: string; x: number; w: number; y?: number; id?: string; nub?: boolean };
-
-/* Keyboard is laid out with a +10 inset so the keycaps sit symmetrically
-   inside the recessed keybed (well spans x=7..183). */
-const ROWS: { y: number; keys: KeyD[] }[] = [
-  { y: 0, keys: [
-    { l: "Esc", x: 10, w: 9 }, { l: "", x: 22, w: 9 }, { l: "", x: 34, w: 9 }, { l: "", x: 46, w: 9 },
-    { l: "", x: 58, w: 9 }, { l: "", x: 70, w: 9 }, { l: "", x: 82, w: 9 }, { l: "", x: 94, w: 9 },
-    { l: "", x: 106, w: 9 }, { l: "", x: 118, w: 9 }, { l: "", x: 130, w: 9 }, { l: "", x: 142, w: 9 },
-    { l: "", x: 154, w: 9 }, { l: "Del", x: 166, w: 13 },
-  ] },
-  { y: 16, keys: [
-    { l: "`", x: 10, w: 9 }, { l: "1", x: 22, w: 9 }, { l: "2", x: 34, w: 9 }, { l: "3", x: 46, w: 9 },
-    { l: "4", x: 58, w: 9 }, { l: "5", x: 70, w: 9 }, { l: "6", x: 82, w: 9 }, { l: "7", x: 94, w: 9 },
-    { l: "8", x: 106, w: 9 }, { l: "9", x: 118, w: 9 }, { l: "0", x: 130, w: 9 },
-    { l: "-", x: 142, w: 9 }, { l: "=", x: 154, w: 9 }, { l: "Bksp", x: 166, w: 13, id: "BACKSPACE" },
-  ] },
-  { y: 32, keys: [
-    { l: "Tab", x: 10, w: 14 }, { l: "q", x: 27, w: 9, id: "Q" }, { l: "w", x: 39, w: 9, id: "W" },
-    { l: "e", x: 51, w: 9, id: "E" }, { l: "r", x: 63, w: 9, id: "R" }, { l: "t", x: 75, w: 9, id: "T" },
-    { l: "y", x: 87, w: 9, id: "Y" }, { l: "u", x: 99, w: 9, id: "U" }, { l: "i", x: 111, w: 9, id: "I" },
-    { l: "o", x: 123, w: 9, id: "O" }, { l: "p", x: 135, w: 9, id: "P" },
-    { l: "[", x: 147, w: 9 }, { l: "]", x: 159, w: 9 }, { l: "\\", x: 171, w: 8 },
-  ] },
-  { y: 48, keys: [
-    { l: "Caps", x: 10, w: 15 }, { l: "a", x: 28, w: 9, id: "A" }, { l: "s", x: 40, w: 9, id: "S" },
-    { l: "d", x: 52, w: 9, id: "D" }, { l: "f", x: 64, w: 9, id: "F", nub: true }, { l: "g", x: 76, w: 9, id: "G" },
-    { l: "h", x: 88, w: 9, id: "H" }, { l: "j", x: 100, w: 9, id: "J", nub: true }, { l: "k", x: 112, w: 9, id: "K" },
-    { l: "l", x: 124, w: 9, id: "L" }, { l: ";", x: 136, w: 9 },
-    { l: "'", x: 148, w: 9 }, { l: "Enter", x: 160, w: 19, id: "ENTER" },
-  ] },
-  { y: 64, keys: [
-    { l: "Shift", x: 10, w: 20 }, { l: "z", x: 33, w: 9, id: "Z" }, { l: "x", x: 45, w: 9, id: "X" },
-    { l: "c", x: 57, w: 9, id: "C" }, { l: "v", x: 69, w: 9, id: "V" }, { l: "b", x: 81, w: 9, id: "B" },
-    { l: "n", x: 93, w: 9, id: "N" }, { l: "m", x: 105, w: 9, id: "M" },
-    { l: ",", x: 117, w: 9 }, { l: ".", x: 129, w: 9 }, { l: "/", x: 141, w: 9 },
-    { l: "Shift", x: 153, w: 26 },
-  ] },
-  { y: 80, keys: [
-    { l: "Ctrl", x: 10, w: 13 }, { l: "Alt", x: 26, w: 13 }, { l: "Meta", x: 42, w: 18 },
-    { l: "Space", x: 63, w: 60, id: "Space" },
-    { l: "Meta", x: 126, w: 18 }, { l: "Alt", x: 147, w: 13 }, { l: "Ctrl", x: 163, w: 13 },
-  ] },
-];
-
-/* ============ isometric projection (2:1) ============ */
-
-const ORX = 150, ORY = 132;
-const CX = 0.8660254, CY = 0.5;
-const iso = (x: number, y: number): [number, number] =>
-  [ORX + CX * (x - y), ORY + CY * (x + y)];
-const P = (arr: [number, number][]) =>
-  arr.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ");
-
-/* deck plane -> world; screen plane -> world */
-const MAT_DECK   = "matrix(0.8660254 0.5 -0.8660254 0.5 150 132)";
-/* The screen's bottom edge is pinned to the deck's back edge (world y = 132),
-   so raising the height simply lifts the lid higher off the deck. */
-const SCREEN_H = 150;
-const MAT_SCREEN = `matrix(0.8660254 0.5 0 1 150 ${132 - SCREEN_H})`;
-
-/* deck corner points (world space) */
-const A  = iso(0, 0);      // back-left
-const B  = iso(190, 0);    // back-right
-const C  = iso(0, 140);    // front-left
-const Dp = iso(190, 140);  // front-right
-const TH_ = 11;            // chassis thickness
-
-/* floor grid segments (clamped to the scene box) */
-const GRID_Y: [number, number][][] = [-50, -25, 0, 25, 50, 75, 100, 125, 150, 175]
-  .map(gy => [iso(Math.max(-40, gy - 215), gy), iso(Math.min(195, gy + 215), gy)]);
-const GRID_X: [number, number][][] = [-40, -15, 10, 35, 60, 85, 110, 135, 160, 185]
-  .map(gx => [iso(gx, Math.max(-50, gx - 215)), iso(gx, Math.min(185, gx + 215))]);
-
-/* floating rave particles */
-const PARTICLES: { x: number; y: number; r: number; c: string; d: string }[] = [
-  { x: 62,  y: 100, r: 1.8, c: "#b8ff00", d: "0s" },
-  { x: 252, y: 64,  r: 2.2, c: "#ff2bd6", d: ".6s" },
-  { x: 336, y: 128, r: 1.5, c: "#00e5ff", d: "1.2s" },
-  { x: 44,  y: 176, r: 2.0, c: "#00e5ff", d: ".3s" },
-  { x: 96, y: 236, r: 1.6, c: "#b8ff00", d: "1.8s" },
-  { x: 120, y: 52,  r: 1.4, c: "#ff2bd6", d: "2.1s" },
-  { x: 352, y: 214, r: 1.8, c: "#b8ff00", d: ".9s" },
-  { x: 22,  y: 118, r: 1.5, c: "#b8ff00", d: "1.5s" },
-  { x: 300, y: 40,  r: 1.6, c: "#00e5ff", d: "2.6s" },
-];
-const DIAMONDS: { x: number; y: number; c: string; d: string }[] = [
-  { x: 90, y: 66, c: "#ff2bd6", d: ".4s" },
-  { x: 270, y: 96, c: "#b8ff00", d: "1.1s" },
-  { x: 46, y: 232, c: "#00e5ff", d: "1.8s" },
-];
-
-/* ============ generated keyframes (infinite loop) ============ */
-
-const kf: string[] = [];
-
-/* key press + neon strobe (acid -> magenta -> cyan) with enhanced glow */
-for (const id of Object.keys(PRESSED)) {
-  (PRESSED[id] as number[]).forEach((t, i) => {
-    kf.push(
-      `@keyframes lp-k${id}${i}{0%,100%{transform:translateY(0)}${pct(t)}{transform:translateY(2.6px)}${pct(t + 0.09)}{transform:translateY(0)}}`
-    );
-    kf.push(
-      `@keyframes lp-g${id}${i}{0%,100%{fill:#18243c}` +
-      `${pct(t)}{fill:#eaffb0;filter:drop-shadow(0 0 3px #b8ff00)}` +
-      `${pct(t + 0.15)}{fill:#b8ff00;filter:drop-shadow(0 0 6px #b8ff00)}` +
-      `${pct(t + 0.5)}{fill:#ff2bd6;filter:drop-shadow(0 0 6px #ff2bd6)}` +
-      `${pct(t + 0.9)}{fill:#00e5ff;filter:drop-shadow(0 0 4px #00e5ff)}` +
-      `${pct(t + 1.4)}{fill:#18243c;filter:none}}`
-    );
-  });
-}
-
-/* screen characters: type in, hold, then delete one by one with backspace */
-/* Characters at the end delete first (v, e, d, space, n, u, r, space, m, p, n) */
-for (let i = 0; i < CHARS.length; i++) {
-  const deleteTime = BACKSPACE_T[CHARS.length - 1 - i]; // Delete from end to start
-  kf.push(
-    `@keyframes lp-c${i}{` +
-    `0%{opacity:0;transform:scale(1)}` +
-    `${pct(CHAR_T[i])}{opacity:1;transform:scale(1)}` +
-    `${pct(deleteTime - 0.02)}{opacity:1;transform:scale(1)}` +
-    `${pct(deleteTime)}{opacity:1;transform:scale(1.2)}` +
-    `${pct(deleteTime + 0.03)}{opacity:0;transform:scale(0.5)}` +
-    `to{opacity:0;transform:scale(1)}}`
-  );
-}
-
-/* cursor: blinks, steps along the line as characters land, then steps back during backspace */
-kf.push("@keyframes lp-cur{0%,100%{opacity:1}50%{opacity:0}}");
-{
-  let steps = "0%{transform:translateX(0)}";
-  // Step forward as characters are typed
-  CHARS.forEach((_, i) => { steps += `${pct(CHAR_T[i])}{transform:translateX(${((i + 1) * CW).toFixed(1)}px)}`; });
-  // Step backward as characters are deleted
-  for (let i = CHARS.length - 1; i >= 0; i--) {
-    const deleteTime = BACKSPACE_T[CHARS.length - 1 - i];
-    steps += `${pct(deleteTime + 0.04)}{transform:translateX(${((i) * CW).toFixed(1)}px)}`;
-  }
-  steps += `to{transform:translateX(0)}`;
-  kf.push(`@keyframes lp-curstep{${steps}}`);
-}
-
-/* "ready" status: flash on enter, re-fire on run, fade when backspace starts */
-kf.push(
-  `@keyframes lp-run{0%,${pct(ENTER_T - 0.01)}{opacity:0}${pct(ENTER_T)}{opacity:1}${pct(RUN_T - 0.01)}{opacity:0}` +
-  `${pct(RUN_T)}{opacity:1}${pct(BACKSPACE_START - 0.15)}{opacity:1}${pct(BACKSPACE_START + 0.15)}{opacity:0}to{opacity:0}}`
-);
-
-/* equalizer bars dance while the dev-server "runs", then rest until backspace */
-for (let i = 0; i < 5; i++) {
-  const ta = RUN_T + 0.25 + ((i * 0.37) % 1.6);
-  kf.push(
-    `@keyframes lp-eq${i}{0%,${pct(RUN_T - 0.3)}{transform:scaleY(0.15)}` +
-    `${pct(ta)}{transform:scaleY(0.95)}${pct(ta + 0.3)}{transform:scaleY(0.3)}` +
-    `${pct(Math.min(ta + 0.6, HOLD_T - 0.15))}{transform:scaleY(0.85)}` +
-    `${pct(HOLD_T + 0.1)}{transform:scaleY(0.35)}${pct(BACKSPACE_START)}{transform:scaleY(0.45)}` +
-    `${pct(BACKSPACE_START + 0.3)}{transform:scaleY(0.15)}to{transform:scaleY(0.15)}}`
-  );
-}
-
-/* ambient rave pulses — smooth sine-like easing */
-kf.push("@keyframes lp-pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}");
-kf.push("@keyframes lp-strip{0%,100%{opacity:.15;transform:scaleX(.95)}50%{opacity:.8;transform:scaleX(1.05)}}");
-kf.push("@keyframes lp-drift{0%{transform:translateY(8px) scale(.8);opacity:0}18%{opacity:.9;transform:translateY(0) scale(1)}78%{opacity:.45}100%{transform:translateY(-30px) scale(.6);opacity:0}}");
-kf.push("@keyframes lp-haze{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.9;transform:scale(1.1)}}");
-kf.push("@keyframes lp-flicker{0%{opacity:0.02}50%{opacity:0.05}100%{opacity:0.02}}");
-
-const STYLE = [
-  "/* LaptopDeck — GPU-accelerated neon animations */",
-  ".lp-ch{opacity:0;will-change:opacity,transform;transform-box:fill-box;transform-origin:50% 50%}",
-  ".lp-eq{transform-box:fill-box;transform-origin:50% 100%;will-change:transform}",
-  ".lp-pt{animation:lp-drift 4.2s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center;will-change:transform,opacity}",
-  ".lp-st1{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite}",
-  ".lp-st2{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite;animation-delay:-1.2s}",
-  ".lp-led{animation:lp-pulse 1.6s cubic-bezier(.4,0,.2,1) infinite}",
-  ".lp-hz{animation:lp-haze 7s cubic-bezier(.4,0,.2,1) infinite}",
-  ".lp-screen-flicker{animation:lp-flicker 0.15s steps(2) infinite}",
-  ".lp-svg{filter:drop-shadow(0 0 20px rgba(184,255,0,.15)) drop-shadow(0 0 40px rgba(255,43,214,.1))}",
-  "@media (prefers-reduced-motion: reduce){.lp-ch{opacity:1}.lp-pt,.lp-st1,.lp-st2,.lp-led,.lp-hz,.lp-screen-flicker{animation:none}}",
-  ...kf,
-].join("");
-
-const CHAR_COLORS = ["#b8ff00", "#00e5ff", "#ff2bd6"];
-const EQ_FILL = ["#b8ff00", "#ff2bd6", "#00e5ff", "#b8ff00", "#ff2bd6"];
+import { STYLE } from "./animations";
+import { ROWS } from "./keyboard";
+import { CHARS, CH_X0, CW, CYCLES, PRESSED } from "./timing";
+import {
+  A,
+  B,
+  C,
+  CHAR_COLORS,
+  DIAMONDS,
+  Dp,
+  EQ_FILL,
+  GRID_X,
+  GRID_Y,
+  iso,
+  MAT_DECK,
+  MAT_SCREEN,
+  P,
+  PARTICLES,
+  SCREEN_H,
+  TH_,
+} from "./scene";
 
 export default function LaptopDeck() {
   return (
@@ -351,7 +132,7 @@ export default function LaptopDeck() {
         <polygon points={P([iso(-15, -15), iso(205, -15), iso(205, 155), iso(-15, 155)])}
           fill="none" stroke="#b8ff00" strokeWidth="1" opacity="0.22" style={{ filter: "url(#lf-glow)" }} />
 
-        {/* magenta floor pool only — no acid/green glow under the chassis */}
+        {/* magenta floor pool only â€” no acid/green glow under the chassis */}
         <ellipse className="lp-st1" cx="163" cy="298" rx="112" ry="21" fill="url(#rp-magenta)" />
 
         {/* ===== screen (rises from the deck's back edge) ===== */}
@@ -370,7 +151,7 @@ export default function LaptopDeck() {
           <circle cx="29" cy="17" r="1.8" fill="#00e5ff" />
           <text x="38" y="19.5" fontSize="5.5" fill="#7f93b8" fontFamily="var(--font-mono), monospace">~/sinisteroid</text>
 
-          {/* typing prompt — per-character <text> reveal, synced with the key flashes */}
+          {/* typing prompt â€” per-character <text> reveal, synced with the key flashes */}
           <g clipPath="url(#lp-screen-clip)">
             <g style={{ filter: "url(#lf-glow)" }}>
               <text x="24" y="54" fontSize="8" fill="#00e5ff" fontFamily="var(--font-mono), monospace"
@@ -416,7 +197,7 @@ export default function LaptopDeck() {
           <circle cx="95" cy="3.6" r="0.6" fill="#b8ff00" opacity="0.8" />
           <text x="95" y={SCREEN_H - 2} fontSize="4.6" letterSpacing="2.5" textAnchor="middle" fill="#5a6a88" fontFamily="var(--font-mono), monospace">SINISTEROID</text>
 
-          {/* neon screen edges — multi-layer glow */}
+          {/* neon screen edges â€” multi-layer glow */}
           <line x1="1" y1="1" x2="1" y2={SCREEN_H - 1} stroke="#b8ff00" strokeWidth="1.5" opacity="0.8" style={{ filter: "url(#lf-glow)" }} />
           <line x1="189" y1="1" x2="189" y2={SCREEN_H - 1} stroke="#ff2bd6" strokeWidth="1.5" opacity="0.7" style={{ filter: "url(#lf-glow)" }} />
           <line x1="1" y1="0.8" x2="189" y2="0.8" stroke="#00e5ff" strokeWidth="1" opacity="0.6" style={{ filter: "url(#lf-glow)" }} />
@@ -438,7 +219,7 @@ export default function LaptopDeck() {
           q.push([iso(x, 140.6)[0], iso(x, 140.6)[1] + 4.5]);
           return <polygon key={x} points={P(q)} fill="#04070d" />;
         })}
-        {/* right wall — closes the hollow right side of the casing */}
+        {/* right wall â€” closes the hollow right side of the casing */}
         <polygon points={P([B, Dp, [Dp[0], Dp[1] + TH_], [B[0], B[1] + TH_]])}
           fill="url(#lg-sideR)" stroke="#1a2438" strokeWidth="0.8" />
         {/* vents on the right wall */}
@@ -456,7 +237,7 @@ export default function LaptopDeck() {
               fill="#04070c" stroke="#00e5ff" strokeWidth="0.4" opacity="0.7" />
           );
         })}
-        {/* back wall — closes the rear of the chassis under the hinge */}
+        {/* back wall â€” closes the rear of the chassis under the hinge */}
         <polygon points={P([A, B, [B[0], B[1] + TH_], [A[0], A[1] + TH_]])}
           fill="url(#lg-sideB)" stroke="#1a2438" strokeWidth="0.8" />
         {/* ports on the left wall */}
@@ -478,7 +259,7 @@ export default function LaptopDeck() {
         <polygon points={P([A, B, Dp, C])} fill="url(#lg-body)" stroke="#26355a" strokeWidth="1.2" strokeLinejoin="round" />
         {/* screen light spill on the deck */}
         <g transform={MAT_DECK}><rect x="10" y="2" width="170" height="12" fill="url(#lg-spill)" /></g>
-        {/* neon edge strips — front acid / left magenta, with pulsing overlays */}
+        {/* neon edge strips â€” front acid / left magenta, with pulsing overlays */}
         <line x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#b8ff00" strokeWidth="2" opacity="0.9" style={{ filter: "url(#lf-glow)" }} />
         <line className="lp-st1" x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#ff2bd6" strokeWidth="1.5" style={{ filter: "url(#lf-glow)" }} />
         <line x1={A[0]} y1={A[1]} x2={C[0]} y2={C[1]} stroke="#ff2bd6" strokeWidth="1.5" opacity="0.8" style={{ filter: "url(#lf-glow)" }} />
@@ -497,7 +278,7 @@ export default function LaptopDeck() {
           <rect x="8" y="99" width="174" height="1.4" fill="rgba(0,0,0,0.42)" />
         </g>
 
-        {/* keys — press + neon-strobe in sync with the terminal */}
+        {/* keys â€” press + neon-strobe in sync with the terminal */}
         {ROWS.map((row, ri) =>
           row.keys.map(k => {
             const keyId = k.id ?? k.l;
@@ -552,7 +333,7 @@ export default function LaptopDeck() {
         <circle className="lp-led" cx={iso(180, 140.6)[0]} cy={iso(180, 140.6)[1] + 4} r="2"
           fill="#b8ff00" style={{ filter: "url(#lf-glow)" }} />
 
-        {/* floating rave particles — enhanced with bloom */}
+        {/* floating rave particles â€” enhanced with bloom */}
         {PARTICLES.map((p, i) => (
           <g key={`p${i}`} className="lp-pt" style={{ animationDelay: p.d }}>
             <circle cx={p.x} cy={p.y} r={p.r * 4} fill={p.c} opacity="0.1" style={{ filter: "url(#lf-bloom)" }} />
