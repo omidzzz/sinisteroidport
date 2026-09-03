@@ -1,7 +1,7 @@
 "use client";
 
 import type { ContentBlock } from "@/lib/posts";
-import { ArrowIcon } from "./icons";
+import { ArrowIcon } from "../ui/icons";
 
 function altText(alt: ContentBlock["altText"]): string {
   if (!alt) return "";

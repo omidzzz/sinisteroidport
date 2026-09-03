@@ -15,7 +15,7 @@ import {
 import { normalizeTags, tagLabel } from "@/lib/tags";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import FaqAccordion from "./FaqAccordion";
-import { ArrowIcon } from "./icons";
+import { ArrowIcon } from "../ui/icons";
 import { getLivePost, preloadLivePost } from "@/lib/live-post";
 
 // Kick the DB refresh off at bundle-parse time — BEFORE React hydrates — so

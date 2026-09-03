@@ -1,10 +1,9 @@
 import Link from "next/link";
-import Magnetic from "./Magnetic";
+import Magnetic from "../ui/Magnetic";
 import LogoType from "./LogoType";
-import { ArrowIcon, SparkIcon, HeartIcon } from "./icons";
+import { ArrowIcon, SparkIcon, HeartIcon } from "../ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
-
-const FOOT_PATHS = ["/", "/work", "/skills", "/education", "/showcase", "/blog"];
+import { NAV_PATHS } from "@/lib/nav";
 
 /* Brand-voice meta strip — ASCII/pinned-LTR like the logotype so it reads
    identically inside the Persian layout. */
@@ -75,9 +74,9 @@ export default function Footer({ locale }: { locale: Locale }) {
             <p className="label mb-7">{fa ? "فهرست" : "Index"}</p>
             <ul className="space-y-4">
               {t.nav.map((item, i) => (
-                <li key={FOOT_PATHS[i]}>
+                <li key={NAV_PATHS[i]}>
                   <Link
-                    href={loc(locale, FOOT_PATHS[i])}
+                    href={loc(locale, NAV_PATHS[i])}
                     className="group inline-flex items-baseline gap-3 font-display text-base font-bold uppercase tracking-wide text-ink transition-colors hover:text-acid"
                   >
                     <span className="foot-idx font-mono text-[0.58rem] tracking-[0.2em]">

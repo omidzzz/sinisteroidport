@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import PageHero from "@/components/PageHero";
-import Reveal from "@/components/Reveal";
-import ProjectIndex from "@/components/ProjectIndex";
-import { JsonLd, itemListJsonLd } from "@/lib/schema";
+import PageHero from "@/components/ui/PageHero";
+import Reveal from "@/components/ui/Reveal";
+import ProjectIndex from "@/components/ui/ProjectIndex";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { itemListJsonLd } from "@/lib/schema";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 

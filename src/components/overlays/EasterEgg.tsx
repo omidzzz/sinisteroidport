@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import LogoType from "./LogoType";
+import LogoType from "../layout/LogoType";
 
 /**
  * Easter egg — the konami sequence (↑↑↓↓←→←→BA) or 7 clicks on any

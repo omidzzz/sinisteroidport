@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import PageHero from "@/components/PageHero";
-import Reveal from "@/components/Reveal";
-import BlogListLive from "@/components/BlogListLive";
-import PostsCountStat from "@/components/PostsCountStat";
+import PageHero from "@/components/ui/PageHero";
+import Reveal from "@/components/ui/Reveal";
+import BlogListLive from "@/components/blog/BlogListLive";
+import PostsCountStat from "@/components/blog/PostsCountStat";
 import { getAllPosts } from "@/lib/posts";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";

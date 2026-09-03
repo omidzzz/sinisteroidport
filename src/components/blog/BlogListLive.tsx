@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Reveal from "./Reveal";
-import { ArrowIcon } from "./icons";
+import Reveal from "../ui/Reveal";
+import { ArrowIcon } from "../ui/icons";
 import type { Post } from "@/lib/posts";
 import {
   isFallbackTranslation,

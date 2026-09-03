@@ -1,9 +1,9 @@
 import Link from "next/link";
-import PageHero from "@/components/PageHero";
-import Reveal from "@/components/Reveal";
-import Spotlight from "@/components/Spotlight";
+import PageHero from "@/components/ui/PageHero";
+import Reveal from "@/components/ui/Reveal";
+import Spotlight from "@/components/ui/Spotlight";
 import { getDict } from "@/lib/i18n";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/ui/icons";
 
 export default function LocaleNotFound({
   params,

@@ -1,19 +1,20 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import Reveal from "@/components/Reveal";
-import Magnetic from "@/components/Magnetic";
-import Tilt from "@/components/Tilt";
-import Spotlight from "@/components/Spotlight";
-import CountUp from "@/components/CountUp";
-import KineticTitle from "@/components/KineticTitle";
-import HeroPlate from "@/components/HeroPlate";
-import LaptopDeck from "@/components/LaptopDeck";
-import LatestPostsLive from "@/components/LatestPostsLive";
-import RainStrip from "@/components/RainStrip";
-import { ArrowIcon, SparkIcon, GaugeIcon, OrbitIcon, SignalIcon } from "@/components/icons";
+import Reveal from "@/components/ui/Reveal";
+import Magnetic from "@/components/ui/Magnetic";
+import Tilt from "@/components/ui/Tilt";
+import Spotlight from "@/components/ui/Spotlight";
+import CountUp from "@/components/ui/CountUp";
+import KineticTitle from "@/components/home/KineticTitle";
+import HeroPlate from "@/components/home/HeroPlate";
+import LaptopDeck from "@/components/home/LaptopDeck";
+import LatestPostsLive from "@/components/home/LatestPostsLive";
+import RainStrip from "@/components/home/RainStrip";
+import { ArrowIcon, SparkIcon, GaugeIcon, OrbitIcon, SignalIcon } from "@/components/ui/icons";
 import { getAllPosts, type FaqItem } from "@/lib/posts";
 import { getDict, loc, isLocale, type Locale } from "@/lib/i18n";
-import { JsonLd, faqJsonLd } from "@/lib/schema";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { faqJsonLd } from "@/lib/schema";
 import skillsData from "@/data/skills.json";
 
 export function generateStaticParams() {

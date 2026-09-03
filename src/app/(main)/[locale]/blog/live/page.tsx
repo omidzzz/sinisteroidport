@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import BlogPostDynamic from "@/components/BlogPostDynamic";
+import BlogPostDynamic from "@/components/blog/BlogPostDynamic";
 import { isLocale, type Locale } from "@/lib/i18n";
 
 interface Props {

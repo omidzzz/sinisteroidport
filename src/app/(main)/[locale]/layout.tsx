@@ -8,25 +8,27 @@ import {
   Noto_Kufi_Arabic,
   Unbounded,
 } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import GLBackground from "@/components/GLBackground";
-import ProgressThread from "@/components/ProgressThread";
-import GridLines from "@/components/GridLines";
-import Cursor from "@/components/Cursor";
-import { GoogleTag } from "@/components/GoogleTag";
-import { AnalyticsEvents } from "@/components/AnalyticsEvents";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import GLBackground from "@/components/shell/GLBackground";
+import ProgressThread from "@/components/shell/ProgressThread";
+import GridLines from "@/components/shell/GridLines";
+import Cursor from "@/components/shell/Cursor";
+import { GoogleTag } from "@/components/analytics/GoogleTag";
+import { AnalyticsEvents } from "@/components/analytics/AnalyticsEvents";
 import {
   CommandPaletteLazy,
   EasterEggLazy,
-} from "@/components/CommandPaletteLazy";
-import type { CmdEntry } from "@/components/CommandPalette";
+} from "@/components/overlays/CommandPaletteLazy";
+import type { CmdEntry } from "@/components/overlays/CommandPalette";
 import { getAllPosts } from "@/lib/posts";
 import { postTitle } from "@/lib/post-helpers";
 import skillsData from "@/data/skills.json";
+import { NAV_PATHS } from "@/lib/nav";
 import { isLocale, locales, loc, getDict, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
-import { JsonLd, personJsonLd, websiteJsonLd } from "@/lib/schema";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { personJsonLd, websiteJsonLd } from "@/lib/schema";
 import "../../globals.css";
 
 // Sets the theme before first paint — no light-mode flash on load.
@@ -166,7 +168,6 @@ export default async function LocaleRootLayout({
 
   // Indexable commands for the palette: pages, skills and posts (content is
   // compiled at build time and serialized into the static export).
-  const NAV_PATHS = ["/", "/work", "/skills", "/education", "/showcase", "/blog"];
   const dict = getDict(locale);
   const posts = getAllPosts();
   const groupPage = locale === "fa" ? "بخش" : "Page";

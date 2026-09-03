@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import ScrambleText from "./ScrambleText";
+import ScrambleText from "../ui/ScrambleText";
 import type { Post } from "@/lib/posts";
 import {
   isFallbackTranslation,
@@ -10,7 +10,7 @@ import {
   postDateKey,
 } from "@/lib/post-helpers";
 import { loc, type Locale } from "@/lib/i18n";
-import { ArrowIcon } from "./icons";
+import { ArrowIcon } from "../ui/icons";
 
 /** Shape returned by /api/get_posts.php (subset of our Post). */
 type ApiRow = {

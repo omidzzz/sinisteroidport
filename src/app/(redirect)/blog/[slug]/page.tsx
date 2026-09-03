@@ -1,4 +1,4 @@
-import LocaleRedirect from "@/components/LocaleRedirect";
+import LocaleRedirect from "@/components/layout/LocaleRedirect";
 import { getAllPosts } from "@/lib/posts";
 
 export function generateStaticParams() {

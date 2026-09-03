@@ -5,10 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LogoType from "./LogoType";
 import ThemeToggle from "./ThemeToggle";
-import { HeartIcon } from "./icons";
+import { HeartIcon } from "../ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
-
-const NAV_PATHS = ["/", "/work", "/skills", "/education", "/showcase", "/blog"];
+import { NAV_PATHS } from "@/lib/nav";
 
 /**
  * CONSOLE DOCK NAV — readable navigation, unconventional placement.

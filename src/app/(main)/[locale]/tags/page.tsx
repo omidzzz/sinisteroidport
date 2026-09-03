@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageHero from "@/components/PageHero";
-import Reveal from "@/components/Reveal";
+import PageHero from "@/components/ui/PageHero";
+import Reveal from "@/components/ui/Reveal";
 import { getAllPosts } from "@/lib/posts";
 import { isLocale, loc, type Locale } from "@/lib/i18n";
 import { seoAlternates, SITE } from "@/lib/seo";
 import { tagLabel, usedTags } from "@/lib/tags";
-import { JsonLd, breadcrumbJsonLd } from "@/lib/schema";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 export async function generateMetadata({
   params,

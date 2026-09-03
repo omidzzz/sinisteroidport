@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import PageHero from "@/components/PageHero";
-import Reveal from "@/components/Reveal";
+import PageHero from "@/components/ui/PageHero";
+import Reveal from "@/components/ui/Reveal";
 import { getAllPosts, getPostMeta } from "@/lib/posts";
 import { formatPostDate } from "@/lib/post-helpers";
 import { isLocale, loc, type Locale } from "@/lib/i18n";
 import { seoAlternates, SITE } from "@/lib/seo";
 import { normalizeTags, tagLabel, usedTags } from "@/lib/tags";
+import { JsonLd } from "@/components/ui/JsonLd";
 import {
-  JsonLd,
   breadcrumbJsonLd,
   itemListJsonLd,
 } from "@/lib/schema";

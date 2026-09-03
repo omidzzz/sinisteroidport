@@ -1,11 +1,12 @@
-import type { Locale } from "./i18n";
-import type { FaqItem, Post } from "./posts";
-import { SITE } from "./seo";
+import type { Locale } from "../i18n";
+import type { FaqItem, Post } from "../posts";
+import { SITE } from "../seo";
 
 /**
  * JSON-LD structured data builders (SEO + GEO).
- * Rendered into the SSR HTML via <JsonLd> so search engines and AI
- * crawlers see them without executing JavaScript.
+ * Pure data functions — no JSX. Rendered into the SSR HTML via the
+ * <JsonLd> component (src/components/ui/JsonLd.tsx) so search engines and
+ * AI crawlers see them without executing JavaScript.
  */
 
 const AUTHOR = {
@@ -26,19 +27,6 @@ function isoDate(value: string): string {
   if (m) return `${m[1]}T${m[2]}${m[2].length === 5 ? ":00" : ""}`;
   const t = new Date(value);
   return Number.isNaN(t.getTime()) ? value : t.toISOString();
-}
-
-/** Render any schema.org payload(s) as an inline JSON-LD script tag. */
-export function JsonLd({ data }: { data: object | object[] }) {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        // Escape "<" so embedded content can never break out of the script tag
-        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
-      }}
-    />
-  );
 }
 
 /** Site owner entity — emitted once per locale on every page via the layout. */

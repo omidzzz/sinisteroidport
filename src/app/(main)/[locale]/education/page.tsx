@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import PageHero from "@/components/PageHero";
-import Tilt from "@/components/Tilt";
-import Reveal from "@/components/Reveal";
+import PageHero from "@/components/ui/PageHero";
+import Tilt from "@/components/ui/Tilt";
+import Reveal from "@/components/ui/Reveal";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import BlogPostLive from "@/components/BlogPostLive";
+import BlogPostLive from "@/components/blog/BlogPostLive";
 import {
   getAllPosts,
   getPostBySlug,
@@ -20,8 +20,8 @@ import {
   normalizeTags,
   tagLabel,
 } from "@/lib/tags";
+import { JsonLd } from "@/components/ui/JsonLd";
 import {
-  JsonLd,
   blogPostingJsonLd,
   breadcrumbJsonLd,
   faqJsonLd,
