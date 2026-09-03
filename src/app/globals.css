@@ -10,6 +10,30 @@
    gated behind prefers-reduced-motion; GL is DPR-capped.
    ============================================================ */
 
+/* ------------------------------------------------------------
+   FILE MAP — this stylesheet is ONE file on purpose (Lighthouse:
+   inline CSS, zero extra round-trips). Jump to any section by
+   Ctrl/Cmd+F for the banner keyword:
+
+     @theme / :root            design tokens (colors, fonts, rails)
+     SPINE RAIL                fixed vertical nav dock
+     NEON CONTROLS             buttons, panels, primitives
+     ZINE FAMILY               signal-slab palette rescopes
+     LOGOTYPE                  SINISTER[OID] lockup
+     HOME COMPOSITION          chips, stickers, orbits, fans
+     CONSTELLATION RAILS       tilted warp lanes
+     HERO PLATE                floating portrait slab
+     HOME FEED                 post rows, pull quotes
+     COMMAND CONSOLE NAV       readable top bar
+     PSIONIC ORBIT             theme engine v2 + [data-theme] light/dark
+     REDACT CONSOLE v2         layout composition + interactions
+     FULL-SITE REBUILD         page composition system v3
+     ACID RAVE                 homepage + hero chrome (v4–v5)
+     V7 / V7b / V8             section icons · showcase frames · bento wall
+     V16 — Console Bay         in-flow acid laptop deck
+     V9 — Blog posts           prose-post article voice
+   ------------------------------------------------------------ */
+
 @import "tailwindcss";
 
 @theme {
