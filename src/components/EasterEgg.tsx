@@ -25,7 +25,7 @@ const SEQ = [
 const BOOT = [
   "sinisteroid kernel 1.0.0 — init",
   "> locating glyphs … ok",
-  "> loading typefaces [ syne / jetbrains-mono / unbounded ] … ok",
+  "> loading typefaces [ orbitron / jetbrains-mono / unbounded ] … ok",
   "> bridging en ⇄ fa … ok",
   "> mounting interface as argument … ok",
   "> boot complete. welcome in.",
@@ -166,7 +166,7 @@ export default function EasterEgg({
   if (!open) return null;
   return (
     <div
-      className="fixed inset-0 z-[90] flex flex-col overflow-hidden bg-[#07081c] text-[#ff2b55]"
+      className="term-veil fixed inset-0 z-[90] flex flex-col overflow-hidden bg-[#07081c] text-[#ff2b55]"
       role="dialog"
       aria-modal="true"
       aria-label="SINISTEROID terminal"

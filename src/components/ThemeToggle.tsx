@@ -1,6 +1,7 @@
 "use client";
 
 import type { Locale } from "@/lib/i18n";
+import { toggleTheme } from "@/lib/theme";
 
 /** Monoline sun — matches the hairline/editorial stroke language */
 function SunIcon() {
@@ -44,6 +45,9 @@ function MoonIcon() {
  * Light/dark toggle. Writes data-theme on <html> (the tokens in globals.css
  * do the rest), persists to localStorage and broadcasts a "themechange"
  * event so canvas-based components (GLBackground) repaint without a reload.
+ * The flip routes through the shared theme helper, which wraps it in a
+ * View Transition where available (dock + logo fly, whole theme crossfades)
+ * and degrades to the plain synchronous flip elsewhere.
  *
  * Both icons are rendered into the SSR HTML; pure CSS shows the one for the
  * active theme (sun while dark = switch to light, moon while light). The
@@ -51,22 +55,14 @@ function MoonIcon() {
  * begins matching the [data-theme] selector — zero React state.
  */
 export default function ThemeToggle({ locale }: { locale: Locale }) {
-  const toggle = () => {
-    const next =
-      document.documentElement.dataset.theme === "light" ? "dark" : "light";
-    document.documentElement.dataset.theme = next;
-    try {
-      localStorage.setItem("theme", next);
-    } catch {
-      /* private mode — session-only theme */
-    }
-    window.dispatchEvent(new Event("themechange"));
+  const onClick = () => {
+    toggleTheme();
   };
 
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={onClick}
       aria-label={
         locale === "fa" ? "تغییر حالت روشن/تیره" : "Toggle light/dark mode"
       }

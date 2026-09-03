@@ -7,7 +7,9 @@ import Spotlight from "@/components/Spotlight";
 import CountUp from "@/components/CountUp";
 import KineticTitle from "@/components/KineticTitle";
 import HeroPlate from "@/components/HeroPlate";
+import LaptopDeck from "@/components/LaptopDeck";
 import LatestPostsLive from "@/components/LatestPostsLive";
+import RainStrip from "@/components/RainStrip";
 import { ArrowIcon, SparkIcon, GaugeIcon, OrbitIcon, SignalIcon } from "@/components/icons";
 import { getAllPosts, type FaqItem } from "@/lib/posts";
 import { getDict, loc, isLocale, type Locale } from "@/lib/i18n";
@@ -19,8 +21,10 @@ export function generateStaticParams() {
 }
 
 /* ── shared bits ── */
-const Seam = ({ flip, cyan }: { flip?: boolean; cyan?: boolean }) => (
-  <div aria-hidden className={`seam ${flip ? "flip" : ""} ${cyan ? "cyan" : ""}`} />
+const Seam = ({ flip, cyan, children }: { flip?: boolean; cyan?: boolean; children?: ReactNode }) => (
+  <div aria-hidden className={`seam ${flip ? "flip" : ""} ${cyan ? "cyan" : ""}`}>
+    {children}
+  </div>
 );
 const Rail = ({ label, icon }: { label: string; icon?: ReactNode }) => (
   <div className="sec-label">
@@ -205,7 +209,9 @@ export default async function HomePage({
       <Seam cyan />
 
       {/* ══ ACT II · TELEMETRY ═══════════════════════════ */}
-      <section className="cv-auto shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+      {/* NOTE: no .cv-auto here — its paint containment clips the absolutely
+          placed TTY console that hangs off the section's lower edge. */}
+      <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Rail label={K.tel} icon={<GaugeIcon />} />
         <div className="relative">
           <span aria-hidden dir="ltr" className="scrub-word rev-dir top-[-0.45em]">
@@ -228,10 +234,22 @@ export default async function HomePage({
               </Reveal>
             ))}
           </div>
+
         </div>
       </section>
 
       <Seam flip />
+
+      {/* ══ CONSOLE BAY ═══════════════════════════════════ */}
+      {/* A dedicated in-flow strip for the acid laptop — never overlaps
+          content, rides the scroll with a scrubbed 3D reveal. */}
+      <section className="console-bay" aria-hidden="true">
+        <div className="console-bay-inner">
+          <div className="console-bay-deck">
+            <LaptopDeck />
+          </div>
+        </div>
+      </section>
 
       {/* ══ ACT III · MODULE BAY ═════════════════════════ */}
       <section className="cv-auto shell-grid rev relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
@@ -243,6 +261,7 @@ export default async function HomePage({
                   className={`module-card ${i % 2 ? "rotate-1 md:-translate-y-6" : "-rotate-1"}`}
                   data-hue={i % 2 ? "cyan" : "acid"}
                 >
+                  <span aria-hidden className="mod-halo" />
                   <div className="flex items-center justify-between">
                     <span className="mod-idx">M.{String(i + 1).padStart(2, "0")}</span>
                     <ArrowIcon className="size-5 text-muted transition-all duration-300 group-hover:text-acid" />
@@ -263,13 +282,16 @@ export default async function HomePage({
       <section className="cv-auto shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Rail label={K.sig} icon={<SignalIcon />} />
         <div className="sig-zone relative min-w-0">
+          <div className="rain-bay">
+            <RainStrip />
+          </div>
           <span aria-hidden dir="ltr" className="scrub-word bottom-0">
             SIGNALS
           </span>
           <div className="mb-6 flex justify-end">
             <Link
               href={loc(locale, "/blog")}
-              className="group font-mono text-xs text-muted transition-colors hover:text-acid"
+              className="group brk font-mono text-xs text-muted transition-colors hover:text-acid"
             >
               {t.allPosts}
               <ArrowIcon className="ms-2 inline align-[-2px] transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />

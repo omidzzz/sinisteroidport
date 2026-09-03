@@ -168,20 +168,24 @@ ok("footer reach chips + back-to-top", foot.includes("chip-brk") && foot.include
 
 // ── Fonts ────────────────────────────────────────────────────────────
 console.log("\n=== FONTS ===");
-// next/font emits hashed __variable_* class names that define the CSS vars
+// next/font emits hashed __variable_* class names that define the CSS vars.
+// Latin faces (Orbitron/Space Grotesk/JetBrains/Unbounded) load on both
+// locales; the Arabic faces (Vazirmatn/Kufi) are fa-only.
 const htmlTag = /<html[^>]*class="([^"]*)"/.exec(home)?.[1] ?? "";
 ok(
-  "font variable classes on <html> (6 incl. Unbounded logotype)",
-  (htmlTag.match(/__variable_/g) || []).length >= 6
+  "font variable classes on <html> (EN 4 / FA 6, locale-gated)",
+  (htmlTag.match(/__variable_/g) || []).length >= 4
 );
 const homeChrome2 = stripRsc(home);
 ok(".font-display on hero title", homeChrome2.includes("font-display"));
 const blogList = fs.readFileSync("out/en/blog/index.html", "utf8");
 ok(".font-display on section titles", stripRsc(blogList).includes("font-display"));
-ok("display font CSS var (Syne + Kufi)", has("--font-syne") && has("--font-kufi"));
+ok("display font CSS var (Orbitron)", has("--font-orbitron-var"));
 ok("RTL display override", /\[lang=fa\][^{]*\{[^}]*--font-display/.test(allCss));
-ok("Syne @font-face self-hosted", /font-family:Syne,Syne Fallback/.test(allCss));
-ok("Kufi @font-face self-hosted", /font-family:Noto Kufi Arabic,Noto Kufi Arabic Fallback/.test(allCss));
+ok("no Syne @font-face shipped (dead fallback removed)", !/font-family:Syne/.test(allCss));
+const faHome = fs.readFileSync("out/fa/index.html", "utf8");
+ok("Kufi @font-face self-hosted (fa pages)", /font-family:Noto Kufi Arabic/.test(faHome));
+ok("Vazirmatn @font-face self-hosted (fa pages)", /font-family:Vazirmatn/.test(faHome));
 
 // blog-post-template.php is now a meta-swapper: it loads the prerendered
 // React shell and swaps its <head> for DB-backed SEO metadata, so DB-only

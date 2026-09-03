@@ -5,6 +5,8 @@ import type { Post } from "@/lib/posts";
 import BlogPostLive from "./BlogPostLive";
 import { postTitle } from "@/lib/post-helpers";
 import { getLivePost } from "@/lib/live-post";
+import { blogPostingJsonLd } from "@/lib/schema";
+import { SITE } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
 
 type Status = "loading" | "ready" | "missing" | "error";
@@ -76,6 +78,48 @@ export default function BlogPostDynamic({ locale }: { locale: Locale }) {
   // Give DB-only posts a real <title> once loaded
   useEffect(() => {
     if (post) document.title = `${postTitle(post, locale)} — Sinisteroid`;
+  }, [post, locale]);
+
+  /* DB-only posts get no server-rendered BlogPosting JSON-LD: the shell is
+     prerendered before the post exists, and blog-post-template.php must
+     never ADD head nodes (hydration contract). Injecting here — after
+     hydration, once the article is fetched — is safe and gives search
+     engines (which render JS) the same structured data prerendered posts
+     ship, including authored SEO keywords ahead of the tag taxonomy. */
+  useEffect(() => {
+    if (!post) return;
+    const translation = post.translations?.[locale] ?? post.translations?.en;
+    const seo = translation?.seo;
+    const focus = seo?.focusKeyword?.trim();
+    const authored = (seo?.keywords ?? "")
+      .split(/[,،]/)
+      .map((k) => k.trim())
+      .filter(Boolean);
+    const extraKeywords = [
+      ...(focus ? [focus] : []),
+      ...authored,
+    ].filter((k, i, arr) => arr.indexOf(k) === i);
+    const src = post.featuredImage?.src;
+    const imageUrl = src
+      ? /^https?:\/\//i.test(src)
+        ? src
+        : `${SITE}${src.startsWith("/") ? "" : "/"}${src}`
+      : undefined;
+    const payload = blogPostingJsonLd(post, locale, {
+      title: postTitle(post, locale),
+      excerpt: translation?.excerpt ?? "",
+      imageUrl,
+      extraKeywords,
+    });
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.dataset.dynamicPost = "true";
+    // Same "<" escaping convention as the <JsonLd> SSR component.
+    script.textContent = JSON.stringify(payload).replace(/</g, "\\u003c");
+    document.head.appendChild(script);
+    return () => {
+      script.remove();
+    };
   }, [post, locale]);
 
   if (status === "ready" && post) {

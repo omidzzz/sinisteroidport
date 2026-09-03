@@ -124,6 +124,22 @@ export function getPostMeta(
     isFallback: !post.translations?.[locale] && locale !== "en",
   };
 }
+/** Resolve the authored SEO keyword list for a post in a given locale
+ * (locale first, EN fallback — same rule as getPostMeta). The focus
+ * keyword leads, then the authored keyword string split on ASCII and
+ * Persian commas, trimmed and deduplicated. Empty when a post has no
+ * authored SEO payload, so callers can omit the tags entirely. */
+export function getPostKeywords(post: Post, locale: Locale = "en"): string[] {
+  const chosen = post.translations?.[locale] ?? post.translations?.en;
+  const seo = chosen?.seo;
+  const focus = seo?.focusKeyword?.trim();
+  const rest = (seo?.keywords ?? "")
+    .split(/[,،]/)
+    .map((k) => k.trim())
+    .filter(Boolean);
+  const all = [focus, ...rest].filter((k): k is string => Boolean(k));
+  return [...new Set(all)];
+}
 
 /** Check whether a public asset referenced by a post actually exists on disk. */
 export function publicAssetExists(src: string | undefined): boolean {

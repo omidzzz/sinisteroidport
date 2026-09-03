@@ -124,6 +124,9 @@ export interface BlogPostingMeta {
   readMinutes?: number;
   /** Canonical taxonomy sections (normalized tags) */
   sections?: string[];
+  /** Authored per-post SEO keywords (focus keyword + keyword string) —
+   * merged ahead of tags into the JSON-LD keywords field */
+  extraKeywords?: string[];
 }
 
 export function blogPostingJsonLd(
@@ -132,6 +135,10 @@ export function blogPostingJsonLd(
   meta: BlogPostingMeta
 ) {
   const url = `${SITE}/${locale}/blog/${post.slug}/`;
+  // Authored SEO keywords (focus keyword first) lead; the canonical tag
+  // taxonomy follows. Deduplicated — authored keywords sometimes repeat a tag.
+  const tags = Array.isArray(post.tags) ? post.tags : [];
+  const keywords = [...new Set([...(meta.extraKeywords ?? []), ...tags])];
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -156,9 +163,7 @@ export function blogPostingJsonLd(
       "@type": "SpeakableSpecification",
       cssSelector: [".post-tldr", "article h1"],
     },
-    ...(Array.isArray(post.tags) && post.tags.length > 0
-      ? { keywords: post.tags.join(", ") }
-      : {}),
+    ...(keywords.length > 0 ? { keywords: keywords.join(", ") } : {}),
     ...(meta.imageUrl ? { image: meta.imageUrl } : {}),
   };
 }

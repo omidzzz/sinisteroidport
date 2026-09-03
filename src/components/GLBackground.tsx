@@ -110,12 +110,30 @@ void main() {
 }
 `;
 
-function compile(gl: WebGLRenderingContext, type: number, src: string) {
-  const sh = gl.createShader(type)!;
+function compile(
+  gl: WebGLRenderingContext,
+  type: number,
+  src: string,
+  kind: "vertex" | "fragment"
+) {
+  /* createShader → null when the WebGL context is lost or unavailable (GPU
+     resets, too many live contexts, headless/software renderers). That is an
+     expected degradation for a decorative background: return quietly so the
+     CSS layer on the wrapper stays put instead of a console `null`. */
+  const sh = gl.createShader(type);
+  if (!sh) return null;
   gl.shaderSource(sh, src);
   gl.compileShader(sh);
   if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(sh));
+    /* getShaderInfoLog may legitimately return null (no driver log, or a dead
+       context) — which is exactly what the old console.error(null) printed. */
+    const log = gl.getShaderInfoLog(sh);
+    console.warn(
+      `[GLBackground] ${kind} shader did not compile` +
+        (log
+          ? `: ${log}`
+          : "; driver returned no info log (WebGL context unavailable?)")
+    );
     gl.deleteShader(sh);
     return null;
   }
@@ -144,15 +162,15 @@ export default function GLBackground() {
          when the fixed layer is evicted during scroll unless it persists. */
       preserveDrawingBuffer: staticFrame,
     });
-    if (!gl) return; // CSS bg on the wrapper is the fallback
+    if (!gl || gl.isContextLost()) return; // CSS bg on the wrapper is the fallback
 
-    const vs = compile(gl, gl.VERTEX_SHADER, VERT);
+    const vs = compile(gl, gl.VERTEX_SHADER, VERT, "vertex");
     // Coarse/low-end devices also drop one fBm octave (4 → 3): the nebula is
     // soft cloud noise, so the lost high-frequency octave is invisible, and
     // shader cost scales with per-pixel octave count. String-level
     // specialization keeps the hot loop free of uniforms and branches.
     const fragSrc = coarse ? FRAG.replace("i < 4", "i < 3") : FRAG;
-    const fs = compile(gl, gl.FRAGMENT_SHADER, fragSrc);
+    const fs = compile(gl, gl.FRAGMENT_SHADER, fragSrc, "fragment");
     if (!vs || !fs) return;
     const prog = gl.createProgram()!;
     gl.attachShader(prog, vs);
@@ -229,7 +247,18 @@ export default function GLBackground() {
     let last = 0;
     const start = performance.now();
     const FPS = 30; // soft cap: the nebula drifts slowly, so 30fps reads identically
+    /* If the context is lost mid-session (GPU process reset, memory pressure,
+       browser reclaim), stop scheduling frames instead of repainting a dead
+       context forever — the CSS background stays on the wrapper. */
+    const stopLoop = () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    };
+    const onContextLost = () => stopLoop();
+    canvas.addEventListener("webglcontextlost", onContextLost);
+
     const frame = (ts: number) => {
+      if (gl.isContextLost()) return; // onContextLost already tore down the loop
       raf = requestAnimationFrame(frame);
       if (document.hidden) return;
       if (ts - last < 1000 / FPS) return;
@@ -249,11 +278,16 @@ export default function GLBackground() {
     }
 
     return () => {
-      cancelAnimationFrame(raf);
+      stopLoop();
+      canvas.removeEventListener("webglcontextlost", onContextLost);
       window.removeEventListener("resize", resize);
       if (!staticFrame) window.removeEventListener("mousemove", onMove);
       window.removeEventListener("themechange", onTheme);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      /* Only release the context on a real unmount. During dev StrictMode /
+         Fast-Refresh effect re-runs the canvas is still connected, so its
+         context must stay alive for the next effect run to reuse. */
+      if (!canvas.isConnected)
+        gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, []);
 

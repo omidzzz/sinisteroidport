@@ -5,7 +5,6 @@ import {
   JetBrains_Mono,
   Vazirmatn,
   Orbitron,
-  Syne,
   Noto_Kufi_Arabic,
   Unbounded,
 } from "next/font/google";
@@ -31,7 +30,10 @@ import { JsonLd, personJsonLd, websiteJsonLd } from "@/lib/schema";
 import "../../globals.css";
 
 // Sets the theme before first paint — no light-mode flash on load.
-const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}document.documentElement.dataset.theme=t}catch(e){}`;
+// Default is DARK (the house identity); the script only restores a theme the
+// user has explicitly saved, and ignores the OS color-scheme (which would
+// otherwise light-wash the whole site on light-OS machines).
+const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.dataset.theme=t}catch(e){}`;
 
 // With output: "export", only render locales listed in generateStaticParams.
 // Any other value (e.g. /admin/) → 404 instead of a runtime crash.
@@ -57,29 +59,6 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-// Persian body text needs an Arabic-script face; Vazirmatn is variable too,
-// so the kinetic weight effect still works.
-const vazirmatn = Vazirmatn({
-  subsets: ["arabic"],
-  variable: "--font-vazirmatn",
-  display: "swap",
-});
-
-// Display faces: Syne for Latin headings (brutalist variable, keeps the
-// kinetic weight effect); Noto Kufi Arabic mirrors it for Persian —
-// geometric Kufi letterforms, also variable (100–900).
-const syne = Syne({
-  subsets: ["latin"],
-  variable: "--font-syne",
-  display: "swap",
-});
-
-const notoKufiArabic = Noto_Kufi_Arabic({
-  subsets: ["arabic"],
-  variable: "--font-kufi",
-  display: "swap",
-});
-
 // Display logotype face for the SINISTER[OID] brand — a wide, slightly
 // techno variable face (200–900). Loaded only for the lockup, so it does
 // not add global weight.
@@ -87,6 +66,26 @@ const unbounded = Unbounded({
   subsets: ["latin"],
   variable: "--font-unbounded",
   display: "swap",
+});
+
+// Persian body text needs an Arabic-script face; Vazirmatn is variable too,
+// so the kinetic weight effect still works. Noto Kufi Arabic mirrors the
+// removed Syne — geometric Kufi letterforms, variable (100–900). `preload:
+// false` keeps English pages from eagerly fetching the Arabic webfonts (they
+// decode only on fa pages, where the @font-face CSS is discovered in the
+// inlined head CSS on first render).
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic"],
+  variable: "--font-vazirmatn",
+  display: "swap",
+  preload: false,
+});
+
+const notoKufiArabic = Noto_Kufi_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-kufi",
+  display: "swap",
+  preload: false,
 });
 
 export function generateStaticParams() {
@@ -156,6 +155,15 @@ export default async function LocaleRootLayout({
   if (!isLocale(raw)) notFound();
   const locale = raw as Locale;
 
+  const fontVars = [
+    orbitron.variable,
+    spaceGrotesk.variable,
+    jetbrainsMono.variable,
+    unbounded.variable,
+    vazirmatn.variable,
+    notoKufiArabic.variable,
+  ].join(" ");
+
   // Indexable commands for the palette: pages, skills and posts (content is
   // compiled at build time and serialized into the static export).
   const NAV_PATHS = ["/", "/work", "/skills", "/education", "/showcase", "/blog"];
@@ -196,7 +204,7 @@ export default async function LocaleRootLayout({
     <html
       lang={locale}
       dir={locale === "fa" ? "rtl" : "ltr"}
-      className={`${orbitron.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${vazirmatn.variable} ${syne.variable} ${notoKufiArabic.variable} ${unbounded.variable}`}
+      className={fontVars}
       suppressHydrationWarning
     >
       <body

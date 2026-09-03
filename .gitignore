@@ -32,3 +32,15 @@ server-test.pid
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local dev scratch / one-off scripts / screenshots
+/.shots/
+/.laptop-preview.js
+/extract_css.js
+/fix2.js
+/fix3.js
+/fix6.js
+/fix_lp.js
+/write_p1.js
+/write_p2.js
+

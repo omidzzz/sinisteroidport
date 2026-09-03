@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { Post } from "@/lib/posts";
 import { postTitle } from "@/lib/post-helpers";
 import { loc, type Locale } from "@/lib/i18n";
+import { toggleTheme } from "@/lib/theme";
 
 export interface CmdEntry {
   id: string;
@@ -174,15 +175,7 @@ export default function CommandPalette({
 
   const run = (e: CmdEntry) => {
     if (e.action === "theme") {
-      const next =
-        document.documentElement.dataset.theme === "light" ? "dark" : "light";
-      document.documentElement.dataset.theme = next;
-      try {
-        localStorage.setItem("theme", next);
-      } catch {
-        /* session-only */
-      }
-      window.dispatchEvent(new Event("themechange"));
+      toggleTheme();
       setOpen(false);
       return;
     }

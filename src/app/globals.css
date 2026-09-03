@@ -3848,8 +3848,14 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
     transition: none !important;
     translate: 0 0 !important;
   }
-  .bento:hover .bento-scan { animation: none !important; }
+     .bento:hover .bento-scan { animation: none !important; }
 }
+/* ============ V16 — Console Bay (in-flow acid laptop deck) ============ */
+.console-bay { position: relative; margin: clamp(2rem, 6vw, 4rem) 0; padding: clamp(1.5rem, 4vw, 2.5rem) 0; isolation: isolate; }
+.console-bay-inner { max-width: 46rem; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2.5rem); }
+.console-bay-deck { position: relative; display: grid; place-items: center; }
+.lp-svg { display: block; width: 100%; height: auto; pointer-events: none; filter: drop-shadow(0 0 20px rgba(184, 255, 0, 0.14)) drop-shadow(0 0 40px rgba(255, 43, 214, 0.09)); }
+[data-theme="light"] .lp-svg { filter: drop-shadow(0 3px 8px rgba(10, 26, 16, 0.16)); }
 /* ============ V9 — Blog posts: acid-rave article voice ============ */
 
 /* Reading progress — acid thread at the very top */

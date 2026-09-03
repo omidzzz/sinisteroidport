@@ -5,6 +5,7 @@ import BlogPostLive from "@/components/BlogPostLive";
 import {
   getAllPosts,
   getPostBySlug,
+  getPostKeywords,
   getPostMeta,
   postReadMinutes,
   postWordCount,
@@ -73,6 +74,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(slug);
   if (!post) return {};
   const meta = getPostMeta(post, locale);
+  // Authored SEO keywords (focus keyword first) — emitted as
+  // <meta name="keywords"> and merged into the BlogPosting JSON-LD.
+  const keywords = getPostKeywords(post, locale);
   // Prefer the generated 1200x630 JPG card (branded, readable in every
   // share surface); fall back to the raw cover, then the default card.
   const card = ogCardSrc(slug);
@@ -83,6 +87,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: meta.title,
     description: meta.excerpt,
+    ...(keywords.length > 0 ? { keywords } : {}),
     alternates: seoAlternates(`blog/${slug}`, locale),
     openGraph: {
       title: meta.title,
@@ -124,6 +129,8 @@ export default async function BlogPostPage({ params }: Props) {
   const card = ogCardSrc(slug);
 
   const meta = getPostMeta(post, locale);
+  // Same resolution rule as generateMetadata: locale first, EN fallback.
+  const keywords = getPostKeywords(post, locale);
   // Same resolution rule as BlogPostLive/getPostMeta: locale first, EN fallback
   const translation = post.translations?.[locale] ?? post.translations?.en;
   const faq = translation?.faq ?? [];
@@ -146,6 +153,7 @@ export default async function BlogPostPage({ params }: Props) {
       wordCount: postWordCount(post, locale),
       readMinutes: postReadMinutes(post, locale),
       sections: normalizeTags(post.tags),
+      extraKeywords: keywords,
     }),
     breadcrumbJsonLd([
       { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },

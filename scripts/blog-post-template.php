@@ -124,6 +124,27 @@ $html = preg_replace('~<title>.*?</title>~is', '<title>' . $dbTitle . ' — Sini
 /* name="description" */
 $html = set_attr($html, '~<meta\s+[^>]*name="description"[^>]*/?>~i', 'content', esc(mb_substr($excerpt, 0, 160)));
 
+/* name="keywords" — authored per-locale SEO payload: focus keyword first,
+   then the keyword string split on ASCII and Persian commas, deduped.
+   The shell ships a placeholder meta purely so this swap can target an
+   EXISTING element (hydration contract: never add head nodes). Posts
+   without an SEO payload get an empty content — never the placeholder. */
+$seo = is_array($t['seo'] ?? null) ? $t['seo'] : [];
+$kwList = array();
+$focusKw = trim((string)($seo['focusKeyword'] ?? ''));
+if ($focusKw !== '') $kwList[] = $focusKw;
+foreach (preg_split('~[,،]~u', (string)($seo['keywords'] ?? '')) as $kw) {
+    $kw = trim((string)$kw);
+    if ($kw !== '') $kwList[] = $kw;
+}
+$kwList = array_values(array_unique($kwList));
+$html = set_attr(
+    $html,
+    '~<meta\s+[^>]*name="keywords"[^>]*/?>~i',
+    'content',
+    esc(implode(', ', $kwList))
+);
+
 /* rel="canonical" */
 $html = set_attr($html, '~<link\s+[^>]*rel="canonical"[^>]*/?>~i', 'href', $dbUrl);
 

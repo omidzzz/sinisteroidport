@@ -30,6 +30,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale === "fa"
         ? "نوشته‌ای از وبلاگ سینیسترویید."
         : "An article from the Sinisteroid blog.",
+    /* Placeholder exists ONLY so the prerendered shell carries a
+       <meta name="keywords"> element. blog-post-template.php swaps its
+       content per DB post (the hydration contract forbids ADDING head
+       nodes, so the element must already exist). Direct visits to the
+       reserved /blog/live/ route show this placeholder; every real
+       DB-published post gets its authored keywords swapped in. */
+    keywords: "Sinisteroid",
   };
 }
 
