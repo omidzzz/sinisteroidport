@@ -1,5 +1,5 @@
 import LocaleRedirect from "@/components/layout/LocaleRedirect";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/blog/repository";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));

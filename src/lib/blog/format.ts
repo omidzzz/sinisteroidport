@@ -1,5 +1,5 @@
-import type { Post, PostTranslation } from "./posts";
-import type { Locale } from "./i18n";
+import type { Post, PostTranslation } from "./types";
+import type { Locale } from "../i18n";
 
 /** Pure, client-safe helpers for reading a post's locale content. */
 

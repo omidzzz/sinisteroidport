@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Reveal from "../ui/Reveal";
 import { ArrowIcon } from "../ui/icons";
-import type { Post } from "@/lib/posts";
+import type { Post } from "@/lib/blog/types";
 import {
   isFallbackTranslation,
   postExcerpt,
   postTitle,
   formatPostDate,
-} from "@/lib/post-helpers";
+} from "@/lib/blog/format";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 
 /** Shape returned by /api/get_posts.php (subset of our Post). */

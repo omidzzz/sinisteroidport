@@ -3,7 +3,7 @@ import PageHero from "@/components/ui/PageHero";
 import Reveal from "@/components/ui/Reveal";
 import BlogListLive from "@/components/blog/BlogListLive";
 import PostsCountStat from "@/components/blog/PostsCountStat";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/blog/repository";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 

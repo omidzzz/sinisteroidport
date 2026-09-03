@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import type { Post } from "@/lib/posts";
-import { postTitle } from "@/lib/post-helpers";
+import type { Post } from "@/lib/blog/types";
+import { postTitle } from "@/lib/blog/format";
 import { loc, type Locale } from "@/lib/i18n";
 import { toggleTheme } from "@/lib/theme";
 

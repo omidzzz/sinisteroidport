@@ -1,4 +1,4 @@
-import type { Post } from "@/lib/posts";
+import type { Post } from "./types";
 
 /**
  * Single-flight client cache for the live post API (/api/get_post.php).

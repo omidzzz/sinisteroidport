@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ScrambleText from "../ui/ScrambleText";
-import type { Post } from "@/lib/posts";
+import type { Post } from "@/lib/blog/types";
 import {
   isFallbackTranslation,
   postTitle,
   postDateKey,
-} from "@/lib/post-helpers";
+} from "@/lib/blog/format";
 import { loc, type Locale } from "@/lib/i18n";
 import { ArrowIcon } from "../ui/icons";
 

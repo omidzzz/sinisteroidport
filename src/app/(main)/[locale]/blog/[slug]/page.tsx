@@ -5,16 +5,13 @@ import BlogPostLive from "@/components/blog/BlogPostLive";
 import {
   getAllPosts,
   getPostBySlug,
-  getPostKeywords,
-  getPostMeta,
-  postReadMinutes,
-  postWordCount,
-  ogCardSrc,
-  publicAssetExists,
-  type Post,
-} from "@/lib/posts";
+} from "@/lib/blog/repository";
+import { getPostMeta, getPostKeywords } from "@/lib/blog/meta";
+import { postWordCount, postReadMinutes } from "@/lib/blog/stats";
+import { ogCardSrc, publicAssetExists } from "@/lib/blog/assets";
+import type { Post } from "@/lib/blog/types";
 import { isLocale, loc, type Locale } from "@/lib/i18n";
-import { formatPostDate } from "@/lib/post-helpers";
+import { formatPostDate } from "@/lib/blog/format";
 import { seoAlternates, SITE } from "@/lib/seo";
 import {
   normalizeTags,

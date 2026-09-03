@@ -1,5 +1,5 @@
 import type { Locale } from "../i18n";
-import type { FaqItem, Post } from "../posts";
+import type { FaqItem, Post } from "../blog/types";
 import { SITE } from "../seo";
 
 /**

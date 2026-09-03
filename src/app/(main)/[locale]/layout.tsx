@@ -21,8 +21,8 @@ import {
   EasterEggLazy,
 } from "@/components/overlays/CommandPaletteLazy";
 import type { CmdEntry } from "@/components/overlays/CommandPalette";
-import { getAllPosts } from "@/lib/posts";
-import { postTitle } from "@/lib/post-helpers";
+import { getAllPosts } from "@/lib/blog/repository";
+import { postTitle } from "@/lib/blog/format";
 import skillsData from "@/data/skills.json";
 import { NAV_PATHS } from "@/lib/nav";
 import { isLocale, locales, loc, getDict, type Locale } from "@/lib/i18n";

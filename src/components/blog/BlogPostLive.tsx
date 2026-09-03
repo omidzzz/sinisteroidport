@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import type { Post } from "@/lib/posts";
+import type { Post } from "@/lib/blog/types";
 import ContentRenderer from "./ContentRenderer";
 import {
   getChosenTranslation,
@@ -11,12 +11,12 @@ import {
   postExcerpt,
   formatPostDate,
   postDateKey,
-} from "@/lib/post-helpers";
+} from "@/lib/blog/format";
 import { normalizeTags, tagLabel } from "@/lib/tags";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import FaqAccordion from "./FaqAccordion";
 import { ArrowIcon } from "../ui/icons";
-import { getLivePost, preloadLivePost } from "@/lib/live-post";
+import { getLivePost, preloadLivePost } from "@/lib/blog/live";
 
 // Kick the DB refresh off at bundle-parse time — BEFORE React hydrates — so
 // the API round-trip overlaps hydration instead of starting after it. No-op

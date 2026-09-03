@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Post } from "@/lib/posts";
+import type { Post } from "@/lib/blog/types";
 import BlogPostLive from "./BlogPostLive";
-import { postTitle } from "@/lib/post-helpers";
-import { getLivePost } from "@/lib/live-post";
+import { postTitle } from "@/lib/blog/format";
+import { getLivePost } from "@/lib/blog/live";
 import { blogPostingJsonLd } from "@/lib/schema";
 import { SITE } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";

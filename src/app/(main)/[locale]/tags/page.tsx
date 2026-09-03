@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/ui/PageHero";
 import Reveal from "@/components/ui/Reveal";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/blog/repository";
 import { isLocale, loc, type Locale } from "@/lib/i18n";
 import { seoAlternates, SITE } from "@/lib/seo";
 import { tagLabel, usedTags } from "@/lib/tags";
