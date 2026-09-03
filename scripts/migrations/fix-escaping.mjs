@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const file = path.resolve("scripts/prepare-cpanel.mjs");
+const file = path.resolve("scripts/build/prepare-cpanel.mjs");
 let c = fs.readFileSync(file, "utf8");
 
 // The editor tool doubled our backslashes.  Our added section contains

@@ -3,7 +3,7 @@
  *
  * Usage:
  *   npm run build        (fresh static export in out/)
- *   node scripts/audit.mjs [--presets mobile,desktop] [--pages /en/,/en/blog/]
+ *   node scripts/tools/audit.mjs [--presets mobile,desktop] [--pages /en/,/en/blog/]
  *
  * Serves out/ on 127.0.0.1:4173 (dependency-free static server) and runs
  * the Lighthouse CLI (via npx, no devDependency) per page × preset. Writes
@@ -16,7 +16,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const outDir = path.join(root, "out");
 const reportDir = path.join(root, ".lighthouse");
 

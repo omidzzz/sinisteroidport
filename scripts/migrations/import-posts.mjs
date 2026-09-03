@@ -3,7 +3,7 @@
  * into content/posts/*.json for the Next.js site.
  *
  * Usage:
- *   node scripts/import-posts.mjs <path-to-export.json>
+ *   node scripts/migrations/import-posts.mjs <path-to-export.json>
  *
  * Handles:
  *  - phpMyAdmin export envelope ({type:"table", name:"posts", data:[...]})
@@ -16,12 +16,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..");
+const root = path.resolve(__dirname, "..", "..");
 const outDir = path.join(root, "content", "posts");
 
 const inputPath = process.argv[2];
 if (!inputPath) {
-  console.error("Usage: node scripts/import-posts.mjs <path-to-export.json>");
+  console.error("Usage: node scripts/migrations/import-posts.mjs <path-to-export.json>");
   process.exit(1);
 }
 

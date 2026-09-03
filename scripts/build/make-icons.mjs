@@ -7,14 +7,14 @@
  *   apple-touch-icon.png (180×180) · og-default.jpg (1200×630)
  *
  * Design: acid ring planet + cyan moon on the void — readable at 16px.
- * Usage: node scripts/make-icons.mjs
+ * Usage: node scripts/build/make-icons.mjs
  */
 import sharp from "sharp";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const pub = path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."), "public");
+const pub = path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", ".."), "public");
 const ACID = "#b8ff00";
 const CYAN = "#00e5ff";
 const VOID = "#020503";

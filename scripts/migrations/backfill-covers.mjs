@@ -11,14 +11,14 @@
  *  - Placeholder filenames (`REPLACE-*`) are skipped.
  *  - The first /api/uploads/*.webp in the page body is treated as the cover.
  *
- * Usage: node scripts/backfill-covers.mjs
+ * Usage: node scripts/migrations/backfill-covers.mjs
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..");
+const root = path.resolve(__dirname, "..", "..");
 const postsDir = path.join(root, "content", "posts");
 const buildBlogDir = path.join(root, "build", "blog");
 

@@ -11,7 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 // Default: the committed source assets (idempotent no-op once optimized).
 // With --out it targets the static-export output instead, which is lock-free
 // and regenerated on every build — the originals never change on disk.

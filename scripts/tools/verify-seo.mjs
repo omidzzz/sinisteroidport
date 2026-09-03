@@ -183,9 +183,9 @@ ok(".font-display on section titles", stripRsc(blogList).includes("font-display"
 ok("display font CSS var (Orbitron)", has("--font-orbitron-var"));
 ok("RTL display override", /\[lang=fa\][^{]*\{[^}]*--font-display/.test(allCss));
 ok("no Syne @font-face shipped (dead fallback removed)", !/font-family:Syne/.test(allCss));
-const faHome = fs.readFileSync("out/fa/index.html", "utf8");
-ok("Kufi @font-face self-hosted (fa pages)", /font-family:Noto Kufi Arabic/.test(faHome));
-ok("Vazirmatn @font-face self-hosted (fa pages)", /font-family:Vazirmatn/.test(faHome));
+const faHome2 = fs.readFileSync("out/fa/index.html", "utf8");
+ok("Kufi @font-face self-hosted (fa pages)", /font-family:Noto Kufi Arabic/.test(faHome2));
+ok("Vazirmatn @font-face self-hosted (fa pages)", /font-family:Vazirmatn/.test(faHome2));
 
 // blog-post-template.php is now a meta-swapper: it loads the prerendered
 // React shell and swaps its <head> for DB-backed SEO metadata, so DB-only
@@ -224,7 +224,7 @@ ok("LTR ticker override in CSS", has("[dir=ltr] .ticker-track"));
 ok("LTR ticker-rev override in CSS", has("[dir=ltr] .ticker-rev .ticker-track"));
 ok("direction:ltr present in CSS", has("direction:ltr"));
 ok("no ticker-move-rtl (old class)", !has("ticker-move-rtl"));
-ok("FA page ticker-track rendered", faHome.includes("ticker-track"));
+ok("FA page ticker-track rendered", faHome2.includes("ticker-track"));
 ok("RTL ticker keyframe for FA pages", has("ticker-run-rtl"));
 
 // ── Sitemap: dynamic + static fallback ────────────────────────────

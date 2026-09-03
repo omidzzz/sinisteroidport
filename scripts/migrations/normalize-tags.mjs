@@ -11,7 +11,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..");
+const root = path.resolve(__dirname, "..", "..");
 const postsDir = path.join(root, "content", "posts");
 const tagData = JSON.parse(
   fs.readFileSync(path.join(root, "src", "data", "tags.json"), "utf8")

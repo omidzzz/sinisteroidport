@@ -20,7 +20,7 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..");
+const root = path.resolve(__dirname, "..", "..");
 const SITE = "https://sinisteroid.ir";
 const W = 1200;
 const H = 630;

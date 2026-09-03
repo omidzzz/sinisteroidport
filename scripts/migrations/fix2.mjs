@@ -1,7 +1,7 @@
 // Fix double backslashes in the .htaccess template literal section we added
 import fs from "node:fs";
 
-const p = "scripts/prepare-cpanel.mjs";
+const p = "scripts/build/prepare-cpanel.mjs";
 let c = fs.readFileSync(p, "utf8");
 
 // Find section boundaries

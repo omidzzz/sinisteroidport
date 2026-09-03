@@ -8,7 +8,7 @@
  * unzip on Linux servers extracts them as real folders — never backslash
  * filenames. Fully synchronous, zero dependencies.
  *
- * Usage:  node scripts/zip-out.mjs
+ * Usage:  node scripts/build/zip-out.mjs
  *         (or `npm run deploy`, which runs build → prepare-cpanel → this)
  */
 import { spawnSync } from "node:child_process";
@@ -17,7 +17,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..");
+const root = path.resolve(__dirname, "..", "..");
 const out = path.join(root, "out");
 const zip = path.join(root, "out.zip");
 

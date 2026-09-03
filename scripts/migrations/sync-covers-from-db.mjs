@@ -14,8 +14,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const postsDir = path.resolve(__dirname, "..", "content", "posts");
-const root = path.resolve(__dirname, "..");
+const postsDir = path.resolve(__dirname, "..", "..", "content", "posts");
+const root = path.resolve(__dirname, "..", "..");
 
 const dbUrl = process.argv[2] ?? "https://sinisteroid.ir/api/get_posts.php";
 
