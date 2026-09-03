@@ -1,0 +1,329 @@
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  /* Tilted bands and bleeds must never spawn a horizontal scrollbar */
+  overflow-x: clip;
+}
+
+body {
+  /* Base tint under every content layer (canvas paints beneath) */
+  background-color: var(--color-bg);
+  overflow-x: clip;
+}
+
+/* Custom cursor takes over on precise pointers */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  body,
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+}
+
+::selection {
+  background: var(--color-acid);
+  color: #04110a;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #040806;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--color-accent),
+    var(--color-accent-2) 55%,
+    var(--color-acid)
+  );
+  border-radius: 8px;
+  border: 2px solid #040806;
+}
+
+/* ---------- Typography helpers ---------- */
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(var(--rgb-ink), 0.55);
+  filter: drop-shadow(0 0 16px rgba(var(--rgb-accent), 0.35));
+}
+
+/* Chromatic aberration — glyph-split RGB echo (pure text-shadow) */
+.rgb-split {
+  text-shadow:
+    -0.03em 0 rgba(var(--rgb-accent), 0.75),
+    0.03em 0 rgba(var(--rgb-accent-2), 0.75),
+    0 0.014em rgba(var(--rgb-acid), 0.4);
+}
+.rgb-split-strong:hover,
+.group:hover .rgb-split-strong {
+  text-shadow:
+    -0.07em 0 rgba(var(--rgb-accent), 0.95),
+    0.07em 0 rgba(var(--rgb-accent-2), 0.95),
+    0 0.05em rgba(var(--rgb-acid), 0.75);
+}
+
+/* Animated holographic display text — iridescent sweep clipped to
+   the glyphs; background-position only, no relayout per frame. */
+.text-holo {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-ink) 0%,
+    var(--color-accent) 30%,
+    var(--color-accent-2) 52%,
+    var(--color-acid) 68%,
+    var(--color-accent-3) 84%,
+    var(--color-ink) 100%
+  );
+  background-size: 220% 100%;
+  background-position-x: 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .text-holo {
+    animation: holo-drift 9s ease-in-out infinite alternate;
+  }
+}
+@keyframes holo-drift {
+  from {
+    background-position-x: 115%;
+  }
+  to {
+    background-position-x: -15%;
+  }
+}
+
+/* Soft acid halo for key words (static paint — cheap) */
+.neon-text {
+  color: var(--color-acid);
+  text-shadow:
+    0 0 10px rgba(var(--rgb-acid), 0.6),
+    0 0 34px rgba(var(--rgb-accent-2), 0.3);
+}
+
+/* ---------- Film grain ---------- */
+
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+}
+
+/* ---------- Scroll-reveal (IntersectionObserver-driven) ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px) scale(0.985);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ---------- Long-form prose ---------- */
+
+.prose-post p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.prose-post a {
+  color: var(--color-accent);
+}
+
+/* Justified text everywhere in posts (per editorial request) */
+.prose-post p,
+.prose-post li {
+  text-align: justify;
+  text-align-last: start;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.prose-post h2,
+.prose-post h3,
+.prose-post h4 {
+  scroll-margin-top: 4rem; /* sticky header offset for anchor links */
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.prose-post p {
+  text-wrap: pretty;
+}
+
+/* Emphasised words pop in ink, not muted */
+.prose-post strong,
+.prose-post b {
+  color: var(--color-acid);
+  font-weight: 600;
+}
+
+/* Inline code inside posts */
+.prose-post code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-acid);
+  background: rgba(var(--rgb-acid), 0.07);
+  border: 1px solid rgba(var(--rgb-acid), 0.3);
+  padding: 0.1em 0.35em;
+  word-break: break-word;
+}
+
+.prose-post img,
+.prose-post video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Persian (RTL): no auto-hyphenation dictionary → looser leading */
+[dir="rtl"] .prose-post p,
+[dir="rtl"] .prose-post li {
+  hyphens: manual;
+  -webkit-hyphens: manual;
+  word-spacing: 0.05em;
+  line-height: 1.95;
+}
+
+/* Perf: long pages skip rendering far-offscreen prose */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}
+
+/* Horizontal draw-on-scroll rule (scroll-driven, zero JS) */
+.x-rule {
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  width: 34%;
+  min-width: 8rem;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--color-acid),
+    var(--color-accent),
+    transparent
+  );
+  box-shadow: 0 0 12px rgba(var(--rgb-acid), 0.5);
+  transform-origin: left center;
+}
+[dir="rtl"] .x-rule {
+  transform-origin: right center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .x-rule {
+    animation: x-grow linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 32%;
+  }
+}
+@keyframes x-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Cross-document View Transitions (MPA, Chromium 126+) — zero JS */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* ---------- Custom cursor — targeting reticle ---------- */
+
+.cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 90;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: var(--color-acid);
+  box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.9);
+  pointer-events: none;
+}
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 80;
+  width: 38px;
+  height: 38px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(var(--rgb-accent), 0.9);
+  background: radial-gradient(
+    closest-side,
+    rgba(var(--rgb-accent), 0.14),
+    transparent
+  );
+  pointer-events: none;
+  transition: border-color 0.25s ease, scale 0.2s ease;
+}
+/* Reticle ticks around the ring (pseudo = north/south beam pair) */
+.cursor-ring::before,
+.cursor-ring::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  width: 1px;
+  height: 6px;
+  margin-left: -0.5px;
+  background: rgba(var(--rgb-accent), 0.85);
+  transform-origin: center calc(19px + 6px);
+}
+.cursor-ring::after {
+  transform: rotate(180deg);
+}
+/* Over interactive elements the reticle ignites acid and tightens */
+.cursor-ring.cursor-hot {
+  border-color: rgba(var(--rgb-acid), 0.95);
+}
+.cursor-ring.cursor-hot::before,
+.cursor-ring.cursor-hot::after {
+  background: rgba(var(--rgb-acid), 0.95);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cursor-ring {
+    animation: ring-spin 9s linear infinite;
+  }
+}
+@keyframes ring-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@media (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}

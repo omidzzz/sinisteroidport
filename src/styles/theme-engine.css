@@ -1,0 +1,121 @@
+/* ============================================================
+   PSIONIC ORBIT — theme engine v2 (total re-skin)
+   ------------------------------------------------------------
+   Dark (default) is a harder-than-black void carved open by an acid-lime signal
+   system. The light/dark toggle is back: it flips [data-theme]
+   on <html> and the whole palette re-maps because every utility
+   and surface below is token-driven. Surfaces that once used raw
+   purple/navy hexes are re-declared first for the (new default)
+   dark mode, then overridden again for light mode.
+   ============================================================ */
+
+/* ---- Dark: refine the hard-coded surfaces to the red void ---- */
+::-webkit-scrollbar-track { background: var(--color-bg); }
+.hero-plate-frame { background: var(--color-panel); }
+.glass {
+  background: linear-gradient(155deg, rgba(var(--rgb-accent-2), 0.10), rgba(3, 10, 7, 0.5));
+}
+.overlay-veil {
+  background: radial-gradient(
+    125% 95% at 70% -10%,
+    rgba(var(--rgb-accent), 0.18),
+    rgba(2, 6, 5, 0.9) 52%,
+    rgba(2, 6, 5, 0.98)
+  );
+}
+.command-bar {
+  background:
+    linear-gradient(180deg, rgba(3, 8, 6, 0.92), rgba(2, 6, 5, 0.62)),
+    radial-gradient(130% 170% at 84% -30%, rgba(var(--rgb-accent), 0.18), transparent 62%);
+}
+
+/* ---------- Theme toggle (sun/moon) icon pairs ---------- */
+.icon-toggle { position: relative; }
+.icon-toggle .icon-sun,
+.icon-toggle .icon-moon { display: grid; place-items: center; }
+html .icon-sun { display: grid; }
+html .icon-moon { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .icon-toggle .icon-sun,
+  .icon-toggle .icon-moon { transition: transform 0.16s ease; }
+  html .icon-sun:hover { transform: rotate(40deg) scale(1.2); }
+  html[data-theme="light"] .icon-moon:hover { transform: rotate(-24deg) scale(1.2); }
+}
+[data-theme="light"] .icon-sun { display: none; }
+[data-theme="light"] .icon-moon { display: grid; }
+
+/* ---------- LIGHT THEME: laboratory whiteout ------------------ */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --color-bg: #f2f6ee;
+  --color-panel: #ffffff;
+  --color-line: rgba(16, 94, 76, 0.22);
+  --color-ink: #0a140c;
+  --color-muted: #55695c;
+  /* Accent darkened for AA: stock #007a8c is only ~4.5:1 on the light bg,
+     too close to the 4.5 bar once opacity/aliasing is applied (the footer
+     logo at 100% now lands ~6.6:1, links and labels ≥ 6:1). */
+  --color-accent: #005f73;
+  --color-accent-2: #005467;
+  --color-accent-3: #24565c;
+  --color-acid: #567d00;
+
+  /* AA-safe accent text variants (readable on --color-bg). The stock
+     acid/accent tones are only ~4.3–4.6:1, too close to the 4.5 bar for
+     small mono labels (hero sig-badge, footer rail indices, logo ID). */
+  --color-acid-ink: #3f5b00;
+  --color-accent-ink: #00596b;
+
+  --rgb-accent: 0, 122, 140;
+  --rgb-accent-2: 0, 99, 118;
+  --rgb-accent-3: 36, 86, 92;
+  --rgb-acid: 86, 125, 0;
+  --rgb-ink: 10, 20, 12;
+}
+
+/* AA-safe accent labels in light mode (7.1:1 acid, 6.3:1 cyan on #f2f6ee) */
+[data-theme="light"] .sig-badge { color: var(--color-acid-ink); }
+[data-theme="light"] .logo-id { color: var(--color-accent-ink); }
+
+[data-theme="light"] ::selection { color: #ffffff; }
+[data-theme="light"] ::-webkit-scrollbar-track { background: #e9eee6; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { border-color: #e9eee6; }
+
+/* Blog-post surfaces: the dark-void overlays baked into .post-tldr and
+   .prose-post pre must not bleed into light mode, or articles render as a
+   muddy half-dark hybrid (dark panels over the laboratory whiteout). */
+[data-theme="light"] .post-tldr {
+  background:
+    linear-gradient(155deg, rgba(var(--rgb-acid), 0.08), rgba(255, 255, 255, 0.75) 60%),
+    var(--color-bg);
+}
+[data-theme="light"] .prose-post pre {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="light"] .glass {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(246, 250, 242, 0.86));
+  border-color: rgba(var(--rgb-accent-3), 0.16);
+}
+[data-theme="light"] .overlay-veil {
+  background: radial-gradient(
+    125% 95% at 70% -10%,
+    rgba(var(--rgb-accent), 0.12),
+    rgba(244, 248, 240, 0.96) 55%,
+    #f2f6ee
+  );
+}
+[data-theme="light"] .command-bar {
+  background:
+    linear-gradient(180deg, rgba(248, 251, 244, 0.92), rgba(245, 249, 240, 0.7)),
+    radial-gradient(130% 170% at 84% -30%, rgba(var(--rgb-accent), 0.07), transparent 62%);
+}
+[data-theme="light"] .hero { background: transparent; }
+[data-theme="light"] .hero-plate-img { filter: grayscale(0.25) contrast(1.02) saturate(1.1); }
+[data-theme="light"] .prism-panel::before { opacity: 0.28; }
+[data-theme="light"] .noise { opacity: 0.05; mix-blend-mode: multiply; }
+[data-theme="light"] .command-link:hover,
+[data-theme="light"] .command-link:focus-visible {
+  background: rgba(var(--rgb-accent-3), 0.08);
+}

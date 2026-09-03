@@ -1,0 +1,70 @@
+/* ============================================================
+   ZINE FAMILY — "signal slabs" that rescope the palette so all
+   inner utilities adapt (the old paper inversion, now a violet
+   hologram register with a travelling scan edge).
+   ============================================================ */
+
+.zine-panel {
+  --color-bg: #05120d;
+  --color-panel: #0c241c;
+  --color-line: rgba(198, 255, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(var(--rgb-acid), 0.22);
+  background:
+    radial-gradient(
+      130% 100% at 85% 0%,
+      rgba(var(--rgb-accent-3), 0.18),
+      transparent 52%
+    ),
+    linear-gradient(165deg, #081b14, #04100c 70%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 26px 70px rgba(2, 2, 12, 0.55);
+  transform: translateY(14px);
+  opacity: 0;
+  transition:
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.8s ease;
+}
+.zine-panel.is-in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Travelling top scanline */
+.zine-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-acid),
+    var(--color-accent-2),
+    transparent
+  );
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .zine-top {
+    animation: zine-scan 4.5s linear infinite;
+  }
+}
+@keyframes zine-scan {
+  from {
+    background-position-x: -60%;
+  }
+  to {
+    background-position-x: 160%;
+  }
+}
+
+/* Numbered service rows inside zine sections */
+.zine-row:hover h3 {
+  color: var(--color-acid);
+  text-shadow: 0 0 18px rgba(var(--rgb-acid), 0.45);
+}

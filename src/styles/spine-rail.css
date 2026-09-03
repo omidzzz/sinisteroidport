@@ -1,0 +1,296 @@
+/* ============================================================
+   SPINE RAIL — fixed vertical navigation docked to the start
+   edge. Kills the conventional top bar entirely: rotated
+   logotype at the foot, writing-mode link stack in the middle,
+   live scroll beam on the edge. Flips sides automatically in
+   RTL via logical properties.
+   ============================================================ */
+
+.spine-rail {
+  position: fixed;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 50;
+  display: none;
+  width: var(--rail-w);
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 1.4rem;
+  border-inline-end: 1px solid rgba(var(--rgb-accent-3), 0.16);
+  background: linear-gradient(
+    to right,
+    rgba(2, 6, 5, 0.66),
+    rgba(2, 6, 5, 0.12) 70%,
+    transparent
+  );
+  backdrop-filter: blur(calc(var(--glass-blur) * 0.7));
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 0.7));
+}
+[dir="rtl"] .spine-rail {
+  background: linear-gradient(
+    to left,
+    rgba(2, 6, 5, 0.66),
+    rgba(2, 6, 5, 0.12) 70%,
+    transparent
+  );
+}
+@media (min-width: 768px) {
+  .spine-rail {
+    display: flex;
+  }
+}
+
+/* Vertical wordmark — reads upward like a book spine */
+.rail-logo {
+  writing-mode: vertical-rl;
+  font-family: var(--font-logo);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--color-ink);
+  rotate: 180deg;
+}
+
+/* Live scroll beam hugging the spine edge */
+.rail-beam {
+  position: absolute;
+  inset-inline-end: -1px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  overflow: hidden;
+}
+.rail-beam-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: top center;
+  background: linear-gradient(
+    180deg,
+    var(--color-acid),
+    var(--color-accent) 45%,
+    var(--color-accent-2)
+  );
+  box-shadow: 0 0 14px rgba(var(--rgb-acid), 0.65);
+  transform: scaleY(var(--scroll-p, 0));
+}
+
+/* The stacked link column */
+.rail-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.35rem;
+}
+
+.rail-link {
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color 0.25s ease, filter 0.25s ease;
+}
+.rail-link:hover,
+.rail-link:focus-visible {
+  color: var(--color-accent);
+  filter: drop-shadow(0 0 8px rgba(var(--rgb-accent), 0.7));
+}
+.rail-link.is-active {
+  color: var(--color-acid);
+  filter: drop-shadow(0 0 9px rgba(var(--rgb-acid), 0.7));
+}
+.rail-index {
+  margin-bottom: 0.55rem;
+  display: block;
+  font-size: 0.56rem;
+  color: rgba(var(--rgb-accent-3), 0.85);
+}
+
+/* Route pip (also used by the mobile overlay) */
+.nav-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--color-acid);
+  box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.95);
+  animation: dot-pulse 2.2s ease-in-out infinite;
+}
+@keyframes dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.72);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-dot {
+    animation: none;
+  }
+}
+
+/* ---------- ORBITAL OVERLAY — fullscreen mobile navigation ------ */
+
+.overlay-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0;
+  visibility: hidden;
+  background:
+    radial-gradient(
+      120% 90% at 80% 110%,
+      rgba(var(--rgb-accent-2), 0.14),
+      transparent 60%
+    ),
+    radial-gradient(
+      120% 100% at 15% -10%,
+      rgba(var(--rgb-accent), 0.13),
+      transparent 55%
+    ),
+    rgba(2, 5, 4, 0.92);
+  backdrop-filter: blur(calc(var(--glass-blur) * 1.6));
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) * 1.6));
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+}
+.overlay-veil.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlay-menu {
+  position: absolute;
+  inset-inline-start: clamp(1.5rem, 7vw, 5rem);
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.overlay-link {
+  display: block;
+  padding-block: 0.18em;
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.02;
+  color: var(--color-ink);
+  opacity: 0;
+  translate: 0 26px;
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s ease,
+    filter 0.3s ease;
+}
+.overlay-veil.is-open .overlay-link {
+  opacity: 1;
+  translate: 0 0;
+}
+.overlay-link:hover,
+.overlay-link.is-active {
+  color: var(--color-acid);
+  filter: drop-shadow(0 0 14px rgba(var(--rgb-acid), 0.55));
+}
+.overlay-index {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: rgba(var(--rgb-accent), 0.8);
+}
+
+/* Niche detail: staggered indentation so the menu composes like type art */
+.overlay-link[data-off="0"] { margin-inline-start: 0; }
+.overlay-link[data-off="1"] { margin-inline-start: 1.75rem; }
+.overlay-link[data-off="2"] { margin-inline-start: 3.5rem; }
+.overlay-link[data-off="3"] { margin-inline-start: 1rem; }
+.overlay-link[data-off="4"] { margin-inline-start: 2.75rem; }
+.overlay-link[data-off="5"] { margin-inline-start: 4.25rem; }
+
+/* ---------- Marquee tickers ---------- */
+
+.ticker {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 7%,
+    #000 93%,
+    transparent
+  );
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-run 30s linear infinite;
+}
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+@keyframes ticker-run {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+[dir="rtl"] .ticker-track {
+  animation-name: ticker-run-rtl;
+}
+@keyframes ticker-run-rtl {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+/* ── Lock dir="ltr" tickers to LTR animation even under <html dir="rtl"> ──
+   The [dir="rtl"] selector above matches ANY ancestor, so in the Persian
+   page it hijacks the footer ASCII bands (which set dir="ltr" on purpose).
+   These overrides — same specificity, later in source order — win the
+   cascade and guarantee crossed-band motion in both languages.            */
+[dir="ltr"] .ticker-track { animation-name: ticker-run; direction: ltr; }
+
+
+/* Inverted acid band used by diagonal marquees */
+.ticker-band {
+  background: linear-gradient(
+    100deg,
+    var(--color-acid),
+    var(--color-accent) 38%,
+    var(--color-accent-2)
+  );
+  color: #04110a;
+  box-shadow:
+    0 0 34px rgba(var(--rgb-acid), 0.32),
+    0 0 80px rgba(var(--rgb-accent-2), 0.22);
+}
+.ticker-band .ticker-track {
+  animation-duration: 26s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+}

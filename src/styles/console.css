@@ -1,0 +1,362 @@
+/* ============================================================
+   REDACT CONSOLE v2 — new layout composition + interactions
+   ------------------------------------------------------------
+   Fresh placements & decorations + the mouse/scroll kit:
+   Spotlight, Tilt, CountUp, hover-accordion services, horizontal
+   post strip. ALL motion is transform/opacity/grid-tracks only
+   and gated behind prefers-reduced-motion.
+   ============================================================ */
+
+/* ---------- Decorative hero scaffolding ---------- */
+.hero-scene {
+  isolation: isolate;
+  background:
+    radial-gradient(120% 90% at 12% 0%, rgba(var(--rgb-accent), 0.10), transparent 46%),
+    linear-gradient(180deg, transparent 0%, rgba(var(--rgb-accent-3), 0.06) 100%);
+}
+[data-theme="light"] .hero-scene {
+  background:
+    radial-gradient(120% 90% at 12% 0%, rgba(var(--rgb-accent), 0.08), transparent 46%);
+}
+
+/* Giant ghost index numeral bleeding off the edge (pure decoration) */
+.ghost-index {
+  position: absolute;
+  inset-inline-end: -0.12em;
+  top: -0.1em;
+  z-index: -1;
+  font-family: var(--font-display);
+  font-size: clamp(8rem, 30vw, 22rem);
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(var(--rgb-accent), 0.14);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Vertical meta rail on the inline-start edge */
+.edge-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.edge-rail::after {
+  content: "";
+  width: 1px;
+  height: 4.5rem;
+  background: linear-gradient(180deg, transparent, var(--color-accent));
+}
+
+/* Cursor spotlight wrapper + glow overlay */
+.spot-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.spot-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    34rem 34rem at var(--sx, 50%) var(--sy, 50%),
+    rgba(var(--rgb-accent), 0.12),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.spot-wrap:hover .spot-glow {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spot-glow {
+    opacity: 0.5;
+    background: radial-gradient(
+      40rem 40rem at 50% 50%,
+      rgba(var(--rgb-accent), 0.1),
+      transparent 60%
+    );
+  }
+}
+
+/* ---------- Services: hover-accordion deck ---------- */
+.service-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.service-row {
+  --row-idx: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: linear-gradient(
+    120deg,
+    rgba(var(--rgb-accent-3), 0.05),
+    rgba(var(--rgb-accent-3), 0.01)
+  );
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+.service-row:hover {
+  border-color: rgba(var(--rgb-accent), 0.45);
+  background: linear-gradient(
+    120deg,
+    rgba(var(--rgb-accent), 0.08),
+    rgba(var(--rgb-accent-2), 0.04)
+  );
+  transform: translateX(0.5rem);
+}
+[dir="rtl"] .service-row:hover {
+  transform: translateX(-0.5rem);
+}
+.service-row-head {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.1rem 1.25rem;
+  cursor: default;
+}
+.service-row-idx {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-accent);
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+.service-row:hover .service-row-idx {
+  color: var(--color-acid);
+  text-shadow: 0 0 12px rgba(var(--rgb-acid), 0.7);
+}
+.service-row-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition: color 0.25s ease;
+}
+.service-row:hover .service-row-title {
+  color: var(--color-ink);
+}
+.service-row-arrow {
+  margin-inline-start: auto;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.service-row:hover .service-row-arrow {
+  opacity: 1;
+  transform: translateY(0.15rem) rotate(45deg);
+}
+/* accordion description — grid-track trick, no overflow height magic */
+.service-desc {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.42s ease;
+}
+.service-row:hover .service-desc,
+.service-row.is-open .service-desc {
+  grid-template-rows: 1fr;
+}
+.service-desc > div {
+  overflow: hidden;
+  min-height: 0;
+}
+.service-desc-inner {
+  padding: 0 1.25rem 1.2rem 3rem;
+  color: var(--color-muted);
+  max-width: 40rem;
+}
+[dir="rtl"] .service-desc-inner {
+  padding-inline-start: 1.25rem;
+  padding-inline-end: 3rem;
+}
+
+/* ---------- Stats strip (CountUp) ---------- */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .stat-strip {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.stat-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.75rem 1.5rem;
+  border-left: 1px solid var(--color-line);
+}
+.stat-cell:first-child {
+  border-left: none;
+}
+[dir="rtl"] .stat-cell {
+  border-right: 1px solid var(--color-line);
+  border-left: none;
+}
+[dir="rtl"] .stat-cell:first-child {
+  border-right: none;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--color-ink);
+  text-shadow: 0 0 22px rgba(var(--rgb-accent), 0.35);
+}
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* ---------- Latest writing horizontal snap strip ---------- */
+.post-strip {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 0.5rem;
+}
+.post-strip::-webkit-scrollbar {
+  display: none;
+}
+.post-card {
+  position: relative;
+  flex: 0 0 min(84%, 22rem);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.5rem;
+  min-height: 15rem;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  background: rgba(var(--rgb-accent-3), 0.04);
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+.post-card::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-acid));
+  transition: transform 0.4s ease;
+}
+.post-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(var(--rgb-accent), 0.5);
+  background: rgba(var(--rgb-accent), 0.08);
+}
+.post-card:hover::after {
+  transform: scaleX(1);
+}
+.post-card-date {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.post-card-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  transition: color 0.25s ease;
+}
+.post-card:hover .post-card-title {
+  color: var(--color-accent);
+}
+
+/* Philosophy spotlight wall */
+.spotwall {
+  border-block: 1px solid var(--color-line);
+  padding: clamp(3rem, 8vw, 6rem) 1.5rem;
+}
+[data-theme="light"] .spotwall .spot-glow {
+  opacity: 1;
+  background: radial-gradient(
+    40rem 40rem at var(--sx, 50%) var(--sy, 50%),
+    rgba(var(--rgb-accent), 0.07),
+    transparent 60%
+  );
+}
+
+/* Reduced motion: disable decorative transforms */
+@media (prefers-reduced-motion: reduce) {
+  .service-row,
+  .post-card,
+  .ghost-index,
+  .edge-rail::after {
+    transform: none !important;
+    transition: none !important;
+  }
+  .service-desc {
+    grid-template-rows: 1fr;
+  }
+  .post-strip {
+    scroll-snap-type: none;
+  }
+}
+
+/* Pulsing ring satellite next to the portrait plate */
+.hero-orb {
+  display: block;
+  width: 5rem;
+  height: 5rem;
+  margin-inline: auto;
+  margin-top: 1rem;
+  border-radius: 9999px;
+  border: 1px dashed rgba(var(--rgb-accent), 0.5);
+  box-shadow:
+    0 0 0 10px rgba(var(--rgb-accent), 0.04),
+    0 0 26px rgba(var(--rgb-accent), 0.35);
+  position: relative;
+}
+.hero-orb::before {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  translate: -50% -50%;
+  border-radius: 9999px;
+  background: var(--color-acid);
+  box-shadow: 0 0 12px rgba(var(--rgb-acid), 0.9);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-orb::after {
+    content: "";
+    position: absolute;
+    inset: -9px;
+    border-radius: 9999px;
+    border: 1px dashed rgba(var(--rgb-accent-2), 0.4);
+    animation: pip-spin 16s linear infinite;
+  }
+}

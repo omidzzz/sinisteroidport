@@ -1,0 +1,43 @@
+@theme {
+  --color-bg: #020503;
+  --color-panel: #06110b;
+  --color-line: rgba(0, 229, 255, 0.14);
+  --color-ink: #ecffe9;
+  --color-muted: #8fa294;
+  --color-accent: #00e5ff;
+  --color-accent-2: #08b8cf;
+  --color-accent-3: #123c44;
+  --color-acid: #b8ff00;
+  /* Warning/alert hue */
+  --warn: #ffe14d;
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, sfmono, monospace;
+}
+
+/* Raw channel triplets for glow shadows (avoids color-mix everywhere) */
+:root {
+  --rgb-accent: 0, 229, 255;
+  --rgb-accent-2: 8, 184, 207;
+  --rgb-accent-3: 18, 60, 68;
+  --rgb-acid: 184, 255, 0;
+  --rgb-ink: 236, 255, 233;
+  --glass-blur: 16px;
+
+  /* Spine rail gutter — content offset mirrors it on md+ */
+  --rail-w: 3.75rem;
+
+  /* ---------- Display faces ---------- */
+  --font-orbitron: var(--font-orbitron-var), var(--font-syne),
+    var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-orbitron), var(--font-syne),
+    var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-logo: var(--font-unbounded), var(--font-space-grotesk), sans-serif;
+}
+
+html[lang="fa"] {
+  --font-display: var(--font-kufi), var(--font-vazirmatn), Tahoma, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
