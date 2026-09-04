@@ -1,88 +1,169 @@
 /**
  * LAPTOP DECK — generated keyframes + `<style>` payload for the infinite
- * neon typing loop. Pure string generation from the timing engine; the
+ * neon command loop. Pure string generation from the timing engine; the
  * component just injects STYLE once.
+ *
+ * Performance rules baked in here:
+ *   - keycaps animate `transform` only (one multi-step keyframe per key,
+ *     never per-press node duplicates)
+ *   - neon strobes are overlay rects animating `opacity` only, with a
+ *     STATIC drop-shadow filter — filters are never animated
+ *   - all keyframes are monotonic + clamped to the loop window (CSS drops
+ *     out-of-order / >100% keyframe selectors)
  */
-import {
-  BACKSPACE_START,
-  BACKSPACE_T,
-  CHAR_T,
-  CHARS,
-  CW,
-  ENTER_T,
-  HOLD_T,
-  PRESSED,
-  RUN_T,
-  pct,
-} from "./timing";
+import { COMMANDS, CYCLE, CW, PRESSED, pct } from "./timing";
 
 const kf: string[] = [];
 
-/* key press + neon strobe (acid -> magenta -> cyan) with enhanced glow */
-for (const id of Object.keys(PRESSED)) {
-  (PRESSED[id] as number[]).forEach((t, i) => {
-    kf.push(
-      `@keyframes lp-k${id}${i}{0%,100%{transform:translateY(0)}${pct(t)}{transform:translateY(2.6px)}${pct(t + 0.09)}{transform:translateY(0)}}`
-    );
-    kf.push(
-      `@keyframes lp-g${id}${i}{0%,100%{fill:#18243c}` +
-        `${pct(t)}{fill:#eaffb0;filter:drop-shadow(0 0 3px #b8ff00)}` +
-        `${pct(t + 0.15)}{fill:#b8ff00;filter:drop-shadow(0 0 6px #b8ff00)}` +
-        `${pct(t + 0.5)}{fill:#ff2bd6;filter:drop-shadow(0 0 6px #ff2bd6)}` +
-        `${pct(t + 0.9)}{fill:#00e5ff;filter:drop-shadow(0 0 4px #00e5ff)}` +
-        `${pct(t + 1.4)}{fill:#18243c;filter:none}}`
-    );
-  });
-}
+/* Monotonic, cycle-clamped keyframe builder. Steps at/after the loop seam
+   are dropped; the 0%/100% base forces the resting state so overflowing
+   windows self-terminate. Near-simultaneous steps are nudged apart — CSS
+   silently drops keyframes whose percentages are not strictly increasing. */
+const buildKF = (name: string, base: string, steps: [number, string][]) => {
+  const limit = CYCLE - 0.05;
+  const valid = steps.filter(([t]) => t < limit).sort((a, b) => a[0] - b[0]);
+  let last = -1;
+  let body = "";
+  for (const [t, decl] of valid) {
+    const tc = Math.max(t, last + 0.02);
+    if (tc >= limit) break;
+    last = tc;
+    body += `${pct(tc)}{${decl}}`;
+  }
+  kf.push(`@keyframes ${name}{${base}${body}}`);
+};
 
-/* screen characters: type in, hold, then delete one by one with backspace */
-/* Characters at the end delete first (v, e, d, space, n, u, r, space, m, p, n) */
-for (let i = 0; i < CHARS.length; i++) {
-  const deleteTime = BACKSPACE_T[CHARS.length - 1 - i]; // Delete from end to start
-  kf.push(
-    `@keyframes lp-c${i}{` +
-      `0%{opacity:0;transform:scale(1)}` +
-      `${pct(CHAR_T[i])}{opacity:1;transform:scale(1)}` +
-      `${pct(deleteTime - 0.02)}{opacity:1;transform:scale(1)}` +
-      `${pct(deleteTime)}{opacity:1;transform:scale(1.2)}` +
-      `${pct(deleteTime + 0.03)}{opacity:0;transform:scale(0.5)}` +
-      `to{opacity:0;transform:scale(1)}}`
+/* keycap press (transform only) + tri-color neon strobe overlays
+   (opacity only, staggered acid -> magenta -> cyan like the old fill swap) */
+for (const [id, times] of Object.entries(PRESSED)) {
+  buildKF(
+    `lp-k${id}`,
+    "0%,100%{transform:translateY(0)}",
+    times.flatMap((t): [number, string][] => [
+      [t, "transform:translateY(2.6px)"],
+      [t + 0.09, "transform:translateY(0)"],
+    ])
   );
+  const glow = (on: number, off: number, phase: string) =>
+    buildKF(
+      `lp-g${phase}${id}`,
+      "0%,100%{opacity:0}",
+      times.flatMap((t): [number, string][] => [
+        [t + on, "opacity:1"],
+        [t + off, "opacity:0"],
+      ])
+    );
+  glow(0, 0.45, "a");
+  glow(0.5, 0.9, "m");
+  glow(0.95, 1.4, "c");
 }
 
-/* cursor: blinks, steps along the line as characters land, then steps back during backspace */
+/* screen characters per command: type in, hold, then delete one by one */
+COMMANDS.forEach((cmd, ci) => {
+  cmd.chars.forEach((ch, i) => {
+    if (ch === " ") return;
+    const delT = cmd.bsT[cmd.chars.length - 1 - i]; // end characters delete first
+    buildKF(`lp-c${ci}-${i}`, "", [
+      [0, "opacity:0;transform:scale(1)"],
+      [cmd.charT[i], "opacity:1;transform:scale(1)"],
+      [delT - 0.02, "opacity:1;transform:scale(1)"],
+      [delT, "opacity:1;transform:scale(1.2)"],
+      [delT + 0.03, "opacity:0;transform:scale(0.5)"],
+      [CYCLE - 0.04, "opacity:0;transform:scale(1)"],
+    ]);
+  });
+});
+
+/* cursor: blinks, steps along the line as characters land, steps back during
+   each command's backspace, then returns home for the next command */
 kf.push("@keyframes lp-cur{0%,100%{opacity:1}50%{opacity:0}}");
 {
-  let steps = "0%{transform:translateX(0)}";
-  // Step forward as characters are typed
-  CHARS.forEach((_, i) => {
-    steps += `${pct(CHAR_T[i])}{transform:translateX(${((i + 1) * CW).toFixed(1)}px)}`;
+  const steps: [number, string][] = [[0, "transform:translateX(0)"]];
+  COMMANDS.forEach((cmd) => {
+    cmd.chars.forEach((_, i) => {
+      steps.push([cmd.charT[i], `transform:translateX(${((i + 1) * CW).toFixed(1)}px)`]);
+    });
+    for (let i = cmd.chars.length - 1; i >= 0; i--) {
+      steps.push([
+        cmd.bsT[cmd.chars.length - 1 - i] + 0.04,
+        `transform:translateX(${(i * CW).toFixed(1)}px)`,
+      ]);
+    }
   });
-  // Step backward as characters are deleted
-  for (let i = CHARS.length - 1; i >= 0; i--) {
-    const deleteTime = BACKSPACE_T[CHARS.length - 1 - i];
-    steps += `${pct(deleteTime + 0.04)}{transform:translateX(${(i * CW).toFixed(1)}px)}`;
-  }
-  steps += `to{transform:translateX(0)}`;
-  kf.push(`@keyframes lp-curstep{${steps}}`);
+  steps.push([CYCLE - 0.04, "transform:translateX(0)"]);
+  buildKF("lp-curstep", "", steps);
 }
 
-/* "ready" status: flash on enter, re-fire on run, fade when backspace starts */
-kf.push(
-  `@keyframes lp-run{0%,${pct(ENTER_T - 0.01)}{opacity:0}${pct(ENTER_T)}{opacity:1}${pct(RUN_T - 0.01)}{opacity:0}` +
-    `${pct(RUN_T)}{opacity:1}${pct(BACKSPACE_START - 0.15)}{opacity:1}${pct(BACKSPACE_START + 0.15)}{opacity:0}to{opacity:0}}`
-);
-
-/* equalizer bars dance while the dev-server "runs", then rest until backspace */
-for (let i = 0; i < 5; i++) {
-  const ta = RUN_T + 0.25 + ((i * 0.37) % 1.6);
+/* per-command output groups: appear on Enter, re-flash on run, fade on backspace */
+COMMANDS.forEach((cmd, ci) => {
   kf.push(
-    `@keyframes lp-eq${i}{0%,${pct(RUN_T - 0.3)}{transform:scaleY(0.15)}` +
-      `${pct(ta)}{transform:scaleY(0.95)}${pct(ta + 0.3)}{transform:scaleY(0.3)}` +
-      `${pct(Math.min(ta + 0.6, HOLD_T - 0.15))}{transform:scaleY(0.85)}` +
-      `${pct(HOLD_T + 0.1)}{transform:scaleY(0.35)}${pct(BACKSPACE_START)}{transform:scaleY(0.45)}` +
-      `${pct(BACKSPACE_START + 0.3)}{transform:scaleY(0.15)}to{transform:scaleY(0.15)}}`
+    `@keyframes lp-run${ci}{0%,${pct(cmd.enterT - 0.01)}{opacity:0}${pct(cmd.enterT)}{opacity:1}` +
+      `${pct(cmd.runT - 0.01)}{opacity:0}${pct(cmd.runT)}{opacity:1}${pct(cmd.holdEnd)}{opacity:1}` +
+      `${pct(cmd.bsStart + 0.15)}{opacity:0}to{opacity:0}}`
   );
+});
+
+/* equalizer bars dance during every run window, rest in between */
+for (let i = 0; i < 5; i++) {
+  const steps: [number, string][] = [[0, "transform:scaleY(0.15)"]];
+  COMMANDS.forEach((cmd) => {
+    const ta = cmd.runT + 0.25 + ((i * 0.37) % 1.2);
+    steps.push([ta, "transform:scaleY(0.95)"]);
+    steps.push([Math.min(ta + 0.3, cmd.holdEnd - 0.1), "transform:scaleY(0.3)"]);
+    steps.push([Math.min(ta + 0.6, cmd.holdEnd), "transform:scaleY(0.85)"]);
+    steps.push([cmd.bsStart, "transform:scaleY(0.45)"]);
+    steps.push([cmd.bsStart + 0.3, "transform:scaleY(0.15)"]);
+  });
+  steps.push([CYCLE - 0.04, "transform:scaleY(0.15)"]);
+  buildKF(`lp-eq${i}`, "", steps);
+}
+
+/* eq/output-group visibility: shown only during run windows */
+{
+  const steps: [number, string][] = [[0, "opacity:0"]];
+  COMMANDS.forEach((cmd) => {
+    steps.push(
+      [cmd.runT - 0.01, "opacity:0"],
+      [cmd.runT, "opacity:1"],
+      [cmd.bsStart + 0.15, "opacity:0"]
+    );
+  });
+  steps.push([CYCLE - 0.04, "opacity:0"]);
+  buildKF("lp-eqshow", "", steps);
+}
+
+/* screen-wide flash on Enter + brighter light spill on the deck while the
+   dev server "runs" (B2) */
+{
+  const flash: [number, string][] = [[0, "opacity:0"]];
+  const spill: [number, string][] = [[0, "opacity:0"]];
+  COMMANDS.forEach((cmd) => {
+    flash.push(
+      [cmd.enterT - 0.01, "opacity:0"],
+      [cmd.enterT, "opacity:0.22"],
+      [cmd.enterT + 0.35, "opacity:0"]
+    );
+    spill.push(
+      [cmd.runT - 0.01, "opacity:0"],
+      [cmd.runT, "opacity:1"],
+      [cmd.bsStart, "opacity:1"],
+      [cmd.bsStart + 0.3, "opacity:0"]
+    );
+  });
+  flash.push([CYCLE - 0.04, "opacity:0"]);
+  spill.push([CYCLE - 0.04, "opacity:0"]);
+  buildKF("lp-flash", "", flash);
+  buildKF("lp-spill", "", spill);
+}
+
+/* subtle deck shake on every backspace press (B5) */
+{
+  const steps: [number, string][] = [[0, "transform:translateY(0)"]];
+  PRESSED.BACKSPACE.forEach((t) => {
+    steps.push([t, "transform:translateY(0.45px)"], [t + 0.04, "transform:translateY(0)"]);
+  });
+  steps.push([CYCLE - 0.04, "transform:translateY(0)"]);
+  buildKF("lp-shake", "", steps);
 }
 
 /* ambient rave pulses — smooth sine-like easing */
@@ -91,18 +172,34 @@ kf.push("@keyframes lp-strip{0%,100%{opacity:.15;transform:scaleX(.95)}50%{opaci
 kf.push("@keyframes lp-drift{0%{transform:translateY(8px) scale(.8);opacity:0}18%{opacity:.9;transform:translateY(0) scale(1)}78%{opacity:.45}100%{transform:translateY(-30px) scale(.6);opacity:0}}");
 kf.push("@keyframes lp-haze{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.9;transform:scale(1.1)}}");
 kf.push("@keyframes lp-flicker{0%{opacity:0.02}50%{opacity:0.05}100%{opacity:0.02}}");
+/* long, slow idle breathing dim over the whole scene (C3) */
+kf.push("@keyframes lp-dim{0%,52%{opacity:0}68%{opacity:.08}84%,100%{opacity:0}}");
 
 export const STYLE = [
   "/* LaptopDeck — GPU-accelerated neon animations */",
-  ".lp-ch{opacity:0;will-change:opacity,transform;transform-box:fill-box;transform-origin:50% 50%}",
+  /* neon hues ride the site theme tokens (B4); magenta is deck-local */
+  ".lp-root{--lp-acid:var(--color-acid,#b8ff00);--lp-cyan:var(--color-accent,#00e5ff);--lp-mag:#ff2bd6;transition:transform .25s cubic-bezier(.2,.8,.2,1)}",
+  ".lp-ch{opacity:0;transform-box:fill-box;transform-origin:50% 50%}",
   ".lp-eq{transform-box:fill-box;transform-origin:50% 100%;will-change:transform}",
+  ".lp-kglow{opacity:0;pointer-events:none}",
   ".lp-pt{animation:lp-drift 4.2s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center;will-change:transform,opacity}",
   ".lp-st1{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite}",
   ".lp-st2{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite;animation-delay:-1.2s}",
   ".lp-led{animation:lp-pulse 1.6s cubic-bezier(.4,0,.2,1) infinite}",
   ".lp-hz{animation:lp-haze 7s cubic-bezier(.4,0,.2,1) infinite}",
   ".lp-screen-flicker{animation:lp-flicker 0.15s steps(2) infinite}",
-  ".lp-svg{filter:drop-shadow(0 0 20px rgba(184,255,0,.15)) drop-shadow(0 0 40px rgba(255,43,214,.1))}",
-  "@media (prefers-reduced-motion: reduce){.lp-ch{opacity:1}.lp-pt,.lp-st1,.lp-st2,.lp-led,.lp-hz,.lp-screen-flicker{animation:none}}",
+  ".lp-dim{pointer-events:none}",
+  /* pause every animation while the deck is scrolled out of view (A3) */
+  ".lp-paused *{animation-play-state:paused!important}",
+  /* .lp-svg filter lives in src/styles/console-bay.css (theme-aware);
+     avoid duplicating it here. */
+  "@media (prefers-reduced-motion: reduce){" +
+    ".lp-ch{opacity:1;animation:none!important}" +
+    ".lp-eq{animation:none!important;transform:scaleY(.35)}" +
+    ".lp-eqshow{animation:none!important;opacity:1}" +
+    ".lp-cur-el{animation:none!important;opacity:1}" +
+    ".lp-kglow{animation:none!important;opacity:0!important}" +
+    ".lp-pt,.lp-st1,.lp-st2,.lp-led,.lp-hz,.lp-screen-flicker,.lp-dim{animation:none!important}" +
+    "}",
   ...kf,
 ].join("");

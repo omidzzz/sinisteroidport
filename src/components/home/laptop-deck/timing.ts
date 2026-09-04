@@ -1,58 +1,81 @@
 /**
  * LAPTOP DECK — typing-loop timing engine.
- * Keys press + neon-strobe in sync with the per-character typing on screen.
- * The whole sequence loops forever: type -> run -> backspace delete -> retype.
- * Pure constants — no React, trivially testable.
+ * The terminal runs a SEQUENCE of commands, each with the same rhythm:
+ * type -> Enter -> run output holds -> backspace delete -> next command.
+ * The whole sequence loops forever. Keys press + neon-strobe in sync with
+ * the per-character typing on screen.
+ * Pure constants — no React, trivially testable (npm run verify-laptop).
  */
 
 export const STEP_T = 0.12;
 export const PAUSE_T: Record<string, number> = { " ": 0.15 };
+export const TYPE_DELAY = 0.4; /* idle before the first character */
+export const ENTER_DELAY = 0.4; /* Enter lands after the last character */
+export const RUN_DELAY = 0.8; /* output appears after Enter */
+export const HOLD_T = 1.6; /* output hold per command */
+export const BS_DELAY = 0.3; /* backspace starts after the hold */
+export const BS_STEP = 0.07; /* time between deletions */
+export const CMD_GAP = 0.35; /* pause between commands */
 
-export const CHARS = ["n", "p", "m", " ", "r", "u", "n", " ", "d", "e", "v"];
-export const CHAR_T: number[] = (() => {
-  const out: number[] = [];
-  let t = 0.4;
-  for (const ch of CHARS) {
-    out.push(t);
+export type Command = {
+  line: string;
+  chars: string[];
+  charT: number[]; /* global type timestamps */
+  enterT: number;
+  runT: number;
+  holdEnd: number;
+  bsStart: number;
+  bsT: number[]; /* global deletion timestamps, first deletion first */
+  end: number;
+};
+
+const buildCommand = (clock: number, line: string): Command => {
+  const chars = [...line];
+  const charT: number[] = [];
+  let t = clock + TYPE_DELAY;
+  for (const ch of chars) {
+    charT.push(t);
     t += STEP_T + (PAUSE_T[ch] ?? 0);
   }
-  return out;
-})();
+  const enterT = charT[charT.length - 1] + ENTER_DELAY;
+  const runT = enterT + RUN_DELAY;
+  const holdEnd = runT + HOLD_T;
+  const bsStart = holdEnd + BS_DELAY;
+  const bsT = chars.map((_, i) => bsStart + i * BS_STEP);
+  const end = bsT[bsT.length - 1] + 0.12;
+  return { line, chars, charT, enterT, runT, holdEnd, bsStart, bsT, end };
+};
 
-export const ENTER_T = CHAR_T[10] + 0.4;
-export const RUN_T = ENTER_T + 0.8;
-export const HOLD_T = RUN_T + 2.5;
+export const COMMAND_LINES = ["npm run dev", "npm test", "git push origin main"];
 
-/* Backspace timing: delete characters one by one from the end */
-export const BACKSPACE_START = HOLD_T + 0.3;
-export const BACKSPACE_STEP = 0.08; // Time between each backspace
-export const BACKSPACE_T: number[] = (() => {
-  const out: number[] = [];
-  for (let i = CHARS.length - 1; i >= 0; i--) {
-    out.push(BACKSPACE_START + (CHARS.length - 1 - i) * BACKSPACE_STEP);
+export const COMMANDS: Command[] = (() => {
+  const out: Command[] = [];
+  let clock = 0;
+  for (const line of COMMAND_LINES) {
+    const cmd = buildCommand(clock, line);
+    out.push(cmd);
+    clock = cmd.end + CMD_GAP;
   }
   return out;
 })();
 
-export const CYCLE = BACKSPACE_T[0] + 0.5;
+export const CYCLE = COMMANDS[COMMANDS.length - 1].end + CMD_GAP + 0.15;
 export const CYCLES = `${CYCLE.toFixed(2)}s linear infinite`;
 export const pct = (t: number) => `${((t / CYCLE) * 100).toFixed(2)}%`;
 
 export const CW = 5.8; /* forced per-character advance on screen (via textLength) */
-export const CH_X0 = 30; /* x of the first typed character - adjusted for better fit */
+export const CH_X0 = 30; /* x of the first typed character */
 
-/* key -> press timestamps ("n" and "space" are pressed twice, Enter ends the
-   line, Backspace deletes) */
-export const PRESSED: Record<string, number[]> = {
-  N: [CHAR_T[0], CHAR_T[6]],
-  P: [CHAR_T[1]],
-  M: [CHAR_T[2]],
-  Space: [CHAR_T[3], CHAR_T[7]],
-  R: [CHAR_T[4]],
-  U: [CHAR_T[5]],
-  D: [CHAR_T[8]],
-  E: [CHAR_T[9]],
-  V: [CHAR_T[10]],
-  ENTER: [ENTER_T],
-  BACKSPACE: BACKSPACE_T,
-};
+/* key -> press timestamps across the whole command sequence ("n" and the
+   space bar are pressed multiple times, Enter ends each line, Backspace
+   deletes every character of every command) */
+export const PRESSED: Record<string, number[]> = (() => {
+  const map: Record<string, number[]> = {};
+  const push = (id: string, t: number) => (map[id] ??= []).push(t);
+  for (const cmd of COMMANDS) {
+    cmd.chars.forEach((ch, i) => push(ch === " " ? "Space" : ch.toUpperCase(), cmd.charT[i]));
+    push("ENTER", cmd.enterT);
+    cmd.bsT.forEach((t) => push("BACKSPACE", t));
+  }
+  return map;
+})();

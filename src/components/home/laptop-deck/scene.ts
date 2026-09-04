@@ -54,6 +54,13 @@ export const DIAMONDS: { x: number; y: number; c: string; d: string }[] = [
   { x: 46, y: 232, c: "#00e5ff", d: "1.8s" },
 ];
 
-/* screen chrome */
-export const CHAR_COLORS = ["#b8ff00", "#00e5ff", "#ff2bd6"];
-export const EQ_FILL = ["#b8ff00", "#ff2bd6", "#00e5ff", "#b8ff00", "#ff2bd6"];
+/* screen chrome — neon hues via deck-local CSS vars set on .lp-root
+   (attributes can't take var(), consumers must apply these via style) */
+export const CHAR_COLORS = ["var(--lp-acid)", "var(--lp-cyan)", "var(--lp-mag)"];
+export const EQ_FILL = [
+  "var(--lp-acid)",
+  "var(--lp-mag)",
+  "var(--lp-cyan)",
+  "var(--lp-acid)",
+  "var(--lp-mag)",
+];

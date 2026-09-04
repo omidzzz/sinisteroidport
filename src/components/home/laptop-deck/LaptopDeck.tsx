@@ -1,20 +1,24 @@
-/**
- * LAPTOP DECK â€” isometric cyberpunk acid-rave neon laptop typing "npm run dev".
- * True 2:1 isometric projection (SVG matrix). Keys press + neon-strobe in sync
- * with the per-character typing on screen. The whole sequence loops forever:
- * type -> run -> backspace delete -> retype. Decorative, aria-hidden.
+/*
+ * LAPTOP DECK - isometric cyberpunk acid-rave neon terminal.
+ * The screen runs a loop of commands (npm run dev -> npm test ->
+ * git push origin main). True 2:1 isometric projection (SVG matrix).
+ * Keys press + neon-strobe in sync with the per-character typing on screen.
+ * The sequence loops forever: type -> run -> backspace -> next command.
+ * Decorative, aria-hidden. Pauses when scrolled out of view; tilts subtly
+ * on hover (fine pointers only).
  *
  * This component is the SVG render. The math/data layers live alongside it:
- *   timing.ts      typing-loop timing engine (pure)
+ *   timing.ts      command-sequence timing engine (pure)
  *   keyboard.ts    keycap layout (pure)
  *   scene.ts       isometric projection + scene constants (pure)
  *   animations.ts  generated keyframes/<style> payload (pure)
  */
 "use client";
 
+import { useEffect, useRef } from "react";
 import { STYLE } from "./animations";
 import { ROWS } from "./keyboard";
-import { CHARS, CH_X0, CW, CYCLES, PRESSED } from "./timing";
+import { CH_X0, COMMANDS, CW, CYCLES, PRESSED } from "./timing";
 import {
   A,
   B,
@@ -34,9 +38,79 @@ import {
   TH_,
 } from "./scene";
 
+/* per-command terminal output lines (screen text) */
+const OUTPUTS: { text: string; y: number; size: number; color: string }[][] = [
+  [
+    { text: "ready - sinisteroid@dev", y: 88, size: 6, color: "#36e5a0" },
+    { text: "Local: http://localhost:3000", y: 100, size: 5.5, color: "#8fa294" },
+    { text: "watching for file changes...", y: 114, size: 5.5, color: "#8fa294" },
+  ],
+  [
+    { text: "running test suite...", y: 88, size: 6, color: "#36e5a0" },
+    { text: "✓ 24 passing (2.1s)", y: 100, size: 5.5, color: "var(--lp-acid)" },
+    { text: "0 failing · 0 skipped", y: 114, size: 5.5, color: "#8fa294" },
+  ],
+  [
+    { text: "pushing main → origin...", y: 88, size: 6, color: "#36e5a0" },
+    { text: "✓ deployed", y: 100, size: 5.5, color: "var(--lp-acid)" },
+    { text: "live at sinisteroid.dev", y: 114, size: 5.5, color: "#8fa294" },
+  ],
+];
+
 export default function LaptopDeck() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  /* pause every animation while the bay is scrolled out of view (A3) */
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => el.classList.toggle("lp-paused", !entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  /* subtle hover parallax tilt (C2) — fine-pointer devices only */
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    let raf = 0;
+    const onMove = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width - 0.5;
+      const ny = (e.clientY - r.top) / r.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.transform = `perspective(900px) rotateY(${(nx * 6).toFixed(2)}deg) rotateX(${(-ny * 5).toFixed(2)}deg)`;
+      });
+    };
+    const onLeave = () => {
+      cancelAnimationFrame(raf);
+      el.style.transform = "";
+    };
+    el.addEventListener("pointermove", onMove);
+    el.addEventListener("pointerleave", onLeave);
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerleave", onLeave);
+      el.style.transform = "";
+    };
+  }, []);
+
   return (
-    <div dir="ltr" aria-hidden="true" style={{ display: "flex", justifyContent: "center", padding: "1rem 0 0.5rem" }}>
+    <div
+      ref={wrapRef}
+      dir="ltr"
+      aria-hidden="true"
+      className="lp-root"
+      style={{ display: "flex", justifyContent: "center", padding: "1rem 0 0.5rem", willChange: "transform" }}
+    >
       <style>{STYLE}</style>
       <svg
         className="lp-svg"
@@ -116,6 +190,18 @@ export default function LaptopDeck() {
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          {/* floor reflection (B1): blurred, faded acid mirror below the chassis */}
+          <filter id="lf-rblur" x="-20%" y="-40%" width="140%" height="180%">
+            <feGaussianBlur stdDeviation="1.6" />
+          </filter>
+          <clipPath id="lp-reflect-clip">
+            <rect x="-30" y="307" width="395" height="33" />
+          </clipPath>
+          <linearGradient id="lg-reflect" gradientUnits="userSpaceOnUse" x1="0" y1="308" x2="0" y2="-22">
+            <stop offset="0%" stopColor="#b8ff00" stopOpacity="0.34" />
+            <stop offset="55%" stopColor="#b8ff00" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#b8ff00" stopOpacity="0" />
+          </linearGradient>
         </defs>
 
         {/* ambient haze */}
@@ -135,6 +221,14 @@ export default function LaptopDeck() {
         {/* magenta floor pool only â€” no acid/green glow under the chassis */}
         <ellipse className="lp-st1" cx="163" cy="298" rx="112" ry="21" fill="url(#rp-magenta)" />
 
+        {/* mirrored acid reflection of the rig below the front edge (B1) */}
+        <g clipPath="url(#lp-reflect-clip)" opacity="0.55" filter="url(#lf-rblur)">
+          <g transform={`translate(0 ${(1.62 * 308).toFixed(1)}) scale(1 -0.62)`}>
+            <polygon points={P([A, B, Dp, C])} fill="url(#lg-reflect)" />
+            <polygon points={P([[150, -22], [314.5, 73], [314.5, 231], [150, 136]])} fill="url(#lg-reflect)" />
+          </g>
+        </g>
+
         {/* ===== screen (rises from the deck's back edge) ===== */}
         <polygon points={P([[150, -22], [314.5, 73], [314.5, 231], [150, 136]])}
           fill="#b8ff00" opacity="0.1" style={{ filter: "url(#lf-glow2)" }} />
@@ -144,6 +238,9 @@ export default function LaptopDeck() {
           <rect x="7" y="7" width="176" height={SCREEN_H - 14} rx="3" fill="#04060e" />
           {/* screen flicker overlay */}
           <rect x="7" y="7" width="176" height={SCREEN_H - 14} rx="3" fill="rgba(184,255,0,0.02)" className="lp-screen-flicker" />
+          {/* screen-wide flash on Enter (B2) */}
+          <rect x="7" y="7" width="176" height={SCREEN_H - 14} rx="3"
+            style={{ fill: "var(--lp-acid)", opacity: 0, animation: `lp-flash ${CYCLES}` }} />
 
           {/* titlebar */}
           <circle cx="15" cy="17" r="1.8" fill="#ff2bd6" />
@@ -154,35 +251,52 @@ export default function LaptopDeck() {
           {/* typing prompt â€” per-character <text> reveal, synced with the key flashes */}
           <g clipPath="url(#lp-screen-clip)">
             <g style={{ filter: "url(#lf-glow)" }}>
-              <text x="24" y="54" fontSize="8" fill="#00e5ff" fontFamily="var(--font-mono), monospace"
-                style={{ filter: "drop-shadow(0 0 2px #00e5ff)" }}>$</text>
-              {CHARS.map((ch, i) =>
-                ch === " " ? null : (
-                  <text key={i} className="lp-ch" x={CH_X0 + i * CW} y="54" fontSize="8"
-                    textLength={CW} lengthAdjust="spacingAndGlyphs" fill={CHAR_COLORS[i % 3]}
-                    fontFamily="var(--font-mono), monospace"
-                    style={{ animation: `lp-c${i} ${CYCLES}`, filter: `drop-shadow(0 0 2px ${CHAR_COLORS[i % 3]})` }}>{ch}</text>
+              <text x="24" y="54" fontSize="8" fontFamily="var(--font-mono), monospace"
+                style={{ fill: "var(--lp-cyan)", filter: "drop-shadow(0 0 2px var(--lp-cyan))" }}>$</text>
+              {COMMANDS.map((cmd, ci) =>
+                cmd.chars.map((ch, i) =>
+                  ch === " " ? null : (
+                    <text key={`${ci}-${i}`} className="lp-ch" x={CH_X0 + i * CW} y="54" fontSize="8"
+                      textLength={CW} lengthAdjust="spacingAndGlyphs"
+                      fontFamily="var(--font-mono), monospace"
+                      style={{
+                        fill: CHAR_COLORS[i % 3],
+                        animation: `lp-c${ci}-${i} ${CYCLES}`,
+                        filter: `drop-shadow(0 0 2px ${CHAR_COLORS[i % 3]})`,
+                      }}>{ch}</text>
+                  )
                 )
               )}
               {/* cursor blinks and steps along the line as characters land */}
-              <rect className="lp-cur-el" x={CH_X0 - 2} y={46.5} width="3" height="9" fill="#b8ff00"
-                style={{ animation: `lp-cur ${CYCLES}, lp-curstep ${CYCLES}`, filter: "drop-shadow(0 0 2px #b8ff00)" }} />
+              <rect className="lp-cur-el" x={CH_X0 - 2} y={46.5} width="3" height="9"
+                style={{
+                  fill: "var(--lp-acid)",
+                  animation: `lp-cur ${CYCLES}, lp-curstep ${CYCLES}`,
+                  filter: "drop-shadow(0 0 2px var(--lp-acid))",
+                }} />
             </g>
           </g>
 
-          {/* run status + equalizer */}
+          {/* per-command run output */}
+          {COMMANDS.map((cmd, ci) => (
+            <g key={`out${ci}`} clipPath="url(#lp-screen-clip)">
+              <g className="lp-ch" style={{ animation: `lp-run${ci} ${CYCLES}` }}>
+                {OUTPUTS[ci].map((o) => (
+                  <text key={o.text} x="24" y={o.y} fontSize={o.size}
+                    fontFamily="var(--font-mono), monospace"
+                    style={{ fill: o.color, filter: `drop-shadow(0 0 2px ${o.color})` }}>{o.text}</text>
+                ))}
+              </g>
+            </g>
+          ))}
+
+          {/* equalizer bars dance while the server runs */}
           <g clipPath="url(#lp-screen-clip)">
-            <g className="lp-ch" style={{ animation: `lp-run ${CYCLES}` }}>
-              <text x="24" y="88" fontSize="6" fill="#36e5a0" fontFamily="var(--font-mono), monospace"
-                style={{ filter: "drop-shadow(0 0 2px #36e5a0)" }}>ready - sinisteroid@dev</text>
-              <text x="24" y="100" fontSize="5.5" fill="#8fa294" fontFamily="var(--font-mono), monospace"
-                style={{ filter: "drop-shadow(0 0 2px #8fa294)" }}>Local: http://localhost:3000</text>
-              <text x="24" y="114" fontSize="5.5" fill="#8fa294" fontFamily="var(--font-mono), monospace"
-                style={{ filter: "drop-shadow(0 0 2px #8fa294)" }}>watching for file changes...</text>
+            <g style={{ animation: `lp-eqshow ${CYCLES}` }}>
               {EQ_FILL.map((f, i) => (
                 <g key={i} style={{ filter: `drop-shadow(0 0 2px ${f})` }}>
                   <rect className="lp-eq" x={138 + i * 8} y={86} width="3.5" height="14"
-                    fill={f} opacity="0.9" style={{ animation: `lp-eq${i} ${CYCLES}` }} />
+                    opacity="0.9" style={{ fill: f, animation: `lp-eq${i} ${CYCLES}` }} />
                 </g>
               ))}
             </g>
@@ -259,6 +373,11 @@ export default function LaptopDeck() {
         <polygon points={P([A, B, Dp, C])} fill="url(#lg-body)" stroke="#26355a" strokeWidth="1.2" strokeLinejoin="round" />
         {/* screen light spill on the deck */}
         <g transform={MAT_DECK}><rect x="10" y="2" width="170" height="12" fill="url(#lg-spill)" /></g>
+        {/* spill brightens while the dev server "runs" (B2) */}
+        <g transform={MAT_DECK}>
+          <rect x="10" y="2" width="170" height="12" fill="rgba(184,255,0,0.3)"
+            opacity="0" style={{ animation: `lp-spill ${CYCLES}` }} />
+        </g>
         {/* neon edge strips â€” front acid / left magenta, with pulsing overlays */}
         <line x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#b8ff00" strokeWidth="2" opacity="0.9" style={{ filter: "url(#lf-glow)" }} />
         <line className="lp-st1" x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#ff2bd6" strokeWidth="1.5" style={{ filter: "url(#lf-glow)" }} />
@@ -269,6 +388,8 @@ export default function LaptopDeck() {
         {/* hinge */}
         <polygon points={P([A, B, [B[0], B[1] + 5], [A[0], A[1] + 5]])} fill="#0a0f1e" stroke="#1e2d4a" strokeWidth="0.8" />
 
+        {/* deck internals jolting on every backspace (B5) */}
+        <g className="lp-shake" style={{ animation: `lp-shake ${CYCLES}` }}>
         {/* keybed well */}
         <g transform={MAT_DECK}>
           <rect x="7" y="13" width="176" height="88" rx="5" fill="#060a16" stroke="#1c2a44" strokeWidth="1" />
@@ -280,20 +401,21 @@ export default function LaptopDeck() {
 
         {/* keys â€” press + neon-strobe in sync with the terminal */}
         {ROWS.map((row, ri) =>
-          row.keys.map(k => {
+          row.keys.map((k) => {
             const keyId = k.id ?? k.l;
-            const times = PRESSED[keyId] ?? [];
-            const renderKey = (i: number) => (
-              <g transform={`${MAT_DECK} translate(${k.x} ${row.y})`}>
+            const pressed = (PRESSED[keyId] ?? []).length > 0;
+            return (
+              <g
+                key={`${ri}-${k.x}`}
+                transform={`${MAT_DECK} translate(${k.x} ${row.y})`}
+                style={pressed ? { animation: `lp-k${keyId} ${CYCLES}` } : undefined}
+              >
                 {/* key shadow for depth */}
                 <rect x="1" y="2" width={k.w - 1} height="11" rx="2" fill="#060a14" opacity="0.6" />
                 {/* key base */}
                 <rect x="1" y="1" width={k.w - 1} height="12" rx="2" fill="#0b1220" />
-                {/* key top with neon strobe */}
-                <rect
-                  x="0" y="0" width={k.w - 1} height="12" rx="2" fill="#18243c" stroke="#33456b" strokeWidth="0.4"
-                  style={times.length > 0 ? { animation: `lp-g${keyId}${i} ${CYCLES}` } : undefined}
-                />
+                {/* key top (static fill; the strobe is the overlays below) */}
+                <rect x="0" y="0" width={k.w - 1} height="12" rx="2" fill="#18243c" stroke="#33456b" strokeWidth="0.4" />
                 {/* keycap top facet highlight + soft bottom rim shade */}
                 <rect x="1.1" y="1.3" width={k.w - 3.2} height="1.6" rx="0.8" fill="rgba(255,255,255,0.07)" />
                 <rect x="1.1" y="10.1" width={k.w - 3.2} height="1.1" rx="0.55" fill="rgba(0,0,0,0.26)" />
@@ -304,14 +426,17 @@ export default function LaptopDeck() {
                   <text x={(k.w - 1) / 2} y="8.6" fontSize="5.5" textAnchor="middle" fill="#93a7cc"
                     fontFamily="var(--font-mono), monospace" style={{ pointerEvents: "none", userSelect: "none" }}>{k.l}</text>
                 )}
-              </g>
-            );
-            if (times.length === 0) return <g key={`${ri}-${k.x}`}>{renderKey(0)}</g>;
-            return (
-              <g key={`${ri}-${k.x}`}>
-                {times.map((_, i) => (
-                  <g key={i} style={{ animation: `lp-k${keyId}${i} ${CYCLES}` }}>{renderKey(i)}</g>
-                ))}
+                {/* neon strobe overlays: opacity only, static filters (A1) */}
+                {pressed && (
+                  <>
+                    <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
+                      style={{ fill: "var(--lp-acid)", animation: `lp-ga${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 6px var(--lp-acid))" }} />
+                    <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
+                      style={{ fill: "var(--lp-mag)", animation: `lp-gm${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 6px var(--lp-mag))" }} />
+                    <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
+                      style={{ fill: "var(--lp-cyan)", animation: `lp-gc${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 4px var(--lp-cyan))" }} />
+                  </>
+                )}
               </g>
             );
           })
@@ -331,7 +456,9 @@ export default function LaptopDeck() {
 
         {/* status LED on the front wall */}
         <circle className="lp-led" cx={iso(180, 140.6)[0]} cy={iso(180, 140.6)[1] + 4} r="2"
-          fill="#b8ff00" style={{ filter: "url(#lf-glow)" }} />
+          style={{ fill: "var(--lp-acid)", filter: "url(#lf-glow)" }} />
+        </g>
+        {/* end deck-internals shake group */}
 
         {/* floating rave particles â€” enhanced with bloom */}
         {PARTICLES.map((p, i) => (
@@ -348,6 +475,10 @@ export default function LaptopDeck() {
               fill="none" stroke={p.c} strokeWidth="1" opacity="0.7" />
           </g>
         ))}
+
+        {/* long idle breathing dim over the whole scene (C3) */}
+        <rect className="lp-dim" x="-30" y="-36" width="395" height="376"
+          fill="#020503" opacity="0" style={{ animation: "lp-dim 64s linear infinite" }} />
       </svg>
     </div>
   );
