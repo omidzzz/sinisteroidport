@@ -60,10 +60,14 @@ const OUTPUTS: { text: string; y: number; size: number; color: string }[][] = [
 export default function LaptopDeck() {
   const wrapRef = useRef<HTMLDivElement>(null);
 
-  /* pause every animation while the bay is scrolled out of view (A3) */
+  /* pause every animation while the deck is scrolled out of view (A3).
+   * Inside a float host this is handled deterministically by the host's
+   * .pf-on class instead — a fixed off-screen stage would trip this
+   * observer at mount and freeze the typing at its opacity-0 keyframe. */
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
+    if (el.closest("[data-pf-host]")) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const obs = new IntersectionObserver(
       ([entry]) => el.classList.toggle("lp-paused", !entry.isIntersecting),

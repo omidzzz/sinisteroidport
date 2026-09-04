@@ -36,6 +36,7 @@
      acid-rave.css     PSIONIC ORBIT v4 — ACID RAVE chrome
      showcase.css      V7 · V7b · V8 — icons, frames, bento wall
      console-bay.css   V16 — in-flow acid laptop deck
+      prop-float.css    V17 — scroll-bound prop floaters (plant/frog/drone)
      blog-post.css     V9 — prose-post article voice
    ------------------------------------------------------------ */
 
@@ -55,4 +56,5 @@
 @import "../styles/acid-rave.css";
 @import "../styles/showcase.css";
 @import "../styles/console-bay.css";
+@import "../styles/prop-float.css";
 @import "../styles/blog-post.css";

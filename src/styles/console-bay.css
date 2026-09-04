@@ -1,21 +1,14 @@
 /* ============ V16 — Console Bay (in-flow acid laptop deck) ============ */
 .console-bay { position: relative; margin: clamp(2rem, 6vw, 4rem) 0; padding: clamp(1.5rem, 4vw, 2.5rem) 0; isolation: isolate; }
 .console-bay-inner { max-width: 72rem; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2.5rem); }
-/* The deck row: laptop (dominant) + companion props on the same 2:1 grid.
-   Placements get fine-tuned later — for now a centered, bottom-aligned row. */
+/* The deck row — laptop alone since the companion props were redeployed as
+   scroll-bound viewport floaters (see src/styles/prop-float.css). */
 .console-bay-deck {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
   justify-content: center;
-  gap: clamp(1rem, 2.4vw, 1.75rem);
 }
 .console-bay-deck .lp-root { flex: 0 0 clamp(19rem, 34vw, 27rem); }
-.plt-root, .frg-root, .drn-root { flex: 0 0 auto; width: clamp(9.5rem, 16vw, 13.5rem); }
-@media (max-width: 639px) {
-  .plt-root, .frg-root, .drn-root { display: none; }
-}
 /* prop SVGs share the laptop's presentation (block, pointer-none, glow) */
 .lp-svg { display: block; width: 100%; height: auto; pointer-events: none; filter: drop-shadow(0 0 20px rgba(184, 255, 0, 0.14)) drop-shadow(0 0 40px rgba(255, 43, 214, 0.09)); }
 .plt-svg, .frg-svg, .drn-svg { display: block; width: 100%; height: auto; pointer-events: none; }

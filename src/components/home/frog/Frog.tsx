@@ -28,6 +28,7 @@ export default function Frog() {
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
+    if (el.closest("[data-pf-host]")) return; /* host pauses via .pf-on */
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const obs = new IntersectionObserver(
       ([entry]) => el.classList.toggle("frg-paused", !entry.isIntersecting),
