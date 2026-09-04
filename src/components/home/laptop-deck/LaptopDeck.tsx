@@ -202,6 +202,15 @@ export default function LaptopDeck() {
             <stop offset="55%" stopColor="#b8ff00" stopOpacity="0.1" />
             <stop offset="100%" stopColor="#b8ff00" stopOpacity="0" />
           </linearGradient>
+          {/* floor scan-sweep: a soft diagonal band that drifts across the acid grid square */}
+          <clipPath id="lp-floor-clip">
+            <polygon points={P([iso(-15, -15), iso(205, -15), iso(205, 155), iso(-15, 155)])} />
+          </clipPath>
+          <linearGradient id="lg-scan-sweep" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#00e5ff" stopOpacity="0" />
+            <stop offset="50%" stopColor="#00e5ff" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#00e5ff" stopOpacity="0" />
+          </linearGradient>
         </defs>
 
         {/* ambient haze */}
@@ -218,7 +227,13 @@ export default function LaptopDeck() {
         <polygon points={P([iso(-15, -15), iso(205, -15), iso(205, 155), iso(-15, 155)])}
           fill="none" stroke="#b8ff00" strokeWidth="1" opacity="0.22" style={{ filter: "url(#lf-glow)" }} />
 
-        {/* magenta floor pool only â€” no acid/green glow under the chassis */}
+        {/* scanning light sweep across the floor grid — advanced-tech radar pass */}
+        <g clipPath="url(#lp-floor-clip)">
+          <rect className="lp-sweep" x="-40" y="-40" width="90" height="480"
+            fill="url(#lg-scan-sweep)" style={{ mixBlendMode: "screen" }} />
+        </g>
+
+        {/* magenta floor pool only — no acid/green glow under the chassis */}
         <ellipse className="lp-st1" cx="163" cy="298" rx="112" ry="21" fill="url(#rp-magenta)" />
 
         {/* mirrored acid reflection of the rig below the front edge (B1) */}
@@ -228,6 +243,11 @@ export default function LaptopDeck() {
             <polygon points={P([[150, -22], [314.5, 73], [314.5, 231], [150, 136]])} fill="url(#lg-reflect)" />
           </g>
         </g>
+
+        {/* ambient chassis halo — soft breathing bloom seated behind the whole rig,
+            reinforces the neon presence without animating any positional transform */}
+        <ellipse className="lp-halo" cx="220" cy="150" rx="185" ry="140"
+          fill="url(#rp-magenta)" style={{ filter: "url(#lf-bloom)" }} />
 
         {/* ===== screen (rises from the deck's back edge) ===== */}
         <polygon points={P([[150, -22], [314.5, 73], [314.5, 231], [150, 136]])}
@@ -248,7 +268,7 @@ export default function LaptopDeck() {
           <circle cx="29" cy="17" r="1.8" fill="#00e5ff" />
           <text x="38" y="19.5" fontSize="5.5" fill="#7f93b8" fontFamily="var(--font-mono), monospace">~/sinisteroid</text>
 
-          {/* typing prompt â€” per-character <text> reveal, synced with the key flashes */}
+          {/* typing prompt — per-character <text> reveal, synced with the key flashes */}
           <g clipPath="url(#lp-screen-clip)">
             <g style={{ filter: "url(#lf-glow)" }}>
               <text x="24" y="54" fontSize="8" fontFamily="var(--font-mono), monospace"
@@ -311,7 +331,7 @@ export default function LaptopDeck() {
           <circle cx="95" cy="3.6" r="0.6" fill="#b8ff00" opacity="0.8" />
           <text x="95" y={SCREEN_H - 2} fontSize="4.6" letterSpacing="2.5" textAnchor="middle" fill="#5a6a88" fontFamily="var(--font-mono), monospace">SINISTEROID</text>
 
-          {/* neon screen edges â€” multi-layer glow */}
+          {/* neon screen edges — multi-layer glow */}
           <line x1="1" y1="1" x2="1" y2={SCREEN_H - 1} stroke="#b8ff00" strokeWidth="1.5" opacity="0.8" style={{ filter: "url(#lf-glow)" }} />
           <line x1="189" y1="1" x2="189" y2={SCREEN_H - 1} stroke="#ff2bd6" strokeWidth="1.5" opacity="0.7" style={{ filter: "url(#lf-glow)" }} />
           <line x1="1" y1="0.8" x2="189" y2="0.8" stroke="#00e5ff" strokeWidth="1" opacity="0.6" style={{ filter: "url(#lf-glow)" }} />
@@ -333,7 +353,7 @@ export default function LaptopDeck() {
           q.push([iso(x, 140.6)[0], iso(x, 140.6)[1] + 4.5]);
           return <polygon key={x} points={P(q)} fill="#04070d" />;
         })}
-        {/* right wall â€” closes the hollow right side of the casing */}
+        {/* right wall — closes the hollow right side of the casing */}
         <polygon points={P([B, Dp, [Dp[0], Dp[1] + TH_], [B[0], B[1] + TH_]])}
           fill="url(#lg-sideR)" stroke="#1a2438" strokeWidth="0.8" />
         {/* vents on the right wall */}
@@ -351,7 +371,7 @@ export default function LaptopDeck() {
               fill="#04070c" stroke="#00e5ff" strokeWidth="0.4" opacity="0.7" />
           );
         })}
-        {/* back wall â€” closes the rear of the chassis under the hinge */}
+        {/* back wall — closes the rear of the chassis under the hinge */}
         <polygon points={P([A, B, [B[0], B[1] + TH_], [A[0], A[1] + TH_]])}
           fill="url(#lg-sideB)" stroke="#1a2438" strokeWidth="0.8" />
         {/* ports on the left wall */}
@@ -378,7 +398,7 @@ export default function LaptopDeck() {
           <rect x="10" y="2" width="170" height="12" fill="rgba(184,255,0,0.3)"
             opacity="0" style={{ animation: `lp-spill ${CYCLES}` }} />
         </g>
-        {/* neon edge strips â€” front acid / left magenta, with pulsing overlays */}
+        {/* neon edge strips — front acid / left magenta, with pulsing overlays */}
         <line x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#b8ff00" strokeWidth="2" opacity="0.9" style={{ filter: "url(#lf-glow)" }} />
         <line className="lp-st1" x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#ff2bd6" strokeWidth="1.5" style={{ filter: "url(#lf-glow)" }} />
         <line x1={A[0]} y1={A[1]} x2={C[0]} y2={C[1]} stroke="#ff2bd6" strokeWidth="1.5" opacity="0.8" style={{ filter: "url(#lf-glow)" }} />
@@ -399,7 +419,7 @@ export default function LaptopDeck() {
           <rect x="8" y="99" width="174" height="1.4" fill="rgba(0,0,0,0.42)" />
         </g>
 
-        {/* keys â€” press + neon-strobe in sync with the terminal */}
+        {/* keys — press + neon-strobe in sync with the terminal */}
         {ROWS.map((row, ri) =>
           row.keys.map((k) => {
             const keyId = k.id ?? k.l;
@@ -408,35 +428,45 @@ export default function LaptopDeck() {
               <g
                 key={`${ri}-${k.x}`}
                 transform={`${MAT_DECK} translate(${k.x} ${row.y})`}
-                style={pressed ? { animation: `lp-k${keyId} ${CYCLES}` } : undefined}
               >
-                {/* key shadow for depth */}
-                <rect x="1" y="2" width={k.w - 1} height="11" rx="2" fill="#060a14" opacity="0.6" />
-                {/* key base */}
-                <rect x="1" y="1" width={k.w - 1} height="12" rx="2" fill="#0b1220" />
-                {/* key top (static fill; the strobe is the overlays below) */}
-                <rect x="0" y="0" width={k.w - 1} height="12" rx="2" fill="#18243c" stroke="#33456b" strokeWidth="0.4" />
-                {/* keycap top facet highlight + soft bottom rim shade */}
-                <rect x="1.1" y="1.3" width={k.w - 3.2} height="1.6" rx="0.8" fill="rgba(255,255,255,0.07)" />
-                <rect x="1.1" y="10.1" width={k.w - 3.2} height="1.1" rx="0.55" fill="rgba(0,0,0,0.26)" />
-                {/* home-row nubs (F/J) */}
-                {k.nub && <circle cx={(k.w - 1) / 2} cy="10.7" r="0.75" fill="#8ba0c4" opacity="0.85" />}
-                {/* key label */}
-                {k.l && (
-                  <text x={(k.w - 1) / 2} y="8.6" fontSize="5.5" textAnchor="middle" fill="#93a7cc"
-                    fontFamily="var(--font-mono), monospace" style={{ pointerEvents: "none", userSelect: "none" }}>{k.l}</text>
-                )}
-                {/* neon strobe overlays: opacity only, static filters (A1) */}
-                {pressed && (
-                  <>
-                    <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
-                      style={{ fill: "var(--lp-acid)", animation: `lp-ga${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 6px var(--lp-acid))" }} />
-                    <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
-                      style={{ fill: "var(--lp-mag)", animation: `lp-gm${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 6px var(--lp-mag))" }} />
-                    <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
-                      style={{ fill: "var(--lp-cyan)", animation: `lp-gc${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 4px var(--lp-cyan))" }} />
-                  </>
-                )}
+                {/* Press animation lives on a nested <g> with NO transform
+                    attribute of its own. A CSS `transform` animation fully
+                    replaces (never composes with) an SVG `transform`
+                    attribute on the SAME element, so animating the keycap
+                    directly on this positioned <g> would silently discard
+                    its MAT_DECK/translate placement for the whole loop and
+                    dump every typed key on top of each other at the
+                    origin. Keeping the animated node transform-attribute-free
+                    avoids that collision. */}
+                <g style={pressed ? { animation: `lp-k${keyId} ${CYCLES}` } : undefined}>
+                  {/* key shadow for depth */}
+                  <rect x="1" y="2" width={k.w - 1} height="11" rx="2" fill="#060a14" opacity="0.6" />
+                  {/* key base */}
+                  <rect x="1" y="1" width={k.w - 1} height="12" rx="2" fill="#0b1220" />
+                  {/* key top (static fill; the strobe is the overlays below) */}
+                  <rect x="0" y="0" width={k.w - 1} height="12" rx="2" fill="#18243c" stroke="#33456b" strokeWidth="0.4" />
+                  {/* keycap top facet highlight + soft bottom rim shade */}
+                  <rect x="1.1" y="1.3" width={k.w - 3.2} height="1.6" rx="0.8" fill="rgba(255,255,255,0.07)" />
+                  <rect x="1.1" y="10.1" width={k.w - 3.2} height="1.1" rx="0.55" fill="rgba(0,0,0,0.26)" />
+                  {/* home-row nubs (F/J) */}
+                  {k.nub && <circle cx={(k.w - 1) / 2} cy="10.7" r="0.75" fill="#8ba0c4" opacity="0.85" />}
+                  {/* key label */}
+                  {k.l && (
+                    <text x={(k.w - 1) / 2} y="8.6" fontSize="5.5" textAnchor="middle" fill="#93a7cc"
+                      fontFamily="var(--font-mono), monospace" style={{ pointerEvents: "none", userSelect: "none" }}>{k.l}</text>
+                  )}
+                  {/* neon strobe overlays: opacity only, static filters (A1) */}
+                  {pressed && (
+                    <>
+                      <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
+                        style={{ fill: "var(--lp-acid)", animation: `lp-ga${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 6px var(--lp-acid))" }} />
+                      <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
+                        style={{ fill: "var(--lp-mag)", animation: `lp-gm${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 6px var(--lp-mag))" }} />
+                      <rect className="lp-kglow" x="0" y="0" width={k.w - 1} height="12" rx="2"
+                        style={{ fill: "var(--lp-cyan)", animation: `lp-gc${keyId} ${CYCLES}`, filter: "drop-shadow(0 0 4px var(--lp-cyan))" }} />
+                    </>
+                  )}
+                </g>
               </g>
             );
           })
@@ -447,10 +477,12 @@ export default function LaptopDeck() {
           <rect x="55" y="108" width="80" height="15" rx="4" fill="#0a1120" stroke="#223252" strokeWidth="0.8" />
           <rect x="58" y="110" width="74" height="11" rx="3" fill="#070d1a" />
           <rect x="58" y="110" width="74" height="11" rx="3" fill="none" stroke="#b8ff00" strokeWidth="0.3" opacity="0.18" />
-          <text x="25" y="121" fontSize="8" fontWeight="bold" fill="#ff2bd6" opacity="0.9"
+          <text className="lp-sticker" x="25" y="121" fontSize="8" fontWeight="bold" fill="#ff2bd6"
+            style={{ filter: "drop-shadow(0 0 3px #ff2bd6)" }}
             fontFamily="var(--font-orbitron-var), var(--font-mono), monospace">ACID</text>
           <rect x="146" y="112" width="30" height="10" rx="2" fill="#0b0f1c" stroke="#b8ff00" strokeWidth="0.5" opacity="0.85" />
-          <text x="161" y="119.6" fontSize="6.5" fontWeight="bold" textAnchor="middle" fill="#b8ff00"
+          <text className="lp-sticker" x="161" y="119.6" fontSize="6.5" fontWeight="bold" textAnchor="middle" fill="#b8ff00"
+            style={{ filter: "drop-shadow(0 0 3px #b8ff00)", animationDelay: "-1.4s" }}
             fontFamily="var(--font-mono), monospace">303</text>
         </g>
 
@@ -460,7 +492,7 @@ export default function LaptopDeck() {
         </g>
         {/* end deck-internals shake group */}
 
-        {/* floating rave particles â€” enhanced with bloom */}
+        {/* floating rave particles — enhanced with bloom */}
         {PARTICLES.map((p, i) => (
           <g key={`p${i}`} className="lp-pt" style={{ animationDelay: p.d }}>
             <circle cx={p.x} cy={p.y} r={p.r * 4} fill={p.c} opacity="0.1" style={{ filter: "url(#lf-bloom)" }} />
@@ -475,6 +507,15 @@ export default function LaptopDeck() {
               fill="none" stroke={p.c} strokeWidth="1" opacity="0.7" />
           </g>
         ))}
+
+        {/* HUD viewfinder corner brackets — foreground cyberpunk framing, pulses
+            independently per corner (opacity only, no positional transform) */}
+        <g fill="none" strokeLinecap="round" style={{ filter: "url(#lf-glow)" }}>
+          <path className="lp-hud" d="M-4,-30 L-24,-30 L-24,-10" stroke="#00e5ff" strokeWidth="1.2" />
+          <path className="lp-hud" style={{ animationDelay: "-0.85s" }} d="M339,-30 L359,-30 L359,-10" stroke="#ff2bd6" strokeWidth="1.2" />
+          <path className="lp-hud" style={{ animationDelay: "-1.7s" }} d="M-24,314 L-24,334 L-4,334" stroke="#b8ff00" strokeWidth="1.2" />
+          <path className="lp-hud" style={{ animationDelay: "-2.55s" }} d="M359,314 L359,334 L339,334" stroke="#00e5ff" strokeWidth="1.2" />
+        </g>
 
         {/* long idle breathing dim over the whole scene (C3) */}
         <rect className="lp-dim" x="-30" y="-36" width="395" height="376"

@@ -175,6 +175,13 @@ kf.push("@keyframes lp-flicker{0%{opacity:0.02}50%{opacity:0.05}100%{opacity:0.0
 /* long, slow idle breathing dim over the whole scene (C3) */
 kf.push("@keyframes lp-dim{0%,52%{opacity:0}68%{opacity:.08}84%,100%{opacity:0}}");
 
+/* embellishments: HUD corner brackets, ambient chassis halo, floor scan sweep,
+   trackpad sticker pulse — all opacity/scale, no attribute-transform conflicts */
+kf.push("@keyframes lp-hudpulse{0%,100%{opacity:.3}50%{opacity:.85}}");
+kf.push("@keyframes lp-halo{0%,100%{opacity:.22;transform:scale(1)}50%{opacity:.42;transform:scale(1.035)}}");
+kf.push("@keyframes lp-sweep{0%{transform:translate(-70px,-70px);opacity:0}8%{opacity:.55}50%{opacity:.75}92%{opacity:.55}100%{transform:translate(70px,70px);opacity:0}}");
+kf.push("@keyframes lp-stickerpulse{0%,100%{opacity:.75}50%{opacity:1}}");
+
 export const STYLE = [
   "/* LaptopDeck — GPU-accelerated neon animations */",
   /* neon hues ride the site theme tokens (B4); magenta is deck-local */
@@ -183,12 +190,16 @@ export const STYLE = [
   ".lp-eq{transform-box:fill-box;transform-origin:50% 100%;will-change:transform}",
   ".lp-kglow{opacity:0;pointer-events:none}",
   ".lp-pt{animation:lp-drift 4.2s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center;will-change:transform,opacity}",
-  ".lp-st1{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite}",
-  ".lp-st2{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite;animation-delay:-1.2s}",
-  ".lp-led{animation:lp-pulse 1.6s cubic-bezier(.4,0,.2,1) infinite}",
-  ".lp-hz{animation:lp-haze 7s cubic-bezier(.4,0,.2,1) infinite}",
+  ".lp-st1{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
+  ".lp-st2{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite;animation-delay:-1.2s;transform-box:fill-box;transform-origin:center}",
+  ".lp-led{animation:lp-pulse 1.6s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
+  ".lp-hz{animation:lp-haze 7s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
   ".lp-screen-flicker{animation:lp-flicker 0.15s steps(2) infinite}",
   ".lp-dim{pointer-events:none}",
+  ".lp-hud{animation:lp-hudpulse 3.4s cubic-bezier(.4,0,.2,1) infinite}",
+  ".lp-halo{animation:lp-halo 5.2s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
+  ".lp-sweep{animation:lp-sweep 6.4s cubic-bezier(.4,0,.2,1) infinite}",
+  ".lp-sticker{animation:lp-stickerpulse 2.8s cubic-bezier(.4,0,.2,1) infinite}",
   /* pause every animation while the deck is scrolled out of view (A3) */
   ".lp-paused *{animation-play-state:paused!important}",
   /* .lp-svg filter lives in src/styles/console-bay.css (theme-aware);
@@ -199,7 +210,7 @@ export const STYLE = [
     ".lp-eqshow{animation:none!important;opacity:1}" +
     ".lp-cur-el{animation:none!important;opacity:1}" +
     ".lp-kglow{animation:none!important;opacity:0!important}" +
-    ".lp-pt,.lp-st1,.lp-st2,.lp-led,.lp-hz,.lp-screen-flicker,.lp-dim{animation:none!important}" +
+    ".lp-pt,.lp-st1,.lp-st2,.lp-led,.lp-hz,.lp-screen-flicker,.lp-dim,.lp-hud,.lp-halo,.lp-sweep,.lp-sticker{animation:none!important}" +
     "}",
   ...kf,
 ].join("");
