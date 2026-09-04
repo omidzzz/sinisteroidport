@@ -236,14 +236,6 @@ export default function LaptopDeck() {
         {/* magenta floor pool only — no acid/green glow under the chassis */}
         <ellipse className="lp-st1" cx="163" cy="298" rx="112" ry="21" fill="url(#rp-magenta)" />
 
-        {/* mirrored acid reflection of the rig below the front edge (B1) */}
-        <g clipPath="url(#lp-reflect-clip)" opacity="0.55" filter="url(#lf-rblur)">
-          <g transform={`translate(0 ${(1.62 * 308).toFixed(1)}) scale(1 -0.62)`}>
-            <polygon points={P([A, B, Dp, C])} fill="url(#lg-reflect)" />
-            <polygon points={P([[150, -22], [314.5, 73], [314.5, 231], [150, 136]])} fill="url(#lg-reflect)" />
-          </g>
-        </g>
-
         {/* ambient chassis halo — soft breathing bloom seated behind the whole rig,
             reinforces the neon presence without animating any positional transform */}
         <ellipse className="lp-halo" cx="220" cy="150" rx="185" ry="140"
@@ -507,15 +499,6 @@ export default function LaptopDeck() {
               fill="none" stroke={p.c} strokeWidth="1" opacity="0.7" />
           </g>
         ))}
-
-        {/* HUD viewfinder corner brackets — foreground cyberpunk framing, pulses
-            independently per corner (opacity only, no positional transform) */}
-        <g fill="none" strokeLinecap="round" style={{ filter: "url(#lf-glow)" }}>
-          <path className="lp-hud" d="M-4,-30 L-24,-30 L-24,-10" stroke="#00e5ff" strokeWidth="1.2" />
-          <path className="lp-hud" style={{ animationDelay: "-0.85s" }} d="M339,-30 L359,-30 L359,-10" stroke="#ff2bd6" strokeWidth="1.2" />
-          <path className="lp-hud" style={{ animationDelay: "-1.7s" }} d="M-24,314 L-24,334 L-4,334" stroke="#b8ff00" strokeWidth="1.2" />
-          <path className="lp-hud" style={{ animationDelay: "-2.55s" }} d="M359,314 L359,334 L339,334" stroke="#00e5ff" strokeWidth="1.2" />
-        </g>
 
         {/* long idle breathing dim over the whole scene (C3) */}
         <rect className="lp-dim" x="-30" y="-36" width="395" height="376"
