@@ -124,7 +124,7 @@ export default function Footer({ locale }: { locale: Locale }) {
                 dir="ltr"
                 className="mt-3 select-none font-mono text-[0.6rem] uppercase tracking-[0.24em] text-muted"
               >
-                BEEP_BOOP <span className="text-acid">♥</span> DONATR.EE/SINISTEROID
+                BEEP_BOOP <span className="text-muted">♥</span> DONATR.EE/SINISTEROID
               </p>
             </div>
             <p

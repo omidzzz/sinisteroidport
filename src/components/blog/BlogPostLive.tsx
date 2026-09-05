@@ -17,6 +17,7 @@ import { getDict, loc, type Locale } from "@/lib/i18n";
 import FaqAccordion from "./FaqAccordion";
 import { ArrowIcon } from "../ui/icons";
 import { getLivePost, preloadLivePost } from "@/lib/blog/live";
+import RelatedReading from "./RelatedReading";
 
 // Kick the DB refresh off at bundle-parse time — BEFORE React hydrates — so
 // the API round-trip overlaps hydration instead of starting after it. No-op
@@ -26,9 +27,11 @@ preloadLivePost();
 export default function BlogPostLive({
   locale,
   post,
+  related = [],
 }: {
   locale: Locale;
   post: Post;
+  related?: Post[];
 }) {
   const [live, setLive] = useState<Post | null>(null);
   const barRef = useRef<HTMLDivElement>(null);
@@ -77,6 +80,22 @@ export default function BlogPostLive({
     }, 0);
     return Math.max(2, Math.round(words / 210));
   }, [translation]);
+
+  // Inline related callouts — deterministic descriptors handed to the
+  // ContentRenderer so internal-link CTAs appear mid-article, not only at
+  // the very bottom of the page.
+  const callouts = useMemo(() => {
+    if (!related.length) return [];
+    const kicker =
+      locale === "fa"
+        ? "اگر این بخش را دوست داشتید"
+        : "If you liked this section";
+    return related.map((p) => ({
+      kicker,
+      title: postTitle(p, locale),
+      href: loc(locale, `/blog/${p.slug}`),
+    }));
+  }, [related, locale]);
 
   // Progress-bar fallback for browsers without CSS scroll-driven animations.
   // Where animation-timeline: scroll() is supported, zero JS runs on scroll.
@@ -147,33 +166,41 @@ export default function BlogPostLive({
       <div ref={barRef} aria-hidden className="reading-progress" />
 
       {/* Sticky mini table of contents — wide viewports only, sits in the
-          page margin so the article measure stays untouched */}
+          page margin so the article measure stays untouched. The outer
+          wrapper is absolute over the full article height, and the inner nav
+          is sticky — so the TOC follows the scroll but stops at the article
+          end instead of overlapping the footer. */}
+      <div className="relative">
       {toc.length >= 3 && (
-        <nav
-          aria-label={locale === "fa" ? "فهرست مطالب" : "Table of contents"}
-          className="fixed top-28 z-20 hidden w-56 xl:block"
+        <div
+          className="pointer-events-none absolute inset-y-0 hidden w-56 xl:block"
           style={{ insetInlineStart: "calc((100vw - 48rem) / 2 - 15rem)" }}
         >
-          <p className="label mb-3">
-            {locale === "fa" ? "(فهرست)" : "(Contents)"}
-          </p>
-          <ul className="space-y-1.5 border-s border-line ps-4">
-            {toc.map((h) => (
-              <li key={h.id}>
-                <a
-                  href={`#${h.id}`}
-                  className={`block font-mono text-[0.66rem] leading-snug transition-all duration-200 ${
-                    activeId === h.id
-                      ? "text-accent rtl:-translate-x-1 translate-x-1"
-                      : "text-muted hover:text-ink"
-                  } ${h.level === 3 ? "ps-3" : ""}`}
-                >
-                  {h.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+          <nav
+            aria-label={locale === "fa" ? "فهرست مطالب" : "Table of contents"}
+            className="pointer-events-auto sticky top-28 w-56"
+          >
+            <p className="label mb-3">
+              {locale === "fa" ? "(فهرست)" : "(Contents)"}
+            </p>
+            <ul className="space-y-1.5 border-s border-line ps-4">
+              {toc.map((h) => (
+                <li key={h.id}>
+                  <a
+                    href={`#${h.id}`}
+                    className={`block font-mono text-[0.66rem] leading-snug transition-all duration-200 ${
+                      activeId === h.id
+                        ? "text-accent rtl:-translate-x-1 translate-x-1"
+                        : "text-muted hover:text-ink"
+                    } ${h.level === 3 ? "ps-3" : ""}`}
+                  >
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
       )}
 
       <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
@@ -191,7 +218,7 @@ export default function BlogPostLive({
           <span className="label">{locale === "fa" ? "(فرستنده)" : "(Transmission)"}</span>
           <span className="h-px w-8 bg-line" aria-hidden />
           <time
-            className="font-mono text-xs tracking-[0.2em] text-acid"
+            className="font-mono text-xs tracking-[0.2em] text-muted"
             dir="ltr"
           >
             {formatPostDate(effective.date)}
@@ -259,7 +286,7 @@ export default function BlogPostLive({
       )}
 
       <div className="cv-auto mt-12">
-        <ContentRenderer blocks={translation.content} />
+        <ContentRenderer blocks={translation.content} callouts={callouts} />
       </div>
 
       {translation.faq && translation.faq.length > 0 && (
@@ -278,6 +305,12 @@ export default function BlogPostLive({
         </section>
       )}
       </article>
+
+      {/* Related reading sits above the FAQ — accordions act as a visual
+          dead-end and interaction drops hard after them */}
+      <RelatedReading related={related} locale={locale} />
+
+      </div>
     </>
   );
 }

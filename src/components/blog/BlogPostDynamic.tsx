@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import type { Post } from "@/lib/blog/types";
 import BlogPostLive from "./BlogPostLive";
 import { postTitle } from "@/lib/blog/format";
-import { getLivePost } from "@/lib/blog/live";
+import { getAllLivePosts, getLivePost } from "@/lib/blog/live";
+import { getRelatedPosts } from "@/lib/blog/related";
 import { blogPostingJsonLd } from "@/lib/schema";
 import { SITE } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n";
@@ -40,6 +41,10 @@ function slugFromPathname(locale: Locale): string | null {
 export default function BlogPostDynamic({ locale }: { locale: Locale }) {
   const [status, setStatus] = useState<Status>("loading");
   const [post, setPost] = useState<Post | null>(null);
+  // Full published list from /api/get_posts.php — used to rank the
+  // "Related reading / Next transmission" block for DB-only posts with the
+  // exact same logic the prerendered pages use (lib/blog/related).
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -68,6 +73,12 @@ export default function BlogPostDynamic({ locale }: { locale: Locale }) {
       }
       setPost(data);
       setStatus("ready");
+    });
+    // Related posts are ranked from the live list so DB-only articles get
+    // the same "Related reading / Next transmission" block as static ones.
+    getAllLivePosts().then((rows) => {
+      if (cancelled || !rows) return;
+      setAllPosts(rows);
     });
     return () => {
       cancelled = true;
@@ -123,8 +134,11 @@ export default function BlogPostDynamic({ locale }: { locale: Locale }) {
   }, [post, locale]);
 
   if (status === "ready" && post) {
-    // The single article renderer — identical to prerendered posts.
-    return <BlogPostLive locale={locale} post={post} />;
+    // The single article renderer — identical to prerendered posts. DB-only
+    // articles get their "Related reading / Next transmission" block ranked
+    // from the live published list (same helper the SSR pages use).
+    const related = getRelatedPosts(post, allPosts, 3);
+    return <BlogPostLive locale={locale} post={post} related={related} />;
   }
   return <ShellNotice locale={locale} status={status} />;
 }

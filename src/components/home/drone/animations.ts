@@ -1,38 +1,39 @@
 /**
- * HOVER DRONE — generated keyframes + `<style>` payload for the fully
- * dressed saucer. Pure string generation; the component injects STYLE once.
- *
- * Motion rules mirror the deck: transform/opacity only, animated nodes sit on
- * transform-attribute-free nested `<g>`s, `.drn-paused` freezes the asset
- * while scrolled out of view, prefers-reduced-motion falls back to static.
+ * PSYCHEDELIC ALIEN UFO — keyframes + `<style>` payload.
+ * Transform/opacity/filter only; `.au-paused` freezes everything while the
+ * asset is scrolled out of view; prefers-reduced-motion falls back to a
+ * static frame (chase lights dim to a steady glow instead of animating).
  */
 export const STYLE = [
-  "/* Drone — hover saucer v2 */",
-  ".drn-root{--drn-acid:var(--color-acid,#b8ff00);--drn-cyan:var(--color-accent,#00e5ff);--drn-mag:#ff2bd6}",
-  ".drn-bob{animation:drn-bob 4.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 75%}",
-  ".drn-rotor{animation:drn-spin .5s linear infinite;transform-box:fill-box;transform-origin:center}",
-  ".drn-led{animation:drn-led .9s steps(2) infinite;animation-delay:var(--drn-dl,0s);transform-box:fill-box;transform-origin:center}",
-  ".drn-beacon{animation:drn-beacon .7s steps(2) infinite;transform-box:fill-box;transform-origin:center}",
-  ".drn-flicker{animation:drn-flick .14s steps(3) infinite;transform-box:fill-box;transform-origin:center}",
-  ".drn-sweep{animation:drn-sweep 6.5s linear infinite;transform-box:fill-box;transform-origin:center}",
-  ".drn-scan{animation:drn-scan 3.2s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
-  ".drn-mote{animation:drn-mote 4.2s cubic-bezier(.4,0,.2,1) infinite;animation-delay:var(--drn-dl,0s);transform-box:fill-box;transform-origin:center}",
-  ".drn-core{animation:drn-core 2.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}",
-  ".drn-breathe{animation:drn-breathe 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}",
-  /* freeze while scrolled out of view (toggled by IntersectionObserver) */
-  ".drn-paused *{animation-play-state:paused!important}",
+  ".au-root{display:block}",
+  ".au-bob{animation:au-bob 4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 70%}",
+  ".au-hue{animation:au-hue 10s linear infinite;transform-box:fill-box;transform-origin:center}",
+  ".au-hue-slow{animation:au-hue 17s linear infinite reverse;transform-box:fill-box;transform-origin:center}",
+  ".au-aura{animation:au-aura 5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}",
+  ".au-sway{animation:au-sway 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}",
+  ".au-blink{animation:au-blink 4.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}",
+  ".au-glare{animation:au-glare 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}",
+  ".au-port{animation:au-port 1.4s steps(2) infinite;animation-delay:var(--au-dl,0s);transform-box:fill-box;transform-origin:center}",
+  ".au-beam{animation:au-beam 2.8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0%}",
+  ".au-streak{animation:au-streak var(--au-du,2.6s) ease-in infinite;animation-delay:var(--au-dl,0s);transform-box:fill-box;transform-origin:center}",
+  ".au-ring{animation:au-spin 7s linear infinite;transform-box:fill-box;transform-origin:center}",
+  ".au-twinkle{animation:au-twinkle var(--au-du,2.8s) ease-in-out infinite;animation-delay:var(--au-dl,0s);transform-box:fill-box;transform-origin:center}",
+  ".au-spark{animation:au-spark var(--au-du,3s) linear infinite;animation-delay:var(--au-dl,0s);transform-box:fill-box;transform-origin:center}",
+  ".au-paused *{animation-play-state:paused!important}",
   "@media (prefers-reduced-motion: reduce){" +
-    ".drn-bob,.drn-rotor,.drn-beacon,.drn-flicker,.drn-sweep,.drn-scan,.drn-mote,.drn-core,.drn-breathe{animation:none!important}" +
-    ".drn-led{animation:none!important;opacity:.85}" +
+    ".au-bob,.au-hue,.au-hue-slow,.au-aura,.au-sway,.au-blink,.au-glare,.au-beam,.au-streak,.au-ring,.au-twinkle,.au-spark{animation:none!important}" +
+    ".au-port{animation:none!important;opacity:.85}" +
     "}",
-  "@keyframes drn-bob{0%,100%{transform:translateY(3px) rotate(-.9deg)}50%{transform:translateY(-7px) rotate(.9deg)}}",
-  "@keyframes drn-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}",
-  "@keyframes drn-led{0%,100%{opacity:.18}50%{opacity:1}}",
-  "@keyframes drn-beacon{0%,100%{opacity:.12}50%{opacity:1}}",
-  "@keyframes drn-flick{0%{opacity:.15}48%{opacity:1}100%{opacity:.5}}",
-  "@keyframes drn-sweep{from{transform:rotate(0)}to{transform:rotate(360deg)}}",
-  "@keyframes drn-scan{0%{opacity:.55;transform:scale(.92)}62%{opacity:.08;transform:scale(1.32)}100%{opacity:0;transform:scale(1.5)}}",
-  "@keyframes drn-mote{0%{opacity:0;transform:translateY(7px) scale(.5)}14%{opacity:.95;transform:translateY(0) scale(1)}70%{opacity:.5;transform:translateY(-26px) scale(.85)}100%{opacity:0;transform:translateY(-40px) scale(.45)}}",
-  "@keyframes drn-core{0%,100%{opacity:.65;transform:scale(1)}50%{opacity:1;transform:scale(1.16)}}",
-  "@keyframes drn-breathe{0%,100%{opacity:.42;transform:scale(1)}50%{opacity:.85;transform:scale(1.06)}}",
+  "@keyframes au-bob{0%,100%{transform:translateY(3px) rotate(-1.1deg)}50%{transform:translateY(-6px) rotate(1.1deg)}}",
+  "@keyframes au-hue{from{filter:hue-rotate(0deg) saturate(1.35)}to{filter:hue-rotate(360deg) saturate(1.35)}}",
+  "@keyframes au-aura{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.85;transform:scale(1.07)}}",
+  "@keyframes au-sway{0%,100%{transform:rotate(-3.5deg)}50%{transform:rotate(3.5deg)}}",
+  "@keyframes au-blink{0%,88%,100%{transform:scaleY(1)}92%{transform:scaleY(0.12)}96%{transform:scaleY(1)}}",
+  "@keyframes au-glare{0%,100%{opacity:.35}50%{opacity:.75}}",
+  "@keyframes au-port{0%,100%{opacity:.35}50%{opacity:1}}",
+  "@keyframes au-beam{0%,100%{opacity:.75;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.05)}}",
+  "@keyframes au-streak{0%{opacity:0;transform:translateY(-4px) scale(.7)}20%{opacity:.9}85%{opacity:.4}100%{opacity:0;transform:translateY(64px) scale(1.1)}}",
+  "@keyframes au-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}",
+  "@keyframes au-twinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}",
+  "@keyframes au-spark{0%{opacity:0;transform:translateY(0) rotate(0deg) scale(.6)}15%{opacity:1}80%{opacity:.5}100%{opacity:0;transform:translateY(-22px) rotate(70deg) scale(1)}}",
 ].join("");

@@ -14,6 +14,7 @@ import type { Post } from "./types";
  *     when both components mount for the same article.
  */
 const inFlight = new Map<string, Promise<Post | null>>();
+let inFlightAll: Promise<Post[] | null> | null = null;
 
 export function getLivePost(slug: string): Promise<Post | null> {
   let req = inFlight.get(slug);
@@ -24,6 +25,19 @@ export function getLivePost(slug: string): Promise<Post | null> {
     inFlight.set(slug, req);
   }
   return req;
+}
+
+/** Full live list (published only, from /api/get_posts.php) — single-flight
+ *  like getLivePost, so BlogPostDynamic can rank related posts for DB-only
+ *  articles without spamming the API. Resolves to null on any failure. */
+export function getAllLivePosts(): Promise<Post[] | null> {
+  if (!inFlightAll) {
+    inFlightAll = fetch("/api/get_posts.php")
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null)
+      .then((rows) => (Array.isArray(rows) ? rows : null));
+  }
+  return inFlightAll;
 }
 
 /** Locale-agnostic slug extraction — matches /en/blog/<slug>/ and

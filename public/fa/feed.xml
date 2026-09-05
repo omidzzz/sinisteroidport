@@ -6,7 +6,7 @@
     <atom:link href="https://sinisteroid.ir/fa/feed.xml" rel="self" type="application/rss+xml" />
     <description>توسعه فرانت‌اند، طراحی، ابزارهای هوش مصنوعی محلی و آینده جست‌وجو.</description>
     <language>fa-ir</language>
-    <lastBuildDate>Thu, 03 Sep 2026 18:59:55 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 05 Sep 2026 10:31:35 GMT</lastBuildDate>
     <item>
       <title>Content Clusters for GEO: How to Build Topical Authority That AI Engines Trust</title>
       <link>https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/</link>
@@ -75,7 +75,7 @@
       <title>کلود کد در برابر کلاین: توسعه‌دهندگان در ۲۰۲۶ کدام عامل کدنویسی هوش مصنوعی را انتخاب کنند؟</title>
       <link>https://sinisteroid.ir/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/</guid>
-      <pubDate>Fri, 14 Aug 2026 22:09:34 GMT</pubDate>
+      <pubDate>Fri, 14 Aug 2026 22:39:34 GMT</pubDate>
       <description>کلود کد و کلاین دو تا از قابل‌اعتمادترین ابزارهای عامل‌محور کدنویسی در سال ۲۰۲۶ هستند؛ یکی محصولی حرفه‌ای و اشتراکی از آنتروپیک، دیگری یک افزونهٔ رایگان، متن‌باز و مستقل از مدل. در این مقاله قیمت، مدل‌ها، پلتفرم‌ها، میزان خودمختاری و اینکه کدام‌یک واقعاً با روند کاری شما هم‌خوانی دارد را بررسی می‌کنیم.</description>
       <category>ai-coding-agents</category><category>ai-tools</category><category>open-source-ai</category>
     </item>
@@ -83,7 +83,7 @@
       <title>مرگ وب‌سایت‌های سنتی: طراحی برای ایجنت‌های هوش مصنوعی</title>
       <link>https://sinisteroid.ir/fa/blog/the-death-of-traditional-websites-designing-for-ai-agents/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/the-death-of-traditional-websites-designing-for-ai-agents/</guid>
-      <pubDate>Sun, 21 Jun 2026 20:30:00 GMT</pubDate>
+      <pubDate>Sun, 21 Jun 2026 21:00:00 GMT</pubDate>
       <description>بیش از ۶۰٪ از جستجوها اکنون بدون یک کلیک به جایی پایان می‌یابند. ایجنت‌های هوش مصنوعی وب‌سایت شما را بدون دیدن آن مرور می‌کنند. سلسله‌مراتب بصری که ماه‌ها صرف اصلاح آن کردید، hover stateها، انیمیشن‌های اسکرول — هیچ‌کدام ثبت نمی‌شوند. آنچه ثبت می‌شود معماری محتوای شما، داده‌های ساختارمند و این است که آیا یک ماشین می‌تواند در کمتر از یک ثانیه یک پاسخ مفید از HTML شما استخراج کند.</description>
       <category>web-architecture</category><category>seo-geo</category><category>content-strategy</category>
     </item>
@@ -91,7 +91,7 @@
       <title>اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی</title>
       <link>https://sinisteroid.ir/fa/blog/open-webui-the-missing-interface-for-local-ai/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/open-webui-the-missing-interface-for-local-ai/</guid>
-      <pubDate>Sat, 20 Jun 2026 20:30:00 GMT</pubDate>
+      <pubDate>Sat, 20 Jun 2026 21:00:00 GMT</pubDate>
       <description>اولاما موتور inference را در اختیار شما می‌گذارد. اوپن وب‌یوآی همه چیز دیگر را — تاریخچه مکالمه، RAG اسناد، کنترل دسترسی چند‌کاربره، صدا، تولید تصویر، و یک سیستم pipeline برای منطق Python سفارشی. این روشی است که یک مدل محلی را به یک پلتفرم هوش مصنوعی کامل تبدیل می‌کند.</description>
       <category>local-ai</category><category>ai-tools</category><category>open-source-ai</category>
     </item>
@@ -99,7 +99,7 @@
       <title>کلاین: عامل هوش مصنوعی متن‌باز کدنویسی که جریان کاری توسعه‌دهندگان را بازتعریف می‌کند</title>
       <link>https://sinisteroid.ir/fa/blog/cline-the-open-source-ai-coding-agent/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/cline-the-open-source-ai-coding-agent/</guid>
-      <pubDate>Fri, 19 Jun 2026 17:30:00 GMT</pubDate>
+      <pubDate>Fri, 19 Jun 2026 18:00:00 GMT</pubDate>
       <description>کلاین عامل هوش مصنوعی خودکار و آگاه از context را مستقیماً به VS Code و ترمینال شما می‌آورد. معماری، حالت‌های Plan/Act، یکپارچه‌سازی با مدل‌های محلی Ollama و دلایل برتری آن در اکوسیستم ابزارهای توسعه هوش مصنوعی سال ۲۰۲۶ را بررسی کنید.</description>
       <category>ai-coding-agents</category><category>local-ai</category><category>ai-tools</category><category>open-source-ai</category>
     </item>

@@ -30,6 +30,13 @@ export function AnalyticsEvents() {
       const text = (anchor.textContent ?? "").trim().slice(0, 80);
 
       try {
+        // Opt-in tracked anchors (related reading, inline callouts) — fired
+        // regardless of internal/external so the CTR funnel is measurable.
+        const tracked = anchor.closest<HTMLElement>("[data-track]");
+        if (tracked?.dataset.track) {
+          trackEvent(tracked.dataset.track, { url: href, text });
+          return;
+        }
         if (href.startsWith("mailto:")) {
           trackEvent("contact_click", { method: "email", text });
         } else if (href.startsWith("tel:")) {

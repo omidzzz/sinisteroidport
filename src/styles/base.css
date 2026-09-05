@@ -151,6 +151,23 @@ body {
   color: var(--color-accent);
 }
 
+/* Body-level links carry an animated underline — the plain-text link
+   affordance that lifts in-prose CTR. Scoped to paragraphs/lists so
+   block-level CTAs and callouts keep their own styling. */
+.prose-post p a,
+.prose-post li a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(var(--rgb-accent), 0.45);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.prose-post p a:hover,
+.prose-post li a:hover {
+  text-decoration-color: var(--color-acid);
+}
+
 /* Justified text everywhere in posts (per editorial request) */
 .prose-post p,
 .prose-post li {

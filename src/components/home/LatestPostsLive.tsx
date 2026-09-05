@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import ScrambleText from "../ui/ScrambleText";
 import type { Post } from "@/lib/blog/types";
 import {
@@ -85,8 +84,6 @@ export default function LatestPostsLive({
     };
   }, []);
 
-  const staticSlugs = new Set(initial.map((p) => p.slug));
-
   return (
     <div className="post-strip" dir="auto">
       {items.map((post, i) => {
@@ -95,7 +92,6 @@ export default function LatestPostsLive({
         const fallback = isFallbackTranslation(post, locale);
         const date = postDateKey(post.date);
         const href = loc(locale, `/blog/${post.slug}`);
-        const isStatic = staticSlugs.has(post.slug);
         const cls = "post-card group";
         const card = (
           <>
@@ -134,16 +130,10 @@ export default function LatestPostsLive({
             </span>
           </>
         );
-        // DB-only posts (not in the static export) have no RSC payload to
-        // prefetch — a plain anchor does a full load straight to the
-        // server-rendered page (api/post.php) and skips the 404 prefetch.
-        if (isStatic) {
-          return (
-            <Link key={post.slug} href={href} className={cls} prefetch>
-              {card}
-            </Link>
-          );
-        }
+        // Plain anchors — same reasoning as the blog issue grid: next/link's
+        // client router can swallow navigations in this static export, and a
+        // plain anchor navigates to the same pretty URL (static file or
+        // api/post.php fallback) reliably, including new-tab.
         return (
           <a key={post.slug} href={href} className={cls}>
             {card}

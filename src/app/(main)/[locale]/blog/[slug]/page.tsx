@@ -10,8 +10,8 @@ import { getPostMeta, getPostKeywords } from "@/lib/blog/meta";
 import { postWordCount, postReadMinutes } from "@/lib/blog/stats";
 import { ogCardSrc, publicAssetExists } from "@/lib/blog/assets";
 import type { Post } from "@/lib/blog/types";
+import { getRelatedPosts } from "@/lib/blog/related";
 import { isLocale, loc, type Locale } from "@/lib/i18n";
-import { formatPostDate } from "@/lib/blog/format";
 import { seoAlternates, SITE } from "@/lib/seo";
 import {
   normalizeTags,
@@ -57,12 +57,6 @@ function isoDate(value: string): string {
   if (m) return `${m[1]}T${m[2]}${m[2].length === 5 ? ":00" : ""}`;
   const t = new Date(value);
   return Number.isNaN(t.getTime()) ? value : t.toISOString();
-}
-
-/** Tag-overlap score for simple cluster-style related-post ranking. */
-function relatedScore(a: Post, b: Post): number {
-  const setB = new Set(b.tags ?? []);
-  return (a.tags ?? []).reduce((n, t) => n + (setB.has(t) ? 1 : 0), 0);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -133,14 +127,7 @@ export default async function BlogPostPage({ params }: Props) {
   const faq = translation?.faq ?? [];
 
   // Cluster-style internal linking: most tag overlap wins, newest breaks ties
-  const related = getAllPosts()
-    .filter((p) => p.slug !== slug)
-    .sort(
-      (a, b) =>
-        relatedScore(post, b) - relatedScore(post, a) ||
-        new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
-    .slice(0, 3);
+  const related = getRelatedPosts(post, getAllPosts(), 3);
 
   const jsonLd = [
     blogPostingJsonLd(post, locale, {
@@ -167,7 +154,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <BlogPostLive locale={locale} post={post} />
+      <BlogPostLive locale={locale} post={post} related={related} />
 
       {/* Chronological prev/next — deepens the crawl path and keeps readers
           moving; newest-first list, so idx-1 is newer, idx+1 is older */}
@@ -215,40 +202,6 @@ export default async function BlogPostPage({ params }: Props) {
           </nav>
         );
       })()}
-
-      {/* Server-rendered related reading — descriptive anchors over a
-          topical cluster, kept outside the client-hydrated component */}
-      <section className="cv-auto relative mx-auto max-w-3xl px-4 py-16 sm:px-6">
-        <span aria-hidden className="x-rule" />
-        <h2 className="label mb-8">
-          {locale === "fa" ? "(مطالب مرتبط)" : "(Related reading)"}
-        </h2>
-        {related.map((p) => {
-          const rm = getPostMeta(p, locale);
-          return (
-            <Link
-              key={p.slug}
-              href={loc(locale, `/blog/${p.slug}`)}
-              className="group flex flex-col gap-1 border-t border-line py-5 transition-colors hover:bg-panel/40 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
-            >
-              <span
-                className="w-28 shrink-0 font-mono text-xs text-muted"
-                dir="ltr"
-              >
-                {formatPostDate(rm.date)}
-              </span>
-              <span className="flex-1 text-lg font-medium tracking-tight transition-colors duration-300 group-hover:text-accent sm:text-xl">
-                {rm.isFallback && (
-                  <span className="label me-2 align-middle">
-                    {locale === "fa" ? "— به انگلیسی منتشر شده" : "— published in English"}
-                  </span>
-                )}
-                {rm.title}
-              </span>
-            </Link>
-          );
-        })}
-      </section>
     </>
   );
 }

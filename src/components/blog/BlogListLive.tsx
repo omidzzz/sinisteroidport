@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Reveal from "../ui/Reveal";
 import { ArrowIcon } from "../ui/icons";
 import type { Post } from "@/lib/blog/types";
@@ -78,8 +77,6 @@ export default function BlogListLive({
     };
   }, []);
 
-  const staticSlugs = new Set(initial.map((p) => p.slug));
-
   return (
     // cv-auto: the issue grid is below the hero — skip layout/paint until
     // the browser actually scrolls near it (contain-intrinsic-size keeps
@@ -93,7 +90,6 @@ export default function BlogListLive({
         const tags = Array.isArray(post.tags) ? post.tags : [];
         const cover = post.featuredImage?.src || "";
         const href = loc(locale, `/blog/${post.slug}`);
-        const isStatic = staticSlugs.has(post.slug);
         const cls = "issue-card group";
         const card = (
           <>
@@ -139,18 +135,11 @@ export default function BlogListLive({
             )}
           </>
         );
-        // DB-only posts (not in the static export) have no RSC payload to
-        // prefetch — a plain anchor does a full load straight to the
-        // server-rendered page (api/post.php) and skips the 404 prefetch.
-        if (isStatic) {
-          return (
-            <Reveal key={post.slug} delay={(i % 4) * 50}>
-              <Link href={href} className={cls} prefetch>
-                {card}
-              </Link>
-            </Reveal>
-          );
-        }
+        // Plain anchors — not next/link. The static-export client router has
+        // been caught swallowing navigations on the issue grid (click does
+        // nothing while new-tab always works); every pretty URL is served by
+        // either a static index.html (internal rewrite) or api/post.php, so a
+        // real navigation is always correct and matches "open in new tab".
         return (
           <Reveal key={post.slug} delay={(i % 4) * 50}>
             <a href={href} className={cls}>
