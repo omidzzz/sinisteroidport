@@ -30,7 +30,7 @@ export default function CtaBlock({ block }: { block: ContentBlock }) {
       {block.buttonUrl && (
         <a
           href={block.buttonUrl}
-          className="mt-5 inline-flex items-center gap-2 border border-accent px-6 py-2.5 font-mono text-xs font-bold uppercase tracking-widest text-accent transition-colors duration-200 hover:bg-accent hover:text-bg"
+          className="cta-btn mt-5 inline-flex items-center gap-2 border border-accent px-6 py-2.5 font-mono text-xs font-bold uppercase tracking-widest text-accent transition-colors duration-200"
         >
           {block.buttonText ?? "Read more"}
           <ArrowIcon className="transition-transform duration-200 group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5" />

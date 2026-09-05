@@ -15,7 +15,7 @@ export default function ManifestoSection({ locale }: { locale: Locale }) {
   const qTail = w.slice(mid).join(" ");
 
   return (
-    <section className="cv-auto shell-grid relative mx-auto my-20 max-w-[86rem] px-5 sm:px-8">
+    <section className="shell-grid relative mx-auto my-20 max-w-[86rem] px-5 sm:px-8">
       <Rail label={man} />
       <Spotlight className="relative min-w-0 py-6">
         <span aria-hidden dir="ltr" className="scrub-word top-[-0.35em]">

@@ -1,0 +1,720 @@
+/* ============================================================
+   FX-MODERN — progressive-enhancement pass on top of the ACID
+   RAVE system. Everything here degrades gracefully: unsupported
+   browsers keep the existing look, motion stays compositor-safe
+   and reduced-motion gated, RTL uses logical properties.
+   ------------------------------------------------------------
+   Contents:
+     §1  Registered brand colors + smooth theme crossfade
+     §2  Scroll-scrubbed display type (wght pump + letter-spacing
+         deconstriction via view() timelines)
+     §3  text-box-trim / optical alignment of giant type
+     §4  Scroll-driven .reveal (CSS-only where supported)
+     §5  @starting-style + transition-behavior: allow-discrete
+         (palette exit, FAQ accordion, mobile veil)
+     §6  :has() couplings (case rows, dock, bento)
+     §7  Container queries on the bento wall
+     §8  light-dark() for hard-coded surfaces
+     §9  interpolate-size / field-sizing / accent-caret
+     §10 scroll-padding + scrollbar-gutter + overscroll
+     §11 @media (scripting: none) fallbacks
+     §12 SVG signal-break glitch filter (feTurbulence)
+     §13 Edge-fade masks (post strip)
+     §14 mix-blend-mode: difference inversion
+     §15 text-holo scrubbed by scroll instead of a time loop
+     §16 Named cross-document View Transitions
+     §17 preserve-3d hologram stacks (case + bento)
+     §18 Conic plasma ring on sec-ico chips
+     §19 clip-path seam utilities (hazard zigzag)
+     §20 content-visibility + contain perfs
+     §21 print / forced-colors / prefers-contrast
+     §22 CTA-block hover contrast fix (.cta-btn)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   §1 REGISTERED BRAND COLORS — the toggle flips <html>
+   [data-theme], and `transition-property: --color-*` below makes
+   every surface that reads these tokens blend smoothly instead of
+   snapping. Browsers without custom-property transitions fall
+   back to the instant flip that exists today. Deliberately NOT
+   using startViewTransition (see theme.ts for the color-scheme
+   white-out bug that killed the JS version).
+   ------------------------------------------------------------ */
+
+/* ---- Registered brand colors ---- */
+@property --color-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #020503;
+}
+@property --color-panel {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #06110b;
+}
+@property --color-line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0, 229, 255, 0.14);
+}
+@property --color-ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ecffe9;
+}
+@property --color-muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #8fa294;
+}
+@property --color-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #00e5ff;
+}
+@property --color-accent-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #08b8cf;
+}
+@property --color-accent-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #123c44;
+}
+@property --color-acid {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #b8ff00;
+}
+
+html {
+  transition:
+    --color-bg 0.5s ease,
+    --color-panel 0.5s ease,
+    --color-line 0.5s ease,
+    --color-ink 0.5s ease,
+    --color-muted 0.5s ease,
+    --color-accent 0.5s ease,
+    --color-accent-2 0.5s ease,
+    --color-accent-3 0.5s ease,
+    --color-acid 0.5s ease;
+}
+
+/* ------------------------------------------------------------
+   §2 SCROLL-SCRUBBED DISPLAY TYPE
+   The headline "charges up" from the thin end of its variable
+   axis to full weight (and tightens its tracking) exactly while
+   it crosses the viewport. Pure compositor-safe paint.
+   ------------------------------------------------------------ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .page-hero-title,
+    .foot-brand,
+    .issue-number,
+    .pump-wght {
+      animation: pump-wght linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .page-hero-eyebrow,
+    .deconstrict {
+      animation: deconstrict linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
+}
+
+@keyframes pump-wght {
+  from {
+    font-variation-settings: "wght" 400;
+  }
+  to {
+    font-variation-settings: "wght" 900;
+  }
+}
+@keyframes deconstrict {
+  from {
+    letter-spacing: 0.18em;
+  }
+  to {
+    letter-spacing: 0.05em;
+  }
+}
+
+/* §3 OPTICAL ALIGNMENT of giant display type — strip the ghost
+   leading above the caps and descender slack below the baseline. */
+.page-hero-title,
+.tx-name,
+.foot-brand,
+.case-name {
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+  /* Safari 16 accelerate prefix */
+  leading-trim: both;
+  text-edge: cap;
+}
+
+/* ------------------------------------------------------------
+   §4 SCROLL-DRIVEN REVEAL — where view() timelines exist the
+   entrance is 100% CSS and the IntersectionObserver wrapper
+   becomes a no-op for the default (up) variant. Varianted
+   reveals keep the JS path.
+   ------------------------------------------------------------ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal:not([data-rv]) {
+      animation: rv-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 26%;
+    }
+  }
+}
+@keyframes rv-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+  }
+}
+/* ------------------------------------------------------------
+   §5 @STARTING-STYLE + allow-discrete
+   5a  FAQ accordion (<details>) — smooth open/close. The
+       container stays in the DOM so both directions animate.
+   5b  Command palette + terminal overlays get a real EXIT
+       (the mount-in animation already existed; the unmount
+       snapped off instantly before). The component keeps
+       mounted ~190ms with .is-closing to play the out.
+   5c  Mobile veil — allow-discrete lets visibility participate.
+   ------------------------------------------------------------ */
+
+/* 5a */
+.faq-bod {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.35s ease,
+    display 0.4s allow-discrete;
+}
+.faq-bod > * {
+  min-height: 0;
+  overflow: hidden;
+}
+details[open] .faq-bod {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+@starting-style {
+  details[open] .faq-bod {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+/* 5b overlay exit — entry uses the existing fade-in / pop-in */
+.overlay-fade.is-closing {
+  animation: overlay-exit 190ms ease both;
+  pointer-events: none;
+}
+.palette-pop.is-closing {
+  animation: palette-exit 190ms cubic-bezier(0.5, 0, 0.75, 0) both;
+}
+@keyframes overlay-exit {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes palette-exit {
+  to {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.97);
+  }
+}
+
+/* 5c mobile menu veil — discrete-friendly transition */
+.overlay-veil {
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease,
+    display 0.35s allow-discrete;
+}
+
+/* ------------------------------------------------------------
+   §6 :has() COUPLINGS
+   ------------------------------------------------------------ */
+/* When a case image is hovered, the whole row reacts: ghost
+   numeral + meta rail ignite in sync (previously only the img). */
+.case-row:has(.case-media-frame:hover) .case-ghost {
+  -webkit-text-stroke-color: rgba(var(--rgb-acid), 0.4);
+}
+.case-row:has(.case-media-frame:hover) .case-idx,
+.case-row:has(.case-media-frame:hover) .case-mark {
+  color: var(--color-acid);
+}
+
+/* Dock lights up when the active route link is present */
+nav.dock:has(.dock-link.is-active) {
+  border-color: rgba(var(--rgb-acid), 0.55);
+}
+
+/* Bento name reacts to its own frame hover */
+.bento:has(.bento-frame:hover) .bento-name {
+  color: var(--color-accent);
+}
+
+/* Command palette scroll lock — the palette toggles
+   html[data-palette-open] in JS; :has() would match the
+   always-in-DOM veil even when closed, so we use the attr. */
+html[data-palette-open="true"],
+html[data-palette-open="true"] body {
+  overflow: clip;
+}
+
+/* ------------------------------------------------------------
+   §7 CONTAINER QUERIES — the bento wall responds to ITS OWN
+   inline size (via the .bento-cq wrapper in ProjectIndex), not
+   just the viewport. Nested :has-style queries keep working,
+   and @container only ever styles a DESCENDANT of the context.
+   ------------------------------------------------------------ */
+.bento-cq {
+  container-type: inline-size;
+}
+@container (max-width: 70rem) {
+  .bento-wall {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento-s2 {
+    grid-column: span 2;
+  }
+  .bento-up,
+  .bento-down {
+    translate: 0 0;
+  }
+}
+@container (max-width: 40rem) {
+  .bento-wall {
+    grid-template-columns: 1fr;
+  }
+  .bento-s2 {
+    grid-column: span 1;
+  }
+}
+
+/* ------------------------------------------------------------
+   §8 light-dark() — the handful of surfaces today overridden by
+   hand-written [data-theme="light"] blocks. color-scheme is set
+   on <html>, so light-dark resolves correctly.
+   ------------------------------------------------------------ */
+.noise {
+  opacity: light-dark(0.05, 0.07);
+  mix-blend-mode: light-dark(multiply, overlay);
+}
+
+/* ------------------------------------------------------------
+   §9 interpolate-size / field-sizing / accent + caret
+   ------------------------------------------------------------ */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+.palette-pop input {
+  field-sizing: content;
+  caret-color: var(--color-acid);
+}
+:root {
+  accent-color: var(--color-acid);
+}
+
+/* §10 anchor + scrollbar + overscroll hardening */
+html {
+  scroll-padding-block: 5rem;
+  scrollbar-gutter: stable;
+}
+body {
+  overscroll-behavior-x: contain;
+}
+
+/* ------------------------------------------------------------
+   §11 @media (scripting: none) — no-JS crawlers/readers must
+   never see the .reveal opacity-zero trap.
+   ------------------------------------------------------------ */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .prop-float,
+  .prop-float.pf-on {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+/* ------------------------------------------------------------
+   §12 SIGNAL-BREAK glitch — feTurbulence displacement filter.
+   The SVG defs live in <FilterDefs/> (mounted in the root
+   layout). Hovering the logotype now physically tears the glyphs
+   instead of only clipping slices.
+   ------------------------------------------------------------ */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .logo-type:hover,
+  .glitchy:hover {
+    animation: sig-break 0.35s steps(2, end) infinite;
+  }
+}
+@keyframes sig-break {
+  0%,
+  100% {
+    filter: url(#signal-break) drop-shadow(0 0 14px rgba(var(--rgb-acid), 0.45));
+  }
+  50% {
+    filter: url(#signal-break) drop-shadow(0 0 30px rgba(var(--rgb-acid), 0.7));
+  }
+}
+
+/* §13 EDGE-FADE mask on the horizontal post strip (the ticker
+   already ships one — see spine-rail.css §ticker) */
+.post-strip {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 4%,
+    #000 96%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 4%,
+    #000 96%,
+    transparent
+  );
+}
+[dir="rtl"] .post-strip {
+  -webkit-mask-image: linear-gradient(
+    270deg,
+    transparent,
+    #000 4%,
+    #000 96%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    270deg,
+    transparent,
+    #000 4%,
+    #000 96%,
+    transparent
+  );
+}
+
+/* §14 mix-blend difference — acid-house CRT inversion on icon
+   chips. Only on precise pointers; hover-only so it never
+   repaints the page. */
+@media (pointer: fine) {
+  .sec-ico:hover,
+  .chip-brk:hover {
+    mix-blend-mode: difference;
+    color: #fff;
+  }
+}
+
+/* ------------------------------------------------------------
+   §15 text-holo scrubbed by scroll — the iridescent sweep follows
+   the reader once instead of looping forever (calmer, cheaper).
+   Browsers without view() keep the original 9s drift.
+   ------------------------------------------------------------ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .text-holo {
+      animation: holo-view linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 55%;
+    }
+  }
+}
+@keyframes holo-view {
+  from {
+    background-position-x: 115%;
+  }
+  to {
+    background-position-x: -15%;
+  }
+}
+/* ------------------------------------------------------------
+   §16 NAMED CROSS-DOCUMENT VIEW TRANSITIONS — the logotype, the
+   hero plate and the giant ghost numeral morph across page
+   navigations (the whole-page crossfade from base.css remains).
+   ------------------------------------------------------------ */
+.chip-start .logo-type {
+  view-transition-name: brand-lockup;
+}
+.hero-plate {
+  view-transition-name: hero-plate;
+}
+.page-hero .page-index,
+.ghost-index {
+  view-transition-name: index-numeral;
+}
+::view-transition-new(root) {
+  animation: vt-new-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+::view-transition-old(root) {
+  animation: vt-old-out 0.25s ease both;
+}
+@keyframes vt-new-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+@keyframes vt-old-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------
+   §17 GHOST-NUMERAL DEPTH — the case ghost recedes behind the
+   row's plane (translateZ negative). The media/labels stay FLAT:
+   we deliberately do NOT push them forward, because perspective
+   scaling would make them slightly overflow their row box and
+   create the "card clipped" look. Recession only = depth with
+   zero clipping risk.
+   NOTE: .bento keeps `isolation: isolate` (needed so its ghost
+   numeral stays visible through the panel) which forces flat 3D,
+   so the bento gets no perspective stacking at all.
+   ------------------------------------------------------------ */
+.case-row {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+.case-ghost {
+  transform: translateZ(-48px);
+}
+
+/* ------------------------------------------------------------
+   §18 CONIC PLASMA RING on sec-ico chips — the registered
+   --ring-angle (blog-post.css) drives a one-off charged halo on
+   hover. Pure decoration, gated to precise pointers.
+   ------------------------------------------------------------ */
+.sec-ico {
+  position: relative;
+  isolation: isolate;
+}
+.sec-ico::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 8px;
+  z-index: -1;
+  opacity: 0;
+  background: conic-gradient(
+    from var(--ring-angle, 0deg),
+    transparent 0deg 120deg,
+    rgba(var(--rgb-acid), 0.9) 150deg,
+    rgba(var(--rgb-accent), 0.8) 190deg,
+    transparent 240deg 360deg
+  );
+  filter: blur(4px);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .sec-ico:hover::before {
+    opacity: 1;
+    animation: plasma-spin 3s linear infinite;
+  }
+}
+@keyframes plasma-spin {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+/* ------------------------------------------------------------
+   §19 CLIP-PATH SEAM UTILITIES — hazard-zigzag / cut-corner
+   section seams (paint-only). Apply .seam-cut-corner to a
+   section to notch its start-corner, or .seam-zigzag to a band
+   for a hazard-tape top edge.
+   ------------------------------------------------------------ */
+.seam-cut-corner {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 1.25rem) 0,
+    100% 1.25rem,
+    100% 100%,
+    0 100%
+  );
+}
+[dir="rtl"] .seam-cut-corner {
+  clip-path: polygon(
+    1.25rem 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    0 1.25rem
+  );
+}
+.seam-zigzag {
+  clip-path: polygon(
+    0 0,
+    2.5% 40%,
+    5% 0,
+    7.5% 40%,
+    10% 0,
+    12.5% 40%,
+    15% 0,
+    17.5% 40%,
+    20% 0,
+    22.5% 40%,
+    25% 0,
+    27.5% 40%,
+    30% 0,
+    32.5% 40%,
+    35% 0,
+    37.5% 40%,
+    40% 0,
+    42.5% 40%,
+    45% 0,
+    47.5% 40%,
+    50% 0,
+    52.5% 40%,
+    55% 0,
+    57.5% 40%,
+    60% 0,
+    62.5% 40%,
+    65% 0,
+    67.5% 40%,
+    70% 0,
+    72.5% 40%,
+    75% 0,
+    77.5% 40%,
+    80% 0,
+    82.5% 40%,
+    85% 0,
+    87.5% 40%,
+    90% 0,
+    92.5% 40%,
+    95% 0,
+    97.5% 40%,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
+}
+/* notch only the palette — the service rows and status panels carry
+   exterior glow pseudos (status-panel::before, prism halo) and hover
+   lift, so a clip-path on them would sever that glow and clip the
+   card tops. The palette is borderless and fully contained. */
+.palette-pop {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 0.9rem) 0,
+    100% 0.9rem,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* ------------------------------------------------------------
+   §20 containment — only the hero plate frame gets `contain:
+   paint` (it already clips to its own border box via overflow,
+   so this is a pure GPU hint, never a visible clip).
+   content-visibility is deliberately NOT used here: it implies
+   paint containment, and any child that lifts/glows outside its
+   box (hover pop on cards, glow pseudos, reveal offsets) would
+   get clipped — exactly the "cards clipped from top" bug we are
+   fixing. Prose already uses .cv-auto in base.css where every
+   child stays inside its box.
+   ------------------------------------------------------------ */
+.hero-plate-frame {
+  contain: paint;
+}
+pre,
+code,
+kbd,
+samp {
+  font-optical-sizing: auto;
+  font-variant-ligatures: contextual;
+  tab-size: 2;
+}
+
+/* ------------------------------------------------------------
+   §21 PRINT / FORCED-COLORS / CONTRAST — the neon decays
+   gracefully to ink.
+   ------------------------------------------------------------ */
+@media print {
+  .noise,
+  body::after,
+  .cursor-dot,
+  .cursor-ring,
+  .scanlines,
+  .gl-glow,
+  .prop-float,
+  .ticker,
+  .dock-wrap,
+  .chip-corner {
+    display: none !important;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    overflow: visible !important;
+  }
+  .text-outline,
+  .stroke-line,
+  .issue-number {
+    color: #000 !important;
+    -webkit-text-stroke: 0 !important;
+  }
+  a {
+    color: #000 !important;
+  }
+}
+@media (forced-colors: active) {
+  .noise,
+  body::after,
+  .cursor-dot,
+  .cursor-ring,
+  .scanlines {
+    display: none !important;
+  }
+  * {
+    border-color: CanvasText !important;
+  }
+}
+@media (prefers-contrast: more) {
+  :root {
+    --color-line: rgba(0, 229, 255, 0.4);
+    --color-muted: #5d7165;
+  }
+  .text-outline,
+  .stroke-line {
+    -webkit-text-stroke-width: 1.5px;
+  }
+}
+
+/* ------------------------------------------------------------
+   §22 CTA-BLOCK HOVER CONTRAST FIX.
+   Root cause: `.prose-post a { color: var(--color-accent) }` in
+   base.css is UNLAYERED, so it beats Tailwind's LAYERED
+   `.hover\:text-bg:hover` utility regardless of specificity —
+   on hover the text stayed accent-on-accent (cyan-on-cyan in
+   dark, dark-teal-on-dark-teal in light). This unlayered rule
+   explicitly wins over both, in both themes.
+   ------------------------------------------------------------ */
+.prose-post .cta-btn {
+  --cta-track: var(--color-bg);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+.prose-post .cta-btn:hover,
+.prose-post .cta-btn:focus-visible {
+  color: var(--color-bg);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}

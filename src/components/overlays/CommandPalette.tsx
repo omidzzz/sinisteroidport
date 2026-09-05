@@ -40,6 +40,51 @@ export default function CommandPalette({
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Exit-animation state: on close the overlay plays a ~190ms fade-out
+  // (see fx-modern.css §5b) before the component unmounts. A stale-open
+  // timer is re-entrant-safe via closingRef + cancelClose().
+  const [closing, setClosing] = useState(false);
+  const closingRef = useRef(false);
+  const closeTimer = useRef<number | null>(null);
+  const openRef = useRef(open);
+  openRef.current = open;
+
+  const beginClose = () => {
+    if (closingRef.current) return;
+    closingRef.current = true;
+    setClosing(true);
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => {
+      closingRef.current = false;
+      setClosing(false);
+      setOpen(false);
+    }, 190);
+  };
+
+  const cancelClose = () => {
+    closingRef.current = false;
+    setClosing(false);
+    if (closeTimer.current) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  // Scroll lock while the palette is open OR animating out — the CSS
+  // hook (html[data-palette-open]) lives in fx-modern.css §6.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute("data-palette-open", open || closing ? "true" : "false");
+    return () => root.removeAttribute("data-palette-open");
+  }, [open, closing]);
+
+  useEffect(
+    () => () => {
+      if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    },
+    []
+  );
+
   // current route without the locale prefix — so the language switch keeps
   // the same page instead of jumping to the homepage
   const pathname = usePathname() ?? "";
@@ -145,10 +190,14 @@ export default function CommandPalette({
       const matchSlash = e.key === "/" && !typing;
       if (matchK || matchSlash) {
         e.preventDefault();
-        setOpen((v) => !v);
+        if (openRef.current) beginClose();
+        else {
+          cancelClose();
+          setOpen(true);
+        }
         return;
       }
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape" && openRef.current) beginClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -157,12 +206,15 @@ export default function CommandPalette({
   // Dock chip / any external affordance can open the palette by dispatching
   // this event — keeps the open state private to this component.
   useEffect(() => {
-    const onOpen = () => setOpen(true);
+    const onOpen = () => {
+      cancelClose();
+      setOpen(true);
+    };
     window.addEventListener("open-command-palette", onOpen);
     return () => window.removeEventListener("open-command-palette", onOpen);
   }, []);
 
-  useEffect(() => setActive(0), [query, open]);
+  useEffect(() => setActive(0), [query, open, closing]);
 
   // focus the input on open
   useEffect(() => {
@@ -176,32 +228,36 @@ export default function CommandPalette({
   const run = (e: CmdEntry) => {
     if (e.action === "theme") {
       toggleTheme();
-      setOpen(false);
+      beginClose();
       return;
     }
     if (e.href) {
       if (e.external) window.open(e.href, "_blank", "noopener,noreferrer");
       else window.location.assign(e.href);
-      setOpen(false);
+      beginClose();
     }
   };
 
-  if (!open) return null;
+  if (!open && !closing) return null;
 
   let cursor = 0;
   return (
     <div
       role="presentation"
-      className="overlay-fade fixed inset-0 z-[80] flex items-start justify-center bg-black/60 px-4 pt-[14vh] backdrop-blur-sm"
+      className={`overlay-fade fixed inset-0 z-[80] flex items-start justify-center bg-black/60 px-4 pt-[14vh] backdrop-blur-sm ${
+        closing ? "is-closing" : ""
+      }`}
       onMouseDown={(ev) => {
-        if (ev.target === ev.currentTarget) setOpen(false);
+        if (ev.target === ev.currentTarget) beginClose();
       }}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-label={locale === "fa" ? "فرمان‌ها" : "Command palette"}
-        className="palette-pop w-full max-w-lg overflow-hidden border border-line bg-panel shadow-2xl shadow-black/50"
+        className={`palette-pop w-full max-w-lg overflow-hidden border border-line bg-panel shadow-2xl shadow-black/50 ${
+          closing ? "is-closing" : ""
+        }`}
       >
         {/* search row */}
         <div className="flex items-center gap-3 border-b border-line px-4">
@@ -265,7 +321,7 @@ export default function CommandPalette({
                     {...(e.external
                       ? { target: "_blank", rel: "noopener noreferrer" }
                       : {})}
-                    onClick={() => setOpen(false)}
+                    onClick={() => beginClose()}
                     className={`flex items-baseline gap-3 px-4 py-2 transition-colors ${
                       isActive ? "bg-accent text-bg" : "text-ink"
                     }`}

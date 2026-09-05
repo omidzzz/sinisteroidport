@@ -78,10 +78,11 @@ export default function BlogListLive({
   }, []);
 
   return (
-    // cv-auto: the issue grid is below the hero — skip layout/paint until
-    // the browser actually scrolls near it (contain-intrinsic-size keeps
-    // the scrollbar honest before first render).
-    <div className="cv-auto issue-grid">
+    // NOTE: no cv-auto here on purpose — the issue cards lift -5px on
+    // hover and carry exterior glow; content-visibility's paint
+    // containment would clip the top row (the "cards clipped from
+    // top" bug). The grid is small enough to render eagerly.
+    <div className="issue-grid">
       {items.map((post, i) => {
         const title = postTitle(post, locale);
         const excerpt = postExcerpt(post, locale);

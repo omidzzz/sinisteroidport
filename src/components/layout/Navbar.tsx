@@ -84,6 +84,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
               <Link
                 key={NAV_PATHS[i]}
                 href={loc(locale, NAV_PATHS[i])}
+                aria-current={active ? "page" : undefined}
                 className={`dock-link ${active ? "is-active" : ""}`}
               >
                 <span className="dock-index">{item.index}</span>
@@ -198,6 +199,15 @@ export default function Navbar({ locale }: { locale: Locale }) {
             <Link
               key={NAV_PATHS[i]}
               href={loc(locale, NAV_PATHS[i])}
+              aria-current={
+                NAV_PATHS[i] === "/"
+                  ? clean === "/"
+                    ? "page"
+                    : undefined
+                  : clean.startsWith(NAV_PATHS[i])
+                    ? "page"
+                    : undefined
+              }
               data-off={i}
               className={`overlay-link text-[clamp(1.9rem,9vw,3.4rem)] ${
                 (NAV_PATHS[i] === "/" ? clean === "/" : clean.startsWith(NAV_PATHS[i]))

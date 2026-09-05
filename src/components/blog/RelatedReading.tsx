@@ -26,7 +26,7 @@ export default function RelatedReading({
   const heroCover = hero.featuredImage?.src || null;
 
   return (
-    <section className="cv-auto relative mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <section className="relative mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <span aria-hidden className="x-rule" />
       <h2 className="label mb-8">
         {locale === "fa" ? "(مطالب مرتبط)" : "(Related reading)"}

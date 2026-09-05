@@ -44,7 +44,10 @@ function ProjectTags({ tags }: { tags: string[] }) {
 
 export default function ProjectIndex({ projects }: { projects: Project[] }) {
   return (
-    <div className="bento-wall mt-16 sm:mt-20">
+    // bento-cq = container query context; the wall below reflows to its
+    // OWN inline size (fx-modern.css §7), independent of the viewport.
+    <div className="bento-cq">
+      <div className="bento-wall mt-16 sm:mt-20">
       {projects.map((project, i) => {
         const span = `bento-s${SPANS[i] ?? 1}`;
         const drift = driftClass(DRIFT[i] ?? "");
@@ -82,6 +85,7 @@ export default function ProjectIndex({ projects }: { projects: Project[] }) {
           </Reveal>
         );
       })}
+      </div>
     </div>
   );
 }

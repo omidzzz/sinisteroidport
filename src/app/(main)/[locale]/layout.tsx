@@ -14,6 +14,7 @@ import GLBackground from "@/components/shell/GLBackground";
 import ProgressThread from "@/components/shell/ProgressThread";
 import GridLines from "@/components/shell/GridLines";
 import Cursor from "@/components/shell/Cursor";
+import FilterDefs from "@/components/shell/FilterDefs";
 import { GoogleTag } from "@/components/analytics/GoogleTag";
 import { AnalyticsEvents } from "@/components/analytics/AnalyticsEvents";
 import {
@@ -223,6 +224,7 @@ export default async function LocaleRootLayout({
         <AnalyticsEvents />
         <ProgressThread />
         <GLBackground />
+        <FilterDefs />
         <GridLines />
         <div aria-hidden className="noise" />
         <Cursor />

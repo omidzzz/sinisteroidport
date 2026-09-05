@@ -21,7 +21,7 @@ export default function SignalsSection({
 
   return (
     <>
-      <section className="cv-auto shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+      <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Rail label={sig} icon={<SignalIcon />} />
         <div className="sig-zone relative min-w-0">
           <div className="rain-bay">

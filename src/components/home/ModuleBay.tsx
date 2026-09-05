@@ -12,7 +12,7 @@ export default function ModuleBay({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <section className="cv-auto shell-grid rev relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
+      <section className="shell-grid rev relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Spotlight className="min-w-0">
           <div className="bay-grid relative">
             {t.services.map((service, i) => (
