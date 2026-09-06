@@ -55,10 +55,15 @@
   background: linear-gradient(180deg, transparent, var(--color-accent));
 }
 
-/* Cursor spotlight wrapper + glow overlay */
+/* Cursor spotlight wrapper + glow overlay.
+   NOTE: no overflow:hidden here on purpose — this wrapper sections off
+   whole card grids (module bay Tilt cards, the work timeline, scrub-words
+   hanging above the fold), and paint-clipping it decapitated every hover
+   lift, exterior glow and tilted corner. Nothing needs clipping anyway:
+   .spot-glow is inset:0 with a background gradient, which can never paint
+   outside its own border box. */
 .spot-wrap {
   position: relative;
-  overflow: hidden;
 }
 .spot-glow {
   position: absolute;
@@ -231,7 +236,12 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  padding-bottom: 0.5rem;
+  /* A scroll container clips vertically too (overflow-x:auto forces
+     overflow-y to auto), which decapitates the -6px card lift. The
+     padding gives the scrollport headroom; the negative margin keeps
+     the layout footprint unchanged. */
+  padding-block: 0.75rem 0.5rem;
+  margin-block-start: -0.75rem;
 }
 .post-strip::-webkit-scrollbar {
   display: none;

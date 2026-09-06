@@ -360,7 +360,9 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  padding-block: 0.5rem 1rem;
+  /* Headroom for the -6px hover lift (scroll containers clip both axes) */
+  padding-block: 0.9rem 1rem;
+  margin-block-start: -0.9rem;
 }
 .case-deck::-webkit-scrollbar { display: none; }
 .case-card {
