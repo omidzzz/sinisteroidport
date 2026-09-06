@@ -3,6 +3,10 @@
     "category": "Frontend Development",
     "skills": [
       {
+        "name": "Next.js (App Router, SSG)",
+        "level": 4
+      },
+      {
         "name": "REST APIs",
         "level": 4
       },
@@ -12,7 +16,7 @@
       },
       {
         "name": "React",
-        "level": 3
+        "level": 4
       },
       {
         "name": "JavaScript",
@@ -20,6 +24,30 @@
       },
       {
         "name": "TypeScript",
+        "level": 4
+      },
+      {
+        "name": "Web Performance (Core Web Vitals)",
+        "level": 4
+      },
+      {
+        "name": "WebGL / GLSL Shaders",
+        "level": 3
+      },
+      {
+        "name": "Service Workers / PWA Caching",
+        "level": 3
+      },
+      {
+        "name": "i18n & RTL Localization",
+        "level": 3
+      },
+      {
+        "name": "Web Accessibility (a11y)",
+        "level": 3
+      },
+      {
+        "name": "SEO & Structured Data (JSON-LD)",
         "level": 3
       },
       {
@@ -56,15 +84,15 @@
         "level": 2
       },
       {
+        "name": "Node.js",
+        "level": 2
+      },
+      {
         "name": "Python",
         "level": 1
       },
       {
         "name": "Rust",
-        "level": 1
-      },
-      {
-        "name": "Node.js",
         "level": 1
       },
       {
@@ -82,7 +110,19 @@
       },
       {
         "name": "CSS3/Sass",
-        "level": 3
+        "level": 4
+      },
+      {
+        "name": "CSS Custom Properties / Design Tokens",
+        "level": 4
+      },
+      {
+        "name": "Advanced CSS Animation & Motion Design",
+        "level": 4
+      },
+      {
+        "name": "Responsive Layout (Grid/Flex)",
+        "level": 4
       },
       {
         "name": "Bootstrap",
@@ -153,6 +193,18 @@
     "skills": [
       {
         "name": "ESLint + Prettier",
+        "level": 3
+      },
+      {
+        "name": "Lighthouse / Performance Auditing",
+        "level": 3
+      },
+      {
+        "name": "Image Optimization (sharp, WebP/AVIF)",
+        "level": 3
+      },
+      {
+        "name": "Node.js Build Tooling & Scripts",
         "level": 3
       },
       {
