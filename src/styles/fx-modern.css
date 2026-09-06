@@ -374,9 +374,14 @@ body {
   }
 }
 
-/* §13 EDGE-FADE mask on the horizontal post strip (the ticker
-   already ships one — see spine-rail.css §ticker) */
-.post-strip {
+/* §13 EDGE-FADE mask — ONLY for the genuinely horizontal snap strip.
+   The homepage re-binds .post-strip into a VERTICAL zigzag ladder
+   (acid-rave v4 `.sig-zone .post-strip`), where a lateral fade would
+   ghost both edges of every card — the classic "writing clipped from
+   the sides" bug. Recency: :not() with a complex selector is fine in
+   every browser this codebase already targets (:has(), view(), ...).
+   The ticker already ships its own mask (spine-rail.css §ticker). */
+.post-strip:not(.sig-zone .post-strip) {
   -webkit-mask-image: linear-gradient(
     90deg,
     transparent,
@@ -392,7 +397,7 @@ body {
     transparent
   );
 }
-[dir="rtl"] .post-strip {
+[dir="rtl"] .post-strip:not(.sig-zone .post-strip) {
   -webkit-mask-image: linear-gradient(
     270deg,
     transparent,

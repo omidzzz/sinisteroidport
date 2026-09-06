@@ -592,12 +592,17 @@
 
 /* ---------- v4 · INCOMING TRANSMISSIONS (zigzag) ---------- */
 
-/* Revoice the existing post-strip cards into a staggered ladder */
+/* Revoice the existing post-strip cards into a staggered ladder.
+   The fx-modern §13 edge-fade mask is scoped to horizontal strips
+   via :not(.sig-zone .post-strip), but keep an explicit reset here
+   so a future import reorder can never ghost the card edges. */
 .sig-zone .post-strip {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
   overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 @media (min-width: 768px) {
   .sig-zone .post-card {
