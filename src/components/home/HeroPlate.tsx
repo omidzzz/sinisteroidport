@@ -26,37 +26,60 @@ export default function HeroPlate({ locale }: { locale: Locale }) {
     const fine = window.matchMedia("(pointer: fine)").matches;
     let tx = 0, ty = 0;      // pointer targets
     let x = 0, y = 0;        // lerped pointer
+    let lastSY = window.scrollY;
     let raf = 0;
 
+    /* SELF-SLEEPING rAF — the previous loop scheduled a frame unconditionally
+       and read getBoundingClientRect() every frame: a permanent 60fps forced
+       layout on an otherwise idle page. Now a frame only runs while something
+       actually moves (pointer lerp not yet converged, or an active scroll
+       shifting the counter-drift). Once settled the loop stops; any
+       mousemove / scroll / resize wakes it again. */
     const frame = () => {
-      raf = requestAnimationFrame(frame);
+      raf = 0;
       if (document.hidden) return;
-      x += (tx - x) * 0.07;
-      y += (ty - y) * 0.07;
 
       const r = wrap.getBoundingClientRect();
       if (r.bottom < -80 || r.top > window.innerHeight + 80) return; // offscreen
 
       const mid = r.top + r.height / 2 - window.innerHeight / 2;
       const drift = Math.max(-34, Math.min(34, (-mid / window.innerHeight) * 42));
+      x += (tx - x) * 0.07;
+      y += (ty - y) * 0.07;
       core.style.transform =
         `translate3d(${x.toFixed(2)}px, ${(y + drift).toFixed(2)}px, 0)`;
+
+      const scrolled = window.scrollY !== lastSY;
+      lastSY = window.scrollY;
+      if (Math.abs(x - tx) < 0.05 && Math.abs(y - ty) < 0.05 && !scrolled) return;
+      raf = requestAnimationFrame(frame);
+    };
+
+    const wake = () => {
+      if (!raf) raf = requestAnimationFrame(frame);
     };
 
     const onMove = (e: MouseEvent) => {
       tx = (e.clientX / window.innerWidth - 0.5) * -22;
       ty = (e.clientY / window.innerHeight - 0.5) * -14;
+      wake();
     };
+    const onScroll = () => wake();
     if (fine) {
       window.addEventListener("mousemove", onMove, { passive: true });
       document.documentElement.addEventListener("mouseleave", () => {
         tx = 0; ty = 0;
+        wake();
       });
     }
-    raf = requestAnimationFrame(frame);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    wake();
     return () => {
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
       if (fine) window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
 

@@ -344,3 +344,24 @@ body {
     display: none;
   }
 }
+/* ---------- Coarse-pointer perf pass (mobile / tablet) ---------- */
+
+/* The film-grain layer is a full-screen mix-blend-mode: overlay compositing
+   every pixel above the animated background. On touch GPUs that is a
+   full-viewport blend that stays hot during scroll — and that for a 7%
+   tint. Drop it on coarse pointers; desktop keeps it. */
+@media (pointer: coarse) {
+  .noise {
+    display: none !important;
+  }
+}
+
+/* Glass panels re-sample their backdrop on every repaint under backdrop-filter;
+   on mobile the backdrop is the animated nebula + scrolling neon, making blur
+   the single most expensive compositing op there. 16px → 6px at the same
+   ~0.9 panel opacity is visually indistinguishable and far cheaper. */
+@media (pointer: coarse) {
+  :root {
+    --glass-blur: 6px;
+  }
+}

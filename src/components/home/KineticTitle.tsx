@@ -30,10 +30,12 @@ export default function KineticTitle({
     // Only run a pass when the pointer actually moved — the effect is a pure
     // function of pointer position, so a resting cursor needs zero per-frame
     // layout reads (each frame previously cost letters.length forced reflows).
+    // The loop now SLEEPS between passes: wake() fires one rAF per pointer
+    // event, then nothing runs while the pointer rests (no empty 60fps loop).
     let dirty = true;
 
     const loop = () => {
-      raf = requestAnimationFrame(loop);
+      raf = 0;
       if (!dirty) return;
       dirty = false;
 
@@ -62,20 +64,30 @@ export default function KineticTitle({
       }
     };
 
+    /* wake() — fire one rAF per dirty pass; the loop sleeps in between. A
+       resting cursor costs ZERO frames instead of an empty 60fps loop. */
+    const wake = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(loop);
+    };
+
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
       dirty = true;
+      wake();
     };
     const onLeave = () => {
       mx = -9999;
       my = -9999;
       dirty = true;
+      wake();
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
     document.documentElement.addEventListener("mouseleave", onLeave);
-    raf = requestAnimationFrame(loop);
+    dirty = true;
+    wake();
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);

@@ -861,8 +861,15 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
 [dir="rtl"] .chip-brk::after { border-width: 0 0 1px 1px; }
 .status-panel { position: relative; isolation: isolate; border: 1px solid var(--color-line); background: linear-gradient(160deg, rgba(var(--rgb-acid), 0.06), rgba(2, 8, 6, 0.42)); }
 .status-panel::before {
-  content: ""; position: absolute; inset: -34%; z-index: -1; filter: blur(30px); opacity: 0.38;
+  content: ""; position: absolute; inset: -34%; z-index: -1; opacity: 0.38;
   background: conic-gradient(from 40deg, transparent, rgba(var(--rgb-acid), 0.4), transparent 35%, rgba(var(--rgb-accent), 0.4), transparent 70%);
+/* Old: filter: blur(30px) over a 168%-inset pseudo. A blur forces the
+     pseudo onto its own texture and the 18s prism-spin re-composits that
+     large blurred layer forever. A radial mask gives the same soft-edged
+     halo with a fraction of the texture cost and zero blur passes — the
+     spin stays a pure GPU transform. */
+  -webkit-mask-image: radial-gradient(58% 58% at 50% 50%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(58% 58% at 50% 50%, #000 30%, transparent 78%);
 }
 @media (prefers-reduced-motion: no-preference) { .status-panel::before { animation: prism-spin 18s linear infinite; } }
 @keyframes prism-spin { to { rotate: 360deg; } }

@@ -148,12 +148,14 @@ export default function GLBackground() {
     if (!canvas) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Touch / coarse-pointer devices get a single painted frame: a full-page
-    // per-pixel shader loop is pure battery drain on phones and dominates the
-    // main thread in mobile performance audits. Desktop (fine pointer) keeps
-    // the slow-drifting animation.
+    // Touch / coarse-pointer devices AND hover-less "fine-pointer" tablets
+    // (iPads, touch laptops in tablet mode) get a single painted frame: a
+    // full-page per-pixel shader loop is pure battery drain on phones and
+    // dominates the main thread in mobile performance audits. Desktops with a
+    // real hover pointer keep the slow-drifting animation.
     const coarse = !window.matchMedia("(pointer: fine)").matches;
-    const staticFrame = reduced || coarse;
+    const hoverless = window.matchMedia("(hover: none)").matches;
+    const staticFrame = reduced || coarse || hoverless;
     const gl = canvas.getContext("webgl", {
       antialias: false,
       alpha: false,
@@ -220,8 +222,13 @@ export default function GLBackground() {
     window.addEventListener("themechange", onTheme);
     /* Coarse devices render at 0.75× native and upscale: the nebula is soft
        fBm clouds, so sub-pixel detail is imperceptible while fragment cost
-       drops by ~44%. Fine-pointer desktops keep 1:1 (capped at DPR 1). */
-    const dpr = Math.min(window.devicePixelRatio || 1, 1) * (coarse ? 0.75 : 1);
+       drops by ~44%. Fine-pointer desktops keep 1:1 (capped at DPR 1);
+       ultra-wide desktops (>2560 CSS px) step down to 0.66× so a fullscreen
+       quad at 4K width cannot saturate a mid-range GPU. */
+    const ultraWide = window.innerWidth > 2560;
+    const dpr =
+      Math.min(window.devicePixelRatio || 1, 1) *
+      (coarse ? 0.75 : ultraWide ? 0.66 : 1);
 
     const resize = () => {
       canvas.width = Math.floor(canvas.clientWidth * dpr);

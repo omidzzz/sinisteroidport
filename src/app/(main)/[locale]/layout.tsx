@@ -15,6 +15,7 @@ import ProgressThread from "@/components/shell/ProgressThread";
 import GridLines from "@/components/shell/GridLines";
 import Cursor from "@/components/shell/Cursor";
 import FilterDefs from "@/components/shell/FilterDefs";
+import ServiceWorkerRegister from "@/components/shell/ServiceWorkerRegister";
 import { GoogleTag } from "@/components/analytics/GoogleTag";
 import { AnalyticsEvents } from "@/components/analytics/AnalyticsEvents";
 import {
@@ -223,6 +224,8 @@ export default async function LocaleRootLayout({
         <GoogleTag />
         <AnalyticsEvents />
         <ProgressThread />
+{/* Production-only SW: repeat-visit caching + last-page offline */}
+        <ServiceWorkerRegister />
         <GLBackground />
         <FilterDefs />
         <GridLines />
