@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
 
 /**
@@ -56,12 +56,60 @@ export default function AgentChat({
   const rtl = locale === "fa";
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Live post index (built from the site's JSON feed when the panel opens).
+  const [liveContext, setLiveContext] = useState<string | null>(null);
+
+  // Fresh post knowledge without any DB exposure: the static export ships a
+  // JSON Feed (public/feed.json, regenerated on every build). Fetch it once
+  // per panel open and inject a compact post index into each chat request as
+  // `context`; the guest backend merges it into the system prompt. Silent
+  // failure = the dossier's evergreen list is simply used as-is.
+  useEffect(() => {
+    let cancelled = false;
+    const feedUrl = locale === "fa" ? "/fa/feed.json" : "/feed.json";
+    fetch(feedUrl)
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((feed: {
+        items?: Array<{
+          title?: string;
+          summary?: string;
+          content_text?: string;
+          date_published?: string;
+        }>;
+      }) => {
+        if (cancelled || !Array.isArray(feed.items) || feed.items.length === 0)
+          return;
+        const index = feed.items
+          .slice(0, 15)
+          .map((it) => {
+            const date = it.date_published?.slice(0, 10) ?? "";
+            const title = (it.title ?? "").trim();
+            const excerpt = (it.summary ?? it.content_text ?? "")
+              .trim()
+              .slice(0, 160);
+            return `- ${date} | ${title}${excerpt ? ` | ${excerpt}` : ""}`;
+          })
+          .join("\n");
+        setLiveContext(index);
+      })
+      .catch(() => {
+        /* offline or missing feed — dossier baseline still covers the rest */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [locale]);
 
   // A fresh transport per mount keeps every panel opening a clean,
-  // stateless conversation on the guest endpoint.
+  // stateless conversation on the guest endpoint. `body` is a resolver so
+  // the latest live post index rides along with every message sent.
   const transport = useMemo(
-    () => new DefaultChatTransport({ api: SINISTER_API }),
-    [],
+    () =>
+      new DefaultChatTransport({
+        api: SINISTER_API,
+        body: () => (liveContext ? { context: liveContext } : {}),
+      }),
+    [liveContext],
   );
 
   const { messages, sendMessage, status, error } = useChat({ transport });
