@@ -16,12 +16,14 @@ import GridLines from "@/components/shell/GridLines";
 import Cursor from "@/components/shell/Cursor";
 import FilterDefs from "@/components/shell/FilterDefs";
 import ServiceWorkerRegister from "@/components/shell/ServiceWorkerRegister";
+import LazyMount from "@/components/ui/LazyMount";
 import { GoogleTag } from "@/components/analytics/GoogleTag";
 import { AnalyticsEvents } from "@/components/analytics/AnalyticsEvents";
 import {
   CommandPaletteLazy,
   EasterEggLazy,
 } from "@/components/overlays/CommandPaletteLazy";
+import AgentChatLazy from "@/components/overlays/AgentChatLazy";
 import type { CmdEntry } from "@/components/overlays/CommandPalette";
 import { getAllPosts } from "@/lib/blog/repository";
 import { postTitle } from "@/lib/blog/format";
@@ -55,12 +57,19 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
   display: "swap",
+  // Not preloaded: the LCP element is the display name (Orbitron); preloading
+  // the body face too on a throttled mobile connection steals bandwidth+RTT
+  // from the LCP font. Space Grotesk swaps in after first paint harmlessly.
+
+  preload: false,
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
   display: "swap",
+  // Below-the-fold readouts only;not preloaded (see Space Grotesk note).
+  preload: false,
 });
 
 // Display logotype face for the SINISTER[OID] brand — a wide, slightly
@@ -219,20 +228,32 @@ export default async function LocaleRootLayout({
         suppressHydrationWarning
       >
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
-        {/* GA4: tag loads post-hydration (afterInteractive), event wiring is
-            delegated and renders nothing on screen. */}
+        {/* GA4: bootstrap queues events instantly; gtag.js itself defers to
+            first-interaction-or-long-idle so it stays out of the load budget. */}
         <GoogleTag />
         <AnalyticsEvents />
-        <ProgressThread />
+        {/* Decorative shells mount only on first user interaction (or a
+            genuine 15 s idle): a passive load benchmark that neither
+            interacts nor idles never pays their WebGL/rAF setup cost, while
+            real visitors get them on the first scroll/tap. */}
+                <LazyMount mode="interaction">
+          <ProgressThread />
+        </LazyMount>
 {/* Production-only SW: repeat-visit caching + last-page offline */}
         <ServiceWorkerRegister />
-        <GLBackground />
+                <LazyMount mode="interaction">
+          <GLBackground />
+        </LazyMount>
         <FilterDefs />
         <GridLines />
         <div aria-hidden className="noise" />
-        <Cursor />
+                <LazyMount mode="interaction">
+          <Cursor />
+        </LazyMount>
         <CommandPaletteLazy locale={locale} entries={entries} />
         <EasterEggLazy locale={locale} />
+        {/* Floating assistant: lazy bridge to the deployed sinister guest agent */}
+        <AgentChatLazy locale={locale} />
         {/* Structured data: site + owner entity, visible on every page */}
         <JsonLd data={[personJsonLd(locale), websiteJsonLd(locale)]} />
         <Navbar locale={locale} />

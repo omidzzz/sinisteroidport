@@ -1,0 +1,302 @@
+/* ============================================================
+   SIN-CHAT — floating assistant widget (guest mode bridge to
+   the deployed `sinister` agent). Scoped .sin-chat-* classes;
+   uses the shared design tokens only. All animation is
+   transform/opacity-only, gated behind prefers-reduced-motion.
+   ============================================================ */
+
+/* ── Floating action button ───────────────────────────────── */
+.sin-chat-fab {
+  position: fixed;
+  inset-inline-end: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 74; /* above chrome (≤62), below cursor/overlays (90+) */
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  padding: 0;
+  color: rgb(var(--rgb-acid));
+  cursor: pointer;
+  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  border: 1px solid rgba(var(--rgb-accent), 0.45);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1px rgba(var(--rgb-acid), 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.sin-chat-fab:hover,
+.sin-chat-fab:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(var(--rgb-acid), 0.8);
+  box-shadow:
+    0 0 18px rgba(var(--rgb-acid), 0.35),
+    0 6px 28px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Panel ────────────────────────────────────────────────── */
+.sin-chat-panel {
+  position: fixed;
+  inset-inline-end: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 75;
+  display: flex;
+  flex-direction: column;
+  width: min(23rem, calc(100vw - 2.5rem));
+  height: min(34rem, calc(100dvh - 4.5rem));
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-panel) 92%, transparent);
+  border: 1px solid rgba(var(--rgb-accent), 0.4);
+  border-radius: 1rem;
+  box-shadow:
+    0 0 24px rgba(var(--rgb-accent), 0.18),
+    0 18px 48px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sin-chat-panel {
+    animation: sin-chat-in 0.28s ease both;
+  }
+  @keyframes sin-chat-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.sin-chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  font-family: var(--font-mono);
+  border-bottom: 1px solid rgba(var(--rgb-accent), 0.25);
+  background: rgba(var(--rgb-accent-3), 0.35);
+}
+
+.sin-chat-id {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.sin-chat-dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: rgb(var(--rgb-acid));
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(var(--rgb-acid), 0.9);
+}
+
+.sin-chat-title {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-ink);
+}
+
+.sin-chat-sub {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.sin-chat-x {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  color: var(--color-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.sin-chat-x:hover,
+.sin-chat-x:focus-visible {
+  color: rgb(var(--rgb-acid));
+  border-color: rgba(var(--rgb-acid), 0.4);
+}
+
+/* ── Message log ──────────────────────────────────────────── */
+.sin-chat-log {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.9rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--rgb-accent), 0.4) transparent;
+}
+
+.sin-chat-row {
+  display: flex;
+}
+
+.sin-chat-row--bot {
+  justify-content: flex-start;
+}
+
+.sin-chat-row--user {
+  justify-content: flex-end;
+}
+
+.sin-chat-bubble {
+  max-width: 88%;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  border-radius: 0.9rem;
+}
+
+.sin-chat-bubble--bot {
+  color: var(--color-ink);
+  background: rgba(var(--rgb-accent-3), 0.4);
+  border: 1px solid rgba(var(--rgb-accent), 0.22);
+  border-start-start-radius: 0.3rem;
+}
+
+.sin-chat-bubble--user {
+  font-family: var(--font-mono);
+  color: #10160a;
+  background: rgba(var(--rgb-acid), 0.92);
+  border-start-end-radius: 0.3rem;
+}
+
+[dir="rtl"] .sin-chat-bubble {
+  text-align: start;
+}
+
+.sin-chat-bubble--error {
+  color: #ffd7dd;
+  background: rgba(255, 60, 90, 0.14);
+  border: 1px solid rgba(255, 60, 90, 0.4);
+}
+
+.sin-chat-typing {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sin-chat-typing {
+    animation: sin-chat-pulse 1.1s ease-in-out infinite;
+  }
+  @keyframes sin-chat-pulse {
+    50% {
+      opacity: 0.45;
+    }
+  }
+}
+
+
+
+/* ── Composer ─────────────────────────────────────────────── */
+.sin-chat-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border-top: 1px solid rgba(var(--rgb-accent), 0.25);
+  background: rgba(var(--rgb-accent-3), 0.3);
+}
+
+.sin-chat-input {
+  flex: 1;
+  max-height: 7.5rem;
+  padding: 0.55rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--color-ink);
+  resize: none;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(var(--rgb-accent), 0.3);
+  border-radius: 0.75rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.sin-chat-input::placeholder {
+  color: var(--color-muted);
+}
+
+.sin-chat-input:focus {
+  border-color: rgba(var(--rgb-acid), 0.6);
+}
+
+.sin-chat-send {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  color: rgb(var(--rgb-acid));
+  cursor: pointer;
+  background: rgba(var(--rgb-acid), 0.1);
+  border: 1px solid rgba(var(--rgb-acid), 0.45);
+  border-radius: 0.75rem;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.sin-chat-send:hover:not(:disabled),
+.sin-chat-send:focus-visible {
+  background: rgba(var(--rgb-acid), 0.22);
+  box-shadow: 0 0 14px rgba(var(--rgb-acid), 0.35);
+}
+
+.sin-chat-send:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+/* Mobile: let the panel breathe on small screens */
+@media (max-width: 480px) {
+  .sin-chat-fab {
+    inset-inline-end: 0.9rem;
+    bottom: 0.9rem;
+  }
+
+  .sin-chat-panel {
+    inset-inline: 0.6rem;
+    bottom: 0.6rem;
+    width: auto;
+    height: min(30rem, calc(100dvh - 5rem));
+  }
+}
