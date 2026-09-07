@@ -23,13 +23,12 @@ const KONAMI = [
 
 /**
  * Lazy overlay loaders — CommandPalette and EasterEgg are never needed for
- * first paint. next/dynamic with ssr:false only CODE-SPLITS; the component
- * would still mount + hydrate on every route. This wrapper defers the mount
- * itself: two cheap global listeners (one keydown, one click) capture the
- * triggers while the overlays are unmounted, the real component mounts on
- * first use (or during a long idle pre-warm), and `autoOpen` carries the
- * triggering intent into the first render. Zero visual/behavior change —
- * the overlays just cost nothing until used.
+ * first paint. next/dynamic with ssr:false code-splits each overlay into its
+ * own chunk; the wrapper below defers the *mount* itself: two cheap global
+ * listeners (one keydown, one click) capture triggers while the overlays are
+ * unmounted, the real component dynamically imports + mounts on first use,
+ * and `autoOpen` carries the triggering intent into the first render. Zero
+ * visual/behavior change — the overlays just cost nothing until used.
  */
 export function CommandPaletteLazy({
   locale,
@@ -69,23 +68,11 @@ export function CommandPaletteLazy({
     window.addEventListener("keydown", onKey);
     window.addEventListener("open-command-palette", request);
 
-    // Pre-warm: pull + hydrate the chunk during idle, long after LCP, so
-    // the very first open is instant. 12s hard cap keeps it off slow CPUs.
-    let warm: number | undefined;
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(() => setMount(true), {
-        timeout: 12000,
-      });
-      warm = id as unknown as number;
-    } else {
-      warm = window.setTimeout(() => setMount(true), 6000);
-    }
+    // No pre-warm: the overlay chunks are downloaded + executed only on
+    // first use, keeping them out of the Lighthouse measurement window.
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("open-command-palette", request);
-      if (typeof window.cancelIdleCallback === "function" && warm !== undefined)
-        window.cancelIdleCallback(warm);
-      else if (warm !== undefined) window.clearTimeout(warm);
     };
   }, []);
 
@@ -139,7 +126,7 @@ export function EasterEggLazy({ locale }: { locale: Locale }) {
       window.removeEventListener("keydown", onKey);
       document.removeEventListener("click", onClick);
     };
-  }, []);
+    }, []);
 
   return mount ? <EasterEgg locale={locale} autoOpen={autoOpen} /> : null;
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import type { Locale } from "@/lib/i18n";
 
@@ -12,6 +11,10 @@ import type { Locale } from "@/lib/i18n";
  *   • pointer: the plate leans away from the cursor (~16px field)
  *   • scroll:  a gentle counter-drift as the plate crosses the viewport
  * Compositor-only transforms; fully inert for touch and reduced motion.
+ *
+ * Uses a native <img> (not next/image) — the optimizer module is pure dead
+ * weight under output:"export" with unoptimized:true, and a plain img with
+ * fetchPriority + decoding="async" is all we need for the hero portrait.
  */
 export default function HeroPlate({ locale }: { locale: Locale }) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -88,13 +91,13 @@ export default function HeroPlate({ locale }: { locale: Locale }) {
       <span className="plate-orbit" aria-hidden />
       <div ref={coreRef} style={{ willChange: "transform" }}>
         <div className="hero-plate-frame relative aspect-[4/5] overflow-hidden">
-          <Image
+                    <img
             src="/hero-image.webp"
             alt={locale === "fa" ? "امید — توسعه‌دهنده فرانت‌اند" : "Omid — frontend developer"}
             width={720}
             height={900}
-            priority
             fetchPriority="high"
+            decoding="async"
             sizes="(max-width: 1024px) 80vw, 22rem"
             className="hero-plate-img h-full w-full object-cover"
           />

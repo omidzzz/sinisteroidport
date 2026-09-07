@@ -110,7 +110,9 @@ export default function KineticTitle({
             <span
               data-ch
               className="inline-block whitespace-nowrap will-change-[font-variation-settings]"
-              style={{ fontVariationSettings: '"wght" 300' }}
+              /* fontWeight 300 mirrors the variation setting so the swap
+                 fallback renders the same weight as the real variable font. */
+              style={{ fontVariationSettings: '"wght" 300', fontWeight: 300 }}
             >
               {word}
             </span>
@@ -129,7 +131,10 @@ export default function KineticTitle({
               key={key++}
               data-ch
               className="inline-block will-change-[font-variation-settings]"
-              style={{ fontVariationSettings: '"wght" 300' }}
+              /* fontWeight 300 mirrors the variation setting so the swap
+                 fallback (Arial) doesn't render at font-black 900 and snap
+                 the whole hero when the real Orbitron arrives (CLS). */
+              style={{ fontVariationSettings: '"wght" 300', fontWeight: 300 }}
             >
               {ch}
             </span>

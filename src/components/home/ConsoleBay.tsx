@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import LaptopDeck from "./laptop-deck/LaptopDeck";
+import dynamic from "next/dynamic";
+
+const LaptopDeck = dynamic(() => import("./laptop-deck/LaptopDeck"), {
+  ssr: false,
+  loading: () => null,
+});
 
 /** DEDICATED CONSOLE BAY — the in-flow acid laptop for narrow viewports only.
  * On ≥768px the laptop lives in the scroll-bound float layer instead

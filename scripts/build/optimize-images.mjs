@@ -1,11 +1,12 @@
 /**
- * optimize-images.mjs — downscale the animated project webps.
+ * optimize-images.mjs — downscale/re-encode the site's raster assets.
  *
- * The bento tiles render at 424px (1 col) / ~848px (2 col) wide, but the
- * source webps in public/images/projects are full-size site screenshots
- * (571–1510 KiB each). A 424×240 card only needs ~50–150 KiB even animated,
- * so we cap project webps at 848px wide, quality 70. The pass is
- * idempotent: files already at/below the cap are left untouched.
+ * Targets (public/ sources, or out/ copies with --out):
+ *   • images/projects — animated bento tiles rendered at 424–848px wide;
+ *     sources are full-size site screenshots, capped at 848px / q62.
+ *   • uploads         — post-card covers rendered at 320–492px wide; capped
+ *     at 640px / q70, always re-encoded (kept only if actually smaller).
+ * The pass is idempotent: files already within budget are left untouched.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -16,28 +17,31 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", ".
 // With --out it targets the static-export output instead, which is lock-free
 // and regenerated on every build — the originals never change on disk.
 const outMode = process.argv.includes("--out");
-const dir = outMode
-  ? path.join(root, "out", "images", "projects")
-  : path.join(root, "public", "images", "projects");
-const MAX_W = 848;
-const QUALITY = 62;
-const MAX_KB = 180; // re-encode anything still fatter than this even at cap width
+// Two targets with different budgets:
+//   • images/projects — animated bento tiles rendered at 424–848px wide
+//   • uploads         — post-card covers rendered at 320–492px wide, so cap
+//                       at 640 (2x DPR of the smallest size) + tighter quality
+const targets = outMode
+  ? [
+      { dir: path.join(root, "out", "images", "projects"), MAX_W: 848, QUALITY: 62, MAX_KB: 180 },
+      // MAX_KB 0 → covers are ALWAYS re-encoded at q70 (kept only if smaller):
+      // Lighthouse's image-delivery insight flags these as over-compressed.
+      { dir: path.join(root, "out", "uploads"), MAX_W: 640, QUALITY: 70, MAX_KB: 0 },
+    ]
+  : [
+      { dir: path.join(root, "public", "images", "projects"), MAX_W: 848, QUALITY: 62, MAX_KB: 180 },
+      { dir: path.join(root, "public", "uploads"), MAX_W: 640, QUALITY: 70, MAX_KB: 0 },
+    ];
 
 const sharp = (await import("sharp")).default;
 
-if (!fs.existsSync(dir)) {
-  console.log(`optimize-images${outMode ? " (out)": ""}: no projects dir at ${path.relative(root, dir)}, nothing to do`);
-  process.exit(0);
-}
 // clear any leftover temp files from an interrupted previous run
-for (const n of fs.readdirSync(dir)) {
-  if (n.endsWith(".tmp")) { try { fs.unlinkSync(path.join(dir, n)); } catch {} }
+for (const { dir } of targets) {
+  if (!fs.existsSync(dir)) continue;
+  for (const n of fs.readdirSync(dir)) {
+    if (n.endsWith(".tmp")) { try { fs.unlinkSync(path.join(dir, n)); } catch {} }
+  }
 }
-
-const files = fs
-  .readdirSync(dir)
-  .filter((n) => /\.webp$/i.test(n))
-  .sort();
 
 let before = 0;
 let after = 0;
@@ -91,43 +95,56 @@ function replaceFile(src, dest) {
   try { fs.unlinkSync(src); } catch {}
 }
 
-for (const name of files) {
-  const p = path.join(dir, name);
-  // Read the source into memory first so no file handle is held on the
-  // destination while we swap it (Windows refuses replace-rename while the
-  // source is open).
-  const buf = fs.readFileSync(p);
-  const meta = await sharp(buf, { animated: true }).metadata();
-  const w = meta.width ?? 0;
-  const h = meta.height ?? 0;
-  const pages = meta.pages ?? 1;
-  const inSize = buf.length;
-  const needsResize = w > MAX_W;
-  const needsReencode = inSize > MAX_KB * 1024;
-  if (!needsResize && !needsReencode) continue;
+for (const { dir, MAX_W, QUALITY, MAX_KB } of targets) {
+  if (!fs.existsSync(dir)) {
+    console.log(`optimize-images${outMode ? " (out)" : ""}: no dir at ${path.relative(root, dir)}, skipping`);
+    continue;
+  }
+  const files = fs
+    .readdirSync(dir)
+    .filter((n) => /\.webp$/i.test(n))
+    .sort();
 
-  const tmp = p + ".tmp";
-  const pipeline = sharp(buf, { animated: true });
-  if (needsResize) pipeline.resize({ width: MAX_W });
-  await pipeline.webp({ quality: QUALITY, effort: 6 }).toFile(tmp);
-  const outSize = fs.statSync(tmp).size;
-  if (outSize < inSize) {
-    replaceFile(tmp, p);
-    before += inSize;
-    after += outSize;
-    touched++;
-    console.log(
-      `${name}: ${w}x${h} (${pages} frame(s)) ${needsResize ? "resized " : "re-encoded "} ` +
-        `${(inSize / 1024).toFixed(0)} KiB -> ${(outSize / 1024).toFixed(0)} KiB (-${Math.round((1 - outSize / inSize) * 100)}%)`
-    );
-  } else {
-    fs.unlinkSync(tmp);
-    console.log(`${name}: skipped (recompress not smaller)`);
+  for (const name of files) {
+    const p = path.join(dir, name);
+    // Read the source into memory first so no file handle is held on the
+    // destination while we swap it (Windows refuses replace-rename while the
+    // source is open).
+    const buf = fs.readFileSync(p);
+    const meta = await sharp(buf, { animated: true }).metadata();
+    const w = meta.width ?? 0;
+    const h = meta.height ?? 0;
+    const pages = meta.pages ?? 1;
+    const inSize = buf.length;
+    const needsResize = w > MAX_W;
+    const needsReencode = inSize > MAX_KB * 1024;
+    if (!needsResize && !needsReencode) continue;
+
+    const tmp = p + ".tmp";
+    const pipeline = sharp(buf, { animated: true });
+    if (needsResize) pipeline.resize({ width: MAX_W });
+    await pipeline.webp({ quality: QUALITY, effort: 6 }).toFile(tmp);
+    const outSize = fs.statSync(tmp).size;
+    // 2% minimum gain keeps the pass byte-idempotent: re-encoding an already
+    // optimized file yields -0..-1% churn, which would dirty git on every run.
+    if (outSize < inSize * 0.98) {
+      replaceFile(tmp, p);
+      before += inSize;
+      after += outSize;
+      touched++;
+      console.log(
+        `${path.relative(root, dir)}/${name}: ${w}x${h} (${pages} frame(s)) ${needsResize ? "resized " : "re-encoded "} ` +
+          `${(inSize / 1024).toFixed(0)} KiB -> ${(outSize / 1024).toFixed(0)} KiB (-${Math.round((1 - outSize / inSize) * 100)}%)`
+      );
+    } else {
+      fs.unlinkSync(tmp);
+      console.log(`${path.relative(root, dir)}/${name}: skipped (recompress not smaller)`);
+    }
   }
 }
 
 if (touched === 0) {
-  console.log("optimize-images: all project webps already within the cap");
+  console.log("optimize-images: all webps already within budget");
 } else {
   console.log(
     `optimize-images: ${touched} file(s) optimized, ${(before / 1024).toFixed(0)} KiB -> ${(after / 1024).toFixed(0)} KiB (saves ${((before - after) / 1024).toFixed(0)} KiB)`

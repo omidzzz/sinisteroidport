@@ -30,7 +30,10 @@ export default function HeroSection({ locale }: { locale: Locale }) {
             <div className="tx-name">
               <KineticTitle
                 text={t.heroName}
-                className="font-display anaglyph-strong select-none text-[clamp(3.4rem,12.5vw,10.5rem)] font-black uppercase leading-[0.84] tracking-tight text-ink"
+                /* font-light (300) matches the letters' inline
+                   font-variation-settings — the swap fallback then renders the
+                   same weight as the real Orbitron instead of snapping 900→300. */
+                className="font-display anaglyph-strong select-none text-[clamp(3.4rem,12.5vw,10.5rem)] font-light uppercase leading-[0.84] tracking-tight text-ink"
               />
               <span
                 dir="ltr"

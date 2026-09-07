@@ -95,9 +95,15 @@ export default function Drone() {
           <ellipse className="au-aura" cx="0" cy="-15" rx="150" ry="140" fill="url(#au-aura)" />
           {STARS.map((s, i) =>
             s.star ? (
-              <path key={`st${i}`} className="au-spark" d={starPath(s.r * 1.7)} fill={s.c}
-                transform={`translate(${s.x} ${s.y})`}
-                style={{ ["--au-dl" as string]: s.d, ["--au-du" as string]: s.du, filter: "url(#au-glow)" }} />
+              /* The positional translate lives on a wrapper <g>, NOT on the
+                 animated path: the .au-spark CSS animation overrides the
+                 path's transform attribute for its whole duration, so stars
+                 used to snap to (0,0) the moment their animation-delay
+                 expired — the single biggest CLS source on this page. */
+              <g key={`st${i}`} transform={`translate(${s.x} ${s.y})`}>
+                <path className="au-spark" d={starPath(s.r * 1.7)} fill={s.c}
+                  style={{ ["--au-dl" as string]: s.d, ["--au-du" as string]: s.du, filter: "url(#au-glow)" }} />
+              </g>
             ) : (
               <circle key={`st${i}`} className="au-twinkle" cx={s.x} cy={s.y} r={s.r} fill={s.c}
                 style={{ ["--au-dl" as string]: s.d, ["--au-du" as string]: s.du }} />

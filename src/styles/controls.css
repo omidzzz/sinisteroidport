@@ -159,3 +159,28 @@
   border-color: rgba(var(--rgb-acid), 0.5);
   box-shadow: 0 24px 60px rgba(2, 2, 10, 0.55);
 }
+
+/* ── Touch targets (Lighthouse target-size audit) ──
+   Ensure every interactive element meets the 44 px minimum on coarse
+   pointers. We pad the hit area with transparent space so the visual
+   layout is unchanged — only the tap zone expands. */
+@media (pointer: coarse) {
+  .dock-link,
+  .chip-brk,
+  .foot-idx,
+  .chip-corner,
+  .btn-neon,
+  .btn-ghost,
+  .icon-toggle,
+  .label,
+  a.inline-flex,
+  button[type="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding-top: max(0.5rem, calc((44px - 1em) / 2));
+    padding-bottom: max(0.5rem, calc((44px - 1em) / 2));
+  }
+  .chip-brk {
+    padding: 0.55rem 0.75rem;
+  }
+}

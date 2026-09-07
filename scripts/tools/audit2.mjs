@@ -1,0 +1,180 @@
+/**
+ * audit2.mjs — Lighthouse audit runner that bypasses cmd.exe quoting.
+ *
+ * The original audit.mjs builds a single shell string and spawns it with
+ * shell:true, so on Windows the `--chrome-flags="--headless=new ..."` value
+ * gets split into separate arguments and Lighthouse rejects them. This runner
+ * invokes the Lighthouse CLI directly through `node node_modules/.../cli/index.js`
+ * with an args ARRAY and shell:false, which keeps each flag intact.
+ *
+ * Usage:
+ *   node scripts/tools/audit2.mjs [--presets mobile,desktop] [--pages /en/,/en/blog/]
+ */
+import http from "node:http";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import zlib from "node:zlib";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
+const outDir = path.join(root, "out");
+const reportDir = path.join(root, ".lighthouse");
+const lhCli = path.join(root, "node_modules", "lighthouse", "cli", "index.js");
+const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+
+const args = process.argv.slice(2);
+const getOpt = (name, fallback) => {
+  const i = args.indexOf(name);
+  return i !== -1 && args[i + 1] ? args[i + 1] : fallback;
+};
+const presets = getOpt("--presets", "mobile,desktop").split(",");
+const pages = getOpt(
+  "--pages",
+  ["/en/", "/en/blog/", "/en/blog/design-without-words-is-decoration/"].join(",")
+).split(",");
+
+if (!fs.existsSync(path.join(outDir, "en", "index.html"))) {
+  console.error("out/en/index.html missing — run `npm run build` first.");
+  process.exit(1);
+}
+if (!fs.existsSync(lhCli)) {
+  console.error("lighthouse not installed — run `npm install --save-dev lighthouse`.");
+  process.exit(1);
+}
+
+const MIME = {
+  ".html": "text/html; charset=utf-8",
+  ".txt": "text/plain; charset=utf-8",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".webp": "image/webp",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
+  ".svg": "image/svg+xml",
+  ".woff2": "font/woff2",
+  ".xml": "application/xml",
+};
+
+const GZIP_TYPES = new Set([".html", ".js", ".css", ".json", ".xml", ".svg", ".txt"]);
+
+const server = http.createServer((req, res) => {
+  try {
+    let urlPath = decodeURIComponent(new URL(req.url, "http://x").pathname);
+    let file = path.join(outDir, urlPath);
+    if (
+      !fs.existsSync(file) &&
+      !/^\/(en|fa)(\/|$)/.test(urlPath) &&
+      urlPath !== "/"
+    ) {
+      const prefixed = `/en${urlPath === "/" ? "/" : urlPath}`;
+      res.writeHead(301, { Location: prefixed });
+      res.end();
+      return;
+    }
+    if (urlPath.endsWith("/")) file = path.join(file, "index.html");
+    if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+      res.writeHead(404);
+      res.end("not found");
+      return;
+    }
+    res.writeHead(200, {
+      "Content-Type": MIME[path.extname(file)] ?? "application/octet-stream",
+      ...(GZIP_TYPES.has(path.extname(file)) && /\bgzip\b/.test(String(req.headers["accept-encoding"] ?? "")) ? { "Content-Encoding": "gzip" } : {}),
+    });
+    if (GZIP_TYPES.has(ext) && /\bgzip\b/.test(String(req.headers["accept-encoding"] ?? ""))) {
+      const gz = zlib.createGzip({ level: 6 });
+      fs.createReadStream(file).on("error", () => { try { res.end(); } catch {} }).pipe(gz);
+      gz.on("error", () => { try { res.end(); } catch {} });
+      gz.pipe(res);
+    } else {
+      fs.createReadStream(file).pipe(res);
+    }
+      const gz = zlib.createGzip({ level: 6 });
+      fs.createReadStream(file).on("error", () => { try { res.end(); } catch {} }).pipe(gz);
+      gz.on("error", () => { try { res.end(); } catch {} });
+      gz.pipe(res;
+    } else {
+      fs.createReadStream(file).pipe(res;
+    }
+  } catch {
+    res.writeHead(500);
+    res.end();
+  }
+});
+
+await new Promise((r) => server.listen(0, "127.0.0.1", r));
+const PORT = server.address().port;
+fs.mkdirSync(reportDir, { recursive: true });
+
+function runLighthouse(url, preset) {
+  const slug = `${urlPathSlug(url)}-${preset}`;
+  const outPath = path.join(reportDir, `${slug}.json`);
+  const chromeUserData = path.join(os.tmpdir(), `lh-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
+  const cliArgs = [
+    lhCli,
+    `http://127.0.0.1:${PORT}${url}`,
+    "--output=json",
+    `--output-path=${outPath}`,
+    `--chrome-path=${chromePath}`,
+    `--chrome-flags=--headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --disable-background-networking --no-first-run --disable-default-apps --disable-component-update --user-data-dir=${chromeUserData}`,
+    "--quiet",
+  ];
+  if (preset === "desktop") cliArgs.push("--preset=desktop");
+  const res = spawnSync(process.execPath, cliArgs, {
+    cwd: root,
+    encoding: "utf8",
+    timeout: 20 * 60_000,
+    env: { ...process.env, CHROME_PATH: chromePath },
+  });
+  if (res.status !== 0 || !fs.existsSync(outPath)) {
+    console.error(`  ✗ lighthouse failed for ${url} (${preset})`);
+    const err = String(res.stderr ?? res.stdout ?? "").slice(-1500);
+    if (err.trim()) console.error(err);
+    return null;
+  }
+  const report = JSON.parse(fs.readFileSync(outPath, "utf8"));
+  const a = report.audits;
+  return {
+    score: report.categories?.performance?.score ?? 0,
+    metrics: {
+      FCP: a["first-contentful-paint"]?.numericValue,
+      LCP: a["largest-contentful-paint"]?.numericValue,
+      TBT: a["total-blocking-time"]?.numericValue,
+      CLS: a["cumulative-layout-shift"]?.numericValue,
+      SI: a["speed-index"]?.numericValue,
+    },
+  };
+}
+
+const urlPathSlug = (u) => u.replace(/^\/|\/$/g, "").replace(/[/?#]/g, "-") || "root";
+
+console.log(`\nServing ${outDir} on http://127.0.0.1:${PORT}\n`);
+const results = [];
+for (const preset of presets) {
+  for (const page of pages) {
+    process.stdout.write(`▶ ${preset.padEnd(7)} ${page} … `);
+    const r = runLighthouse(page, preset.trim());
+    if (r) {
+      results.push({ preset: preset.trim(), page, ...r });
+      const m = r.metrics;
+      const fmt = (v) => (v == null ? "  —  " : v.toFixed(v < 1 ? 3 : 0).padStart(7));
+      console.log(
+        `perf ${String(Math.round(r.score * 100)).padStart(3)} | ` +
+          `FCP${fmt(m.FCP)} LCP${fmt(m.LCP)} TBT${fmt(m.TBT)} CLS${fmt(m.CLS)} SI${fmt(m.SI)}`
+      );
+    } else {
+      console.log("failed");
+    }
+  }
+}
+server.close();
+
+fs.writeFileSync(
+  path.join(reportDir, "summary.json"),
+  JSON.stringify({ date: new Date().toISOString(), results }, null, 2)
+);
+console.log(`\n✓ ${results.length} reports in .lighthouse/ (summary.json)`);

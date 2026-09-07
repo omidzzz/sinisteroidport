@@ -1,10 +1,7 @@
 "use client";
 
+import { ScrollLazy } from "@/components/ui/LazyMount";
 import PropFloat from "./PropFloat";
-import LaptopDeck from "../laptop-deck/LaptopDeck";
-import Drone from "../drone/Drone";
-import Plant from "../plant/Plant";
-import Frog from "../frog/Frog";
 
 /**
  * PROP FLOAT LAYER — the console props, deployed as scroll-bound viewport
@@ -17,21 +14,25 @@ import Frog from "../frog/Frog";
  * Each springs in from its docked edge while its quarter is active.
  * The laptop also renders in-flow inside ConsoleBay for narrow viewports,
  * where this layer is hidden. Fixed layer, decorative, never interactive.
+ *
+ * Each prop is a ScrollLazy dynamic import — its chunk is NOT requested until
+ * the prop's viewport quarter approaches, removing ~100 KiB of SVG/animation
+ * JS from the initial bundle.
  */
 export default function PropFloatLayer() {
   return (
     <>
       <PropFloat index={0} side="left" top="30%" depth={20} react="flee" className="pf-frog">
-        <Frog />
+        <ScrollLazy load={() => import("../frog/Frog")} />
       </PropFloat>
       <PropFloat index={1} side="right" top="22%" depth={18} react="heavy" className="pf-laptop">
-        <LaptopDeck />
+        <ScrollLazy load={() => import("../laptop-deck/LaptopDeck")} />
       </PropFloat>
       <PropFloat index={2} side="left" top="26%" depth={22} react="sway" className="pf-plant">
-        <Plant />
+        <ScrollLazy load={() => import("../plant/Plant")} />
       </PropFloat>
       <PropFloat index={3} side="right" top="34%" depth={26} react="chase" className="pf-drone">
-        <Drone />
+        <ScrollLazy load={() => import("../drone/Drone")} />
       </PropFloat>
     </>
   );

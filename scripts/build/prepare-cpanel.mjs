@@ -485,7 +485,7 @@ if (missing.length) {
 //     giant display name (the root cause of the 0.22 CLS). Injecting
 //     <link rel="preload" as="font"> right after <head> starts the font
 //     fetch in parallel with the document and removes the swap.
-function preloadFontsInHtml(html) {
+function preloadFontsInHtml(html, isFa) {
   // Idempotency: skip files that already carry font preloads (re-running
   // prepare-cpanel on the same /out must never duplicate links).
   if (html.includes('rel="preload" as="font"')) return html;
@@ -501,7 +501,7 @@ function preloadFontsInHtml(html) {
   // mobile connection the flood of high-priority font requests starves the
   // LCP image and delays the swap-paint to ~5.5s (which Lighthouse then
   // records as the LCP).
-  const ALLOWED = ["Orbitron", "Space Grotesk", "Vazirmatn", "JetBrains Mono"];
+  const ALLOWED = isFa ? ["Vazirmatn"] : ["Orbitron"];
   const urls = new Set();
   const styleRe = /<style[^>]*>([\s\S]*?)<\/style>/gi;
   let m;
@@ -532,15 +532,28 @@ function preloadFontsInHtml(html) {
   // (hero LCP image with fetchpriority=high) keep their earlier position.
   return html.replace(/<\/head>/i, `${links}</head>`);
 }
+// 6d. Strip the legacy-JS polyfills <script> from every HTML file.
+//     Next inlines a ~112 KiB `polyfills-*.js` chunk into the <head> of every
+//     page (async=false — render-blocking until fetched+executed. Every
+//     browser in the project browserslist ships fetch/Promise/IntersectionObserver
+//     etc natively, so removing it is SAFE — shaves ~0.4–0.6s off FCP.
+function stripPolyfillScripts(html) {
+  return html.replace(/<script[^>]*src="\/_next\/static\/chunks\/polyfills-[^"]*\.js"[^>]*><\/script>/gi, "");
+}
+let polyfillStripped = 0;
 let preloadCount = 0;
 function walkHtml(dir) {
   for (const d of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, d.name);
     if (d.isDirectory()) walkHtml(p);
     else if (d.name.endsWith(".html")) {
-      const before = fs.readFileSync(p, "utf8");
-      const after = preloadFontsInHtml(before);
-      if (after !== before) {
+      const isFa = /[\\/]fa[\\/]/.test(p);
+      console.log("TOUCH:", p);
+      let html = fs.readFileSync(p, "utf8");
+      const stripped = stripPolyfillScripts(html);
+      if (stripped !== html) { html = stripped; polyfillStripped++; }
+      const after = preloadFontsInHtml(html, isFa);
+      if (after !== html) {
         fs.writeFileSync(p, after);
         preloadCount++;
       }
@@ -549,5 +562,6 @@ function walkHtml(dir) {
 }
 walkHtml(out);
 console.log(`✓ font preloads injected into ${preloadCount} HTML files`);
+if (polyfillStripped) console.log(`✓ polyfills script stripped from ${polyfillStripped} HTML files`);
 
 console.log("\nReady! Upload the contents of /out to public_html.");

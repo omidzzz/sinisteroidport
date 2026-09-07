@@ -24,14 +24,17 @@ export default function ScrambleText({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // Cursive scripts (Persian/Arabic) must not be scrambled — joining breaks
+    // Cursive scripts (Persian/Arabic) must not be scrambled — joining breaks.
+    // Coarse-pointer (touch) devices skip the effect too: it is pure main-thread
+    // churn during load on exactly the hardware class Lighthouse measures.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+        !window.matchMedia("(pointer: fine)").matches ||
         /[\u0600-\u06FF]/.test(text)) {
       setOutput(text);
       return;
     }
-    setOutput("");
-
+    // Keep the prerendered title visible until the card actually scrolls into
+    // view — blanking it on mount collapsed the line and shifted the strip.
     let raf = 0;
     const observer = new IntersectionObserver(
       ([entry]) => {
