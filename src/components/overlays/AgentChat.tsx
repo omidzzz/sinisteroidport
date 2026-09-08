@@ -123,8 +123,8 @@ export default function AgentChat({
 
   // A fresh transport per mount keeps every panel opening a clean,
   // stateless conversation on the guest endpoint. `body` is a resolver so
-  // the latest live post index, session id, and locale ride along with
-  // every message sent.
+  // the latest live post index, session id, locale and a few anonymous
+  // context fields (page path, screen size) ride along with every message.
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
@@ -133,6 +133,8 @@ export default function AgentChat({
           ...(liveContext ? { context: liveContext } : {}),
           ...(sessionId ? { sessionId } : {}),
           locale,
+          path: window.location.pathname,
+          screen: `${window.screen.width}x${window.screen.height}`,
         }),
       }),
     [liveContext, sessionId, locale],
