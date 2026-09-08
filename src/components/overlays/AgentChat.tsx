@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
 
@@ -14,6 +14,39 @@ import type { Locale } from "@/lib/i18n";
 const SINISTER_API =
   process.env.NEXT_PUBLIC_SINISTER_API ??
   "https://sinister-mu.vercel.app/api/chat";
+
+/* ── History persistence ─────────────────────────────────────────────
+ * The whole conversation is stored per anonymous browser session so it
+ * survives refresh / panel close, and is re-sent to the model with the next
+ * message so the agent has the full context across visits ("remembers" the
+ * user). localStorage holds only the most recent exchanges to stay light.
+ */
+const HISTORY_PREFIX = "sin-chat-history";
+const HISTORY_LIMIT = 60;
+
+function readHistory(sessionId: string | null): UIMessage[] | undefined {
+  if (!sessionId) return undefined;
+  try {
+    const raw = localStorage.getItem(`${HISTORY_PREFIX}-${sessionId}`);
+    if (!raw) return undefined;
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeHistory(sessionId: string | null, messages: UIMessage[]): void {
+  if (!sessionId) return;
+  try {
+    localStorage.setItem(
+      `${HISTORY_PREFIX}-${sessionId}`,
+      JSON.stringify(messages.slice(-HISTORY_LIMIT)),
+    );
+  } catch {
+    /* quota / blocked storage — history just won't survive this session */
+  }
+}
 
 const COPY = {
   en: {
@@ -140,7 +173,22 @@ export default function AgentChat({
     [liveContext, sessionId, locale],
   );
 
-  const { messages, sendMessage, status, error } = useChat({ transport });
+  const { messages, sendMessage, status, error } = useChat({
+    transport,
+    // Restore the persisted conversation, if any, so it survives refresh /
+    // panel close. The SDK resends these with the next message, which gives
+    // the model continuous context across visits.
+    messages: sessionId ? (readHistory(sessionId) ?? []) : [],
+  });
+
+  // Persist after each completed exchange (never mid-stream, to avoid a
+  // write storm on every streamed delta). A mid-stream close keeps the last
+  // saved frame, which is fine.
+  useEffect(() => {
+    if (status === "submitted" || status === "streaming") return;
+    if (!sessionId || messages.length === 0) return;
+    writeHistory(sessionId, messages);
+  }, [messages, status, sessionId]);
 
   // Keep the newest message in view while streaming.
   useEffect(() => {
@@ -194,9 +242,11 @@ export default function AgentChat({
       </header>
 
       <div className="sin-chat-log" ref={scrollRef}>
-        <div className="sin-chat-row sin-chat-row--bot">
-          <div className="sin-chat-bubble sin-chat-bubble--bot">{t.intro}</div>
-        </div>
+        {messages.length === 0 && (
+          <div className="sin-chat-row sin-chat-row--bot">
+            <div className="sin-chat-bubble sin-chat-bubble--bot">{t.intro}</div>
+          </div>
+        )}
         {messages.map((message) =>
           message.parts
             .filter((p) => p.type === "text")
