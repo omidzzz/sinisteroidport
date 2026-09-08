@@ -118,42 +118,87 @@ export default function AgentChat({
     }
   });
 
-  // Fresh post knowledge without any DB exposure: the static export ships a
-  // JSON Feed (public/feed.json, regenerated on every build). Fetch it once
-  // per panel open and inject a compact post index into each chat request as
-  // `context`; the guest backend merges it into the system prompt. Silent
-  // failure = the dossier's evergreen list is simply used as-is.
+  // Fresh post knowledge: the live MySQL `posts` table is the source of
+  // truth (it includes CMS-published posts that never appear in the
+  // build-time feed). Fetch the compact index endpoint first (few KB,
+  // service-worker-bypassed), and only fall back to the build-time JSON
+  // feed when the API is unreachable (e.g. local dev). Inject the newest
+  // posts into each chat request as `context`; the guest backend merges it
+  // into the system prompt as a LIVE POST INDEX.
   useEffect(() => {
     let cancelled = false;
-    const feedUrl = locale === "fa" ? "/fa/feed.json" : "/feed.json";
-    fetch(feedUrl)
+
+    const buildIndex = (rows: Array<{
+      date?: string;
+      title?: string;
+      faTitle?: string;
+      enTitle?: string;
+      enExcerpt?: string;
+      faExcerpt?: string;
+    }>) => {
+      if (cancelled) return null;
+      const index = rows
+        .slice(0, 15)
+        .map((it) => {
+          const date = (it.date ?? "").slice(0, 10);
+          const title =
+            (locale === "fa" ? (it.faTitle ?? "") : (it.enTitle ?? "")) ||
+            it.title ||
+            "";
+          const excerpt = (locale === "fa" ? (it.faExcerpt ?? "") : (it.enExcerpt ?? ""))
+            .trim()
+            .slice(0, 140);
+          return `- ${date} | ${(title || "").trim()} | ${excerpt}`;
+        })
+        .join("\n");
+      return index;
+    };
+
+    const loadFromFeed = () => {
+      const feedUrl = locale === "fa" ? "/fa/feed.json" : "/feed.json";
+      // Cache-buster: the service worker serves .json stale-while-revalidate,
+      // so a unique query forces a fresh fetch each panel open.
+      fetch(`${feedUrl}?v=${Date.now()}`)
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((feed: {
+          items?: Array<{
+            title?: string;
+            summary?: string;
+            content_text?: string;
+            date_published?: string;
+          }>;
+        }) => {
+          if (cancelled || !Array.isArray(feed.items) || feed.items.length === 0)
+            return;
+          const index = feed.items
+            .slice(0, 15)
+            .map((it) => {
+              const date = it.date_published?.slice(0, 10) ?? "";
+              const title = (it.title ?? "").trim();
+              const excerpt = (it.summary ?? it.content_text ?? "")
+                .trim()
+                .slice(0, 140);
+              return `- ${date} | ${title} | ${excerpt}`;
+            })
+            .join("\n");
+          setLiveContext(index);
+        })
+        .catch(() => {
+          /* no feed — dossier baseline still covers the rest */
+        });
+    };
+
+    fetch("/api/get_posts_index.php")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((feed: {
-        items?: Array<{
-          title?: string;
-          summary?: string;
-          content_text?: string;
-          date_published?: string;
-        }>;
-      }) => {
-        if (cancelled || !Array.isArray(feed.items) || feed.items.length === 0)
-          return;
-        const index = feed.items
-          .slice(0, 15)
-          .map((it) => {
-            const date = it.date_published?.slice(0, 10) ?? "";
-            const title = (it.title ?? "").trim();
-            const excerpt = (it.summary ?? it.content_text ?? "")
-              .trim()
-              .slice(0, 160);
-            return `- ${date} | ${title}${excerpt ? ` | ${excerpt}` : ""}`;
-          })
-          .join("\n");
-        setLiveContext(index);
+      .then((rows: unknown) => {
+        if (cancelled) return;
+        if (!Array.isArray(rows) || rows.length === 0)
+          throw new Error("empty index");
+        const index = buildIndex(rows);
+        if (index) setLiveContext(index);
       })
-      .catch(() => {
-        /* offline or missing feed — dossier baseline still covers the rest */
-      });
+      .catch(loadFromFeed);
+
     return () => {
       cancelled = true;
     };

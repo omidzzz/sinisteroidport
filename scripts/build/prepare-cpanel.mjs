@@ -57,7 +57,7 @@ fs.cpSync(apiSrc, apiOut, { recursive: true });
 console.log("✓ copied api/ (PHP endpoints)");
 
 // 1b. Clean up non-PHP files that were copied from the reference build's api/
-const keepPhp = new Set(["db.php", "get_posts.php", "get_post.php", "admin.php", "config.sample.php", "uploads"]);
+const keepPhp = new Set(["db.php", "get_posts.php", "get_post.php", "get_posts_index.php", "admin.php", "config.sample.php", "uploads"]);
 for (const f of fs.readdirSync(apiOut)) {
   if (!keepPhp.has(f)) {
     fs.rmSync(path.join(apiOut, f), { recursive: true, force: true });
