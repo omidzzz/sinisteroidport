@@ -286,6 +286,20 @@
   opacity: 0.4;
 }
 
+/* ── Disclosure note ──────────────────────────────────────── */
+.sin-chat-note {
+  margin: 0;
+  padding: 0.3rem 0.9rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-align: center;
+  color: var(--color-muted);
+  background: rgba(var(--rgb-accent-3), 0.3);
+  border-top: 1px solid rgba(var(--rgb-accent), 0.15);
+  opacity: 0.85;
+}
+
 /* Mobile: let the panel breathe on small screens */
 @media (max-width: 480px) {
   .sin-chat-fab {

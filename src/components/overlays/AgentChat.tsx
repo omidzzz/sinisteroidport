@@ -26,6 +26,7 @@ const COPY = {
     close: "Close chat",
     status: "scheming…",
     error: "I'm unreachable right now. Tragic. Try again in a moment.",
+    privacy: "Chats are logged anonymously for research.",
   },
   fa: {
     title: "سینیستر",
@@ -37,6 +38,7 @@ const COPY = {
     close: "بستن گفتگو",
     status: "در حال نقشه‌کشی…",
     error: "الان در دسترس نیستم. تراژدی است. چند لحظه بعد امتحان کن.",
+    privacy: "گفتگوها به‌صورت ناشناس برای پژوهش ذخیره می‌شوند.",
   },
 } as const;
 
@@ -58,6 +60,25 @@ export default function AgentChat({
   const scrollRef = useRef<HTMLDivElement>(null);
   // Live post index (built from the site's JSON feed when the panel opens).
   const [liveContext, setLiveContext] = useState<string | null>(null);
+  // Anonymous per-browser session id — lets research group exchanges into
+  // conversations without any cookies, IPs, or accounts. Computed lazily on
+  // first render (this panel never SSR's, so localStorage is safe here).
+  const [sessionId] = useState<string | null>(() => {
+    try {
+      let sid = localStorage.getItem("sin-chat-session");
+      if (!sid) {
+        sid =
+          typeof crypto !== "undefined" && "randomUUID" in crypto
+            ? crypto.randomUUID()
+            : `s-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        localStorage.setItem("sin-chat-session", sid);
+      }
+      return sid;
+    } catch {
+      /* storage blocked — exchanges just log without a session id */
+      return null;
+    }
+  });
 
   // Fresh post knowledge without any DB exposure: the static export ships a
   // JSON Feed (public/feed.json, regenerated on every build). Fetch it once
@@ -102,14 +123,19 @@ export default function AgentChat({
 
   // A fresh transport per mount keeps every panel opening a clean,
   // stateless conversation on the guest endpoint. `body` is a resolver so
-  // the latest live post index rides along with every message sent.
+  // the latest live post index, session id, and locale ride along with
+  // every message sent.
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
         api: SINISTER_API,
-        body: () => (liveContext ? { context: liveContext } : {}),
+        body: () => ({
+          ...(liveContext ? { context: liveContext } : {}),
+          ...(sessionId ? { sessionId } : {}),
+          locale,
+        }),
       }),
-    [liveContext],
+    [liveContext, sessionId, locale],
   );
 
   const { messages, sendMessage, status, error } = useChat({ transport });
@@ -256,6 +282,7 @@ export default function AgentChat({
           </svg>
         </button>
       </form>
+      <p className="sin-chat-note">{t.privacy}</p>
     </div>
   );
 }
