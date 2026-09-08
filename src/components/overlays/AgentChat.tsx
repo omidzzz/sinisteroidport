@@ -14,6 +14,9 @@ import type { Locale } from "@/lib/i18n";
 const SINISTER_API =
   process.env.NEXT_PUBLIC_SINISTER_API ??
   "https://sinister-mu.vercel.app/api/chat";
+const SINISTER_LOG_API =
+  process.env.NEXT_PUBLIC_SINISTER_LOG_API ??
+  "https://sinister-mu.vercel.app/api/log";
 
 /* ── History persistence ─────────────────────────────────────────────
  * The whole conversation is stored per anonymous browser session so it
@@ -59,7 +62,6 @@ const COPY = {
     close: "Close chat",
     status: "scheming…",
     error: "I'm unreachable right now. Tragic. Try again in a moment.",
-    privacy: "Chats are logged anonymously for research.",
   },
   fa: {
     title: "سینیستر",
@@ -71,7 +73,6 @@ const COPY = {
     close: "بستن گفتگو",
     status: "در حال نقشه‌کشی…",
     error: "الان در دسترس نیستم. تراژدی است. چند لحظه بعد امتحان کن.",
-    privacy: "گفتگوها به‌صورت ناشناس برای پژوهش ذخیره می‌شوند.",
   },
 } as const;
 
@@ -96,6 +97,10 @@ export default function AgentChat({
   // Anonymous per-browser session id — lets research group exchanges into
   // conversations without any cookies, IPs, or accounts. Computed lazily on
   // first render (this panel never SSR's, so localStorage is safe here).
+  // Track the start time and user text for research logging.
+  const startedAtRef = useRef<number>(0);
+  const userTextRef = useRef<string>("");
+  const lastAssistantTextRef = useRef<string>("");
   const [sessionId] = useState<string | null>(() => {
     try {
       let sid = localStorage.getItem("sin-chat-session");
@@ -207,6 +212,48 @@ export default function AgentChat({
 
   const isStreaming = status === "submitted" || status === "streaming";
 
+  // Research logging — fire-and-forget call to /api/log after each exchange
+  // completes. Uses the explicit endpoint instead of streamText's onFinish,
+  // which is unreliable in serverless (the function instance can freeze before
+  // the callback runs). Only logs when we have a session and a completed turn.
+  const wasStreamingRef = useRef(false);
+  useEffect(() => {
+    if (isStreaming) {
+      wasStreamingRef.current = true;
+      return;
+    }
+    if (!wasStreamingRef.current) return;
+    wasStreamingRef.current = false;
+
+    if (!sessionId || !userTextRef.current) return;
+    const lastMsg = messages[messages.length - 1];
+    const assistantText =
+      lastMsg?.role === "assistant"
+        ? lastMsg.parts
+            .filter((p) => p.type === "text")
+            .map((p) => (p as { text: string }).text)
+            .join("")
+        : "";
+    if (!assistantText) return;
+
+    void fetch(SINISTER_LOG_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId,
+        mode: "public",
+        locale,
+        userText: userTextRef.current,
+        assistantText,
+        latencyMs: Date.now() - startedAtRef.current,
+        path: window.location.pathname,
+        screen: `${window.screen.width}x${window.screen.height}`,
+      }),
+    }).catch(() => {
+      /* logging is best-effort — never surface to the user */
+    });
+  }, [isStreaming, sessionId, messages, locale]);
+
   return (
     <div
       className="sin-chat-panel"
@@ -295,6 +342,8 @@ export default function AgentChat({
           const input = form.elements.namedItem("text") as HTMLTextAreaElement;
           const text = input.value.trim();
           if (!text || isStreaming) return;
+          startedAtRef.current = Date.now();
+          userTextRef.current = text;
           sendMessage({ text });
           form.reset();
           input.style.height = "auto";
@@ -334,7 +383,6 @@ export default function AgentChat({
           </svg>
         </button>
       </form>
-      <p className="sin-chat-note">{t.privacy}</p>
     </div>
   );
 }

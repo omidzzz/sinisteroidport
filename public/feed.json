@@ -163,7 +163,7 @@
       "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
       "content_text": "Claude Code and Cline are two of the most capable agentic coding tools of 2026 — one a polished, subscription-based product from Anthropic, the other a free, open-source, model-agnostic extension. Here's a full head-to-head on pricing, models, platforms, autonomy, and which one actually fits your workflow.",
       "summary": "Claude Code and Cline are two of the most capable agentic coding tools of 2026 — one a polished, subscription-based product from Anthropic, the other a free, open-source, model-agnostic extension. Here's a full head-to-head on pricing, models, platforms, autonomy, and which one actually fits your workflow.",
-      "date_published": "2026-08-14T22:09:34.000Z",
+      "date_published": "2026-08-14T22:39:34.000Z",
       "tags": [
         "ai-coding-agents",
         "ai-tools",
@@ -183,7 +183,7 @@
       "title": "The Death of Traditional Websites: Designing for AI Agents",
       "content_text": "Over 60% of searches now end without a single click. AI agents browse your website without seeing it. The visual hierarchy you spent months refining, the hover states, the scroll animations — none of it registers. What does register is your content architecture, your structured data, and whether a machine can extract a useful answer from your HTML in under a second.",
       "summary": "Over 60% of searches now end without a single click. AI agents browse your website without seeing it. The visual hierarchy you spent months refining, the hover states, the scroll animations — none of it registers. What does register is your content architecture, your structured data, and whether a machine can extract a useful answer from your HTML in under a second.",
-      "date_published": "2026-06-21T20:30:00.000Z",
+      "date_published": "2026-06-21T21:00:00.000Z",
       "tags": [
         "web-architecture",
         "seo-geo",
@@ -203,7 +203,7 @@
       "title": "Open WebUI: The Missing Interface for Local AI",
       "content_text": "Ollama gives you the inference engine. Open WebUI gives you everything else — conversation history, document RAG, multi-user access control, voice, image generation, and a pipeline system for custom Python logic. This is how you turn a local model into a complete AI platform.",
       "summary": "Ollama gives you the inference engine. Open WebUI gives you everything else — conversation history, document RAG, multi-user access control, voice, image generation, and a pipeline system for custom Python logic. This is how you turn a local model into a complete AI platform.",
-      "date_published": "2026-06-20T20:30:00.000Z",
+      "date_published": "2026-06-20T21:00:00.000Z",
       "tags": [
         "local-ai",
         "ai-tools",
@@ -223,7 +223,7 @@
       "title": "Cline: The Open-Source AI Coding Agent Redefining Developer Workflows",
       "content_text": "Cline brings autonomous, context-aware AI coding directly into VS Code and your terminal. Explore its architecture, Plan/Act modes, local LLM integration with Ollama, and why it stands out in the 2026 AI developer tooling landscape.",
       "summary": "Cline brings autonomous, context-aware AI coding directly into VS Code and your terminal. Explore its architecture, Plan/Act modes, local LLM integration with Ollama, and why it stands out in the 2026 AI developer tooling landscape.",
-      "date_published": "2026-06-19T17:30:00.000Z",
+      "date_published": "2026-06-19T18:00:00.000Z",
       "tags": [
         "ai-coding-agents",
         "local-ai",
