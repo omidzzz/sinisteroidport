@@ -2,7 +2,10 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import type { Components } from "react-markdown";
 import type { Locale } from "@/lib/i18n";
 
 /**
@@ -51,6 +54,88 @@ function writeHistory(sessionId: string | null, messages: UIMessage[]): void {
   }
 }
 
+/* ── Copy-to-clipboard helper ───────────────────────────────────────
+ * A small button that copies text to clipboard and briefly shows a
+ * "copied" state. Uses the modern Clipboard API with a graceful
+ * fallback to the legacy execCommand approach. */
+function useCopy(): [
+  boolean,
+  (text: string) => Promise<void>,
+] {
+  const [copied, setCopied] = useState(false);
+  const copy = useCallback(async (text: string) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Fallback for older browsers / insecure contexts
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* clipboard blocked — fail silently */
+    }
+  }, []);
+  return [copied, copy];
+}
+
+function CopyButton({
+  text,
+  label,
+  title,
+  className = "",
+}: {
+  text: string;
+  label: string;
+  title?: string;
+  className?: string;
+}) {
+  const [copied, copy] = useCopy();
+  return (
+    <button
+      type="button"
+      className={`sin-chat-copy${copied ? " sin-chat-copy--done" : ""} ${className}`}
+      title={title ?? label}
+      onClick={() => void copy(text)}
+    >
+      {copied ? "✓" : "⧉"}{" "}
+      <span>{copied ? "Copied" : label}</span>
+    </button>
+  );
+}
+
+/* ── Code block with copy ───────────────────────────────────────────
+ * Renders a fenced code block with a header showing the language and
+ * a copy button. Used via react-markdown's components override. */
+function CodeBlock({
+  language,
+  children,
+}: {
+  language: string;
+  children: string;
+}) {
+  const code = children.trimEnd();
+  return (
+    <div className="sin-chat-code-block">
+      <div className="sin-chat-code-head">
+        <span>{language || "code"}</span>
+        <CopyButton text={code} label="Copy" />
+      </div>
+      <pre>
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
+
 const COPY = {
   en: {
     title: "SINISTER",
@@ -75,6 +160,47 @@ const COPY = {
     error: "الان در دسترس نیستم. تراژدی است. چند لحظه بعد امتحان کن.",
   },
 } as const;
+
+/**
+ * Custom react-markdown components — handles internal vs external links and
+ * fenced code blocks with a copy button. Internal links (relative or on the
+ * same domain) render plainly; external links get a subtle ↗ indicator.
+ */
+const markdownComponents: Components = {
+  a({ href, children }) {
+    if (!href) return <>{children}</>;
+    const isExternal =
+      href.startsWith("http://") ||
+      href.startsWith("https://") ||
+      href.startsWith("//");
+    // Treat same-domain links as internal (no external indicator)
+    const reallyExternal =
+      isExternal &&
+      !href.includes("sinisteroid.ir") &&
+      !href.includes("localhost");
+    const className = reallyExternal ? "sin-chat-link-external" : undefined;
+    const reallyExternalBool = Boolean(reallyExternal);
+    return (
+      <a
+        href={href}
+        className={className}
+        target={reallyExternalBool ? "_blank" : undefined}
+        rel={reallyExternalBool ? "noopener noreferrer" : undefined}
+      >
+        {children}
+      </a>
+    );
+  },
+  code({ className, children, ...props }) {
+    const match = /language-(\w+)/.exec(className || "");
+    const code = String(children).trimEnd();
+    if (match) {
+      return <CodeBlock language={match[1]}>{code}</CodeBlock>;
+    }
+    // Inline code
+    return <code className={className}>{children}</code>;
+  },
+};
 
 /**
  * The floating assistant panel. Code-split (loaded via next/dynamic from
@@ -339,29 +465,51 @@ export default function AgentChat({
             <div className="sin-chat-bubble sin-chat-bubble--bot">{t.intro}</div>
           </div>
         )}
-        {messages.map((message) =>
-          message.parts
+        {messages.map((message) => {
+          const text = message.parts
             .filter((p) => p.type === "text")
-            .map((p, i) => (
+            .map((p) => (p as { text: string }).text)
+            .join("");
+          if (!text) return null;
+
+          if (message.role === "user") {
+            return (
               <div
-                key={`${message.id}-${i}`}
-                className={`sin-chat-row ${
-                  message.role === "user"
-                    ? "sin-chat-row--user"
-                    : "sin-chat-row--bot"
-                }`}
+                key={message.id}
+                className="sin-chat-row sin-chat-row--user"
               >
-                <div
-                  className={`sin-chat-bubble ${
-                    message.role === "user"
-                      ? "sin-chat-bubble--user"
-                      : "sin-chat-bubble--bot"
-                  }`}
-                >
-                  {(p as { text: string }).text}
+                <div className="sin-chat-bubble sin-chat-bubble--user">
+                  {text}
                 </div>
               </div>
-            )))}
+            );
+          }
+
+          // Bot message — render markdown with copy button
+          return (
+            <div
+              key={message.id}
+              className="sin-chat-row sin-chat-row--bot"
+            >
+              <div className="sin-chat-bubble sin-chat-bubble--bot">
+                <CopyButton
+                  text={text}
+                  label="Copy"
+                  title="Copy message"
+                  className="sin-chat-msg-copy"
+                />
+                <div className="sin-chat-md">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={markdownComponents}
+                  >
+                    {text}
+                  </ReactMarkdown>
+                </div>
+              </div>
+            </div>
+          );
+        })}
 
         {isStreaming && (
           <div className="sin-chat-row sin-chat-row--bot">

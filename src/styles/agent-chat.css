@@ -40,6 +40,67 @@
     border-color 0.25s ease;
 }
 
+/* Attention pulse — a subtle glow ring that draws the eye without being
+   annoying. Respects reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .sin-chat-fab::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(var(--rgb-acid), 0.5);
+    opacity: 0;
+    pointer-events: none;
+    animation: sin-chat-attention 2.4s ease-out infinite;
+  }
+  /* Second delayed pulse for a more organic feel */
+  .sin-chat-fab::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    animation: sin-chat-glow 3s ease-in-out infinite;
+    box-shadow: 0 0 20px 4px rgba(var(--rgb-acid), 0.3);
+  }
+  @keyframes sin-chat-attention {
+    0% {
+      transform: scale(0.85);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1.35);
+      opacity: 0;
+    }
+  }
+  @keyframes sin-chat-glow {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+  /* When the panel is open, stop the attention animation to avoid
+     competing with the chat UI. */
+  .sin-chat-fab[data-open]::after,
+  .sin-chat-fab[data-open]::before {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Mobile: slightly larger tap target + stronger glow */
+@media (max-width: 640px) {
+  .sin-chat-fab {
+    width: 4rem;
+    height: 4rem;
+    inset-inline-end: 1rem;
+    bottom: 1rem;
+  }
+}
+
 /* Light theme: pop the robot head to a light surface so it reads on the
    whiteout, and brighten the glint. The acid accents keep the same hue. */
 html[data-theme="light"] .sin-chat-fab {
@@ -193,16 +254,170 @@ html[data-theme="light"] .sin-chat-fab {
   padding: 0.55rem 0.8rem;
   font-size: 0.82rem;
   line-height: 1.55;
-  white-space: pre-wrap;
   overflow-wrap: anywhere;
   border-radius: 0.9rem;
 }
 
 .sin-chat-bubble--bot {
+  position: relative;
   color: var(--color-ink);
   background: rgba(var(--rgb-accent-3), 0.4);
   border: 1px solid rgba(var(--rgb-accent), 0.22);
   border-start-start-radius: 0.3rem;
+  /* Extra padding on the end to make room for the copy button */
+  padding-inline-end: 2.2rem;
+}
+
+/* ── Markdown rendered content ────────────────────────────── */
+.sin-chat-md {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.sin-chat-md > :first-child {
+  margin-top: 0;
+}
+.sin-chat-md > :last-child {
+  margin-bottom: 0;
+}
+.sin-chat-md p {
+  margin: 0 0 0.5rem;
+}
+.sin-chat-md p:last-child {
+  margin-bottom: 0;
+}
+.sin-chat-md strong {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+.sin-chat-md em {
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+/* Links — internal vs external */
+.sin-chat-md a {
+  color: rgb(var(--rgb-acid));
+  text-decoration: none;
+  border-bottom: 1px solid rgba(var(--rgb-acid), 0.35);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.sin-chat-md a:hover {
+  border-bottom-color: rgb(var(--rgb-acid));
+}
+/* External links get a tiny indicator */
+.sin-chat-md a.sin-chat-link-external::after {
+  content: "↗";
+  display: inline-block;
+  margin-inline-start: 0.15em;
+  font-size: 0.7em;
+  vertical-align: super;
+  opacity: 0.7;
+}
+
+/* Lists */
+.sin-chat-md ul,
+.sin-chat-md ol {
+  margin: 0.4rem 0 0.6rem;
+  padding-inline-start: 1.4rem;
+}
+.sin-chat-md li {
+  margin-bottom: 0.2rem;
+}
+.sin-chat-md li > p {
+  margin: 0;
+}
+
+/* Inline code */
+.sin-chat-md code {
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+  padding: 0.1em 0.35em;
+  background: rgba(var(--rgb-acid), 0.1);
+  border: 1px solid rgba(var(--rgb-acid), 0.2);
+  border-radius: 0.25rem;
+  color: rgb(var(--rgb-acid));
+}
+
+/* Code blocks */
+.sin-chat-code-block {
+  position: relative;
+  margin: 0.5rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(var(--rgb-accent), 0.3);
+  background: rgba(0, 0, 0, 0.55);
+}
+.sin-chat-code-block pre {
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--rgb-accent), 0.4) transparent;
+}
+.sin-chat-code-block code {
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: var(--color-ink);
+}
+
+/* Code block header with language label + copy button */
+.sin-chat-code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3rem 0.6rem;
+  background: rgba(var(--rgb-accent-3), 0.5);
+  border-bottom: 1px solid rgba(var(--rgb-accent), 0.2);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Copy buttons */
+.sin-chat-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  cursor: pointer;
+  background: rgba(var(--rgb-accent-3), 0.4);
+  border: 1px solid rgba(var(--rgb-accent), 0.25);
+  border-radius: 0.35rem;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.sin-chat-copy:hover {
+  color: rgb(var(--rgb-acid));
+  border-color: rgba(var(--rgb-acid), 0.5);
+  background: rgba(var(--rgb-acid), 0.08);
+}
+.sin-chat-copy.sin-chat-copy--done {
+  color: rgb(var(--rgb-acid));
+  border-color: rgba(var(--rgb-acid), 0.6);
+}
+
+/* Copy button for the whole message (top-right of bot bubble) */
+.sin-chat-msg-copy {
+  position: absolute;
+  top: 0.3rem;
+  inset-inline-end: 0.3rem;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.sin-chat-bubble--bot:hover .sin-chat-msg-copy,
+.sin-chat-msg-copy:focus-visible {
+  opacity: 1;
 }
 
 .sin-chat-bubble--user {
