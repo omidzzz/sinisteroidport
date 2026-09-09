@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import { trackEvent } from "@/lib/analytics";
+import { SparkIcon } from "@/components/ui/icons";
+import SelectionAsk from "./SelectionAsk";
 
 // The chat panel pulls in the AI SDK runtime — never load it until the
 // visitor actually opens the widget. ssr:false keeps it out of the static
@@ -11,9 +13,17 @@ import { trackEvent } from "@/lib/analytics";
 const AgentChat = dynamic(() => import("./AgentChat"), { ssr: false });
 
 const LABELS = {
-  en: { open: "Open the assistant chat" },
-  fa: { open: "باز کردن گفتگو با دستیار" },
+  en: {
+    open: "Open the assistant chat",
+    hint: "the menace is in — ask it something.",
+  },
+  fa: {
+    open: "باز کردن گفتگو با دستیار",
+    hint: "سینیستر اومده — یه چیزی ازش بپرس.",
+  },
 } as const;
+
+const HINT_KEY = "sin-chat-hint-seen";
 
 /**
  * Floating assistant toggle. The button itself is dependency-free (a few
@@ -44,8 +54,33 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
   const [unread, setUnread] = useState(false);
   const fabRef = useRef<HTMLButtonElement>(null);
 
+  // First-visit hint — a small nudge near the FAB, shown once and never
+  // again (dismissed on open or after a few seconds).
+  const [hint, setHint] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(HINT_KEY) !== "1";
+    } catch {
+      return false;
+    }
+  });
+  useEffect(() => {
+    if (!hint) return;
+    const id = window.setTimeout(() => setHint(false), 12_000);
+    return () => window.clearTimeout(id);
+  }, [hint]);
+
+  const dismissHint = useCallback(() => {
+    setHint(false);
+    try {
+      localStorage.setItem(HINT_KEY, "1");
+    } catch {
+      /* storage blocked — the hint may re-appear next visit */
+    }
+  }, []);
+
   const open = useCallback(
     (question?: string) => {
+      dismissHint();
       setStarted(true);
       setVisible(true);
       setUnread(false);
@@ -55,13 +90,36 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
         question ? { locale, source: "deep_link" } : { locale },
       );
     },
-    [locale],
+    [locale, dismissHint],
   );
 
   const close = useCallback(() => {
     setVisible(false);
     fabRef.current?.focus();
   }, []);
+
+  // Keyboard summon: Ctrl+Shift+A toggles the panel (guarded against typing
+  // in an input so browser select-all still works inside fields).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
+      if (e.key.toLowerCase() !== "a") return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      e.preventDefault();
+      if (visible) close();
+      else open();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, close, visible]);
 
   // Analytics for the boot-time deep link (state itself was set lazily).
   useEffect(() => {
@@ -99,6 +157,12 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
 
   return (
     <>
+      {hint && !started && (
+        <div className="sin-chat-fab-hint" role="status">
+          <SparkIcon />
+          <span>{LABELS[locale].hint}</span>
+        </div>
+      )}
       <button
         type="button"
         className="sin-chat-fab"
@@ -182,6 +246,7 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
           onUnread={setUnread}
         />
       )}
+      <SelectionAsk locale={locale} />
     </>
   );
 }

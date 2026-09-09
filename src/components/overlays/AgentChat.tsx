@@ -367,6 +367,8 @@ const COPY = {
     newChat: "New conversation",
     nameLabel: "call me:",
     namePlaceholder: "a name it will remember",
+    retry: "Try again",
+    threadDelete: "Delete conversation",
     chipsHome: [
       "What can Omid actually do?",
       "What makes this site fast?",
@@ -431,6 +433,8 @@ const COPY = {
     newChat: "گفتگوی جدید",
     nameLabel: "صدا کنم:",
     namePlaceholder: "یه اسم که یادش بمونه",
+    retry: "دوباره امتحان کن",
+    threadDelete: "حذف گفتگو",
     chipsHome: [
       "امید دقیقاً چه‌کارهایی بلده؟",
       "چرا این سایت این‌قدر سریعه؟",
@@ -899,6 +903,42 @@ export default function AgentChat({
     trackEvent("chat_thread", { locale, action: "new" });
   }, [threads, stop, setMessages, locale]);
 
+  // Delete a thread: remove its history, drop it from the list, and — if
+  // it was the active thread — pivot to the newest remaining (or a fresh
+  // thread when the last one goes).
+  const deleteThread = useCallback(
+    (id: string) => {
+      let next = threads.filter((t) => t.id !== id);
+      try {
+        localStorage.removeItem(`${HISTORY_PREFIX}-${id}`);
+      } catch {
+        /* storage blocked */
+      }
+      if (next.length === 0) {
+        const fresh: Thread = { id: newThreadId(), title: "", createdAt: Date.now() };
+        next = [fresh];
+      }
+      try {
+        localStorage.setItem(THREADS_KEY, JSON.stringify(next));
+        if (id === activeId) {
+          localStorage.setItem(THREAD_ACTIVE_KEY, next[0]!.id);
+        }
+      } catch {
+        /* storage blocked */
+      }
+      if (id === activeId) {
+        stop();
+        setMessages(readHistory(next[0]!.id) ?? []);
+        setActiveId(next[0]!.id);
+        messagesThreadRef.current = next[0]!.id;
+      }
+      setThreads(next);
+      setThreadsOpen(false);
+      trackEvent("chat_thread", { locale, action: "delete" });
+    },
+    [threads, activeId, stop, setMessages, locale],
+  );
+
   // Thread-aware persistence: only write when the in-memory messages belong
   // to the active thread (guards against a mid-switch stale frame).
   useEffect(() => {
@@ -1010,14 +1050,24 @@ export default function AgentChat({
     setShowJump(false);
   }, []);
 
-  // Escape closes the panel — matches the site's overlay conventions.
+  // Escape closes an open popover first, then the panel — matches the
+  // site's overlay conventions.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key !== "Escape") return;
+      if (inspectOpen) {
+        setInspectOpen(false);
+        return;
+      }
+      if (threadsOpen) {
+        setThreadsOpen(false);
+        return;
+      }
+      onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, inspectOpen, threadsOpen]);
 
   const isStreaming = status === "submitted" || status === "streaming";
 
@@ -1177,7 +1227,7 @@ export default function AgentChat({
 
       {/* ── Threads popover ─────────────────────────────────────── */}
       {threadsOpen && (
-        <div className="sin-chat-pop">
+        <div className="sin-chat-pop" aria-label={t.threadsTitle}>
           <button
             type="button"
             className="sin-chat-pop-item sin-chat-pop-new"
@@ -1205,27 +1255,37 @@ export default function AgentChat({
             </span>
           </button>
           {threads.map((th) => (
-            <button
-              key={th.id}
-              type="button"
-              className="sin-chat-pop-item"
-              onClick={() => {
-                setThreadsOpen(false);
-                switchThread(th.id);
-              }}
-            >
-              <span className="sin-chat-pop-item-label">
-                {threadTitle(th.id, t.threadsUntitled, t.threadsLegacy)}
-              </span>
-              <span className="sin-chat-pop-item-sub">{relTime(th.createdAt, locale)}</span>
-            </button>
+            <div key={th.id} className="sin-chat-pop-row">
+              <button
+                type="button"
+                className="sin-chat-pop-item"
+                onClick={() => {
+                  setThreadsOpen(false);
+                  switchThread(th.id);
+                }}
+              >
+                <span className="sin-chat-pop-item-label">
+                  {threadTitle(th.id, t.threadsUntitled, t.threadsLegacy)}
+                </span>
+                <span className="sin-chat-pop-item-sub">{relTime(th.createdAt, locale)}</span>
+              </button>
+              <button
+                type="button"
+                className="sin-chat-thread-del"
+                aria-label={t.threadDelete}
+                title={t.threadDelete}
+                onClick={() => deleteThread(th.id)}
+              >
+                <PlusIcon />
+              </button>
+            </div>
           ))}
         </div>
       )}
 
       {/* ── Inspector: facts + "call me…" ───────────────────────── */}
       {inspectOpen && (
-        <div className="sin-chat-pop sin-chat-inspect">
+        <div className="sin-chat-pop sin-chat-inspect" aria-label={t.inspect}>
           <p className="sin-chat-inspect-label">{t.factMode}</p>
           <p className="sin-chat-inspect-row">
             <span className="sin-chat-pop-item-label">
@@ -1416,6 +1476,16 @@ export default function AgentChat({
           <div className="sin-chat-row sin-chat-row--bot">
             <div className="sin-chat-bubble sin-chat-bubble--error">
               {errorBusy ? t.errorBusy : t.error}
+              {!isStreaming && messages.some((m) => m.role === "user") && (
+                <button
+                  type="button"
+                  className="sin-chat-retry"
+                  onClick={() => regenerate()}
+                >
+                  <RefreshIcon />
+                  <span>{t.retry}</span>
+                </button>
+              )}
             </div>
           </div>
         )}

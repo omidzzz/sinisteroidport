@@ -1046,3 +1046,184 @@ html[data-theme="light"] .sin-chat-fab {
   color: rgb(var(--rgb-acid));
   border-color: rgba(var(--rgb-acid), 0.6);
 }
+
+/* ── Selection → Ask SINISTER ─────────────────────────────── */
+.sin-selection-ask {
+  position: fixed;
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #10160a;
+  cursor: pointer;
+  background: rgba(var(--rgb-acid), 0.92);
+  border: 1px solid rgba(var(--rgb-acid), 0.9);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.sin-selection-ask svg {
+  width: 12px;
+  height: 12px;
+}
+
+.sin-selection-ask:hover,
+.sin-selection-ask:focus-visible {
+  background: rgb(var(--rgb-acid));
+  box-shadow: 0 0 14px rgba(var(--rgb-acid), 0.4);
+  transform: translateY(-1px);
+}
+
+/* ── First-visit FAB hint ─────────────────────────────────── */
+.sin-chat-fab-hint {
+  position: fixed;
+  inset-inline-end: 5.6rem;
+  bottom: 2rem;
+  z-index: 74;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 15rem;
+  padding: 0.4rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-ink);
+  background: rgba(var(--rgb-accent-3), 0.4);
+  border: 1px solid rgba(var(--rgb-acid), 0.4);
+  border-radius: 0.8rem;
+  pointer-events: none;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.sin-chat-fab-hint svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sin-chat-fab-hint {
+    animation: sin-chat-hint-in 0.3s ease both;
+  }
+  @keyframes sin-chat-hint-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ── Thread rows + delete ─────────────────────────────────── */
+.sin-chat-pop-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sin-chat-pop-row .sin-chat-pop-item {
+  flex: 1;
+  min-width: 0;
+}
+
+.sin-chat-thread-del {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  padding: 0;
+  color: var(--color-muted);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 0.3rem;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.sin-chat-thread-del svg {
+  width: 11px;
+  height: 11px;
+  transform: rotate(45deg);
+}
+
+.sin-chat-thread-del:hover,
+.sin-chat-thread-del:focus-visible {
+  color: #ffd7dd;
+  background: rgba(255, 60, 90, 0.16);
+}
+
+/* ── Error retry ──────────────────────────────────────────── */
+.sin-chat-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: rgb(var(--rgb-acid));
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(var(--rgb-acid), 0.4);
+  border-radius: 0.6rem;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.sin-chat-retry svg {
+  width: 12px;
+  height: 12px;
+}
+
+.sin-chat-retry:hover,
+.sin-chat-retry:focus-visible {
+  background: rgba(var(--rgb-acid), 0.12);
+  box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.25);
+}
+
+/* ── RTL: mirror the send arrow ───────────────────────────── */
+[dir="rtl"] .sin-chat-send svg {
+  transform: scaleX(-1);
+}
+
+/* ── Light-theme token pass ───────────────────────────────── */
+html[data-theme="light"] .sin-tok-c {
+  color: #5b6a77;
+}
+
+html[data-theme="light"] .sin-tok-s {
+  color: #0f7a3d;
+}
+
+html[data-theme="light"] .sin-tok-k {
+  color: #b5227e;
+}
+
+html[data-theme="light"] .sin-tok-n {
+  color: #0b6ec2;
+}
+
+html[data-theme="light"] .sin-chat-mood--hyper {
+  color: #0b6ec2;
+}
+
+html[data-theme="light"] .sin-chat-mood--competence {
+  color: #0f7a3d;
+}
+
+html[data-theme="light"] .sin-chat-mood--snark {
+  color: #b5227e;
+}
