@@ -111,6 +111,23 @@ function relTime(ts: number, locale: Locale): string {
   return locale === "fa" ? `${days} روز` : `${days}d`;
 }
 
+/** Render the whole thread as paste-ready Markdown for export/copy. */
+function formatThread(messages: UIMessage[]): string {
+  const lines: string[] = ["# SINISTER — conversation"];
+  for (const m of messages) {
+    const text = m.parts
+      .filter((p) => p.type === "text")
+      .map((p) => (p as { text: string }).text)
+      .join("")
+      .trim();
+    if (!text) continue;
+    lines.push("");
+    lines.push(m.role === "user" ? "**You:**" : "**SINISTER:**");
+    lines.push(text);
+  }
+  return `${lines.join("\n").trim()}\n`;
+}
+
 /* ── Tiny syntax highlighter for fenced code blocks ─────────────────
  * A single-pass regex tokenizer (comments / strings / keywords / numbers)
  * — ~40 lines instead of a highlighter dependency, and it renders React
@@ -365,6 +382,8 @@ const COPY = {
     threadsUntitled: "new conversation",
     threadsLegacy: "earlier conversation",
     newChat: "New conversation",
+    exportThread: "Copy conversation",
+    exported: "copied",
     nameLabel: "call me:",
     namePlaceholder: "a name it will remember",
     retry: "Try again",
@@ -431,6 +450,8 @@ const COPY = {
     threadsUntitled: "گفتگوی جدید",
     threadsLegacy: "گفتگوی قبلی",
     newChat: "گفتگوی جدید",
+    exportThread: "کپی گفتگو",
+    exported: "کپی شد",
     nameLabel: "صدا کنم:",
     namePlaceholder: "یه اسم که یادش بمونه",
     retry: "دوباره امتحان کن",
@@ -614,6 +635,8 @@ export default function AgentChat({
   // Message ratings (👍/👎 as circle glyphs) — session-local UI state; the
   // signal itself is persisted server-side via the /api/log rating path.
   const [ratings, setRatings] = useState<Record<string, 1 | -1>>({});
+  // "Exported" feedback for the copy-this-thread action.
+  const [exported, setExported] = useState(false);
 
   // "Unhinged mode" — synced from the terminal easter egg via localStorage
   // plus the sinister:unhinged event (see EasterEgg.tsx). Lazy initializer is
@@ -948,6 +971,31 @@ export default function AgentChat({
     writeHistory(sessionId, messages);
   }, [messages, status, activeId, sessionId]);
 
+  // Recent-activity sorting: whenever the active thread gains a new
+  // exchange, float it to the top of the list (the array order is the
+  // display order; a no-op once it's already first). The state write is
+  // deferred out of the effect body (react-hooks rule) — the stored
+  // localStorage order updates immediately.
+  useEffect(() => {
+    if (messagesThreadRef.current !== activeId) return;
+    if (status === "submitted" || status === "streaming") return;
+    if (threads.length < 2) return;
+    const idx = threads.findIndex((t) => t.id === activeId);
+    if (idx <= 0) return;
+    const next = [
+      threads[idx],
+      ...threads.filter((t, i) => i !== idx),
+    ];
+    try {
+      localStorage.setItem(THREADS_KEY, JSON.stringify(next));
+    } catch {
+      /* storage blocked — order just won't survive reload */
+    }
+    window.setTimeout(() => {
+      setThreads(next);
+    }, 0);
+  }, [messages, status, threads, activeId]);
+
   // Thread titles are derived lazily (never stored): the first user message
   // of the thread's history — in-memory for the active one, persisted for
   // the rest — names the thread. No state writes, no sync setState.
@@ -1017,6 +1065,23 @@ export default function AgentChat({
     },
     [ratings, sessionId, locale],
   );
+
+  // Copy the whole active thread as clean Markdown — the "keep it / share it"
+  // primitive for a conversation worth keeping.
+  const exportThread = useCallback(() => {
+    const md = formatThread(messages);
+    if (!md) return;
+    void navigator.clipboard
+      ?.writeText(md)
+      .then(() => {
+        setExported(true);
+        setTimeout(() => setExported(false), 1600);
+        trackEvent("chat_export", { locale, messages: messages.length });
+      })
+      .catch(() => {
+        /* clipboard blocked — fail silently */
+      });
+  }, [messages, locale]);
 
   // Smart autoscroll: follow the stream only while the visitor is already
   // at the bottom; otherwise leave their scroll position alone and offer a
@@ -1238,6 +1303,17 @@ export default function AgentChat({
           >
             <PlusIcon />
             <span>{t.newChat}</span>
+          </button>
+          <button
+            type="button"
+            className="sin-chat-pop-item sin-chat-pop-export"
+            onClick={() => {
+              exportThread();
+              setThreadsOpen(false);
+            }}
+            disabled={messages.length === 0}
+          >
+            <span>{exported ? `✓ ${t.exported}` : t.exportThread}</span>
           </button>
           <button
             type="button"

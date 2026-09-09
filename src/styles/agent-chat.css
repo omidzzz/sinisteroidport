@@ -339,6 +339,70 @@ html[data-theme="light"] .sin-chat-fab {
   color: rgb(var(--rgb-acid));
 }
 
+/* Headings */
+.sin-chat-md h1,
+.sin-chat-md h2,
+.sin-chat-md h3,
+.sin-chat-md h4,
+.sin-chat-md h5,
+.sin-chat-md h6 {
+  margin: 0.6rem 0 0.4rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.sin-chat-md h1 {
+  font-size: 1.15rem;
+}
+.sin-chat-md h2 {
+  font-size: 1.05rem;
+  color: var(--color-ink);
+}
+.sin-chat-md h3 {
+  font-size: 0.95rem;
+}
+.sin-chat-md h4 {
+  font-size: 0.88rem;
+}
+
+/* Blockquote */
+.sin-chat-md blockquote {
+  margin: 0.5rem 0;
+  padding: 0.3rem 0.7rem;
+  border-inline-start: 3px solid rgba(var(--rgb-acid), 0.5);
+  border-radius: 0.3rem;
+  color: var(--color-muted);
+  background: rgba(var(--rgb-accent-3), 0.25);
+}
+
+/* Divider */
+.sin-chat-md hr {
+  margin: 0.6rem 0;
+  border: none;
+  border-top: 1px dashed rgba(var(--rgb-accent), 0.4);
+}
+
+/* Tables */
+.sin-chat-md table {
+  width: 100%;
+  margin: 0.6rem 0;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+.sin-chat-md th,
+.sin-chat-md td {
+  padding: 0.3rem 0.55rem;
+  text-align: start;
+  border: 1px solid rgba(var(--rgb-accent), 0.25);
+}
+.sin-chat-md th {
+  font-weight: 700;
+  color: var(--color-ink);
+  background: rgba(var(--rgb-accent-3), 0.4);
+}
+.sin-chat-md tr:nth-child(even) td {
+  background: rgba(var(--rgb-accent-3), 0.15);
+}
+
 /* Code blocks */
 .sin-chat-code-block {
   position: relative;
