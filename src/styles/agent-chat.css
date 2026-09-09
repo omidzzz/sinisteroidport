@@ -547,3 +547,289 @@ html[data-theme="light"] .sin-chat-fab {
     height: min(30rem, calc(100dvh - 5rem));
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   ENHANCEMENTS — keep-mounted panel, chips, voice, mood tags,
+   clear button, jump pill, unhinged badge, ask button.
+   Same rules: scoped classes, design tokens, transform/opacity-only
+   animation gated behind prefers-reduced-motion.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Keep-mounted panel show/hide ─────────────────────────── */
+.sin-chat-panel {
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    visibility 0.22s;
+}
+
+.sin-chat-panel--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0.75rem) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sin-chat-panel {
+    transition: none;
+  }
+}
+
+/* ── FAB unread-response dot ──────────────────────────────── */
+.sin-chat-fab-dot {
+  position: absolute;
+  top: 2px;
+  inset-inline-end: 2px;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: rgb(var(--rgb-acid));
+  box-shadow: 0 0 8px rgba(var(--rgb-acid), 0.9);
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sin-chat-fab[data-attention] .sin-chat-fab-dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Header: action cluster + unhinged badge ──────────────── */
+.sin-chat-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.sin-chat-unhinged {
+  flex: none;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgb(var(--rgb-acid));
+  border: 1px solid rgba(var(--rgb-acid), 0.55);
+  border-radius: 0.4rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sin-chat-unhinged {
+    animation: sin-chat-unhinged-flicker 2.2s linear infinite;
+  }
+  @keyframes sin-chat-unhinged-flicker {
+    0%,
+    90%,
+    100% {
+      opacity: 1;
+    }
+    94% {
+      opacity: 0.35;
+    }
+  }
+}
+
+/* ── Log wrapper + jump pill ──────────────────────────────── */
+.sin-chat-log-wrap {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.sin-chat-jump {
+  position: absolute;
+  bottom: 0.75rem;
+  inset-inline-end: 0.75rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: #10160a;
+  cursor: pointer;
+  background: rgba(var(--rgb-acid), 0.92);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.sin-chat-jump:hover,
+.sin-chat-jump:focus-visible {
+  background: rgb(var(--rgb-acid));
+}
+
+/* ── Mood tags ────────────────────────────────────────────── */
+.sin-chat-mood {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.sin-chat-mood--hyper {
+  color: #53e0ff;
+}
+
+.sin-chat-mood--deadpan {
+  color: var(--color-muted);
+}
+
+.sin-chat-mood--competence {
+  color: #9dff57;
+}
+
+.sin-chat-mood--snark {
+  color: #ff5cd6;
+}
+
+/* ── Read-aloud button (bot bubble, stacked under copy) ───── */
+.sin-chat-tts {
+  position: absolute;
+  top: 2rem;
+  inset-inline-end: 0.3rem;
+  display: grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  padding: 0;
+  font-size: 0.7rem;
+  color: var(--color-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.sin-chat-bubble--bot:hover .sin-chat-tts,
+.sin-chat-tts:focus-visible,
+.sin-chat-tts--on {
+  opacity: 1;
+}
+
+.sin-chat-tts:hover,
+.sin-chat-tts--on {
+  color: rgb(var(--rgb-acid));
+  border-color: rgba(var(--rgb-acid), 0.5);
+}
+
+/* ── Starter chips ────────────────────────────────────────── */
+.sin-chat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.55rem 0.75rem;
+  border-top: 1px solid rgba(var(--rgb-accent), 0.18);
+  background: rgba(var(--rgb-accent-3), 0.3);
+}
+
+.sin-chat-chip {
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-ink);
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(var(--rgb-accent), 0.35);
+  border-radius: 1rem;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.sin-chat-chip:hover,
+.sin-chat-chip:focus-visible {
+  color: #10160a;
+  background: rgba(var(--rgb-acid), 0.85);
+  border-color: rgba(var(--rgb-acid), 0.9);
+}
+
+/* ── Voice input (mic) ────────────────────────────────────── */
+.sin-chat-mic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  color: var(--color-muted);
+  cursor: pointer;
+  background: rgba(var(--rgb-accent), 0.08);
+  border: 1px solid rgba(var(--rgb-accent), 0.3);
+  border-radius: 0.75rem;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sin-chat-mic:hover:not(:disabled),
+.sin-chat-mic:focus-visible {
+  color: rgb(var(--rgb-acid));
+  border-color: rgba(var(--rgb-acid), 0.5);
+}
+
+.sin-chat-mic--on {
+  color: rgb(var(--rgb-acid));
+  border-color: rgba(var(--rgb-acid), 0.8);
+  box-shadow: 0 0 12px rgba(var(--rgb-acid), 0.45);
+}
+
+.sin-chat-mic:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+/* Stop variant of the send button (■ while streaming) */
+.sin-chat-send--stop {
+  color: #ffd7dd;
+  background: rgba(255, 60, 90, 0.18);
+  border-color: rgba(255, 60, 90, 0.6);
+}
+
+.sin-chat-send--stop:hover:not(:disabled),
+.sin-chat-send--stop:focus-visible {
+  background: rgba(255, 60, 90, 0.3);
+  box-shadow: 0 0 14px rgba(255, 60, 90, 0.4);
+}
+
+/* ── "Ask SINISTER about this post" (blog pages) ──────────── */
+.sin-ask-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 1.25rem 0 0;
+  padding: 0.5rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: rgb(var(--rgb-acid));
+  cursor: pointer;
+  background: rgba(var(--rgb-acid), 0.08);
+  border: 1px solid rgba(var(--rgb-acid), 0.4);
+  border-radius: 0.75rem;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sin-ask-btn:hover,
+.sin-ask-btn:focus-visible {
+  background: rgba(var(--rgb-acid), 0.16);
+  box-shadow: 0 0 14px rgba(var(--rgb-acid), 0.3);
+  transform: translateY(-1px);
+}

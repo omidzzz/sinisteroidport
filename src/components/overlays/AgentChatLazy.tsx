@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
+import { trackEvent } from "@/lib/analytics";
 
 // The chat panel pulls in the AI SDK runtime — never load it until the
 // visitor actually opens the widget. ssr:false keeps it out of the static
@@ -18,19 +19,94 @@ const LABELS = {
  * Floating assistant toggle. The button itself is dependency-free (a few
  * hundred bytes in the shared layout chunk); the entire chat experience —
  * AI SDK, streaming transport, message log — is downloaded on first open.
+ *
+ * Once opened, the panel stays mounted and toggles visibility instead of
+ * unmounting, so in-flight responses finish in the background and a
+ * completed-while-hidden response lights up the FAB's attention dot.
  */
 export default function AgentChatLazy({ locale }: { locale: Locale }) {
-  const [open, setOpen] = useState(false);
+  // Deep-link boot: an ?ask=… query param opens the panel with the question
+  // pre-loaded on first render (lazy initializer — this wrapper only mounts
+  // client-side, so reading the URL here is hydration-safe).
+  const [boot] = useState(() => {
+    let question: string | null = null;
+    try {
+      const q = new URLSearchParams(window.location.search).get("ask");
+      if (q && q.trim()) question = q.trim();
+    } catch {
+      /* malformed URL — ignore */
+    }
+    return { started: question !== null, visible: question !== null, question };
+  });
+  const [started, setStarted] = useState(boot.started);
+  const [visible, setVisible] = useState(boot.visible);
+  const [ask, setAsk] = useState<string | null>(boot.question);
+  const [unread, setUnread] = useState(false);
+  const fabRef = useRef<HTMLButtonElement>(null);
+
+  const open = useCallback(
+    (question?: string) => {
+      setStarted(true);
+      setVisible(true);
+      setUnread(false);
+      if (question) setAsk(question);
+      trackEvent(
+        "chat_open",
+        question ? { locale, source: "deep_link" } : { locale },
+      );
+    },
+    [locale],
+  );
+
+  const close = useCallback(() => {
+    setVisible(false);
+    fabRef.current?.focus();
+  }, []);
+
+  // Analytics for the boot-time deep link (state itself was set lazily).
+  useEffect(() => {
+    if (boot.question) {
+      trackEvent("chat_open", { locale, source: "deep_link" });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- boot once
+  }, []);
+
+  // sinister:ask custom events, dispatched from anywhere on the site
+  // (e.g. the "Ask SINISTER about this post" button on blog pages).
+  useEffect(() => {
+    const onAsk = (e: Event) => {
+      const q = (e as CustomEvent<string>).detail;
+      if (q && q.trim()) open(q.trim());
+    };
+    window.addEventListener("sinister:ask", onAsk);
+    return () => window.removeEventListener("sinister:ask", onAsk);
+  }, [open]);
+
+  // Strip ?ask= from the URL so a refresh doesn't re-fire the question.
+  useEffect(() => {
+    if (!ask) return;
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has("ask")) {
+        url.searchParams.delete("ask");
+        window.history.replaceState(null, "", url.toString());
+      }
+    } catch {
+      /* noop */
+    }
+  }, [ask]);
 
   return (
     <>
       <button
         type="button"
         className="sin-chat-fab"
+        ref={fabRef}
         aria-label={LABELS[locale].open}
-        aria-expanded={open}
-        data-open={open || undefined}
-        onClick={() => setOpen(true)}
+        aria-expanded={visible}
+        data-open={visible || undefined}
+        data-attention={unread || undefined}
+        onClick={() => (visible ? close() : open())}
       >
         {/* Sly smirking robot — adapted from the 128px design: squint eye +
             smug brow + wide glinting eye + smirk. Theme-aware: the head pops
@@ -92,8 +168,19 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
             style={{ filter: "url(#sin-fab-glow)" }}
           />
         </svg>
+        {/* unread-response dot — lit while the panel is hidden and SINISTER
+            has finished scheming */}
+        <span className="sin-chat-fab-dot" aria-hidden />
       </button>
-      {open && <AgentChat locale={locale} onClose={() => setOpen(false)} />}
+      {started && (
+        <AgentChat
+          locale={locale}
+          visible={visible}
+          initialAsk={ask}
+          onClose={close}
+          onUnread={setUnread}
+        />
+      )}
     </>
   );
 }

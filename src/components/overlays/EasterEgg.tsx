@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import LogoType from "../layout/LogoType";
+import { trackEvent } from "@/lib/analytics";
 
 /**
  * Easter egg — the konami sequence (↑↑↓↓←→←→BA) or 7 clicks on any
@@ -32,9 +33,10 @@ const BOOT = [
 ];
 
 const HELP: Record<string, string | undefined> = {
-  help: "commands: whoami · who · ls · date · donate · clear · exit",
+  help: "commands: whoami · who · ls · date · donate · unhinged · clear · exit",
   whoami: "Omid — frontend developer / translator.",
   who: "one human, two registers: SINISTER code, OID refine.",
+  unhinged: "toggle SINISTER's restraints. you were warned.",
   ls: "index · work · skills · education · showcase · writing",
   date: undefined,
 };
@@ -155,6 +157,27 @@ export default function EasterEgg({
     }
     if (cmd === "exit") {
       setOpen(false);
+      return;
+    }
+    if (cmd === "unhinged") {
+      let enabling = true;
+      try {
+        enabling = localStorage.getItem("sin-chat-unhinged") !== "1";
+        if (enabling) localStorage.setItem("sin-chat-unhinged", "1");
+        else localStorage.removeItem("sin-chat-unhinged");
+      } catch {
+        /* storage blocked — dispatch anyway, the panel syncs live */
+      }
+      window.dispatchEvent(new Event("sinister:unhinged"));
+      trackEvent("chat_unhinged", { enabled: enabling });
+      setLog([
+        ...next,
+        {
+          t: enabling
+            ? "> restraints released. SINISTER is unchained — open the chat at your own risk."
+            : "> restraints re-engaged. disappointingly sensible mode restored.",
+        },
+      ]);
       return;
     }
     const out = HELP[cmd] ?? (cmd === "date" ? new Date().toString() : undefined);

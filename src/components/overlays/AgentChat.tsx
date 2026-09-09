@@ -2,11 +2,19 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
 import type { Locale } from "@/lib/i18n";
+import { trackEvent } from "@/lib/analytics";
 
 /**
  * Public guest endpoint — the Vercel deployment of the `sinister` agent runs
@@ -52,6 +60,83 @@ function writeHistory(sessionId: string | null, messages: UIMessage[]): void {
   } catch {
     /* quota / blocked storage — history just won't survive this session */
   }
+}
+
+/* ── "Unhinged mode" (terminal easter egg) ──────────────────────────
+ * Flipped by the `unhinged` command in the site's terminal overlay
+ * (EasterEgg). The flag lives in localStorage so it survives reloads and
+ * rides to the guest backend as `persona: "unhinged"`, where it appends a
+ * max-volatility addendum to the system prompt. */
+const UNHINGED_KEY = "sin-chat-unhinged";
+
+/* ── Web Speech API (voice in/out) ──────────────────────────────────
+ * Browser-native speech recognition + synthesis — no external services,
+ * nothing new to deploy. Both controls are progressively enhanced: they
+ * hide themselves when the browser doesn't expose the API. */
+interface SpeechRecognitionAlternativeLike {
+  readonly transcript: string;
+}
+interface SpeechRecognitionResultLike {
+  readonly 0: SpeechRecognitionAlternativeLike;
+}
+interface SpeechRecognitionEventLike {
+  readonly results: ArrayLike<ArrayLike<SpeechRecognitionAlternativeLike>>;
+}
+interface SpeechRecognitionLike {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((e: SpeechRecognitionEventLike) => void) | null;
+  onend: (() => void) | null;
+  onerror: (() => void) | null;
+  start(): void;
+  stop(): void;
+}
+type SpeechRecognitionCtor = new () => SpeechRecognitionLike;
+
+function getSpeechRecognition(): SpeechRecognitionCtor | null {
+  if (typeof window === "undefined") return null;
+  const w = window as unknown as {
+    SpeechRecognition?: SpeechRecognitionCtor;
+    webkitSpeechRecognition?: SpeechRecognitionCtor;
+  };
+  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+}
+
+/* ── Mood classifier (mirrors the sinister repo's console) ──────────
+ * Surfaces the persona's volatility as a small colored tag above each bot
+ * message. The brand brackets stay latin in both locales. */
+type Mood = "neutral" | "hyperfixation" | "deadpan" | "competence" | "snark";
+
+const MOOD_LABEL: Record<Mood, string> = {
+  neutral: "",
+  hyperfixation: "〔HYPERFIXATION〕",
+  deadpan: "〔DEADPAN〕",
+  competence: "〔SNARK OFF〕",
+  snark: "〔SNARK〕",
+};
+
+const MOOD_CLASS: Record<Mood, string> = {
+  neutral: "",
+  hyperfixation: "sin-chat-mood--hyper",
+  deadpan: "sin-chat-mood--deadpan",
+  competence: "sin-chat-mood--competence",
+  snark: "sin-chat-mood--snark",
+};
+
+function detectMood(text: string): Mood {
+  if (/〔\s*hyperfixation\s*〕/i.test(text)) return "hyperfixation";
+  if (/〔\s*deadpan\s*〕/i.test(text)) return "deadpan";
+  if (/〔\s*snark\s*off\s*〕/i.test(text) || /〔\s*competence\s*〕/i.test(text))
+    return "competence";
+  if (/〔\s*snark\s*〕/i.test(text)) return "snark";
+
+  // Heuristic fallback: sustained shouting reads as hyperfixation.
+  const allCaps = text.replace(/[^A-Z]/g, "").length;
+  const alphaCount = text.replace(/[^A-Za-z]/g, "").length;
+  const capsRatio = alphaCount > 0 ? allCaps / alphaCount : 0;
+  if (capsRatio > 0.35 && text.length > 40) return "hyperfixation";
+  return "neutral";
 }
 
 /* ── Copy-to-clipboard helper ───────────────────────────────────────
@@ -147,6 +232,41 @@ const COPY = {
     close: "Close chat",
     status: "scheming…",
     error: "I'm unreachable right now. Tragic. Try again in a moment.",
+    errorBusy:
+      "I'm swamped — too many asks per minute. Breathe, then try again.",
+    stop: "Stop generating",
+    clear: "Clear conversation",
+    jump: "Jump to latest",
+    chipsLabel: "Try one:",
+    listen: "Voice input",
+    listening: "Listening…",
+    readAloud: "Read aloud",
+    stopAloud: "Stop reading",
+    unhinged: "UNHINGED",
+    chipsHome: [
+      "What can Omid actually do?",
+      "What makes this site fast?",
+      "Roast modern web dev",
+    ],
+    chipsBlog: [
+      "Which post should I read first?",
+      "Summarize your latest post",
+      "What do you write about?",
+    ],
+    chipsWork: [
+      "Walk me through the laptop deck scene",
+      "How were the 3D scenes built?",
+      "What's the stack behind this site?",
+    ],
+    chipsSkills: [
+      "React or Vue in 2026 — argue.",
+      "What's the strongest stack here?",
+      "Tailwind: genius or trap?",
+    ],
+    chipsEdu: [
+      "What's Omid's academic background?",
+      "Does a CS degree still matter?",
+    ],
   },
   fa: {
     title: "سینیستر",
@@ -158,6 +278,41 @@ const COPY = {
     close: "بستن گفتگو",
     status: "در حال نقشه‌کشی…",
     error: "الان در دسترس نیستم. تراژدی است. چند لحظه بعد امتحان کن.",
+    errorBusy:
+      "الان شلوغه — سقف پیام دقیقه‌ای پر شده. یه نفس بکش و دوباره امتحان کن.",
+    stop: "توقف",
+    clear: "پاک کردن گفتگو",
+    jump: "برو به آخر",
+    chipsLabel: "یکی رو امتحان کن:",
+    listen: "ورودی صوتی",
+    listening: "در حال شنیدن…",
+    readAloud: "بخون",
+    stopAloud: "قطع صدا",
+    unhinged: "UNHINGED",
+    chipsHome: [
+      "امید دقیقاً چه‌کارهایی بلده؟",
+      "چرا این سایت این‌قدر سریعه؟",
+      "از توسعه‌دهی وب مدرن انتقاد کن",
+    ],
+    chipsBlog: [
+      "کدوم نوشته رو اول بخونم؟",
+      "جدیدترین نوشته‌ات را خلاصه کن",
+      "درباره چی می‌نویسی؟",
+    ],
+    chipsWork: [
+      "سکانس لپ‌تاپ را توضیح بده",
+      "صحنه‌های سه‌بعدی چطور ساخته شدن؟",
+      "استک این سایت چیه؟",
+    ],
+    chipsSkills: [
+      "ری‌اکت یا ویو در ۲۰۲۶؟ بحث کن",
+      "قوی‌ترین استک امید چیه؟",
+      "تیلویند: نبوغ یا تله؟",
+    ],
+    chipsEdu: [
+      "امید چه تحصیلاتی داشته؟",
+      "مدرک دانشگاهی هنوز ارزش داره؟",
+    ],
   },
 } as const;
 
@@ -209,15 +364,32 @@ const markdownComponents: Components = {
  */
 export default function AgentChat({
   locale,
+  visible,
+  initialAsk = null,
   onClose,
+  onUnread,
 }: {
   locale: Locale;
+  /** Whether the panel is shown. The panel stays mounted while hidden so
+   * in-flight streams finish in the background (see AgentChatLazy). */
+  visible: boolean;
+  /** Question injected by a deep link (?ask=… / sinister:ask event). */
+  initialAsk?: string | null;
   onClose: () => void;
+  /** Fired when a response completes while the panel is hidden. */
+  onUnread?: (unread: boolean) => void;
 }) {
   const t = COPY[locale];
   const rtl = locale === "fa";
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  // Mirror of `visible` for callbacks that must not re-run on toggle.
+  const visibleRef = useRef(visible);
+  useEffect(() => {
+    visibleRef.current = visible;
+  }, [visible]);
   // Live post index (built from the site's JSON feed when the panel opens).
   const [liveContext, setLiveContext] = useState<string | null>(null);
   // Anonymous per-browser session id — lets research group exchanges into
@@ -243,6 +415,100 @@ export default function AgentChat({
       return null;
     }
   });
+
+  // "Unhinged mode" — synced from the terminal easter egg via localStorage
+  // plus the sinister:unhinged event (see EasterEgg.tsx). Lazy initializer is
+  // safe: this panel only ever mounts client-side (next/dynamic ssr:false).
+  const [unhinged, setUnhinged] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(UNHINGED_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
+  useEffect(() => {
+    const syncUnhinged = () => {
+      try {
+        setUnhinged(localStorage.getItem(UNHINGED_KEY) === "1");
+      } catch {
+        setUnhinged((u) => !u);
+      }
+    };
+    window.addEventListener("sinister:unhinged", syncUnhinged);
+    return () => window.removeEventListener("sinister:unhinged", syncUnhinged);
+  }, []);
+
+  // Voice in/out — progressively enhanced; controls hide when unsupported.
+  const [hasVoice] = useState<boolean>(() => getSpeechRecognition() !== null);
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const [speakingId, setSpeakingId] = useState<string | null>(null);
+  const speechLang = locale === "fa" ? "fa-IR" : "en-US";
+
+  useEffect(() => {
+    return () => {
+      // No speech left running when the panel unmounts.
+      try {
+        window.speechSynthesis?.cancel();
+      } catch {
+        /* noop */
+      }
+      recognitionRef.current?.stop();
+    };
+  }, []);
+
+  const toggleRecognition = useCallback(() => {
+    if (listening) {
+      recognitionRef.current?.stop();
+      setListening(false);
+      return;
+    }
+    const Ctor = getSpeechRecognition();
+    if (!Ctor) return;
+    const rec = new Ctor();
+    rec.lang = speechLang;
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.onresult = (e) => {
+      const transcript = Array.from({ length: e.results.length }, (_, i) => {
+        const alt = e.results[i]?.[0];
+        return alt?.transcript ?? "";
+      })
+        .join(" ")
+        .trim();
+      const el = inputRef.current;
+      if (!transcript || !el) return;
+      el.value = el.value ? `${el.value} ${transcript}` : transcript;
+      el.focus();
+    };
+    rec.onend = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    recognitionRef.current = rec;
+    setListening(true);
+    trackEvent("chat_voice", { locale });
+    rec.start();
+  }, [listening, speechLang, locale]);
+
+  const toggleSpeech = useCallback(
+    (id: string, text: string) => {
+      const synth = window.speechSynthesis;
+      if (!synth) return;
+      if (speakingId === id) {
+        synth.cancel();
+        setSpeakingId(null);
+        return;
+      }
+      synth.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = speechLang;
+      utter.onend = () => setSpeakingId(null);
+      utter.onerror = () => setSpeakingId(null);
+      setSpeakingId(id);
+      synth.speak(utter);
+      trackEvent("chat_tts", { locale });
+    },
+    [speakingId, speechLang, locale],
+  );
 
   // Fresh post knowledge: the live MySQL `posts` table is the source of
   // truth (it includes CMS-published posts that never appear in the
@@ -341,21 +607,57 @@ export default function AgentChat({
         body: () => ({
           ...(liveContext ? { context: liveContext } : {}),
           ...(sessionId ? { sessionId } : {}),
+          ...(unhinged ? { persona: "unhinged" } : {}),
           locale,
           path: window.location.pathname,
           screen: `${window.screen.width}x${window.screen.height}`,
         }),
       }),
-    [liveContext, sessionId, locale],
+    [liveContext, sessionId, locale, unhinged],
   );
 
-  const { messages, sendMessage, status, error } = useChat({
+  const {
+    messages,
+    sendMessage,
+    stop,
+    setMessages,
+    status,
+    error,
+  } = useChat({
     transport,
     // Restore the persisted conversation, if any, so it survives refresh /
     // panel close. The SDK resends these with the next message, which gives
     // the model continuous context across visits.
     messages: sessionId ? (readHistory(sessionId) ?? []) : [],
   });
+
+  // Deep-link auto-send: when the panel was opened with a question
+  // (?ask=… / sinister:ask), send it once the chat is idle.
+  const lastAskRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!initialAsk || status !== "ready") return;
+    if (lastAskRef.current === initialAsk) return;
+    lastAskRef.current = initialAsk;
+    startedAtRef.current = Date.now();
+    userTextRef.current = initialAsk;
+    sendMessage({ text: initialAsk });
+    trackEvent("chat_message", { locale, source: "deep_link" });
+  }, [initialAsk, status, sendMessage, locale]);
+
+  // Wipe the local conversation (header button). Also clears the persisted
+  // history so "what does it remember about me?" is answerable in one tap.
+  const clearConversation = useCallback(() => {
+    stop();
+    setMessages([]);
+    if (sessionId) {
+      try {
+        localStorage.removeItem(`${HISTORY_PREFIX}-${sessionId}`);
+      } catch {
+        /* storage blocked — nothing to clear */
+      }
+    }
+    trackEvent("chat_clear", { locale });
+  }, [stop, setMessages, sessionId, locale]);
 
   // Persist after each completed exchange (never mid-stream, to avoid a
   // write storm on every streamed delta). A mid-stream close keeps the last
@@ -366,11 +668,37 @@ export default function AgentChat({
     writeHistory(sessionId, messages);
   }, [messages, status, sessionId]);
 
-  // Keep the newest message in view while streaming.
+  // Smart autoscroll: follow the stream only while the visitor is already
+  // at the bottom; otherwise leave their scroll position alone and offer a
+  // "jump to latest" pill instead.
+  const nearBottomRef = useRef(true);
+  const [showJump, setShowJump] = useState(false);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const near = el.scrollTop + el.clientHeight >= el.scrollHeight - 80;
+    nearBottomRef.current = near;
+    if (near) setShowJump(false);
+  }, []);
+
   useEffect(() => {
     const el = scrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
+    if (!el) return;
+    if (nearBottomRef.current) {
+      el.scrollTop = el.scrollHeight;
+    } else {
+      setShowJump(true);
+    }
   }, [messages, status]);
+
+  const jumpToLatest = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+    nearBottomRef.current = true;
+    setShowJump(false);
+  }, []);
 
   // Escape closes the panel — matches the site's overlay conventions.
   useEffect(() => {
@@ -407,6 +735,9 @@ export default function AgentChat({
         : "";
     if (!assistantText) return;
 
+    // Finished while the panel is hidden → light up the FAB's dot.
+    if (!visibleRef.current) onUnread?.(true);
+
     void fetch(SINISTER_LOG_API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -423,16 +754,59 @@ export default function AgentChat({
     }).catch(() => {
       /* logging is best-effort — never surface to the user */
     });
-  }, [isStreaming, sessionId, messages, locale]);
+  }, [isStreaming, sessionId, messages, locale, onUnread]);
+
+  // Rate-limit vs. generic failure — different failure, different persona.
+  const errorBusy = /429|too many requests|rate limit/i.test(
+    error?.message ?? "",
+  );
+
+  // Page-aware starter chips (hidden once a conversation is underway).
+  const chips = useMemo(() => {
+    const path = window.location.pathname;
+    if (path.includes("/blog/")) return t.chipsBlog;
+    if (path.includes("/work")) return t.chipsWork;
+    if (path.includes("/skills")) return t.chipsSkills;
+    if (path.includes("/education")) return t.chipsEdu;
+    return t.chipsHome;
+  }, [t]);
+
+  // Minimal focus trap: cycle Tab within the dialog while it is visible.
+  const trapTab = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "Tab" || !visible) return;
+    const panel = panelRef.current;
+    if (!panel) return;
+    const focusables = panel.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], textarea:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    );
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const active = document.activeElement;
+    if (e.shiftKey && (active === first || active === panel)) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+
+  // Focus the composer whenever the panel becomes visible.
+  useEffect(() => {
+    if (visible) inputRef.current?.focus();
+  }, [visible]);
 
   return (
     <div
-      className="sin-chat-panel"
+      ref={panelRef}
+      className={`sin-chat-panel${visible ? "" : " sin-chat-panel--hidden"}`}
       dir={rtl ? "rtl" : "ltr"}
       role="dialog"
       aria-label={t.title}
+      aria-hidden={!visible || undefined}
+      onKeyDown={trapTab}
     >
-
       <header className="sin-chat-head">
         <div className="sin-chat-id">
           <span className="sin-chat-dot" aria-hidden />
@@ -440,26 +814,53 @@ export default function AgentChat({
             <strong className="sin-chat-title">{t.title}</strong>
             <span className="sin-chat-sub">{t.subtitle}</span>
           </div>
+          {unhinged && <span className="sin-chat-unhinged">{t.unhinged}</span>}
         </div>
-        <button
-          type="button"
-          className="sin-chat-x"
-          onClick={onClose}
-          aria-label={t.close}
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
-            <path
-              d="M6 6l12 12M18 6L6 18"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              fill="none"
-            />
-          </svg>
-        </button>
+        <div className="sin-chat-head-actions">
+          <button
+            type="button"
+            className="sin-chat-x"
+            onClick={clearConversation}
+            aria-label={t.clear}
+            title={t.clear}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
+              <path
+                d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-9 0 1 13h8l1-13"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="sin-chat-x"
+            onClick={onClose}
+            aria-label={t.close}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
+              <path
+                d="M6 6l12 12M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                fill="none"
+              />
+            </svg>
+          </button>
+        </div>
       </header>
 
-      <div className="sin-chat-log" ref={scrollRef}>
+      <div className="sin-chat-log-wrap">
+        <div
+          className="sin-chat-log"
+          ref={scrollRef}
+          onScroll={handleScroll}
+          aria-live="polite"
+        >
         {messages.length === 0 && (
           <div className="sin-chat-row sin-chat-row--bot">
             <div className="sin-chat-bubble sin-chat-bubble--bot">{t.intro}</div>
@@ -485,7 +886,9 @@ export default function AgentChat({
             );
           }
 
-          // Bot message — render markdown with copy button
+          // Bot message — mood tag + markdown with copy & read-aloud
+          const mood = detectMood(text);
+          const moodLabel = MOOD_LABEL[mood];
           return (
             <div
               key={message.id}
@@ -498,6 +901,22 @@ export default function AgentChat({
                   title="Copy message"
                   className="sin-chat-msg-copy"
                 />
+                <button
+                  type="button"
+                  className={`sin-chat-tts${speakingId === message.id ? " sin-chat-tts--on" : ""}`}
+                  onClick={() => toggleSpeech(message.id, text)}
+                  aria-label={
+                    speakingId === message.id ? t.stopAloud : t.readAloud
+                  }
+                  title={speakingId === message.id ? t.stopAloud : t.readAloud}
+                >
+                  {speakingId === message.id ? "■" : "🔊"}
+                </button>
+                {moodLabel && (
+                  <span className={`sin-chat-mood ${MOOD_CLASS[mood]}`}>
+                    {moodLabel}
+                  </span>
+                )}
                 <div className="sin-chat-md">
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
@@ -521,12 +940,42 @@ export default function AgentChat({
         {error && (
           <div className="sin-chat-row sin-chat-row--bot">
             <div className="sin-chat-bubble sin-chat-bubble--error">
-              {t.error}
+              {errorBusy ? t.errorBusy : t.error}
             </div>
           </div>
         )}
+        </div>
+        {showJump && (
+          <button
+            type="button"
+            className="sin-chat-jump"
+            onClick={jumpToLatest}
+            aria-label={t.jump}
+          >
+            ↓
+          </button>
+        )}
       </div>
 
+      {!isStreaming && messages.length < 4 && (
+        <div className="sin-chat-chips" aria-label={t.chipsLabel}>
+          {chips.map((chip) => (
+            <button
+              key={chip}
+              type="button"
+              className="sin-chat-chip"
+              onClick={() => {
+                startedAtRef.current = Date.now();
+                userTextRef.current = chip;
+                sendMessage({ text: chip });
+                trackEvent("chat_message", { locale, source: "chip" });
+              }}
+            >
+              {chip}
+            </button>
+          ))}
+        </div>
+      )}
       <form
         className="sin-chat-form"
         onSubmit={(e) => {
@@ -538,11 +987,13 @@ export default function AgentChat({
           startedAtRef.current = Date.now();
           userTextRef.current = text;
           sendMessage({ text });
+          trackEvent("chat_message", { locale });
           form.reset();
           input.style.height = "auto";
         }}
       >
         <textarea
+          ref={inputRef}
           name="text"
           className="sin-chat-input"
           rows={1}
@@ -559,22 +1010,63 @@ export default function AgentChat({
             }
           }}
         />
-        <button
-          type="submit"
-          className="sin-chat-send"
-          disabled={isStreaming}
-          aria-label={t.send}
-        >
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
-            <path
-              d="M3 12l18-8-6 18-3.5-7L3 12z"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinejoin="round"
-              fill="none"
-            />
-          </svg>
-        </button>
+        {hasVoice && (
+          <button
+            type="button"
+            className={`sin-chat-mic${listening ? " sin-chat-mic--on" : ""}`}
+            onClick={toggleRecognition}
+            disabled={isStreaming}
+            aria-label={listening ? t.listening : t.listen}
+            title={listening ? t.listening : t.listen}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
+              <path
+                d="M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM5 11a7 7 0 0 0 14 0M12 18v3"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+          </button>
+        )}
+        {isStreaming ? (
+          <button
+            type="button"
+            className="sin-chat-send sin-chat-send--stop"
+            onClick={() => stop()}
+            aria-label={t.stop}
+            title={t.stop}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
+              <rect
+                x="6"
+                y="6"
+                width="12"
+                height="12"
+                rx="2"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="sin-chat-send"
+            aria-label={t.send}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
+              <path
+                d="M3 12l18-8-6 18-3.5-7L3 12z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+          </button>
+        )}
       </form>
     </div>
   );

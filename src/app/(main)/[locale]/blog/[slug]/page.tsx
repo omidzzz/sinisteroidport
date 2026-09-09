@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import BlogPostLive from "@/components/blog/BlogPostLive";
+import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import {
   getAllPosts,
   getPostBySlug,
@@ -155,6 +156,10 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       <BlogPostLive locale={locale} post={post} related={related} />
+
+      {/* Ask SINISTER — hands the post to the resident agent. Dispatches the
+          sinister:ask event; AgentChatLazy opens the panel and auto-sends. */}
+      <AskSinisterButton locale={locale} postTitle={meta.title} />
 
       {/* Chronological prev/next — deepens the crawl path and keeps readers
           moving; newest-first list, so idx-1 is newer, idx+1 is older */}
