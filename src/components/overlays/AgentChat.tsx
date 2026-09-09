@@ -15,6 +15,16 @@ import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
 import type { Locale } from "@/lib/i18n";
 import { trackEvent } from "@/lib/analytics";
+import {
+  PlusIcon,
+  InfoIcon,
+  StackIcon,
+  VolumeIcon,
+  StopSquareIcon,
+  RefreshIcon,
+  RateUpIcon,
+  RateDownIcon,
+} from "@/components/ui/icons";
 
 /**
  * Public guest endpoint — the Vercel deployment of the `sinister` agent runs
@@ -68,6 +78,95 @@ function writeHistory(sessionId: string | null, messages: UIMessage[]): void {
  * rides to the guest backend as `persona: "unhinged"`, where it appends a
  * max-volatility addendum to the system prompt. */
 const UNHINGED_KEY = "sin-chat-unhinged";
+
+/* ── Conversation threads + visitor profile (all local, no accounts) ──
+ * Each thread keeps its own history key and acts as its own anonymous
+ * research session id. The profile nickname rides along with every
+ * message so the backend persona can use the visitor's chosen name. */
+const THREADS_KEY = "sin-chat-threads";
+const THREAD_ACTIVE_KEY = "sin-chat-thread-active";
+const PROFILE_KEY = "sin-chat-profile";
+const MAX_THREADS = 20;
+
+type Thread = {
+  id: string;
+  title: string; // "" until the first exchange names it
+  createdAt: number;
+};
+
+function newThreadId(): string {
+  return typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `s-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+/** Compact relative timestamp for the thread list (locale-aware). */
+function relTime(ts: number, locale: Locale): string {
+  const mins = Math.max(0, Math.round((Date.now() - ts) / 60_000));
+  if (mins < 1) return locale === "fa" ? "همین حالا" : "just now";
+  if (mins < 60) return locale === "fa" ? `${mins} دقیقه` : `${mins}m`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return locale === "fa" ? `${hours} ساعت` : `${hours}h`;
+  const days = Math.floor(hours / 24);
+  return locale === "fa" ? `${days} روز` : `${days}d`;
+}
+
+/* ── Tiny syntax highlighter for fenced code blocks ─────────────────
+ * A single-pass regex tokenizer (comments / strings / keywords / numbers)
+ * — ~40 lines instead of a highlighter dependency, and it renders React
+ * spans rather than injecting HTML. Covers what the persona actually
+ * writes: ts/js, json, bash, css, py, and friends. */
+type Token = { t: string; c?: string };
+
+const KEYWORDS =
+  "const|let|var|function|return|if|else|for|while|do|switch|case|default|break|continue|new|class|extends|super|import|export|from|as|async|await|try|catch|finally|throw|typeof|instanceof|delete|in|of|this|yield|static|interface|enum|implements|public|private|protected|readonly|true|false|null|undefined|void|any|unknown|never|echo|cd|git|npm|npx|sudo|apt|curl|mkdir|ls|cat|source|then|fi|done|esac|def|lambda|print|self|fn|pub|impl|struct|match|use";
+
+const TOKEN_RE_STD = new RegExp(
+  "(\\/\\*[\\s\\S]*?\\*\\/|\\/\\/[^\\n]*)"
+    + "|(\"(?:\\\\.|[^\"\\\\\\n])*\"|'(?:\\\\.|[^'\\\\\\n])*'|`(?:\\\\.|[^`\\\\])*`)"
+    + "|(\\b(?:" + KEYWORDS + ")\\b)"
+    + "|(\\b0x[0-9a-fA-F]+\\b|\\b\\d[\\d_]*(?:\\.\\d+)?(?:e[+-]?\\d+)?\\b)",
+  "g",
+);
+const TOKEN_RE_HASH = new RegExp(
+  "(\\/\\*[\\s\\S]*?\\*\\/|\\/\\/[^\\n]*|#[^\\n]*)"
+    + "|(\"(?:\\\\.|[^\"\\\\\\n])*\"|'(?:\\\\.|[^'\\\\\\n])*'|`(?:\\\\.|[^`\\\\])*`)"
+    + "|(\\b(?:" + KEYWORDS + ")\\b)"
+    + "|(\\b0x[0-9a-fA-F]+\\b|\\b\\d[\\d_]*(?:\\.\\d+)?(?:e[+-]?\\d+)?\\b)",
+  "g",
+);
+
+function tokenizeCode(code: string, language: string): Token[] {
+  const hashLang = /^(bash|sh|shell|zsh|console|terminal|yaml|yml|python|py|ruby|rb)$/i.test(
+    language,
+  );
+  const re = hashLang ? TOKEN_RE_HASH : TOKEN_RE_STD;
+  re.lastIndex = 0;
+  const tokens: Token[] = [];
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(code)) !== null) {
+    if (m[0].length === 0) {
+      re.lastIndex += 1;
+      continue;
+    }
+    if (m.index > last) tokens.push({ t: code.slice(last, m.index) });
+    const cls = m[1]
+      ? "sin-tok-c"
+      : m[2]
+        ? "sin-tok-s"
+        : m[3]
+          ? "sin-tok-k"
+          : m[4]
+            ? "sin-tok-n"
+            : undefined;
+    tokens.push({ t: m[0], c: cls });
+    last = m.index + m[0].length;
+    if (tokens.length > 4000) break; // safety valve for pathological blocks
+  }
+  if (last < code.length) tokens.push({ t: code.slice(last) });
+  return tokens;
+}
 
 /* ── Web Speech API (voice in/out) ──────────────────────────────────
  * Browser-native speech recognition + synthesis — no external services,
@@ -208,6 +307,7 @@ function CodeBlock({
   children: string;
 }) {
   const code = children.trimEnd();
+  const tokens = tokenizeCode(code, language);
   return (
     <div className="sin-chat-code-block">
       <div className="sin-chat-code-head">
@@ -215,7 +315,13 @@ function CodeBlock({
         <CopyButton text={code} label="Copy" />
       </div>
       <pre>
-        <code>{code}</code>
+        <code>
+          {tokens.map((tok, i) => (
+            <span key={i} className={tok.c}>
+              {tok.t}
+            </span>
+          ))}
+        </code>
       </pre>
     </div>
   );
@@ -243,6 +349,24 @@ const COPY = {
     readAloud: "Read aloud",
     stopAloud: "Stop reading",
     unhinged: "UNHINGED",
+    regenerate: "Regenerate reply",
+    rateLabel: "useful?",
+    rateUp: "Useful",
+    rateDown: "Not useful",
+    inspect: "What SINISTER knows",
+    factMode: "persona",
+    modeStandard: "standard",
+    factPosts: "live post index",
+    factPostsUnit: "posts",
+    factPostsBase: "dossier baseline",
+    factMessages: "messages in thread",
+    factEndpoint: "endpoint",
+    threadsTitle: "conversations",
+    threadsUntitled: "new conversation",
+    threadsLegacy: "earlier conversation",
+    newChat: "New conversation",
+    nameLabel: "call me:",
+    namePlaceholder: "a name it will remember",
     chipsHome: [
       "What can Omid actually do?",
       "What makes this site fast?",
@@ -272,7 +396,7 @@ const COPY = {
     title: "سینیستر",
     subtitle: "دستیار وب‌سایت",
     intro:
-      "سلام! من سینیستر هستم؛ یک ایجنت عمومی با شخصیت وحشی که توی این سایت لانه کرده. هر چیزی بپرس: کد، تکنولوژی، تاریخ، بحث‌های داغ. ضمناً این سایت و کارهای امید را هم مو‌به‌مو بلدم. سؤال خسته‌کننده نپرس.",
+      "سلام. سینیستر اینجاست — یه ایجنت وحشی که توی این پورتفولیو لانه کرده و قرار هم نیست خیلی مؤدب باشه. از کد و تکنولوژی بگیر تا تاریخ و بحث‌های داغ، هر چی بپرسی نظره داره؛ این سایت رو هم تا آخرین شیدرش بلده. فقط یه خواهش: سؤال خسته‌کننده نپرس.",
     placeholder: "سؤالی داری؟…",
     send: "ارسال",
     close: "بستن گفتگو",
@@ -289,6 +413,24 @@ const COPY = {
     readAloud: "بخون",
     stopAloud: "قطع صدا",
     unhinged: "UNHINGED",
+    regenerate: "دوباره بساز",
+    rateLabel: "به‌دردبخور بود؟",
+    rateUp: "آره",
+    rateDown: "نه",
+    inspect: "سینیستر چه می‌دونه",
+    factMode: "شخصیت",
+    modeStandard: "استاندارد",
+    factPosts: "ایندکس زنده‌ی نوشته‌ها",
+    factPostsUnit: "نوشته",
+    factPostsBase: "نسخه‌ی پایه (دوجیلی)",
+    factMessages: "پیام در این گفتگو",
+    factEndpoint: "سرور",
+    threadsTitle: "گفتگوها",
+    threadsUntitled: "گفتگوی جدید",
+    threadsLegacy: "گفتگوی قبلی",
+    newChat: "گفتگوی جدید",
+    nameLabel: "صدا کنم:",
+    namePlaceholder: "یه اسم که یادش بمونه",
     chipsHome: [
       "امید دقیقاً چه‌کارهایی بلده؟",
       "چرا این سایت این‌قدر سریعه؟",
@@ -392,29 +534,82 @@ export default function AgentChat({
   }, [visible]);
   // Live post index (built from the site's JSON feed when the panel opens).
   const [liveContext, setLiveContext] = useState<string | null>(null);
-  // Anonymous per-browser session id — lets research group exchanges into
-  // conversations without any cookies, IPs, or accounts. Computed lazily on
-  // first render (this panel never SSR's, so localStorage is safe here).
   // Track the start time and user text for research logging.
   const startedAtRef = useRef<number>(0);
   const userTextRef = useRef<string>("");
   const lastAssistantTextRef = useRef<string>("");
-  const [sessionId] = useState<string | null>(() => {
+
+  /* ── Conversation threads ──────────────────────────────────────
+   * Lazy boot: load the thread list, migrating the legacy single-session
+   * history into the first thread when found. Safe on first render —
+   * this panel never SSRs (next/dynamic ssr:false in AgentChatLazy). */
+  const [boot] = useState(() => {
+    let threads: Thread[] = [];
     try {
-      let sid = localStorage.getItem("sin-chat-session");
-      if (!sid) {
-        sid =
-          typeof crypto !== "undefined" && "randomUUID" in crypto
-            ? crypto.randomUUID()
-            : `s-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-        localStorage.setItem("sin-chat-session", sid);
+      const raw = localStorage.getItem(THREADS_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw) as unknown;
+        if (Array.isArray(arr) && arr.length > 0) threads = arr as Thread[];
       }
-      return sid;
     } catch {
-      /* storage blocked — exchanges just log without a session id */
-      return null;
+      threads = [];
+    }
+    if (threads.length === 0) {
+      // Legacy migration: the pre-threads widget kept one session id plus
+      // its history. Adopt them as the first thread; otherwise start fresh.
+      let legacyId: string | null = null;
+      try {
+        legacyId = localStorage.getItem("sin-chat-session");
+      } catch {
+        legacyId = null;
+      }
+      threads = [
+        {
+          id: legacyId ?? newThreadId(),
+          title: "",
+          createdAt: Date.now(),
+        },
+      ];
+      try {
+        localStorage.setItem(THREADS_KEY, JSON.stringify(threads));
+      } catch {
+        /* storage blocked — threads just won't survive reload */
+      }
+    }
+    let activeId = threads[0]!.id;
+    try {
+      const stored = localStorage.getItem(THREAD_ACTIVE_KEY);
+      if (stored && threads.some((t) => t.id === stored)) activeId = stored;
+    } catch {
+      /* fall back to the newest thread */
+    }
+    return { threads, activeId };
+  });
+  const [threads, setThreads] = useState<Thread[]>(boot.threads);
+  const [activeId, setActiveId] = useState<string>(boot.activeId);
+  // Which thread the in-memory `messages` currently belongs to. Guards the
+  // history-persist effect against writing old messages into a new thread
+  // during a switch.
+  const messagesThreadRef = useRef<string>(boot.activeId);
+  const [inspectOpen, setInspectOpen] = useState(false);
+  const [threadsOpen, setThreadsOpen] = useState(false);
+
+  // Active thread id doubles as the anonymous research session id, so all
+  // downstream logging / history code keeps one name.
+  const sessionId: string | null = activeId;
+
+  // Visitor profile — a self-chosen nickname remembered across visits.
+  const [profile, setProfile] = useState<string>(() => {
+    try {
+      return localStorage.getItem(PROFILE_KEY) ?? "";
+    } catch {
+      return "";
     }
   });
+
+  // Message ratings (👍/👎 as circle glyphs) — session-local UI state; the
+  // signal itself is persisted server-side via the /api/log rating path.
+  const [ratings, setRatings] = useState<Record<string, 1 | -1>>({});
 
   // "Unhinged mode" — synced from the terminal easter egg via localStorage
   // plus the sinister:unhinged event (see EasterEgg.tsx). Lazy initializer is
@@ -608,12 +803,13 @@ export default function AgentChat({
           ...(liveContext ? { context: liveContext } : {}),
           ...(sessionId ? { sessionId } : {}),
           ...(unhinged ? { persona: "unhinged" } : {}),
+          ...(profile.trim() ? { profile: profile.trim().slice(0, 40) } : {}),
           locale,
           path: window.location.pathname,
           screen: `${window.screen.width}x${window.screen.height}`,
         }),
       }),
-    [liveContext, sessionId, locale, unhinged],
+    [liveContext, sessionId, locale, unhinged, profile],
   );
 
   const {
@@ -621,6 +817,7 @@ export default function AgentChat({
     sendMessage,
     stop,
     setMessages,
+    regenerate,
     status,
     error,
   } = useChat({
@@ -659,14 +856,127 @@ export default function AgentChat({
     trackEvent("chat_clear", { locale });
   }, [stop, setMessages, sessionId, locale]);
 
-  // Persist after each completed exchange (never mid-stream, to avoid a
-  // write storm on every streamed delta). A mid-stream close keeps the last
-  // saved frame, which is fine.
+  /* ── Thread actions ─────────────────────────────────────────── */
+
+  // Switch the active thread: swap the in-memory messages for that thread's
+  // persisted history. The ref is set before the state setters so the
+  // persist effect below never writes one thread's messages into another.
+  const switchThread = useCallback(
+    (id: string) => {
+      if (id === activeId) return;
+      messagesThreadRef.current = id;
+      stop();
+      setMessages(readHistory(id) ?? []);
+      setActiveId(id);
+      setInspectOpen(false);
+      try {
+        localStorage.setItem(THREAD_ACTIVE_KEY, id);
+      } catch {
+        /* storage blocked — switching just won't survive reload */
+      }
+      trackEvent("chat_thread", { locale, action: "switch" });
+    },
+    [activeId, stop, setMessages, locale],
+  );
+
+  const startNewThread = useCallback(() => {
+    if (threads.length >= MAX_THREADS) threads.pop();
+    const id = newThreadId();
+    const thread: Thread = { id, title: "", createdAt: Date.now() };
+    const next = [thread, ...threads];
+    try {
+      localStorage.setItem(THREADS_KEY, JSON.stringify(next));
+      localStorage.setItem(THREAD_ACTIVE_KEY, id);
+    } catch {
+      /* storage blocked */
+    }
+    setThreads(next);
+    messagesThreadRef.current = id;
+    stop();
+    setMessages([]);
+    setActiveId(id);
+    setInspectOpen(false);
+    trackEvent("chat_thread", { locale, action: "new" });
+  }, [threads, stop, setMessages, locale]);
+
+  // Thread-aware persistence: only write when the in-memory messages belong
+  // to the active thread (guards against a mid-switch stale frame).
   useEffect(() => {
+    if (messagesThreadRef.current !== activeId) return;
     if (status === "submitted" || status === "streaming") return;
     if (!sessionId || messages.length === 0) return;
     writeHistory(sessionId, messages);
-  }, [messages, status, sessionId]);
+  }, [messages, status, activeId, sessionId]);
+
+  // Thread titles are derived lazily (never stored): the first user message
+  // of the thread's history — in-memory for the active one, persisted for
+  // the rest — names the thread. No state writes, no sync setState.
+  const threadTitle = useCallback(
+    (id: string, untitled: string, legacy: string): string => {
+      const th = threads.find((x) => x.id === id);
+      if (th?.title) return th.title;
+      const hist =
+        id === activeId ? messages : (readHistory(id) ?? []);
+      const firstUser = hist.find(
+        (m) =>
+          m.role === "user" &&
+          m.parts.some(
+            (p) => p.type === "text" && typeof (p as { text?: string }).text === "string",
+          ),
+      );
+      if (!firstUser) return th ? untitled : legacy;
+      const text = firstUser.parts
+        .filter((p) => p.type === "text")
+        .map((p) => (p as { text: string }).text)
+        .join(" ")
+        .trim()
+        .replace(/\s+/g, " ")
+        .slice(0, 40);
+      return text || untitled;
+    },
+    [threads, messages, activeId],
+  );
+
+  /* ── Visitor profile ("call me…") ───────────────────────────── */
+  const saveProfile = useCallback(
+    (name: string) => {
+      const clean = name.trim().slice(0, 40);
+      setProfile(clean);
+      try {
+        if (clean) localStorage.setItem(PROFILE_KEY, clean);
+        else localStorage.removeItem(PROFILE_KEY);
+      } catch {
+        /* storage blocked — profile live for this session only */
+      }
+      trackEvent("chat_profile", { locale, set: clean !== "" });
+    },
+    [locale],
+  );
+
+  /* ── Message ratings ────────────────────────────────────────── */
+  // Toggle a quality signal on the latest assistant reply; persisted
+  // server-side via the /api/log rating path (best-effort).
+  const toggleRating = useCallback(
+    (messageId: string, value: 1 | -1) => {
+      const current = ratings[messageId];
+      const nextValue = current === value ? 0 : value;
+      const next = { ...ratings };
+      if (nextValue === 0) delete next[messageId];
+      else next[messageId] = value;
+      setRatings(next);
+      if (sessionId && nextValue !== 0) {
+        void fetch(SINISTER_LOG_API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId, rating: value }),
+        }).catch(() => {
+          /* best-effort — never surface */
+        });
+      }
+      trackEvent("chat_rating", { locale, value });
+    },
+    [ratings, sessionId, locale],
+  );
 
   // Smart autoscroll: follow the stream only while the visitor is already
   // at the bottom; otherwise leave their scroll position alone and offer a
@@ -820,20 +1130,31 @@ export default function AgentChat({
           <button
             type="button"
             className="sin-chat-x"
+            onClick={() => setInspectOpen((v) => !v)}
+            aria-label={t.inspect}
+            title={t.inspect}
+            aria-pressed={inspectOpen}
+          >
+            <InfoIcon />
+          </button>
+          <button
+            type="button"
+            className="sin-chat-x"
+            onClick={() => setThreadsOpen((v) => !v)}
+            aria-label={t.threadsTitle}
+            title={t.threadsTitle}
+            aria-pressed={threadsOpen}
+          >
+            <StackIcon />
+          </button>
+          <button
+            type="button"
+            className="sin-chat-x"
             onClick={clearConversation}
             aria-label={t.clear}
             title={t.clear}
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>
-              <path
-                d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-9 0 1 13h8l1-13"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
+            <PlusIcon />
           </button>
           <button
             type="button"
@@ -853,6 +1174,96 @@ export default function AgentChat({
           </button>
         </div>
       </header>
+
+      {/* ── Threads popover ─────────────────────────────────────── */}
+      {threadsOpen && (
+        <div className="sin-chat-pop">
+          <button
+            type="button"
+            className="sin-chat-pop-item sin-chat-pop-new"
+            onClick={() => {
+              setThreadsOpen(false);
+              startNewThread();
+            }}
+          >
+            <PlusIcon />
+            <span>{t.newChat}</span>
+          </button>
+          <button
+            type="button"
+            className="sin-chat-pop-item"
+            onClick={() => {
+              setThreadsOpen(false);
+              switchThread(activeId);
+            }}
+          >
+            <span className="sin-chat-pop-item-label sin-chat-pop-current">
+              {t.threadsTitle}
+            </span>
+            <span className="sin-chat-pop-item-sub">
+              {messages.length} {t.factMessages}
+            </span>
+          </button>
+          {threads.map((th) => (
+            <button
+              key={th.id}
+              type="button"
+              className="sin-chat-pop-item"
+              onClick={() => {
+                setThreadsOpen(false);
+                switchThread(th.id);
+              }}
+            >
+              <span className="sin-chat-pop-item-label">
+                {threadTitle(th.id, t.threadsUntitled, t.threadsLegacy)}
+              </span>
+              <span className="sin-chat-pop-item-sub">{relTime(th.createdAt, locale)}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* ── Inspector: facts + "call me…" ───────────────────────── */}
+      {inspectOpen && (
+        <div className="sin-chat-pop sin-chat-inspect">
+          <p className="sin-chat-inspect-label">{t.factMode}</p>
+          <p className="sin-chat-inspect-row">
+            <span className="sin-chat-pop-item-label">
+              {unhinged ? t.unhinged : t.modeStandard}
+            </span>
+            <span className="sin-chat-inspect-badge">
+              {unhinged ? t.unhinged : t.modeStandard}
+            </span>
+          </p>
+          <p className="sin-chat-inspect-label">{t.factPosts}</p>
+          <p className="sin-chat-inspect-row">
+            <span className="sin-chat-pop-item-label">
+              {liveContext ? `${liveContext.split("\n").length} ${t.factPostsUnit}` : t.factPostsBase}
+            </span>
+          </p>
+          <p className="sin-chat-inspect-label">{t.factMessages}</p>
+          <p className="sin-chat-inspect-row">
+            <span className="sin-chat-pop-item-label">{messages.length}</span>
+          </p>
+          <p className="sin-chat-inspect-label">{t.factEndpoint}</p>
+          <p className="sin-chat-inspect-row">
+            <span className="sin-chat-pop-item-label sin-chat-inspect-mono">
+              {SINISTER_API.replace(/^https?:\/\//, "").slice(0, 34)}
+            </span>
+          </p>
+          <label className="sin-chat-inspect-name">
+            <span className="sin-chat-inspect-label">{t.nameLabel}</span>
+            <input
+              type="text"
+              className="sin-chat-inspect-input"
+              value={profile}
+              placeholder={t.namePlaceholder}
+              maxLength={40}
+              onChange={(e) => saveProfile(e.target.value)}
+            />
+          </label>
+        </div>
+      )}
 
       <div className="sin-chat-log-wrap">
         <div
@@ -886,9 +1297,21 @@ export default function AgentChat({
             );
           }
 
-          // Bot message — mood tag + markdown with copy & read-aloud
+          // Bot message — mood tag + markdown with copy, read-aloud,
+          // ratings and (on the latest) regenerate
           const mood = detectMood(text);
           const moodLabel = MOOD_LABEL[mood];
+          const isLatest =
+            message.id === messages[messages.length - 1]?.id;
+          const followups = message.parts
+            .filter((p) => p.type === "data-followups")
+            .flatMap(
+              (p) =>
+                (p as { data?: { items?: string[] } }).data?.items ?? [],
+            )
+            .filter((q) => typeof q === "string" && q.trim())
+            .slice(0, 3);
+          const rating = ratings[message.id];
           return (
             <div
               key={message.id}
@@ -910,7 +1333,7 @@ export default function AgentChat({
                   }
                   title={speakingId === message.id ? t.stopAloud : t.readAloud}
                 >
-                  {speakingId === message.id ? "■" : "🔊"}
+                  {speakingId === message.id ? <StopSquareIcon /> : <VolumeIcon />}
                 </button>
                 {moodLabel && (
                   <span className={`sin-chat-mood ${MOOD_CLASS[mood]}`}>
@@ -925,7 +1348,59 @@ export default function AgentChat({
                     {text}
                   </ReactMarkdown>
                 </div>
+                {isLatest && !isStreaming && (
+                  <span className="sin-chat-actions">
+                    <button
+                      type="button"
+                      className={`sin-chat-act-rate${rating === 1 ? " is-on" : ""}`}
+                      onClick={() => toggleRating(message.id, 1)}
+                      aria-label={t.rateUp}
+                      aria-pressed={rating === 1}
+                      title={`${t.rateUp}?`}
+                    >
+                      <RateUpIcon />
+                    </button>
+                    <button
+                      type="button"
+                      className={`sin-chat-act-rate${rating === -1 ? " is-on" : ""}`}
+                      onClick={() => toggleRating(message.id, -1)}
+                      aria-label={t.rateDown}
+                      aria-pressed={rating === -1}
+                      title={`${t.rateDown}?`}
+                    >
+                      <RateDownIcon />
+                    </button>
+                    <button
+                      type="button"
+                      className="sin-chat-act-regen"
+                      onClick={() => regenerate()}
+                      aria-label={t.regenerate}
+                      title={t.regenerate}
+                    >
+                      <RefreshIcon />
+                    </button>
+                  </span>
+                )}
               </div>
+              {followups.length > 0 && (
+                <div className="sin-chat-followups" aria-label={t.chipsLabel}>
+                  {followups.map((q) => (
+                    <button
+                      key={q}
+                      type="button"
+                      className="sin-chat-chip"
+                      onClick={() => {
+                        startedAtRef.current = Date.now();
+                        userTextRef.current = q;
+                        sendMessage({ text: q });
+                        trackEvent("chat_message", { locale, source: "followup" });
+                      }}
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}

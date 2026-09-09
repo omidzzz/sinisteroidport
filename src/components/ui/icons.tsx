@@ -113,3 +113,104 @@ export function HeartIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/* ── SIN-CHAT monoline set — same hairline language (1.5px, round caps,
+   currentColor) as the icons above; drawn for the assistant widget. ── */
+
+const MONOLINE = {
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.5,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  "aria-hidden": true,
+};
+
+/** Plus — new conversation */
+export function PlusIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+/** Info — the "what SINISTER knows" inspector */
+export function InfoIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5" />
+      <path d="M12 7.5h.01" />
+    </svg>
+  );
+}
+
+/** Chevron down — jump to latest / disclosure affordance */
+export function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+/** Speaker — read a message aloud */
+export function VolumeIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <path d="M11 5 6.5 8.5H3v7h3.5L11 19V5Z" />
+      <path d="M15 9.5a4 4 0 0 1 0 5" />
+      <path d="M17.5 7a7.5 7.5 0 0 1 0 10" />
+    </svg>
+  );
+}
+
+/** Filled stop square — interrupt playback or generation */
+export function StopSquareIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden className={className}>
+      <rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="currentColor" />
+    </svg>
+  );
+}
+
+/** Refresh — regenerate the last reply */
+export function RefreshIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <path d="M20 12a8 8 0 1 1-2.3-5.6" />
+      <path d="M20 4v4h-4" />
+    </svg>
+  );
+}
+
+/** Circle-plus — rate a reply as useful */
+export function RateUpIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v8M8 12h8" />
+    </svg>
+  );
+}
+
+/** Circle-minus — rate a reply as not useful */
+export function RateDownIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 12h8" />
+    </svg>
+  );
+}
+
+/** Stacked rows — conversation threads */
+export function StackIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <path d="M4 6h16M4 12h16M4 18h10" />
+    </svg>
+  );
+}

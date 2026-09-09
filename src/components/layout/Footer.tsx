@@ -2,6 +2,7 @@ import Link from "next/link";
 import Magnetic from "../ui/Magnetic";
 import LogoType from "./LogoType";
 import { ArrowIcon, SparkIcon, HeartIcon } from "../ui/icons";
+import AskSinisterButton from "../blog/AskSinisterButton";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import { NAV_PATHS } from "@/lib/nav";
 
@@ -155,6 +156,19 @@ export default function Footer({ locale }: { locale: Locale }) {
                   </a>
                 </li>
               ))}
+              {/* resident agent — opens the chat panel via sinister:ask */}
+              <li>
+                <AskSinisterButton
+                  locale={locale}
+                  className="chip-brk sin-ask-chip"
+                  label={fa ? "سینیستر" : "SINISTER"}
+                  prompt={
+                    fa
+                      ? "خودت رو معرفی کن — این‌جا چه‌کارهایی ازت برمیاد؟"
+                      : "Introduce yourself — what can you do around here?"
+                  }
+                />
+              </li>
             </ul>
           </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import Reveal from "@/components/ui/Reveal";
+import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import skillsData from "@/data/skills.json";
 import { seoAlternates } from "@/lib/seo";
@@ -92,6 +93,21 @@ export default async function SkillsPage({
           </section>
         ))}
       </div>
+
+      {/* Ask SINISTER — resident agent, pre-loaded with a stack prompt */}
+      <AskSinisterButton
+        locale={locale}
+        label={
+          isLocale(locale) && locale === "fa"
+            ? "از سینیستر درباره‌ی استک بپرس"
+            : "Ask SINISTER about the stack"
+        }
+        prompt={
+          isLocale(locale) && locale === "fa"
+            ? "قوی‌ترین استک امید چیه و برای چه نوع کاری ارزش استخدام داره؟ رک جواب بده."
+            : "What's Omid's strongest stack, and what kind of work is he worth hiring for? Be blunt."
+        }
+      />
     </div>
   );
 }

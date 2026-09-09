@@ -3,6 +3,7 @@ import PageHero from "@/components/ui/PageHero";
 import Tilt from "@/components/ui/Tilt";
 import Spotlight from "@/components/ui/Spotlight";
 import Reveal from "@/components/ui/Reveal";
+import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 
@@ -94,6 +95,21 @@ export default async function WorkPage({
           ))}
         </div>
       </Spotlight>
+
+      {/* Ask SINISTER — resident agent, pre-loaded with a work-tour prompt */}
+      <AskSinisterButton
+        locale={locale}
+        label={
+          isLocale(locale) && locale === "fa"
+            ? "از سینیستر درباره‌ی سوابق کاری بپرس"
+            : "Ask SINISTER about this experience"
+        }
+        prompt={
+          isLocale(locale) && locale === "fa"
+            ? "یه تور از سوابق کاری امید بده — هر تجربه چه مهارتی بهش اضافه کرده و کدوم بخش برای یه کارفرما جالبه؟"
+            : "Give me the tour of Omid's work experience — what did each role sharpen, and which part should an employer look at first?"
+        }
+      />
     </div>
   );
 }

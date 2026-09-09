@@ -14,7 +14,7 @@ export interface CmdEntry {
   group: string;
   href?: string;
   external?: boolean;
-  action?: "theme";
+  action?: "theme" | "ask";
 }
 
 /**
@@ -228,6 +228,13 @@ export default function CommandPalette({
   const run = (e: CmdEntry) => {
     if (e.action === "theme") {
       toggleTheme();
+      beginClose();
+      return;
+    }
+    if (e.action === "ask") {
+      // Summon the resident agent — opens the chat panel without a
+      // pre-loaded question (see AgentChatLazy's sinister:ask listener).
+      window.dispatchEvent(new CustomEvent<string>("sinister:ask", { detail: "" }));
       beginClose();
       return;
     }

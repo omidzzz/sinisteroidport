@@ -185,6 +185,13 @@ export default async function LocaleRootLayout({
   const groupSkill = locale === "fa" ? "مهارت" : "Skills";
   const groupPost = locale === "fa" ? "نوشته" : "Posts";
   const entries: CmdEntry[] = [
+    {
+      id: "ask-sinister",
+      label: locale === "fa" ? "از سینیستر بپرس" : "Ask SINISTER",
+      sub: locale === "fa" ? "دستیار وب‌سایت" : "resident menace",
+      group: locale === "fa" ? "دستیار" : "Assistant",
+      action: "ask",
+    },
     ...dict.nav.map((n, i) => ({
       id: `page-${i}`,
       label: n.label,

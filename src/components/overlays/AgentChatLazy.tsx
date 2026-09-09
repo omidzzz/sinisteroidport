@@ -72,11 +72,12 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
   }, []);
 
   // sinister:ask custom events, dispatched from anywhere on the site
-  // (e.g. the "Ask SINISTER about this post" button on blog pages).
+  // (blog "ask about this post" buttons, the command palette's Ask SINISTER
+  // action, page-level buttons). An empty detail just opens the panel.
   useEffect(() => {
     const onAsk = (e: Event) => {
       const q = (e as CustomEvent<string>).detail;
-      if (q && q.trim()) open(q.trim());
+      open(q && q.trim() ? q.trim() : undefined);
     };
     window.addEventListener("sinister:ask", onAsk);
     return () => window.removeEventListener("sinister:ask", onAsk);
