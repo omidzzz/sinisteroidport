@@ -417,10 +417,6 @@ const COPY = {
     clear: "پاک کردن گفتگو",
     jump: "برو به آخر",
     chipsLabel: "یکی رو امتحان کن:",
-    listen: "ورودی صوتی",
-    listening: "در حال شنیدن…",
-    readAloud: "بخون",
-    stopAloud: "قطع صدا",
     unhinged: "UNHINGED",
     regenerate: "دوباره بساز",
     rateLabel: "به‌دردبخور بود؟",
@@ -693,6 +689,7 @@ export default function AgentChat({
     const buildIndex = (rows: Array<{
       date?: string;
       title?: string;
+      slug?: string;
       faTitle?: string;
       enTitle?: string;
       enExcerpt?: string;
@@ -710,7 +707,11 @@ export default function AgentChat({
           const excerpt = (locale === "fa" ? (it.faExcerpt ?? "") : (it.enExcerpt ?? ""))
             .trim()
             .slice(0, 140);
-          return `- ${date} | ${(title || "").trim()} | ${excerpt}`;
+          // The endpoint returns each post's real slug — passing it through
+          // stops the agent from fabricating slugs from titles.
+          const slug = (it.slug ?? "").trim();
+          const path = slug ? `/${locale}/blog/${slug}` : "";
+          return `- ${date} | ${(title || "").trim()} | ${path} | ${excerpt}`;
         })
         .join("\n");
       return index;
@@ -724,6 +725,8 @@ export default function AgentChat({
         .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
         .then((feed: {
           items?: Array<{
+            id?: string;
+            url?: string;
             title?: string;
             summary?: string;
             content_text?: string;
@@ -740,7 +743,15 @@ export default function AgentChat({
               const excerpt = (it.summary ?? it.content_text ?? "")
                 .trim()
                 .slice(0, 140);
-              return `- ${date} | ${title} | ${excerpt}`;
+              // JSON-feed ids/urls are absolute post URLs — pull the slug off
+              // the end so the agent links real posts even on this fallback.
+              const rawId = (it.id ?? it.url ?? "").trim();
+              const slug = rawId
+                .split(/[/?#]/)
+                .filter(Boolean)
+                .pop() ?? "";
+              const path = slug ? `/${locale}/blog/${slug}` : "";
+              return `- ${date} | ${title} | ${path} | ${excerpt}`;
             })
             .join("\n");
           setLiveContext(index);

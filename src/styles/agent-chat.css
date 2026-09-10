@@ -755,41 +755,6 @@ html[data-theme="light"] .sin-chat-fab {
   color: #ff5cd6;
 }
 
-/* ── Read-aloud button (bot bubble, stacked under copy) ───── */
-.sin-chat-tts {
-  position: absolute;
-  top: 2rem;
-  inset-inline-end: 0.3rem;
-  display: grid;
-  place-items: center;
-  width: 1.55rem;
-  height: 1.55rem;
-  padding: 0;
-  font-size: 0.7rem;
-  color: var(--color-muted);
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 0.4rem;
-  opacity: 0;
-  transition:
-    opacity 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.sin-chat-bubble--bot:hover .sin-chat-tts,
-.sin-chat-tts:focus-visible,
-.sin-chat-tts--on {
-  opacity: 1;
-}
-
-.sin-chat-tts:hover,
-.sin-chat-tts--on {
-  color: rgb(var(--rgb-acid));
-  border-color: rgba(var(--rgb-acid), 0.5);
-}
-
 /* ── Starter chips ────────────────────────────────────────── */
 .sin-chat-chips {
   display: flex;
