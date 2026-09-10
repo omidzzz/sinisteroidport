@@ -48,10 +48,10 @@ const SINISTER_LOG_API =
 const HISTORY_PREFIX = "sin-chat-history";
 const HISTORY_LIMIT = 60;
 
-function readHistory(sessionId: string | null): UIMessage[] | undefined {
-  if (!sessionId) return undefined;
+function readHistory(threadId: string | null): UIMessage[] | undefined {
+  if (typeof window === "undefined") return undefined;
   try {
-    const raw = localStorage.getItem(`${HISTORY_PREFIX}-${sessionId}`);
+    const raw = localStorage.getItem(`${HISTORY_PREFIX}-${threadId ?? "default"}`);
     if (!raw) return undefined;
     const arr = JSON.parse(raw);
     return Array.isArray(arr) ? arr : undefined;
@@ -60,11 +60,11 @@ function readHistory(sessionId: string | null): UIMessage[] | undefined {
   }
 }
 
-function writeHistory(sessionId: string | null, messages: UIMessage[]): void {
-  if (!sessionId) return;
+function writeHistory(threadId: string | null, messages: UIMessage[]): void {
+  if (typeof window === "undefined") return;
   try {
     localStorage.setItem(
-      `${HISTORY_PREFIX}-${sessionId}`,
+      `${HISTORY_PREFIX}-${threadId ?? "default"}`,
       JSON.stringify(messages.slice(-HISTORY_LIMIT)),
     );
   } catch {
@@ -78,6 +78,26 @@ function writeHistory(sessionId: string | null, messages: UIMessage[]): void {
  * rides to the guest backend as `persona: "unhinged"`, where it appends a
  * max-volatility addendum to the system prompt. */
 const UNHINGED_KEY = "sin-chat-unhinged";
+
+/* ── Visitor-selectable persona ───────────────────────────────────
+ * The visitor can flip personality at any moment — via the inspector
+ * picker or the terminal easter egg's `unhinged` command (which sets the
+ * same key). "standard" needs no backend directive (the base guest prompt
+ * already is feral snark); the others map to GUEST_PERSONA_DIRECTIVES. */
+const PERSONA_KEY = "sin-chat-persona";
+type PersonaId =
+  | "standard"
+  | "deadpan"
+  | "hyperfixation"
+  | "professional"
+  | "unhinged";
+const PERSONAS: readonly PersonaId[] = [
+  "standard",
+  "deadpan",
+  "hyperfixation",
+  "professional",
+  "unhinged",
+];
 
 /* ── Conversation threads + visitor profile (all local, no accounts) ──
  * Each thread keeps its own history key and acts as its own anonymous
@@ -373,6 +393,12 @@ const COPY = {
     inspect: "What SINISTER knows",
     factMode: "persona",
     modeStandard: "standard",
+    // Persona picker labels (the selectable moods the visitor can flip to).
+    personaStandard: "standard",
+    personaDeadpan: "deadpan",
+    personaHyper: "hyperfixation",
+    personaPro: "professional",
+    personaUnhinged: "unhinged",
     factPosts: "live post index",
     factPostsUnit: "posts",
     factPostsBase: "dossier baseline",
@@ -441,6 +467,11 @@ const COPY = {
     inspect: "سینیستر چه می‌دونه",
     factMode: "شخصیت",
     modeStandard: "استاندارد",
+    personaStandard: "استاندارد",
+    personaDeadpan: "بی‌احساس",
+    personaHyper: "هیپرفیکس",
+    personaPro: "حرفه‌ای",
+    personaUnhinged: "UNHINGED",
     factPosts: "ایندکس زنده‌ی نوشته‌ها",
     factPostsUnit: "نوشته",
     factPostsBase: "نسخه‌ی پایه (دوجیلی)",
@@ -638,34 +669,86 @@ export default function AgentChat({
   // "Exported" feedback for the copy-this-thread action.
   const [exported, setExported] = useState(false);
 
-  // "Unhinged mode" — synced from the terminal easter egg via localStorage
-  // plus the sinister:unhinged event (see EasterEgg.tsx). Lazy initializer is
-  // safe: this panel only ever mounts client-side (next/dynamic ssr:false).
-  const [unhinged, setUnhinged] = useState<boolean>(() => {
+  // Persona — the visitor can flip personality at any moment (inspector
+  // picker, or the terminal easter egg's `unhinged` command which writes
+  // the same key and dispatches `sinister:persona` to sync live). Lazy
+  // initializer is safe: this panel only mounts client-side.
+  const [persona, setPersona] = useState<PersonaId>(() => {
     try {
-      return localStorage.getItem(UNHINGED_KEY) === "1";
+      const stored = localStorage.getItem(PERSONA_KEY);
+      if (stored && (PERSONAS as readonly string[]).includes(stored)) {
+        return stored as PersonaId;
+      }
+      // Legacy migration: the old unhinged flag becomes the persona.
+      return localStorage.getItem(UNHINGED_KEY) === "1"
+        ? "unhinged"
+        : "standard";
     } catch {
-      return false;
+      return "standard";
     }
   });
-  useEffect(() => {
-    const syncUnhinged = () => {
+  const choosePersona = useCallback(
+    (next: PersonaId) => {
+      setPersona(next);
       try {
-        setUnhinged(localStorage.getItem(UNHINGED_KEY) === "1");
+        localStorage.setItem(PERSONA_KEY, next);
       } catch {
-        setUnhinged((u) => !u);
+        /* storage blocked — live for this session only */
+      }
+      trackEvent("chat_persona", { locale, persona: next });
+    },
+    [locale],
+  );
+  useEffect(() => {
+    const syncPersona = () => {
+      try {
+        const stored = localStorage.getItem(PERSONA_KEY);
+        setPersona(
+          stored && (PERSONAS as readonly string[]).includes(stored)
+            ? (stored as PersonaId)
+            : localStorage.getItem(UNHINGED_KEY) === "1"
+              ? "unhinged"
+              : "standard",
+        );
+      } catch {
+        /* keep current */
       }
     };
-    window.addEventListener("sinister:unhinged", syncUnhinged);
-    return () => window.removeEventListener("sinister:unhinged", syncUnhinged);
+    window.addEventListener("sinister:persona", syncPersona);
+    return () => window.removeEventListener("sinister:persona", syncPersona);
   }, []);
 
-  // Voice in/out — progressively enhanced; controls hide when unsupported.
-  const [hasVoice] = useState<boolean>(() => getSpeechRecognition() !== null);
+  // Voice in/out — progressively enhanced; controls hide when unsupported
+  // (or show a disabled title so users know why).
+  const [voiceSupport, setVoiceSupport] = useState<"auto" | "none">("auto");
+  // Read-aloud (TTS) needs speechSynthesis + an utterance ctor.
+  const [ttsState, setTtsState] = useState<"checking" | "ok" | "none">("checking");
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const [speakingId, setSpeakingId] = useState<string | null>(null);
   const speechLang = locale === "fa" ? "fa-IR" : "en-US";
+
+  useEffect(() => {
+    let alive = true;
+    const detect = () => {
+      if (!alive) return;
+      setVoiceSupport(getSpeechRecognition() !== null ? "auto" : "none");
+      const hasTts =
+        typeof window !== "undefined" &&
+        window.speechSynthesis != null &&
+        typeof SpeechSynthesisUtterance === "function";
+      setTtsState(hasTts ? "ok" : "none");
+    };
+    detect();
+    // Some engines populate voices asynchronously; re-check after a tick.
+    const t1 = window.setTimeout(detect, 300);
+    const t2 = window.setTimeout(detect, 1200);
+    return () => {
+      alive = false;
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -679,42 +762,60 @@ export default function AgentChat({
     };
   }, []);
 
+  const [voiceError, setVoiceError] = useState<string | null>(null);
   const toggleRecognition = useCallback(() => {
     if (listening) {
       recognitionRef.current?.stop();
       setListening(false);
+      setVoiceError(null);
       return;
     }
     const Ctor = getSpeechRecognition();
-    if (!Ctor) return;
-    const rec = new Ctor();
-    rec.lang = speechLang;
-    rec.continuous = false;
-    rec.interimResults = false;
-    rec.onresult = (e) => {
-      const transcript = Array.from({ length: e.results.length }, (_, i) => {
-        const alt = e.results[i]?.[0];
-        return alt?.transcript ?? "";
-      })
-        .join(" ")
-        .trim();
-      const el = inputRef.current;
-      if (!transcript || !el) return;
-      el.value = el.value ? `${el.value} ${transcript}` : transcript;
-      el.focus();
-    };
-    rec.onend = () => setListening(false);
-    rec.onerror = () => setListening(false);
-    recognitionRef.current = rec;
-    setListening(true);
-    trackEvent("chat_voice", { locale });
-    rec.start();
+    if (!Ctor) {
+      setVoiceError(locale === "fa" ? "مرورگرت ورودی صوتی ندارد" : "Voice input isn't supported in this browser");
+      return;
+    }
+    try {
+      const rec = new Ctor();
+      rec.lang = speechLang;
+      rec.continuous = false;
+      rec.interimResults = false;
+      rec.onresult = (e) => {
+        const transcript = Array.from({ length: e.results.length }, (_, i) => {
+          const alt = e.results[i]?.[0];
+          return alt?.transcript ?? "";
+        })
+          .join(" ")
+          .trim();
+        const el = inputRef.current;
+        if (!transcript || !el) return;
+        setVoiceError(null);
+        el.value = el.value ? `${el.value} ${transcript}` : transcript;
+        el.focus();
+      };
+      rec.onend = () => {
+        setListening(false);
+        recognitionRef.current = null;
+      };
+      rec.onerror = () => {
+        setListening(false);
+        recognitionRef.current = null;
+        setVoiceError(locale === "fa" ? "صدا شنیده نشد — دوباره تلاش کن" : "Voice input failed — try again");
+      };
+      recognitionRef.current = rec;
+      setListening(true);
+      trackEvent("chat_voice", { locale });
+      rec.start();
+    } catch {
+      setListening(false);
+      setVoiceError(locale === "fa" ? "شنیدن صدا ممکن نیست" : "Voice input isn't available here");
+    }
   }, [listening, speechLang, locale]);
 
   const toggleSpeech = useCallback(
     (id: string, text: string) => {
       const synth = window.speechSynthesis;
-      if (!synth) return;
+      if (!synth || typeof SpeechSynthesisUtterance !== "function") return;
       if (speakingId === id) {
         synth.cancel();
         setSpeakingId(null);
@@ -723,9 +824,23 @@ export default function AgentChat({
       synth.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = speechLang;
+      // Pick a voice that matches the locale when one exists (voices load
+      // asynchronously; blank getVoices() → fall back to engine default).
+      try {
+        const voices = synth.getVoices();
+        const match = (voices as Array<{ lang?: string; name?: string }>).find(
+          (v) => v.lang?.toLowerCase().startsWith(speechLang.toLowerCase().split("-")[0]),
+        );
+        if (match) utter.voice = (match as unknown) as SpeechSynthesisVoice;
+      } catch {
+        /* no voices yet — engine default */
+      }
+      utter.rate = 1;
+      utter.pitch = 1;
       utter.onend = () => setSpeakingId(null);
       utter.onerror = () => setSpeakingId(null);
       setSpeakingId(id);
+      setVoiceError(null);
       synth.speak(utter);
       trackEvent("chat_tts", { locale });
     },
@@ -752,7 +867,7 @@ export default function AgentChat({
     }>) => {
       if (cancelled) return null;
       const index = rows
-        .slice(0, 15)
+        .slice(0, 40)
         .map((it) => {
           const date = (it.date ?? "").slice(0, 10);
           const title =
@@ -785,7 +900,7 @@ export default function AgentChat({
           if (cancelled || !Array.isArray(feed.items) || feed.items.length === 0)
             return;
           const index = feed.items
-            .slice(0, 15)
+            .slice(0, 40)
             .map((it) => {
               const date = it.date_published?.slice(0, 10) ?? "";
               const title = (it.title ?? "").trim();
@@ -829,14 +944,14 @@ export default function AgentChat({
         body: () => ({
           ...(liveContext ? { context: liveContext } : {}),
           ...(sessionId ? { sessionId } : {}),
-          ...(unhinged ? { persona: "unhinged" } : {}),
+          ...(persona !== "standard" ? { persona } : {}),
           ...(profile.trim() ? { profile: profile.trim().slice(0, 40) } : {}),
           locale,
           path: window.location.pathname,
           screen: `${window.screen.width}x${window.screen.height}`,
         }),
       }),
-    [liveContext, sessionId, locale, unhinged, profile],
+    [liveContext, sessionId, locale, persona, profile],
   );
 
   const {
@@ -852,7 +967,7 @@ export default function AgentChat({
     // Restore the persisted conversation, if any, so it survives refresh /
     // panel close. The SDK resends these with the next message, which gives
     // the model continuous context across visits.
-    messages: sessionId ? (readHistory(sessionId) ?? []) : [],
+    messages: readHistory(boot.activeId) ?? [],
   });
 
   // Deep-link auto-send: when the panel was opened with a question
@@ -891,6 +1006,15 @@ export default function AgentChat({
   const switchThread = useCallback(
     (id: string) => {
       if (id === activeId) return;
+      // Flush the outgoing thread's in-memory messages to localStorage first
+      // so switching never loses the conversation you're leaving behind.
+      if (activeId && messages.length > 0 && messagesThreadRef.current === activeId) {
+        try {
+          writeHistory(activeId, messages);
+        } catch {
+          /* storage blocked — switch anyway */
+        }
+      }
       messagesThreadRef.current = id;
       stop();
       setMessages(readHistory(id) ?? []);
@@ -903,14 +1027,19 @@ export default function AgentChat({
       }
       trackEvent("chat_thread", { locale, action: "switch" });
     },
-    [activeId, stop, setMessages, locale],
+    [activeId, messages, stop, setMessages, locale],
   );
 
   const startNewThread = useCallback(() => {
-    if (threads.length >= MAX_THREADS) threads.pop();
+    // Never mutate the threads array in place: cap immutably so React state
+    // stays consistent (a direct .pop() on state is what made old threads
+    // disappear from the list after adding a new one).
+    const capped = threads.length >= MAX_THREADS
+      ? threads.slice(0, MAX_THREADS - 1)
+      : threads;
     const id = newThreadId();
     const thread: Thread = { id, title: "", createdAt: Date.now() };
-    const next = [thread, ...threads];
+    const next = [thread, ...capped];
     try {
       localStorage.setItem(THREADS_KEY, JSON.stringify(next));
       localStorage.setItem(THREAD_ACTIVE_KEY, id);
@@ -923,6 +1052,7 @@ export default function AgentChat({
     setMessages([]);
     setActiveId(id);
     setInspectOpen(false);
+    setThreadsOpen(false);
     trackEvent("chat_thread", { locale, action: "new" });
   }, [threads, stop, setMessages, locale]);
 
@@ -968,7 +1098,7 @@ export default function AgentChat({
     if (messagesThreadRef.current !== activeId) return;
     if (status === "submitted" || status === "streaming") return;
     if (!sessionId || messages.length === 0) return;
-    writeHistory(sessionId, messages);
+    writeHistory(messagesThreadRef.current, messages);
   }, [messages, status, activeId, sessionId]);
 
   // Recent-activity sorting: whenever the active thread gains a new
@@ -1239,7 +1369,7 @@ export default function AgentChat({
             <strong className="sin-chat-title">{t.title}</strong>
             <span className="sin-chat-sub">{t.subtitle}</span>
           </div>
-          {unhinged && <span className="sin-chat-unhinged">{t.unhinged}</span>}
+          {persona === "unhinged" && <span className="sin-chat-unhinged">{t.unhinged}</span>}
         </div>
         <div className="sin-chat-head-actions">
           <button
@@ -1315,26 +1445,15 @@ export default function AgentChat({
           >
             <span>{exported ? `✓ ${t.exported}` : t.exportThread}</span>
           </button>
-          <button
-            type="button"
-            className="sin-chat-pop-item"
-            onClick={() => {
-              setThreadsOpen(false);
-              switchThread(activeId);
-            }}
-          >
-            <span className="sin-chat-pop-item-label sin-chat-pop-current">
-              {t.threadsTitle}
-            </span>
-            <span className="sin-chat-pop-item-sub">
-              {messages.length} {t.factMessages}
-            </span>
-          </button>
           {threads.map((th) => (
-            <div key={th.id} className="sin-chat-pop-row">
+            <div
+              key={th.id}
+              className={`sin-chat-pop-row${th.id === activeId ? " is-current" : ""}`}
+            >
               <button
                 type="button"
                 className="sin-chat-pop-item"
+                aria-current={th.id === activeId ? "true" : undefined}
                 onClick={() => {
                   setThreadsOpen(false);
                   switchThread(th.id);
@@ -1363,12 +1482,36 @@ export default function AgentChat({
       {inspectOpen && (
         <div className="sin-chat-pop sin-chat-inspect" aria-label={t.inspect}>
           <p className="sin-chat-inspect-label">{t.factMode}</p>
+          <div className="sin-chat-persona-picker" role="group" aria-label={t.factMode}>
+            {[
+              { id: "standard" as const, label: t.personaStandard },
+              { id: "deadpan" as const, label: t.personaDeadpan },
+              { id: "hyperfixation" as const, label: t.personaHyper },
+              { id: "professional" as const, label: t.personaPro },
+              { id: "unhinged" as const, label: t.personaUnhinged },
+            ].map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                className={`sin-chat-persona-btn${persona === id ? " is-on" : ""}`}
+                aria-pressed={persona === id}
+                aria-label={label}
+                title={label}
+                onClick={() => {
+                  choosePersona(id);
+                  setInspectOpen(false);
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
           <p className="sin-chat-inspect-row">
             <span className="sin-chat-pop-item-label">
-              {unhinged ? t.unhinged : t.modeStandard}
+              {persona.toUpperCase()}
             </span>
             <span className="sin-chat-inspect-badge">
-              {unhinged ? t.unhinged : t.modeStandard}
+              {persona === "unhinged" ? t.unhinged : persona}
             </span>
           </p>
           <p className="sin-chat-inspect-label">{t.factPosts}</p>
@@ -1467,7 +1610,14 @@ export default function AgentChat({
                   aria-label={
                     speakingId === message.id ? t.stopAloud : t.readAloud
                   }
-                  title={speakingId === message.id ? t.stopAloud : t.readAloud}
+                  title={
+                    ttsState !== "ok"
+                      ? (locale === "fa" ? "خواندن صوتی در این مرورگر موجود نیست" : "Read-aloud isn't supported in this browser")
+                      : speakingId === message.id
+                        ? t.stopAloud
+                        : t.readAloud
+                  }
+                  disabled={ttsState !== "ok"}
                 >
                   {speakingId === message.id ? <StopSquareIcon /> : <VolumeIcon />}
                 </button>
@@ -1631,7 +1781,7 @@ export default function AgentChat({
             }
           }}
         />
-        {hasVoice && (
+        {voiceSupport === "auto" && (
           <button
             type="button"
             className={`sin-chat-mic${listening ? " sin-chat-mic--on" : ""}`}
@@ -1651,6 +1801,11 @@ export default function AgentChat({
               />
             </svg>
           </button>
+        )}
+        {voiceError && (
+          <span className="sin-chat-voice-error" role="status">
+            {voiceError}
+          </span>
         )}
         {isStreaming ? (
           <button

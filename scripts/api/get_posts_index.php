@@ -15,7 +15,7 @@ try {
     $stmt = $pdo->prepare(
         "SELECT slug, title, date_published AS date, tags, content_json
          FROM posts WHERE status = 'published'
-         ORDER BY date_published DESC LIMIT 25"
+         ORDER BY date_published DESC LIMIT 40"
     );
     $stmt->execute();
     $rows = $stmt->fetchAll();

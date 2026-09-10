@@ -1291,3 +1291,81 @@ html[data-theme="light"] .sin-chat-mood--competence {
 html[data-theme="light"] .sin-chat-mood--snark {
   color: #b5227e;
 }
+
+
+/* ── Horizontal-overflow guards: chips + follow-ups must never widen the chat ── */
+.sin-chat-row {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.sin-chat-row > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.sin-chat-row .sin-chat-followups,
+.sin-chat-row [class*="followup"] {
+  flex-basis: 100%;
+  width: 100%;
+  max-width: 100%;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  padding-inline: 0;
+  margin-inline: 0;
+}
+.sin-chat-bubble {
+  max-width: 100%;
+}
+.sin-chat-followups .sin-chat-chip,
+.sin-chat-chips .sin-chat-chip {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  flex: 0 1 auto;
+}
+.sin-chat-scroll,
+.sin-chat-messages,
+.sin-chat-log,
+.sin-chat-panel,
+.sin-chat-widget {
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+/* ── Persona picker (inspector) ─────────────────────────────── */
+.sin-chat-persona-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.35rem 0 0.55rem;
+}
+.sin-chat-persona-btn {
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-ink);
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(var(--rgb-accent), 0.35);
+  border-radius: 0.9rem;
+}
+.sin-chat-persona-btn:hover,
+.sin-chat-persona-btn:focus-visible {
+  border-color: rgba(var(--rgb-acid), 0.8);
+  color: rgb(var(--rgb-acid));
+}
+.sin-chat-persona-btn.is-on {
+  background: rgba(var(--rgb-acid), 0.18);
+  border-color: rgba(var(--rgb-acid), 0.85);
+  color: rgb(var(--rgb-acid));
+}
+
+/* ── Voice error line ───────────────────────────────────────── */
+.sin-chat-voice-error {
+  display: block;
+  font-size: 0.62rem;
+  color: var(--color-muted);
+  margin: 0.15rem 0 0.4rem;
+}
