@@ -415,7 +415,10 @@ html[data-theme="light"] .sin-chat-fab {
 .sin-chat-code-block pre {
   margin: 0;
   padding: 0.7rem 0.8rem;
+  /* Long code lines may scroll horizontally, but the pre must never become a
+   * vertical scroller: overflow-x alone would compute overflow-y to auto. */
   overflow-x: auto;
+  overflow-y: hidden;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   line-height: 1.55;
@@ -1275,6 +1278,7 @@ html[data-theme="light"] .sin-chat-mood--snark {
   max-width: 100%;
   flex-wrap: wrap;
   overflow-x: hidden;
+  overflow-y: hidden;
   padding-inline: 0;
   margin-inline: 0;
 }
@@ -1299,14 +1303,19 @@ html[data-theme="light"] .sin-chat-mood--snark {
 }
 
 /* Message-level boxes must NEVER render their own scrollbars — the chat log
- * is the single vertical scroller. (overflow-x:hidden alone forces the used
- * overflow-y to auto per spec, which can grow tiny per-message scroll areas
- * inside flex rows; pin overflow explicitly so only .sin-chat-log scrolls.) */
+ * is the single vertical scroller.
+ *
+ * Previous versions set overflow:hidden on rows and then overflow-y:visible
+ * on top — a classic spec trap: when one axis is `visible` and the other is
+ * not, the visible axis COMPUTES to `auto`, turning every row/bubble into a
+ * mini scroll container (exactly the per-message scrollbars this was meant
+ * to kill). `clip` is the correct tool: it clips overflow but NEVER creates
+ * a scroll container, even when only one axis is set. */
 .sin-chat-row,
 .sin-chat-bubble,
 .sin-chat-md,
 .sin-chat-md > * {
-  overflow-y: visible !important;
+  overflow: clip !important;
   max-height: none;
 }
 

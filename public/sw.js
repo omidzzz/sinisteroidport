@@ -13,7 +13,7 @@
  * skipWaiting) and then purges caches left behind by older versions, so an
  * in-flight session never has its hashed chunks evicted mid-navigation.
  */
-const VERSION = "1.0.1";
+const VERSION = "1.0.2";
 const CACHES = {
   static: `sinisteroid-static-${VERSION}`,
   media: `sinisteroid-media-${VERSION}`,
