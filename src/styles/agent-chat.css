@@ -1298,7 +1298,7 @@ html[data-theme="light"] .sin-chat-mood--snark {
   flex-wrap: wrap;
   min-width: 0;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 .sin-chat-row > * {
   min-width: 0;
@@ -1332,6 +1332,18 @@ html[data-theme="light"] .sin-chat-mood--snark {
 .sin-chat-widget {
   overflow-x: hidden;
   min-width: 0;
+}
+
+/* Message-level boxes must NEVER render their own scrollbars — the chat log
+ * is the single vertical scroller. (overflow-x:hidden alone forces the used
+ * overflow-y to auto per spec, which can grow tiny per-message scroll areas
+ * inside flex rows; pin overflow explicitly so only .sin-chat-log scrolls.) */
+.sin-chat-row,
+.sin-chat-bubble,
+.sin-chat-md,
+.sin-chat-md > * {
+  overflow-y: visible !important;
+  max-height: none;
 }
 
 /* ── Persona picker (inspector) ─────────────────────────────── */
