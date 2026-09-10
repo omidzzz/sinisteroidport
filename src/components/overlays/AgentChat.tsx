@@ -19,11 +19,11 @@ import {
   PlusIcon,
   InfoIcon,
   StackIcon,
-  VolumeIcon,
-  StopSquareIcon,
   RefreshIcon,
   RateUpIcon,
   RateDownIcon,
+  ClearIcon,
+  XIcon,
 } from "@/components/ui/icons";
 
 /**
@@ -205,40 +205,6 @@ function tokenizeCode(code: string, language: string): Token[] {
   return tokens;
 }
 
-/* ── Web Speech API (voice in/out) ──────────────────────────────────
- * Browser-native speech recognition + synthesis — no external services,
- * nothing new to deploy. Both controls are progressively enhanced: they
- * hide themselves when the browser doesn't expose the API. */
-interface SpeechRecognitionAlternativeLike {
-  readonly transcript: string;
-}
-interface SpeechRecognitionResultLike {
-  readonly 0: SpeechRecognitionAlternativeLike;
-}
-interface SpeechRecognitionEventLike {
-  readonly results: ArrayLike<ArrayLike<SpeechRecognitionAlternativeLike>>;
-}
-interface SpeechRecognitionLike {
-  lang: string;
-  continuous: boolean;
-  interimResults: boolean;
-  onresult: ((e: SpeechRecognitionEventLike) => void) | null;
-  onend: (() => void) | null;
-  onerror: (() => void) | null;
-  start(): void;
-  stop(): void;
-}
-type SpeechRecognitionCtor = new () => SpeechRecognitionLike;
-
-function getSpeechRecognition(): SpeechRecognitionCtor | null {
-  if (typeof window === "undefined") return null;
-  const w = window as unknown as {
-    SpeechRecognition?: SpeechRecognitionCtor;
-    webkitSpeechRecognition?: SpeechRecognitionCtor;
-  };
-  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
-}
-
 /* ── Mood classifier (mirrors the sinister repo's console) ──────────
  * Surfaces the persona's volatility as a small colored tag above each bot
  * message. The brand brackets stay latin in both locales. */
@@ -381,10 +347,6 @@ const COPY = {
     clear: "Clear conversation",
     jump: "Jump to latest",
     chipsLabel: "Try one:",
-    listen: "Voice input",
-    listening: "Listening…",
-    readAloud: "Read aloud",
-    stopAloud: "Stop reading",
     unhinged: "UNHINGED",
     regenerate: "Regenerate reply",
     rateLabel: "useful?",
@@ -717,135 +679,6 @@ export default function AgentChat({
     window.addEventListener("sinister:persona", syncPersona);
     return () => window.removeEventListener("sinister:persona", syncPersona);
   }, []);
-
-  // Voice in/out — progressively enhanced; controls hide when unsupported
-  // (or show a disabled title so users know why).
-  const [voiceSupport, setVoiceSupport] = useState<"auto" | "none">("auto");
-  // Read-aloud (TTS) needs speechSynthesis + an utterance ctor.
-  const [ttsState, setTtsState] = useState<"checking" | "ok" | "none">("checking");
-  const [listening, setListening] = useState(false);
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
-  const [speakingId, setSpeakingId] = useState<string | null>(null);
-  const speechLang = locale === "fa" ? "fa-IR" : "en-US";
-
-  useEffect(() => {
-    let alive = true;
-    const detect = () => {
-      if (!alive) return;
-      setVoiceSupport(getSpeechRecognition() !== null ? "auto" : "none");
-      const hasTts =
-        typeof window !== "undefined" &&
-        window.speechSynthesis != null &&
-        typeof SpeechSynthesisUtterance === "function";
-      setTtsState(hasTts ? "ok" : "none");
-    };
-    detect();
-    // Some engines populate voices asynchronously; re-check after a tick.
-    const t1 = window.setTimeout(detect, 300);
-    const t2 = window.setTimeout(detect, 1200);
-    return () => {
-      alive = false;
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-    };
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      // No speech left running when the panel unmounts.
-      try {
-        window.speechSynthesis?.cancel();
-      } catch {
-        /* noop */
-      }
-      recognitionRef.current?.stop();
-    };
-  }, []);
-
-  const [voiceError, setVoiceError] = useState<string | null>(null);
-  const toggleRecognition = useCallback(() => {
-    if (listening) {
-      recognitionRef.current?.stop();
-      setListening(false);
-      setVoiceError(null);
-      return;
-    }
-    const Ctor = getSpeechRecognition();
-    if (!Ctor) {
-      setVoiceError(locale === "fa" ? "مرورگرت ورودی صوتی ندارد" : "Voice input isn't supported in this browser");
-      return;
-    }
-    try {
-      const rec = new Ctor();
-      rec.lang = speechLang;
-      rec.continuous = false;
-      rec.interimResults = false;
-      rec.onresult = (e) => {
-        const transcript = Array.from({ length: e.results.length }, (_, i) => {
-          const alt = e.results[i]?.[0];
-          return alt?.transcript ?? "";
-        })
-          .join(" ")
-          .trim();
-        const el = inputRef.current;
-        if (!transcript || !el) return;
-        setVoiceError(null);
-        el.value = el.value ? `${el.value} ${transcript}` : transcript;
-        el.focus();
-      };
-      rec.onend = () => {
-        setListening(false);
-        recognitionRef.current = null;
-      };
-      rec.onerror = () => {
-        setListening(false);
-        recognitionRef.current = null;
-        setVoiceError(locale === "fa" ? "صدا شنیده نشد — دوباره تلاش کن" : "Voice input failed — try again");
-      };
-      recognitionRef.current = rec;
-      setListening(true);
-      trackEvent("chat_voice", { locale });
-      rec.start();
-    } catch {
-      setListening(false);
-      setVoiceError(locale === "fa" ? "شنیدن صدا ممکن نیست" : "Voice input isn't available here");
-    }
-  }, [listening, speechLang, locale]);
-
-  const toggleSpeech = useCallback(
-    (id: string, text: string) => {
-      const synth = window.speechSynthesis;
-      if (!synth || typeof SpeechSynthesisUtterance !== "function") return;
-      if (speakingId === id) {
-        synth.cancel();
-        setSpeakingId(null);
-        return;
-      }
-      synth.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = speechLang;
-      // Pick a voice that matches the locale when one exists (voices load
-      // asynchronously; blank getVoices() → fall back to engine default).
-      try {
-        const voices = synth.getVoices();
-        const match = (voices as Array<{ lang?: string; name?: string }>).find(
-          (v) => v.lang?.toLowerCase().startsWith(speechLang.toLowerCase().split("-")[0]),
-        );
-        if (match) utter.voice = (match as unknown) as SpeechSynthesisVoice;
-      } catch {
-        /* no voices yet — engine default */
-      }
-      utter.rate = 1;
-      utter.pitch = 1;
-      utter.onend = () => setSpeakingId(null);
-      utter.onerror = () => setSpeakingId(null);
-      setSpeakingId(id);
-      setVoiceError(null);
-      synth.speak(utter);
-      trackEvent("chat_tts", { locale });
-    },
-    [speakingId, speechLang, locale],
-  );
 
   // Fresh post knowledge: the live MySQL `posts` table is the source of
   // truth (it includes CMS-published posts that never appear in the
@@ -1399,7 +1232,7 @@ export default function AgentChat({
             aria-label={t.clear}
             title={t.clear}
           >
-            <PlusIcon />
+            <ClearIcon />
           </button>
           <button
             type="button"
@@ -1471,7 +1304,7 @@ export default function AgentChat({
                 title={t.threadDelete}
                 onClick={() => deleteThread(th.id)}
               >
-                <PlusIcon />
+                <XIcon />
               </button>
             </div>
           ))}
@@ -1603,24 +1436,6 @@ export default function AgentChat({
                   title="Copy message"
                   className="sin-chat-msg-copy"
                 />
-                <button
-                  type="button"
-                  className={`sin-chat-tts${speakingId === message.id ? " sin-chat-tts--on" : ""}`}
-                  onClick={() => toggleSpeech(message.id, text)}
-                  aria-label={
-                    speakingId === message.id ? t.stopAloud : t.readAloud
-                  }
-                  title={
-                    ttsState !== "ok"
-                      ? (locale === "fa" ? "خواندن صوتی در این مرورگر موجود نیست" : "Read-aloud isn't supported in this browser")
-                      : speakingId === message.id
-                        ? t.stopAloud
-                        : t.readAloud
-                  }
-                  disabled={ttsState !== "ok"}
-                >
-                  {speakingId === message.id ? <StopSquareIcon /> : <VolumeIcon />}
-                </button>
                 {moodLabel && (
                   <span className={`sin-chat-mood ${MOOD_CLASS[mood]}`}>
                     {moodLabel}
@@ -1781,32 +1596,6 @@ export default function AgentChat({
             }
           }}
         />
-        {voiceSupport === "auto" && (
-          <button
-            type="button"
-            className={`sin-chat-mic${listening ? " sin-chat-mic--on" : ""}`}
-            onClick={toggleRecognition}
-            disabled={isStreaming}
-            aria-label={listening ? t.listening : t.listen}
-            title={listening ? t.listening : t.listen}
-          >
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden>
-              <path
-                d="M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM5 11a7 7 0 0 0 14 0M12 18v3"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
-          </button>
-        )}
-        {voiceError && (
-          <span className="sin-chat-voice-error" role="status">
-            {voiceError}
-          </span>
-        )}
         {isStreaming ? (
           <button
             type="button"

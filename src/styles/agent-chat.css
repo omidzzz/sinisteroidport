@@ -1219,7 +1219,6 @@ html[data-theme="light"] .sin-chat-fab {
 .sin-chat-thread-del svg {
   width: 11px;
   height: 11px;
-  transform: rotate(45deg);
 }
 
 .sin-chat-thread-del:hover,

@@ -214,3 +214,22 @@ export function StackIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/** Bubble-x — clear the current conversation (bubble + X inside: wipe this thread, not a trash can, not a plus) */
+export function ClearIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <path d="M3.5 4.5h17v11h-9.8L5 19V4.5Z" />
+      <path d="M9.2 8.6l5.6 3.8M14.8 8.6l-5.6 3.8" />
+    </svg>
+  );
+}
+
+/** Close X — thread delete / dismiss (dedicated glyph, not a rotated plus) */
+export function XIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="14" height="14" className={className}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
