@@ -225,6 +225,18 @@ export default function CommandPalette({
     }
   }, [open]);
 
+  // Remember the element that opened the palette and return focus to it when
+  // the palette fully closes (after the 190ms exit animation) — keyboard users
+  // must never be stranded with focus on the dismissed overlay's backdrop.
+  const openTriggerRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (open) {
+      openTriggerRef.current = document.activeElement as HTMLElement | null;
+    } else if (openTriggerRef.current?.isConnected) {
+      openTriggerRef.current.focus();
+    }
+  }, [open]);
+
   const run = (e: CmdEntry) => {
     if (e.action === "theme") {
       toggleTheme();

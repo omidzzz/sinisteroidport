@@ -18,6 +18,7 @@ import FaqAccordion from "./FaqAccordion";
 import { ArrowIcon } from "../ui/icons";
 import { getLivePost, preloadLivePost } from "@/lib/blog/live";
 import RelatedReading from "./RelatedReading";
+import SharePost from "./SharePost";
 
 // Kick the DB refresh off at bundle-parse time — BEFORE React hydrates — so
 // the API round-trip overlaps hydration instead of starting after it. No-op
@@ -155,7 +156,6 @@ export default function BlogPostLive({
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.slug]);
 
   if (!translation) return null;
@@ -269,6 +269,10 @@ export default function BlogPostLive({
         </div>
       )}
 
+      {/* Share bar — early visibility so the social spread starts on read,
+          not after the reader leaves */}
+      <SharePost slug={effective.slug} title={title} locale={locale} />
+
       {cover && (
         <div className="post-cover mt-9">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -307,8 +311,9 @@ export default function BlogPostLive({
       </article>
 
       {/* Related reading sits above the FAQ — accordions act as a visual
-          dead-end and interaction drops hard after them */}
-      <RelatedReading related={related} locale={locale} />
+          dead-end and interaction drops hard after them. Pass the post's
+          primary tag so the block can hop readers into the topic hub. */}
+      <RelatedReading related={related} locale={locale} tag={tags[0]} />
 
       </div>
     </>

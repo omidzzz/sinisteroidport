@@ -13,7 +13,7 @@
  * skipWaiting) and then purges caches left behind by older versions, so an
  * in-flight session never has its hashed chunks evicted mid-navigation.
  */
-const VERSION = "1.0.2";
+const VERSION = "1.0.3";
 const CACHES = {
   static: `sinisteroid-static-${VERSION}`,
   media: `sinisteroid-media-${VERSION}`,
@@ -23,6 +23,18 @@ const CACHES = {
 const STATIC_PREFIX = "/_next/static/";
 const MEDIA_RE = /^\/(?:images|uploads|og|fa)\//;
 const STATIC_EXT_RE = /\.(?:webp|png|ico|jpe?g|svg|woff2?|xml|json|txt|webmanifest)$/;
+
+/** Document-shaped URL? Trailing slash routes (/en/, /en/blog/, /en/blog/slug),
+ *  explicit *.html, or an extensionless final segment — but NOT /api/* (live
+ *  DB JSON) and not hashed build assets (handled by the _next/static rule). */
+function isHtmlPath(pathname) {
+  if (pathname.startsWith("/api/")) return false;
+  const last = pathname.split("/").filter(Boolean).pop() ?? "";
+  if (!last) return true; // "/" or trailing slash
+  if (/\.html?$/.test(last)) return true;
+  // Extensionless final segment = document route (e.g. /en, /en/work).
+  return !/\.[a-z0-9]{2,}$/i.test(last);
+}
 
 self.addEventListener("activate", (event) => {
   const keep = new Set(Object.values(CACHES));
@@ -48,7 +60,12 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  if (request.mode === "navigate") {
+  // Any document-like request — real navigations (mode: "navigate") AND the
+  // client-side idle prefetch of top-level pages (ordinary same-origin GETs
+  // with no file extension) — goes network-first, so the nav cache can warm
+  // ahead of later visits and hold pages for offline fallback. API calls
+  // (/api/*.php) are excluded — they're live DB data, never nav-cacheable.
+  if (request.mode === "navigate" || isHtmlPath(url.pathname)) {
     event.respondWith(networkFirst(request));
     return;
   }

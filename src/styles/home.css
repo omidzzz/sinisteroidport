@@ -424,3 +424,52 @@
   color: transparent;
   -webkit-text-stroke: 1.5px var(--color-acid);
 }
+
+/* ── SYNAPSE · homepage skill network ─────────────────────────── */
+/* Open constellation deck: NO chamber, NO panel — the canvas floats over the
+   page nebula. The "black tint glass" was this block's panel gradient. */
+.net-stage {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+.net-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(rgba(var(--rgb-acid), 0.12) 1px, transparent 1.4px) 0 0 / 26px 26px,
+    radial-gradient(rgba(var(--rgb-accent), 0.1) 1px, transparent 1.4px) 13px 13px / 26px 26px;
+  opacity: 0.55;
+}
+[data-theme="light"] .net-stage {
+  background: transparent;
+  border: none;
+}
+.net-stage canvas {
+  z-index: 2;
+}
+/* Corner ticks — quiet ornament instead of a border. */
+.net-stage::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--color-acid), var(--color-acid)) 0 0 / 14px 1px,
+    linear-gradient(var(--color-acid), var(--color-acid)) 0 0 / 1px 14px,
+    linear-gradient(var(--color-acid), var(--color-acid)) 100% 0 / 14px 1px,
+    linear-gradient(var(--color-acid), var(--color-acid)) 100% 0 / 1px 14px,
+    linear-gradient(var(--color-acid), var(--color-acid)) 0 100% / 14px 1px,
+    linear-gradient(var(--color-acid), var(--color-acid)) 0 100% / 1px 14px,
+    linear-gradient(var(--color-acid), var(--color-acid)) 100% 100% / 14px 1px,
+    linear-gradient(var(--color-acid), var(--color-acid)) 100% 100% / 1px 14px;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+}
+.net-hud {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}

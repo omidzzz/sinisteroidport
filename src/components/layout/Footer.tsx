@@ -1,4 +1,4 @@
-import Link from "next/link";
+import VTLink from "@/components/shell/ViewTransition";
 import Magnetic from "../ui/Magnetic";
 import LogoType from "./LogoType";
 import { ArrowIcon, SparkIcon, HeartIcon } from "../ui/icons";
@@ -50,7 +50,7 @@ export default function Footer({ locale }: { locale: Locale }) {
             className={`ticker ticker-band ${rev ? "ticker-rev row-b" : "row-a"}`}
           >
             <div className="ticker-track">
-              {[0, 1].map((copy) => (
+              {Array.from({ length: 2 }, (_, copy) => (
                 <div key={copy} className="flex">
                   {META.map((w) => (
                     <span
@@ -76,7 +76,7 @@ export default function Footer({ locale }: { locale: Locale }) {
             <ul className="space-y-4">
               {t.nav.map((item, i) => (
                 <li key={NAV_PATHS[i]}>
-                  <Link
+                  <VTLink
                     href={loc(locale, NAV_PATHS[i])}
                     className="group inline-flex items-baseline gap-3 font-display text-base font-bold uppercase tracking-wide text-ink transition-colors hover:text-acid"
                   >
@@ -84,7 +84,7 @@ export default function Footer({ locale }: { locale: Locale }) {
                       {item.index}
                     </span>
                     {item.label}
-                  </Link>
+                  </VTLink>
                 </li>
               ))}
             </ul>
@@ -170,6 +170,27 @@ export default function Footer({ locale }: { locale: Locale }) {
                 />
               </li>
             </ul>
+
+            {/* Follow — honest, no-backend feed links: RSS/JSON readers
+                pull new posts back without a newsletter account */}
+            <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-line pt-4">
+              <span className="label">{t.follow}</span>
+              <span className="h-px w-8 bg-line" aria-hidden />
+              <a
+                href={fa ? "/fa/feed.xml" : "/feed.xml"}
+                aria-label={`${t.rss} ${fa ? "خوراک" : "feed"}`}
+                className="inline-flex items-center gap-1.5 border border-line font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted transition-all duration-300 hover:border-acid/60 hover:text-acid"
+              >
+                {t.rss}
+              </a>
+              <a
+                href={fa ? "/fa/feed.json" : "/feed.json"}
+                aria-label={t.jsonFeed}
+                className="inline-flex items-center gap-1.5 border border-line font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted transition-all duration-300 hover:border-acid/60 hover:text-acid"
+              >
+                {t.jsonFeed}
+              </a>
+            </div>
           </div>
 
           {/* ── status tower ── */}

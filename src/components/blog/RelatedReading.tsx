@@ -1,21 +1,27 @@
 import type { Post } from "@/lib/blog/types";
 import { postTitle, postExcerpt, formatPostDate } from "@/lib/blog/format";
 import { loc, type Locale } from "@/lib/i18n";
+import { tagLabel } from "@/lib/tags";
 import { ArrowIcon } from "../ui/icons";
 
 /**
  * Related-reading block — the article's main CTR surface. A "Next
  * transmission" hero card for the single best-matching post (big title,
- * excerpt, cover, arrow) followed by compact rows for the rest. Rendered
- * inside the client post component (still SSR'd to static HTML) between the
- * article body and the FAQ so it isn't buried behind the accordions.
+ * excerpt, cover, arrow) followed by compact rows for the rest, plus a
+ * "more on {topic}" hop into the post's tag hub so every article feeds
+ * its cluster hub (topical-authority plumbing → crawl depth + hub CTR).
+ * Rendered inside the client post component (still SSR'd to static HTML)
+ * between the article body and the FAQ so it isn't buried behind the
+ * accordions.
  */
 export default function RelatedReading({
   related,
   locale,
+  tag,
 }: {
   related: Post[];
   locale: Locale;
+  tag?: string;
 }) {
   if (!related.length) return null;
 
@@ -31,6 +37,20 @@ export default function RelatedReading({
       <h2 className="label mb-8">
         {locale === "fa" ? "(مطالب مرتبط)" : "(Related reading)"}
       </h2>
+
+      {tag && (
+        /* Cluster hop — sends readers (and crawlers) from the post into
+            the topic hub that owns this tag. */
+        <a
+          href={loc(locale, `/tags/${tag}`)}
+          className="group mb-6 inline-flex items-center gap-2 border border-line px-4 py-2 font-mono text-[0.7rem] tracking-[0.12em] uppercase text-muted transition-colors hover:border-accent/60 hover:text-accent"
+        >
+          {locale === "fa"
+            ? `بیشتر در «${tagLabel(tag, locale)}»`
+            : `More on ${tagLabel(tag, locale)}`}
+          <ArrowIcon className="size-3.5 transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+        </a>
+      )}
 
       {/* compact rows — title is the payload, date/excerpt stay quiet */}
       {rest.map((p) => {

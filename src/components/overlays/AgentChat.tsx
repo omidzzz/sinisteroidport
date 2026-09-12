@@ -347,6 +347,7 @@ const COPY = {
     clear: "Clear conversation",
     jump: "Jump to latest",
     chipsLabel: "Try one:",
+    chipsHide: "Hide suggestions",
     unhinged: "UNHINGED",
     regenerate: "Regenerate reply",
     rateLabel: "useful?",
@@ -417,6 +418,7 @@ const COPY = {
     clear: "پاک کردن گفتگو",
     jump: "برو به آخر",
     chipsLabel: "یکی رو امتحان کن:",
+    chipsHide: "پنهان کردن پیشنهادها",
     unhinged: "UNHINGED",
     regenerate: "دوباره بساز",
     rateLabel: "به‌دردبخور بود؟",
@@ -1160,6 +1162,25 @@ export default function AgentChat({
     error?.message ?? "",
   );
 
+  // Starter chips can be dismissed — they eat real vertical space on small
+  // panels. The choice sticks for the browser session (sessionStorage), so
+  // a re-opened panel stays lean without hiding the chips forever.
+  const [chipsHidden, setChipsHidden] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem("sin-chips-hidden") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const hideChips = () => {
+    setChipsHidden(true);
+    try {
+      sessionStorage.setItem("sin-chips-hidden", "1");
+    } catch {
+      /* storage unavailable — hide for this open only */
+    }
+  };
+
   // Page-aware starter chips (hidden once a conversation is underway).
   const chips = useMemo(() => {
     const path = window.location.pathname;
@@ -1554,23 +1575,37 @@ export default function AgentChat({
         )}
       </div>
 
-      {!isStreaming && messages.length < 4 && (
+      {!isStreaming && messages.length < 4 && !chipsHidden && (
         <div className="sin-chat-chips" aria-label={t.chipsLabel}>
-          {chips.map((chip) => (
+          <div className="sin-chat-chips-head">
+            <span className="sin-chat-chips-title">{t.chipsLabel}</span>
             <button
-              key={chip}
               type="button"
-              className="sin-chat-chip"
-              onClick={() => {
-                startedAtRef.current = Date.now();
-                userTextRef.current = chip;
-                sendMessage({ text: chip });
-                trackEvent("chat_message", { locale, source: "chip" });
-              }}
+              className="sin-chat-chips-hide"
+              onClick={hideChips}
+              aria-label={t.chipsHide}
+              title={t.chipsHide}
             >
-              {chip}
+              ×
             </button>
-          ))}
+          </div>
+          <div className="sin-chat-chips-row">
+            {chips.map((chip) => (
+              <button
+                key={chip}
+                type="button"
+                className="sin-chat-chip"
+                onClick={() => {
+                  startedAtRef.current = Date.now();
+                  userTextRef.current = chip;
+                  sendMessage({ text: chip });
+                  trackEvent("chat_message", { locale, source: "chip" });
+                }}
+              >
+                {chip}
+              </button>
+            ))}
+          </div>
         </div>
       )}
       <form

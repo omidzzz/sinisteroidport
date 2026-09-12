@@ -70,9 +70,10 @@
 @media (prefers-reduced-motion: no-preference) {
   .live-dot { animation: node-pulse 2.6s ease-in-out infinite; }
 }
-/* ---------- v4 · /* ---------- v4 · Console DOCK navigation ---------- */
+/* ---------- v4 · Console DOCK navigation ---------- */
 
-/* Desktop console rides the TOP; hidden under md where the pill takes over */
+/* Desktop console rides the TOP; below 1200px the pills + orbital
+   overlay take over (the dock's link row can't breathe under 1200). */
 .dock-wrap {
   position: fixed;
   inset-inline: 0;
@@ -82,7 +83,7 @@
   justify-content: center;
   pointer-events: none;
 }
-@media (max-width: 767px) {
+@media (max-width: 1199.98px) {
   .dock-wrap { display: none; }
 }
 
@@ -123,7 +124,7 @@
 }
 .chip-start { inset-inline-start: 0.9rem; }
 .chip-end { inset-inline-end: 0.9rem; }
-@media (max-width: 767px) {
+@media (max-width: 1199.98px) {
   .chip-end { display: none; }
   .chip-start { padding: 0.36rem 0.6rem; }
 }
@@ -167,6 +168,43 @@
 }
 .dock-index { font-size: 0.55rem; color: rgba(var(--rgb-accent), 0.85); }
 
+/* ── Persian menu face — Vazirmatn UI / Kufi geometric ──────────────────
+   The chrome's mono/uppercase/letter-spacing recipe is Latin-only: JetBrains
+   Mono has no Arabic glyphs, so Persian labels fell through to system Tahoma
+   at 0.7rem with 0.15em tracking — which splits the cursive joins apart and
+   reads tiny+generic. Under FA, menu surfaces switch to the Vazirmatn face
+   (variable Arabic/Persian UI face, already loaded in layout.tsx) with
+   tracking zeroed (Persian joins stay intact) and a size bump — the tall
+   Persian ascenders need the room. Kufi (geometric Arabic) is the fallback
+   when Vazirmatn is unavailable. `.dock-index` numerals stay mono: latin
+   digits keep the techy counter look against the poster face. */
+html[lang="fa"] .dock-link {
+  font-family: var(--font-kufi), var(--font-vazirmatn), Tahoma, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.35;
+}
+html[lang="fa"] .mob-pill {
+  font-family: var(--font-kufi), var(--font-vazirmatn), Tahoma, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.35;
+}
+/* Orbital overlay items render huge (clamp 1.9–3.4rem) — Vazirmatn at
+   display size is the poster moment of the mobile menu. Index numerals
+   stay mono. */
+html[lang="fa"] .overlay-link {
+  font-family: var(--font-kufi), var(--font-vazirmatn), Tahoma, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.55;
+}
+
 /* Footer rail index numbers — acid small-caps; light theme uses the
    AA-safe acid-ink variant so the 4.5:1 contrast bar is always met. */
 .foot-idx { color: var(--color-acid); }
@@ -208,7 +246,8 @@
   background: linear-gradient(180deg, transparent, rgba(var(--rgb-acid), 0.4), transparent);
 }
 
-/* Mobile: top-end MENU button (opposite the logo chip at top-start) */
+/* Mobile: top-end MENU button (opposite the logo chip at top-start).
+   Shown below the 1200px console switch; the dock owns >= 1200px. */
 .mob-dock {
   position: fixed;
   inset-inline-end: calc(0.9rem + env(safe-area-inset-right));
@@ -218,8 +257,12 @@
   justify-content: flex-end;
   gap: 0.5rem;
 }
-@media (max-width: 767px) {
+@media (max-width: 1199.98px) {
   .mob-dock { display: flex; }
+}
+/* The orbital overlay lives in the same mobile register */
+@media (min-width: 1200px) {
+  .nav-mobile-only { display: none; }
 }
 .mob-pill {
   pointer-events: auto;
@@ -825,12 +868,11 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
   100% { text-shadow: 0 0 18px rgba(var(--rgb-accent), 0.4); }
 }
 
-/* Reverse companion ticker */
-.ticker-rev .ticker-track { animation-direction: reverse; }
-[dir="rtl"] .ticker-rev .ticker-track { animation-direction: normal; }
-/* Re-lock dir="ltr" reversed bands to true reverse (opposite direction)
-   in RTL pages, so row-a and row-b always cross regardless of document dir. */
-[dir="ltr"] .ticker-rev .ticker-track { animation-direction: reverse; direction: ltr; }
+/* Reverse companion ticker — the second row of a crossed pair. Uses the
+   dedicated backward keyframe (NOT animation-direction:reverse) so the
+   direction rules in spine-rail.css can flip row-a / row-b cleanly and a
+   double marquee always crosses in BOTH languages without re-inversion. */
+.ticker-rev .ticker-track > * { animation-name: ticker-step-bwd; }
 
 /* Hero portrait plate treatment */
 .plate-orbit { position: absolute; inset: -4.5% -7%; border-radius: 9999px; border: 1px dashed rgba(var(--rgb-accent), 0.4); pointer-events: none; }

@@ -16,6 +16,7 @@ import GridLines from "@/components/shell/GridLines";
 import Cursor from "@/components/shell/Cursor";
 import FilterDefs from "@/components/shell/FilterDefs";
 import ServiceWorkerRegister from "@/components/shell/ServiceWorkerRegister";
+import { ViewTransitionBridge, GlobalVTNav } from "@/components/shell/ViewTransition";
 import LazyMount from "@/components/ui/LazyMount";
 import { GoogleTag } from "@/components/analytics/GoogleTag";
 import { AnalyticsEvents } from "@/components/analytics/AnalyticsEvents";
@@ -94,6 +95,11 @@ const vazirmatn = Vazirmatn({
   preload: false,
 });
 
+// Arabic-script geometric mirror face (replaces the removed Syne). Variable
+// (100–900) so the kinetic weight effect still works. `preload: false` keeps
+// English pages from eagerly fetching the Arabic webfont (it decodes only on
+// fa pages, where the @font-face CSS is discovered in the inlined head CSS
+// on first render).
 const notoKufiArabic = Noto_Kufi_Arabic({
   subsets: ["arabic"],
   variable: "--font-kufi",
@@ -234,6 +240,16 @@ export default async function LocaleRootLayout({
         }`}
         suppressHydrationWarning
       >
+        {/* a11y: first focusable element on every page — lets keyboard users
+            jump straight past the nav/chrome to the page content (<main id="top">).
+            Hidden by default, pinned over the whole stack when focused. */}
+        <a
+          href="#top"
+          className="skip-link"
+          aria-label={locale === "fa" ? "پرش به محتوا" : "Skip to content"}
+        >
+          {locale === "fa" ? "پرش به محتوا" : "Skip to content"}
+        </a>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         {/* GA4: bootstrap queues events instantly; gtag.js itself defers to
             first-interaction-or-long-idle so it stays out of the load budget. */}
@@ -248,6 +264,13 @@ export default async function LocaleRootLayout({
         </LazyMount>
 {/* Production-only SW: repeat-visit caching + last-page offline */}
         <ServiceWorkerRegister />
+        {/* Route-change View Transitions: resolves the pending
+            startViewTransition promise once the new page paints. */}
+        <ViewTransitionBridge />
+        {/* Catch ALL internal links (cards, CTAs, footer, related posts) so
+            every route change rides a view transition, not just the chrome
+            that uses VTLink. */}
+        <GlobalVTNav />
                 <LazyMount mode="interaction">
           <GLBackground />
         </LazyMount>

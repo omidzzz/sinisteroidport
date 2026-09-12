@@ -7,6 +7,7 @@ const en = {
     { index: "04", label: "Education" },
     { index: "05", label: "Showcase" },
     { index: "06", label: "Writing" },
+    { index: "07", label: "Contact" },
   ] as { index: string; label: string }[],
   site: "/ sinisteroid.ir",
   coords: "35.6892°N / 51.3890°E",
@@ -74,6 +75,12 @@ const en = {
     intro:
       "Frontend development, design, local AI tooling, and the shifting landscape of search.",
   },
+  contact: {
+    kicker: "(07) Open channel",
+    title: "CONTACT",
+    intro:
+      "Four direct routes to one inbox — no forms, no bots, no waiting rooms.",
+  },
   notFound: {
     kicker: "(Error) — route not resolved",
     intro:
@@ -82,6 +89,9 @@ const en = {
   },
   fallbackNote: "— published in English",
   donate: "Donate",
+  follow: "New posts · no inbox noise",
+  rss: "RSS",
+  jsonFeed: "JSON feed",
 };
 
 export type Dictionary = typeof en;

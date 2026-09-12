@@ -134,6 +134,19 @@ export default function EasterEgg({
     return () => clearInterval(id);
   }, [open, boot]);
 
+  // Dialog focus contract: capture the trigger when the terminal opens, move
+  // focus to the prompt, and hand it back when it closes. (autoOpen mounts
+  // already-open — the trigger is null then and restore is a no-op.)
+  const openTriggerRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (open) {
+      openTriggerRef.current = document.activeElement as HTMLElement | null;
+      const id = requestAnimationFrame(() => inputRef.current?.focus());
+      return () => cancelAnimationFrame(id);
+    }
+    if (openTriggerRef.current?.isConnected) openTriggerRef.current.focus();
+  }, [open]);
+
   const run = (raw: string) => {
     const cmd = raw.trim().toLowerCase();
     if (!cmd) return;

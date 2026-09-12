@@ -36,6 +36,13 @@
 
 html[lang="fa"] {
   --font-display: var(--font-kufi), var(--font-vazirmatn), Tahoma, sans-serif;
+  /* Menu chrome (dock, mobile pills, orbital overlay) — the poster face.
+     Sahel is unavailable in this build, so lead with Vazirmatn (the
+     reliable variable Arabic/Persian UI face, already loaded in layout.tsx),
+     fall back to Kufi (geometric Arabic) then Tahoma. Letter-spacing MUST
+     stay 0 on Arabic script: tracking breaks the cursive joins between
+     Persian glyphs. */
+  --font-fa-menu: var(--font-kufi), var(--font-vazirmatn), Tahoma, sans-serif;
 }
 
 .font-display {

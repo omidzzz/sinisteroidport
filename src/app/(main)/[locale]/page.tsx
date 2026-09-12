@@ -2,6 +2,7 @@ import { JsonLd } from "@/components/ui/JsonLd";
 import { faqJsonLd } from "@/lib/schema";
 import HeroSection from "@/components/home/HeroSection";
 import TelemetrySection from "@/components/home/TelemetrySection";
+import SkillNetwork from "@/components/home/SkillNetwork";
 import ConsoleBay from "@/components/home/ConsoleBay";
 import ModuleBay from "@/components/home/ModuleBay";
 import SignalsSection from "@/components/home/SignalsSection";
@@ -44,6 +45,7 @@ export default async function HomePage({
 
       <HeroSection locale={locale} />
       <TelemetrySection locale={locale} skillTotal={skillTotal} />
+      <SkillNetwork locale={locale} />
       <ConsoleBay />
       <ModuleBay locale={locale} />
       <SignalsSection locale={locale} initial={latest} />

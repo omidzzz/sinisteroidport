@@ -7,7 +7,11 @@
  *
  * The shared key file (public/<key>.txt) must be reachable at
  * https://sinisteroid.ir/<key>.txt — it ships with the static export.
- * Run AFTER `npm run deploy` has uploaded the new build.
+ *
+ * `npm run deploy` now chains this as its last step, so every release
+ * pings the engines automatically (Bing re-crawls whatever it receives,
+ * so submitting pre-upload is harmless — the sitemap URL set is stable).
+ * Run it manually anyway after a cPanel upload to force a re-ping.
  */
 import fs from "node:fs";
 import path from "node:path";

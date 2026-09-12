@@ -87,12 +87,24 @@ export default function HeroSection({ locale }: { locale: Locale }) {
           <div className="hazard-tape absolute inset-x-0 -top-[9px] h-[9px]" />
           <div className="ticker ticker-band">
             <div className="ticker-track">
-              {[0, 1].map((copy) => (
+              {Array.from({ length: 2 }, (_, copy) => (
                 <div key={copy} className="flex">
                   {t.services.map((s) => (
                     <span
                       key={`${copy}-${s.title}`}
-                      className="flex items-center gap-6 whitespace-nowrap px-6 py-3.5 font-display text-sm font-bold uppercase tracking-[0.18em]"
+                      className={`flex items-center gap-6 whitespace-nowrap px-6 py-3.5 text-sm font-bold ${
+                        locale === "fa" ? "" : "font-display uppercase tracking-[0.18em]"
+                      }`}
+                      style={
+                        locale === "fa"
+                          ? {
+                              fontFamily:
+                                "var(--font-vazirmatn), var(--font-kufi), Tahoma, sans-serif",
+                              letterSpacing: "0",
+                              textTransform: "none",
+                            }
+                          : undefined
+                      }
                     >
                       <SparkIcon className="shrink-0 opacity-70" />
                       {s.title}

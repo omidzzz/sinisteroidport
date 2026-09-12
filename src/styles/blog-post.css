@@ -251,21 +251,23 @@ h1, h2, h3 {
   outline-offset: 3px;
 }
 
-/* Site-wide CRT veil — a single static composited layer above the
-   nebula canvas. Deliberately no blend mode and no animation: nothing
-   repaints per frame, the GPU just stacks one more fixed layer. */
+/* Site-wide CRT veil — a single static composited layer. It must sit UNDER
+   the page content (z 0, below the GL nebula's -z-10 wrapper? no — juste
+   under content, above nothing interactive). Above-content black scanlines
+   over a transparent <canvas> read as tinted glass ("black tint" bug), so
+   keep this veil thin and pointer-transparent. */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 70;
+  z-index: 0;
   pointer-events: none;
   background: repeating-linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.16) 0 1px,
-    transparent 1px 3px
+    rgba(0, 0, 0, 0.1) 0 1px,
+    transparent 1px 4px
   );
-  opacity: 0.5;
+  opacity: 0.22;
 }
 [data-theme="light"] body::after { opacity: 0.22; }
 

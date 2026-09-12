@@ -7,7 +7,7 @@ import {
   getAllPosts,
   getPostBySlug,
 } from "@/lib/blog/repository";
-import { getPostMeta, getPostKeywords } from "@/lib/blog/meta";
+import { buildSeoTitle, getPostMeta, getPostKeywords } from "@/lib/blog/meta";
 import { postWordCount, postReadMinutes } from "@/lib/blog/stats";
 import { ogCardSrc, publicAssetExists } from "@/lib/blog/assets";
 import type { Post } from "@/lib/blog/types";
@@ -69,6 +69,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Authored SEO keywords (focus keyword first) — emitted as
   // <meta name="keywords"> and merged into the BlogPosting JSON-LD.
   const keywords = getPostKeywords(post, locale);
+  // SERP title: focus-keyword-led, capped so the " – Omid" suffix stays
+  // inside Google's title budget (og:title keeps the full authored title —
+  // social cards have more room than SERP rows).
+  const seoTitle = buildSeoTitle(post, locale);
   // Prefer the generated 1200x630 JPG card (branded, readable in every
   // share surface); fall back to the raw cover, then the default card.
   const card = ogCardSrc(slug);
@@ -77,7 +81,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // or ?lang= variants. The per-post seo.canonical field in the JSON points
   // at legacy bare URLs and is intentionally not used here.
   return {
-    title: meta.title,
+    title: seoTitle,
     description: meta.excerpt,
     ...(keywords.length > 0 ? { keywords } : {}),
     alternates: seoAlternates(`blog/${slug}`, locale),

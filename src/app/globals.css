@@ -38,6 +38,8 @@
      console-bay.css   V16 — in-flow acid laptop deck
       prop-float.css    V17 — scroll-bound prop floaters (plant/frog/drone)
      blog-post.css     V9 — prose-post article voice
+     motion-reduce.css WCAG 2.2.2 safety net — freezes every remaining
+                       CSS animation for prefers-reduced-motion (LAST)
    ------------------------------------------------------------ */
 
 @import "tailwindcss";
@@ -53,6 +55,7 @@
 @import "../styles/theme-engine.css";
 @import "../styles/console.css";
 @import "../styles/pages.css";
+@import "../styles/contact.css";
 @import "../styles/acid-rave.css";
 @import "../styles/showcase.css";
 @import "../styles/console-bay.css";
@@ -60,3 +63,5 @@
 @import "../styles/blog-post.css";
 @import "../styles/agent-chat.css";
 @import "../styles/fx-modern.css";
+@import "../styles/view-transitions.css";
+@import "../styles/motion-reduce.css";

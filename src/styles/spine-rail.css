@@ -222,6 +222,17 @@
 
 .ticker {
   overflow: hidden;
+  container-type: inline-size;
+  /* PHYSICAL LTR ANCHOR — the RTL-independence keystone. `direction`
+     affects where a wider-than-container child BOX is placed: in an RTL
+     document a block child aligns to the right edge and overflows LEFT,
+     which put the step-scheme copies outside the window at the loop start
+     (FA band: empty → items slide in → jump to empty, every cycle). With
+     the container forced ltr, the track always sits at the left edge and
+     overflows right — the copy geometry (and thus the seamless step math)
+     becomes identical in both languages. Persian phrases inside each copy
+     still shape RTL correctly (each span is a single bidi run). */
+  direction: ltr;
   -webkit-mask-image: linear-gradient(
     90deg,
     transparent,
@@ -237,42 +248,101 @@
     transparent
   );
 }
+/* Track = identical copies tiling side-by-side. The track itself NEVER
+   animates: each COPY animates 0 → -100% of its OWN width, in lockstep.
+
+   Why per-copy steps? A composited animation layer wider than the GPU's
+   max texture size (8192 device px on many real GPUs — headless/software
+   rasterization is immune) fails to paint, so animating the whole 2×-band
+   track as one layer blanked the whole marquee on real hardware (the FA
+   hero band "shows nothing"). With per-copy animation every composited
+   layer is exactly ONE copy ≈ one band wide — far under the limit even at
+   DPR 2 on a 2560px screen (~5.8k device px).
+
+   Why it can never gap: at progress p, copy-a covers [pW..(p+1)W] and
+   copy-b [(p-1)W..pW] (W = copy width), so the band [0..W] is always fully
+   covered by the two half-steps. At the loop point copy-b's end state
+   (fully covering the band) is pixel-identical to copy-a's reset state, so
+   the wrap is frame-perfect. Coverage is forced by construction: `.ticker`
+   is an inline-size container and every copy gets min-width: 100cqw with
+   space-around spreading, so each copy ≥ band width at ANY viewport.
+   translateX percentages resolve against the copy's own border box, so the
+   step distance always equals the flex offset between copies — the seam
+   stays exact even if a copy's content overflows its min-width. */
 .ticker-track {
   display: flex;
   width: max-content;
-  animation: ticker-run 30s linear infinite;
 }
-.ticker:hover .ticker-track {
+.ticker-track > * {
+  flex: none;
+  min-width: 100cqw;
+  justify-content: space-around;
+  animation: ticker-step-fwd 40s linear infinite;
+}
+/* Legacy engines without container queries: fall back to a viewport-width
+   copy (the widest band is 114vw, so 120vw keeps it covered). translateX
+   percentages still equal the copy offset, so the seam stays exact. */
+@supports not (width: 1cqw) {
+  .ticker-track > * {
+    min-width: 120vw;
+  }
+}
+.ticker:hover .ticker-track > * {
   animation-play-state: paused;
 }
-@keyframes ticker-run {
+@keyframes ticker-step-fwd {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
   }
 }
-[dir="rtl"] .ticker-track {
-  animation-name: ticker-run-rtl;
-}
-@keyframes ticker-run-rtl {
+@keyframes ticker-step-bwd {
   from {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
   }
   to {
     transform: translateX(0);
   }
 }
-/* ── Lock dir="ltr" tickers to LTR animation even under <html dir="rtl"> ──
-   The [dir="rtl"] selector above matches ANY ancestor, so in the Persian
-   page it hijacks the footer ASCII bands (which set dir="ltr" on purpose).
-   These overrides — same specificity, later in source order — win the
-   cascade and guarantee crossed-band motion in both languages.            */
-[dir="ltr"] .ticker-track { animation-name: ticker-run; direction: ltr; }
+/* ── Direction semantics ────────────────────────────────────────────────
+   "Forward" is whichever physical direction reads naturally for the doc
+   language: LTR pages scroll the text leftward (0 → -100%), RTL pages
+   scroll it rightward (-100% → 0). Both are seamless because the copies
+   step in lockstep regardless of flex direction.
+
+   The reversed companion band (.ticker-rev — "row-b" of a crossed pair)
+   always runs the OPPOSITE keyframe. A dedicated keyframe name is used
+   instead of `animation-direction: reverse`, because reverse would be
+   re-inverted by the RTL rule below and both rows of a double marquee
+   would end up moving the same way.
+
+   Selector strategy (verified in a real engine — see the cross band
+   assertions): document rules are anchored to `html[dir=…]` so a band's
+   OWN dir attribute can never co-match them; bands that pin dir="ltr"
+   (ASCII strips inside the Persian layout) are matched by self-selectors
+   `[dir="ltr"].ticker …` whose higher specificity wins regardless of
+   source order. No tie-breaks, so double marquees ALWAYS cross. */
+html[dir="rtl"] .ticker-track > * { animation-name: ticker-step-bwd; }
+html[dir="rtl"] .ticker-rev .ticker-track > * { animation-name: ticker-step-fwd; }
+html[dir="ltr"] .ticker-track > * { animation-name: ticker-step-fwd; }
+html[dir="ltr"] .ticker-rev .ticker-track > * { animation-name: ticker-step-bwd; }
+/* Self-pinned LTR bands — always win over the document rules. */
+[dir="ltr"].ticker .ticker-track > * { animation-name: ticker-step-fwd; direction: ltr; }
+[dir="ltr"].ticker.ticker-rev .ticker-track > * { animation-name: ticker-step-bwd; direction: ltr; }
 
 
-/* Inverted acid band used by diagonal marquees */
+/* ── Ticker labels in Arabic-script layouts ────────────────────────────── */
+/* Latin ticker recipe (uppercase + wide tracking) shreds Persian cursive
+   joins and is a no-op for case. Neutralize both for fa so the hero hazard
+   band and footer marquees read as connected Arabic glyphs. */
+html[lang="fa"] .ticker-track > * > span,
+html[lang="fa"] .ticker-band .ticker-track > * > span {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-vazirmatn), var(--font-kufi), Tahoma, sans-serif;
+}
 .ticker-band {
   background: linear-gradient(
     100deg,
@@ -285,12 +355,13 @@
     0 0 34px rgba(var(--rgb-acid), 0.32),
     0 0 80px rgba(var(--rgb-accent-2), 0.22);
 }
-.ticker-band .ticker-track {
-  animation-duration: 26s;
+.ticker-band .ticker-track > * {
+  /* 34s — one copy (~= band width) per step ≈ 53px/s on a 1600w screen. */
+  animation-duration: 34s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ticker-track {
+  .ticker-track > * {
     animation: none;
   }
 }

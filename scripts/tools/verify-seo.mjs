@@ -222,10 +222,14 @@ ok("template strips + re-injects shell JSON-LD", php.includes("application/ld+js
 console.log("\n=== MARQUEE FIXES ===");
 ok("LTR ticker override in CSS", has("[dir=ltr] .ticker-track"));
 ok("LTR ticker-rev override in CSS", has("[dir=ltr] .ticker-rev .ticker-track"));
+ok("RTL ticker-rev override in CSS", has("[dir=rtl] .ticker-rev .ticker-track"));
 ok("direction:ltr present in CSS", has("direction:ltr"));
 ok("no ticker-move-rtl (old class)", !has("ticker-move-rtl"));
 ok("FA page ticker-track rendered", faHome2.includes("ticker-track"));
-ok("RTL ticker keyframe for FA pages", has("ticker-run-rtl"));
+ok("RTL ticker keyframe for FA pages", has("ticker-step-bwd") && has("ticker-step-fwd"));
+ok("old full-track keyframes removed", !has("@keyframes ticker-backward") && !has("@keyframes ticker-forward"));
+ok("per-copy step animation (track static)", has(".ticker-track > *") && has("translateX(-100%)"));
+ok("no backwards-compat keyframe residue", !has("ticker-run-rtl"));
 
 // ── Sitemap: dynamic + static fallback ────────────────────────────
 console.log("\n=== SITEMAP FIXES ===");

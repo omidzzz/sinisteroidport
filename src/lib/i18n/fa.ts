@@ -9,6 +9,7 @@ const fa: Dictionary = {
     { index: "04", label: "تحصیلات" },
     { index: "05", label: "نمونه‌کارها" },
     { index: "06", label: "نوشته‌ها" },
+    { index: "۰۷", label: "تماس" },
   ],
   site: "/ sinisteroid.ir",
   coords: "۳۵٫۶۸۹۲ شمالی / ۵۱٫۳۸۹۰ شرقی",
@@ -75,6 +76,11 @@ const fa: Dictionary = {
     title: "نوشته‌ها",
     intro: "توسعه فرانت‌اند، طراحی، ابزارهای هوش مصنوعی محلی و آینده جست‌وجو.",
   },
+  contact: {
+    kicker: "(۰۷) کانال ارتباطی",
+    title: "تماس",
+    intro: "چهار مسیر مستقیم به یک صندوق ایمیل — بدون فرم، بدون ربات، بدون اتاق انتظار.",
+  },
   notFound: {
     kicker: "(خطا) — مسیر پیدا نشد",
     intro: "صفحه‌ای که دنبالش هستید وجود ندارد یا جابه‌جا شده است.",
@@ -82,6 +88,9 @@ const fa: Dictionary = {
   },
   fallbackNote: "— به انگلیسی منتشر شده",
   donate: "حمایت",
+  follow: "نوشته‌های تازه · بدون هرزنامه",
+  rss: "RSS",
+  jsonFeed: "فید JSON",
 };
 
 export default fa;

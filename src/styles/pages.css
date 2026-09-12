@@ -353,6 +353,127 @@
 }
 .edu-card:hover::after { opacity: 1; }
 
+/* ---------- CONTACT: channel deck (reuses the edu-card recipe) ---------- */
+.contact-deck { grid-template-columns: 1fr; }
+@media (min-width: 640px) {
+  .contact-deck { grid-template-columns: repeat(2, 1fr); }
+}
+.contact-card {
+  min-height: 12.5rem;
+  cursor: pointer;
+}
+article.contact-card { cursor: default; }
+.contact-card .contact-value {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.3;
+  word-break: break-word;
+}
+a.contact-card:hover .contact-value { color: var(--color-acid); }
+
+/* channel mark — a small framed plate carrying the detailed SVG */
+.contact-head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.contact-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  flex: none;
+  padding: 0.45rem;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  background:
+    linear-gradient(155deg, rgba(var(--rgb-accent), 0.09), transparent 62%),
+    rgba(var(--rgb-accent-3), 0.1);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.contact-icon .contact-mark {
+  width: 100%;
+  height: 100%;
+}
+/* hover ignition — the plate lights up in sync with the card */
+a.contact-card:hover .contact-icon,
+article.contact-card:hover .contact-icon {
+  border-color: rgba(var(--rgb-accent), 0.45);
+  box-shadow: 0 0 16px rgba(var(--rgb-acid), 0.16);
+}
+/* idle sonar ring — gentle, non-layout, motion-reduce kills it globally */
+@media (prefers-reduced-motion: no-preference) {
+  .contact-icon::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid rgba(var(--rgb-acid), 0.35);
+    opacity: 0;
+    pointer-events: none;
+    animation: contact-icon-pulse 3.4s ease-in-out infinite;
+    animation-delay: var(--ci-delay, 0s);
+  }
+  @keyframes contact-icon-pulse {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    45% { opacity: 0.7; transform: scale(1.06); }
+    60% { opacity: 0; transform: scale(1.1); }
+  }
+  /* stagger the four cards so the sonar doesn't blink in unison
+     (cards live inside Reveal wrappers — stagger on the deck's children) */
+  .contact-deck > .reveal:nth-child(2) .contact-icon::after { --ci-delay: 0.85s; }
+  .contact-deck > .reveal:nth-child(3) .contact-icon::after { --ci-delay: 1.7s; }
+  .contact-deck > .reveal:nth-child(4) .contact-icon::after { --ci-delay: 2.55s; }
+}
+
+.contact-card .contact-go {
+  position: absolute;
+  inset-inline-end: 1.4rem;
+  inset-block-start: 1.4rem;
+  color: var(--color-muted);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+a.contact-card:hover .contact-go {
+  color: var(--color-acid);
+  transform: translateX(4px);
+}
+[dir="rtl"] a.contact-card:hover .contact-go { transform: translateX(-4px); }
+.contact-card .contact-copy {
+  align-self: flex-start;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.contact-card .contact-copy:hover {
+  color: var(--color-acid);
+  border-color: rgba(var(--rgb-acid), 0.5);
+}
+/* availability strip under the hero */
+.contact-status {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 2.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.contact-status .live-dot { flex: none; }
+
 /* ---------- SHOWCASE: case deck ---------- */
 .case-deck {
   display: flex;

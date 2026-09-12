@@ -12,7 +12,27 @@
 .logo-sinister {
   font-weight: 800;
   letter-spacing: 0.04em;
-  color: var(--color-ink);
+  /* Eye-catching gradient register — acid → magenta → violet sweep */
+  background: linear-gradient(
+    97deg,
+    var(--color-acid) 8%,
+    var(--color-accent) 55%,
+    var(--color-accent-2) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 12px rgba(var(--rgb-acid), 0.32));
+}
+[data-theme="light"] .logo-sinister {
+  background: linear-gradient(
+    97deg,
+    var(--color-acid-ink) 8%,
+    var(--color-accent) 55%,
+    var(--color-accent-2) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 .logo-glyph {
   font-family: var(--font-mono);
@@ -26,8 +46,10 @@
 }
 .logo-ring {
   color: transparent;
-  -webkit-text-stroke: 1.5px var(--color-acid);
-  text-shadow: 0 0 14px rgba(var(--rgb-acid), 0.45);
+  -webkit-text-stroke: 2px var(--color-acid);
+  text-shadow:
+    0 0 16px rgba(var(--rgb-acid), 0.6),
+    0 0 42px rgba(var(--rgb-accent), 0.35);
 }
 .logo-id {
   font-weight: 800;
@@ -53,6 +75,33 @@
 @keyframes oid-scan {
   50% {
     opacity: 0.25;
+  }
+}
+
+/* ---------- BRAND MARK — the "S" tile (Navbar chip) ---------- */
+.brand-mark {
+  display: block;
+  filter: drop-shadow(0 0 9px rgba(var(--rgb-acid), 0.5));
+  transition: filter 0.25s ease;
+}
+a:hover .brand-mark,
+a:focus-visible .brand-mark {
+  filter:
+    drop-shadow(0 0 14px rgba(var(--rgb-acid), 0.85))
+    drop-shadow(0 0 30px rgba(var(--rgb-accent), 0.35));
+}
+.brand-mark .brand-orbit {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .brand-mark .brand-orbit {
+    animation: brand-orbit 7s linear infinite;
+  }
+}
+@keyframes brand-orbit {
+  to {
+    rotate: 360deg;
   }
 }
 

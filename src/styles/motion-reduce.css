@@ -1,0 +1,38 @@
+/* ============================================================
+   MOTION-REDUCE — WCAG 2.2.2 site-wide safety net.
+   ------------------------------------------------------------
+   The animated components already opt out individually
+   (KineticTitle & ScrambleText render inert, CountUp snaps,
+   Cursor and PropFloat drift bail, GLBackground paints a single
+   static frame, LaptopDeck ships its own inline block). This
+   LAST-imported sheet freezes every remaining pure-CSS
+   animation/transition — ticker/band marquees, holo-core pulses,
+   CRT scanlines, glow flickers, the holo-drift shimmer — for
+   visitors who request reduced motion.
+
+   Purely additive: default-motion visitors see zero change, and
+   nothing here alters layout (duration/iteration only).
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    /* base.css sets smooth scrolling — honor the user's motion choice. */
+    scroll-behavior: auto;
+  }
+
+  /* Every animation completes instantly (0.01 ms ≈ one frame) and never
+     repeats: infinite tickers/glows freeze on their start frame instead of
+     cycling. Transitions snap to their end state, so state toggles (.reveal,
+     overlay open/close, hover tints) still resolve correctly — just without
+     the eased slide. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

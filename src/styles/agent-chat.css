@@ -7,12 +7,14 @@
 
 /* ── Floating action button ───────────────────────────────── */
 .sin-chat-fab {
-  /* Theme-aware robot surface vars (see light override below). The accent
-     (eyes/mouth) uses `color`, which tracks the acid token in both themes. */
-  --fab-head: #20242c;
-  --fab-head2: #333a46;
-  --fab-edge: #454c5a;
-  --fab-visor: #12151b;
+  /* Theme-aware ALIEN surface vars (see light override below). The neon
+     accents (eye ring, smirk/grin, orbit halo) use `color`, which tracks
+     the acid token in both themes. Head greens come from the UFO alien
+     (components/home/drone) so the agent and the saucer share a face. */
+  --fab-head: #7ee657;
+  --fab-head2: #52c93c;
+  --fab-edge: #1a1330; /* the UFO's cartoon ink outline */
+  --fab-visor: #141024; /* eye fill */
   --fab-glint: #eafcff;
 
   position: fixed;
@@ -101,14 +103,147 @@
   }
 }
 
-/* Light theme: pop the robot head to a light surface so it reads on the
-   whiteout, and brighten the glint. The acid accents keep the same hue. */
+/* Light theme: deepen the alien greens a touch so the ink outline and
+   dark eyes stay crisp on the whiteout. The acid accents keep the hue. */
 html[data-theme="light"] .sin-chat-fab {
-  --fab-head: #dde3ea;
-  --fab-head2: #c3ccd8;
-  --fab-edge: #5b6577;
-  --fab-visor: #0e1419;
+  --fab-head: #8bef5e;
+  --fab-head2: #5ecb3c;
+  --fab-edge: #1a1330;
+  --fab-visor: #141024;
   --fab-glint: #ffffff;
+}
+
+/* ── The alien's face — idle sly look + hover expression flip ──────────
+   Idle: left eye squinted shut (the sly squint) under a smug brow, right
+   eye wide with a neon ring, lazy smirk, slow abduction-halo spin.
+   Hover/focus: the squint SNAPS to the other eye (left opens wide, right
+   narrows), the brow lifts, the glints travel, the head tilts slyly with
+   an acid drop-glow, and the smirk blooms into an open neon grin.
+   Springs use a slight overshoot; everything is transform/opacity-only
+   and the infinite loops (blink, halo spin) are gated behind
+   prefers-reduced-motion (motion-reduce.css freezes the rest site-wide). */
+.sin-chat-fab .al-eye,
+.sin-chat-fab .al-brow,
+.sin-chat-fab .al-glint,
+.sin-chat-fab .al-head,
+.sin-chat-fab .al-orbit,
+.sin-chat-fab .al-smirk,
+.sin-chat-fab .al-grin {
+  transform-box: fill-box;
+}
+.sin-chat-fab .al-eye,
+.sin-chat-fab .al-brow,
+.sin-chat-fab .al-glint,
+.sin-chat-fab .al-head {
+  transform-origin: 50% 50%;
+  transition: transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.sin-chat-fab .al-head {
+  transform-origin: 50% 62%;
+  transition:
+    transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 320ms ease;
+}
+
+/* idle sly squint: left eye pinched, right eye wide */
+.sin-chat-fab .al-eye-l {
+  transform: scaleY(0.34) scaleX(1.08);
+}
+.sin-chat-fab .al-eye-r {
+  transform: scaleY(1);
+}
+
+/* hover: the squint swaps eyes — the alien "wakes up" at you */
+.sin-chat-fab:hover .al-eye-l,
+.sin-chat-fab:focus-visible .al-eye-l {
+  transform: scaleY(1.06) scaleX(1.08);
+}
+.sin-chat-fab:hover .al-eye-r,
+.sin-chat-fab:focus-visible .al-eye-r {
+  transform: scaleY(0.4) scaleX(1.06);
+}
+/* brow lifts off the newly-opened eye */
+.sin-chat-fab .al-brow {
+  transform-origin: 20% 50%;
+}
+.sin-chat-fab:hover .al-brow,
+.sin-chat-fab:focus-visible .al-brow {
+  transform: translateY(-4px) rotate(10deg);
+}
+/* glints drift up-and-out, like a second reflection catching light */
+.sin-chat-fab:hover .al-glint,
+.sin-chat-fab:focus-visible .al-glint {
+  transform: translate(2.5px, -2.5px) scale(1.3);
+}
+/* sly head tilt + acid under-glow */
+.sin-chat-fab:hover .al-head,
+.sin-chat-fab:focus-visible .al-head {
+  transform: rotate(-5deg);
+  filter: drop-shadow(0 0 7px rgba(var(--rgb-acid), 0.55));
+}
+
+/* mouth: smirk ⇄ open grin crossfade */
+.sin-chat-fab .al-grin {
+  opacity: 0;
+  transition: opacity 300ms ease 60ms;
+}
+.sin-chat-fab .al-smirk {
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+.sin-chat-fab:hover .al-smirk,
+.sin-chat-fab:focus-visible .al-smirk {
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.sin-chat-fab:hover .al-grin,
+.sin-chat-fab:focus-visible .al-grin {
+  opacity: 1;
+}
+
+/* abduction halo: slow idle spin, sprints + brightens on hover */
+.sin-chat-fab .al-orbit {
+  transform-origin: center;
+  transition: opacity 300ms ease;
+}
+.sin-chat-fab:hover .al-orbit,
+.sin-chat-fab:focus-visible .al-orbit {
+  opacity: 0.85;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sin-chat-fab .al-orbit {
+    animation: al-spin 26s linear infinite;
+  }
+  .sin-chat-fab:hover .al-orbit,
+  .sin-chat-fab:focus-visible .al-orbit {
+    animation-duration: 7s;
+  }
+  /* life sign: the alien blinks both eyes every few seconds (scales the
+     whole eyes group, so the hover squint-swap on the children keeps
+     working independently) */
+  .sin-chat-fab .al-eyes {
+    transform-box: fill-box;
+    transform-origin: 50% 55%;
+    animation: al-blink 5.6s ease-in-out infinite;
+  }
+  @keyframes al-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes al-blink {
+    0%,
+    92.5%,
+    100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.06);
+    }
+    97.5% {
+      transform: scaleY(1);
+    }
+  }
 }
 
 .sin-chat-fab:hover,
@@ -760,12 +895,58 @@ html[data-theme="light"] .sin-chat-fab {
 
 /* ── Starter chips ────────────────────────────────────────── */
 .sin-chat-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
   padding: 0.55rem 0.75rem;
   border-top: 1px solid rgba(var(--rgb-accent), 0.18);
   background: rgba(var(--rgb-accent-3), 0.3);
+}
+
+/* header row: label + dismiss control */
+.sin-chat-chips-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.sin-chat-chips-title {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(var(--rgb-accent), 0.75);
+}
+
+/* full-width ghost close — comfortable tap target, quiet until hovered */
+.sin-chat-chips-hide {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  min-width: 44px;
+  min-height: 24px;
+  flex: 0 0 auto;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(var(--rgb-ink), 0.55);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.sin-chat-chips-hide:hover {
+  color: rgba(var(--rgb-accent), 1);
+  border-color: rgba(var(--rgb-accent), 0.4);
+}
+
+.sin-chat-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 .sin-chat-chip {

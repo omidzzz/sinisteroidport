@@ -30,6 +30,7 @@ const CATEGORY_FA: Record<string, string> = {
   "Database Expertise": "پایگاه داده",
   "Tools & Workflow": "ابزارها و گردش کار",
   "AI Prompting": "مهندسی پرامپت هوش مصنوعی",
+  "AI Agent Engineering": "مهندسی ایجنت هوش مصنوعی",
   "Media Editing": "ویرایش رسانه",
   "Social Skills": "مهارت‌های اجتماعی",
 };

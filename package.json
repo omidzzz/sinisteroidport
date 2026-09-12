@@ -16,7 +16,7 @@
     "audit": "node scripts/tools/audit2.mjs",
     "verify-laptop": "node scripts/tools/verify-laptop-timing.mjs",
     "zip-out": "node scripts/build/zip-out.mjs",
-    "deploy": "npm run build && npm run prepare-cpanel && npm run zip-out",
+    "deploy": "npm run build && npm run prepare-cpanel && npm run zip-out && npm run indexnow",
     "regen:previews": "node scripts/regen-project-previews.mjs"
   },
   "dependencies": {

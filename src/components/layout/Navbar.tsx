@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import VTLink from "@/components/shell/ViewTransition";
 import { usePathname } from "next/navigation";
 import LogoType from "./LogoType";
+import BrandMark from "./BrandMark";
 import ThemeToggle from "./ThemeToggle";
 import { HeartIcon } from "../ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
@@ -12,13 +13,13 @@ import { NAV_PATHS } from "@/lib/nav";
 /**
  * CONSOLE DOCK NAV — readable navigation, unconventional placement.
  *
- *  • Desktop (md+): a floating capsule dock pinned to the BOTTOM center.
+ *  • Desktop (>=1200px): a floating capsule dock pinned to the BOTTOM center.
  *    Indexed uppercase mono links stay fully legible over any background;
  *    the active route carries an acid underline beam. Brand lives in its
  *    own corner chip (top start); telemetry + language + theme sit in the
  *    dock's tail section.
  *
- *  • Mobile: brand chip up top, a bottom-center SIGNAL pill opens ORBITAL
+ *  • Mobile (<1200px): brand chip up top, a bottom-center SIGNAL pill opens ORBITAL
  *    — the fullscreen staggered display-link overlay (reused voice).
  */
 export default function Navbar({ locale }: { locale: Locale }) {
@@ -58,18 +59,15 @@ export default function Navbar({ locale }: { locale: Locale }) {
     <>
       {/* ══ BRAND CORNER CHIP (always visible) ══ */}
       <div className="chip-corner chip-start">
-        <Link
+        <VTLink
           href={loc(locale, "/")}
           aria-label="Omid — home"
           onClick={() => setOpen(false)}
           className="flex shrink-0 items-center gap-2.5 transition-colors hover:text-acid"
         >
-          <span className="relative grid place-items-center" aria-hidden>
-            <span className="orbit-pip" />
-            <span className="nav-dot" />
-          </span>
+          <BrandMark className="h-[30px] w-[30px]" />
           <LogoType variant="compact" className="align-middle text-[0.92rem]" />
-        </Link>
+        </VTLink>
       </div>
 
       {/* ══ DESKTOP FLOATING DOCK ══════════════════════════ */}
@@ -81,7 +79,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
                 ? clean === "/"
                 : clean.startsWith(NAV_PATHS[i]);
             return (
-              <Link
+              <VTLink
                 key={NAV_PATHS[i]}
                 href={loc(locale, NAV_PATHS[i])}
                 aria-current={active ? "page" : undefined}
@@ -89,7 +87,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
               >
                 <span className="dock-index">{item.index}</span>
                 {item.label}
-              </Link>
+              </VTLink>
             );
           })}
 
@@ -136,7 +134,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
       </div>
 
       {/* ══ MOBILE DOCK: search + menu (easy to find, top-end) ══ */}
-      <div className="mob-dock md:hidden gap-2">
+      <div className="mob-dock gap-2">
         {/* Command palette affordance — Ctrl+K is keyboard-only, so touch
             users get a real button that opens the same palette. */}
         <button
@@ -184,7 +182,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
       {/* ══ MOBILE ORBITAL OVERLAY ═════════════════════════ */}
       <div
         id="orbital-nav"
-        className={`overlay-veil md:hidden ${open ? "is-open" : ""}`}
+        className={`overlay-veil nav-mobile-only ${open ? "is-open" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
@@ -196,7 +194,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
         <div className="overlay-menu">
           <p className="label mb-6">{t.site}</p>
           {t.nav.map((item, i) => (
-            <Link
+            <VTLink
               key={NAV_PATHS[i]}
               href={loc(locale, NAV_PATHS[i])}
               aria-current={
@@ -218,7 +216,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
             >
               <span className="overlay-index me-3 align-middle">{item.index}</span>
               {item.label}
-            </Link>
+            </VTLink>
           ))}
           <div className="mt-8 flex flex-wrap items-center gap-4 font-mono text-xs uppercase tracking-widest text-muted">
             {langSwap}

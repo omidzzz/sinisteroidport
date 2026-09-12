@@ -127,6 +127,14 @@ function runLighthouse(url, preset) {
   }
   const report = JSON.parse(fs.readFileSync(outPath, "utf8"));
   const a = report.audits;
+  const a11yCat = report.categories?.accessibility;
+  // WCAG A/AA audits carry positive weight; score <1 means a rule is failing
+  // (color-contrast can be fractional, image-alt is binary 0/1).
+  const a11yFails = (a11yCat?.auditRefs ?? [])
+    .filter((ref) => Number.isFinite(ref.weight) && ref.weight > 0)
+    .map((ref) => ({ id: ref.id, score: a[ref.id]?.score }))
+    .filter(({ score }) => typeof score === "number" && score < 1)
+    .map(({ id }) => `${id} (${a[id]?.title ?? id})`);
   return {
     score: report.categories?.performance?.score ?? 0,
     metrics: {
@@ -137,6 +145,9 @@ function runLighthouse(url, preset) {
       SI: a["speed-index"]?.numericValue,
       LCPEl: a["largest-contentful-paint-element"]?.displayValue ?? null,
     },
+    // a11y category score (Lighthouse %, 0..1) + the failing WCAG A/AA audits.
+    a11y: a11yCat?.score ?? null,
+    a11yFails,
   };
 }
 
@@ -144,6 +155,7 @@ const urlPathSlug = (u) => u.replace(/^\/|\/$/g, "").replace(/[/?#]/g, "-" ) || 
 
 console.log(`\nServing ${outDir} on http://127.0.0.1:${PORT}\n`);
 const results = [];
+const a11yGate = args.includes("--a11y-gate");
 for (const preset of presets) {
   for (const page of pages) {
     process.stdout.write(`▶ ${preset.padEnd(7)} ${page} … `);
@@ -154,7 +166,9 @@ for (const preset of presets) {
       const fmt = (v) => (v == null ? " — " : v.toFixed(v < 1 ? 3 : 0).padStart(7));
       console.log(
         `perf ${String(Math.round(r.score * 100)).padStart(3)} | ` +
-          `FCP${fmt(m.FCP)} LCP${fmt(m.LCP)} TBT${fmt(m.TBT)} CLS${fmt(m.CLS)} SI${fmt(m.SI)}${m.LCPEl ? ` | LCP=${m.LCPEl}` : ""}`
+          `FCP${fmt(m.FCP)} LCP${fmt(m.LCP)} TBT${fmt(m.TBT)} CLS${fmt(m.CLS)} SI${fmt(m.SI)}${m.LCPEl ? ` | LCP=${m.LCPEl}` : ""}` +
+          ` | a11y ${r.a11y == null ? "—" : Math.round(r.a11y * 100)}` +
+          (r.a11yFails.length ? ` fails=${r.a11yFails.join(", ")}` : "")
       );
     } else {
       console.log("failed");
@@ -168,3 +182,19 @@ fs.writeFileSync(
   JSON.stringify({ date: new Date().toISOString(), results }, null, 2)
 );
 console.log(`\n✓ ${results.length} reports in .lighthouse/ (summary.json)`);
+
+// ── a11y gate ─────────────────────────────────────────────────────
+// `--a11y-gate` turns any failing WCAG A/AA audit on the audited pages into a
+// non-zero exit (for CI / deploy scripts). Weighted audits that return null
+// (not applicable) are ignored.
+if (a11yGate && results.length) {
+  const fails = results.filter((r) => r.a11yFails.length > 0);
+  if (fails.length) {
+    console.error("\n✗ a11y gate: WCAG A/AA failures found —");
+    for (const r of fails) {
+      console.error(`  ${r.preset} ${r.page}: ${r.a11yFails.join("; ")}`);
+    }
+    process.exit(1);
+  }
+  console.log("✓ a11y gate passed (no WCAG A/AA failures on audited pages)");
+}

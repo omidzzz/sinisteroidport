@@ -210,6 +210,10 @@
       {
         "name": "Git/GitHub",
         "level": 2
+      },
+      {
+        "name": "Web Scraping",
+        "level": 4
       }
     ]
   },
@@ -227,6 +231,43 @@
       {
         "name": "Creative Problem-Solving",
         "level": 4
+      }
+    ]
+  },
+  {
+    "category": "AI Agent Engineering",
+    "skills": [
+      {
+        "name": "LLM API Integration (streaming)",
+        "level": 3
+      },
+      {
+        "name": "Prompt Engineering (persona & system design)",
+        "level": 4
+      },
+      {
+        "name": "Chat UX (streaming responses, typing state)",
+        "level": 4
+      },
+      {
+        "name": "Conversation State Management",
+        "level": 3
+      },
+      {
+        "name": "Context Injection (site corpus → agent)",
+        "level": 3
+      },
+      {
+        "name": "Agent Analytics (GA4 event funnels)",
+        "level": 3
+      },
+      {
+        "name": "Progressive Loading (dynamic imports)",
+        "level": 3
+      },
+      {
+        "name": "Response Guardrails & Tone Shaping",
+        "level": 3
       }
     ]
   },

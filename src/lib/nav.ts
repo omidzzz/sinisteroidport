@@ -10,4 +10,5 @@ export const NAV_PATHS = [
   "/education",
   "/showcase",
   "/blog",
+  "/contact",
 ] as const;

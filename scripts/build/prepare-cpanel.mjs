@@ -214,12 +214,28 @@ const htaccessContent = `<IfModule mod_rewrite.c>
 
   # ── Keep the JSON endpoints out of search indexes ─────────────────
   Header set X-Robots-Tag "noindex, nofollow" env=SINISTEROID_API
-  <FilesMatch "\\.(css|js|webp|png|jpg|svg|woff2)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-  </FilesMatch>
-  <FilesMatch "\\.html$">
-    Header set Cache-Control "public, max-age=0, must-revalidate"
-  </FilesMatch>
+  # ── Cache-Control: path-scoped, never content-hash by extension ──────
+  # The old "FilesMatch \.(css|js|…)$ immutable" rule matched sw.js (so the
+  # service worker was frozen for a year — browsers cap SW refresh at ~24h,
+  # but every non-_next image/OG card was also immutable-in-place across
+  # rebuilds, which is exactly wrong for files that change per build).
+  # 1. _next/static/* is content-hashed per build → immutable for its lifetime.
+  Header set Cache-Control "public, max-age=31536000, immutable" "expr=%{REQUEST_URI} =~ m#^/_next/static/#"
+  # 2. The service worker is polled for updates — never cache it long or new
+  #    SW versions stall behind the browser's update cap.
+  Header set Cache-Control "no-cache, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/sw\\.js$#"
+  # 3. Manifest/feeds regenerate per build — short revalidate, no round-trip
+  #    on every page load.
+  Header set Cache-Control "public, max-age=300, must-revalidate" "expr=%{REQUEST_URI} =~ m#\\.(webmanifest|xml|txt)$#"
+  # 4. Media OUTSIDE _next (hero image, project shots, generated OG cards,
+  #    uploads, favicon, fonts) is replaced by the next build: week-long cache
+  #    with revalidation — never immutable (old OG cards/live-index thumbnails
+  #    must update without a hard cache-busting rename).
+  Header set Cache-Control "public, max-age=604800, must-revalidate" "expr=%{REQUEST_URI} =~ m#\\.(webp|png|jpe?g|gif|svg|ico|woff2?)$#"
+  # 5. API responses are live DB data — never reuse a stale JSON payload.
+  Header set Cache-Control "no-store" "expr=%{REQUEST_URI} =~ m#^/api/#"
+  # 6. HTML documents always revalidate (they embed the inline CSS + RSC shell).
+  Header set Cache-Control "public, max-age=0, must-revalidate" "expr=%{REQUEST_URI} =~ m#\\.html$#"
 </IfModule>
 
 # ── Compression: smaller HTML/CSS/JS/JSON over the wire ──────────

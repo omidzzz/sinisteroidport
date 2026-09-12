@@ -1,0 +1,221 @@
+/* ============================================================
+   CONTACT — TRANSMISSION DECK
+   An asymmetric bento: the email channel is a hero plate with
+   glitch-stroke display type and an orbiting signal; Telegram and
+   GitHub counter-tilt beside it; the phone channel stretches into
+   a full-width console strip; crossed mantra bands cut across the
+   page like the footer's signal strips. Reuses the global recipes
+   (edu-card, cross-strip, ticker, glitchy, stroke-line).
+   RTL: grid placement + tilts are mirrored where needed.
+   ============================================================ */
+
+.contact-stage {
+  overflow-x: clip;
+}
+
+/* ── crossed mantra bands (footer's cross-strip, contact wording) ── */
+.contact-cross {
+  margin-block: 2.2rem 1rem;
+}
+
+/* ── the asymmetric bento ── */
+.contact-deck-wild {
+  position: relative;
+  display: grid;
+  gap: 1.1rem;
+  max-width: 74rem;
+  margin-inline: auto;
+  margin-top: 2.6rem;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px) {
+  .contact-deck-wild {
+    padding-inline: 2rem;
+  }
+}
+
+/* ── EMAIL hero plate ── */
+.ch-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 2rem 1.8rem;
+  min-height: 19rem;
+}
+.ch-hero .contact-icon {
+  width: 4.6rem;
+  height: 4.6rem;
+  padding: 0.7rem;
+  border-radius: 16px;
+}
+.ch-display {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6.5vw, 4.6rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.ch-address {
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 2.4vw, 1.3rem);
+  color: var(--color-acid);
+  text-decoration: none;
+  word-break: break-all;
+  align-self: flex-start;
+}
+.ch-address:hover,
+.ch-address:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+/* giant ghost @ bleeding off the corner */
+.ch-ghost {
+  position: absolute;
+  inset-block-end: -3.4rem;
+  inset-inline-end: -1rem;
+  font-family: var(--font-display);
+  font-size: 15rem;
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(var(--rgb-acid), 0.13);
+  pointer-events: none;
+  user-select: none;
+}
+/* dashed signal orbit + its acid satellite */
+.ch-orbit {
+  position: absolute;
+  inset-block-start: -34%;
+  inset-inline-end: -12%;
+  width: 19rem;
+  height: 19rem;
+  border: 1px dashed rgba(var(--rgb-acid), 0.22);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+.ch-orbit::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 12%;
+  inset-inline-start: 14%;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: var(--color-acid);
+  box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.8);
+}
+
+/* ── scattered telemetry readouts (lg+ only) ── */
+.contact-float {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .contact-deck-wild {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .ch-hero-wrap {
+    grid-column: 1 / span 7;
+    grid-row: 1 / span 2;
+  }
+  .ch-tg {
+    grid-column: 8 / span 5;
+  }
+  .ch-gh {
+    grid-column: 8 / span 5;
+  }
+  .ch-tel {
+    grid-column: 1 / -1;
+  }
+  .contact-float {
+    display: inline-block;
+    position: absolute;
+    z-index: 2;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: rgba(var(--rgb-accent-3), 0.55);
+    backdrop-filter: blur(4px);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .cf-1 {
+    inset-block-start: -1.1rem;
+    inset-inline-end: 6%;
+    rotate: 2deg;
+    color: var(--color-acid);
+  }
+  .cf-2 {
+    inset-block-start: 46%;
+    inset-inline-start: -1.8rem;
+    rotate: -2deg;
+  }
+  .cf-3 {
+    inset-block-end: -1.2rem;
+    inset-inline-end: 22%;
+    rotate: 1.4deg;
+  }
+}
+
+/* ── counter-tilts (mirrored for RTL, dropped on small screens) ── */
+.ch-tilt-a { rotate: 0.7deg; }
+.ch-tilt-b { rotate: -0.7deg; }
+[dir="rtl"] .ch-tilt-a { rotate: -0.7deg; }
+[dir="rtl"] .ch-tilt-b { rotate: 0.7deg; }
+@media (max-width: 1023px) {
+  .ch-tilt-a,
+  .ch-tilt-b {
+    rotate: none;
+  }
+}
+
+/* ── TEL console strip ── */
+.ch-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.1rem 1.6rem;
+  min-height: 8.5rem;
+}
+.ch-strip .edu-inst {
+  margin: 0;
+}
+.ch-strip .contact-value {
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+}
+.ch-strip .contact-go {
+  position: static;
+}
+.ch-utc {
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--color-acid);
+}
+
+/* ── console footer ── */
+.contact-console {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.6rem;
+  padding: 1.1rem 1.4rem;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: rgba(var(--rgb-accent-3), 0.25);
+}
+.contact-console .contact-status {
+  margin: 0;
+}

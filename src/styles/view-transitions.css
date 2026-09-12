@@ -1,0 +1,120 @@
+/* ═══════════════════════════════════════════════════════════════════
+   VIEW TRANSITIONS — route-change choreography.
+
+   SPA navigations (dock, orbital, footer rail) animate through
+   document.startViewTransition (see components/shell/ViewTransition.tsx).
+   Full-document loads (language swap, the command palette's
+   location.assign) opt in via @view-transition. Firefox simply never
+   animates; reduced-motion users get hard cuts everywhere.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Cross-document transitions (Chromium 126+, Safari 18+) — the language
+   swap <a>s and the palette's location.assign ride this for free. */
+@view-transition {
+  navigation: auto;
+}
+
+/* Fixed site chrome is captured as its own layer and stays pinned while
+   the page content cross-fades underneath. .dock-wrap and .mob-dock are
+   mutually exclusive per viewport, so one shared name is safe. */
+.dock-wrap,
+.chip-corner,
+.mob-dock {
+  view-transition-name: site-chrome;
+}
+::view-transition-group(site-chrome) {
+  animation: none;
+}
+
+/* ── THE CHOREOGRAPHY — visible, not polite ──────────────────────────────
+   Old page sinks away under a dark wash with a neon acid sweep crossing
+   the overlay; new page rises in with an eased bloom. 320–380ms: long
+   enough to read as a transition, short enough to stay snappy. Motion
+   lives on the pseudo-elements (snapshots are static images — never
+   animate those directly); ::view-transition carries the wash + sweep. */
+::view-transition {
+  animation: vt-sweep 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+  background: rgba(2, 5, 3, 0.92);
+}
+::view-transition-group(root) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+::view-transition-old(root) {
+  animation: vt-leave 360ms cubic-bezier(0.45, 0, 0.9, 1) both;
+}
+::view-transition-new(root) {
+  animation: vt-enter 400ms 50ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes vt-leave {
+  to {
+    opacity: 0;
+    transform: translateY(55px) scale(0.88);
+    filter: blur(3px);
+  }
+}
+@keyframes vt-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-40px) scale(1.06);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+/* Dark wash + bright acid sweep line crossing the viewport mid-transition. */
+@keyframes vt-sweep {
+  from {
+    background: rgba(2, 5, 3, 0.95);
+    box-shadow: inset 0 0 220px rgba(2, 5, 3, 0.96);
+  }
+  50% {
+    background: rgba(2, 5, 3, 0.95);
+    box-shadow:
+      inset 0 0 220px rgba(2, 5, 3, 0.96),
+      inset 78vw 0 60px -32px rgba(184, 255, 0, 1);
+  }
+  to {
+    background: transparent;
+    box-shadow: inset 0 0 0 0 transparent;
+  }
+}
+
+/* ── FALLBACK (browsers without the View Transitions API — Firefox) ─────
+   GlobalVTNav adds .page-exit before the SPA push; ViewTransitionBridge
+   plays .page-enter once the new route has painted. Opacity-only — a
+   transform here would turn <body> into a containing block and displace
+   the fixed site chrome mid-animation. */
+html.page-exit body {
+  opacity: 0;
+  transition: opacity 180ms cubic-bezier(0.4, 0, 1, 1);
+}
+html.page-enter body {
+  animation: page-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*) {
+    animation: none !important;
+  }
+  html.page-enter body {
+    animation: none;
+  }
+}

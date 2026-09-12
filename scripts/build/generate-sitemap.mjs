@@ -80,6 +80,7 @@ const sections = [
   { path: "skills", priority: "0.7", changefreq: "monthly" },
   { path: "education", priority: "0.6", changefreq: "monthly" },
   { path: "work", priority: "0.6", changefreq: "monthly" },
+  { path: "contact", priority: "0.6", changefreq: "monthly" },
 ];
 
 for (const s of sections) {
