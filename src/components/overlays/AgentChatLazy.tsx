@@ -110,6 +110,17 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
     fabRef.current?.focus();
   }, []);
 
+  // Press/flare state for the FAB face — set directly on the element (no
+  // re-render). Pointer events fire identically on touch and mouse, so the
+  // menace expression behaves the same on every device; :active and
+  // :focus-visible mirror it for keyboard and other input paths.
+  const setPressed = useCallback((pressed: boolean) => {
+    const el = fabRef.current;
+    if (!el) return;
+    if (pressed) el.setAttribute("data-pressed", "");
+    else el.removeAttribute("data-pressed");
+  }, []);
+
   // Keyboard summon: Ctrl+Shift+A toggles the panel (guarded against typing
   // in an input so browser select-all still works inside fields).
   useEffect(() => {
@@ -183,21 +194,31 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
         aria-expanded={visible}
         data-open={visible || undefined}
         data-attention={unread || undefined}
+        onPointerDown={() => setPressed(true)}
+        onPointerUp={() => setPressed(false)}
+        onPointerCancel={() => setPressed(false)}
+        onPointerLeave={() => setPressed(false)}
         onClick={() => (visible ? close() : open())}
       >
-        {/* Sly alien — same face that peeks out of the UFO's dome
-            (components/home/drone): inverted-egg head with a pointy chin,
-            big vertical-almond eyes with white glints, cartoon-ink strokes.
-            Idle: left eye squints (the sly look) over a raised brow, smirk.
-            On hover the expression FLIPS — the squinting eye snaps wide, the
-            wide eye narrows, the brow lifts, glints travel and the smirk
-            blooms into an open neon grin (see .al-* rules in agent-chat.css).
-            Theme-aware: the head is the UFO alien green in both themes while
-            the neon accents inherit the FAB's `color` (acid token). */}
-        <svg viewBox="0 0 128 128" width="52" height="52" aria-hidden>
+        {/* The menace — same brand DNA as the UFO drone alien (alien-green
+            head, ink outline, acid neon) but redrawn hostile: an elongated
+            skull with cranial ridges, a deep V scowl, slanted void eyes with
+            glowing acid slit pupils, nostril slits and a fanged sneer.
+            Idle: the hostile stare + targeting halo; the life signs are a
+            slow pupil pulse and one hostile blink every few seconds.
+            Press/tap: the pupils flare, the brows slam down, the head
+            lunges and the sneer cracks open into a fanged jaw. The flare is
+            driven by [data-pressed] (pointerdown/up — identical on touch and
+            mouse) with :active/:focus-visible fallbacks; desktop-only
+            :hover lives behind a (hover: hover) media query so phones never
+            latch a stuck hover state (see the .al-* rules in agent-chat.css).
+            Theme-aware: the head is the alien green in both themes while the
+            neon accents inherit the FAB's `color` (acid token). */}
+        <svg viewBox="0 0 128 128" aria-hidden>
           <defs>
             <linearGradient id="sin-fab-head" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" style={{ stopColor: "var(--fab-head)" }} />
+              <stop offset="40%" style={{ stopColor: "var(--fab-head)" }} />
               <stop offset="100%" style={{ stopColor: "var(--fab-head2)" }} />
             </linearGradient>
             <filter id="sin-fab-glow" x="-80%" y="-80%" width="260%" height="260%">
@@ -209,80 +230,132 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
             </filter>
           </defs>
 
-          {/* rotating neon orbit ring — the alien's "abduction halo" */}
+          {/* targeting halo — a slow lock-on ring around the skull */}
           <ellipse
             className="al-orbit"
-            cx="64" cy="60" rx="50" ry="52"
+            cx="64" cy="62" rx="50" ry="52"
             fill="none"
             stroke="currentColor"
-            strokeWidth="1.5"
-            strokeDasharray="6 9"
-            opacity="0.35"
-            transform="rotate(-14 64 60)"
+            strokeWidth="2"
+            strokeDasharray="3 9"
+            opacity="0.3"
+            transform="rotate(-18 64 62)"
             style={{ filter: "url(#sin-fab-glow)" }}
           />
 
           <g className="al-head">
-            {/* head — the UFO alien's inverted egg with the pointy chin */}
+            {/* skull — elongated cranium tapering to an angular chin */}
             <path
-              d="M 28,62 C 28,34 48,18 64,18 C 80,18 100,34 100,62 C 100,86 82,101 64,109 C 46,101 28,86 28,62 Z"
+              d="M 27,58 C 27,30 43,12 64,12 C 85,12 101,30 101,58 C 101,80 93,93 82,102 C 75,107 69,110 64,112 C 59,110 53,107 46,102 C 35,93 27,80 27,58 Z"
               fill="url(#sin-fab-head)"
               style={{ stroke: "var(--fab-edge)" }}
               strokeWidth="3.6"
             />
-            {/* dome glare — the same gloss streak as the UFO's glass dome */}
+            {/* cranial ridges — sutures across the dome */}
             <path
-              d="M 25,35 Q 43,24 60,28 Q 40,35 30,52 Z"
-              fill="#ffffff"
+              d="M 36,40 C 44,24 54,18 64,18 C 74,18 84,24 92,40"
+              fill="none"
+              style={{ stroke: "var(--fab-edge)" }}
+              strokeWidth="1.6"
               opacity="0.3"
             />
+            <path
+              d="M 33,52 C 41,32 51,25 64,25 C 77,25 87,32 95,52"
+              fill="none"
+              style={{ stroke: "var(--fab-edge)" }}
+              strokeWidth="1.4"
+              opacity="0.2"
+            />
+            {/* dome glare */}
+            <path d="M 32,34 Q 48,22 62,25 Q 44,31 36,48 Z" fill="#ffffff" opacity="0.22" />
+            {/* cheek hatching — gaunt detail */}
+            <path d="M 33,72 Q 38,78 44,81" fill="none" style={{ stroke: "var(--fab-edge)" }} strokeWidth="1.4" opacity="0.3" />
+            <path d="M 95,72 Q 90,78 84,81" fill="none" style={{ stroke: "var(--fab-edge)" }} strokeWidth="1.4" opacity="0.3" />
 
-            {/* eyes — the UFO alien's big vertical almonds. The LEFT eye is
-                squinted shut-by-default (CSS scaleY) for the sly look; hover
-                opens it wide while the right one narrows. */}
+            {/* eyes — slanted voids, each carrying a glowing acid slit pupil
+                (the press-flare target) and a rim that ignites on press.
+                The slant lives on a static group so CSS transforms on the
+                pupil/rim can't clobber the rotation. */}
             <g className="al-eyes">
-              <g className="al-eye al-eye-l">
-                <ellipse cx="49" cy="60" rx="10" ry="15" fill="var(--fab-visor)" transform="rotate(-6 49 60)" />
-                <circle className="al-glint" cx="46" cy="53" r="2.6" fill="var(--fab-glint)" />
+              <g className="al-eye">
+                <g transform="rotate(-14 47 57)">
+                  <ellipse cx="47" cy="57" rx="11" ry="11.5" fill="var(--fab-visor)" />
+                  <ellipse className="al-rim" cx="47" cy="57" rx="11" ry="11.5" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
+                  <ellipse className="al-pupil" cx="47" cy="57" rx="2.6" ry="6.5" fill="currentColor" opacity="0.85" style={{ filter: "url(#sin-fab-glow)" }} />
+                  <circle className="al-glint" cx="43.5" cy="51.5" r="2.2" fill="var(--fab-glint)" />
+                </g>
               </g>
-              <g className="al-eye al-eye-r">
-                <ellipse cx="79" cy="60" rx="10" ry="15" fill="var(--fab-visor)" transform="rotate(6 79 60)" />
-                {/* neon acid ring around the wide (open) eye */}
-                <ellipse cx="79" cy="60" rx="10" ry="15" fill="none" stroke="currentColor" strokeWidth="1.6" opacity="0.85" transform="rotate(6 79 60)" style={{ filter: "url(#sin-fab-glow)" }} />
-                <circle className="al-glint" cx="76" cy="53" r="2.6" fill="var(--fab-glint)" />
+              <g className="al-eye">
+                <g transform="rotate(14 81 57)">
+                  <ellipse cx="81" cy="57" rx="11" ry="11.5" fill="var(--fab-visor)" />
+                  <ellipse className="al-rim" cx="81" cy="57" rx="11" ry="11.5" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
+                  <ellipse className="al-pupil" cx="81" cy="57" rx="2.6" ry="6.5" fill="currentColor" opacity="0.85" style={{ filter: "url(#sin-fab-glow)" }} />
+                  <circle className="al-glint" cx="84.5" cy="51.5" r="2.2" fill="var(--fab-glint)" />
+                </g>
               </g>
             </g>
 
-            {/* smug raised brow over the squinting eye */}
-            <path
-              className="al-brow"
-              d="M 30,46 Q 45,38 60,42"
-              fill="none"
-              style={{ stroke: "var(--fab-edge)" }}
-              strokeWidth="3.6"
-              strokeLinecap="round"
-            />
+            {/* deep V scowl plates — hugging the eye tops */}
+            <path className="al-brow" d="M 32,42 L 56,36 L 59,46 L 35,50 Z" fill="var(--fab-edge)" />
+            <path className="al-brow" d="M 96,42 L 72,36 L 69,46 L 93,50 Z" fill="var(--fab-edge)" />
 
-            {/* mouth — idle smirk; crossfades to an open neon grin on hover */}
-            <path
-              className="al-smirk"
-              d="M 40,88 Q 54,96 66,91 Q 80,86 94,78"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.8"
-              strokeLinecap="round"
-              style={{ filter: "url(#sin-fab-glow)" }}
-            />
-            <g className="al-grin">
+            {/* nostril slits */}
+            <ellipse cx="59" cy="76" rx="1.8" ry="3.6" fill="var(--fab-edge)" opacity="0.5" transform="rotate(-10 59 76)" />
+            <ellipse cx="69" cy="76" rx="1.8" ry="3.6" fill="var(--fab-edge)" opacity="0.5" transform="rotate(10 69 76)" />
+
+            {/* mouth — idle fanged sneer (ink shadow line above, acid lip +
+                fangs below); crossfades to a cracked-open jaw on press */}
+            <g className="al-grimace">
               <path
-                d="M 38,86 Q 64,84 92,78 Q 88,102 62,104 Q 48,100 38,86 Z"
+                d="M 40,86.5 Q 64,91.5 88,86.5"
+                fill="none"
+                style={{ stroke: "var(--fab-edge)" }}
+                strokeWidth="2"
+                opacity="0.45"
+                strokeLinecap="round"
+              />
+              <path
+                d="M 37,89 Q 64,95 91,89"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                style={{ filter: "url(#sin-fab-glow)" }}
+              />
+              <path
+                d="M 45,91 L 47.5,98.5 M 64,94.3 L 64,101 M 83,91 L 80.5,98.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                style={{ filter: "url(#sin-fab-glow)" }}
+              />
+            </g>
+            <g className="al-jaw">
+              <path
+                d="M 36,86 Q 64,82 92,86 Q 91,102 64,108 Q 37,102 36,86 Z"
                 fill="var(--fab-visor)"
                 stroke="currentColor"
-                strokeWidth="1.8"
+                strokeWidth="2"
                 strokeLinejoin="round"
                 style={{ filter: "url(#sin-fab-glow)" }}
               />
-              <ellipse cx="64" cy="98" rx="10" ry="4.5" fill="currentColor" opacity="0.4" />
+              <path
+                d="M 46,87 L 48,94 M 58,85.5 L 58,94 M 70,85.5 L 70,94 M 82,87 L 80,94"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <path
+                d="M 52,103.5 L 52,99 M 76,103.5 L 76,99"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                opacity="0.7"
+              />
+              <ellipse cx="64" cy="99" rx="8" ry="3.5" fill="currentColor" opacity="0.35" />
             </g>
           </g>
         </svg>

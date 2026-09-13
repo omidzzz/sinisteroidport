@@ -23,6 +23,7 @@
   z-index: 74; /* above chrome (≤62), below cursor/overlays (90+) */
   display: grid;
   place-items: center;
+  overflow: visible;
   width: 3.6rem;
   height: 3.6rem;
   padding: 0;
@@ -40,6 +41,7 @@
     transform 0.25s ease,
     box-shadow 0.25s ease,
     border-color 0.25s ease;
+  overflow: visible;
 }
 
 /* Attention pulse — a subtle glow ring that draws the eye without being
@@ -93,7 +95,10 @@
   }
 }
 
-/* Mobile: slightly larger tap target + stronger glow */
+/* Mobile: larger tap target ONLY. The glyph itself is sized as a percentage
+   of the button (below), so PC and mobile render the IDENTICAL face — the
+   button is just a few px bigger under the thumb. No optical fudge needed:
+   the redrawn art is optically centered in its own viewBox. */
 @media (max-width: 640px) {
   .sin-chat-fab {
     width: 4rem;
@@ -101,20 +106,35 @@
     inset-inline-end: 1rem;
     bottom: 1rem;
   }
-  /* Optical centering + presence: the alien art is bottom-heavy in its own
-     viewBox (orbit ring centered at cy=60 of 128, cheeks/chin/grin at
-     y 78–109), so even though grid centering is mathematically perfect it
-     READS low. On mobile the glyph is also smaller relative to its circle
-     than on desktop (84% vs ~93%) — size it back up to match, then lift it
-     so the ring-bias (4 units) + bottom mass sit optically centered.
-     display:block guards against any inline baseline gap in engines that
-     don't treat grid items as block boxes. */
+}
+
+/* One glyph rule for EVERY device: the art fills 90% of the circle and is
+   optically centered in its viewBox (skull mass y 12–115, targeting ring
+   centered at 64,62), so grid centering is correct everywhere.
+   display:block guards against any inline baseline gap. */
+.sin-chat-fab svg {
+  display: block;
+  width: 90%;
+  height: 90%;
+  transition: transform 0.25s ease;
+}
+@media (max-width: 640px) {
   .sin-chat-fab svg {
-    display: block;
-    width: 58px;
-    height: 58px;
-    transform: translateY(-3px);
+    width: 100%;
+    height: 100%;
+    transform: scale(2);
+    transform-origin: center;
   }
+}
+
+/* Touch hygiene so the press/flare feels native on phones: kill the tap
+   highlight, the long-press callout and double-tap-zoom delay, and keep
+   the glyph unselectable. */
+.sin-chat-fab {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  user-select: none;
 }
 
 /* Light theme: deepen the alien greens a touch so the ink outline and
@@ -127,30 +147,38 @@ html[data-theme="light"] .sin-chat-fab {
   --fab-glint: #ffffff;
 }
 
-/* ── The alien's face — idle sly look + hover expression flip ──────────
-   Idle: left eye squinted shut (the sly squint) under a smug brow, right
-   eye wide with a neon ring, lazy smirk, slow abduction-halo spin.
-   Hover/focus: the squint SNAPS to the other eye (left opens wide, right
-   narrows), the brow lifts, the glints travel, the head tilts slyly with
-   an acid drop-glow, and the smirk blooms into an open neon grin.
-   Springs use a slight overshoot; everything is transform/opacity-only
-   and the infinite loops (blink, halo spin) are gated behind
+/* ── The menace — hostile idle stare + press/tap flare (device-agnostic) ─
+   Idle: slanted void eyes with glowing acid slit pupils under a deep V
+   scowl, a fanged sneer, and a targeting halo counter-spinning around the
+   skull. Life signs: a slow pupil pulse + one hostile blink.
+   Press/tap: the pupils FLARE, the brows slam down, the head lunges with
+   an acid drop-glow and the sneer cracks open into a fanged jaw.
+   The flare trigger is [data-pressed] (set from pointerdown/up — fires
+   identically on touch and mouse) plus :active/:focus-visible fallbacks.
+   Desktop-only :hover lives in a (hover: hover) media query, so touch
+   devices can never get stuck in a hover state and every device shows the
+   exact same expression. Springs use a slight overshoot; everything is
+   transform/opacity-only and the infinite loops are gated behind
    prefers-reduced-motion (motion-reduce.css freezes the rest site-wide). */
-.sin-chat-fab .al-eye,
 .sin-chat-fab .al-brow,
 .sin-chat-fab .al-glint,
+.sin-chat-fab .al-pupil,
+.sin-chat-fab .al-rim,
 .sin-chat-fab .al-head,
 .sin-chat-fab .al-orbit,
-.sin-chat-fab .al-smirk,
-.sin-chat-fab .al-grin {
+.sin-chat-fab .al-grimace,
+.sin-chat-fab .al-jaw {
   transform-box: fill-box;
 }
-.sin-chat-fab .al-eye,
 .sin-chat-fab .al-brow,
 .sin-chat-fab .al-glint,
+.sin-chat-fab .al-pupil,
+.sin-chat-fab .al-rim,
 .sin-chat-fab .al-head {
   transform-origin: 50% 50%;
-  transition: transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 220ms ease;
 }
 .sin-chat-fab .al-head {
   transform-origin: 50% 62%;
@@ -159,102 +187,153 @@ html[data-theme="light"] .sin-chat-fab {
     filter 320ms ease;
 }
 
-/* idle sly squint: left eye pinched, right eye wide */
-.sin-chat-fab .al-eye-l {
-  transform: scaleY(0.34) scaleX(1.08);
+/* the flare — one trigger list for every press/tap/keyboard path */
+.sin-chat-fab[data-pressed] .al-pupil,
+.sin-chat-fab:active .al-pupil,
+.sin-chat-fab:focus-visible .al-pupil {
+  transform: scale(1.55);
+  opacity: 1;
+  animation: none;
 }
-.sin-chat-fab .al-eye-r {
-  transform: scaleY(1);
+.sin-chat-fab[data-pressed] .al-rim,
+.sin-chat-fab:active .al-rim,
+.sin-chat-fab:focus-visible .al-rim {
+  opacity: 0.9;
 }
-
-/* hover: the squint swaps eyes — the alien "wakes up" at you */
-.sin-chat-fab:hover .al-eye-l,
-.sin-chat-fab:focus-visible .al-eye-l {
-  transform: scaleY(1.06) scaleX(1.08);
-}
-.sin-chat-fab:hover .al-eye-r,
-.sin-chat-fab:focus-visible .al-eye-r {
-  transform: scaleY(0.4) scaleX(1.06);
-}
-/* brow lifts off the newly-opened eye */
-.sin-chat-fab .al-brow {
-  transform-origin: 20% 50%;
-}
-.sin-chat-fab:hover .al-brow,
+.sin-chat-fab[data-pressed] .al-brow,
+.sin-chat-fab:active .al-brow,
 .sin-chat-fab:focus-visible .al-brow {
-  transform: translateY(-4px) rotate(10deg);
+  transform: translateY(3px) scaleY(1.2);
 }
-/* glints drift up-and-out, like a second reflection catching light */
-.sin-chat-fab:hover .al-glint,
+.sin-chat-fab[data-pressed] .al-glint,
+.sin-chat-fab:active .al-glint,
 .sin-chat-fab:focus-visible .al-glint {
-  transform: translate(2.5px, -2.5px) scale(1.3);
+  transform: translate(1.5px, -1.5px) scale(1.25);
 }
-/* sly head tilt + acid under-glow */
-.sin-chat-fab:hover .al-head,
+.sin-chat-fab[data-pressed] .al-head,
+.sin-chat-fab:active .al-head,
 .sin-chat-fab:focus-visible .al-head {
-  transform: rotate(-5deg);
-  filter: drop-shadow(0 0 7px rgba(var(--rgb-acid), 0.55));
+  transform: rotate(4deg) translateY(2px) scale(0.985);
+  filter: drop-shadow(0 0 8px rgba(var(--rgb-acid), 0.6));
 }
 
-/* mouth: smirk ⇄ open grin crossfade */
-.sin-chat-fab .al-grin {
+/* desktop bonus: preview the flare on hover, pointer-devices only — a
+   (hover: none) device (phones) would otherwise latch :hover after the
+   first tap and stay flared forever */
+@media (hover: hover) {
+  .sin-chat-fab:hover .al-pupil {
+    transform: scale(1.55);
+    opacity: 1;
+    animation: none;
+  }
+  .sin-chat-fab:hover .al-rim {
+    opacity: 0.9;
+  }
+  .sin-chat-fab:hover .al-brow {
+    transform: translateY(3px) scaleY(1.2);
+  }
+  .sin-chat-fab:hover .al-glint {
+    transform: translate(1.5px, -1.5px) scale(1.25);
+  }
+  .sin-chat-fab:hover .al-head {
+    transform: rotate(4deg) translateY(2px) scale(0.985);
+    filter: drop-shadow(0 0 8px rgba(var(--rgb-acid), 0.6));
+  }
+}
+
+/* mouth: fanged sneer ⇄ cracked-open jaw crossfade */
+.sin-chat-fab .al-jaw {
   opacity: 0;
   transition: opacity 300ms ease 60ms;
 }
-.sin-chat-fab .al-smirk {
+.sin-chat-fab .al-grimace {
   opacity: 1;
   transition: opacity 220ms ease;
 }
-.sin-chat-fab:hover .al-smirk,
-.sin-chat-fab:focus-visible .al-smirk {
+.sin-chat-fab[data-pressed] .al-grimace,
+.sin-chat-fab:active .al-grimace,
+.sin-chat-fab:focus-visible .al-grimace {
   opacity: 0;
   transition: opacity 180ms ease;
 }
-.sin-chat-fab:hover .al-grin,
-.sin-chat-fab:focus-visible .al-grin {
+.sin-chat-fab[data-pressed] .al-jaw,
+.sin-chat-fab:active .al-jaw,
+.sin-chat-fab:focus-visible .al-jaw {
   opacity: 1;
 }
+@media (hover: hover) {
+  .sin-chat-fab:hover .al-grimace {
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+  .sin-chat-fab:hover .al-jaw {
+    opacity: 1;
+  }
+}
 
-/* abduction halo: slow idle spin, sprints + brightens on hover */
+/* targeting halo: slow lock-on spin, sprints + brightens on press */
 .sin-chat-fab .al-orbit {
   transform-origin: center;
   transition: opacity 300ms ease;
 }
-.sin-chat-fab:hover .al-orbit,
+.sin-chat-fab[data-pressed] .al-orbit,
+.sin-chat-fab:active .al-orbit,
 .sin-chat-fab:focus-visible .al-orbit {
-  opacity: 0.85;
+  opacity: 0.8;
+}
+@media (hover: hover) {
+  .sin-chat-fab:hover .al-orbit {
+    opacity: 0.8;
+  }
 }
 @media (prefers-reduced-motion: no-preference) {
   .sin-chat-fab .al-orbit {
-    animation: al-spin 26s linear infinite;
+    animation: al-spin 22s linear infinite;
   }
-  .sin-chat-fab:hover .al-orbit,
+  .sin-chat-fab[data-pressed] .al-orbit,
+  .sin-chat-fab:active .al-orbit,
   .sin-chat-fab:focus-visible .al-orbit {
-    animation-duration: 7s;
+    animation-duration: 6s;
   }
-  /* life sign: the alien blinks both eyes every few seconds (scales the
-     whole eyes group, so the hover squint-swap on the children keeps
-     working independently) */
+  @media (hover: hover) {
+    .sin-chat-fab:hover .al-orbit {
+      animation-duration: 6s;
+    }
+  }
+  /* life signs: the pupils throb with acid light and the alien takes one
+     slow hostile blink every few seconds (the blink scales the whole eyes
+     group, so the press flare on the pupils keeps working independently) */
   .sin-chat-fab .al-eyes {
     transform-box: fill-box;
-    transform-origin: 50% 55%;
-    animation: al-blink 5.6s ease-in-out infinite;
+    transform-origin: 50% 58%;
+    animation: al-blink 6.4s ease-in-out infinite;
+  }
+  .sin-chat-fab .al-pupil {
+    animation: al-pulse 3.2s ease-in-out infinite alternate;
   }
   @keyframes al-spin {
     to {
-      transform: rotate(360deg);
+      transform: rotate(-360deg);
+    }
+  }
+  @keyframes al-pulse {
+    from {
+      opacity: 0.72;
+    }
+    to {
+      opacity: 1;
     }
   }
   @keyframes al-blink {
     0%,
-    92.5%,
+    93.5%,
     100% {
       transform: scaleY(1);
     }
-    95% {
+    96% {
       transform: scaleY(0.06);
     }
-    97.5% {
+    98.5% {
       transform: scaleY(1);
     }
   }
