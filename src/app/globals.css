@@ -1,6 +1,15 @@
-// Optimized base.css with performance-friendly graphic enhancements
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   GLOBAL STYLES — performance-first foundation
+   ------------------------------------------------------------ */
 @layer base, components, utilities;
 
+/* ============================================================
+   TYPOGRAPHY HELPERS — performance-optimized
+   ------------------------------------------------------------ */
 @layer base {
   /* ============================================================
      GLOBAL STYLES — performance-first foundation
