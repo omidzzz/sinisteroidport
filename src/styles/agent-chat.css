@@ -101,6 +101,20 @@
     inset-inline-end: 1rem;
     bottom: 1rem;
   }
+  /* Optical centering + presence: the alien art is bottom-heavy in its own
+     viewBox (orbit ring centered at cy=60 of 128, cheeks/chin/grin at
+     y 78–109), so even though grid centering is mathematically perfect it
+     READS low. On mobile the glyph is also smaller relative to its circle
+     than on desktop (84% vs ~93%) — size it back up to match, then lift it
+     so the ring-bias (4 units) + bottom mass sit optically centered.
+     display:block guards against any inline baseline gap in engines that
+     don't treat grid items as block boxes. */
+  .sin-chat-fab svg {
+    display: block;
+    width: 58px;
+    height: 58px;
+    transform: translateY(-3px);
+  }
 }
 
 /* Light theme: deepen the alien greens a touch so the ink outline and

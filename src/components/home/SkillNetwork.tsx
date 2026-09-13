@@ -114,6 +114,24 @@ const LEVEL = new Map<string, number>(
 /*__P2__*/
 
 /**
+ * The canvas palette comes from the SAME token blocks the DOM uses —
+ * tokens.css :root (dark, default) and theme-engine.css
+ * [data-theme="light"]. We read the FINAL values from this static map keyed
+ * by the *instant* data-theme attribute instead of getComputedStyle(): the
+ * html {} rule in fx-modern.css §1 intentionally animates every --color-*
+ * token over 0.5s on theme flip, so a computed read mid-flip returns
+ * interpolated mud (the "matte/blurry" smear). DOM surfaces keep that
+ * smooth 0.5s crossfade; the canvas snaps to the target theme in one frame.
+ */
+const PALETTES: Record<
+  "dark" | "light",
+  { acid: string; cyan: string; violet: string; ink: string }
+> = {
+  dark: { acid: "#b8ff00", cyan: "#00e5ff", violet: "#08b8cf", ink: "#ecffe9" },
+  light: { acid: "#567d00", cyan: "#005f73", violet: "#005467", ink: "#0a140c" },
+};
+
+/**
  * Parse a color custom-property into an [r,g,b] triplet for canvas rgba().
  * The browser does NOT give back the `#hex` we author in tokens.css — Tailwind
  * v4 registers theme tokens as <color> properties, so getComputedStyle
@@ -183,14 +201,13 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
 
     /* Palette is resolved from the live theme and RE-resolved when the
        user flips the light/dark toggle (MutationObserver below). */
+    /* Palette resolves instantly from the target theme. See PALETTES above. */
     const resolvePal = () => {
-      const styles = getComputedStyle(document.documentElement);
-      return {
-        acid: styles.getPropertyValue("--color-acid").trim() || "#b8ff00",
-        cyan: styles.getPropertyValue("--color-accent").trim() || "#00e5ff",
-        violet: styles.getPropertyValue("--color-accent-2").trim() || "#08b8cf",
-        ink: styles.getPropertyValue("--color-ink").trim() || "#ecffe9",
-      };
+      const theme =
+        document.documentElement.getAttribute("data-theme") === "light"
+          ? "light"
+          : "dark";
+      return PALETTES[theme];
     };
     let C = resolvePal();
     const A = () => hexToRgb(C.acid);
@@ -203,6 +220,46 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const reducedMotion = reducedQuery.matches;
     setReduced(reducedMotion);
+
+    /* ── Glow sprites ───────────────────────────────────────────────
+       The per-frame createRadialGradient on every node (29×/frame) is the
+       mobile jank. Bake one gradient per color into a tiny offscreen tile
+       once per palette and stamp it with drawImage — GPU-cheap, same look.
+       Rebuilt whenever the palette re-resolves (theme flip, below). */
+    const raw = (t: [number, number, number], a: number) =>
+      `rgba(${t[0]},${t[1]},${t[2]},${a})`;
+    const makeGlowSprite = (t: [number, number, number]) => {
+      const s = document.createElement("canvas");
+      const S = 128;
+      s.width = S;
+      s.height = S;
+      const c = s.getContext("2d");
+      if (!c) return null;
+      const g = c.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+      g.addColorStop(0, raw(t, 1));
+      g.addColorStop(0.45, raw(t, 0.55));
+      g.addColorStop(1, raw(t, 0));
+      c.fillStyle = g;
+      c.fillRect(0, 0, S, S);
+      return s;
+    };
+    let glow: { acid: HTMLCanvasElement | null; cyan: HTMLCanvasElement | null } = {
+      acid: makeGlowSprite(A()),
+      cyan: makeGlowSprite(Y()),
+    };
+    const paintGlow = (
+      kind: "acid" | "cyan",
+      x: number,
+      y: number,
+      diameter: number,
+      alpha: number,
+    ) => {
+      const spr = glow[kind];
+      if (!spr) return;
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(spr, x - diameter / 2, y - diameter / 2, diameter, diameter);
+      ctx.globalAlpha = 1;
+    };
 
     /* ── Build the constellation ─────────────────────────────────── */
     const nodes: NetNode[] = [];
@@ -272,7 +329,12 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     /* ── Sizing (DPR aware) ──────────────────────────────────────── */
     const sizeCanvas = () => {
       const rect = wrap.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      /* Narrow screens: cap device-pixel ratio at 1.5 — a 390px phone at
+         DPR 2 would back a 780×920 buffer for a mostly-glow scene. */
+      const dpr = Math.min(
+        window.devicePixelRatio || 1,
+        window.innerWidth < 480 ? 1.5 : 2,
+      );
       dprRef.current = dpr;
       wRef.current = rect.width;
       hRef.current = rect.height;
@@ -307,7 +369,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     HUB.y = cy;
 
     /* Static dust field for depth (normalized coords). */
-    const dust = Array.from({ length: 64 }, () => ({
+    const dust = Array.from({ length: wRef.current < 480 ? 36 : 64 }, () => ({
       x: Math.random(),
       y: Math.random(),
       s: 0.4 + Math.random() * 1.1,
@@ -604,45 +666,21 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
               : dark
                 ? A()
                 : K();
-          const baseA = isHub
-            ? 1
-            : lit || isHot
-              ? 1
-              : dark
-                ? n.kind === "cat"
-                  ? 0.85
-                  : 0.68
-                : n.kind === "cat"
-                  ? 0.6
-                  : 0.4;
           const breathe = reducedMotion
             ? 1
             : 1 + Math.sin(t * 2 + n.phase) * (isHub ? 0.05 : 0.025);
 
           /* Glow — hot/hub always; dark idle nodes get a TIGHT halo only.
-             The old r*8 bloom on every node stacked ~29 translucent washes
-             into a smoked-glass haze (the "black tint"). */
+             Stamped from pre-baked gradient sprites (drawImage) instead of
+             29 createRadialGradient calls per frame. Light theme stays clean
+             and crisp — near-black ink on paper needs no smoke. */
           if (isHot || isHub || dark) {
+            const spr = isHot ? "cyan" : "acid";
             /* Inner tight halo — bright core glow. */
-            const glowInner = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 2.2);
-            glowInner.addColorStop(0, `rgba(${r},${g},${bl},${isHub ? 0.95 : isHot ? 0.9 : dark ? 0.5 : 0.3})`);
-            glowInner.addColorStop(0.45, `rgba(${r},${g},${bl},${isHub ? 0.6 : isHot ? 0.55 : dark ? 0.28 : 0.15})`);
-            glowInner.addColorStop(1, `rgba(${r},${g},${bl},0)`);
-            ctx.fillStyle = glowInner;
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, n.r * 2.2, 0, Math.PI * 2);
-            ctx.fill();
+            paintGlow(spr, n.x, n.y, n.r * 4.4, isHub ? 0.95 : isHot ? 0.9 : 0.5);
             /* Outer wide bloom — hot/hub ONLY. */
             if (isHot || isHub) {
-              const glowOuter = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 6);
-              glowOuter.addColorStop(0, `rgba(${r},${g},${bl},${isHub ? 0.7 : 0.6})`);
-              glowOuter.addColorStop(0.25, `rgba(${r},${g},${bl},${isHub ? 0.35 : 0.3})`);
-              glowOuter.addColorStop(0.6, `rgba(${r},${g},${bl},${isHub ? 0.1 : 0.08})`);
-              glowOuter.addColorStop(1, `rgba(${r},${g},${bl},0)`);
-              ctx.fillStyle = glowOuter;
-              ctx.beginPath();
-              ctx.arc(n.x, n.y, n.r * 6, 0, Math.PI * 2);
-              ctx.fill();
+              paintGlow(spr, n.x, n.y, n.r * 12, isHub ? 0.7 : 0.6);
             }
           }
 
@@ -682,16 +720,16 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
             rg.addColorStop(1, `rgba(${V()[0]},${V()[1]},${V()[2]},1)`);
             ctx.fillStyle = rg;
           } else {
-            ctx.fillStyle = `rgba(${r},${g},${bl},${isHot ? 1 : dark ? 0.85 : baseA * 0.32})`;
+            ctx.fillStyle = `rgba(${r},${g},${bl},${isHot ? 1 : dark ? 0.85 : 0.72})`;
           }
           ctx.fill();
           if (!isHub) {
-            ctx.strokeStyle = `rgba(${r},${g},${bl},${isHot ? 1 : dark ? 0.9 : baseA})`;
-            ctx.lineWidth = isHot ? 3 : dark ? 2 : 1;
+            ctx.strokeStyle = `rgba(${r},${g},${bl},${isHot ? 1 : dark ? 0.9 : 0.85})`;
+            ctx.lineWidth = isHot ? 3 : dark ? 2 : 1.5;
             ctx.stroke();
             if (n.kind === "cat") {
               /* Secondary halo ring for cluster anchors. */
-              ctx.strokeStyle = `rgba(${r},${g},${bl},${isHot ? 0.6 : dark ? 0.35 : 0.2})`;
+              ctx.strokeStyle = `rgba(${r},${g},${bl},${isHot ? 0.6 : dark ? 0.35 : 0.3})`;
               ctx.lineWidth = 1.5;
               ctx.beginPath();
               ctx.arc(n.x, n.y, n.r + 6, 0, Math.PI * 2);
@@ -722,7 +760,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           ctx.textBaseline = "middle";
           ctx.fillStyle = isHub
             ? "#020503"
-            : `rgba(${r},${g},${bl},${isHot ? 1 : lit ? 0.95 : dark ? 0.92 : baseA})`;
+            : `rgba(${r},${g},${bl},${isHot ? 1 : lit ? 0.95 : dark ? 0.92 : 0.95})`;
           ctx.fillText(n.label, n.x, n.y + (isHub ? 0 : n.r + fs * 0.9));
         }
       };
@@ -741,6 +779,9 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
        reduced-motion mode, where only physics/dust are gated). */
     const themeObs = new MutationObserver(() => {
       C = resolvePal();
+      /* Rebuild the glow tiles from the new palette so the very next frame
+         repaints in the flipped theme (no stale-color ghost frame). */
+      glow = { acid: makeGlowSprite(A()), cyan: makeGlowSprite(Y()) };
     });
     themeObs.observe(document.documentElement, {
       attributes: true,
@@ -780,7 +821,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           </span>
 
           <Reveal>
-            <div className="net-stage relative mt-2 overflow-hidden rounded-2xl">
+            <div className="net-stage relative mt-2 overflow-hidden -mx-5 sm:mx-0 rounded-none sm:rounded-2xl">
               <div ref={wrapRef} className="relative h-[460px] sm:h-[540px] lg:h-[600px]">
                 <canvas
                   ref={canvasRef}
@@ -797,7 +838,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
                   style={fa ? { left: "1rem" } : { right: "1rem" }}
                 >
                   {active ? (
-                    <span className="net-hud block rounded-lg border border-[rgba(var(--rgb-acid),0.35)] bg-[rgba(2,5,3,0.75)] px-3 py-2">
+                    <span className="net-hud block rounded-lg border px-3 py-2">
                       <b className="font-display text-[0.8rem] tracking-normal text-[var(--color-ink)]">
                         {active.full}
                       </b>

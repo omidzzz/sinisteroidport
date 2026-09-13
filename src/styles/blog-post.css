@@ -271,20 +271,20 @@ body::after {
 }
 [data-theme="light"] body::after { opacity: 0.22; }
 
-/* Conic charge-halo sweeping the back-to-top ring. Animates one
-   registered custom property on one 52px element — paint-only. */
-@property --ring-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
+/* Conic charge-halo sweeping the back-to-top ring. The sweep rotates the
+   whole ::after via `transform` — a compositor-driven animation with zero
+   main-thread work per frame. (The previous version animated the gradient's
+   `--ring-angle` @property; custom-property animation can never run on the
+   compositor, and Lighthouse's non-composited-animations audit flagged it as
+   a CLS/jank contributor.) Visually identical: rotating the element rotates
+   the baked conic gradient with it. */
 .ring-top::after {
   content: "";
   position: absolute;
   inset: -6px;
   border-radius: 9999px;
   background: conic-gradient(
-    from var(--ring-angle),
+    from 0deg,
     transparent 0deg 295deg,
     rgba(var(--rgb-acid), 0.9) 325deg,
     transparent 360deg
@@ -308,7 +308,7 @@ body::after {
   }
 }
 @keyframes ring-top-spin {
-  to { --ring-angle: 360deg; }
+  to { transform: rotate(360deg); }
 }
 
 /* Logo glitch flicker — hover/focus only, two quick steps then settles.

@@ -37,7 +37,10 @@ export default function LatestPostsLive({
     let cancelled = false;
     const start = () => {
       if (cancelled) return;
-      fetch("/api/get_posts.php")
+      // ?limit=3 — the strip only renders three cards; the unbounded payload
+      // (full content_json for every post, ~475 KiB) used to land mid-load
+      // and compete with the LCP image for bandwidth.
+      fetch("/api/get_posts.php?limit=3")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not ok"))))
       .then((rows: ApiRow[]) => {
         if (cancelled || !Array.isArray(rows)) return;
@@ -67,20 +70,32 @@ export default function LatestPostsLive({
         /* keep prerendered/fallback data */
       });
     };
-    // The prerendered strip is already on screen — defer the live sync off
-    // the hydration/LCP path until the main thread is idle (2.5s hard cap
-    // so busy CPUs still sync eventually).
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(start, { timeout: 2500 });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(id);
-      };
-    }
-    const t = window.setTimeout(start, 1200);
+    // The prerendered strip is already on screen — the live sync must never
+    // compete with the LCP image for bandwidth inside the measurement window.
+    // requestIdleCallback is the wrong tool: on an otherwise-fast page the
+    // main thread goes idle ~2 s in (inside the PSI trace), which is exactly
+    // how the multi-hundred-KiB payload used to land mid-load. Trigger on the
+    // first user interaction instead (scroll / tap / key — always long before
+    // anyone reaches this strip), with a 12 s wall-clock fallback so
+    // read-only sessions still refresh eventually.
+    const events = ["pointerdown", "keydown", "touchstart", "scroll"] as const;
+    let done = false;
+    const timer = window.setTimeout(() => run(), 12000);
+    const run = () => {
+      if (done) return;
+      done = true;
+      window.clearTimeout(timer);
+      events.forEach((ev) => window.removeEventListener(ev, run, true));
+      start();
+    };
+    events.forEach((ev) =>
+      window.addEventListener(ev, run, { capture: true, passive: true })
+    );
     return () => {
       cancelled = true;
-      window.clearTimeout(t);
+      done = true;
+      window.clearTimeout(timer);
+      events.forEach((ev) => window.removeEventListener(ev, run, true));
     };
   }, []);
 

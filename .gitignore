@@ -46,3 +46,7 @@ next-env.d.ts
 /shot.mjs
 /src/components/home/plant.zip
 
+# PSI / Lighthouse reports (downloaded locally, never committed)
+/lighthouse.html
+
+.aider*

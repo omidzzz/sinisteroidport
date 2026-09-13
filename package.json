@@ -5,7 +5,7 @@
   "description": "Omid – Frontend Developer Portfolio (Next.js)",
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/build/generate-og-cards.mjs && node scripts/build/generate-sitemap.mjs && node scripts/build/generate-rss.mjs && next build --webpack && node scripts/build/optimize-images.mjs --out",
+    "build": "node scripts/build/generate-og-cards.mjs && node scripts/build/generate-sitemap.mjs && node scripts/build/generate-rss.mjs && next build --webpack && node scripts/build/fix-segment-cache-paths.mjs --prune && node scripts/build/optimize-images.mjs --out && node scripts/build/inline-fonts.mjs && node scripts/build/inline-hero.mjs",
     "start": "next start",
     "lint": "eslint .",
     "indexnow": "node scripts/tools/indexnow.mjs",
@@ -13,7 +13,7 @@
     "extract-posts": "node scripts/migrations/extract-posts.mjs",
     "import-posts": "node scripts/migrations/import-posts.mjs",
     "prepare-cpanel": "node scripts/build/prepare-cpanel.mjs",
-    "audit": "node scripts/tools/audit2.mjs",
+    "audit": "node scripts/tools/audit3.mjs",
     "verify-laptop": "node scripts/tools/verify-laptop-timing.mjs",
     "zip-out": "node scripts/build/zip-out.mjs",
     "deploy": "npm run build && npm run prepare-cpanel && npm run zip-out && npm run indexnow",

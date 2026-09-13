@@ -9,10 +9,15 @@ const nextConfig = {
   trailingSlash: true,
   images: { unoptimized: true },
   outputFileTracingRoot: __dirname,
-  // Inline all CSS into <style> tags instead of render-blocking external
-  // stylesheets — for a static export this removes the two stylesheet
-  // roundtrips that cost ~1 s of first-paint latency under PSI throttling.
-  experimental: { inlineCss: true },
+  // NOTE: experimental.inlineCss was REMOVED. With output:"export" it emitted
+  // the compiled stylesheet as an inline <style> — but the RSC flight payload
+  // ALSO embedded the whole 194 KiB stylesheet as a text node (the flight
+  // duplicates the React tree, including the style element), so the CSS was
+  // shipped TWICE in every HTML document (~380 KiB of extra bytes + a 187 KiB
+  // JS-string parse + flight deserialize on the main thread). An external
+  // render-blocking stylesheet is discovered by the preload scanner in the
+  // first bytes of the HTML, so its download overlaps the HTML transfer; the
+  // net effect is smaller documents, cheaper flight hydration, equal FCP.
   // ── Legacy-JS polyfill swap (Next 16 / Turbopack) ──────────────────
   // Next unconditionally bundles next/dist/build/polyfills/polyfill-module
   // (~11 KiB of shims for Promise.finally, Object.fromEntries,

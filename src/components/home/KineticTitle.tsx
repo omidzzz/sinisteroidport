@@ -1,12 +1,20 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import KineticTitleFrame from "./KineticTitleFrame";
 
 /**
- * Kinetic typography — each letter's variable-font weight bends toward the
- * pointer based on distance. Uses Space Grotesk's `wght` axis via
- * font-variation-settings; runs a single rAF loop while mounted.
- * Inert on touch devices and for reduced-motion users.
+ * KINETIC TITLE — client wrapper that mounts the pointer-tracking rAF loop.
+ *
+ * The static letter spans are rendered by KineticTitleFrame (a server
+ * component) so the title text is in the initial HTML — the browser paints
+ * it on first render (letters at their resting wght 300) and search
+ * engines see the plain text. This client wrapper only adds the
+ * mousemove listener + rAF loop after hydration.
+ *
+ * The letters look identical before and after hydration (both at wght:300),
+ * so there's zero visual shift. The kinetic effect is decorative — it only
+ * activates on (pointer: fine) + (prefers-reduced-motion: no-preference).
  */
 export default function KineticTitle({
   text,
@@ -15,10 +23,10 @@ export default function KineticTitle({
   text: string;
   className?: string;
 }) {
-  const rootRef = useRef<HTMLHeadingElement>(null);
+  const internalRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    const root = rootRef.current;
+    const root = internalRef.current;
     if (!root) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -27,11 +35,6 @@ export default function KineticTitle({
     let mx = -9999;
     let my = -9999;
     let raf = 0;
-    // Only run a pass when the pointer actually moved — the effect is a pure
-    // function of pointer position, so a resting cursor needs zero per-frame
-    // layout reads (each frame previously cost letters.length forced reflows).
-    // The loop now SLEEPS between passes: wake() fires one rAF per pointer
-    // event, then nothing runs while the pointer rests (no empty 60fps loop).
     let dirty = true;
 
     const loop = () => {
@@ -39,9 +42,6 @@ export default function KineticTitle({
       if (!dirty) return;
       dirty = false;
 
-      // READ phase: collect every rect before touching styles. Interleaving
-      // getBoundingClientRect() with style writes forces a synchronous
-      // reflow per letter (layout thrashing — the "Forced reflow" audit).
       const rects: (DOMRect | null)[] = new Array(letters.length);
       for (let i = 0; i < letters.length; i++) {
         const r = letters[i].getBoundingClientRect();
@@ -49,7 +49,6 @@ export default function KineticTitle({
           r.bottom < -80 || r.top > window.innerHeight + 80 ? null : r;
       }
 
-      // WRITE phase: batch all style mutations after the reads.
       for (let i = 0; i < letters.length; i++) {
         const r = rects[i];
         if (!r) continue;
@@ -57,15 +56,13 @@ export default function KineticTitle({
         const dy = my - (r.top + r.height / 2);
         const dist = Math.hypot(dx, dy);
         const influence = Math.max(0, 1 - dist / 200);
-        const weight = 300 + influence * 600; // 300 → 900
+        const weight = 300 + influence * 600;
         const el = letters[i];
         el.style.fontVariationSettings = `"wght" ${weight.toFixed(0)}`;
         el.style.transform = `translateY(${(-influence * 6).toFixed(2)}px)`;
       }
     };
 
-    /* wake() — fire one rAF per dirty pass; the loop sleeps in between. A
-       resting cursor costs ZERO frames instead of an empty 60fps loop. */
     const wake = () => {
       if (raf) return;
       raf = requestAnimationFrame(loop);
@@ -95,54 +92,13 @@ export default function KineticTitle({
     };
   }, [text]);
 
-  // Preserve word wrapping: split into words, then letters.
-  // Arabic/Persian script is cursive — splitting into letters breaks letter
-  // joining, so RTL titles get WORD-level kinetics instead: each word bends
-  // as a unit (joining stays intact inside the word).
-  const isArabicScript = /[\u0600-\u06FF]/.test(text);
-  let key = 0;
-  if (isArabicScript) {
-    const words = text.split(" ").filter(Boolean);
-    return (
-      <h1 ref={rootRef} className={className} aria-label={text}>
-        {words.map((word, wi) => (
-          <span key={wi}>
-            <span
-              data-ch
-              className="inline-block whitespace-nowrap will-change-[font-variation-settings]"
-              /* fontWeight 300 mirrors the variation setting so the swap
-                 fallback renders the same weight as the real variable font. */
-              style={{ fontVariationSettings: '"wght" 300', fontWeight: 300 }}
-            >
-              {word}
-            </span>
-            {wi < words.length - 1 ? " " : null}
-          </span>
-        ))}
-      </h1>
-    );
-  }
   return (
-    <h1 ref={rootRef} className={className} aria-label={text}>
-      {text.split(" ").map((word, wi) => (
-        <span key={wi} className="inline-block whitespace-nowrap">
-          {word.split("").map((ch) => (
-            <span
-              key={key++}
-              data-ch
-              className="inline-block will-change-[font-variation-settings]"
-              /* fontWeight 300 mirrors the variation setting so the swap
-                 fallback (Arial) doesn't render at font-black 900 and snap
-                 the whole hero when the real Orbitron arrives (CLS). */
-              style={{ fontVariationSettings: '"wght" 300', fontWeight: 300 }}
-            >
-              {ch}
-            </span>
-          ))}
-          {/* real space between words */}
-          <span className="inline-block">&nbsp;</span>
-        </span>
-      ))}
-    </h1>
+    <div ref={internalRef} style={{ display: 'contents' }}>
+      <KineticTitleFrame
+        text={text}
+        className={className}
+      />
+    </div>
   );
 }
+

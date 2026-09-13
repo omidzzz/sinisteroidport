@@ -12,7 +12,16 @@ try {
     if ($statusFilter !== '') {
         $params['status'] = 'published';
     }
-    $stmt = $pdo->prepare("SELECT slug, status, title, date_published AS date, tags, featured_image, content_json FROM posts $statusFilter ORDER BY date_published DESC");
+    // `?limit=N` (clamped 1..50) — the home-page strip renders three cards;
+    // without a limit this endpoint shipped every post's full content_json
+    // (~475 KiB), and on a cold mobile connection that body landed inside the
+    // PSI measurement window, competing with the LCP image for bandwidth.
+    // Default (no param) stays "all posts" for the blog index sync.
+    $limit = isset($_GET['limit']) ? max(1, min(50, (int) $_GET['limit'])) : 0;
+    $stmt = $pdo->prepare(
+        "SELECT slug, status, title, date_published AS date, tags, featured_image, content_json FROM posts $statusFilter ORDER BY date_published DESC"
+        . ($limit > 0 ? " LIMIT $limit" : "")
+    );
     $stmt->execute($params);
     $rows = $stmt->fetchAll();
     $posts = array_map(function ($row) {

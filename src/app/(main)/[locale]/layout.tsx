@@ -6,7 +6,6 @@ import {
   Vazirmatn,
   Orbitron,
   Noto_Kufi_Arabic,
-  Unbounded,
 } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -57,30 +56,36 @@ const orbitron = Orbitron({
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
-  display: "swap",
+  // display:"optional" — the body face must NEVER swap in after first paint
+  // (the swap re-wraps the hero roles/desc/CTA column → 0.26 CLS → -8 score).
+  // optional = Chrome skips the fetch on constrained connections and keeps
+  // the metric-compatible fallback on first visit; the real face still loads
+  // for repeat visitors (cache) and fast connections. Orbitron is the LCP
+  // display face and is build-inlined instead.
+  display: "optional",
   // Not preloaded: the LCP element is the display name (Orbitron); preloading
   // the body face too on a throttled mobile connection steals bandwidth+RTT
-  // from the LCP font. Space Grotesk swaps in after first paint harmlessly.
-
+  // from the LCP font.
   preload: false,
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
-  display: "swap",
+  // Below-the-fold readouts only — optional lets Chrome skip the fetch on
+  // constrained connections (no swap → no CLS from mono labels).
+  display: "optional",
   // Below-the-fold readouts only;not preloaded (see Space Grotesk note).
   preload: false,
 });
 
-// Display logotype face for the SINISTER[OID] brand — a wide, slightly
-// techno variable face (200–900). Loaded only for the lockup, so it does
-// not add global weight.
-const unbounded = Unbounded({
-  subsets: ["latin"],
-  variable: "--font-unbounded",
-  display: "swap",
-});
+// NOTE: Unbounded was removed. It existed only for the small SINISTER[OID]
+// lockup, but Chrome eagerly fetches fonts used anywhere in the layout tree —
+// including the below-fold footer lockup — so every /en/ visit downloaded the
+// ~51 KiB face (the single largest font on the page) for a 0.92rem logo, and
+// its swap was the residual 0.019 logo CLS. The lockup now renders in
+// Orbitron (see tokens.css --font-logo), which is already loaded for the
+// hero display type: one display face, zero extra wire bytes, no swap shift.
 
 // Persian body text needs an Arabic-script face; Vazirmatn is variable too,
 // so the kinetic weight effect still works. Noto Kufi Arabic mirrors the
@@ -91,7 +96,11 @@ const unbounded = Unbounded({
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
   variable: "--font-vazirmatn",
-  display: "swap",
+  // optional: even though subsets are arabic, Chrome eagerly fetched the
+  // latin @font-face slice on /en/ (the face is declared in the shared head
+  // CSS). optional makes Chrome skip it on constrained connections — no
+  // 34 KiB of dead weight and no swap on the English page.
+  display: "optional",
   preload: false,
 });
 
@@ -103,7 +112,7 @@ const vazirmatn = Vazirmatn({
 const notoKufiArabic = Noto_Kufi_Arabic({
   subsets: ["arabic"],
   variable: "--font-kufi",
-  display: "swap",
+  display: "optional",
   preload: false,
 });
 
@@ -178,7 +187,6 @@ export default async function LocaleRootLayout({
     orbitron.variable,
     spaceGrotesk.variable,
     jetbrainsMono.variable,
-    unbounded.variable,
     vazirmatn.variable,
     notoKufiArabic.variable,
   ].join(" ");

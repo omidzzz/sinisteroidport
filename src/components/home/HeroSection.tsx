@@ -61,13 +61,13 @@ export default function HeroSection({ locale }: { locale: Locale }) {
             <Reveal delay={240}>
               <div className="mt-9 flex flex-wrap items-center gap-5">
                 <Magnetic>
-                  <Link href={loc(locale, "/showcase")} className="btn-neon group">
+                  <Link href={loc(locale, "/showcase")} prefetch={false} className="btn-neon group">
                     {t.ctaWork}
                     <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
                   </Link>
                 </Magnetic>
                 <Magnetic strength={0.1} maxShift={6}>
-                  <Link href={loc(locale, "/blog")} className="btn-ghost group">
+                  <Link href={loc(locale, "/blog")} prefetch={false} className="btn-ghost group">
                     {t.ctaWriting}
                     <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
                   </Link>
@@ -75,7 +75,14 @@ export default function HeroSection({ locale }: { locale: Locale }) {
               </div>
             </Reveal>
           </div>
-          <div className="justify-self-center lg:justify-self-end">
+          {/* No justify-self: let the grid item STRETCH to fill its definite
+              track (minmax(15rem,21rem)). justify-self-center/end would
+              shrink-to-fit the item, making the plate's percentage widths
+              resolve against a content-dependent parent — the plate box then
+              collapses to a ~3px speck until the portrait's intrinsic size
+              lands, re-centering the items-center grid (a ~0.09-0.26 shift).
+              The plate wrapper's mx-auto centers it within the stretched item. */}
+          <div className="w-full">
             <HeroPlate locale={locale} />
           </div>
         </div>

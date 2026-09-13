@@ -35,7 +35,34 @@ export default async function HomePage({
   const { locale: raw } = await params;
   const locale = (isLocale(raw) ? raw : "en") as Locale;
   const fa = locale === "fa";
-  const latest = getAllPosts().slice(0, 3);
+  // PERF: the strip renders title + date + cover only. Passing the FULL posts
+  // serialized every post's content blocks (~84 KiB of JSON for three posts)
+  // into the RSC flight payload embedded in the HTML — paid on transfer AND
+  // parse AND hydration at the 4x-throttled mobile CPU. Slim to what the strip
+  // reads (empty `content` is a valid PostTranslation — zero behavior change).
+  const latest = getAllPosts().slice(0, 3).map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    date: p.date,
+    tags: p.tags,
+    featuredImage: p.featuredImage ? { src: p.featuredImage.src } : undefined,
+    translations: {
+      en: {
+        title: p.translations?.en?.title ?? p.title,
+        excerpt: "",
+        content: [],
+      },
+      ...(p.translations?.fa
+        ? {
+            fa: {
+              title: p.translations.fa.title,
+              excerpt: "",
+              content: [],
+            },
+          }
+        : {}),
+    },
+  }));
   const skillTotal = skillsData.reduce((n, g) => n + g.skills.length, 0);
 
   return (

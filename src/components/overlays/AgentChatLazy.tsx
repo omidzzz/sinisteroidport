@@ -56,13 +56,25 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
 
   // First-visit hint — a small nudge near the FAB, shown once and never
   // again (dismissed on open or after a few seconds).
-  const [hint, setHint] = useState<boolean>(() => {
+  // MUST resolve post-mount: reading localStorage during the SSR render
+  // returns a DIFFERENT answer than the client's first pass (server hits
+  // the catch block → false; a fresh client → true), which makes the
+  // server HTML mismatch the client's render — a React hydration error on
+  // literally every first-time visitor. So the first render is always
+  // hint=false on both sides; the real value is read once, after mount.
+  const [hint, setHint] = useState(false);
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (mounted.current) return;
+    mounted.current = true;
+    let seen = true;
     try {
-      return localStorage.getItem(HINT_KEY) !== "1";
+      seen = localStorage.getItem(HINT_KEY) === "1";
     } catch {
-      return false;
+      /* storage blocked — treat as seen so we don't nag */
     }
-  });
+    setHint(!seen);
+  }, []);
   useEffect(() => {
     if (!hint) return;
     const id = window.setTimeout(() => setHint(false), 12_000);

@@ -471,5 +471,12 @@
   opacity: 0.4;
 }
 .net-hud {
+  border-color: rgba(var(--rgb-acid), 0.35);
+  background: rgba(2, 5, 3, 0.75);
   transition: opacity 0.25s ease, transform 0.25s ease;
+}
+/* Light theme: the near-black readout panel becomes paper, so the ink-colored
+   label text (var(--color-ink) → near-black in light) stays legible. */
+[data-theme="light"] .net-hud {
+  background: rgba(245, 249, 240, 0.9);
 }

@@ -33,6 +33,7 @@ export default function SignalsSection({
           <div className="mb-6 flex justify-end">
             <Link
               href={loc(locale, "/blog")}
+              prefetch={false}
               className="group brk font-mono text-xs text-muted transition-colors hover:text-acid"
             >
               {t.allPosts}

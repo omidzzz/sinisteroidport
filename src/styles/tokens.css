@@ -31,7 +31,7 @@
     var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-orbitron), var(--font-syne),
     var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-logo: var(--font-unbounded), var(--font-space-grotesk), sans-serif;
+  --font-logo: var(--font-orbitron), var(--font-space-grotesk), sans-serif;
 }
 
 html[lang="fa"] {

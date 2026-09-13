@@ -46,11 +46,20 @@ export default function Navbar({ locale }: { locale: Locale }) {
 
   const langSwap =
     locale === "en" ? (
-      <a href={`/fa${clean}`} className="font-bold text-acid">
+      /* The dock's only non-pill hit zone — give it a real tap target
+         (the donate pill next to it is ~27px; match that so Lighthouse's
+         target-size audit and touch users both clear it). */
+      <a
+        href={`/fa${clean}`}
+        className="inline-flex min-h-[28px] min-w-[28px] items-center justify-center px-1 font-bold text-acid"
+      >
         فا
       </a>
     ) : (
-      <a href={`/en${clean}`} className="font-bold text-acid">
+      <a
+        href={`/en${clean}`}
+        className="inline-flex min-h-[28px] min-w-[28px] items-center justify-center px-1 font-bold text-acid"
+      >
         EN
       </a>
     );

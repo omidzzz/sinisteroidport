@@ -198,5 +198,10 @@ export default function VTLink({ href, onClick, ...rest }: LinkProps) {
     if (startVT(() => router.push(href))) e.preventDefault();
   };
 
-  return <Link href={href} {...rest} onClick={handleClick} />;
+  // prefetch={false} — every below-fold route's RSC payload (~435 KiB across
+  // /en/blog, /en/skills, /en/showcase, /fa…) used to be prefetched the moment
+  // the chrome rendered, saturating the link with the LCP image still pending.
+  // Callers may still pass their own prefetch prop (it overrides this default
+  // via {...rest}).
+  return <Link href={href} prefetch={false} {...rest} onClick={handleClick} />;
 }

@@ -11,8 +11,7 @@ import http from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import zlib from "node:zlib";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -28,6 +27,10 @@ const getOpt = (name, fallback) => {
 };
 const presets = getOpt("--presets", "mobile,desktop").split(",");
 const pages = getOpt("--pages", "/en/,/fa/").split(",");
+// `--latency N` — forwarded to serve-out.mjs; injects N ms of TTFB into every
+// response so the local audit reproduces PSI-like font arrival timing (and
+// therefore the font-swap CLS that PSI catches on the live host).
+const LATENCY_MS = Math.max(0, parseInt(getOpt("--latency", "0"), 10) || 0);
 
 if (!fs.existsSync(path.join(outDir, "en", "index.html"))) {
   console.error("out/en/index.html missing — run `npx next build --webpack` first.");
@@ -38,68 +41,26 @@ if (!fs.existsSync(lhCli)) {
   process.exit(1);
 }
 
-const MIME = {
-  ".html": "text/html; charset=utf-8",
-  ".txt": "text/plain; charset=utf-8",
-  ".js": "text/javascript",
-  ".css": "text/css",
-  ".json": "application/json",
-  ".webp": "image/webp",
-  ".jpg": "image/jpeg",
-  ".png": "image/png",
-  ".ico": "image/x-icon",
-  ".svg": "image/svg+xml",
-  ".woff2": "font/woff2",
-  ".xml": "application/xml",
-};
-const GZIP_TYPES = new Set([".html", ".js", ".css", ".json", ".xml", ".svg", ".txt"]);
-
-const server = http.createServer((req, res) => {
-  try {
-    const urlPath = decodeURIComponent(new URL(req.url??"/", "http://x").pathname);
-    let file = path.join(outDir, urlPath);
-    if (
-      !fs.existsSync(file) &&
-      !/^\/(en|fa)(\/|$)/.test(urlPath) &&
-      urlPath !== "/"
-    ) {
-      const prefixed = `/en${urlPath === "/" ? "/" : urlPath}`;
-      res.writeHead(301, { Location: prefixed });
-      res.end();
-      return;
-    }
-    if (urlPath.endsWith("/")) file = path.join(file, "index.html");
-    if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
-      res.writeHead(404);
-      res.end("not found");
-      return;
-    }
-    const ext = path.extname(file);
-    const gzip = GZIP_TYPES.has(ext) && /\bgzip\b/.test(String(req.headers["accept-encoding"] ?? ""));
-    res.writeHead(200, {
-      "Content-Type": MIME[ext] ?? "application/octet-stream",
-      ...(gzip ? { "Content-Encoding": "gzip" } : {}),
-    });
-    const raw = fs.createReadStream(file);
-    raw.on("error", () => { try { res.end(); } catch {} });
-    if (gzip) {
-      const gz = zlib.createGzip({ level: 6 });
-      gz.on("error", () => { try { res.end(); } catch {} });
-      raw.pipe(gz ).pipe(res );
-    } else {
-      raw.pipe(res );
-    }
-  } catch {
-    res.writeHead(500);
-    res.end();
-  }
-});
-
-await new Promise((r) => server.listen(0, "127.0.0.1", r));
-const PORT = server.address().port;
 fs.mkdirSync(reportDir, { recursive: true });
+
+// Serve out/ from a SEPARATE process. A static server co-located with the
+// blocking spawnSync below shares this single-threaded event loop, so it
+// can never answer a request while the CLI is waiting — Chrome's navigation
+// then stalls and dies with "Protocol error (Page.navigate): Target
+// closed", which is exactly what audit3 hit on every run. The child process
+// keeps serving independently for the entire audit.
+const probe = http.createServer();
+await new Promise((r) => probe.listen(0, "127.0.0.1", r));
+const PORT = probe.address().port;
+probe.close();
+const srv = spawn(process.execPath, [
+  path.join(root, "scripts", "tools", "serve-out.mjs"),
+  "--port", String(PORT),
+  "--root", outDir,
+  ...(LATENCY_MS ? ["--latency", String(LATENCY_MS)] : []),
+], { cwd: root });
 function runLighthouse(url, preset) {
-  const slug = `${urlPathSlug(url)}-${preset}`;
+  const slug = `${urlPathSlug(url)}-${preset}${LATENCY_MS ? `-lat${LATENCY_MS}` : ""}`;
   const outPath = path.join(reportDir, `${slug}.json`);
   const profile = path.join(os.tmpdir(), `lh-${Date.now()}-${Math.random().toString(36).slice(2, 8)}}`);
   const cliArgs = [
@@ -153,7 +114,7 @@ function runLighthouse(url, preset) {
 
 const urlPathSlug = (u) => u.replace(/^\/|\/$/g, "").replace(/[/?#]/g, "-" ) || "root";
 
-console.log(`\nServing ${outDir} on http://127.0.0.1:${PORT}\n`);
+console.log(`\nServing ${outDir} on http://127.0.0.1:${PORT}${LATENCY_MS ? ` (+${LATENCY_MS}ms TTFB)` : ""}\n`);
 const results = [];
 const a11yGate = args.includes("--a11y-gate");
 for (const preset of presets) {
@@ -175,7 +136,7 @@ for (const preset of presets) {
     }
   }
 }
-server.close();
+try { srv.kill(); } catch {}
 
 fs.writeFileSync(
   path.join(reportDir, "summary.json"),
