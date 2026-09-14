@@ -185,21 +185,25 @@ kf.push("@keyframes lp-stickerpulse{0%,100%{opacity:.75}50%{opacity:1}}");
 export const STYLE = [
   "/* LaptopDeck — GPU-accelerated neon animations */",
   /* neon hues ride the site theme tokens (B4); magenta is deck-local */
-  ".lp-root{--lp-acid:var(--color-acid,#b8ff00);--lp-cyan:var(--color-accent,#00e5ff);--lp-mag:#ff2bd6;transition:transform .25s cubic-bezier(.2,.8,.2,1)}",
+  ".lp-root{--lp-acid:var(--color-acid,#b8ff00);--lp-cyan:var(--color-accent,#00e5ff);--lp-mag:#ff2bd6;--lp-tick:1;transition:transform .25s cubic-bezier(.2,.8,.2,1)}",
   ".lp-ch{opacity:0;transform-box:fill-box;transform-origin:50% 50%}",
   ".lp-eq{transform-box:fill-box;transform-origin:50% 100%;will-change:transform}",
   ".lp-kglow{opacity:0;pointer-events:none}",
-  ".lp-pt{animation:lp-drift 4.2s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center;will-change:transform,opacity}",
-  ".lp-st1{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
-  ".lp-st2{animation:lp-strip 2.4s cubic-bezier(.4,0,.2,1) infinite;animation-delay:-1.2s;transform-box:fill-box;transform-origin:center}",
-  ".lp-led{animation:lp-pulse 1.6s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
-  ".lp-hz{animation:lp-haze 7s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
+  /* Ambient neon loops scale with --lp-tick (scroll-velocity wake sets it
+     from JS). calc() multiplication is compositor data, never re-keyframed;
+     browsers without calc(`*`) drop the declaration and keep the base
+     duration. The typing/cursor cycle stays fixed — it is sequence-locked. */
+  ".lp-pt{animation:lp-drift calc(4.2s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center;will-change:transform,opacity}",
+  ".lp-st1{animation:lp-strip calc(2.4s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
+  ".lp-st2{animation:lp-strip calc(2.4s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite;animation-delay:-1.2s;transform-box:fill-box;transform-origin:center}",
+  ".lp-led{animation:lp-pulse calc(1.6s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
+  ".lp-hz{animation:lp-haze calc(7s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
   ".lp-screen-flicker{animation:lp-flicker 0.15s steps(2) infinite}",
   ".lp-dim{pointer-events:none}",
-  ".lp-hud{animation:lp-hudpulse 3.4s cubic-bezier(.4,0,.2,1) infinite}",
-  ".lp-halo{animation:lp-halo 5.2s cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
-  ".lp-sweep{animation:lp-sweep 6.4s cubic-bezier(.4,0,.2,1) infinite}",
-  ".lp-sticker{animation:lp-stickerpulse 2.8s cubic-bezier(.4,0,.2,1) infinite}",
+  ".lp-hud{animation:lp-hudpulse calc(3.4s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite}",
+  ".lp-halo{animation:lp-halo calc(5.2s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite;transform-box:fill-box;transform-origin:center}",
+  ".lp-sweep{animation:lp-sweep calc(6.4s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite}",
+  ".lp-sticker{animation:lp-stickerpulse calc(2.8s * var(--lp-tick,1)) cubic-bezier(.4,0,.2,1) infinite}",
   /* pause every animation while the deck is scrolled out of view (A3) */
   ".lp-paused *{animation-play-state:paused!important}",
   /* .lp-svg filter lives in src/styles/console-bay.css (theme-aware);

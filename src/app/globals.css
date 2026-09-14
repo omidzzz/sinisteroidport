@@ -65,3 +65,7 @@
 @import "../styles/fx-modern.css";
 @import "../styles/view-transitions.css";
 @import "../styles/motion-reduce.css";
+/* enhance.css MUST stay last: finesse pass whose overrides (btn-shine
+   compositor lift, module energizer, seam/footer scrubs, print decay)
+   need to win the cascade. */
+@import "../styles/enhance.css";

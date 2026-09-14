@@ -107,6 +107,47 @@ export default function LaptopDeck() {
     };
   }, []);
 
+  /* scroll-velocity wake (E1): the ambient neon loops sprint while the page
+   * flings and settle back after — same self-sleeping rAF + passive listener
+   * as the hero hazard ticker, writing --lp-tick (a duration multiplier ≥ 1)
+   * that the STYLE durations consume via calc(). Fine-pointer + no-reduced-
+   * motion only; browsers without calc(`*`) simply keep the base speed. */
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    let raf = 0;
+    let v = 1; // scroll-speed multiplier (1 = calm, up to 2.4 = sprint)
+    let lastY = window.scrollY;
+    let lastT = performance.now();
+    const tick = (now: number) => {
+      raf = 0;
+      if (document.hidden) return;
+      const y = window.scrollY;
+      const dt = Math.max(now - lastT, 16);
+      lastT = now;
+      const speed = Math.abs(y - lastY) / dt;
+      lastY = y;
+      const target = Math.min(1 + speed * 2.4, 2.4);
+      v += (target - v) * 0.12;
+      if (v < 1.02) v = 1;
+      /* Faster fling → shorter duration → ambient loops sprint. */
+      el.style.setProperty("--lp-tick", Math.max(0.42, Math.min(1, 1 / v)).toFixed(3));
+      if (v > 1.02 || target > 1.02) raf = requestAnimationFrame(tick);
+    };
+    const wake = () => {
+      lastT = performance.now();
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    window.addEventListener("scroll", wake, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", wake);
+      if (raf) cancelAnimationFrame(raf);
+      el.style.removeProperty("--lp-tick");
+    };
+  }, []);
+
   return (
     <div
       ref={wrapRef}

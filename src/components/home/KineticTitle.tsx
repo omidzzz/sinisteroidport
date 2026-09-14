@@ -34,12 +34,33 @@ export default function KineticTitle({
     const letters = Array.from(root.querySelectorAll<HTMLElement>("[data-ch]"));
     let mx = -9999;
     let my = -9999;
+    /* Scroll-velocity "doppler" (D1): the title charges on page flings
+       exactly like the hazard ticker — same self-sleeping rAF, same clamp
+       and decay. The pump rides the existing per-letter wght animation,
+       so no new CSS surface is needed. */
+    let sp = 1; // 1 = calm … 2.2 = sprint (scroll-speed multiplier)
+    let lastY = window.scrollY;
+    let lastT = performance.now();
     let raf = 0;
     let dirty = true;
 
-    const loop = () => {
+    const loop = (now: number) => {
       raf = 0;
-      if (!dirty) return;
+
+      /* Scroll velocity + decay — measured every frame the loop is awake,
+         so a fling's inertia keeps fading after the last scroll event. */
+      const y = window.scrollY;
+      const dt = Math.max(now - lastT, 16);
+      lastT = now;
+      const speed = Math.abs(y - lastY) / dt;
+      lastY = y;
+      const target = Math.min(1 + speed * 2.4, 2.2);
+      sp += (target - sp) * 0.14;
+      if (sp < 1.02) sp = 1;
+
+      const charge = (sp - 1) * 160; // wght pump: 0 … ~192
+      const settled = Math.abs(sp - 1) < 0.03;
+      if (!dirty && settled) return;
       dirty = false;
 
       const rects: (DOMRect | null)[] = new Array(letters.length);
@@ -56,10 +77,11 @@ export default function KineticTitle({
         const dy = my - (r.top + r.height / 2);
         const dist = Math.hypot(dx, dy);
         const influence = Math.max(0, 1 - dist / 200);
-        const weight = 300 + influence * 600;
+        /* Orbitron variable face is 400–900: cap so a charge never overdrives. */
+        const weight = Math.min(300 + influence * 600 + charge, 900);
         const el = letters[i];
         el.style.fontVariationSettings = `"wght" ${weight.toFixed(0)}`;
-        el.style.transform = `translateY(${(-influence * 6).toFixed(2)}px)`;
+        el.style.transform = `translateY(${(-influence * 6 - charge * 0.03).toFixed(2)}px)`;
       }
     };
 
@@ -80,14 +102,20 @@ export default function KineticTitle({
       dirty = true;
       wake();
     };
+    const onScroll = () => {
+      dirty = true;
+      wake();
+    };
 
     window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     document.documentElement.addEventListener("mouseleave", onLeave);
     dirty = true;
     wake();
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", onScroll);
       document.documentElement.removeEventListener("mouseleave", onLeave);
     };
   }, [text]);

@@ -1,0 +1,201 @@
+/* ============================================================
+   ENHANCE — professional finesse pass (2026-09)
+   ------------------------------------------------------------
+   Loaded LAST so these rules win the cascade. Every effect obeys
+   the house performance rules:
+     • compositor-only properties (transform, translate, rotate,
+       opacity) or scroll-driven view() timelines — zero JS
+     • reduced-motion gated; @supports / @media guards so
+       unsupported browsers keep the pre-pass look
+     • logical properties + [dir="rtl"] mirrors
+     • token-driven (light/dark adapt for free)
+   Contents:
+     §1 Seam progress hairline — view() scrubbed act meter
+     §2 Module-card energizer  — hover-only conic charge ring
+     §3 Ghost-CTA sheen        — hover sweep (.btn-ghost)
+     §4 btn-neon shine lift    — left → translate (compositor)
+     §5 Footer exit signal     — view() scrubbed closing line
+     §6 Light-theme parity     — soft glows for the lab wash
+     §7 Print decay            — new surfaces print as ink
+   ============================================================ */
+
+/* §1 SEAM PROGRESS — the act divider's hairline fills as the band
+   passes through the viewport. `entry 0% exit 0%` is the natural
+   range for a fixed-height band: from first contact with the top
+   edge to fully exiting the bottom. Browsers without view()
+   simply skip the rule (the seam keeps its current static look). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .seam::after {
+      content: "";
+      position: absolute;
+      inset-inline: 12% 12%;
+      bottom: 18%;
+      height: 2px;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, var(--color-acid), var(--color-accent));
+      transform-origin: left center;
+      animation: eh-seam-progress linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 0%;
+    }
+    [dir="rtl"] .seam::after { transform-origin: right center; }
+    @keyframes eh-seam-progress {
+      from { transform: scaleX(0.04); }
+      to { transform: scaleX(1); }
+    }
+  }
+}
+
+/* §2 MODULE-CARD ENERGIZER — the deck's currently-empty .mod-halo
+   span becomes a conic "charge ring" that only exists on hover:
+   a conic-gradient masked to an annulus (same technique as the
+   status-panel halo), spinning as a pure GPU rotate. Idle cost
+   is zero — opacity 0, no animation. */
+.module-card .mod-halo {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: conic-gradient(
+    from 20deg,
+    transparent 0%,
+    color-mix(in srgb, var(--hue) 55%, transparent) 9%,
+    transparent 24%,
+    color-mix(in srgb, var(--hue) 55%, transparent) 38%,
+    transparent 52%,
+    color-mix(in srgb, var(--hue) 55%, transparent) 66%,
+    transparent 80%,
+    color-mix(in srgb, var(--hue) 55%, transparent) 93%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    160% 160% at 50% 50%,
+    transparent 78%,
+    #000 82%,
+    transparent 85%
+  );
+  mask-image: radial-gradient(
+    160% 160% at 50% 50%,
+    transparent 78%,
+    #000 82%,
+    transparent 85%
+  );
+}
+@media (hover: hover) and (pointer: fine) {
+  @media (prefers-reduced-motion: no-preference) {
+    .module-card:hover .mod-halo,
+    .module-card:focus-within .mod-halo {
+      opacity: 1;
+      animation: eh-energize 7s linear infinite;
+    }
+  }
+}
+@keyframes eh-energize { to { rotate: 360deg; } }
+/* §3 GHOST-CTA SHEEN — mirrors the btn-neon shine so every CTA
+   family speaks the same language. Hover-only, transform/opacity,
+   clipped inside the button (box-shadow still paints outside). */
+.btn-ghost {
+  position: relative;
+  overflow: clip;
+}
+.btn-ghost::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(var(--rgb-accent), 0.16) 44%,
+    rgba(var(--rgb-acid), 0.1) 52%,
+    transparent 100%
+  );
+}
+@media (hover: hover) and (pointer: fine) {
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-ghost:hover::after {
+      opacity: 1;
+      animation: eh-ghost-sheen 0.8s ease forwards;
+    }
+  }
+}
+@keyframes eh-ghost-sheen {
+  from { translate: -130% 0; }
+  to { translate: 130% 0; }
+}
+
+/* §4 btn-neon SHINE LIFT — the existing shine animates `left`
+   (a layout-triggering property). Redefining the btn-shine
+   keyframes to drive `translate` keeps the exact same geometry
+   on the compositor. Unsupported browsers drop `translate` and
+   simply keep the static base — no visual regression. */
+@keyframes btn-shine {
+  from { translate: 0 0; }
+  to { translate: 467% 0; }
+}
+
+/* §5 FOOTER EXIT SIGNAL — a scrubbed closing line under the
+   colophon: the page's last beat. view() only, static fallback. */
+.foot-edition { position: relative; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .foot-edition::before {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      bottom: -1.1rem;
+      height: 2px;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, var(--color-acid), var(--color-accent));
+      transform-origin: left center;
+      animation: eh-footer-signal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 0%;
+    }
+    [dir="rtl"] .foot-edition::before { transform-origin: right center; }
+    @keyframes eh-footer-signal {
+      from { transform: scaleX(0.04); opacity: 0.35; }
+      to { transform: scaleX(1); opacity: 0.95; }
+    }
+  }
+}
+
+/* §6 LIGHT-THEME PARITY — the new surfaces and the legacy chrome
+   props get softened glows for the laboratory whiteout. */
+[data-theme="light"] .module-card:hover .mod-halo { opacity: 0.7; }
+[data-theme="light"] .status-panel::before { opacity: 0.22; }
+[data-theme="light"] .holo-core {
+  filter: drop-shadow(0 2px 6px rgba(var(--rgb-acid), 0.2));
+}
+
+/* §7 PRINT DECAY — the 2026 additions print as ink, never neon;
+   the giant closer keeps a thin stroke instead of a solid slab. */
+@media print {
+  .seam::after,
+  .foot-edition::before,
+  .module-card .mod-halo,
+  .btn-ghost::after,
+  .btn-neon::after,
+  .status-panel::before,
+  .holo-core,
+  .sig-wave,
+  .live-dot,
+  .thread {
+    display: none !important;
+  }
+  .foot-giant {
+    -webkit-text-stroke: 0.4px #000;
+    opacity: 1;
+  }
+  .module-card {
+    background: #fff !important;
+    border-color: #bbb !important;
+  }
+}

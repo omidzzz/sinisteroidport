@@ -403,8 +403,14 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
         n.vx = 0;
         n.vy = 0;
       }
+      const prevHot = hotRef.current;
       const h = hit(p.x, p.y);
       hotRef.current = h;
+      /* Sonar ping: arm a one-shot expanding ring when a NEW node becomes
+         the hover target (never during a drag) — the draw pass reuses the
+         same frame loop, so the only extra cost is a single arc for ~1 s
+         after each hover change. */
+      if (h !== -1 && h !== prevHot && dragRef.current === -1) pingT = t;
       canvas.style.cursor = h === -1 ? "default" : dragRef.current === h ? "grabbing" : "grab";
       if (h !== -1) {
         const n = nodes[h];
@@ -478,6 +484,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
 
     /* ── Physics + render ────────────────────────────────────────── */
     let t = 0;
+    let pingT = -10; // time (t) the current hover sonar ping was armed
     const step = () => {
       rafRef.current = requestAnimationFrame(step);
       if (hiddenRef.current) return; // paused offscreen
@@ -703,6 +710,17 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r + 4 + rp * 26, 0, Math.PI * 2);
             ctx.stroke();
+          }
+          if (!reducedMotion && dragRef.current === -1 && i === hot) {
+            /* Hover sonar ping — one expanding ring (~1 s) per node entry. */
+            const pp = (t - pingT) * 1.1;
+            if (pp > 0 && pp < 1) {
+              ctx.strokeStyle = `rgba(${Y()[0]},${Y()[1]},${Y()[2]},${(1 - pp) * 0.45})`;
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.arc(n.x, n.y, n.r + 5 + pp * 30, 0, Math.PI * 2);
+              ctx.stroke();
+            }
           }
 
           ctx.beginPath();
