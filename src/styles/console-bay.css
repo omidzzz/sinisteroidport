@@ -10,10 +10,10 @@
 }
 .console-bay-deck .lp-root { flex: 0 0 clamp(19rem, 34vw, 27rem); }
 /* prop SVGs share the laptop's presentation (block, pointer-none, glow) */
-.lp-svg { display: block; width: 100%; height: auto; pointer-events: none; filter: drop-shadow(0 0 20px rgba(255, 194, 74, 0.14)) drop-shadow(0 0 40px rgba(216, 255, 77, 0.09)); }
+.lp-svg { display: block; width: 100%; height: auto; pointer-events: none; filter: drop-shadow(0 0 20px rgba(255, 138, 92, 0.14)) drop-shadow(0 0 40px rgba(255, 233, 77, 0.09)); }
 .plt-svg, .frg-svg, .drn-svg { display: block; width: 100%; height: auto; pointer-events: none; }
-.plt-svg { filter: drop-shadow(0 0 14px rgba(255, 194, 74, 0.13)) drop-shadow(0 0 30px rgba(216, 255, 77, 0.08)); }
-.frg-svg { filter: drop-shadow(0 0 14px rgba(255, 194, 74, 0.13)) drop-shadow(0 0 28px rgba(255, 93, 122, 0.08)); }
-.drn-svg { filter: drop-shadow(0 0 14px rgba(255, 93, 122, 0.13)) drop-shadow(0 0 32px rgba(255, 194, 74, 0.08)); }
-[data-theme="light"] .lp-svg { filter: drop-shadow(0 3px 8px rgba(16, 19, 28, 0.16)); }
+.plt-svg { filter: drop-shadow(0 0 14px rgba(255, 138, 92, 0.13)) drop-shadow(0 0 30px rgba(255, 233, 77, 0.08)); }
+.frg-svg { filter: drop-shadow(0 0 14px rgba(255, 138, 92, 0.13)) drop-shadow(0 0 28px rgba(255, 90, 54, 0.08)); }
+.drn-svg { filter: drop-shadow(0 0 14px rgba(255, 90, 54, 0.13)) drop-shadow(0 0 32px rgba(255, 138, 92, 0.08)); }
+[data-theme="light"] .lp-svg { filter: drop-shadow(0 3px 8px rgba(22, 22, 27, 0.16)); }
 [data-theme="light"] .plt-svg, [data-theme="light"] .frg-svg, [data-theme="light"] .drn-svg { filter: none; }

@@ -728,8 +728,8 @@ html[data-theme="light"] .sin-chat-fab {
 
 .sin-chat-bubble--error {
   color: #ffd7dd;
-  background: rgba(255, 93, 122, 0.14);
-  border: 1px solid rgba(255, 93, 122, 0.4);
+  background: rgba(255, 90, 54, 0.14);
+  border: 1px solid rgba(255, 90, 54, 0.4);
 }
 
 .sin-chat-typing {
@@ -1103,14 +1103,14 @@ html[data-theme="light"] .sin-chat-fab {
 /* Stop variant of the send button (■ while streaming) */
 .sin-chat-send--stop {
   color: #ffd7dd;
-  background: rgba(255, 93, 122, 0.18);
-  border-color: rgba(255, 93, 122, 0.6);
+  background: rgba(255, 90, 54, 0.18);
+  border-color: rgba(255, 90, 54, 0.6);
 }
 
 .sin-chat-send--stop:hover:not(:disabled),
 .sin-chat-send--stop:focus-visible {
-  background: rgba(255, 93, 122, 0.3);
-  box-shadow: 0 0 14px rgba(255, 93, 122, 0.4);
+  background: rgba(255, 90, 54, 0.3);
+  box-shadow: 0 0 14px rgba(255, 90, 54, 0.4);
 }
 
 /* ── "Ask SINISTER about this post" (blog pages) ──────────── */
@@ -1322,7 +1322,7 @@ html[data-theme="light"] .sin-chat-fab {
 
 /* ── Code token colors (syntax light) ──────────────────────── */
 .sin-tok-c {
-  color: #8d8a86;
+  color: #8c877f;
 }
 
 .sin-tok-s {
@@ -1466,7 +1466,7 @@ html[data-theme="light"] .sin-chat-fab {
 .sin-chat-thread-del:hover,
 .sin-chat-thread-del:focus-visible {
   color: #ffd7dd;
-  background: rgba(255, 93, 122, 0.16);
+  background: rgba(255, 90, 54, 0.16);
 }
 
 /* ── Error retry ──────────────────────────────────────────── */
@@ -1514,7 +1514,7 @@ html[data-theme="light"] .sin-tok-s {
 }
 
 html[data-theme="light"] .sin-tok-k {
-  color: #a63e50;
+  color: #b03060;
 }
 
 html[data-theme="light"] .sin-tok-n {
@@ -1530,7 +1530,7 @@ html[data-theme="light"] .sin-chat-mood--competence {
 }
 
 html[data-theme="light"] .sin-chat-mood--snark {
-  color: #a63e50;
+  color: #b03060;
 }
 
 

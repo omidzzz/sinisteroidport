@@ -127,19 +127,19 @@ const PALETTES: Record<
   "dark" | "light",
   { acid: string; cyan: string; violet: string; ink: string }
 > = {
-  dark: { acid: "#ffc24a", cyan: "#ff5d7a", violet: "#8a6bff", ink: "#ece5d4" },
-  light: { acid: "#b45400", cyan: "#a63e50", violet: "#6b4fd0", ink: "#1a150f" },
+  dark: { acid: "#ff8a5c", cyan: "#ff5a36", violet: "#3d70ff", ink: "#efeae0" },
+  light: { acid: "#c2401f", cyan: "#b03060", violet: "#2b4bc0", ink: "#221f1a" },
 };
 
 /**
  * Parse a color custom-property into an [r,g,b] triplet for canvas rgba().
  * The browser does NOT give back the `#hex` we author in tokens.css — Tailwind
  * v4 registers theme tokens as <color> properties, so getComputedStyle
- * serializes them to `rgb(255, 194, 74)`. Accept hex, 3-digit hex and
+ * serializes them to `rgb(255, 138, 92)`. Accept hex, 3-digit hex and
  * rgb()/ rgba() so the network NEVER silently paints black again. On a truly
  * unpare-able value, fail open to the acid-lime brand color (never black).
  */
-const ACID_RGB: [number, number, number] = [255, 194, 74];
+const ACID_RGB: [number, number, number] = [255, 138, 92];
 
 function hexToRgb(color: string): [number, number, number] {
   if (!color) return ACID_RGB;
@@ -777,7 +777,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = isHub
-            ? "#0a0b10"
+            ? "#0d0d0f"
             : `rgba(${r},${g},${bl},${isHot ? 1 : lit ? 0.95 : dark ? 0.92 : 0.95})`;
           ctx.fillText(n.label, n.x, n.y + (isHub ? 0 : n.r + fs * 0.9));
         }

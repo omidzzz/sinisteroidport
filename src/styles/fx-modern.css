@@ -45,47 +45,47 @@
 @property --color-bg {
   syntax: "<color>";
   inherits: true;
-  initial-value: #0a0b10;
+  initial-value: #0d0d0f;
 }
 @property --color-panel {
   syntax: "<color>";
   inherits: true;
-  initial-value: #10131c;
+  initial-value: #16161b;
 }
 @property --color-line {
   syntax: "<color>";
   inherits: true;
-  initial-value: rgba(255, 93, 122, 0.14);
+  initial-value: rgba(255, 90, 54, 0.14);
 }
 @property --color-ink {
   syntax: "<color>";
   inherits: true;
-  initial-value: #ece5d4;
+  initial-value: #efeae0;
 }
 @property --color-muted {
   syntax: "<color>";
   inherits: true;
-  initial-value: #8d8a86;
+  initial-value: #8c877f;
 }
 @property --color-accent {
   syntax: "<color>";
   inherits: true;
-  initial-value: #ff5d7a;
+  initial-value: #ff5a36;
 }
 @property --color-accent-2 {
   syntax: "<color>";
   inherits: true;
-  initial-value: #8a6bff;
+  initial-value: #3d70ff;
 }
 @property --color-accent-3 {
   syntax: "<color>";
   inherits: true;
-  initial-value: #4a4560;
+  initial-value: #4c4a52;
 }
 @property --color-acid {
   syntax: "<color>";
   inherits: true;
-  initial-value: #ffc24a;
+  initial-value: #ff8a5c;
 }
 /* ---- Registered beam angle for future conic rings (kept for .beam
    utilities added later; the hero CTA sheen needs no registered prop).
@@ -701,7 +701,7 @@ samp {
 }
 @media (prefers-contrast: more) {
   :root {
-    --color-line: rgba(255, 93, 122, 0.4);
+    --color-line: rgba(255, 90, 54, 0.4);
     --color-muted: #6d655c;
   }
   .text-outline,

@@ -94,7 +94,7 @@
   padding: 1.05rem 1.1rem 1.1rem;
   border: 1px solid var(--color-line);
   background:
-    linear-gradient(155deg, rgba(var(--rgb-accent-3), 0.2), rgba(10, 11, 16, 0.4) 62%),
+    linear-gradient(155deg, rgba(var(--rgb-accent-3), 0.2), rgba(13, 13, 15, 0.4) 62%),
     var(--color-bg);
   transition: border-color 0.3s ease, box-shadow 0.35s ease, translate 0.3s ease;
 }

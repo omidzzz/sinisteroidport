@@ -1,27 +1,27 @@
 @theme {
-  --color-bg: #0a0b10;
-  --color-panel: #10131c;
-  --color-line: rgba(255, 194, 74, 0.16);
-  --color-ink: #ece5d4;
-  --color-muted: #8d8a86;
-  --color-accent: #ff5d7a;
-  --color-accent-2: #8a6bff;
-  --color-accent-3: #4a4560;
-  --color-acid: #ffc24a;
+  --color-bg: #0d0d0f;
+  --color-panel: #16161b;
+  --color-line: rgba(255, 138, 92, 0.16);
+  --color-ink: #efeae0;
+  --color-muted: #8c877f;
+  --color-accent: #ff5a36;
+  --color-accent-2: #3d70ff;
+  --color-accent-3: #4c4a52;
+  --color-acid: #ff8a5c;
   /* Warning/alert hue */
-  --warn: #d8ff4d;
+  --warn: #ffe94d;
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, sfmono, monospace;
 }
 
 /* Raw channel triplets for glow shadows (avoids color-mix everywhere) */
 :root {
-  --rgb-accent: 255, 93, 122;
-  --rgb-accent-2: 138, 107, 255;
-  --rgb-accent-3: 74, 68, 88;
-  --rgb-acid: 255, 194, 74;
-  --rgb-warn: 216, 255, 77;
-  --rgb-ink: 236, 229, 212;
+  --rgb-accent: 255, 90, 54;
+  --rgb-accent-2: 61, 112, 255;
+  --rgb-accent-3: 76, 74, 82;
+  --rgb-acid: 255, 138, 92;
+  --rgb-warn: 255, 233, 77;
+  --rgb-ink: 239, 234, 224;
   --glass-blur: 16px;
 
   /* Spine rail gutter — content offset mirrors it on md+ */

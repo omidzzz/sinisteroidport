@@ -1,22 +1,27 @@
 /* ============================================================
-   STRATUM · MANTLE — total layout re-skin (2026-09)
+   REAM · PRINTHEAD — total layout re-skin (2026-09)
    ------------------------------------------------------------
-   The page is a cross-section: every act is a full-bleed STRATUM
-   band with an interlocking mineral fault edge, and each stratum
-   re-maps the inherited --color-acid/--color-accent tokens for
-   its whole subtree — the same components visibly re-tint as you
-   descend (amber shelf → rose shelf → violet shelf). The spine
-   rail becomes a core-sample column.
+   The page is a ream of freshly-printed sheets: every act is a
+   full-bleed SHEET with a perforation tear edge at its top and
+   print-shop crop marks at its corners. Each sheet re-maps the
+   inherited --color-acid/--color-accent tokens for its whole
+   subtree — the same components visibly re-ink as you page
+   through (riso-orange sheet → riso-pink sheet → riso-blue
+   sheet). A printhead pass sweeps each sheet as it scrolls.
+   The spine rail becomes the paper-feed edge; the footer is
+   the ream's bottom sheet.
 
-   Performance rules: pure CSS, no JS. Fault edges are static
-   clip-path + gradients (zero animation). Shelf switches are
+   Performance rules: pure CSS, no JS. Tear edges, crop marks
+   and halftone are static gradients (zero animation). The
+   printhead pass is one compositor-only transform on a view()
+   timeline with a static fallback. Sheet inks switch via
    custom-property inheritance (no layout, no repaint loops).
-   RTL-safe via logical properties; reduced-motion users see the
-   same static geology. Imported after motion-reduce, before the
-   finesse overrides.
+   RTL-safe via logical properties; reduced-motion users get
+   the same static print. Imported after motion-reduce, before
+   the finesse overrides.
    ============================================================ */
 
-/* ---- 1. Stratum band ---- */
+/* ---- 1. Sheet ---- */
 .stratum {
   position: relative;
   isolation: isolate;
@@ -25,52 +30,45 @@
     radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--color-acid) 6%, transparent), transparent 55%);
 }
 
-/* interlocking fault edge — thin mineral band with a jagged underside.
-   The page bg shows through the notches where the next stratum will sit. */
+/* perforation tear edge — a punched top strip whose round holes
+   let the previous sheet's ink bleed through the gaps */
 .stratum::before {
   content: "";
   position: absolute;
   inset-inline: 0;
   top: 0;
-  height: clamp(0.8rem, 1.8vw, 1.2rem);
+  height: clamp(0.7rem, 1.6vw, 1.1rem);
   pointer-events: none;
   z-index: 0;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-acid) 34%, transparent),
-    color-mix(in srgb, var(--color-acid) 6%, transparent)
-  );
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - 8px),
-    92% 100%,
-    83% calc(100% - 6px),
-    74% 100%,
-    65% calc(100% - 7px),
-    56% 100%,
-    47% calc(100% - 6px),
-    38% 100%,
-    29% calc(100% - 7px),
-    20% 100%,
-    11% calc(100% - 6px),
-    0 calc(100% - 8px)
-  );
+  background:
+    radial-gradient(circle at center, transparent 0 34%, var(--color-bg) 36% 44%, transparent 46%)
+      50% 50% / 26px 100% repeat-x,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-acid) 30%, transparent),
+      color-mix(in srgb, var(--color-acid) 6%, transparent)
+    );
+  mask: linear-gradient(180deg, #000 62%, transparent);
 }
 
-/* bottom hairline — the seam between two strata ends in a thin mineral trace */
+/* crop marks — print-shop registration ticks in the four corners */
 .stratum::after {
   content: "";
   position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: 1px;
+  inset-block: clamp(0.4rem, 1vw, 0.8rem);
+  inset-inline: clamp(0.4rem, 1.2vw, 1rem);
   pointer-events: none;
-  background: linear-gradient(90deg, rgba(var(--rgb-acid), 0.5), rgba(var(--rgb-acid), 0.05) 70%);
-}
-
-[dir="rtl"] .stratum::after {
-  background: linear-gradient(270deg, rgba(var(--rgb-acid), 0.5), rgba(var(--rgb-acid), 0.05) 70%);
+  background:
+    linear-gradient(var(--color-line), var(--color-line)) top left / 14px 1px,
+    linear-gradient(var(--color-line), var(--color-line)) top left / 1px 14px,
+    linear-gradient(var(--color-line), var(--color-line)) top right / 14px 1px,
+    linear-gradient(var(--color-line), var(--color-line)) top right / 1px 14px,
+    linear-gradient(var(--color-line), var(--color-line)) bottom left / 14px 1px,
+    linear-gradient(var(--color-line), var(--color-line)) bottom left / 1px 14px,
+    linear-gradient(var(--color-line), var(--color-line)) bottom right / 14px 1px,
+    linear-gradient(var(--color-line), var(--color-line)) bottom right / 1px 14px;
+  background-repeat: no-repeat;
+  opacity: 0.8;
 }
 
 /* the stratum's content should always paint over the fault strip */
@@ -79,104 +77,178 @@
   z-index: 1;
 }
 
-/* ---- 2. Mineral shelves — the palette-morph centerpiece ----
-   Each shelf re-maps the two operationally-hot tokens (--color-acid
-   and --color-acid's shadow triplet + --color-accent) for every
-   descendant. Unexposed UI (nav dock, spine rail, overlays) stays
-   on the base MANTLE amber/rose. */
+/* ---- 2. Sheet inks — the palette-morph centerpiece ----
+   Each sheet re-maps the two operationally-hot tokens (--color-acid
+   and its shadow triplet + --color-accent) for every descendant,
+   like pulling successive sheets from one riso drum. Unexposed UI
+   (nav dock, spine rail, overlays) stays on the base CARBON inks. */
 .stratum[data-mineral="amber"] {
-  --color-acid: #ffc24a;
-  --rgb-acid: 255, 194, 74;
-  --color-accent: #ff9a5c;
-  --rgb-accent: 255, 154, 92;
+  --color-acid: #ff8a5c;
+  --rgb-acid: 255, 138, 92;
+  --color-accent: #ff5a36;
+  --rgb-accent: 255, 90, 54;
 }
 .stratum[data-mineral="rose"] {
-  --color-acid: #ff7a90;
-  --rgb-acid: 255, 122, 144;
-  --color-accent: #ff5d7a;
-  --rgb-accent: 255, 93, 122;
+  --color-acid: #ff6da8;
+  --rgb-acid: 255, 109, 168;
+  --color-accent: #ff5a36;
+  --rgb-accent: 255, 90, 54;
 }
 .stratum[data-mineral="violet"] {
-  --color-acid: #a78bfa;
-  --rgb-acid: 167, 139, 250;
-  --color-accent: #8a6bff;
-  --rgb-accent: 138, 107, 255;
+  --color-acid: #3d70ff;
+  --rgb-acid: 61, 112, 255;
+  --color-accent: #8a5cff;
+  --rgb-accent: 138, 92, 255;
 }
 
-/* ---- 3. SALT FLAT mirrors for the shelves ---- */
+/* ---- 3. BOND mirrors for the sheets (AA overprint inks) ---- */
 [data-theme="light"] .stratum[data-mineral="amber"] {
-  --color-acid: #b45400;
-  --rgb-acid: 180, 84, 0;
-  --color-accent: #a3482a;
-  --rgb-accent: 163, 72, 42;
+  --color-acid: #c2401f;
+  --rgb-acid: 194, 64, 31;
+  --color-accent: #9c3410;
+  --rgb-accent: 156, 52, 16;
 }
 [data-theme="light"] .stratum[data-mineral="rose"] {
-  --color-acid: #b03d52;
-  --rgb-acid: 176, 61, 82;
-  --color-accent: #a63e50;
-  --rgb-accent: 166, 62, 80;
+  --color-acid: #b03060;
+  --rgb-acid: 176, 48, 96;
+  --color-accent: #9c2748;
+  --rgb-accent: 156, 39, 72;
 }
 [data-theme="light"] .stratum[data-mineral="violet"] {
-  --color-acid: #6b4fd0;
-  --rgb-acid: 107, 79, 208;
-  --color-accent: #7b5cd6;
-  --rgb-accent: 123, 92, 214;
+  --color-acid: #2b4bc0;
+  --rgb-acid: 43, 75, 192;
+  --color-accent: #5a3fb0;
+  --rgb-accent: 90, 63, 176;
 }
 
-/* ---- 4. Core-sample rail (spine re-skin) ----
-   Ruled depth ticks down the rail; the beam keeps its amber→rose→
-   violet mineral gradient. Later import wins over spine-rail.css. */
+/* ---- 4. Printhead pass — the scroll-scrubbed showstopper ----
+   A narrow printhead carriage sweeps across each sheet (with a
+   faint ink raster behind it) as the sheet crosses the viewport.
+   One compositor-only translate on a view() timeline; browsers
+   without scroll timelines render the static field only. */
+.stratum [data-printhead] {
+  position: absolute;
+  inset-inline: 0;
+  top: clamp(1.4rem, 3vw, 2.6rem);
+  height: 3px;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(90deg,
+      transparent,
+      rgba(var(--rgb-acid), 0.14) 30%,
+      var(--color-acid) 86%,
+      rgba(var(--rgb-ink), 0.9) 99%);
+  transform: translateX(-100%);
+}
+.stratum [data-printhead]::after {
+  /* the carriage head itself */
+  content: "";
+  position: absolute;
+  inset-inline-end: -2px;
+  top: -7px;
+  width: 5px;
+  height: 17px;
+  border-radius: 2px;
+  background: var(--color-ink);
+  box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.7);
+}
+[dir="rtl"] .stratum [data-printhead] {
+  background:
+    linear-gradient(270deg,
+      transparent,
+      rgba(var(--rgb-acid), 0.14) 30%,
+      var(--color-acid) 86%,
+      rgba(var(--rgb-ink), 0.9) 99%);
+  transform: translateX(100%);
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .stratum [data-printhead] {
+      animation: rp-printhead linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 0%;
+    }
+    [dir="rtl"] .stratum [data-printhead] {
+      animation-name: rp-printhead-rtl;
+    }
+    @keyframes rp-printhead {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+    @keyframes rp-printhead-rtl {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+  }
+}
+
+/* halftone dot field — static unprinted stock in opposite corners */
+.stratum [data-halftone] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle, rgba(var(--rgb-acid), 0.07) 0 1px, transparent 1.4px)
+      0 0 / 9px 9px;
+  mask:
+    radial-gradient(90% 60% at 8% 12%, #000, transparent),
+    radial-gradient(90% 60% at 92% 88%, #000, transparent);
+  mask-composite: add;
+  opacity: 0.7;
+}
+
+/* ---- 5. Paper-feed rail (spine re-skin) ----
+   Sprocket holes down the rail, like stock being pulled through
+   the press. Later import wins over spine-rail.css. */
 @media (min-width: 768px) {
   .spine-rail {
     background:
-      repeating-linear-gradient(
-        180deg,
-        rgba(var(--rgb-acid), 0.07) 0 1px,
-        transparent 1px 44px
-      ),
+      radial-gradient(circle at center, rgba(var(--rgb-acid), 0.16) 0 1.6px, transparent 2.6px)
+        50% 22px / 100% 44px repeat-y,
       linear-gradient(
         to right,
-        rgba(10, 11, 16, 0.72),
-        rgba(10, 11, 16, 0.14) 70%,
+        rgba(13, 13, 15, 0.72),
+        rgba(13, 13, 15, 0.14) 70%,
         transparent
       );
     border-inline-end: 1px solid rgba(var(--rgb-acid), 0.14);
   }
   [dir="rtl"] .spine-rail {
     background:
-      repeating-linear-gradient(
-        180deg,
-        rgba(var(--rgb-acid), 0.07) 0 1px,
-        transparent 1px 44px
-      ),
+      radial-gradient(circle at center, rgba(var(--rgb-acid), 0.16) 0 1.6px, transparent 2.6px)
+        50% 22px / 100% 44px repeat-y,
       linear-gradient(
         to left,
-        rgba(10, 11, 16, 0.72),
-        rgba(10, 11, 16, 0.14) 70%,
+        rgba(13, 13, 15, 0.72),
+        rgba(13, 13, 15, 0.14) 70%,
         transparent
       );
   }
 }
 [data-theme="light"] .spine-rail {
-  background: repeating-linear-gradient(
-    180deg,
-    rgba(var(--rgb-acid), 0.06) 0 1px,
-    transparent 1px 44px
-  );
+  background:
+    radial-gradient(circle at center, rgba(var(--rgb-acid), 0.14) 0 1.6px, transparent 2.6px)
+      50% 22px / 100% 44px repeat-y;
   border-inline-end: 1px solid rgba(var(--rgb-acid), 0.2);
 }
 
-/* ---- 5. Mantle floor (footer) ----
-   The giant closer reads as a cut stratigraphic vein. */
+/* ---- 6. Ream bottom sheet (footer) ----
+   The giant closer reads as an embossed plate on the last sheet. */
 footer .foot-giant {
   -webkit-text-stroke: 1px color-mix(in srgb, var(--color-acid) 38%, transparent);
 }
 
-/* ---- 6. reduced-motion / print parity ----
-   Fault edges are already static; just unify the print decay. */
+/* ---- 7. reduced-motion / print parity ----
+   Tear edges, crop marks and halftone are static already; the
+   printhead simply never starts without the view() support +
+   motion gate. Unify the print decay: keep crop marks (they are
+   a print artifact), drop the screen-only machinery. */
 @media print {
   .stratum::before,
-  .stratum::after {
+  .stratum [data-printhead],
+  .stratum [data-halftone] {
     display: none !important;
   }
   .stratum {
