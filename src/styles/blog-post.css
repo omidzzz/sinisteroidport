@@ -32,7 +32,7 @@
   padding: 1.05rem 1.2rem 1.15rem;
   border: 1px solid var(--color-line);
   background:
-    linear-gradient(155deg, rgba(var(--rgb-acid), 0.06), rgba(10, 11, 16, 0.4) 60%),
+    linear-gradient(155deg, rgba(var(--rgb-acid), 0.06), rgba(10, 15, 12, 0.4) 60%),
     var(--color-bg);
   color: var(--color-muted);
   font-size: 0.95rem;
@@ -121,7 +121,7 @@
   padding: 1rem 1.15rem;
   border: 1px solid var(--color-line);
   border-radius: 4px;
-  background: rgba(10, 11, 16, 0.6);
+  background: rgba(10, 15, 12, 0.6);
   font-family: var(--font-mono);
   font-size: 0.82rem;
   line-height: 1.6;
@@ -209,7 +209,7 @@
 .post-thumb.no-cover { display: none; }
 
 /* ── Donate CTA — "power the next transmission" ── */
-.donate-cta{position:relative;display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.7rem;border-radius:9999px;overflow:hidden;font-family:var(--font-display);font-weight:800;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:#0a0b10;background:linear-gradient(140deg,var(--color-acid) 0%,var(--color-accent) 145%);box-shadow:0 0 0 1px rgba(var(--rgb-acid),.35),0 0 24px rgba(var(--rgb-acid),.32),0 0 70px rgba(var(--rgb-accent),.16);transition:transform .3s,box-shadow .3s}
+.donate-cta{position:relative;display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.7rem;border-radius:9999px;overflow:hidden;font-family:var(--font-display);font-weight:800;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:#0a0f0c;background:linear-gradient(140deg,var(--color-acid) 0%,var(--color-accent) 145%);box-shadow:0 0 0 1px rgba(var(--rgb-acid),.35),0 0 24px rgba(var(--rgb-acid),.32),0 0 70px rgba(var(--rgb-accent),.16);transition:transform .3s,box-shadow .3s}
 .donate-cta:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(var(--rgb-acid),.65),0 0 34px rgba(var(--rgb-acid),.5),0 0 100px rgba(var(--rgb-accent),.28)}
 .donate-cta:active{transform:translateY(0) scale(.97)}
 .donate-cta::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.5) 50%,transparent 68%);transform:translateX(-130%);transition:transform .7s ease}

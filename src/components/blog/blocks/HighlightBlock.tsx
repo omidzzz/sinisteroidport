@@ -2,7 +2,7 @@ import type { ContentBlock } from "@/lib/blog/types";
 
 export default function HighlightBlock({ block }: { block: ContentBlock }) {
   return (
-    <aside className="my-10 border border-accent/40 bg-panel/60 p-5 shadow-[0_0_24px_rgba(255,93,122,0.08)]">
+    <aside className="my-10 border border-accent/40 bg-panel/60 p-5 shadow-[0_0_24px_rgba(224,138,76,0.08)]">
       {block.label && (
         <p className="mb-2 font-mono text-xs font-bold uppercase tracking-widest text-accent">
           [{block.label}]

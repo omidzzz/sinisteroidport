@@ -202,7 +202,7 @@ export default function EasterEgg({
   if (!open) return null;
   return (
     <div
-      className="term-veil fixed inset-0 z-[90] flex flex-col overflow-hidden bg-[#100f16] text-[#ff5d7a]"
+      className="term-veil fixed inset-0 z-[90] flex flex-col overflow-hidden bg-[#0f1511] text-[#e08a4c]"
       role="dialog"
       aria-modal="true"
       aria-label="SINISTEROID terminal"
@@ -217,7 +217,7 @@ export default function EasterEgg({
       <span className="term-scan" aria-hidden />
 
       {/* close */}
-      <div className="flex items-center justify-between border-b border-[#ff5d7a]/25 px-5 py-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#ff5d7a]/80">
+      <div className="flex items-center justify-between border-b border-[#e08a4c]/25 px-5 py-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#e08a4c]/80">
         <span className="term-blink">● REC</span>
         <button
           type="button"
@@ -242,7 +242,7 @@ export default function EasterEgg({
               revealed === 0 ? "opacity-0" : ""
             }`}
           />
-          <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#ff5d7a]/60">
+          <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#e08a4c]/60">
             system console — type `help` for commands
           </p>
         </div>
@@ -250,7 +250,7 @@ export default function EasterEgg({
         {/* init log */}
         <div className="font-mono text-sm leading-relaxed">
           {boot.slice(0, revealed).map((line, i) => (
-            <p key={i} className="text-[#ff5d7a]/85">
+            <p key={i} className="text-[#e08a4c]/85">
               {line.href ? (
                 <a
                   href={line.href}
@@ -270,7 +270,7 @@ export default function EasterEgg({
         {/* session log */}
         <div className="mt-3 font-mono text-sm leading-relaxed">
           {log.map((l, i) => (
-            <p key={i} className="text-[#ff5d7a]">
+            <p key={i} className="text-[#e08a4c]">
               {l.href ? (
                 <a
                   href={l.href}
@@ -303,14 +303,14 @@ export default function EasterEgg({
             value={input}
             onChange={(ev) => setInput(ev.target.value)}
             aria-label="terminal command input"
-            className="w-full bg-transparent font-mono text-sm text-[#ff5d7a] caret-[#ff5d7a] focus:outline-none"
+            className="w-full bg-transparent font-mono text-sm text-[#e08a4c] caret-[#e08a4c] focus:outline-none"
             placeholder="type a command…"
           />
         </form>
       </div>
 
       {/* footer status */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#ff5d7a]/25 px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-[#ff5d7a]/60">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#e08a4c]/25 px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-[#e08a4c]/60">
         <span>SINISTER[OID] // {locale === "fa" ? "فارسی" : "en"}</span>
         <span>↑↑↓↓←→←→BA</span>
       </div>

@@ -127,8 +127,8 @@ const PALETTES: Record<
   "dark" | "light",
   { acid: string; cyan: string; violet: string; ink: string }
 > = {
-  dark: { acid: "#ffc24a", cyan: "#ff5d7a", violet: "#8a6bff", ink: "#ece5d4" },
-  light: { acid: "#b45400", cyan: "#a63e50", violet: "#6b4fd0", ink: "#1a150f" },
+  dark: { acid: "#4dff9a", cyan: "#e08a4c", violet: "#57d4e0", ink: "#d9e6d5" },
+  light: { acid: "#1e6b3d", cyan: "#a2542a", violet: "#256d78", ink: "#20261f" },
 };
 
 /**
@@ -777,7 +777,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = isHub
-            ? "#0a0b10"
+            ? "#0a0f0c"
             : `rgba(${r},${g},${bl},${isHot ? 1 : lit ? 0.95 : dark ? 0.92 : 0.95})`;
           ctx.fillText(n.label, n.x, n.y + (isHub ? 0 : n.r + fs * 0.9));
         }

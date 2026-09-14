@@ -1,27 +1,27 @@
 @theme {
-  --color-bg: #0a0b10;
-  --color-panel: #10131c;
-  --color-line: rgba(255, 194, 74, 0.16);
-  --color-ink: #ece5d4;
-  --color-muted: #8d8a86;
-  --color-accent: #ff5d7a;
-  --color-accent-2: #8a6bff;
-  --color-accent-3: #4a4560;
-  --color-acid: #ffc24a;
+  --color-bg: #0a0f0c;
+  --color-panel: #101712;
+  --color-line: rgba(77, 255, 154, 0.16);
+  --color-ink: #d9e6d5;
+  --color-muted: #7e8c7f;
+  --color-accent: #e08a4c;
+  --color-accent-2: #57d4e0;
+  --color-accent-3: #46554a;
+  --color-acid: #4dff9a;
   /* Warning/alert hue */
-  --warn: #d8ff4d;
+  --warn: #ffb454;
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, sfmono, monospace;
 }
 
 /* Raw channel triplets for glow shadows (avoids color-mix everywhere) */
 :root {
-  --rgb-accent: 255, 93, 122;
-  --rgb-accent-2: 138, 107, 255;
-  --rgb-accent-3: 74, 68, 88;
-  --rgb-acid: 255, 194, 74;
-  --rgb-warn: 216, 255, 77;
-  --rgb-ink: 236, 229, 212;
+  --rgb-accent: 224, 138, 76;
+  --rgb-accent-2: 87, 212, 224;
+  --rgb-accent-3: 70, 85, 74;
+  --rgb-acid: 77, 255, 154;
+  --rgb-warn: 255, 180, 84;
+  --rgb-ink: 217, 230, 213;
   --glass-blur: 16px;
 
   /* Spine rail gutter — content offset mirrors it on md+ */

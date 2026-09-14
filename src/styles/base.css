@@ -23,14 +23,14 @@ body {
 
 ::selection {
   background: var(--color-acid);
-  color: #0a0b10;
+  color: #0a0f0c;
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0b10;
+  background: #0a0f0c;
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(
@@ -40,7 +40,7 @@ body {
     var(--color-acid)
   );
   border-radius: 8px;
-  border: 2px solid #0a0b10;
+  border: 2px solid #0a0f0c;
 }
 
 /* ---------- Typography helpers ---------- */
@@ -350,7 +350,7 @@ body {
   width: 64px;
   height: 64px;
   border-color: rgba(var(--rgb-acid), 0.95);
-  background: rgba(10, 11, 16, 0.55);
+  background: rgba(10, 15, 12, 0.55);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
@@ -428,7 +428,7 @@ body {
   padding: 0.7rem 1.15rem;
   border-radius: 6px;
   background: var(--color-acid);
-  color: #0a0b10;
+  color: #0a0f0c;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;

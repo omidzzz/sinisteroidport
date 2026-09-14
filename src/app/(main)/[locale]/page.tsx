@@ -76,25 +76,25 @@ export default async function HomePage({
       {/* STRATUM · MANTLE — the home page is a tectonic cross-section.
           Each act is a mineral shelf (amber → rose → violet) that re-tints
           the same components via scoped tokens; fault edges interlock. */}
-      <Stratum mineral="amber">
+      <Stratum mineral="copper">
         <HeroSection locale={locale} />
       </Stratum>
-      <Stratum mineral="rose">
+      <Stratum mineral="probe">
         <TelemetrySection locale={locale} skillTotal={skillTotal} />
       </Stratum>
-      <Stratum mineral="violet">
+      <Stratum mineral="phosphor">
         <SkillNetwork locale={locale} />
       </Stratum>
-      <Stratum mineral="amber">
+      <Stratum mineral="copper">
         <ConsoleBay />
       </Stratum>
-      <Stratum mineral="rose">
+      <Stratum mineral="probe">
         <ModuleBay locale={locale} />
       </Stratum>
-      <Stratum mineral="violet">
+      <Stratum mineral="phosphor">
         <SignalsSection locale={locale} initial={latest} />
       </Stratum>
-      <Stratum mineral="amber">
+      <Stratum mineral="copper">
         <ManifestoSection locale={locale} />
       </Stratum>
       <PropFloatLayer />

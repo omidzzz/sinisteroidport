@@ -9,13 +9,14 @@ void main() {
 }
 `;
 
-/* STRATUM · MANTLE nebula — ACID-light background.
-   Two domain-warped fBm cloud fields drift through the basalt: a
-   halide-amber layer and a mantle-rose layer crossing each other
-   diagonally, dusted with twinkling stardust. The pointer adds a
-   soft parallax pull. Light theme washes everything to a faint
-   salt-flat cream. One loop, transform-free fullscreen quad, DPR-cap
-   in host code below; reduced motion paints a single frame. */
+/* SPECIMEN-WIRING nebula — PHOSPHOR-light background.
+   Two domain-warped fBm cloud fields drift through the lab-dark
+   void: a phosphor-green layer and a probe-cyan layer crossing
+   each other diagonally, dusted with twinkling dust motes. The
+   pointer adds a soft parallax pull. Light theme washes it to a
+   faint herbarium-paper cream. One loop, transform-free
+   fullscreen quad, DPR-cap in host code below; reduced motion
+   paints a single frame. */
 const FRAG = `
 precision highp float;
 uniform vec2 uRes;
@@ -81,12 +82,12 @@ void main() {
   float nebB = smoothstep(-0.44, 0.94, c1);
 
   bool lightMode = uLight > 0.5;
-  vec3 voidC = lightMode ? vec3(0.937, 0.925, 0.918)
-                         : vec3(0.039, 0.043, 0.063);
-  vec3 acidC = lightMode ? vec3(0.706, 0.329, 0.000)
-                         : vec3(1.000, 0.761, 0.290);
-  vec3 cyanC = lightMode ? vec3(0.651, 0.243, 0.314)
-                         : vec3(1.000, 0.365, 0.478);
+  vec3 voidC = lightMode ? vec3(0.945, 0.933, 0.886)
+                         : vec3(0.039, 0.059, 0.047);
+  vec3 acidC = lightMode ? vec3(0.118, 0.420, 0.239)
+                         : vec3(0.302, 1.000, 0.604);
+  vec3 cyanC = lightMode ? vec3(0.635, 0.329, 0.165)
+                         : vec3(0.878, 0.541, 0.298);
 
   vec3 col = voidC;
   col = mix(col, cyanC * 0.60, nebB * (lightMode ? 0.30 : 0.46));

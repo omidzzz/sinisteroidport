@@ -123,7 +123,7 @@ a:focus-visible .brand-mark {
 }
 .fill-hover:hover {
   background-size: 100% 100%;
-  -webkit-text-fill-color: #0a0b10;
+  -webkit-text-fill-color: #0a0f0c;
   padding-inline: 0.08em;
 }
 
