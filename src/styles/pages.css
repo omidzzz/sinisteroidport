@@ -711,6 +711,43 @@ a.contact-card:hover .contact-go {
   transform: translateX(0.35rem);
 }
 [dir="rtl"] .foot-links a:hover { transform: translateX(-0.35rem); }
+/* Giant closer — scrub-word voice, static outline, colophon edition line */
+.foot-giant {
+  margin-top: 4rem;
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 0.9;
+  font-size: clamp(3.2rem, 13vw, 11rem);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(var(--rgb-acid), 0.22);
+  opacity: 0.8;
+  user-select: none;
+  pointer-events: none;
+}
+.foot-edition {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.foot-edition i {
+  font-style: normal;
+  width: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(var(--rgb-acid), 0.55), transparent);
+}
+.foot-edition b {
+  color: var(--color-acid);
+  font-weight: 600;
+}
 
 /* Reduced motion for all new compositor effects */
 @media (prefers-reduced-motion: reduce) {

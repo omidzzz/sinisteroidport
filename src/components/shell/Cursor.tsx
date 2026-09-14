@@ -29,16 +29,26 @@ export default function Cursor() {
     let raf = 0;
     let running = false;
 
-    const set = (interactive: boolean) => {
+    const set = (interactive: boolean, label: string | null) => {
       targetScale = interactive ? 1.55 : 1;
       ring.classList.toggle("cursor-hot", !!interactive);
-};
+      if (label) {
+        ring.classList.add("cursor-label");
+        ring.setAttribute("data-label", label);
+        targetScale = 1;
+      } else {
+        ring.classList.remove("cursor-label");
+        ring.removeAttribute("data-label");
+      }
+    };
 
     const onMove = (e: MouseEvent) => {
       mx = e.clientX;
       my = e.clientY;
       const t = e.target as HTMLElement | null;
-      set(!!t?.closest("a, button, [data-cursor]"));
+      const labeled = t?.closest("[data-cursor]") as HTMLElement | null;
+      const label = labeled?.getAttribute("data-cursor") || null;
+      set(!!t?.closest("a, button, [data-cursor]"), label);
       if (!shown) {
         shown = true;
         dot.style.opacity = "1";

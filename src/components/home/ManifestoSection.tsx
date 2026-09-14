@@ -14,6 +14,19 @@ export default function ManifestoSection({ locale }: { locale: Locale }) {
   const qHead = w.slice(0, mid).join(" ");
   const qTail = w.slice(mid).join(" ");
 
+  /* Word-split for the scroll scrub — word-level only, never letter-level
+     (letter-splitting breaks Persian cursive joins). */
+  let wi = 0;
+  const renderWords = (line: string) =>
+    line.split(" ").map((word, i, arr) => (
+      <span key={`${word}-${i}`}>
+        <span className="mani-w" style={{ ["--i" as string]: wi++ }}>
+          {word}
+        </span>
+        {i < arr.length - 1 ? " " : null}
+      </span>
+    ));
+
   return (
     <section className="shell-grid relative mx-auto my-20 max-w-[86rem] px-5 sm:px-8">
       <Rail label={man} />
@@ -22,15 +35,15 @@ export default function ManifestoSection({ locale }: { locale: Locale }) {
           PHILOSOPHY
         </span>
         <Reveal delay={100} variant="left">
-          <p className="mani-block anaglyph-strong relative">{qHead}</p>
+          <p className="mani-block mani-scrub anaglyph-strong relative">{renderWords(qHead)}</p>
         </Reveal>
         <Reveal delay={220} variant="right">
           <p
-            className={`mani-block anaglyph-strong relative mt-6 ${
+            className={`mani-block mani-scrub anaglyph-strong relative mt-6 ${
               fa ? "mani-offset-end text-start" : "mani-offset-end text-end"
             }`}
           >
-            {qTail}
+            {renderWords(qTail)}
           </p>
         </Reveal>
         <Reveal delay={320}>

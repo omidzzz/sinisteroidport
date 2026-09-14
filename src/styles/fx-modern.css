@@ -87,6 +87,15 @@
   inherits: true;
   initial-value: #b8ff00;
 }
+/* ---- Registered beam angle for future conic rings (kept for .beam
+   utilities added later; the hero CTA sheen needs no registered prop).
+   Inherits:false so each ring spins its own angle. Unsupported
+   browsers ignore the animation and keep the static ring. ---- */
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
 
 html {
   transition:

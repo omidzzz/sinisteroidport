@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
 import Magnetic from "@/components/ui/Magnetic";
@@ -11,15 +14,55 @@ import { getDict, loc, type Locale } from "@/lib/i18n";
  * HOME ACT I — TRANSMISSION HERO + hazard ticker.
  * Kinetic name × portrait plate, role chips, manifesto CTAs, then the
  * scrolling services ticker (outside the hero so nothing clips it).
+ *
+ * Scroll-velocity ticker: a self-sleeping rAF reads scroll speed and writes
+ * --tick-v on the band — the CSS divides the 34s base duration by it, so the
+ * band sprints on flings and eases back. Fine pointers + no-preference only.
  */
 export default function HeroSection({ locale }: { locale: Locale }) {
   const t = getDict(locale);
+  const bandRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const band = bandRef.current;
+    if (!band) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    let raf = 0;
+    let lastY = window.scrollY;
+    let v = 1;
+    let lastT = performance.now();
+    const tick = (now: number) => {
+      raf = 0;
+      if (document.hidden) return;
+      const y = window.scrollY;
+      const dt = Math.max(now - lastT, 16);
+      lastT = now;
+      const speed = Math.abs(y - lastY) / dt;
+      lastY = y;
+      const target = Math.min(1 + speed * 2.4, 2.2);
+      v += (target - v) * 0.12;
+      if (v < 1.02) v = 1;
+      band.style.setProperty("--tick-v", v.toFixed(2));
+      if (v > 1.02 || target > 1.02) raf = requestAnimationFrame(tick);
+    };
+    const wake = () => {
+      lastT = performance.now();
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    window.addEventListener("scroll", wake, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", wake);
+      if (raf) cancelAnimationFrame(raf);
+      band.style.removeProperty("--tick-v");
+    };
+  }, []);
 
   return (
     <>
       <section className="tx-hero !pb-0">
         <span className="scanlines" aria-hidden />
-        <div className="relative z-10 mx-auto grid max-w-[84rem] items-center gap-12 px-6 pt-10 sm:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,21rem)]">
+        <div className="tx-collapse relative z-10 mx-auto grid max-w-[84rem] items-center gap-12 px-6 pt-10 sm:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,21rem)]">
           <div>
             <Reveal>
               <p className="mb-5 flex items-center gap-3">
@@ -61,7 +104,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
             <Reveal delay={240}>
               <div className="mt-9 flex flex-wrap items-center gap-5">
                 <Magnetic>
-                  <Link href={loc(locale, "/showcase")} prefetch={false} className="btn-neon group">
+                  <Link href={loc(locale, "/showcase")} prefetch={false} className="btn-neon beam group">
                     {t.ctaWork}
                     <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
                   </Link>
@@ -73,6 +116,21 @@ export default function HeroSection({ locale }: { locale: Locale }) {
                   </Link>
                 </Magnetic>
               </div>
+            </Reveal>
+            {/* Studio meta strip — availability + locale + coords. Static paint,
+                tabular numerals, ASCII/LTR pinned like the logotype so it reads
+                identically inside the Persian layout. */}
+            <Reveal delay={300}>
+              <p className="tx-meta mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+                <span className="inline-flex items-center gap-2">
+                  <span className="live-dot" aria-hidden />
+                  <span dir="ltr">OPEN FOR WORK — 2026</span>
+                </span>
+                <span aria-hidden className="tx-meta-sep" />
+                <span dir="ltr">{t.coords}</span>
+                <span aria-hidden className="tx-meta-sep" />
+                <span dir="ltr">{locale === "fa" ? "FA / EN" : "EN / FA"}</span>
+              </p>
             </Reveal>
           </div>
           {/* No justify-self: let the grid item STRETCH to fill its definite
@@ -90,7 +148,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
 
       {/* hazard ticker lives OUTSIDE the hero so nothing clips it */}
       <div aria-hidden className="relative z-30 -mt-8 select-none pb-6">
-        <div className="hazard-band">
+        <div className="hazard-band" ref={bandRef}>
           <div className="hazard-tape absolute inset-x-0 -top-[9px] h-[9px]" />
           <div className="ticker ticker-band">
             <div className="ticker-track">
@@ -124,7 +182,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
           <div className="hazard-tape absolute inset-x-0 -bottom-[9px] h-[9px]" />
         </div>
       </div>
-      <Seam cyan />
+      <Seam cyan tag="SIG.01 ▸ TRANSMISSION" />
     </>
   );
 }

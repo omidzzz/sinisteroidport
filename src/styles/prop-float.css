@@ -54,6 +54,22 @@
 @media (max-width: 767px) {
   .prop-float { display: none; }
 }
+/* Ground ellipse under each floater — static radial paint that grounds the
+   mascots like the hero plate shadow. ::after is free on .prop-float. */
+.prop-float::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -0.9rem;
+  height: 1.3rem;
+  pointer-events: none;
+  background: radial-gradient(
+    50% 55% at 50% 50%,
+    rgba(0, 0, 0, 0.45),
+    transparent 72%
+  );
+}
 
 /* reduced motion: fade only — no slide, no pointer drift */
 @media (prefers-reduced-motion: reduce) {

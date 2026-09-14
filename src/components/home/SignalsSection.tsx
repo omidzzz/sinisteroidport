@@ -1,6 +1,7 @@
 import Link from "next/link";
 import LatestPostsLive from "./LatestPostsLive";
 import RainStrip from "./RainStrip";
+import Spotlight from "@/components/ui/Spotlight";
 import { Rail, Seam } from "@/components/ui/Section";
 import { ArrowIcon, SignalIcon } from "@/components/ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
@@ -40,11 +41,13 @@ export default function SignalsSection({
               <ArrowIcon className="ms-2 inline align-[-2px] transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
             </Link>
           </div>
-          <LatestPostsLive locale={locale} initial={initial} />
+          <Spotlight className="min-w-0">
+            <LatestPostsLive locale={locale} initial={initial} />
+          </Spotlight>
         </div>
       </section>
 
-      <Seam />
+      <Seam tag="SIG.05 ▸ SIGNALS" />
     </>
   );
 }

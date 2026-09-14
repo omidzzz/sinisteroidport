@@ -155,7 +155,11 @@ export default function GLBackground() {
     // real hover pointer keep the slow-drifting animation.
     const coarse = !window.matchMedia("(pointer: fine)").matches;
     const hoverless = window.matchMedia("(hover: none)").matches;
-    const staticFrame = reduced || coarse || hoverless;
+    /* Save-Data: the visitor asked for less — a single static frame. */
+    const saveData =
+      (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+        ?.saveData === true;
+    const staticFrame = reduced || coarse || hoverless || saveData;
     const gl = canvas.getContext("webgl", {
       antialias: false,
       alpha: false,
@@ -171,7 +175,11 @@ export default function GLBackground() {
     // soft cloud noise, so the lost high-frequency octave is invisible, and
     // shader cost scales with per-pixel octave count. String-level
     // specialization keeps the hot loop free of uniforms and branches.
-    const fragSrc = coarse ? FRAG.replace("i < 4", "i < 3") : FRAG;
+    // Ultra-wide desktops step down too so a fullscreen 4K quad cannot
+    // saturate a mid-range GPU.
+    const lowFreq =
+      coarse || saveData || (typeof window !== "undefined" && window.innerWidth > 2560);
+    const fragSrc = lowFreq ? FRAG.replace("i < 4", "i < 3") : FRAG;
     const fs = compile(gl, gl.FRAGMENT_SHADER, fragSrc, "fragment");
     if (!vs || !fs) return;
     const prog = gl.createProgram()!;

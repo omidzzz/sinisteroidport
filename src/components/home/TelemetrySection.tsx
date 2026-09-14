@@ -49,6 +49,9 @@ export default function TelemetrySection({
             {STATS.map((s, i) => (
               <Reveal key={s.label} delay={i * 80} variant={i % 2 ? "left" : "scale"}>
                 <div className="gauge-cell">
+                  <span dir="ltr" className="gauge-idx" aria-hidden>
+                    S.0{i + 1}
+                  </span>
                   <span className="gauge-num block text-[clamp(1.9rem,3.2vw,2.7rem)] leading-none">
                     <CountUp to={s.n} suffix="+" />
                   </span>
@@ -65,7 +68,7 @@ export default function TelemetrySection({
         </div>
       </section>
 
-      <Seam flip />
+      <Seam flip tag="SIG.02 ▸ TELEMETRY" />
     </>
   );
 }

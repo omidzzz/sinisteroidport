@@ -1,7 +1,6 @@
-// Optimized SkillNetwork component with performance enhancements
 "use client";
 
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/ui/Reveal";
 import { Rail, Seam } from "@/components/ui/Section";
 import { ArrowIcon, SparkIcon } from "@/components/ui/icons";
@@ -12,22 +11,21 @@ import skillsData from "@/data/skills.json";
 /**
  * HOME ACT — SYNAPSE / SKILL NETWORK.
  * A living constellation of Omid's strongest skills, anchored by the
- * SINISTER agent hub. Optimized for performance with:
- * - React.memo for node components
- * - useMemo for expensive calculations
- * - requestAnimationFrame throttling
- * - CSS containment for layout stability
- * - Reduced state updates
+ * SINISTER agent hub. Pure <canvas>: soft-body physics (edge springs +
+ * pairwise repulsion), pointer repel, node dragging, hover/selection
+ * highlighting, idle drift so it never sits still. Honors
+ * prefers-reduced-motion (settles to a static constellation) and pauses
+ * when offscreen. Node clicks fire `skill_node_click` GA4 events.
  */
 
 type Kind = "hub" | "cat" | "leaf";
 
 interface NetNode {
   id: string;
-  label: string;
-  full: string;
+  label: string; // short canvas label
+  full: string; // full skill name (HUD)
   kind: Kind;
-  group: string;
+  group: string; // category key (EN, for analytics)
   level: number;
   x: number;
   y: number;
@@ -40,7 +38,7 @@ interface NetNode {
 interface NetEdge {
   a: number;
   b: number;
-  deep: boolean;
+  deep: boolean; // true = cat→leaf spring, false = hub→cat
 }
 
 /** Curated constellation leaves, keyed by the exact skills.json names. */
@@ -179,8 +177,8 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
   const hRef = useRef(0);
   const nodesRef = useRef<NetNode[]>([]);
   const edgesRef = useRef<NetEdge[]>([]);
-  const hotRef = useRef(-1);
-  const selRef = useRef(-1);
+  const hotRef = useRef(-1); // hovered node index
+  const selRef = useRef(-1); // selected node index
   const dragRef = useRef(-1);
   const downAtRef = useRef(0);
   const downPtRef = useRef({ x: 0, y: 0 });
@@ -203,6 +201,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
 
     /* Palette is resolved from the live theme and RE-resolved when the
        user flips the light/dark toggle (MutationObserver below). */
+    /* Palette resolves instantly from the target theme. See PALETTES above. */
     const resolvePal = () => {
       const theme =
         document.documentElement.getAttribute("data-theme") === "light"
@@ -330,6 +329,8 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     /* ── Sizing (DPR aware) ──────────────────────────────────────── */
     const sizeCanvas = () => {
       const rect = wrap.getBoundingClientRect();
+      /* Narrow screens: cap device-pixel ratio at 1.5 — a 390px phone at
+         DPR 2 would back a 780×920 buffer for a mostly-glow scene. */
       const dpr = Math.min(
         window.devicePixelRatio || 1,
         window.innerWidth < 480 ? 1.5 : 2,
@@ -394,6 +395,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     const onPointerMove = (e: PointerEvent) => {
       const p = toCanvas(e);
       pointersRef.current = [{ x: p.x, y: p.y }];
+      /* Dragged node follows the pointer 1:1 — no physics fight. */
       if (dragRef.current !== -1) {
         const n = nodes[dragRef.current];
         n.x = p.x;
@@ -541,6 +543,8 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           n.vy += (ncy - n.y) * centerK;
           n.vx += Math.sin(t * 0.9 + n.phase) * 0.015;
           n.vy += Math.cos(t * 0.7 + n.phase * 1.3) * 0.015;
+          /* Pointer repel — never applied to the hovered/dragged node,
+             or it flees the cursor before you can grab it. */
           if (i !== hotRef.current && i !== dragRef.current) {
             for (const p of pointersRef.current) {
               const dx = n.x - p.x;
@@ -652,6 +656,9 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           const isHub = n.kind === "hub";
           const isHot = i === hot || i === sel;
           const lit = focusGroup !== null && n.group === focusGroup;
+          /* Dark idle nodes/labels: neon acid-lime by default (matches the
+             house identity); cyan is reserved for the hovered/lit state so
+             focus always reads as a different signal. Light theme uses ink. */
           const [r, g, bl] = isHub
             ? A()
             : lit || isHot
@@ -663,15 +670,22 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
             ? 1
             : 1 + Math.sin(t * 2 + n.phase) * (isHub ? 0.05 : 0.025);
 
+          /* Glow — hot/hub always; dark idle nodes get a TIGHT halo only.
+             Stamped from pre-baked gradient sprites (drawImage) instead of
+             29 createRadialGradient calls per frame. Light theme stays clean
+             and crisp — near-black ink on paper needs no smoke. */
           if (isHot || isHub || dark) {
             const spr = isHot ? "cyan" : "acid";
+            /* Inner tight halo — bright core glow. */
             paintGlow(spr, n.x, n.y, n.r * 4.4, isHub ? 0.95 : isHot ? 0.9 : 0.5);
+            /* Outer wide bloom — hot/hub ONLY. */
             if (isHot || isHub) {
               paintGlow(spr, n.x, n.y, n.r * 12, isHub ? 0.7 : 0.6);
             }
           }
 
           if (isHub) {
+            /* Rotating dashed orbit ring around the hub. */
             ctx.setLineDash([5, 8]);
             ctx.lineDashOffset = -t * 14;
             ctx.strokeStyle = `rgba(${A()[0]},${A()[1]},${A()[2]},${0.35 + Math.sin(t * 1.7) * 0.12})`;
@@ -682,6 +696,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
             ctx.setLineDash([]);
           }
           if (i === sel) {
+            /* Pinned-node ripple. */
             const rp = (t * 0.7) % 1;
             ctx.strokeStyle = `rgba(${Y()[0]},${Y()[1]},${Y()[2]},${(1 - rp) * 0.5})`;
             ctx.lineWidth = 1.5;
@@ -713,6 +728,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
             ctx.lineWidth = isHot ? 3 : dark ? 2 : 1.5;
             ctx.stroke();
             if (n.kind === "cat") {
+              /* Secondary halo ring for cluster anchors. */
               ctx.strokeStyle = `rgba(${r},${g},${bl},${isHot ? 0.6 : dark ? 0.35 : 0.3})`;
               ctx.lineWidth = 1.5;
               ctx.beginPath();
@@ -721,6 +737,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
             }
           }
 
+          /* Orbiting satellite on the hub. */
           if (isHub && !reducedMotion) {
             const oa = t * 1.4 + n.phase;
             ctx.fillStyle = `rgba(${A()[0]},${A()[1]},${A()[2]},0.95)`;
@@ -735,7 +752,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
             ctx.fill();
           }
 
-          /* Optimized label rendering - batch text operations */
+          /* Label. */
           const fs = isHub ? 13 : n.kind === "cat" ? 11 : 10;
           const weight = isHub || isHot ? "700" : n.kind === "cat" ? "600" : "600";
           ctx.font = `${weight} ${fs}px "Vazirmatn", "Space Grotesk", ui-sans-serif, sans-serif`;
@@ -762,6 +779,8 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
        reduced-motion mode, where only physics/dust are gated). */
     const themeObs = new MutationObserver(() => {
       C = resolvePal();
+      /* Rebuild the glow tiles from the new palette so the very next frame
+         repaints in the flipped theme (no stale-color ghost frame). */
       glow = { acid: makeGlowSprite(A()), cyan: makeGlowSprite(Y()) };
     });
     themeObs.observe(document.documentElement, {
@@ -810,6 +829,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
                   style={{ touchAction: "pan-y" }}
                   aria-label={fa ? "نقشه تعاملی مهارت‌ها" : "Interactive map of Omid's skills"}
                   role="img"
+                  data-cursor={fa ? "بکش" : "DRAG"}
                 />
 
                 {/* HUD — active node readout */}
@@ -841,10 +861,16 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
                 dir={fa ? "rtl" : "ltr"}
                 className="flex flex-wrap items-center justify-between gap-3 px-5 pb-1 pt-3"
               >
-                <p className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">
-                  {fa
-                    ? "هاب سینیستر = مهارت‌های ایجنت هوش مصنوعی"
-                    : "SINISTER hub = the AI-agent skill stack"}
+                <p className="net-legend font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted">
+                  <span className="net-legend-item" data-k="hub">
+                    {fa ? "هاب" : "Hub"}
+                  </span>
+                  <span className="net-legend-item" data-k="cat">
+                    {fa ? "دسته" : "Cat"}
+                  </span>
+                  <span className="net-legend-item" data-k="leaf">
+                    {fa ? "برگ" : "Leaf"}
+                  </span>
                 </p>
                 <a
                   href={loc(locale, "/skills")}
@@ -859,7 +885,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           </Reveal>
         </div>
       </section>
-      <Seam cyan />
+      <Seam cyan tag="SIG.03 ▸ SYNAPSE" />
     </>
   );
-}```
+}

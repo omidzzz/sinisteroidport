@@ -107,9 +107,12 @@ export default function LatestPostsLive({
         const fallback = isFallbackTranslation(post, locale);
         const date = postDateKey(post.date);
         const href = loc(locale, `/blog/${post.slug}`);
-        const cls = "post-card group";
+        const cls = "post-card group holo-glare";
         const card = (
           <>
+            <span dir="ltr" aria-hidden className="post-idx">
+              PK.0{i + 1}
+            </span>
             {cover && (
               <div className="bento-frame post-thumb">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -131,6 +134,9 @@ export default function LatestPostsLive({
             )}
             <span className="post-card-date">
               <span dir="ltr">{date || `00${i + 1}`}</span>
+              <span dir="ltr" className="post-read">
+                {locale === "fa" ? "۳ دقیقه خواندن" : "3 MIN READ"}
+              </span>
               <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
             </span>
             {fallback && (
@@ -150,7 +156,7 @@ export default function LatestPostsLive({
         // plain anchor navigates to the same pretty URL (static file or
         // api/post.php fallback) reliably, including new-tab.
         return (
-          <a key={post.slug} href={href} className={cls}>
+          <a key={post.slug} href={href} className={cls} data-cursor={locale === "fa" ? "باز کن" : "OPEN"}>
             {card}
           </a>
         );

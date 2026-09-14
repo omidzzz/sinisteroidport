@@ -66,7 +66,7 @@ export default async function HomePage({
   const skillTotal = skillsData.reduce((n, g) => n + g.skills.length, 0);
 
   return (
-    <div className="overflow-x-clip">
+    <div className="home-acts overflow-x-clip">
       {/* GEO/SEO: machine-readable FAQ (also great for AI crawlers + rich results) */}
       <JsonLd data={faqJsonLd(homeFaq(fa))} />
 

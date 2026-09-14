@@ -132,7 +132,10 @@
   inset: -38%;
   z-index: -1;
   opacity: 0.5;
-  filter: blur(34px);
+  /* Masked instead of blurred: the 16s orbit stays a pure GPU transform
+     with zero blur passes — same technique as .status-panel::before. */
+  -webkit-mask-image: radial-gradient(58% 58% at 50% 50%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(58% 58% at 50% 50%, #000 30%, transparent 78%);
   background: conic-gradient(
     from 90deg,
     transparent,
@@ -158,6 +161,60 @@
 .prism-panel:hover {
   border-color: rgba(var(--rgb-acid), 0.5);
   box-shadow: 0 24px 60px rgba(2, 2, 10, 0.55);
+}
+
+/* ============================================================
+   EMBELLISHMENT PASS — beam sheen (hero primary CTA only)
+   ------------------------------------------------------------
+   .btn-neon is a clip-path chip, so a border-box conic ring is
+   impossible (clip-path clips borders). Instead the existing
+   ::after shine sweep auto-plays on the hero CTA only — same
+   transform-only sweep as the hover shine, compositor-safe and
+   clipped to the chip silhouette. Repeating cards keep the
+   hover-only shine so the animation budget stays flat.
+   ============================================================ */
+.btn-neon.beam::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  bottom: -50%;
+  left: -80%;
+  width: 45%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  transform: skewX(-20deg);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-neon.beam::after {
+    animation: beam-sheen 3.8s ease-in-out infinite;
+  }
+}
+@keyframes beam-sheen {
+  0% {
+    left: -80%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  55% {
+    left: 130%;
+    opacity: 1;
+  }
+  70%,
+  100% {
+    left: 130%;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .btn-neon.beam::after {
+    animation: none;
+  }
 }
 
 /* ── Touch targets (Lighthouse target-size audit) ──

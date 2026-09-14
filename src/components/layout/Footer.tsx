@@ -221,6 +221,16 @@ export default function Footer({ locale }: { locale: Locale }) {
         </div>
 
         {/* ── floor bar ── */}
+        <div className="foot-giant" aria-hidden dir="ltr">
+          SINISTEROID
+        </div>
+        <p className="foot-edition" dir="ltr" aria-hidden>
+          <b>ED.2026</b>
+          <i />
+          VOID-FREE
+          <i />
+          ACID RAVE
+        </p>
         <div className="mt-16 flex flex-col items-start justify-between gap-5 border-t border-line pt-6 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-muted sm:flex-row sm:items-center">
           <p suppressHydrationWarning>
             © {year} {t.rights}
