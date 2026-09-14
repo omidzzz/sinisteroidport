@@ -49,7 +49,7 @@ export default function ManifestoSection({ locale }: { locale: Locale }) {
         <Reveal delay={320}>
           <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-muted">
             <span>{t.quoteLabel}</span>
-            <span dir="ltr" className="text-acid">SIG.OK ▸ VOID-FREE</span>
+            <span dir="ltr" className="text-acid">MANTLE.OK ▸ STABLE</span>
           </div>
         </Reveal>
       </Spotlight>

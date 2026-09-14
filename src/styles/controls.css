@@ -21,7 +21,7 @@
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #04110a;
+  color: #0a0b10;
   background: linear-gradient(
     100deg,
     var(--color-acid),
@@ -29,7 +29,7 @@
     var(--color-accent-2)
   );
   filter: drop-shadow(0 0 16px rgba(var(--rgb-acid), 0.35))
-    drop-shadow(0 10px 24px rgba(2, 2, 10, 0.5));
+    drop-shadow(0 10px 24px rgba(10, 11, 16, 0.5));
   transition:
     transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
     filter 0.3s ease;
@@ -37,7 +37,7 @@
 .btn-neon:hover {
   transform: translateY(-2px) skewX(-1.5deg);
   filter: drop-shadow(0 0 26px rgba(var(--rgb-acid), 0.55))
-    drop-shadow(0 14px 30px rgba(2, 2, 10, 0.55));
+    drop-shadow(0 14px 30px rgba(10, 11, 16, 0.55));
 }
 .btn-neon:active {
   transform: translateY(0);
@@ -99,8 +99,8 @@
 .glass {
   background: linear-gradient(
     155deg,
-    rgba(184, 255, 60, 0.07),
-    rgba(3, 10, 7, 0.46)
+    rgba(216, 255, 77, 0.07),
+    rgba(16, 19, 28, 0.46)
   );
   border: 1px solid var(--color-line);
   backdrop-filter: blur(var(--glass-blur));
@@ -115,8 +115,8 @@
   isolation: isolate;
   background: linear-gradient(
     160deg,
-    rgba(0, 229, 255, 0.09),
-    rgba(2, 8, 6, 0.72) 58%
+    rgba(255, 93, 122, 0.09),
+    rgba(10, 11, 16, 0.72) 58%
   );
   border: 1px solid rgba(var(--rgb-accent-3), 0.28);
   backdrop-filter: blur(var(--glass-blur));
@@ -160,7 +160,7 @@
 .group:hover > .prism-panel,
 .prism-panel:hover {
   border-color: rgba(var(--rgb-acid), 0.5);
-  box-shadow: 0 24px 60px rgba(2, 2, 10, 0.55);
+  box-shadow: 0 24px 60px rgba(10, 11, 16, 0.55);
 }
 
 /* ============================================================

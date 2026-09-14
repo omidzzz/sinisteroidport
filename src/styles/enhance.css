@@ -19,30 +19,42 @@
      §7 Print decay            — new surfaces print as ink
    ============================================================ */
 
-/* §1 SEAM PROGRESS — the act divider's hairline fills as the band
-   passes through the viewport. `entry 0% exit 0%` is the natural
-   range for a fixed-height band: from first contact with the top
-   edge to fully exiting the bottom. Browsers without view()
-   simply skip the rule (the seam keeps its current static look). */
+/* §1 VEIN CHARGE — the ore vein's molten fill scrubs through as the
+    band passes the viewport. The hot tip is baked into the gradient's
+    leading edge, so the scaleX reveal reads as a traveling charge.
+    `entry 0% exit 0%` is the natural range for a fixed-height band.
+    Browsers without view() simply skip the rule (static vein). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .seam::after {
       content: "";
       position: absolute;
       inset-inline: 12% 12%;
-      bottom: 18%;
+      top: 50%;
       height: 2px;
+      translate: 0 -50%;
       border-radius: 9999px;
-      background: linear-gradient(90deg, var(--color-acid), var(--color-accent));
+      background: linear-gradient(90deg,
+        rgba(var(--rgb-acid), 0.05),
+        var(--color-acid) 78%,
+        #fff 98%);
+      box-shadow: 0 0 12px rgba(var(--rgb-acid), 0.55);
       transform-origin: left center;
       animation: eh-seam-progress linear both;
       animation-timeline: view();
       animation-range: entry 0% exit 0%;
     }
-    [dir="rtl"] .seam::after { transform-origin: right center; }
+    [dir="rtl"] .seam::after {
+      transform-origin: right center;
+      background: linear-gradient(270deg,
+        rgba(var(--rgb-acid), 0.05),
+        var(--color-acid) 78%,
+        #fff 98%);
+    }
     @keyframes eh-seam-progress {
-      from { transform: scaleX(0.04); }
-      to { transform: scaleX(1); }
+      from { transform: scaleX(0.04); opacity: 0.25; }
+      30% { opacity: 1; }
+      to { transform: scaleX(1); opacity: 1; }
     }
   }
 }

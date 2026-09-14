@@ -9,12 +9,12 @@ void main() {
 }
 `;
 
-/* PSIONIC ORBIT NEBULA — ACID RAVE background.
-   Two domain-warped fBm cloud fields drift through the void: an
-   acid-lime layer and an electric-cyan layer crossing each other
+/* STRATUM · MANTLE nebula — ACID-light background.
+   Two domain-warped fBm cloud fields drift through the basalt: a
+   halide-amber layer and a mantle-rose layer crossing each other
    diagonally, dusted with twinkling stardust. The pointer adds a
    soft parallax pull. Light theme washes everything to a faint
-   lab-whiteout. One loop, transform-free fullscreen quad, DPR-cap
+   salt-flat cream. One loop, transform-free fullscreen quad, DPR-cap
    in host code below; reduced motion paints a single frame. */
 const FRAG = `
 precision highp float;
@@ -81,12 +81,12 @@ void main() {
   float nebB = smoothstep(-0.44, 0.94, c1);
 
   bool lightMode = uLight > 0.5;
-  vec3 voidC = lightMode ? vec3(0.952, 0.968, 0.936)
-                         : vec3(0.008, 0.020, 0.012);
-  vec3 acidC = lightMode ? vec3(0.400, 0.560, 0.080)
-                         : vec3(0.700, 1.000, 0.000);
-  vec3 cyanC = lightMode ? vec3(0.120, 0.480, 0.540)
-                         : vec3(0.000, 0.900, 1.000);
+  vec3 voidC = lightMode ? vec3(0.937, 0.925, 0.918)
+                         : vec3(0.039, 0.043, 0.063);
+  vec3 acidC = lightMode ? vec3(0.706, 0.329, 0.000)
+                         : vec3(1.000, 0.761, 0.290);
+  vec3 cyanC = lightMode ? vec3(0.651, 0.243, 0.314)
+                         : vec3(1.000, 0.365, 0.478);
 
   vec3 col = voidC;
   col = mix(col, cyanC * 0.60, nebB * (lightMode ? 0.30 : 0.46));

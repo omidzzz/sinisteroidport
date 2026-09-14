@@ -58,14 +58,14 @@ export default function Frog() {
           {/* acid -> magenta trip aura */}
           <radialGradient id="frg-aura" cx="0.5" cy="0.45" r="0.62">
             <stop offset="0%" stopColor="rgba(158,219,90,0.3)" />
-            <stop offset="42%" stopColor="rgba(184,255,0,0.13)" />
-            <stop offset="74%" stopColor="rgba(255,43,214,0.1)" />
-            <stop offset="100%" stopColor="rgba(255,43,214,0)" />
+            <stop offset="42%" stopColor="rgba(255,194,74,0.13)" />
+            <stop offset="74%" stopColor="rgba(216,255,77,0.1)" />
+            <stop offset="100%" stopColor="rgba(216,255,77,0)" />
           </radialGradient>
           <radialGradient id="frg-auraB" cx="0.5" cy="0.5" r="0.62">
-            <stop offset="0%" stopColor="rgba(255,43,214,0.3)" />
-            <stop offset="60%" stopColor="rgba(0,229,255,0.1)" />
-            <stop offset="100%" stopColor="rgba(0,229,255,0)" />
+            <stop offset="0%" stopColor="rgba(216,255,77,0.3)" />
+            <stop offset="60%" stopColor="rgba(255,93,122,0.1)" />
+            <stop offset="100%" stopColor="rgba(255,93,122,0)" />
           </radialGradient>
           <filter id="frg-glowF" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="0.55" result="b" />

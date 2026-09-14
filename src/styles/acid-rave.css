@@ -96,7 +96,7 @@
   padding: 0.38rem 0.6rem;
   border-radius: 9999px;
   border: 1px solid rgba(var(--rgb-acid), 0.26);
-  background: linear-gradient(155deg, rgba(6, 17, 11, 0.9), rgba(2, 5, 3, 0.84));
+  background: linear-gradient(155deg, rgba(16, 19, 28, 0.9), rgba(10, 11, 16, 0.84));
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow:
@@ -280,7 +280,7 @@ html[lang="fa"] .overlay-link {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-ink);
-  background: linear-gradient(155deg, rgba(6, 17, 11, 0.95), rgba(2, 5, 3, 0.9));
+  background: linear-gradient(155deg, rgba(16, 19, 28, 0.95), rgba(10, 11, 16, 0.9));
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow:
@@ -308,11 +308,11 @@ html[lang="fa"] .overlay-link {
   border-color: rgba(var(--rgb-accent-3), 0.25);
 }
 [data-theme="light"] .mob-pill {
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(242, 246, 238, 0.9));
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(239, 236, 234, 0.9));
   border-color: rgba(var(--rgb-acid), 0.55);
   box-shadow:
     0 0 22px rgba(var(--rgb-acid), 0.18),
-    0 10px 30px -12px rgba(20, 40, 24, 0.35);
+    0 10px 30px -12px rgba(26, 30, 38, 0.35);
 }
 [data-theme="light"] .overlay-index {
   color: rgba(var(--rgb-accent), 0.9);
@@ -322,12 +322,12 @@ html[lang="fa"] .overlay-link {
   filter: drop-shadow(0 0 10px rgba(var(--rgb-acid), 0.3));
 }
 [data-theme="light"] .dock {
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(242, 246, 238, 0.9));
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(239, 236, 234, 0.9));
   border-color: rgba(var(--rgb-accent-3), 0.32);
-  box-shadow: 0 14px 40px -16px rgba(20, 40, 24, 0.45);
+  box-shadow: 0 14px 40px -16px rgba(26, 30, 38, 0.45);
 }
 [data-theme="light"] .btn-neon,
-[data-theme="light"] .ticker-band { color: #f2f6ee; }
+[data-theme="light"] .ticker-band { color: #efecea; }
 
 /* ---------- v4 · TRANSMISSION HERO ---------- */
 
@@ -439,7 +439,7 @@ html[lang="fa"] .overlay-link {
   z-index: 2;
   border-radius: 9999px;
   background:
-    radial-gradient(circle at 32% 28%, #f4ffe8, var(--color-acid) 42%, color-mix(in oklab, var(--color-acid) 55%, black) 100%);
+    radial-gradient(circle at 32% 28%, #f2ede2, var(--color-acid) 42%, color-mix(in oklab, var(--color-acid) 55%, black) 100%);
   box-shadow:
     0 0 18px rgba(var(--rgb-acid), 0.85),
     0 0 64px rgba(var(--rgb-acid), 0.35);
@@ -504,7 +504,7 @@ html[lang="fa"] .overlay-link {
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--color-ink);
-  background: rgba(2, 8, 6, 0.92);
+  background: rgba(10, 11, 16, 0.92);
   border: 1px solid rgba(var(--rgb-acid), 0.35);
   box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.8);
   opacity: 0;
@@ -524,7 +524,7 @@ html[lang="fa"] .overlay-link {
   padding: 1.15rem 1.25rem 1.3rem;
   border: 1px solid var(--color-line);
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 0.95rem), calc(100% - 0.95rem) 100%, 0 100%);
-  background: linear-gradient(160deg, rgba(var(--rgb-accent-3), 0.28), rgba(2, 8, 6, 0.36));
+  background: linear-gradient(160deg, rgba(var(--rgb-accent-3), 0.28), rgba(10, 11, 16, 0.36));
   transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .gauge-cell:hover {
@@ -580,7 +580,7 @@ html[lang="fa"] .overlay-link {
   overflow: hidden;
   border: 1px solid var(--color-line);
   background:
-    linear-gradient(150deg, color-mix(in srgb, var(--hue) 7%, transparent), rgba(2, 8, 6, 0.4) 58%),
+    linear-gradient(150deg, color-mix(in srgb, var(--hue) 7%, transparent), rgba(10, 11, 16, 0.4) 58%),
     var(--color-bg);
   transition: border-color 0.3s ease, box-shadow 0.35s ease;
 }
@@ -804,17 +804,49 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
 }
 [dir="rtl"] .thread b { transform-origin: right center; }
 
-/* Skewed full-bleed seams between acts */
+/* Ore-vein seams between acts: a crystalline mineral band — bright
+   core streak, soft halo, and crystal ticks — fault-tilted as before. */
 .seam { position: relative; height: clamp(2.6rem, 7vw, 5rem); }
 .seam::before {
-  content: ""; position: absolute; inset-inline: -12%; top: 50%; height: 130%; translate: 0 -50%;
-  rotate: -1.4deg; border-block: 1px solid var(--color-line);
-  background: linear-gradient(90deg, rgba(var(--rgb-acid), 0.05), rgba(var(--rgb-accent), 0.07));
+  content: ""; position: absolute; inset-inline: -12%; top: 50%; height: 150%; translate: 0 -50%;
+  rotate: -1.4deg;
+  background:
+    linear-gradient(90deg,
+      transparent,
+      rgba(var(--rgb-acid), 0.16) 12%,
+      rgba(var(--rgb-acid), 0.42) 38%,
+      rgba(var(--rgb-accent), 0.38) 62%,
+      rgba(var(--rgb-acid), 0.14) 86%,
+      transparent),
+    repeating-linear-gradient(105deg,
+      rgba(var(--rgb-acid), 0.2) 0 1px,
+      transparent 1px clamp(18px, 3.4vw, 34px)),
+    linear-gradient(180deg,
+      rgba(var(--rgb-acid), 0.1),
+      rgba(var(--rgb-acid), 0.02) 45%,
+      rgba(var(--rgb-acid), 0.1));
+  /* vein core: a bright hairline masked to the fault plane */
+  -webkit-mask: linear-gradient(180deg, transparent 42%, #000 47%, #000 53%, transparent 58%);
+  mask: linear-gradient(180deg, transparent 42%, #000 47%, #000 53%, transparent 58%);
 }
 [dir="rtl"] .seam::before { rotate: 1.4deg; }
 .seam.flip::before { rotate: 1.4deg; }
 [dir="rtl"] .seam.flip::before { rotate: -1.4deg; }
-.seam.cyan::before { background: linear-gradient(90deg, rgba(var(--rgb-accent), 0.08), rgba(var(--rgb-acid), 0.04)); }
+.seam.cyan::before {
+  background:
+    linear-gradient(90deg,
+      transparent,
+      rgba(var(--rgb-accent), 0.34) 30%,
+      rgba(var(--rgb-acid), 0.24) 70%,
+      transparent),
+    repeating-linear-gradient(75deg,
+      rgba(var(--rgb-accent), 0.18) 0 1px,
+      transparent 1px clamp(18px, 3.4vw, 34px)),
+    linear-gradient(180deg,
+      rgba(var(--rgb-accent), 0.08),
+      rgba(var(--rgb-accent), 0.02) 45%,
+      rgba(var(--rgb-accent), 0.08));
+}
 
 /* Sticky act-label rail + ghost numeral per section */
 .shell-grid { display: grid; gap: 2.25rem 0; }
@@ -901,7 +933,7 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
 [dir="rtl"] .chip-brk::before { border-width: 1px 1px 0 0; }
 .chip-brk::after { bottom: 4px; inset-inline-end: 4px; border-width: 0 1px 1px 0; }
 [dir="rtl"] .chip-brk::after { border-width: 0 0 1px 1px; }
-.status-panel { position: relative; isolation: isolate; border: 1px solid var(--color-line); background: linear-gradient(160deg, rgba(var(--rgb-acid), 0.06), rgba(2, 8, 6, 0.42)); }
+.status-panel { position: relative; isolation: isolate; border: 1px solid var(--color-line); background: linear-gradient(160deg, rgba(var(--rgb-acid), 0.06), rgba(10, 11, 16, 0.42)); }
 .status-panel::before {
   content: ""; position: absolute; inset: -34%; z-index: -1; opacity: 0.38;
   background: conic-gradient(from 40deg, transparent, rgba(var(--rgb-acid), 0.4), transparent 35%, rgba(var(--rgb-accent), 0.4), transparent 70%);

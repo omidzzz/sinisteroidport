@@ -182,7 +182,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
           <div className="hazard-tape absolute inset-x-0 -bottom-[9px] h-[9px]" />
         </div>
       </div>
-      <Seam cyan tag="SIG.01 ▸ TRANSMISSION" />
+      <Seam cyan tag="FAULT.01 ▸ CRUST" />
     </>
   );
 }

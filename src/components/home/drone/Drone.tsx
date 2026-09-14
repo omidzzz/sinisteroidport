@@ -57,17 +57,17 @@ export default function Drone() {
       >
         <defs>
           <radialGradient id="au-aura" cx="0.5" cy="0.42" r="0.6">
-            <stop offset="0%" stopColor="#ff6bd6" stopOpacity="0.35" />
+            <stop offset="0%" stopColor="#ffb03f" stopOpacity="0.35" />
             <stop offset="45%" stopColor="#8a5cf6" stopOpacity="0.18" />
             <stop offset="100%" stopColor="#8a5cf6" stopOpacity="0" />
           </radialGradient>
           <linearGradient id="au-beamGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#ffe600" stopOpacity="0.9" />
-            <stop offset="55%" stopColor="#ff2bd6" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#00e5ff" stopOpacity="0" />
+            <stop offset="55%" stopColor="#d8ff4d" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#ff5d7a" stopOpacity="0" />
           </linearGradient>
           <radialGradient id="au-rimGrad" cx="0.5" cy="0.35" r="0.75">
-            <stop offset="0%" stopColor="#e2b6ff" />
+            <stop offset="0%" stopColor="#dfc4ec" />
             <stop offset="50%" stopColor="#9b5cf6" />
             <stop offset="100%" stopColor="#4a2ea8" />
           </radialGradient>
@@ -77,7 +77,7 @@ export default function Drone() {
             ))}
           </linearGradient>
           <linearGradient id="au-domeGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#e2c8ff" />
+            <stop offset="0%" stopColor="#e8d9f5" />
             <stop offset="50%" stopColor="#7fd8ff" />
             <stop offset="100%" stopColor="#5cf6c1" />
           </linearGradient>
@@ -152,7 +152,7 @@ export default function Drone() {
               <path d={HEAD_PATH} fill="#7ee657" stroke={INK} strokeWidth="5" />
               <g className="au-blink">
                 {EYES.map((e, i) => (
-                  <ellipse key={`ey${i}`} cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} fill="#141024"
+                  <ellipse key={`ey${i}`} cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} fill="#191226"
                     transform={`rotate(${e.rot} ${e.cx} ${e.cy})`} />
                 ))}
               </g>

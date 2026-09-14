@@ -47,7 +47,7 @@ export default function SignalsSection({
         </div>
       </section>
 
-      <Seam tag="SIG.05 ▸ SIGNALS" />
+      <Seam tag="FAULT.05 ▸ SIGNAL" />
     </>
   );
 }

@@ -65,6 +65,10 @@
 @import "../styles/fx-modern.css";
 @import "../styles/view-transitions.css";
 @import "../styles/motion-reduce.css";
+/* stratum.css — STRATUM · MANTLE layout + mineral shelves (tectonic
+   bands, core-sample rail, per-shelf token morphing). Comes after the
+   motion-reduce safety net because the geology is static. */
+@import "../styles/stratum.css";
 /* enhance.css MUST stay last: finesse pass whose overrides (btn-shine
    compositor lift, module energizer, seam/footer scrubs, print decay)
    need to win the cascade. */

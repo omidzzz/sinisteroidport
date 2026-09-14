@@ -7,6 +7,7 @@ import ConsoleBay from "@/components/home/ConsoleBay";
 import ModuleBay from "@/components/home/ModuleBay";
 import SignalsSection from "@/components/home/SignalsSection";
 import ManifestoSection from "@/components/home/ManifestoSection";
+import Stratum from "@/components/home/Stratum";
 import PropFloatLayer from "@/components/home/prop-float/PropFloatLayer";
 import { homeFaq } from "@/components/home/faq";
 import { getAllPosts } from "@/lib/blog/repository";
@@ -18,14 +19,16 @@ export function generateStaticParams() {
 }
 
 /**
- * HOME — PSIONIC ORBIT // ACID RAVE (v6)
- * Asymmetric acts: overlap hero (kinetic name × portrait plate),
- * skewed seams, sticky rails w/ section icons, scrub outline words,
- * scattered telemetry, mirrored bento modules, zigzag transmissions,
+ * HOME — STRATUM · MANTLE (v7)
+ * Tectonic cross-section: full-bleed strata bands with interlocking
+ * fault edges, mineral shelves (amber → rose → violet) that re-map
+ * the hot tokens per act, the core-sample rail, crossed marquee
+ * crust strips, an embedded core-portrait plate, a scrubbed CORE
+ * network, mirror-shelf modules, zigzag transmissions and a
  * spotlight manifesto. No coordinates, no star chart.
  *
- * The acts live in components/home/*; this page is a pure composition.
- * Change a section's markup there — order the sections here.
+ * The acts live in components/home/*; each is wrapped in a Stratum
+ * by this page — change a section's markup there, order strata here.
  */
 export default async function HomePage({
   params,
@@ -70,13 +73,30 @@ export default async function HomePage({
       {/* GEO/SEO: machine-readable FAQ (also great for AI crawlers + rich results) */}
       <JsonLd data={faqJsonLd(homeFaq(fa))} />
 
-      <HeroSection locale={locale} />
-      <TelemetrySection locale={locale} skillTotal={skillTotal} />
-      <SkillNetwork locale={locale} />
-      <ConsoleBay />
-      <ModuleBay locale={locale} />
-      <SignalsSection locale={locale} initial={latest} />
-      <ManifestoSection locale={locale} />
+      {/* STRATUM · MANTLE — the home page is a tectonic cross-section.
+          Each act is a mineral shelf (amber → rose → violet) that re-tints
+          the same components via scoped tokens; fault edges interlock. */}
+      <Stratum mineral="amber">
+        <HeroSection locale={locale} />
+      </Stratum>
+      <Stratum mineral="rose">
+        <TelemetrySection locale={locale} skillTotal={skillTotal} />
+      </Stratum>
+      <Stratum mineral="violet">
+        <SkillNetwork locale={locale} />
+      </Stratum>
+      <Stratum mineral="amber">
+        <ConsoleBay />
+      </Stratum>
+      <Stratum mineral="rose">
+        <ModuleBay locale={locale} />
+      </Stratum>
+      <Stratum mineral="violet">
+        <SignalsSection locale={locale} initial={latest} />
+      </Stratum>
+      <Stratum mineral="amber">
+        <ManifestoSection locale={locale} />
+      </Stratum>
       <PropFloatLayer />
     </div>
   );

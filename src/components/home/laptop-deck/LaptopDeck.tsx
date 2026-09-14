@@ -42,18 +42,18 @@ import {
 const OUTPUTS: { text: string; y: number; size: number; color: string }[][] = [
   [
     { text: "ready - sinisteroid@dev", y: 88, size: 6, color: "#36e5a0" },
-    { text: "Local: http://localhost:3000", y: 100, size: 5.5, color: "#8fa294" },
-    { text: "watching for file changes...", y: 114, size: 5.5, color: "#8fa294" },
+    { text: "Local: http://localhost:3000", y: 100, size: 5.5, color: "#8d8a86" },
+    { text: "watching for file changes...", y: 114, size: 5.5, color: "#8d8a86" },
   ],
   [
     { text: "running test suite...", y: 88, size: 6, color: "#36e5a0" },
     { text: "✓ 24 passing (2.1s)", y: 100, size: 5.5, color: "var(--lp-acid)" },
-    { text: "0 failing · 0 skipped", y: 114, size: 5.5, color: "#8fa294" },
+    { text: "0 failing · 0 skipped", y: 114, size: 5.5, color: "#8d8a86" },
   ],
   [
     { text: "pushing main → origin...", y: 88, size: 6, color: "#36e5a0" },
     { text: "✓ deployed", y: 100, size: 5.5, color: "var(--lp-acid)" },
-    { text: "live at sinisteroid.dev", y: 114, size: 5.5, color: "#8fa294" },
+    { text: "live at sinisteroid.dev", y: 114, size: 5.5, color: "#8d8a86" },
   ],
 ];
 
@@ -167,40 +167,40 @@ export default function LaptopDeck() {
       >
         <defs>
           <linearGradient id="lg-body" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#212b4e" /><stop offset="100%" stopColor="#0d1426" />
+            <stop offset="0%" stopColor="#221d3a" /><stop offset="100%" stopColor="#131022" />
           </linearGradient>
           <linearGradient id="lg-sideF" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#111a32" /><stop offset="100%" stopColor="#080d1a" />
+            <stop offset="0%" stopColor="#171330" /><stop offset="100%" stopColor="#13151e" />
           </linearGradient>
           <linearGradient id="lg-sideL" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#0b1122" /><stop offset="100%" stopColor="#05080f" />
+            <stop offset="0%" stopColor="#15151e" /><stop offset="100%" stopColor="#0b0c12" />
           </linearGradient>
           <linearGradient id="lg-sideR" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#161f38" /><stop offset="100%" stopColor="#0a101d" />
+            <stop offset="0%" stopColor="#161f38" /><stop offset="100%" stopColor="#12121a" />
           </linearGradient>
           <linearGradient id="lg-sideB" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#0e1425" /><stop offset="100%" stopColor="#070b15" />
+            <stop offset="0%" stopColor="#141124" /><stop offset="100%" stopColor="#100f16" />
           </linearGradient>
           <linearGradient id="lg-lid" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#182240" /><stop offset="100%" stopColor="#0b1226" />
+            <stop offset="0%" stopColor="#1e1736" /><stop offset="100%" stopColor="#171720" />
           </linearGradient>
           <linearGradient id="lg-glass" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="rgba(255,255,255,0.08)" /><stop offset="100%" stopColor="rgba(255,255,255,0)" />
           </linearGradient>
           <linearGradient id="lg-spill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="rgba(184,255,0,0.16)" /><stop offset="100%" stopColor="rgba(184,255,0,0)" />
+            <stop offset="0%" stopColor="rgba(255,194,74,0.16)" /><stop offset="100%" stopColor="rgba(255,194,74,0)" />
           </linearGradient>
           <radialGradient id="rp-magenta">
-            <stop offset="0%" stopColor="rgba(255,43,214,0.26)" /><stop offset="100%" stopColor="rgba(255,43,214,0)" />
+            <stop offset="0%" stopColor="rgba(216,255,77,0.26)" /><stop offset="100%" stopColor="rgba(216,255,77,0)" />
           </radialGradient>
           <radialGradient id="rh-violet">
             <stop offset="0%" stopColor="rgba(124,58,255,0.13)" /><stop offset="100%" stopColor="rgba(124,58,255,0)" />
           </radialGradient>
           <radialGradient id="rh-magenta">
-            <stop offset="0%" stopColor="rgba(255,43,214,0.09)" /><stop offset="100%" stopColor="rgba(255,43,214,0)" />
+            <stop offset="0%" stopColor="rgba(216,255,77,0.09)" /><stop offset="100%" stopColor="rgba(216,255,77,0)" />
           </radialGradient>
           <radialGradient id="rh-cyan">
-            <stop offset="0%" stopColor="rgba(0,229,255,0.09)" /><stop offset="100%" stopColor="rgba(0,229,255,0)" />
+            <stop offset="0%" stopColor="rgba(255,93,122,0.09)" /><stop offset="100%" stopColor="rgba(255,93,122,0)" />
           </radialGradient>
           <pattern id="lp-scan" width="4" height="3.2" patternUnits="userSpaceOnUse">
             <rect width="4" height="1.1" fill="rgba(0,0,0,0.42)" />
@@ -243,18 +243,18 @@ export default function LaptopDeck() {
             <rect x="-30" y="307" width="395" height="33" />
           </clipPath>
           <linearGradient id="lg-reflect" gradientUnits="userSpaceOnUse" x1="0" y1="308" x2="0" y2="-22">
-            <stop offset="0%" stopColor="#b8ff00" stopOpacity="0.34" />
-            <stop offset="55%" stopColor="#b8ff00" stopOpacity="0.1" />
-            <stop offset="100%" stopColor="#b8ff00" stopOpacity="0" />
+            <stop offset="0%" stopColor="#ffc24a" stopOpacity="0.34" />
+            <stop offset="55%" stopColor="#ffc24a" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#ffc24a" stopOpacity="0" />
           </linearGradient>
           {/* floor scan-sweep: a soft diagonal band that drifts across the acid grid square */}
           <clipPath id="lp-floor-clip">
             <polygon points={P([iso(-15, -15), iso(205, -15), iso(205, 155), iso(-15, 155)])} />
           </clipPath>
           <linearGradient id="lg-scan-sweep" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#00e5ff" stopOpacity="0" />
-            <stop offset="50%" stopColor="#00e5ff" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#00e5ff" stopOpacity="0" />
+            <stop offset="0%" stopColor="#ff5d7a" stopOpacity="0" />
+            <stop offset="50%" stopColor="#ff5d7a" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#ff5d7a" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -264,13 +264,13 @@ export default function LaptopDeck() {
         <circle className="lp-hz" style={{ animationDelay: "-4.8s" }} cx="255" cy="58" r="75" fill="url(#rh-cyan)" />
 
         {/* isometric floor grid */}
-        <g stroke="#2a3a5c" strokeWidth="0.7" opacity="0.16">
+        <g stroke="#322a58" strokeWidth="0.7" opacity="0.16">
           {GRID_Y.map((s, i) => <line key={`gy${i}`} x1={s[0][0]} y1={s[0][1]} x2={s[1][0]} y2={s[1][1]} />)}
           {GRID_X.map((s, i) => <line key={`gx${i}`} x1={s[0][0]} y1={s[0][1]} x2={s[1][0]} y2={s[1][1]} />)}
         </g>
         {/* acid grid square under the rig */}
         <polygon points={P([iso(-15, -15), iso(205, -15), iso(205, 155), iso(-15, 155)])}
-          fill="none" stroke="#b8ff00" strokeWidth="1" opacity="0.22" style={{ filter: "url(#lf-glow)" }} />
+          fill="none" stroke="#ffc24a" strokeWidth="1" opacity="0.22" style={{ filter: "url(#lf-glow)" }} />
 
         {/* scanning light sweep across the floor grid — advanced-tech radar pass */}
         <g clipPath="url(#lp-floor-clip)">
@@ -288,22 +288,22 @@ export default function LaptopDeck() {
 
         {/* ===== screen (rises from the deck's back edge) ===== */}
         <polygon points={P([[150, -22], [314.5, 73], [314.5, 231], [150, 136]])}
-          fill="#b8ff00" opacity="0.1" style={{ filter: "url(#lf-glow2)" }} />
+          fill="#ffc24a" opacity="0.1" style={{ filter: "url(#lf-glow2)" }} />
         <g transform={MAT_SCREEN}>
           {/* lid + bezel */}
-          <rect x="0" y="0" width="190" height={SCREEN_H} rx="6" fill="url(#lg-lid)" stroke="#2a3f65" strokeWidth="1.2" />
-          <rect x="7" y="7" width="176" height={SCREEN_H - 14} rx="3" fill="#04060e" />
+          <rect x="0" y="0" width="190" height={SCREEN_H} rx="6" fill="url(#lg-lid)" stroke="#322d5e" strokeWidth="1.2" />
+          <rect x="7" y="7" width="176" height={SCREEN_H - 14} rx="3" fill="#0a0b10" />
           {/* screen flicker overlay */}
-          <rect x="7" y="7" width="176" height={SCREEN_H - 14} rx="3" fill="rgba(184,255,0,0.02)" className="lp-screen-flicker" />
+          <rect x="7" y="7" width="176" height={SCREEN_H - 14} rx="3" fill="rgba(255,194,74,0.02)" className="lp-screen-flicker" />
           {/* screen-wide flash on Enter (B2) */}
           <rect x="7" y="7" width="176" height={SCREEN_H - 14} rx="3"
             style={{ fill: "var(--lp-acid)", opacity: 0, animation: `lp-flash ${CYCLES}` }} />
 
           {/* titlebar */}
-          <circle cx="15" cy="17" r="1.8" fill="#ff2bd6" />
-          <circle cx="22" cy="17" r="1.8" fill="#b8ff00" />
-          <circle cx="29" cy="17" r="1.8" fill="#00e5ff" />
-          <text x="38" y="19.5" fontSize="5.5" fill="#7f93b8" fontFamily="var(--font-mono), monospace">~/sinisteroid</text>
+          <circle cx="15" cy="17" r="1.8" fill="#d8ff4d" />
+          <circle cx="22" cy="17" r="1.8" fill="#ffc24a" />
+          <circle cx="29" cy="17" r="1.8" fill="#ff5d7a" />
+          <text x="38" y="19.5" fontSize="5.5" fill="#8d8a86" fontFamily="var(--font-mono), monospace">~/sinisteroid</text>
 
           {/* typing prompt — per-character <text> reveal, synced with the key flashes */}
           <g clipPath="url(#lp-screen-clip)">
@@ -364,93 +364,93 @@ export default function LaptopDeck() {
           <path d="M7,7 L128,7 L86,64 L7,64 Z" fill="url(#lg-glass)" />
 
           {/* webcam + brand */}
-          <circle cx="95" cy="3.6" r="1.8" fill="#0a1520" stroke="#2a3f65" strokeWidth="0.5" />
-          <circle cx="95" cy="3.6" r="0.6" fill="#b8ff00" opacity="0.8" />
-          <text x="95" y={SCREEN_H - 2} fontSize="4.6" letterSpacing="2.5" textAnchor="middle" fill="#5a6a88" fontFamily="var(--font-mono), monospace">SINISTEROID</text>
+          <circle cx="95" cy="3.6" r="1.8" fill="#14141d" stroke="#322d5e" strokeWidth="0.5" />
+          <circle cx="95" cy="3.6" r="0.6" fill="#ffc24a" opacity="0.8" />
+          <text x="95" y={SCREEN_H - 2} fontSize="4.6" letterSpacing="2.5" textAnchor="middle" fill="#6b6a8a" fontFamily="var(--font-mono), monospace">SINISTEROID</text>
 
           {/* neon screen edges — multi-layer glow */}
-          <line x1="1" y1="1" x2="1" y2={SCREEN_H - 1} stroke="#b8ff00" strokeWidth="1.5" opacity="0.8" style={{ filter: "url(#lf-glow)" }} />
-          <line x1="189" y1="1" x2="189" y2={SCREEN_H - 1} stroke="#ff2bd6" strokeWidth="1.5" opacity="0.7" style={{ filter: "url(#lf-glow)" }} />
-          <line x1="1" y1="0.8" x2="189" y2="0.8" stroke="#00e5ff" strokeWidth="1" opacity="0.6" style={{ filter: "url(#lf-glow)" }} />
-          <line x1="1" y1={SCREEN_H - 0.8} x2="189" y2={SCREEN_H - 0.8} stroke="#b8ff00" strokeWidth="0.8" opacity="0.5" style={{ filter: "url(#lf-glow)" }} />
-          <rect x="0.6" y="0.6" width="188.8" height={SCREEN_H - 1.2} rx="6" fill="none" stroke="#b8ff00" strokeWidth="0.7" opacity="0.4" style={{ filter: "url(#lf-glow)" }} />
+          <line x1="1" y1="1" x2="1" y2={SCREEN_H - 1} stroke="#ffc24a" strokeWidth="1.5" opacity="0.8" style={{ filter: "url(#lf-glow)" }} />
+          <line x1="189" y1="1" x2="189" y2={SCREEN_H - 1} stroke="#d8ff4d" strokeWidth="1.5" opacity="0.7" style={{ filter: "url(#lf-glow)" }} />
+          <line x1="1" y1="0.8" x2="189" y2="0.8" stroke="#ff5d7a" strokeWidth="1" opacity="0.6" style={{ filter: "url(#lf-glow)" }} />
+          <line x1="1" y1={SCREEN_H - 0.8} x2="189" y2={SCREEN_H - 0.8} stroke="#ffc24a" strokeWidth="0.8" opacity="0.5" style={{ filter: "url(#lf-glow)" }} />
+          <rect x="0.6" y="0.6" width="188.8" height={SCREEN_H - 1.2} rx="6" fill="none" stroke="#ffc24a" strokeWidth="0.7" opacity="0.4" style={{ filter: "url(#lf-glow)" }} />
         </g>
 
         {/* ===== chassis ===== */}
         {/* left wall */}
         <polygon points={P([A, C, [C[0], C[1] + TH_], [A[0], A[1] + TH_]])}
-          fill="url(#lg-sideL)" stroke="#1a2438" strokeWidth="0.8" />
+          fill="url(#lg-sideL)" stroke="#201936" strokeWidth="0.8" />
         {/* front wall */}
         <polygon points={P([C, Dp, [Dp[0], Dp[1] + TH_], [C[0], C[1] + TH_]])}
-          fill="url(#lg-sideF)" stroke="#1a2438" strokeWidth="0.8" />
+          fill="url(#lg-sideF)" stroke="#201936" strokeWidth="0.8" />
         {/* vents on the front wall */}
         {[28, 66, 104, 142].map(x => {
           const q = [iso(x, 140.6), iso(x + 9, 140.6)] as [number, number][];
           q.push([iso(x + 9, 140.6)[0], iso(x + 9, 140.6)[1] + 4.5]);
           q.push([iso(x, 140.6)[0], iso(x, 140.6)[1] + 4.5]);
-          return <polygon key={x} points={P(q)} fill="#04070d" />;
+          return <polygon key={x} points={P(q)} fill="#0a0b10" />;
         })}
         {/* right wall — closes the hollow right side of the casing */}
         <polygon points={P([B, Dp, [Dp[0], Dp[1] + TH_], [B[0], B[1] + TH_]])}
-          fill="url(#lg-sideR)" stroke="#1a2438" strokeWidth="0.8" />
+          fill="url(#lg-sideR)" stroke="#201936" strokeWidth="0.8" />
         {/* vents on the right wall */}
         {[22, 75, 105, 130].map(y => {
           const q = [iso(189.6, y), iso(189.6, y + 9)] as [number, number][];
           q.push([iso(189.6, y + 9)[0], iso(189.6, y + 9)[1] + 4.5]);
           q.push([iso(189.6, y)[0], iso(189.6, y)[1] + 4.5]);
-          return <polygon key={y} points={P(q)} fill="#04070d" />;
+          return <polygon key={y} points={P(q)} fill="#0a0b10" />;
         })}
         {/* ports on the right wall */}
         {[45, 61].map(y => {
           const p1 = iso(189.6, y), p2 = iso(189.6, y + 9);
           return (
             <polygon key={y} points={P([p1, p2, [p2[0], p2[1] + 5], [p1[0], p1[1] + 5]])}
-              fill="#04070c" stroke="#00e5ff" strokeWidth="0.4" opacity="0.7" />
+              fill="#0a0b10" stroke="#ff5d7a" strokeWidth="0.4" opacity="0.7" />
           );
         })}
         {/* back wall — closes the rear of the chassis under the hinge */}
         <polygon points={P([A, B, [B[0], B[1] + TH_], [A[0], A[1] + TH_]])}
-          fill="url(#lg-sideB)" stroke="#1a2438" strokeWidth="0.8" />
+          fill="url(#lg-sideB)" stroke="#201936" strokeWidth="0.8" />
         {/* ports on the left wall */}
         {[58, 74].map(y => {
           const p1 = iso(0.4, y), p2 = iso(0.4, y + 9);
           return (
             <polygon key={y} points={P([p1, p2, [p2[0], p2[1] + 5], [p1[0], p1[1] + 5]])}
-              fill="#04070c" stroke="#00e5ff" strokeWidth="0.4" opacity="0.7" />
+              fill="#0a0b10" stroke="#ff5d7a" strokeWidth="0.4" opacity="0.7" />
           );
         })}
         {/* glowing data cable */}
         <path
           d={`M${iso(0, 83)[0].toFixed(1)},${(iso(0, 83)[1] + 7).toFixed(1)} C ${(iso(0, 83)[0] - 26).toFixed(1)},${(iso(0, 83)[1] + 26).toFixed(1)} ${(iso(0, 110)[0] - 20).toFixed(1)},${(iso(0, 110)[1] + 50).toFixed(1)} ${(iso(0, 120)[0] - 6).toFixed(1)},${(iso(0, 120)[1] + 68).toFixed(1)}`}
-          fill="none" stroke="#00e5ff" strokeWidth="2" strokeLinecap="round" opacity="0.65"
+          fill="none" stroke="#ff5d7a" strokeWidth="2" strokeLinecap="round" opacity="0.65"
           style={{ filter: "url(#lf-glow)" }} />
-        <circle cx={iso(0, 83)[0]} cy={iso(0, 83)[1] + 7} r="1.3" fill="#00e5ff" opacity="0.9" />
+        <circle cx={iso(0, 83)[0]} cy={iso(0, 83)[1] + 7} r="1.3" fill="#ff5d7a" opacity="0.9" />
 
         {/* deck top */}
-        <polygon points={P([A, B, Dp, C])} fill="url(#lg-body)" stroke="#26355a" strokeWidth="1.2" strokeLinejoin="round" />
+        <polygon points={P([A, B, Dp, C])} fill="url(#lg-body)" stroke="#2e2652" strokeWidth="1.2" strokeLinejoin="round" />
         {/* screen light spill on the deck */}
         <g transform={MAT_DECK}><rect x="10" y="2" width="170" height="12" fill="url(#lg-spill)" /></g>
         {/* spill brightens while the dev server "runs" (B2) */}
         <g transform={MAT_DECK}>
-          <rect x="10" y="2" width="170" height="12" fill="rgba(184,255,0,0.3)"
+          <rect x="10" y="2" width="170" height="12" fill="rgba(255,194,74,0.3)"
             opacity="0" style={{ animation: `lp-spill ${CYCLES}` }} />
         </g>
         {/* neon edge strips — front acid / left magenta, with pulsing overlays */}
-        <line x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#b8ff00" strokeWidth="2" opacity="0.9" style={{ filter: "url(#lf-glow)" }} />
-        <line className="lp-st1" x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#ff2bd6" strokeWidth="1.5" style={{ filter: "url(#lf-glow)" }} />
-        <line x1={A[0]} y1={A[1]} x2={C[0]} y2={C[1]} stroke="#ff2bd6" strokeWidth="1.5" opacity="0.8" style={{ filter: "url(#lf-glow)" }} />
-        <line className="lp-st2" x1={A[0]} y1={A[1]} x2={C[0]} y2={C[1]} stroke="#00e5ff" strokeWidth="1.2" style={{ filter: "url(#lf-glow)" }} />
+        <line x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#ffc24a" strokeWidth="2" opacity="0.9" style={{ filter: "url(#lf-glow)" }} />
+        <line className="lp-st1" x1={C[0]} y1={C[1]} x2={Dp[0]} y2={Dp[1]} stroke="#d8ff4d" strokeWidth="1.5" style={{ filter: "url(#lf-glow)" }} />
+        <line x1={A[0]} y1={A[1]} x2={C[0]} y2={C[1]} stroke="#d8ff4d" strokeWidth="1.5" opacity="0.8" style={{ filter: "url(#lf-glow)" }} />
+        <line className="lp-st2" x1={A[0]} y1={A[1]} x2={C[0]} y2={C[1]} stroke="#ff5d7a" strokeWidth="1.2" style={{ filter: "url(#lf-glow)" }} />
         {/* bottom edge glow */}
-        <line x1={C[0]} y1={C[1] + TH_} x2={Dp[0]} y2={Dp[1] + TH_} stroke="#00e5ff" strokeWidth="1" opacity="0.5" style={{ filter: "url(#lf-glow)" }} />
+        <line x1={C[0]} y1={C[1] + TH_} x2={Dp[0]} y2={Dp[1] + TH_} stroke="#ff5d7a" strokeWidth="1" opacity="0.5" style={{ filter: "url(#lf-glow)" }} />
         {/* hinge */}
-        <polygon points={P([A, B, [B[0], B[1] + 5], [A[0], A[1] + 5]])} fill="#0a0f1e" stroke="#1e2d4a" strokeWidth="0.8" />
+        <polygon points={P([A, B, [B[0], B[1] + 5], [A[0], A[1] + 5]])} fill="#12121a" stroke="#261f42" strokeWidth="0.8" />
 
         {/* deck internals jolting on every backspace (B5) */}
         <g className="lp-shake" style={{ animation: `lp-shake ${CYCLES}` }}>
         {/* keybed well */}
         <g transform={MAT_DECK}>
-          <rect x="7" y="13" width="176" height="88" rx="5" fill="#060a16" stroke="#1c2a44" strokeWidth="1" />
-          <rect x="9" y="15" width="172" height="84" rx="4" fill="none" stroke="#b8ff00" strokeWidth="0.4" opacity="0.15" />
+          <rect x="7" y="13" width="176" height="88" rx="5" fill="#0b0c12" stroke="#231c3e" strokeWidth="1" />
+          <rect x="9" y="15" width="172" height="84" rx="4" fill="none" stroke="#ffc24a" strokeWidth="0.4" opacity="0.15" />
           {/* soft inner rim: light catch along the top, shade at the bottom for depth */}
           <rect x="8" y="13" width="174" height="1" fill="rgba(255,255,255,0.045)" />
           <rect x="8" y="99" width="174" height="1.4" fill="rgba(0,0,0,0.42)" />
@@ -477,11 +477,11 @@ export default function LaptopDeck() {
                     avoids that collision. */}
                 <g style={pressed ? { animation: `lp-k${keyId} ${CYCLES}` } : undefined}>
                   {/* key shadow for depth */}
-                  <rect x="1" y="2" width={k.w - 1} height="11" rx="2" fill="#060a14" opacity="0.6" />
+                  <rect x="1" y="2" width={k.w - 1} height="11" rx="2" fill="#0b0c12" opacity="0.6" />
                   {/* key base */}
-                  <rect x="1" y="1" width={k.w - 1} height="12" rx="2" fill="#0b1220" />
+                  <rect x="1" y="1" width={k.w - 1} height="12" rx="2" fill="#15151e" />
                   {/* key top (static fill; the strobe is the overlays below) */}
-                  <rect x="0" y="0" width={k.w - 1} height="12" rx="2" fill="#18243c" stroke="#33456b" strokeWidth="0.4" />
+                  <rect x="0" y="0" width={k.w - 1} height="12" rx="2" fill="#1e1736" stroke="#3a3566" strokeWidth="0.4" />
                   {/* keycap top facet highlight + soft bottom rim shade */}
                   <rect x="1.1" y="1.3" width={k.w - 3.2} height="1.6" rx="0.8" fill="rgba(255,255,255,0.07)" />
                   <rect x="1.1" y="10.1" width={k.w - 3.2} height="1.1" rx="0.55" fill="rgba(0,0,0,0.26)" />
@@ -489,7 +489,7 @@ export default function LaptopDeck() {
                   {k.nub && <circle cx={(k.w - 1) / 2} cy="10.7" r="0.75" fill="#8ba0c4" opacity="0.85" />}
                   {/* key label */}
                   {k.l && (
-                    <text x={(k.w - 1) / 2} y="8.6" fontSize="5.5" textAnchor="middle" fill="#93a7cc"
+                    <text x={(k.w - 1) / 2} y="8.6" fontSize="5.5" textAnchor="middle" fill="#9a96a0"
                       fontFamily="var(--font-mono), monospace" style={{ pointerEvents: "none", userSelect: "none" }}>{k.l}</text>
                   )}
                   {/* neon strobe overlays: opacity only, static filters (A1) */}
@@ -511,15 +511,15 @@ export default function LaptopDeck() {
 
         {/* trackpad + rave stickers */}
         <g transform={MAT_DECK}>
-          <rect x="55" y="108" width="80" height="15" rx="4" fill="#0a1120" stroke="#223252" strokeWidth="0.8" />
-          <rect x="58" y="110" width="74" height="11" rx="3" fill="#070d1a" />
-          <rect x="58" y="110" width="74" height="11" rx="3" fill="none" stroke="#b8ff00" strokeWidth="0.3" opacity="0.18" />
-          <text className="lp-sticker" x="25" y="121" fontSize="8" fontWeight="bold" fill="#ff2bd6"
-            style={{ filter: "drop-shadow(0 0 3px #ff2bd6)" }}
+          <rect x="55" y="108" width="80" height="15" rx="4" fill="#14141d" stroke="#2a2348" strokeWidth="0.8" />
+          <rect x="58" y="110" width="74" height="11" rx="3" fill="#12131c" />
+          <rect x="58" y="110" width="74" height="11" rx="3" fill="none" stroke="#ffc24a" strokeWidth="0.3" opacity="0.18" />
+          <text className="lp-sticker" x="25" y="121" fontSize="8" fontWeight="bold" fill="#d8ff4d"
+            style={{ filter: "drop-shadow(0 0 3px #d8ff4d)" }}
             fontFamily="var(--font-orbitron-var), var(--font-mono), monospace">ACID</text>
-          <rect x="146" y="112" width="30" height="10" rx="2" fill="#0b0f1c" stroke="#b8ff00" strokeWidth="0.5" opacity="0.85" />
-          <text className="lp-sticker" x="161" y="119.6" fontSize="6.5" fontWeight="bold" textAnchor="middle" fill="#b8ff00"
-            style={{ filter: "drop-shadow(0 0 3px #b8ff00)", animationDelay: "-1.4s" }}
+          <rect x="146" y="112" width="30" height="10" rx="2" fill="#14141d" stroke="#ffc24a" strokeWidth="0.5" opacity="0.85" />
+          <text className="lp-sticker" x="161" y="119.6" fontSize="6.5" fontWeight="bold" textAnchor="middle" fill="#ffc24a"
+            style={{ filter: "drop-shadow(0 0 3px #ffc24a)", animationDelay: "-1.4s" }}
             fontFamily="var(--font-mono), monospace">303</text>
         </g>
 
@@ -547,7 +547,7 @@ export default function LaptopDeck() {
 
         {/* long idle breathing dim over the whole scene (C3) */}
         <rect className="lp-dim" x="-30" y="-36" width="395" height="376"
-          fill="#020503" opacity="0" style={{ animation: "lp-dim 64s linear infinite" }} />
+          fill="#0a0b10" opacity="0" style={{ animation: "lp-dim 64s linear infinite" }} />
       </svg>
     </div>
   );

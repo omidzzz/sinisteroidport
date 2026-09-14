@@ -31,16 +31,16 @@ export default function LocaleRedirect({
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        color: "#7d7d74",
+        color: "#8d8a86",
         fontFamily: "monospace",
       }}
     >
       <p>
-        <a href={`/en${path}`} style={{ color: "#ff2b55" }}>
+        <a href={`/en${path}`} style={{ color: "#ff5d7a" }}>
           English
         </a>{" "}
         ·{" "}
-        <a href={`/fa${path}`} style={{ color: "#ff2b55" }}>
+        <a href={`/fa${path}`} style={{ color: "#ff5d7a" }}>
           فارسی
         </a>
       </p>

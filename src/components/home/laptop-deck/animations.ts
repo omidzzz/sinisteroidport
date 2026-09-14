@@ -185,7 +185,7 @@ kf.push("@keyframes lp-stickerpulse{0%,100%{opacity:.75}50%{opacity:1}}");
 export const STYLE = [
   "/* LaptopDeck — GPU-accelerated neon animations */",
   /* neon hues ride the site theme tokens (B4); magenta is deck-local */
-  ".lp-root{--lp-acid:var(--color-acid,#b8ff00);--lp-cyan:var(--color-accent,#00e5ff);--lp-mag:#ff2bd6;--lp-tick:1;transition:transform .25s cubic-bezier(.2,.8,.2,1)}",
+  ".lp-root{--lp-acid:var(--color-acid,#ffc24a);--lp-cyan:var(--color-accent,#ff5d7a);--lp-mag:#d8ff4d;--lp-tick:1;transition:transform .25s cubic-bezier(.2,.8,.2,1)}",
   ".lp-ch{opacity:0;transform-box:fill-box;transform-origin:50% 50%}",
   ".lp-eq{transform-box:fill-box;transform-origin:50% 100%;will-change:transform}",
   ".lp-kglow{opacity:0;pointer-events:none}",

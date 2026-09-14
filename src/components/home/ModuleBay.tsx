@@ -55,7 +55,7 @@ export default function ModuleBay({ locale }: { locale: Locale }) {
         <Rail label={bay} icon={<OrbitIcon />} />
       </section>
 
-      <Seam cyan flip tag="SIG.04 ▸ MODULES" />
+      <Seam cyan flip tag="FAULT.04 ▸ CYCLE" />
     </>
   );
 }

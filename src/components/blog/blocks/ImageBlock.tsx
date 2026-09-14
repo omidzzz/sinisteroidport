@@ -14,7 +14,7 @@ export default function ImageBlock({
 
   return (
     <figure className="group my-10">
-      <div className="border border-line bg-panel p-1.5 transition-all duration-300 group-hover:border-accent/40 group-hover:shadow-[0_0_30px_rgba(60,226,255,0.07)]">
+      <div className="border border-line bg-panel p-1.5 transition-all duration-300 group-hover:border-accent/40 group-hover:shadow-[0_0_30px_rgba(255,93,122,0.07)]">
         {/* eslint-disable @next/next/no-img-element */}
         <img
           src={src}

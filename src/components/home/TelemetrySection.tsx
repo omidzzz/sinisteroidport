@@ -68,7 +68,7 @@ export default function TelemetrySection({
         </div>
       </section>
 
-      <Seam flip tag="SIG.02 ▸ TELEMETRY" />
+      <Seam flip tag="FAULT.02 ▸ DRILL" />
     </>
   );
 }

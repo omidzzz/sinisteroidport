@@ -1,0 +1,186 @@
+/* ============================================================
+   STRATUM · MANTLE — total layout re-skin (2026-09)
+   ------------------------------------------------------------
+   The page is a cross-section: every act is a full-bleed STRATUM
+   band with an interlocking mineral fault edge, and each stratum
+   re-maps the inherited --color-acid/--color-accent tokens for
+   its whole subtree — the same components visibly re-tint as you
+   descend (amber shelf → rose shelf → violet shelf). The spine
+   rail becomes a core-sample column.
+
+   Performance rules: pure CSS, no JS. Fault edges are static
+   clip-path + gradients (zero animation). Shelf switches are
+   custom-property inheritance (no layout, no repaint loops).
+   RTL-safe via logical properties; reduced-motion users see the
+   same static geology. Imported after motion-reduce, before the
+   finesse overrides.
+   ============================================================ */
+
+/* ---- 1. Stratum band ---- */
+.stratum {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(2rem, 5vw, 4.5rem);
+  background:
+    radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--color-acid) 6%, transparent), transparent 55%);
+}
+
+/* interlocking fault edge — thin mineral band with a jagged underside.
+   The page bg shows through the notches where the next stratum will sit. */
+.stratum::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: clamp(0.8rem, 1.8vw, 1.2rem);
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-acid) 34%, transparent),
+    color-mix(in srgb, var(--color-acid) 6%, transparent)
+  );
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 8px),
+    92% 100%,
+    83% calc(100% - 6px),
+    74% 100%,
+    65% calc(100% - 7px),
+    56% 100%,
+    47% calc(100% - 6px),
+    38% 100%,
+    29% calc(100% - 7px),
+    20% 100%,
+    11% calc(100% - 6px),
+    0 calc(100% - 8px)
+  );
+}
+
+/* bottom hairline — the seam between two strata ends in a thin mineral trace */
+.stratum::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(var(--rgb-acid), 0.5), rgba(var(--rgb-acid), 0.05) 70%);
+}
+
+[dir="rtl"] .stratum::after {
+  background: linear-gradient(270deg, rgba(var(--rgb-acid), 0.5), rgba(var(--rgb-acid), 0.05) 70%);
+}
+
+/* the stratum's content should always paint over the fault strip */
+.stratum > :not([aria-hidden]) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- 2. Mineral shelves — the palette-morph centerpiece ----
+   Each shelf re-maps the two operationally-hot tokens (--color-acid
+   and --color-acid's shadow triplet + --color-accent) for every
+   descendant. Unexposed UI (nav dock, spine rail, overlays) stays
+   on the base MANTLE amber/rose. */
+.stratum[data-mineral="amber"] {
+  --color-acid: #ffc24a;
+  --rgb-acid: 255, 194, 74;
+  --color-accent: #ff9a5c;
+  --rgb-accent: 255, 154, 92;
+}
+.stratum[data-mineral="rose"] {
+  --color-acid: #ff7a90;
+  --rgb-acid: 255, 122, 144;
+  --color-accent: #ff5d7a;
+  --rgb-accent: 255, 93, 122;
+}
+.stratum[data-mineral="violet"] {
+  --color-acid: #a78bfa;
+  --rgb-acid: 167, 139, 250;
+  --color-accent: #8a6bff;
+  --rgb-accent: 138, 107, 255;
+}
+
+/* ---- 3. SALT FLAT mirrors for the shelves ---- */
+[data-theme="light"] .stratum[data-mineral="amber"] {
+  --color-acid: #b45400;
+  --rgb-acid: 180, 84, 0;
+  --color-accent: #a3482a;
+  --rgb-accent: 163, 72, 42;
+}
+[data-theme="light"] .stratum[data-mineral="rose"] {
+  --color-acid: #b03d52;
+  --rgb-acid: 176, 61, 82;
+  --color-accent: #a63e50;
+  --rgb-accent: 166, 62, 80;
+}
+[data-theme="light"] .stratum[data-mineral="violet"] {
+  --color-acid: #6b4fd0;
+  --rgb-acid: 107, 79, 208;
+  --color-accent: #7b5cd6;
+  --rgb-accent: 123, 92, 214;
+}
+
+/* ---- 4. Core-sample rail (spine re-skin) ----
+   Ruled depth ticks down the rail; the beam keeps its amber→rose→
+   violet mineral gradient. Later import wins over spine-rail.css. */
+@media (min-width: 768px) {
+  .spine-rail {
+    background:
+      repeating-linear-gradient(
+        180deg,
+        rgba(var(--rgb-acid), 0.07) 0 1px,
+        transparent 1px 44px
+      ),
+      linear-gradient(
+        to right,
+        rgba(10, 11, 16, 0.72),
+        rgba(10, 11, 16, 0.14) 70%,
+        transparent
+      );
+    border-inline-end: 1px solid rgba(var(--rgb-acid), 0.14);
+  }
+  [dir="rtl"] .spine-rail {
+    background:
+      repeating-linear-gradient(
+        180deg,
+        rgba(var(--rgb-acid), 0.07) 0 1px,
+        transparent 1px 44px
+      ),
+      linear-gradient(
+        to left,
+        rgba(10, 11, 16, 0.72),
+        rgba(10, 11, 16, 0.14) 70%,
+        transparent
+      );
+  }
+}
+[data-theme="light"] .spine-rail {
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(var(--rgb-acid), 0.06) 0 1px,
+    transparent 1px 44px
+  );
+  border-inline-end: 1px solid rgba(var(--rgb-acid), 0.2);
+}
+
+/* ---- 5. Mantle floor (footer) ----
+   The giant closer reads as a cut stratigraphic vein. */
+footer .foot-giant {
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-acid) 38%, transparent);
+}
+
+/* ---- 6. reduced-motion / print parity ----
+   Fault edges are already static; just unify the print decay. */
+@media print {
+  .stratum::before,
+  .stratum::after {
+    display: none !important;
+  }
+  .stratum {
+    padding-block: 1.5rem;
+    background: none !important;
+  }
+}
