@@ -8,7 +8,7 @@
  */
 export const STYLE = [
   "/* Plant — neon potted flora */",
-  ".plt-root{--plt-acid:var(--color-acid,#ffc24a);--plt-cyan:var(--color-accent,#ff5d7a);--plt-mag:#d8ff4d}",
+  ".plt-root{--plt-acid:var(--color-acid);--plt-cyan:var(--color-accent);--plt-mag:var(--warn)}",
   ".plt-leaf{animation:plt-sway 3.4s ease-in-out infinite;animation-delay:var(--plt-dl,0s);transform-box:fill-box;transform-origin:0% 50%}",
   ".plt-breath{animation:plt-breath 4.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}",
   ".plt-spore{animation:plt-spore 4.8s ease-in-out infinite;animation-delay:var(--plt-dl,0s);transform-box:fill-box;transform-origin:center}",

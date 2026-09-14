@@ -14,8 +14,8 @@
  */
 export const STYLE = [
   "/* Frog — nervous Pepe (psychedelic acid) */",
-  ".frg-root{--frg-acid:var(--color-acid,#ffc24a);--frg-cyan:var(--color-accent,#ff5d7a);--frg-mag:#d8ff4d;--frg-ink:#9edb5a}",
-  "[data-theme=\"light\"] .frg-root{--frg-ink:#3c6e1f}",
+  ".frg-root{--frg-acid:var(--color-acid);--frg-cyan:var(--color-accent);--frg-mag:var(--warn);--frg-ink:var(--warn)}",
+  "[data-theme=\"light\"] .frg-root{--frg-ink:color-mix(in srgb, var(--warn) 55%, var(--color-ink))}",
   ".frg-ink path{fill:var(--frg-ink)}",
   ".frg-ink path.frg-drop{fill:var(--frg-cyan);filter:url(#frg-glowF)}",
   ".frg-inkA path{fill:var(--frg-acid)}",
@@ -25,7 +25,7 @@ export const STYLE = [
   ".frg-inkB{transform:translate(-.5px,.35px);animation:frg-chromaB 6.5s ease-in-out infinite}",
   /* hypno-swirl pupils: dark socket + 3 spirals per eye, strokes cycling
    * acid → cyan → magenta (frg-acid), each layer spinning at its own speed */
-  ".frg-socket{fill:#12141d;stroke:var(--frg-acid);stroke-width:.14;opacity:.9}",
+  ".frg-socket{fill:var(--color-panel);stroke:var(--frg-acid);stroke-width:.14;opacity:.9}",
   ".frg-swirl{transform-box:fill-box;transform-origin:center;fill:none}",
   ".frg-swirl0{stroke:var(--frg-acid);animation:frg-spin 3.2s linear infinite,frg-acid 5s linear infinite}",
   ".frg-swirl1{stroke:var(--frg-cyan);animation:frg-spin 4.4s linear infinite reverse,frg-acid 7s linear infinite reverse}",

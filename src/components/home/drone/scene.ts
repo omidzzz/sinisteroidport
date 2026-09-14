@@ -6,10 +6,17 @@
 export const r1 = (n: number) => Math.round(n * 10) / 10;
 
 /* rainbow palette (6-way rotation) used for portholes, rim ring, stars */
-export const HUES = ["#ffe600", "#d8ff4d", "#ff5d7a", "#8cff2b", "#ffc24a", "#8a6bff"] as const;
+export const HUES = [
+  "var(--color-acid)",
+  "var(--warn)",
+  "var(--color-accent)",
+  "color-mix(in srgb, var(--color-accent) 50%, var(--color-accent-2))",
+  "var(--color-accent-2)",
+  "color-mix(in srgb, var(--color-acid) 65%, var(--warn))",
+] as const;
 export const hue = (i: number) => HUES[((i % HUES.length) + HUES.length) % HUES.length];
 
-export const INK = "#1a1330"; /* near-black cartoon outline, stays crisp under hue-rotate */
+export const INK = "color-mix(in srgb, var(--color-ink) 10%, var(--color-bg))"; /* near-black cartoon outline, stays crisp under hue-rotate */
 
 /* ---------- saucer body ---------- */
 export const RIM = { cy: 58, rx: 98, ry: 27 };

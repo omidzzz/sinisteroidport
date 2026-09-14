@@ -267,7 +267,7 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
               opacity="0.2"
             />
             {/* dome glare */}
-            <path d="M 32,34 Q 48,22 62,25 Q 44,31 36,48 Z" fill="#ffffff" opacity="0.22" />
+            <path d="M 32,34 Q 48,22 62,25 Q 44,31 36,48 Z" style={{ fill: "var(--color-ink)" }} opacity="0.22" />
             {/* cheek hatching — gaunt detail */}
             <path d="M 33,72 Q 38,78 44,81" fill="none" style={{ stroke: "var(--fab-edge)" }} strokeWidth="1.4" opacity="0.3" />
             <path d="M 95,72 Q 90,78 84,81" fill="none" style={{ stroke: "var(--fab-edge)" }} strokeWidth="1.4" opacity="0.3" />

@@ -38,20 +38,20 @@ export const GRID_X: [number, number][][] = [
 
 /* floating rave particles */
 export const PARTICLES: { x: number; y: number; r: number; c: string; d: string }[] = [
-  { x: 62, y: 100, r: 1.8, c: "#ffc24a", d: "0s" },
-  { x: 252, y: 64, r: 2.2, c: "#d8ff4d", d: ".6s" },
-  { x: 336, y: 128, r: 1.5, c: "#ff5d7a", d: "1.2s" },
-  { x: 44, y: 176, r: 2.0, c: "#ff5d7a", d: ".3s" },
-  { x: 96, y: 236, r: 1.6, c: "#ffc24a", d: "1.8s" },
-  { x: 120, y: 52, r: 1.4, c: "#d8ff4d", d: "2.1s" },
-  { x: 352, y: 214, r: 1.8, c: "#ffc24a", d: ".9s" },
-  { x: 22, y: 118, r: 1.5, c: "#ffc24a", d: "1.5s" },
-  { x: 300, y: 40, r: 1.6, c: "#ff5d7a", d: "2.6s" },
+  { x: 62, y: 100, r: 1.8, c: "var(--color-acid)", d: "0s" },
+  { x: 252, y: 64, r: 2.2, c: "var(--warn)", d: ".6s" },
+  { x: 336, y: 128, r: 1.5, c: "var(--color-accent)", d: "1.2s" },
+  { x: 44, y: 176, r: 2.0, c: "var(--color-accent)", d: ".3s" },
+  { x: 96, y: 236, r: 1.6, c: "var(--color-acid)", d: "1.8s" },
+  { x: 120, y: 52, r: 1.4, c: "var(--warn)", d: "2.1s" },
+  { x: 352, y: 214, r: 1.8, c: "var(--color-acid)", d: ".9s" },
+  { x: 22, y: 118, r: 1.5, c: "var(--color-acid)", d: "1.5s" },
+  { x: 300, y: 40, r: 1.6, c: "var(--color-accent)", d: "2.6s" },
 ];
 export const DIAMONDS: { x: number; y: number; c: string; d: string }[] = [
-  { x: 90, y: 66, c: "#d8ff4d", d: ".4s" },
-  { x: 270, y: 96, c: "#ffc24a", d: "1.1s" },
-  { x: 46, y: 232, c: "#ff5d7a", d: "1.8s" },
+  { x: 90, y: 66, c: "var(--warn)", d: ".4s" },
+  { x: 270, y: 96, c: "var(--color-acid)", d: "1.1s" },
+  { x: 46, y: 232, c: "var(--color-accent)", d: "1.8s" },
 ];
 
 /* screen chrome — neon hues via deck-local CSS vars set on .lp-root

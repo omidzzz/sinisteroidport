@@ -10,7 +10,7 @@
      • logical properties + [dir="rtl"] mirrors
      • token-driven (light/dark adapt for free)
    Contents:
-     §1 Seam progress hairline — view() scrubbed act meter
+     §1 (retired) - seam progress removed by design decision
      §2 Module-card energizer  — hover-only conic charge ring
      §3 Ghost-CTA sheen        — hover sweep (.btn-ghost)
      §4 btn-neon shine lift    — left → translate (compositor)
@@ -19,45 +19,8 @@
      §7 Print decay            — new surfaces print as ink
    ============================================================ */
 
-/* §1 VEIN CHARGE — the ore vein's molten fill scrubs through as the
-    band passes the viewport. The hot tip is baked into the gradient's
-    leading edge, so the scaleX reveal reads as a traveling charge.
-    `entry 0% exit 0%` is the natural range for a fixed-height band.
-    Browsers without view() simply skip the rule (static vein). */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .seam::after {
-      content: "";
-      position: absolute;
-      inset-inline: 12% 12%;
-      top: 50%;
-      height: 2px;
-      translate: 0 -50%;
-      border-radius: 9999px;
-      background: linear-gradient(90deg,
-        rgba(var(--rgb-acid), 0.05),
-        var(--color-acid) 78%,
-        #fff 98%);
-      box-shadow: 0 0 12px rgba(var(--rgb-acid), 0.55);
-      transform-origin: left center;
-      animation: eh-seam-progress linear both;
-      animation-timeline: view();
-      animation-range: entry 0% exit 0%;
-    }
-    [dir="rtl"] .seam::after {
-      transform-origin: right center;
-      background: linear-gradient(270deg,
-        rgba(var(--rgb-acid), 0.05),
-        var(--color-acid) 78%,
-        #fff 98%);
-    }
-    @keyframes eh-seam-progress {
-      from { transform: scaleX(0.04); opacity: 0.25; }
-      30% { opacity: 1; }
-      to { transform: scaleX(1); opacity: 1; }
-    }
-  }
-}
+/* §1 retired: the per-section vein-charge progress bars were removed
+   by request — seams are now purely static mineral geology. */
 
 /* §2 MODULE-CARD ENERGIZER — the deck's currently-empty .mod-halo
    span becomes a conic "charge ring" that only exists on hover:

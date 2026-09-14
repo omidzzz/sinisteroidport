@@ -97,20 +97,20 @@ export default function Plant() {
       >
         <defs>
           <radialGradient id="plt-acidGlow">
-            <stop offset="0%" stopColor="rgba(255,194,74,0.32)" />
-            <stop offset="100%" stopColor="rgba(255,194,74,0)" />
+            <stop offset="0%" style={{ stopColor: "rgba(var(--rgb-acid),0.32)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(var(--rgb-acid),0)" }} />
           </radialGradient>
           <radialGradient id="plt-magGlow">
-            <stop offset="0%" stopColor="rgba(216,255,77,0.3)" />
-            <stop offset="100%" stopColor="rgba(216,255,77,0)" />
+            <stop offset="0%" style={{ stopColor: "rgba(var(--rgb-warn),0.3)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(var(--rgb-warn),0)" }} />
           </radialGradient>
           <radialGradient id="plt-cyanGlow">
-            <stop offset="0%" stopColor="rgba(255,93,122,0.28)" />
-            <stop offset="100%" stopColor="rgba(255,93,122,0)" />
+            <stop offset="0%" style={{ stopColor: "rgba(var(--rgb-accent),0.28)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(var(--rgb-accent),0)" }} />
           </radialGradient>
           <linearGradient id="plt-pot" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#191430" />
-            <stop offset="100%" stopColor="#13151e" />
+            <stop offset="0%" style={{ stopColor: "color-mix(in srgb, var(--color-accent-2) 16%, var(--color-bg))" }} />
+            <stop offset="100%" style={{ stopColor: "var(--color-panel)" }} />
           </linearGradient>
           <filter id="plt-glow" x="-70%" y="-70%" width="240%" height="240%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1" />
@@ -127,33 +127,33 @@ export default function Plant() {
         <ellipse className="plt-breath" cx={PLINTH.cx} cy={PLINTH.cy + 20} rx={PLINTH.rx * 1.05} ry={PLINTH.ry * 1.12} fill="url(#plt-cyanGlow)" style={{ animationDelay: "-2s" }} />
 
         {/* plinth slab */}
-        <ellipse cx={PLINTH.cx} cy={PLINTH.cy + 4} rx={PLINTH.rx} ry={PLINTH.ry} fill="#0b0c12" stroke="#211a3a" strokeWidth="0.8" />
-        <ellipse cx={PLINTH.cx} cy={PLINTH.cy + 4} rx={PLINTH.rx} ry={PLINTH.ry} fill="none" stroke={C.acid} strokeWidth="0.5" opacity="0.2" />
-        <circle className="plt-pulse" cx={PLINTH.cx + 26} cy={PLINTH.cy + 26} r="4" fill={C.acid} style={{ filter: "url(#plt-glow)" }} />
-        <circle className="plt-pulse" cx={PLINTH.cx - 30} cy={PLINTH.cy + 30} r="3" fill={C.cyan} style={{ filter: "url(#plt-glow)", animationDelay: "-1.1s" }} />
+        <ellipse cx={PLINTH.cx} cy={PLINTH.cy + 4} rx={PLINTH.rx} ry={PLINTH.ry} style={{ fill: "color-mix(in srgb, var(--color-bg) 60%, var(--color-panel))", stroke: "color-mix(in srgb, var(--color-accent-2) 25%, var(--color-bg))" }}  strokeWidth="0.8" />
+        <ellipse cx={PLINTH.cx} cy={PLINTH.cy + 4} rx={PLINTH.rx} ry={PLINTH.ry} fill="none" style={{ stroke: C.acid }} strokeWidth="0.5" opacity="0.2" />
+        <circle className="plt-pulse" cx={PLINTH.cx + 26} cy={PLINTH.cy + 26} r="4"  style={{ filter: "url(#plt-glow)", fill: C.acid }} />
+        <circle className="plt-pulse" cx={PLINTH.cx - 30} cy={PLINTH.cy + 30} r="3"  style={{ filter: "url(#plt-glow)", animationDelay: "-1.1s", fill: C.cyan }} />
 
         {/* pot back faces */}
-        {BACK.map((s, i) => <polygon key={`b${i}`} points={P(s.q)} fill="#100f16" stroke="#211a3a" strokeWidth="0.6" />)}
+        {BACK.map((s, i) => <polygon key={`b${i}`} points={P(s.q)} style={{ fill: "color-mix(in srgb, var(--color-bg) 55%, var(--color-panel))", stroke: "color-mix(in srgb, var(--color-accent-2) 25%, var(--color-bg))" }}  strokeWidth="0.6" />)}
         {/* pot body */}
-        {POT_FRONT.map((s, i) => <polygon key={`f${i}`} points={P(s.q)} fill="url(#plt-pot)" stroke="#2a2348" strokeWidth="0.8" />)}
+        {POT_FRONT.map((s, i) => <polygon key={`f${i}`} points={P(s.q)} fill="url(#plt-pot)" style={{ stroke: "color-mix(in srgb, var(--color-accent-2) 39%, var(--color-bg))" }} strokeWidth="0.8" />)}
         {/* rivets down each front face's leading edge */}
-        {RIVETS.map((p, i) => <circle key={`rv${i}`} cx={p[0]} cy={p[1]} r="0.8" fill="#322a4e" opacity="0.85" />)}
+        {RIVETS.map((p, i) => <circle key={`rv${i}`} cx={p[0]} cy={p[1]} r="0.8" style={{ fill: "color-mix(in srgb, var(--color-accent-2) 42%, var(--color-bg))" }} opacity="0.85" />)}
         {/* neon bands (acid top, thin cyan lower) */}
         {POT_FRONT.map((s) => (
-          <polygon key={`bandA${s.face}`} points={P(band(19, 25)(s.face))} fill="none" stroke={C.acid} strokeWidth="0.7" style={{ filter: "url(#plt-glow)" }} />
+          <polygon key={`bandA${s.face}`} points={P(band(19, 25)(s.face))} fill="none"  strokeWidth="0.7" style={{ filter: "url(#plt-glow)", stroke: C.acid }} />
         ))}
         {POT_FRONT.map((s) => (
-          <polygon key={`bandC${s.face}`} points={P(band(6, 8)(s.face))} fill="none" stroke={C.cyan} strokeWidth="0.5" opacity="0.5" />
+          <polygon key={`bandC${s.face}`} points={P(band(6, 8)(s.face))} fill="none" style={{ stroke: C.cyan }} strokeWidth="0.5" opacity="0.5" />
         ))}
         {/* status-LED strip, chase-lit */}
         {LED_STRIP.map((l, i) => (
           <circle key={`led${i}`} className="plt-led" cx={l.x} cy={l.y} r="1" fill={C[l.c]} style={{ ["--plt-dl" as string]: l.delay, filter: "url(#plt-glow)" }} />
         ))}
         {/* pot top rim */}
-        <polygon points={P(POT_TOP)} fill="none" stroke={C.cyan} strokeWidth="0.7" opacity="0.35" />
+        <polygon points={P(POT_TOP)} fill="none" style={{ stroke: C.cyan }} strokeWidth="0.7" opacity="0.35" />
         {/* soil + specks */}
-        <ellipse cx={SOIL.cx} cy={SOIL.cy} rx={SOIL.rx} ry={SOIL.ry} fill="#14141d" />
-        {SPECK.map((s, i) => <circle key={`sp${i}`} cx={SOIL.cx + s.x} cy={SOIL.cy + s.y} r={s.r} fill="#1a1530" />)}
+        <ellipse cx={SOIL.cx} cy={SOIL.cy} rx={SOIL.rx} ry={SOIL.ry} style={{ fill: "color-mix(in srgb, var(--color-panel) 88%, var(--color-accent-3))" }} />
+        {SPECK.map((s, i) => <circle key={`sp${i}`} cx={SOIL.cx + s.x} cy={SOIL.cy + s.y} r={s.r} style={{ fill: "color-mix(in srgb, var(--color-accent-2) 18%, var(--color-bg))" }} />)}
         {/* denser glowing root network in the soil */}
         {ROOTS.map((r, i) => (
           <path key={`rt${i}`} d={r.d} fill="none" stroke={C[r.c]} strokeWidth={r.w} opacity={r.o} style={{ filter: "url(#plt-glow)" }} />
@@ -169,10 +169,10 @@ export default function Plant() {
           <ellipse className="plt-breath" cx={0} cy={-66} rx={48} ry={84} fill="url(#plt-magGlow)" style={{ animationDelay: "-3s" }} />
 
           {/* double-helix tendril with cross-rungs + traveling data beads */}
-          <path d={HELIX_A} fill="none" stroke={C.cyan} strokeWidth="1" opacity="0.7" style={{ filter: "url(#plt-glow)" }} />
-          <path d={HELIX_B} fill="none" stroke={C.acid} strokeWidth="1" opacity="0.7" style={{ filter: "url(#plt-glow)" }} />
+          <path d={HELIX_A} fill="none"  strokeWidth="1" opacity="0.7" style={{ filter: "url(#plt-glow)", stroke: C.cyan }} />
+          <path d={HELIX_B} fill="none"  strokeWidth="1" opacity="0.7" style={{ filter: "url(#plt-glow)", stroke: C.acid }} />
           {HELIX_RUNGS.map((r, i) => (
-            <line key={`hr${i}`} x1={r.x1} y1={r.y1} x2={r.x2} y2={r.y2} stroke={C.mag} strokeWidth="0.35" opacity="0.35" />
+            <line key={`hr${i}`} x1={r.x1} y1={r.y1} x2={r.x2} y2={r.y2} style={{ stroke: C.mag }} strokeWidth="0.35" opacity="0.35" />
           ))}
           {[0, 1].map((k) => (
             <circle key={`hb${k}`} r="1.1" fill={k === 0 ? C.acid : C.cyan} style={{ filter: "url(#plt-glow)" }}>
@@ -181,17 +181,17 @@ export default function Plant() {
           ))}
 
           {/* main stalk */}
-          <path d={STEM_PATH} fill="none" stroke="#241d3f" strokeWidth="3.4" />
-          <path d={STEM_PATH} fill="none" stroke={C.acid} strokeWidth="1.1" opacity="0.85" style={{ filter: "url(#plt-glow)" }} />
+          <path d={STEM_PATH} fill="none" style={{ stroke: "color-mix(in srgb, var(--color-accent-2) 31%, var(--color-bg))" }} strokeWidth="3.4" />
+          <path d={STEM_PATH} fill="none"  strokeWidth="1.1" opacity="0.85" style={{ filter: "url(#plt-glow)", stroke: C.acid }} />
 
           {/* leaves (nested animated group avoids transform-attribute collision) */}
           {LEAVES.map((l, i) => (
             <g key={`l${i}`} transform={`translate(${l.bx} ${l.by}) rotate(${l.rot})`}>
               <g className="plt-leaf" style={{ ["--plt-dl" as string]: `${l.dl}s` }}>
                 <ellipse cx={l.w * 0.42} cy={0} rx={l.w * 0.5} ry={l.h * 0.5} fill={C[l.c]} opacity="0.8" style={{ filter: "url(#plt-glow)" }} />
-                <line x1={l.w * 0.05} y1={-l.h * 0.35} x2={l.w * 0.9} y2={l.h * 0.4} stroke="#0e1a28" strokeWidth="0.7" />
-                <line x1={l.w * 0.1} y1={0} x2={l.w * 0.95} y2={0} stroke={l.c === "acid" ? "#dfff55" : l.c === "cyan" ? "#7fe8ff" : "#ffb03f"} strokeWidth="0.8" opacity="0.9" />
-                <line x1={l.w * 0.2} y1={-l.h * 0.1} x2={l.w * 0.7} y2={l.h * 0.14} stroke={l.c === "acid" ? "#dfff55" : l.c === "cyan" ? "#7fe8ff" : "#ffb03f"} strokeWidth="0.4" opacity="0.5" />
+                <line x1={l.w * 0.05} y1={-l.h * 0.35} x2={l.w * 0.9} y2={l.h * 0.4} style={{ stroke: "color-mix(in srgb, var(--color-accent-2) 18%, var(--color-bg))" }} strokeWidth="0.7" />
+                <line x1={l.w * 0.1} y1={0} x2={l.w * 0.95} y2={0} style={{ stroke: l.c === "acid" ? "var(--warn)" : l.c === "cyan" ? "color-mix(in srgb, var(--color-accent-2) 55%, var(--color-ink))" : "var(--color-acid)" }} strokeWidth="0.8" opacity="0.9" />
+                <line x1={l.w * 0.2} y1={-l.h * 0.1} x2={l.w * 0.7} y2={l.h * 0.14} style={{ stroke: l.c === "acid" ? "var(--warn)" : l.c === "cyan" ? "color-mix(in srgb, var(--color-accent-2) 55%, var(--color-ink))" : "var(--color-acid)" }} strokeWidth="0.4" opacity="0.5" />
               </g>
             </g>
           ))}
@@ -206,7 +206,7 @@ export default function Plant() {
                     <ellipse cx={0} cy={-b.r * 0.5} rx={b.r * 0.32} ry={b.r * 0.55} fill={C[b.c]} opacity="0.85" style={{ filter: "url(#plt-glow)" }} />
                   </g>
                 ))}
-                <circle r={b.r * 0.22} fill={C.mag} style={{ filter: "url(#plt-glow)" }} />
+                <circle r={b.r * 0.22}  style={{ filter: "url(#plt-glow)", fill: C.mag }} />
               </g>
             </g>
           ))}
@@ -226,12 +226,12 @@ export default function Plant() {
 
           {/* ruler ticks running beside the scan line's track */}
           {TICKS.map((t, i) => (
-            <line key={`tk${i}`} className="plt-tick" x1={SCAN.x1 - 14} y1={t.y} x2={SCAN.x1 - 14 + (t.major ? 6 : 3)} y2={t.y} stroke={C.cyan} strokeWidth={t.major ? 0.6 : 0.4} opacity={t.major ? 0.5 : 0.3} />
+            <line key={`tk${i}`} className="plt-tick" x1={SCAN.x1 - 14} y1={t.y} x2={SCAN.x1 - 14 + (t.major ? 6 : 3)} y2={t.y} style={{ stroke: C.cyan }} strokeWidth={t.major ? 0.6 : 0.4} opacity={t.major ? 0.5 : 0.3} />
           ))}
 
           {/* vertical scan line sweeping the specimen */}
           <g className="plt-scanline" style={{ ["--plt-scan-dist" as string]: SCAN_DIST }}>
-            <line x1={SCAN.x1} y1={SCAN.y0} x2={SCAN.x2} y2={SCAN.y0} stroke={C.cyan} strokeWidth="0.7" style={{ filter: "url(#plt-glow)" }} />
+            <line x1={SCAN.x1} y1={SCAN.y0} x2={SCAN.x2} y2={SCAN.y0}  strokeWidth="0.7" style={{ filter: "url(#plt-glow)", stroke: C.cyan }} />
           </g>
 
           {/* bloom at the top */}
@@ -240,18 +240,18 @@ export default function Plant() {
             {[-60, -20, 20, 60].map((a, i) => (
               <g key={`p${i}`} transform={`rotate(${a})`}>
                 <g className="plt-bloom">
-                  <ellipse cx={0} cy={-BLOOM.r * 0.55} rx={BLOOM.r * 0.34} ry={BLOOM.r * 0.62} fill={C.mag} opacity="0.88" style={{ filter: "url(#plt-glow)" }} />
+                  <ellipse cx={0} cy={-BLOOM.r * 0.55} rx={BLOOM.r * 0.34} ry={BLOOM.r * 0.62}  opacity="0.88" style={{ filter: "url(#plt-glow)", fill: C.mag }} />
                 </g>
               </g>
             ))}
-            <circle className="plt-pulse" cx={0} cy={0} r={BLOOM.r * 0.28} fill={C.acid} style={{ filter: "url(#plt-glow)" }} />
+            <circle className="plt-pulse" cx={0} cy={0} r={BLOOM.r * 0.28}  style={{ filter: "url(#plt-glow)", fill: C.acid }} />
           </g>
         </g>
 
         {/* corner reticle brackets framing the specimen */}
         {RETICLE.map((r, i) => (
           <g key={`ret${i}`} className="plt-reticle" transform={`translate(${r.x} ${r.y}) scale(${r.sx} ${r.sy})`} style={{ animationDelay: `${i * 0.2}s` }}>
-            <path d="M 0,12 L 0,0 L 12,0" fill="none" stroke={C.cyan} strokeWidth="1" style={{ filter: "url(#plt-glow)" }} />
+            <path d="M 0,12 L 0,0 L 12,0" fill="none"  strokeWidth="1" style={{ filter: "url(#plt-glow)", stroke: C.cyan }} />
           </g>
         ))}
 
@@ -260,24 +260,24 @@ export default function Plant() {
           <g key={`co${i}`} className="plt-callout" style={{ animationDelay: `${i * 0.6}s` }}>
             <circle cx={co.mx} cy={co.my} r="1.3" fill={C[co.c]} style={{ filter: "url(#plt-glow)" }} />
             <line x1={co.mx} y1={co.my} x2={co.lx} y2={co.ly} stroke={C[co.c]} strokeWidth="0.4" opacity="0.45" />
-            <text x={co.lx + (co.anchor === "end" ? -2 : 2)} y={co.ly + 1.2} fontSize="4" textAnchor={co.anchor} fill="#8d8a86" fontFamily="var(--font-mono), monospace">{co.label}</text>
+            <text x={co.lx + (co.anchor === "end" ? -2 : 2)} y={co.ly + 1.2} fontSize="4" textAnchor={co.anchor} style={{ fill: "var(--color-muted)" }} fontFamily="var(--font-mono), monospace">{co.label}</text>
           </g>
         ))}
 
         {/* micro-scanner probe orbiting the specimen */}
         <g>
-          <path d="M 0,-3 L 2.6,0 L 0,3 L -2.6,0 Z" fill="#14141d" stroke={C.cyan} strokeWidth="0.6" style={{ filter: "url(#plt-glow)" }} />
-          <circle className="plt-plaque" r="0.8" fill={C.acid} style={{ filter: "url(#plt-glow)" }} />
+          <path d="M 0,-3 L 2.6,0 L 0,3 L -2.6,0 Z"   strokeWidth="0.6" style={{ filter: "url(#plt-glow)", stroke: C.cyan, fill: "color-mix(in srgb, var(--color-panel) 88%, var(--color-accent-3))" }} />
+          <circle className="plt-plaque" r="0.8"  style={{ filter: "url(#plt-glow)", fill: C.acid }} />
           <animateMotion dur={PROBE.dur} repeatCount="indefinite" path={PROBE_PATH} rotate="auto" />
         </g>
 
         {/* plaque on the pot front */}
-        <rect x={PLAQUE.x - 14} y={PLAQUE.y - 3.4} width="28" height="6.8" rx="1.6" fill="#14141d" stroke="#2a2348" strokeWidth="0.6" />
-        <text x={PLAQUE.x} y={PLAQUE.y + 1.2} fontSize="3.5" textAnchor="middle" fill="#8d8a86" fontFamily="var(--font-mono), monospace">BIO//303</text>
-        <circle className="plt-plaque" cx={PLAQUE.x + 18} cy={PLAQUE.y} r="1.3" fill={C.acid} style={{ filter: "url(#plt-glow)" }} />
+        <rect x={PLAQUE.x - 14} y={PLAQUE.y - 3.4} width="28" height="6.8" rx="1.6" style={{ fill: "color-mix(in srgb, var(--color-panel) 88%, var(--color-accent-3))", stroke: "color-mix(in srgb, var(--color-accent-2) 39%, var(--color-bg))" }}  strokeWidth="0.6" />
+        <text x={PLAQUE.x} y={PLAQUE.y + 1.2} fontSize="3.5" textAnchor="middle" style={{ fill: "var(--color-muted)" }} fontFamily="var(--font-mono), monospace">BIO//303</text>
+        <circle className="plt-plaque" cx={PLAQUE.x + 18} cy={PLAQUE.y} r="1.3"  style={{ filter: "url(#plt-glow)", fill: C.acid }} />
         {/* tiny growth-level bar graph beneath the plaque */}
         {Array.from({ length: 5 }, (_, i) => (
-          <rect key={`bg${i}`} x={PLAQUE.x - 13 + i * 2.4} y={PLAQUE.y + 4.6} width="1.7" height="1.6" fill={i < 4 ? C.acid : "#2a2348"} opacity={i < 4 ? 0.9 : 0.6} />
+          <rect key={`bg${i}`} x={PLAQUE.x - 13 + i * 2.4} y={PLAQUE.y + 4.6} width="1.7" height="1.6" style={{ fill: i < 4 ? C.acid : "color-mix(in srgb, var(--color-accent-2) 39%, var(--color-bg))" }} opacity={i < 4 ? 0.9 : 0.6} />
         ))}
 
         {/* spores drifting up around the flora */}

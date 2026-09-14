@@ -57,15 +57,15 @@ export default function Frog() {
         <defs>
           {/* acid -> magenta trip aura */}
           <radialGradient id="frg-aura" cx="0.5" cy="0.45" r="0.62">
-            <stop offset="0%" stopColor="rgba(158,219,90,0.3)" />
-            <stop offset="42%" stopColor="rgba(255,194,74,0.13)" />
-            <stop offset="74%" stopColor="rgba(216,255,77,0.1)" />
-            <stop offset="100%" stopColor="rgba(216,255,77,0)" />
+            <stop offset="0%" style={{ stopColor: "rgba(var(--rgb-warn),0.3)" }} />
+            <stop offset="42%" style={{ stopColor: "rgba(var(--rgb-acid),0.13)" }} />
+            <stop offset="74%" style={{ stopColor: "rgba(var(--rgb-warn),0.1)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(var(--rgb-warn),0)" }} />
           </radialGradient>
           <radialGradient id="frg-auraB" cx="0.5" cy="0.5" r="0.62">
-            <stop offset="0%" stopColor="rgba(216,255,77,0.3)" />
-            <stop offset="60%" stopColor="rgba(255,93,122,0.1)" />
-            <stop offset="100%" stopColor="rgba(255,93,122,0)" />
+            <stop offset="0%" style={{ stopColor: "rgba(var(--rgb-warn),0.3)" }} />
+            <stop offset="60%" style={{ stopColor: "rgba(var(--rgb-accent),0.1)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(var(--rgb-accent),0)" }} />
           </radialGradient>
           <filter id="frg-glowF" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="0.55" result="b" />
@@ -82,12 +82,12 @@ export default function Frog() {
         <ellipse
           className="frg-ring"
           cx="24" cy="24" rx="21" ry="20.4"
-          fill="none" stroke={C.acid} strokeWidth="0.4" strokeDasharray="3 5" opacity="0.3"
+          fill="none" style={{ stroke: C.acid }} strokeWidth="0.4" strokeDasharray="3 5" opacity="0.3"
         />
         <ellipse
           className="frg-ring frg-ringB"
           cx="24" cy="24" rx="16.5" ry="15.8"
-          fill="none" stroke={C.mag} strokeWidth="0.4" strokeDasharray="2 4" opacity="0.3"
+          fill="none" style={{ stroke: C.mag }} strokeWidth="0.4" strokeDasharray="2 4" opacity="0.3"
         />
 
         <g className="frg-frog">

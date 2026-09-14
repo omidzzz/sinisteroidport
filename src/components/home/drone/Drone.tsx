@@ -57,29 +57,29 @@ export default function Drone() {
       >
         <defs>
           <radialGradient id="au-aura" cx="0.5" cy="0.42" r="0.6">
-            <stop offset="0%" stopColor="#ffb03f" stopOpacity="0.35" />
-            <stop offset="45%" stopColor="#8a5cf6" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#8a5cf6" stopOpacity="0" />
+            <stop offset="0%" style={{ stopColor: "var(--color-acid)" }} stopOpacity="0.35" />
+            <stop offset="45%" style={{ stopColor: "var(--color-accent-2)" }} stopOpacity="0.18" />
+            <stop offset="100%" style={{ stopColor: "var(--color-accent-2)" }} stopOpacity="0" />
           </radialGradient>
           <linearGradient id="au-beamGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#ffe600" stopOpacity="0.9" />
-            <stop offset="55%" stopColor="#d8ff4d" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#ff5d7a" stopOpacity="0" />
+            <stop offset="0%" style={{ stopColor: "var(--warn)" }} stopOpacity="0.9" />
+            <stop offset="55%" style={{ stopColor: "var(--warn)" }} stopOpacity="0.35" />
+            <stop offset="100%" style={{ stopColor: "var(--color-accent)" }} stopOpacity="0" />
           </linearGradient>
           <radialGradient id="au-rimGrad" cx="0.5" cy="0.35" r="0.75">
-            <stop offset="0%" stopColor="#dfc4ec" />
-            <stop offset="50%" stopColor="#9b5cf6" />
-            <stop offset="100%" stopColor="#4a2ea8" />
+            <stop offset="0%" style={{ stopColor: "color-mix(in srgb, var(--color-accent-2) 30%, var(--color-ink))" }} />
+            <stop offset="50%" style={{ stopColor: "var(--color-accent-2)" }} />
+            <stop offset="100%" style={{ stopColor: "color-mix(in srgb, var(--color-accent-2) 58%, var(--color-bg))" }} />
           </radialGradient>
           <linearGradient id="au-rainbow" x1="0%" y1="0%" x2="100%" y2="0%">
             {HUES.map((h, i) => (
-              <stop key={i} offset={`${(i / (HUES.length - 1)) * 100}%`} stopColor={h} />
+              <stop key={i} offset={`${(i / (HUES.length - 1)) * 100}%`} style={{ stopColor: h }} />
             ))}
           </linearGradient>
           <linearGradient id="au-domeGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#e8d9f5" />
-            <stop offset="50%" stopColor="#7fd8ff" />
-            <stop offset="100%" stopColor="#5cf6c1" />
+            <stop offset="0%" style={{ stopColor: "color-mix(in srgb, var(--color-accent-2) 16%, var(--color-ink))" }} />
+            <stop offset="50%" style={{ stopColor: "color-mix(in srgb, var(--color-accent-2) 50%, var(--color-ink))" }} />
+            <stop offset="100%" style={{ stopColor: "var(--warn)" }} />
           </linearGradient>
           <filter id="au-glow" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b" />
@@ -120,8 +120,7 @@ export default function Drone() {
           <g clipPath="url(#au-beamClip)">
             {BEAM_STREAKS.map((s, i) => (
               <rect key={`bs${i}`} className="au-streak" x={s.x - 2.4} y="80" width="4.8" height="16" rx="2.4"
-                fill="#ffffff" opacity="0.8"
-                style={{ ["--au-dl" as string]: s.delay, ["--au-du" as string]: s.dur }} />
+                style={{ fill: "var(--color-ink)", ["--au-dl" as string]: s.delay, ["--au-du" as string]: s.dur }} opacity="0.8" />
             ))}
           </g>
         </g>
@@ -130,45 +129,45 @@ export default function Drone() {
         <g className="au-bob">
           <g className="au-hue">
             {/* feet bumps peeking from under the rim */}
-            <g fill="#7a4fd6" stroke={INK} strokeWidth="4">
+            <g  style={{ stroke: INK, fill: "var(--color-accent-2)" }} strokeWidth="4">
               {FEET.map((f, i) => (
                 <ellipse key={`ft${i}`} cx={f.x} cy={f.y} rx="15" ry="10" />
               ))}
             </g>
 
             {/* outer rim + spinning rainbow accent ring */}
-            <ellipse cx="0" cy={RIM.cy} rx={RIM.rx} ry={RIM.ry} fill="url(#au-rimGrad)" stroke={INK} strokeWidth="5" />
+            <ellipse cx="0" cy={RIM.cy} rx={RIM.rx} ry={RIM.ry} fill="url(#au-rimGrad)" style={{ stroke: INK }} strokeWidth="5" />
             <ellipse className="au-ring" cx="0" cy={RIM_RING.cy} rx={RIM_RING.rx} ry={RIM_RING.ry}
               fill="none" stroke="url(#au-rainbow)" strokeWidth="2.2" strokeDasharray="10 9" opacity="0.85" />
 
             {/* glass dome */}
-            <ellipse cx="0" cy={DOME.cy} rx={DOME.rx} ry={DOME.ry} fill="url(#au-domeGrad)" stroke={INK} strokeWidth="5" />
+            <ellipse cx="0" cy={DOME.cy} rx={DOME.rx} ry={DOME.ry} fill="url(#au-domeGrad)" style={{ stroke: INK }} strokeWidth="5" />
 
             {/* alien shoulders (static) */}
-            <path d={SHOULDERS_PATH} fill="#7ee657" stroke={INK} strokeWidth="4.5" />
+            <path d={SHOULDERS_PATH}  style={{ stroke: INK, fill: "var(--color-acid)" }} strokeWidth="4.5" />
 
             {/* alien head + eyes + glare — gently sways like it's dancing */}
             <g className="au-sway">
-              <path d={HEAD_PATH} fill="#7ee657" stroke={INK} strokeWidth="5" />
+              <path d={HEAD_PATH}  style={{ stroke: INK, fill: "var(--color-acid)" }} strokeWidth="5" />
               <g className="au-blink">
                 {EYES.map((e, i) => (
-                  <ellipse key={`ey${i}`} cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} fill="#191226"
+                  <ellipse key={`ey${i}`} cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} style={{ fill: "color-mix(in srgb, var(--color-accent-2) 22%, var(--color-bg))" }}
                     transform={`rotate(${e.rot} ${e.cx} ${e.cy})`} />
                 ))}
               </g>
               {EYES.map((e, i) => (
-                <circle key={`gl${i}`} cx={e.gx} cy={e.gy} r="2.6" fill="#fff" />
+                <circle key={`gl${i}`} cx={e.gx} cy={e.gy} r="2.6" style={{ fill: "var(--color-ink)" }} />
               ))}
             </g>
-            <path className="au-glare" d={GLARE_PATH} fill="#fff" opacity="0.5" />
+            <path className="au-glare" d={GLARE_PATH} style={{ fill: "var(--color-ink)" }} opacity="0.5" />
 
             {/* deck band + rainbow porthole chase (drawn last to tuck the dome/alien in) */}
-            <ellipse cx="0" cy={BAND.cy} rx={BAND.rx} ry={BAND.ry} fill="#5a35b0" stroke={INK} strokeWidth="5" />
+            <ellipse cx="0" cy={BAND.cy} rx={BAND.rx} ry={BAND.ry}  style={{ stroke: INK, fill: "color-mix(in srgb, var(--color-accent-2) 72%, var(--color-bg))" }} strokeWidth="5" />
             {PORTHOLES.map((p, i) => (
               <g key={`po${i}`}>
-                <circle cx={p.x} cy={p.y} r="9" fill={INK} />
-                <circle className="au-port" cx={p.x} cy={p.y} r="5.5" fill={p.c}
-                  style={{ ["--au-dl" as string]: p.delay, filter: "url(#au-glow)" }} />
+                <circle cx={p.x} cy={p.y} r="9" style={{ fill: INK }} />
+                <circle className="au-port" cx={p.x} cy={p.y} r="5.5"
+                  style={{ fill: p.c, ["--au-dl" as string]: p.delay, filter: "url(#au-glow)" }} />
               </g>
             ))}
           </g>
