@@ -200,164 +200,27 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
         onPointerLeave={() => setPressed(false)}
         onClick={() => (visible ? close() : open())}
       >
-        {/* The menace — same brand DNA as the UFO drone alien (alien-green
-            head, ink outline, acid neon) but redrawn hostile: an elongated
-            skull with cranial ridges, a deep V scowl, slanted void eyes with
-            glowing acid slit pupils, nostril slits and a fanged sneer.
-            Idle: the hostile stare + targeting halo; the life signs are a
-            slow pupil pulse and one hostile blink every few seconds.
-            Press/tap: the pupils flare, the brows slam down, the head
-            lunges and the sneer cracks open into a fanged jaw. The flare is
-            driven by [data-pressed] (pointerdown/up — identical on touch and
-            mouse) with :active/:focus-visible fallbacks; desktop-only
-            :hover lives behind a (hover: hover) media query so phones never
-            latch a stuck hover state (see the .al-* rules in agent-chat.css).
-            Theme-aware: the head is the alien green in both themes while the
-            neon accents inherit the FAB's `color` (acid token). */}
-        <svg viewBox="0 0 128 128" aria-hidden>
-          <defs>
-            <linearGradient id="sin-fab-head" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: "var(--fab-head)" }} />
-              <stop offset="40%" style={{ stopColor: "var(--fab-head)" }} />
-              <stop offset="100%" style={{ stopColor: "var(--fab-head2)" }} />
-            </linearGradient>
-            <filter id="sin-fab-glow" x="-80%" y="-80%" width="260%" height="260%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="b" />
-              <feMerge>
-                <feMergeNode in="b" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
-          {/* targeting halo — a slow lock-on ring around the skull */}
-          <ellipse
-            className="al-orbit"
-            cx="64" cy="62" rx="50" ry="52"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeDasharray="3 9"
-            opacity="0.3"
-            transform="rotate(-18 64 62)"
-            style={{ filter: "url(#sin-fab-glow)" }}
-          />
-
-          <g className="al-head">
-            {/* skull — elongated cranium tapering to an angular chin */}
-            <path
-              d="M 27,58 C 27,30 43,12 64,12 C 85,12 101,30 101,58 C 101,80 93,93 82,102 C 75,107 69,110 64,112 C 59,110 53,107 46,102 C 35,93 27,80 27,58 Z"
-              fill="url(#sin-fab-head)"
-              style={{ stroke: "var(--fab-edge)" }}
-              strokeWidth="3.6"
-            />
-            {/* cranial ridges — sutures across the dome */}
-            <path
-              d="M 36,40 C 44,24 54,18 64,18 C 74,18 84,24 92,40"
-              fill="none"
-              style={{ stroke: "var(--fab-edge)" }}
-              strokeWidth="1.6"
-              opacity="0.3"
-            />
-            <path
-              d="M 33,52 C 41,32 51,25 64,25 C 77,25 87,32 95,52"
-              fill="none"
-              style={{ stroke: "var(--fab-edge)" }}
-              strokeWidth="1.4"
-              opacity="0.2"
-            />
-            {/* dome glare */}
-            <path d="M 32,34 Q 48,22 62,25 Q 44,31 36,48 Z" style={{ fill: "var(--color-ink)" }} opacity="0.22" />
-            {/* cheek hatching — gaunt detail */}
-            <path d="M 33,72 Q 38,78 44,81" fill="none" style={{ stroke: "var(--fab-edge)" }} strokeWidth="1.4" opacity="0.3" />
-            <path d="M 95,72 Q 90,78 84,81" fill="none" style={{ stroke: "var(--fab-edge)" }} strokeWidth="1.4" opacity="0.3" />
-
-            {/* eyes — slanted voids, each carrying a glowing acid slit pupil
-                (the press-flare target) and a rim that ignites on press.
-                The slant lives on a static group so CSS transforms on the
-                pupil/rim can't clobber the rotation. */}
-            <g className="al-eyes">
-              <g className="al-eye">
-                <g transform="rotate(-14 47 57)">
-                  <ellipse cx="47" cy="57" rx="11" ry="11.5" fill="var(--fab-visor)" />
-                  <ellipse className="al-rim" cx="47" cy="57" rx="11" ry="11.5" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
-                  <ellipse className="al-pupil" cx="47" cy="57" rx="2.6" ry="6.5" fill="currentColor" opacity="0.85" style={{ filter: "url(#sin-fab-glow)" }} />
-                  <circle className="al-glint" cx="43.5" cy="51.5" r="2.2" fill="var(--fab-glint)" />
-                </g>
-              </g>
-              <g className="al-eye">
-                <g transform="rotate(14 81 57)">
-                  <ellipse cx="81" cy="57" rx="11" ry="11.5" fill="var(--fab-visor)" />
-                  <ellipse className="al-rim" cx="81" cy="57" rx="11" ry="11.5" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
-                  <ellipse className="al-pupil" cx="81" cy="57" rx="2.6" ry="6.5" fill="currentColor" opacity="0.85" style={{ filter: "url(#sin-fab-glow)" }} />
-                  <circle className="al-glint" cx="84.5" cy="51.5" r="2.2" fill="var(--fab-glint)" />
-                </g>
-              </g>
-            </g>
-
-            {/* deep V scowl plates — hugging the eye tops */}
-            <path className="al-brow" d="M 32,42 L 56,36 L 59,46 L 35,50 Z" fill="var(--fab-edge)" />
-            <path className="al-brow" d="M 96,42 L 72,36 L 69,46 L 93,50 Z" fill="var(--fab-edge)" />
-
-            {/* nostril slits */}
-            <ellipse cx="59" cy="76" rx="1.8" ry="3.6" fill="var(--fab-edge)" opacity="0.5" transform="rotate(-10 59 76)" />
-            <ellipse cx="69" cy="76" rx="1.8" ry="3.6" fill="var(--fab-edge)" opacity="0.5" transform="rotate(10 69 76)" />
-
-            {/* mouth — idle fanged sneer (ink shadow line above, acid lip +
-                fangs below); crossfades to a cracked-open jaw on press */}
-            <g className="al-grimace">
-              <path
-                d="M 40,86.5 Q 64,91.5 88,86.5"
-                fill="none"
-                style={{ stroke: "var(--fab-edge)" }}
-                strokeWidth="2"
-                opacity="0.45"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 37,89 Q 64,95 91,89"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                style={{ filter: "url(#sin-fab-glow)" }}
-              />
-              <path
-                d="M 45,91 L 47.5,98.5 M 64,94.3 L 64,101 M 83,91 L 80.5,98.5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                style={{ filter: "url(#sin-fab-glow)" }}
-              />
-            </g>
-            <g className="al-jaw">
-              <path
-                d="M 36,86 Q 64,82 92,86 Q 91,102 64,108 Q 37,102 36,86 Z"
-                fill="var(--fab-visor)"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                style={{ filter: "url(#sin-fab-glow)" }}
-              />
-              <path
-                d="M 46,87 L 48,94 M 58,85.5 L 58,94 M 70,85.5 L 70,94 M 82,87 L 80,94"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 52,103.5 L 52,99 M 76,103.5 L 76,99"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                opacity="0.7"
-              />
-              <ellipse cx="64" cy="99" rx="8" ry="3.5" fill="currentColor" opacity="0.35" />
-            </g>
-          </g>
+        {/* A plain chat glyph, drawn the way every other icon on the site is
+            drawn: one 1.5px currentColor stroke on a 24×24 grid, round caps
+            and joins, no filter, no fill. It inherits the button's `color`
+            (the acid token in the neon registers, --color-ink on paper).
+            The previous art — an elongated alien skull with an ink outline,
+            a glow filter, slanted void eyes and a fanged jaw that cracked
+            open on press — was ~145 lines of SVG plus ~190 lines of .al-*
+            animation rules, and it was the loudest object in an edition
+            built entirely from hairlines and rules. The print register draws
+            its marks as rules; so does this. Press/tap is a plain scale on
+            the glyph (agent-chat.css), not a change of face. */}
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden
+        >
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z" />
         </svg>
         {/* unread-response dot — lit while the panel is hidden and SINISTER
             has finished scheming */}

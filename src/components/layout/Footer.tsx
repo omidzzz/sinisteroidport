@@ -1,251 +1,186 @@
 import VTLink from "@/components/shell/ViewTransition";
-import Magnetic from "../ui/Magnetic";
+import ThemeToggle from "./ThemeToggle";
 import LogoType from "./LogoType";
-import { ArrowIcon, SparkIcon, HeartIcon } from "../ui/icons";
+import { ArrowIcon } from "../ui/icons";
 import AskSinisterButton from "../blog/AskSinisterButton";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import { NAV_PATHS } from "@/lib/nav";
 
-/* Brand-voice meta strip — ASCII/pinned-LTR like the logotype so it reads
-   identically inside the Persian layout. */
-const META = [
-  "UPLINK STABLE",
-  "ACID RAVE",
-  "SIGNAL DOMAIN",
-  "EST.2012",
-  "NEXT.JS × REACT",
-  "PURE CSS ORNAMENT",
-];
-
 /**
- * FOOTER — SIGNAL TOWER (v6).
+ * FOOTER — COLOPHON (v9, QUIRE).
  *
- * Three misaligned columns under two crossed marquee bands:
- *   rail     vertical act index (sitemap)
- *   channel  giant magnetic LET'S TALK + bracket reach-chips
- *   tower    glowing status panel (LEDs, city, uplink, mini holo-core)
- * Floor bar carries © , build tag and a dashed-ring BACK-TO-TOP (#top,
- * zero-JS smooth anchor since <html> scrolls smoothly).
+ * Not a footer: a colophon. One justified measure under a double rule
+ * states what the edition is; its words ARE the sitemap. Reach routes,
+ * feeds, donate, the language swap and the edition toggle resolve as
+ * marginalia beneath the paragraph. The vermilion end-mark returns the
+ * reader to the top — zero-JS smooth anchor since <html> scrolls
+ * smoothly. Everything the signal tower carried is re-voiced here:
+ * status/city/year/domain ride the technical line, the holo-core
+ * becomes the end-mark, the marquee is gone.
  */
 export default function Footer({ locale }: { locale: Locale }) {
   const t = getDict(locale);
   const fa = locale === "fa";
   const year = new Date().getFullYear();
 
-  const reach: Array<[string, string, boolean]> = [
-    ["Email", "mailto:ghadamgahi.omid@gmail.com", false],
-    ["GitHub", "https://github.com/omidzzz", true],
-    ["Telegram", "https://t.me/simplyeffedup", true],
-    ["Tel · +98 936 747 1992", "tel:+989367471992", false],
+  /* Reach routes — same contacts as before, resolved as footnote marks. */
+  const reach: Array<[string, string]> = [
+    ["Email", "mailto:ghadamgahi.omid@gmail.com"],
+    ["GitHub", "https://github.com/omidzzz"],
+    ["Telegram", "https://t.me/simplyeffedup"],
+    ["Tel · +98 936 747 1992", "tel:+989367471992"],
   ];
+  const foot = (i: number) => ["¹", "²", "³", "⁴"][i] ?? "";
 
   return (
-    <footer className="relative mt-32 overflow-hidden border-t border-line bg-bg">
-      {/* crossed meta bands */}
-      <div aria-hidden className="cross-strip my-10 select-none">
-        {[false, true].map((rev) => (
-          <div
-            key={String(rev)}
-            dir="ltr"
-            className={`ticker ticker-band ${rev ? "ticker-rev row-b" : "row-a"}`}
-          >
-            <div className="ticker-track">
-              {Array.from({ length: 2 }, (_, copy) => (
-                <div key={copy} className="flex">
-                  {META.map((w) => (
-                    <span
-                      key={`${copy}-${w}`}
-                      className="flex items-center gap-5 whitespace-nowrap px-6 py-3.5 font-mono text-[0.6rem] uppercase tracking-[0.3em]"
+    <footer className="relative mt-32 overflow-hidden">
+      <div className="colophon-rule">
+        <div className="mx-auto max-w-[86rem] pb-14 pt-10">
+          {/* ── the sentence: the sitemap, set as prose ── */}
+          <p className="colophon-body">
+            {fa ? (
+              <>
+                این مجموعه یک <b>دفعِ چاپی</b> است و از تهران می‌گذرد — یک صفحه
+                پیوسته که بالا تا پایین خوانده می‌شود.{" "}
+                {t.nav.map((item, i) => (
+                  <span key={NAV_PATHS[i]}>
+                    <VTLink
+                      href={loc(locale, NAV_PATHS[i])}
+                      className="transition-colors"
                     >
-                      <SparkIcon className="shrink-0 opacity-70" />
-                      {w}
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="mx-auto max-w-[86rem] px-5 pb-14 pt-10 sm:px-8">
-        <div className="grid items-start gap-14 lg:grid-cols-[auto_minmax(0,1fr)_minmax(15rem,17rem)] lg:gap-12">
-          {/* ── sitemap rail ── */}
-          <nav aria-label={fa ? "پیوندها" : "Footer navigation"} className="min-w-max">
-            <p className="label mb-7">{fa ? "فهرست" : "Index"}</p>
-            <ul className="space-y-4">
-              {t.nav.map((item, i) => (
-                <li key={NAV_PATHS[i]}>
-                  <VTLink
-                    href={loc(locale, NAV_PATHS[i])}
-                    className="group inline-flex items-baseline gap-3 font-display text-base font-bold uppercase tracking-wide text-ink transition-colors hover:text-acid"
-                  >
-                    <span className="foot-idx font-mono text-[0.58rem] tracking-[0.2em]">
-                      {item.index}
-                    </span>
-                    {item.label}
-                  </VTLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* ── open channel ── */}
-          <div className="min-w-0">
-            <p className="mb-8 flex flex-wrap items-center gap-3">
-              <span className="live-dot" aria-hidden />
-              <span className="label">{t.contactLabel}</span>
-            </p>
-
-            <Magnetic strength={0.13} maxShift={9}>
-              <a
-                href="mailto:ghadamgahi.omid@gmail.com"
-                className="glitchy stroke-line block w-fit font-display font-black uppercase leading-[0.92] tracking-tight text-[clamp(2.3rem,6.6vw,5.4rem)]"
-              >
-                {t.letsTalk}
-              </a>
-            </Magnetic>
-<div className="mt-8">
-              <Magnetic strength={0.18} maxShift={10}>
+                      {item.label}
+                    </VTLink>
+                    {i < t.nav.length - 1 ? " · " : ""}
+                  </span>
+                ))}
+                . سفارش و اصلاح از راه{" "}
+                <a href={reach[0][1]}>رایانامه</a> می‌رسد؛ اصل متن روی{" "}
+                <a href={reach[1][1]} target="_blank" rel="noopener noreferrer">
+                  گیت‌هاب
+                </a>{" "}
+                باز است؛ پیام از{" "}
+                <a href={reach[2][1]} target="_blank" rel="noopener noreferrer">
+                  تلگرام
+                </a>{" "}
+                یا{" "}
+                <a href={reach[3][1]} dir="ltr">
+                  تلفن
+                </a>{" "}
+                می‌گذرد؛ و{" "}
                 <a
                   href="https://donatr.ee/sinisteroid/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={fa ? "حمایت مالی" : "Donate"}
-                  className="donate-cta group"
                 >
-                  <span className="donate-ring" aria-hidden />
-                  <HeartIcon className="donate-heart" />
-                  <span>{t.donate}</span>
-                  <ArrowIcon className="size-3.5 -rotate-45 rtl:rotate-45 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  پرس چاپ
+                </a>{" "}
+                با پشتیبانی شما روشن می‌ماند.
+              </>
+            ) : (
+              <>
+                This edition is <b>printed, not built</b> — one continuous
+                quire, read from the frontispiece down. Its sections are{" "}
+                {t.nav.map((item, i) => (
+                  <span key={NAV_PATHS[i]}>
+                    <VTLink
+                      href={loc(locale, NAV_PATHS[i])}
+                      className="transition-colors"
+                    >
+                      {item.label}
+                    </VTLink>
+                    {i < t.nav.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+                . Corrections and commissions reach{" "}
+                <a href={reach[0][1]}>Email{foot(0)}</a>; the source stays open
+                on{" "}
+                <a href={reach[1][1]} target="_blank" rel="noopener noreferrer">
+                  GitHub{foot(1)}
                 </a>
-              </Magnetic>
-              <p
-                aria-hidden
-                dir="ltr"
-                className="mt-3 select-none font-mono text-[0.6rem] uppercase tracking-[0.24em] text-muted"
-              >
-                BEEP_BOOP <span className="text-muted">♥</span> DONATR.EE/SINISTEROID
-              </p>
-            </div>
-            <p
-              aria-hidden
-              dir="ltr"
-              className="mt-4 select-none font-mono text-[0.64rem] uppercase tracking-[0.3em] text-muted"
+                ; word travels over{" "}
+                <a href={reach[2][1]} target="_blank" rel="noopener noreferrer">
+                  Telegram{foot(2)}
+                </a>{" "}
+                or{" "}
+                <a href={reach[3][1]}>telephone{foot(3)}</a>; and{" "}
+                <a
+                  href="https://donatr.ee/sinisteroid/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  the presses
+                </a>{" "}
+                keep running on support.
+              </>
+            )}
+          </p>
+
+          {/* ── marginalia: feeds, assistant, language, edition ── */}
+          <div className="colophon-marginalia mt-9">
+            <span className="label">{t.follow}</span>
+            <a
+              href={fa ? "/fa/feed.xml" : "/feed.xml"}
+              aria-label={`${t.rss} ${fa ? "خوراک" : "feed"}`}
+              className="colophon-note transition-colors hover:text-acid"
             >
-              OPEN CHANNEL ▸ UPLINK<span className="tx-cursor ms-1">▌</span>
-            </p>
-
-            {/* easter egg lives here too — logo accepts 7 secret clicks */}
-            <div className="mt-10">
-              <LogoType variant="full" activate className="text-lg" />
-            </div>
-
-            <ul className="mt-10 flex flex-wrap gap-3">
-              {reach.map(([label, href, ext]) => (
-                <li key={href}>
-                  <a
-                    href={href}
-                    {...(ext ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="chip-brk inline-flex items-center gap-2.5 border border-line font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted transition-all duration-300 hover:border-acid/60 hover:text-acid"
-                  >
-                    {label}
-                    <ArrowIcon
-                      className={`size-3.5 transition-transform duration-300 ${ext ? (fa ? "rotate-45" : "-rotate-45") : ""}`}
-                    />
-                  </a>
-                </li>
-              ))}
-              {/* resident agent — opens the chat panel via sinister:ask */}
-              <li>
-                <AskSinisterButton
-                  locale={locale}
-                  className="chip-brk sin-ask-chip"
-                  label={fa ? "سینیستر" : "SINISTER"}
-                  prompt={
-                    fa
-                      ? "خودت رو معرفی کن — این‌جا چه‌کارهایی ازت برمیاد؟"
-                      : "Introduce yourself — what can you do around here?"
-                  }
-                />
-              </li>
-            </ul>
-
-            {/* Follow — honest, no-backend feed links: RSS/JSON readers
-                pull new posts back without a newsletter account */}
-            <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-line pt-4">
-              <span className="label">{t.follow}</span>
-              <span className="h-px w-8 bg-line" aria-hidden />
-              <a
-                href={fa ? "/fa/feed.xml" : "/feed.xml"}
-                aria-label={`${t.rss} ${fa ? "خوراک" : "feed"}`}
-                className="inline-flex items-center gap-1.5 border border-line font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted transition-all duration-300 hover:border-acid/60 hover:text-acid"
-              >
-                {t.rss}
-              </a>
-              <a
-                href={fa ? "/fa/feed.json" : "/feed.json"}
-                aria-label={t.jsonFeed}
-                className="inline-flex items-center gap-1.5 border border-line font-mono text-[0.66rem] uppercase tracking-[0.16em] text-muted transition-all duration-300 hover:border-acid/60 hover:text-acid"
-              >
-                {t.jsonFeed}
-              </a>
-            </div>
+              {t.rss}
+            </a>
+            <a
+              href={fa ? "/fa/feed.json" : "/feed.json"}
+              aria-label={t.jsonFeed}
+              className="colophon-note transition-colors hover:text-acid"
+            >
+              {t.jsonFeed}
+            </a>
+            <AskSinisterButton
+              locale={locale}
+              className="colophon-note transition-colors hover:text-acid"
+              label={fa ? "سینستر" : "SINISTER"}
+              prompt={
+                fa
+                  ? "خودت رو معرفی کن — این‌جا چه‌کارهایی ازت برمیاد؟"
+                  : "Introduce yourself — what can you do around here?"
+              }
+            />
+            <span aria-hidden className="h-px w-8 bg-line" />
+            <span className="colophon-note">
+              {fa ? (
+                <VTLink href="/en" className="transition-colors hover:text-acid">
+                  EN
+                </VTLink>
+              ) : (
+                <VTLink href="/fa" className="lang-switch-fa transition-colors hover:text-acid">
+                  فا
+                </VTLink>
+              )}
+            </span>
+            <ThemeToggle locale={locale} />
           </div>
 
-          {/* ── status tower ── */}
-          <aside className="status-panel p-6 lg:p-7">
-            <p className="stat-row">
-              <span>Status</span>
-              <b className="inline-flex items-center gap-2">
-                <span className="live-dot" />
-                Live
-              </b>
+          {/* ── technical line + end-mark ── */}
+          <div className="colophon-marginalia mt-4">
+            <p className="colophon-note" suppressHydrationWarning>
+              © {year} {t.rights}
             </p>
-            <div className="mt-6 space-y-3.5">
-              <p className="stat-row"><span>{fa ? "شهر" : "City"}</span><b>{t.city}</b></p>
-              <p className="stat-row"><span>{fa ? "سال" : "Year"}</span><b suppressHydrationWarning>{year}</b></p>
-              <p className="stat-row"><span dir="ltr">Domain</span><b dir="ltr">sinisteroid.ir</b></p>
-              <p className="stat-row"><span>{fa ? "حالت" : "Mode"}</span><b>RAVE / VOID</b></p>
-            </div>
-            <div className="my-7 border-t border-line" />
-            <div className="holo-core mx-auto !w-24 scale-90">
-              <span className="holo-ring r1" aria-hidden />
-              <span className="holo-sq" aria-hidden />
-              <span className="holo-sigil !text-sm">OM</span>
-            </div>
-            <p aria-hidden dir="ltr" className="mt-5 text-center font-mono text-[0.6rem] uppercase tracking-[0.24em] text-muted">
-              CORE STABLE
+            <p aria-hidden dir="ltr" className="colophon-note">
+              SET IN FRAUNCES · ARCHIVO · PLEX MONO
             </p>
-          </aside>
-        </div>
-
-        {/* ── floor bar ── */}
-        <div className="foot-giant" aria-hidden dir="ltr">
-          SINISTEROID
-        </div>
-        <p className="foot-edition" dir="ltr" aria-hidden>
-          <b>ED.2026</b>
-          <i />
-          VOID-FREE
-          <i />
-          ACID RAVE
-        </p>
-        <div className="mt-16 flex flex-col items-start justify-between gap-5 border-t border-line pt-6 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-muted sm:flex-row sm:items-center">
-          <p suppressHydrationWarning>
-            © {year} {t.rights}
-          </p>
-          <span aria-hidden className="hidden tracking-[0.3em] md:inline">
-            ✦ BUILT ON THE VOID ✦
-          </span>
-          <a
-            href="#top"
-            aria-label={fa ? "بازگشت به بالای صفحه" : "Back to top"}
-            className="ring-top grid h-11 w-11 place-items-center rounded-full border border-line text-acid transition-colors hover:border-acid/70"
-          >
-            <i aria-hidden />
-            <ArrowIcon className="size-4 -rotate-90" />
-          </a>
+            <p aria-hidden dir="ltr" className="colophon-note">
+              NEXT.JS × REACT
+            </p>
+            <p aria-hidden dir="ltr" className="colophon-note">
+              {t.city} · {year} · SINISTEROID.IR
+            </p>
+            {/* easter egg lives here too — the lockup accepts 7 secret clicks */}
+            <LogoType variant="full" activate className="text-base" />
+            <a
+              href="#top"
+              aria-label={fa ? "بازگشت به بالای صفحه" : "Back to top"}
+              className="end-mark ms-auto"
+            >
+              <ArrowIcon className="size-4 -rotate-90" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -10,7 +10,6 @@ const en = {
     { index: "07", label: "Contact" },
   ] as { index: string; label: string }[],
   site: "/ sinisteroid.ir",
-  coords: "35.6892°N / 51.3890°E",
   city: "Tehran, Iran",
   heroName: "OMID",
   heroKicker: "(Portfolio) Frontend Developer — career est. 2012",

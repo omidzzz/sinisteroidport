@@ -172,10 +172,7 @@ export default function BlogPostLive({
           end instead of overlapping the footer. */}
       <div className="relative">
       {toc.length >= 3 && (
-        <div
-          className="pointer-events-none absolute inset-y-0 hidden w-56 xl:block"
-          style={{ insetInlineStart: "calc((100vw - 48rem) / 2 - 15rem)" }}
-        >
+        <div className="post-toc-rail">
           <nav
             aria-label={locale === "fa" ? "فهرست مطالب" : "Table of contents"}
             className="pointer-events-auto sticky top-28 w-56"

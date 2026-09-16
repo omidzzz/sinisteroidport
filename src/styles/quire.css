@@ -1,0 +1,1126 @@
+/* ============================================================
+   QUIRE — the printed edition (register CSS, v9)
+   ------------------------------------------------------------
+   The home page as a QUIRE: one continuous measure of type on
+   paper, read top to bottom like a book. The entire chrome is
+   relocated to the MARGIN — a running head above, a numeral
+   index in the inline gutter, a colophon below. One ink, hairline
+   rules, one vermilion seal. No glow, no grain, no canvas.
+
+   Sections:
+     §0   shell — measure, margin gutter
+     §1   ink remap — legacy neon becomes ink
+     §2   margin index (desktop nav)
+     §3   running head (top bar) + mobile dock + contents overlay
+     §4   frontispiece (hero)
+     §5   ledger (telemetry)
+     §6   figure (skill network + prop plates)
+     §7   notes / plates / appendix (console, modules, signals)
+     §8   epigraph (manifesto)
+     §9   colophon (footer)
+     §10  night edition mirrors
+     §11  fa tracking resets
+     §12  narrow viewports
+     §13  print · no-scripting · reduced motion
+
+   Import order: after terranomy.css, BEFORE enhance.css (the
+   enhance finesse pass must stay last in the cascade).
+   ============================================================ */
+
+/* ---- §0 SHELL ------------------------------------------------------------
+   The nav sidebar lives in the inline-start gutter on wide screens;
+   content mirrors the offset so nothing ever overlaps. --sidebar-w is
+   the plate width (tokens.css); the reserve adds a 1rem gap. */
+
+[data-register="quire"] main {
+  padding-inline: 1.25rem;
+}
+@media (min-width: 1200px) {
+  [data-register="quire"] main {
+    padding-inline-start: calc(var(--sidebar-w) + 1rem);
+    padding-inline-end: 1.25rem;
+  }
+}
+
+/* ---- §1 INK REMAP --------------------------------------------------------
+   Every legacy ornament is silenced: the register's drawing is the type,
+   the rules and the seal. (The retired components — GL canvas, GridLines,
+   .noise, cursor reticle — are gone from the shell; their CSS hooks are
+   flattened here for safety.) */
+
+[data-register="quire"] .scanlines,
+[data-register="quire"] .mod-halo,
+[data-register="quire"] .rain-bay,
+[data-register="quire"] .scrub-word,
+[data-register="quire"] .orbit-ring,
+[data-register="quire"] .hazard-tape,
+[data-register="quire"] .noise,
+[data-register="quire"] .cursor-dot,
+[data-register="quire"] .cursor-ring {
+  display: none !important;
+}
+
+[data-register="quire"] .text-holo {
+  background-image: none;
+  color: var(--color-ink);
+  -webkit-text-fill-color: currentColor;
+  animation: none;
+}
+[data-register="quire"] .rgb-split,
+[data-register="quire"] .rgb-split-strong,
+[data-register="quire"] .rgb-split-strong:hover,
+[data-register="quire"] .group:hover .rgb-split-strong,
+[data-register="quire"] .anaglyph-strong,
+[data-register="quire"] .glitchy {
+  text-shadow: none !important;
+  filter: none !important;
+}
+[data-register="quire"] .text-outline {
+  color: var(--color-ink);
+  -webkit-text-stroke: 0;
+  filter: none;
+}
+[data-register="quire"] .stroke-line {
+  -webkit-text-stroke: 0;
+  color: var(--color-ink);
+}
+[data-register="quire"] .neon-text {
+  color: var(--color-acid);
+  text-shadow: none;
+}
+
+[data-register="quire"] .glass,
+[data-register="quire"] .prism-panel,
+[data-register="quire"] .hero-plate-frame {
+  background: transparent;
+  border-color: var(--color-line);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+[data-register="quire"] .x-rule {
+  height: 1px;
+  background: var(--color-ink);
+  box-shadow: none;
+}
+
+/* The live marker becomes the seal: a small vermilion square, static. */
+[data-register="quire"] .live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 0;
+  background: var(--color-acid);
+  box-shadow: none;
+  animation: none;
+  flex-shrink: 0;
+}
+[data-register="quire"] .live-dot::before,
+[data-register="quire"] .live-dot::after {
+  display: none;
+}
+
+/* Ticker bands: the marquee is retired — the same content reads as a
+   quiet single-line service index. */
+[data-register="quire"] .ticker-track {
+  animation: none !important;
+  transform: none !important;
+}
+[data-register="quire"] .ticker-band,
+[data-register="quire"] .hazard-band {
+  background: none;
+  border-block: 1px solid var(--color-line);
+  box-shadow: none;
+  overflow: hidden;
+}
+/* The band's ink must follow the GROUND, not the retired gradient.
+   Removing the acid fill above turns the ticker back into type-on-paper,
+   but its color still came from the gradient world: spine-rail.css paints
+   `#0a0b10` (type on bright acid) and acid-rave.css §light-theme repaints
+   it `#efecea` (type on dark vermilion). On the quire ground those read
+   ≈1.04:1 (night edition: #0a0b10 on #141310) and ≈1.03:1 (day edition:
+   #efecea on #f3efe7) — the marquee looks blank in BOTH editions.
+   Token ink flips with the edition and clears AA on paper and carbon.
+   Specificity note: this is (0,2,0), equal to
+   `[data-theme="light"] .ticker-band` in acid-rave.css, and quire.css is
+   imported AFTER it (§globals.css order), so the day override loses. */
+[data-register="quire"] .ticker-band {
+  color: var(--color-ink);
+}
+
+/* Seams become act rules: a hairline with a marginal tag. The Seams keep
+   their IntersectionObserver contract; the visual is a rule. */
+[data-register="quire"] .seam {
+  height: auto;
+  min-height: 0;
+  margin: 4rem auto 0;
+  max-width: 86rem;
+  padding: 0;
+  background: none;
+  transform: none;
+  clip-path: none;
+  border: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+[data-register="quire"] .seam::before {
+  content: "";
+  order: 2;
+  flex: 1;
+  height: 1px;
+  background: var(--color-line);
+}
+[data-register="quire"] .seam .seam-tag {
+  position: static;
+  transform: none;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+[data-register="quire"] .seam.flip {
+  transform: none;
+}
+
+/* ---- §2 NAV SIDEBAR (desktop) ----------------------------------------------
+   Margin index with labels always visible: each row is numeral + route
+   word (01 Index … 07 Contact), set in mono uppercase. Quiet at rest —
+   muted ink; the active route wears the register's single acid seal plus
+   a 2px inline-start bar. The plate carries a hairline rule with an SVG
+   mask on its content edge, straddled by a folio lozenge. Aligned to the
+   main gutter reserve (--sidebar-w). */
+
+[data-register="quire"] .dock-wrap {
+  inset-inline: 0 auto;
+  inset-block: 0;
+  margin: 0;
+  width: var(--sidebar-w);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  /* Rows carry their own inset padding — the wrap stays flush so the
+     hairline sits on the plate's content edge; breathing room lives in
+     main's 1rem reserve. */
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* The content-facing hairline: a single 1px rule on the plate's edge that
+   faces the main text. Two things make it "genius":
+   (1) an inline SVG mask (data URI) fades the rule at its top/bottom ~7% and
+       is densest through the middle, so it reads as a printed margin rule —
+       never a flat digital stroke; and
+   (2) the rule carries the register's vermilion (var(--color-acid)) at a
+       viewport-height-relative alpha (clamp), so it is quiet on short
+       screens and present on tall ones — proportional to the surface.
+   A 7px paper-filled lozenge (::before) rides the rule's vertical middle —
+   the plate's one piece of furniture, straddling the hairline like a folio
+   ornament. z-index:1 lifts it above the rule so the hairline passes
+   *behind* it instead of through it — the lozenge punches a clean window.
+   Persian RTL mirrors the edge. */
+[data-register="quire"] .dock-wrap::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 0;
+  width: 7px;
+  height: 7px;
+  /* Center the lozenge ON the hairline: half its own width back toward the
+     content, half the 1px rule back toward the viewport edge. */
+    translate: calc(50% - 0.5px) -50%;
+  rotate: 45deg;
+  z-index: 1; /* above the hairline so the rule sits behind the lozenge */
+  background: var(--color-bg);
+  border: 1px solid var(--color-acid);
+  opacity: 0.9;
+  pointer-events: none;
+}
+[dir="rtl"] [data-register="quire"] .dock-wrap::before {
+  inset-inline-end: auto;
+  inset-inline-start: 0;
+  translate: calc(-50% + 0.5px) -50%;
+}
+[data-register="quire"] .dock-wrap::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 1px;
+    background: var(--color-acid);
+  --divider-alpha: clamp(0.22, calc((100vh - 680px) / 1100), 0.45);
+  opacity: var(--divider-alpha);
+  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxIDEwMjQiPjxkZWZzPjxsaW5lYXJHcmFwaCByYzI9ImEiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxMDI0Ij48c3RvcCBvZmZzcz0iMCIgc3RvcHBhZD0iIzAwMCIgc3RvcDpvcGFjaXR5PSIwIi8+PHN0b3Agb2Zmc2VzPSIwLjA3IiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAuMTIiLz48c3RvcCBvZmZzcz0iMC41IiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAuOTIiLz48c3RvcCBvZmZzcz0iMC45MyIgc3RvcHBhZD0iIzAwMCIgc3RvcDpvcGFjaXR5PSIwLjEyIi8+PHN0b3Agb2Zmc2VzPSIxIiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAiLz48L2xpbmVhckJyYW5nZT48L2RlZnM+PHJlY3Qgd2lkdGg9IjEiIGhlaWdodD0iMTAyNCIgZmlsbD0idXJsKCNmKSIvPjwvc3ZnPg==");
+  mask-size: 1px 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxIDEwMjQiPjxkZWZzPjxsaW5lYXJHcmFwaCByYzI9ImEiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxMDI0Ij48c3RvcCBvZmZzcz0iMCIgc3RvcHBhZD0iIzAwMCIgc3RvcDpvcGFjaXR5PSIwIi8+PHN0b3Agb2Zmc2VzPSIwLjA3IiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAuMTIiLz48c3RvcCBvZmZzcz0iMC41IiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAuOTIiLz48c3RvcCBvZmZzcz0iMC45MyIgc3RvcHBhZD0iIzAwMCIgc3RvcDpvcGFjaXR5PSIwLjEyIi8+PHN0b3Agb2Zmc2VzPSIxIiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAiLz48L2xpbmVhckJyYW5nZT48L2RlZnM+PHJlY3Qgd2lkdGg9IjEiIGhlaWdodD0iMTAyNCIgZmlsbD0idXJsKCNmKSIvPjwvc3ZnPg==");
+  -webkit-mask-size: 1px 100%;
+  -webkit-mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* No depth cue — the plate is bare paper; the ::after hairline below is
+   the only mark on the content edge. The lozenge (z-index:1) is the sole
+   gap in the rule — its paper fill covers the hairline so it visibly
+   passes *behind* the folio ornament. */
+[data-register="quire"] .dock-wrap {
+  box-shadow: none;
+}
+
+[dir="rtl"] [data-register="quire"] .dock-wrap::after {
+  inset-inline-end: auto;
+  inset-inline-start: 0;
+}
+
+@media (min-width: 1200px) {
+  [data-register="quire"] .dock-wrap {
+    display: flex;
+  }
+}
+
+[data-register="quire"] .dock {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  /* acid-rave's .dock is a horizontal glass capsule: border-radius 9999px,
+     overflow-x auto (which computes overflow-y to auto → a clip/scroll
+     container) and a 14px backdrop blur. On the VERTICAL rail the capsule
+     radius sliced the first/last rows' corners and the auto overflow clipped
+     rows to the border box. Complete the reset so nothing clips. */
+  overflow: visible;
+  max-width: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: auto;
+}
+
+[data-register="quire"] .dock-link {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start; /* numeral + label rows read inline-start */
+  gap: 0.55rem;
+  min-height: 2.6rem; /* 44px+ tap target */
+  width: 100%;
+  padding: 0.4rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+}
+[data-register="quire"] .dock-link .dock-index {
+  /* Numeral leads each row; the label beside it is always visible. */
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+[data-register="quire"] .dock-link .dock-label {
+  /* Route word is always visible beside its numeral — no hover needed. */
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: nowrap;
+  border: 0;
+  color: inherit;
+  font-weight: 500;
+}
+/* Quiet rows at rest; full ink on approach; acid seal + inline-start bar
+   on the current route. No horizontal shift. */
+[data-register="quire"] .dock-link:hover,
+[data-register="quire"] .dock-link:focus-visible {
+  color: var(--color-ink);
+  border-color: transparent;
+  background: rgba(var(--rgb-acid), 0.05);
+  transform: none;
+}
+[data-register="quire"] .dock-link.is-active {
+  color: var(--color-acid);
+  border-color: transparent;
+  background: rgba(var(--rgb-acid), 0.07);
+  transform: none;
+}
+[data-register="quire"] .dock-link.is-active .dock-index {
+  color: var(--color-acid);
+}
+/* Kill acid-rave's active underline accent — the bar carries the signal. */
+[data-register="quire"] .dock-link.is-active::after {
+  display: none;
+}
+/* Active-row marker: a 2px vermilion bar on the row's inline-start edge —
+   the plate's second piece of furniture after the folio lozenge. */
+[data-register="quire"] .dock-link.is-active::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 22%;
+  bottom: 22%;
+  width: 2px;
+  background: var(--color-acid);
+  pointer-events: none;
+}
+/* Persian rows ride the menu face (Vazirmatn) with zero tracking so the
+   cursive joins stay intact; numerals keep tabular mono. */
+html[lang="fa"] [data-register="quire"] .dock-link {
+  font-family: var(--font-fa-menu);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.5;
+}
+html[lang="fa"] [data-register="quire"] .dock-link .dock-label {
+  letter-spacing: 0;
+  text-transform: none;
+}
+[data-register="quire"] .dock-sep {
+  display: none;
+}
+
+/* ---- §3 RUNNING HEAD + MOBILE DOCK + CONTENTS ----------------------------- */
+
+/* The corner chip becomes the running head: brand at the inline-start,
+   utilities at the inline-end, one hairline under the whole bar. */
+[data-register="quire"] .chip-corner {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 1.25rem;
+  background: var(--color-bg);
+  border: 0;
+  border-block-end: 1px solid var(--color-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Utility cluster inside the running head (kbd-hint, theme, lang, donate) */
+[data-register="quire"] .head-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+[data-register="quire"] .kbd-hint {
+  background: none;
+  border: 1px solid var(--color-line);
+  border-radius: 0;
+  color: var(--color-muted);
+  box-shadow: none;
+  min-height: 2.75rem;
+}
+[data-register="quire"] .kbd-hint:hover {
+  color: var(--color-ink);
+  border-color: var(--color-muted);
+}
+
+/* The donate pill loses its glow: a hairline chip that fills seal on hover. */
+[data-register="quire"] .donate-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 0.8rem;
+  background: none;
+  border: 1px solid var(--color-line);
+  border-radius: 0;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+[data-register="quire"] .donate-pill:hover,
+[data-register="quire"] .donate-pill:focus-visible {
+  color: var(--color-acid-ink);
+  border-color: var(--color-acid);
+}
+
+/* Mobile bar: the running head above carries the brand; this bar is the
+   edition's bottom rule — one hairline, palette + contents at the inline-end.
+   POSITIONING FIX: acid-rave.css anchors .mob-dock to the TOP of the viewport
+   (top: 0.85rem, inset-inline-end: 0.9rem, z-index: 60). The register's
+   running head is a full-width OPAQUE bar at z-index 70, so the pill landed
+   inside that bar and was painted *behind* it — the menu was invisible and
+   untappable at every <1200px viewport. The register owns the chrome now:
+   the bar is anchored to the bottom edge (matching the border-block-start
+   hairline already declared below), full width, and lifted above the running
+   head so the same pill can say "Close" while the contents overlay is open. */
+[data-register="quire"] .mob-dock {
+  inset-block-start: auto;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 71;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem calc(0.5rem + env(safe-area-inset-bottom));
+  background: var(--color-bg);
+  border: 0;
+  border-block-start: 1px solid var(--color-line);
+  box-shadow: none;
+}
+[data-register="quire"] .mob-pill {
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  background: none;
+  border: 1px solid var(--color-line);
+  border-radius: 0;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+[data-register="quire"] .mob-pill:hover,
+[data-register="quire"] .mob-pill:focus-visible {
+  color: var(--color-acid-ink);
+  border-color: var(--color-acid);
+}
+/* The burger becomes three hairline rules (the rules ARE the drawing). */
+[data-register="quire"] .mob-burger {
+  width: 1rem;
+  gap: 3px;
+}
+[data-register="quire"] .mob-burger i {
+  height: 1px;
+  border-radius: 0;
+}
+[data-register="quire"] .mob-burger i:nth-child(2) {
+  width: 100%;
+}
+/* The assistant FAB is the register's one floating control, so it is drawn as
+   the edition's one piece of wax: a FILLED vermilion seal (glyph knocked out
+   in paper) inside a hairline outline frame. No blur, no glow, no rings —
+   the neon treatment stays in agent-chat.css for the registers that want it. */
+[data-register="quire"] .sin-chat-fab {
+  color: var(--color-bg); /* the glyph knocks out of the seal */
+  background: var(--color-acid);
+  border: 1px solid var(--color-acid);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  /* the outline frame: a detached 1px hairline, not a shadow */
+  outline: 1px solid var(--color-line);
+  outline-offset: 4px;
+}
+/* a slow breath in fill only — no glow, no scale, no rings; off entirely
+   when the visitor asks for reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  [data-register="quire"] .sin-chat-fab {
+    animation: quire-seal-breath 5.5s ease-in-out infinite;
+  }
+  @keyframes quire-seal-breath {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.88;
+    }
+  }
+}
+/* the attention rings are ::before/::after — no halos on paper */
+[data-register="quire"] .sin-chat-fab::before,
+[data-register="quire"] .sin-chat-fab::after {
+  display: none;
+}
+/* hover/focus: invert to paper-on-ink, hairline snaps to seal vermilion */
+[data-register="quire"] .sin-chat-fab:hover,
+[data-register="quire"] .sin-chat-fab:focus-visible {
+  transform: none;
+  color: var(--color-acid-ink);
+  background: var(--color-bg);
+  border-color: var(--color-acid);
+  outline-color: var(--color-acid);
+  box-shadow: none;
+  animation: none;
+}
+[data-register="quire"] .sin-chat-fab-dot {
+  box-shadow: none;
+  background: currentColor;
+}
+/* The first-visit hint comes onto paper too: radius 0, hairline, no drop
+   shadow, an acid rule on the inline-start — it read as a glass pill from
+   another register. */
+[data-register="quire"] .sin-chat-fab-hint {
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-inline-start: 2px solid var(--color-acid);
+}
+
+/* POSITIONING FIX (narrow viewports): below 1200px the ONLY navigation in
+   this register is the fixed bottom bar above, and the FAB is pinned to the
+   SAME corner at a higher z-index (agent-chat.css: 74 against the bar's 71).
+   The 3.6rem disc therefore painted straight over the palette and contents
+   pills — the menu was rendered, correct and focusable, but invisible and
+   untappable, which is exactly "there is no navigation on mobile or tablet".
+   Lift the button (and the first-visit hint beside it) clear of the bar, and
+   reserve the bar's height after the colophon so the fixed bar never sits on
+   the last line of the page. */
+@media (max-width: 1199.98px) {
+  [data-register="quire"] .sin-chat-fab {
+    bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  }
+  [data-register="quire"] .sin-chat-fab-hint {
+    bottom: calc(5.25rem + env(safe-area-inset-bottom));
+  }
+  [data-register="quire"] .colophon-rule {
+    padding-block-end: calc(1.25rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Contents overlay — a book's table of contents: paper, display type,
+   hairline rows. (#orbital-nav, Escape-close and scroll-lock contract
+   preserved from the orbital overlay.) */
+[data-register="quire"] .overlay-veil {
+  background: var(--color-bg);
+  border: 0;
+  /* spine-rail centers .overlay-menu with position:absolute top:0 bottom:0 +
+     justify-content:center — on a short phone (FA labels, 320x568) the 7 rows
+     are TALLER than the viewport, centered flex overflows both ends, and the
+     first rows are unreachable/untappable. Make the veil the scroll container
+     and the menu a normal flow block that centers when it fits and scrolls
+     when it doesn't. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+[data-register="quire"] .overlay-menu {
+  position: static;
+  inset: auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+  max-width: 44rem;
+  margin-inline: auto;
+  padding: calc(5rem + env(safe-area-inset-top)) 1.5rem
+    calc(6rem + env(safe-area-inset-bottom));
+}
+[data-register="quire"] .overlay-link {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--color-ink);
+  border-block-end: 1px solid var(--color-line);
+  border-radius: 0;
+  padding-block: 0.9rem;
+  filter: none;
+  transition: color 0.2s ease;
+}
+[data-register="quire"] .overlay-link:hover,
+[data-register="quire"] .overlay-link.is-active {
+  filter: none;
+  color: var(--color-acid-ink);
+}
+[data-register="quire"] .overlay-index {
+  color: var(--color-acid-ink);
+  font-family: var(--font-mono);
+  font-size: 0.6em;
+}
+
+/* ---- §4 FRONTISPIECE (hero) -----------------------------------------------
+   The name is set large in Fraunces, static — no kinetic charge, no
+   anaglyph. The portrait plate stays server-rendered. Services read as a
+   single quiet index line. */
+
+/* Full-bleed ground, CENTERED content: the two margins negate main's side
+   gutters so the ground reaches both viewport edges, but padding keeps the
+   grid centered in the same visible box as the rest of the page — the text
+   never shifts. (main pads 1.25rem / --sidebar-w + 1rem; hero must mirror
+   them exactly. .tx-collapse untouched: original max-w/mx-auto/px.) */
+[data-register="quire"] .tx-hero {
+  max-width: none;
+  margin-inline-start: -1.25rem;
+  /* Far edge over-bleeds 12px past the viewport (clipped, harmless) so no
+     stray pixel of gutter survives there; padding pays it back, so the
+     content box — and the centered grid inside it — never moves. */
+  margin-inline-end: calc(-1.25rem - 12px);
+  padding-inline-start: 1.25rem;
+  padding-inline-end: calc(1.25rem + 12px);
+  padding-block-start: 5.5rem; /* clears the running head */
+  background: var(--color-bg);
+}
+@media (min-width: 1200px) {
+  [data-register="quire"] .tx-hero {
+    margin-inline-start: calc(-1 * (var(--sidebar-w) + 1rem));
+    padding-inline-start: calc(var(--sidebar-w) + 1rem);
+    margin-inline-end: calc(-1.25rem - 12px);
+    padding-inline-end: calc(1.25rem + 12px);
+  }
+}
+/* Ticker bleed (far edge only): the hazard band lives INSIDE main, so it
+   inherits main's 1.25rem inline-end gutter and its hairlines stop short
+   of the browser edge like a stray margin. Pull the band out to the edge —
+   the rail side mirror main exactly at every breakpoint (1.25rem mobile,
+   0 rail-side at ≥1200px: the margin index owns that edge; the band must
+   never slide under the fixed numerals). Logical property, so RTL mirrors
+   automatically. */
+[data-register="quire"] .tx-ticker-bleed {
+  margin-inline-start: -1.25rem;
+  /* Same far-edge insurance as the hero ground: the dark band must die
+     INTO the viewport edge, never a pixel short of it. */
+  margin-inline-end: calc(-1.25rem - 12px);
+}
+@media (min-width: 1200px) {
+  [data-register="quire"] .tx-ticker-bleed {
+    margin-inline-start: calc(-1 * (var(--sidebar-w) + 1rem));
+  }
+}
+[data-register="quire"] .tx-name .font-display,
+[data-register="quire"] .tx-name.font-display {
+  font-variation-settings: "opsz" 144;
+  text-transform: none;
+  letter-spacing: -0.015em;
+}
+[data-register="quire"] .tx-line-2 {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  color: var(--color-muted);
+}
+[data-register="quire"] .tx-meta,
+[data-register="quire"] .tx-meta-sep {
+  font-family: var(--font-mono);
+  color: var(--color-muted);
+}
+[data-register="quire"] .tx-meta-sep {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* Hero CTAs: hairline buttons, no neon fill. */
+[data-register="quire"] .btn-neon,
+[data-register="quire"] .btn-ghost {
+  background: none;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  color: var(--color-ink);
+  box-shadow: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+[data-register="quire"] .btn-neon:hover,
+[data-register="quire"] .btn-ghost:hover,
+[data-register="quire"] .btn-neon:focus-visible,
+[data-register="quire"] .btn-ghost:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+[data-register="quire"] .btn-neon::before,
+[data-register="quire"] .btn-neon::after {
+  display: none;
+}
+
+/* ---- §5 LEDGER (telemetry) -------------------------------------------------
+   Stats read as a table: tabular numerals, hairline rows, no meters. */
+
+[data-register="quire"] .gauge-cell {
+  background: none;
+  border: 0;
+  border-block-end: 1px solid var(--color-line);
+  border-radius: 0;
+  padding: 1.1rem 0 1.25rem;
+  box-shadow: none;
+}
+[data-register="quire"] .gauge-idx {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--color-acid-ink);
+}
+[data-register="quire"] .gauge-num {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 350;
+  color: var(--color-ink);
+}
+[data-register="quire"] .gauge-meter {
+  display: none;
+}
+
+/* ---- §6 FIGURE (skill network) + PROP PLATES -------------------------------
+   The competency figure draws in monochrome ink (canvas palette is
+   re-inked in SkillNetwork.tsx). The 3D-voice props return as monochrome
+   FIG. plates mounted in-flow inside their acts. */
+
+[data-register="quire"] .net-stage {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+[data-register="quire"] .net-hud {
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* FigPlate — the printed plate: hairline frame, caption, monochrome ink. */
+.fig-plate {
+  border: 1px solid var(--color-line);
+  background: var(--color-panel);
+  padding: 1.1rem;
+}
+/* In-flow plate placement between acts. */
+.quire-plate {
+  max-width: 26rem;
+  margin: 3.5rem auto 0;
+}
+@media (max-width: 767.98px) {
+  .quire-plate {
+    max-width: 20rem;
+  }
+}
+.fig-plate svg,
+.fig-plate canvas {
+  filter: grayscale(1) contrast(1.04);
+}
+.fig-plate figcaption,
+.fig-caption {
+  margin-block-start: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+.fig-caption::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-line);
+}
+.fig-caption .fig-no {
+  color: var(--color-acid-ink);
+}
+
+/* ---- §7 NOTES · PLATES · APPENDIX ------------------------------------------ */
+
+/* Modules become plates: no tilt-pose, no halo — hairline top rules and
+   marginal numerals. (The Tilt/Spotlight interactivity is kept; only the
+   printed pose is fixed.) */
+[data-register="quire"] .module-card {
+  background: none;
+  border: 0;
+  border-block-start: 1px solid var(--color-ink);
+  border-radius: 0;
+  box-shadow: none;
+  rotate: none !important;
+  padding: 1.2rem 0 0;
+}
+[data-register="quire"] .module-card[data-hue] {
+  background: none;
+}
+[data-register="quire"] .mod-idx {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--color-acid-ink);
+}
+[data-register="quire"] .mod-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+[data-register="quire"] .mod-chip {
+  background: none;
+  border: 1px solid var(--color-line);
+  border-radius: 0;
+  color: var(--color-muted);
+  box-shadow: none;
+}
+[data-register="quire"] .bay-grid {
+  gap: 2.5rem;
+}
+
+/* Signals appendix: dated index rows. */
+[data-register="quire"] .sig-zone {
+  background: none;
+  border: 0;
+}
+[data-register="quire"] .post-card,
+[data-register="quire"] .post-strip-item {
+  background: none;
+  border: 0;
+  border-block-end: 1px solid var(--color-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ---- §8 EPIGRAPH (manifesto) ------------------------------------------------
+   The quote is set in Fraunces italic, one measure. */
+
+[data-register="quire"] .mani-block {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 340;
+  font-variation-settings: "opsz" 60;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--color-ink);
+}
+[data-register="quire"] .mani-w {
+  opacity: 1;
+  transform: none;
+}
+[data-register="quire"] .mani-scrub .mani-w {
+  color: var(--color-muted);
+  transition: color 0.4s ease;
+}
+[data-register="quire"] .mani-scrub .mani-w.is-lit,
+[data-register="quire"] .mani-scrub .mani-w.lit {
+  color: var(--color-ink);
+}
+
+/* Act rules (Quire.tsx <Act>): marginal numeral + title + hairline. */
+.q-act-rule {
+  max-width: 86rem;
+  margin: 4.5rem auto 0;
+  padding-inline: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+.q-act-rule i {
+  flex: 1;
+  height: 1px;
+  background: var(--color-line);
+}
+.q-act-num {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--color-acid-ink);
+}
+.q-act-title {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+html[lang="fa"] .q-act-num,
+html[lang="fa"] .q-act-title {
+  letter-spacing: 0;
+}
+
+/* ---- §9 COLOPHON (footer) ---------------------------------------------------
+   The footer is a colophon: one justified measure under a double rule.
+   Links run in the sentence; reach routes, feeds, donate, language and
+   the edition toggle resolve as marginalia beneath it. The vermilion
+   end-mark returns the reader to the top. */
+
+[data-register="quire"] footer {
+  margin-block-start: 7rem;
+  border-block-start: 0;
+  background: none;
+}
+[data-register="quire"] .colophon-rule {
+  max-width: 86rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+[data-register="quire"] .colophon-rule::before {
+  content: "";
+  display: block;
+  height: 3px;
+  border-block-start: 1px solid var(--color-ink);
+  border-block-end: 1px solid var(--color-line);
+}
+[data-register="quire"] .colophon-body {
+  max-width: 66ch;
+  margin-inline: 0;
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  line-height: 1.85;
+  color: var(--color-ink);
+}
+[data-register="quire"] .colophon-body a {
+  color: var(--color-acid-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(var(--rgb-accent), 0.4);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+[data-register="quire"] .colophon-body a:hover,
+[data-register="quire"] .colophon-body a:focus-visible {
+  color: var(--color-acid);
+  text-decoration-color: var(--color-acid);
+}
+[data-register="quire"] .colophon-note {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+[data-register="quire"] .colophon-marginalia {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.4rem;
+  border-block-start: 1px solid var(--color-line);
+  padding-block-start: 1.1rem;
+}
+
+/* The end-mark: a vermilion square that returns to the top. 44px target. */
+[data-register="quire"] .end-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: var(--color-acid);
+  color: var(--color-bg);
+  border: 0;
+  border-radius: 0;
+  transition: opacity 0.2s ease;
+}
+[data-register="quire"] .end-mark:hover,
+[data-register="quire"] .end-mark:focus-visible {
+  opacity: 0.85;
+}
+
+/* ---- §10 NIGHT EDITION MIRRORS ---------------------------------------------
+   The token remap in theme-engine.css does the heavy lifting; these are
+   the surfaces whose day form is structural (hairlines stay hairlines,
+   the running head gets the carbon stock). */
+
+[data-theme="dark"] [data-register="quire"] .chip-corner,
+[data-theme="dark"] [data-register="quire"] .mob-dock,
+[data-theme="dark"] [data-register="quire"] .overlay-veil {
+  background: var(--color-bg);
+}
+[data-theme="dark"] [data-register="quire"] .btn-neon,
+[data-theme="dark"] [data-register="quire"] .btn-ghost:hover,
+[data-theme="dark"] [data-register="quire"] .btn-ghost:focus-visible {
+  border-color: var(--color-ink);
+}
+[data-theme="dark"] [data-register="quire"] .btn-neon:hover,
+[data-theme="dark"] [data-register="quire"] .btn-neon:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+[data-theme="dark"] [data-register="quire"] .fig-plate {
+  background: var(--color-panel);
+}
+
+/* ---- §11 FA TRACKING RESETS --------------------------------------------------
+   Persian: letter-spacing must stay 0 on Arabic script (tracking breaks
+   the cursive joins). The register's tracked mono chrome is Latin-only. */
+
+html[lang="fa"] [data-register="quire"] .tx-line-2,
+html[lang="fa"] [data-register="quire"] .kbd-hint,
+html[lang="fa"] [data-register="quire"] .donate-pill,
+html[lang="fa"] [data-register="quire"] .seam .seam-tag,
+html[lang="fa"] [data-register="quire"] .fig-caption,
+html[lang="fa"] [data-register="quire"] .gauge-idx,
+html[lang="fa"] [data-register="quire"] .mod-idx,
+html[lang="fa"] [data-register="quire"] .colophon-note {
+  letter-spacing: 0;
+}
+html[lang="fa"] [data-register="quire"] .overlay-link,
+html[lang="fa"] [data-register="quire"] .mani-block,
+html[lang="fa"] [data-register="quire"] .mod-title,
+html[lang="fa"] [data-register="quire"] .tx-name .font-display {
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ---- §12 NARROW VIEWPORTS ----------------------------------------------------
+   <1200px: no margin index (the contents overlay carries navigation);
+   the running head stays; measures relax. */
+
+@media (max-width: 1199.98px) {
+  [data-register="quire"] .chip-corner {
+    padding-inline: 1rem;
+  }
+}
+
+/* ---- §13 PRINT · NO-SCRIPTING · REDUCED MOTION -------------------------------- */
+
+@media print {
+  [data-register="quire"] .chip-corner,
+  [data-register="quire"] .dock-wrap,
+  [data-register="quire"] .mob-dock,
+  [data-register="quire"] .end-mark {
+    display: none !important;
+  }
+  [data-register="quire"] main {
+    padding: 0 !important;
+  }
+  [data-register="quire"] .fig-plate svg {
+    filter: none;
+  }
+}
+
+/* The margin index and running head are pure presentation over real links —
+   with scripting disabled the links still work; only hover reveal is lost. */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-register="quire"] .dock-link,
+  [data-register="quire"] .overlay-link,
+  [data-register="quire"] .colophon-body a,
+  [data-register="quire"] .mani-scrub .mani-w,
+  [data-register="quire"] .end-mark,
+  [data-register="quire"] .donate-pill {
+    transition: none;
+  }
+}
+
+
+
+

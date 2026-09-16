@@ -25,10 +25,10 @@ const SITE = "https://sinisteroid.ir";
 const W = 1200;
 const H = 630;
 
-const BG = "#020503";
-const ACID = "#b8ff00";
-const CYAN = "#00e5ff";
-const INK = "#f2f7f2";
+const BG = "#f3efe7";
+const ACID = "#b53a1a";
+const CYAN = "#6f6a5f";
+const INK = "#171512";
 
 const postsDir = path.join(root, "content", "posts");
 const outDir = path.join(root, "public", "og");
@@ -91,8 +91,8 @@ function overlaySvg(title, isFa) {
   return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Tahoma, Arial, sans-serif">
   <defs>
     <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0.35" stop-color="#020503" stop-opacity="0"/>
-      <stop offset="1" stop-color="#020503" stop-opacity="0.94"/>
+      <stop offset="0.35" stop-color="#f3efe7" stop-opacity="0"/>
+      <stop offset="1" stop-color="#f3efe7" stop-opacity="0.94"/>
     </linearGradient>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#fade)"/>
@@ -108,7 +108,7 @@ function overlaySvg(title, isFa) {
 const flatBase = Buffer.from(
   `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
     <rect width="${W}" height="${H}" fill="${BG}"/>
-    <g stroke="#0d1a12" stroke-width="1">
+    <g stroke="#d8d2c4" stroke-width="1">
       ${Array.from({ length: 8 }, (_, i) => `<line x1="${(i + 1) * 133}" y1="0" x2="${(i + 1) * 133}" y2="${H}"/>`).join("")}
       ${Array.from({ length: 4 }, (_, i) => `<line x1="0" y1="${(i + 1) * 126}" x2="${W}" y2="${(i + 1) * 126}"/>`).join("")}
     </g>

@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/ui/Reveal";
-import { Rail, Seam } from "@/components/ui/Section";
+import { Rail } from "@/components/ui/Section";
+import { Act } from "./Quire";
 import { ArrowIcon, SparkIcon } from "@/components/ui/icons";
 import { trackEvent } from "@/lib/analytics";
 import { loc, type Locale } from "@/lib/i18n";
@@ -127,19 +128,19 @@ const PALETTES: Record<
   "dark" | "light",
   { acid: string; cyan: string; violet: string; ink: string }
 > = {
-  dark: { acid: "#ff8a5c", cyan: "#ff5a36", violet: "#3d70ff", ink: "#efeae0" },
-  light: { acid: "#c2401f", cyan: "#b03060", violet: "#2b4bc0", ink: "#221f1a" },
+  dark: { acid: "#e05a33", cyan: "#c9a35a", violet: "#948d7d", ink: "#e9e3d6" },
+  light: { acid: "#b53a1a", cyan: "#8a5a24", violet: "#6f6a5f", ink: "#171512" },
 };
 
 /**
  * Parse a color custom-property into an [r,g,b] triplet for canvas rgba().
  * The browser does NOT give back the `#hex` we author in tokens.css — Tailwind
  * v4 registers theme tokens as <color> properties, so getComputedStyle
- * serializes them to `rgb(255, 138, 92)`. Accept hex, 3-digit hex and
+ * serializes them to `rgb(255, 194, 74)`. Accept hex, 3-digit hex and
  * rgb()/ rgba() so the network NEVER silently paints black again. On a truly
  * unpare-able value, fail open to the acid-lime brand color (never black).
  */
-const ACID_RGB: [number, number, number] = [255, 138, 92];
+const ACID_RGB: [number, number, number] = [255, 194, 74];
 
 function hexToRgb(color: string): [number, number, number] {
   if (!color) return ACID_RGB;
@@ -773,11 +774,13 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           /* Label. */
           const fs = isHub ? 13 : n.kind === "cat" ? 11 : 10;
           const weight = isHub || isHot ? "700" : n.kind === "cat" ? "600" : "600";
-          ctx.font = `${weight} ${fs}px "Vazirmatn", "Space Grotesk", ui-sans-serif, sans-serif`;
+          ctx.font = `${weight} ${fs}px "Vazirmatn", "Archivo", ui-sans-serif, sans-serif`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = isHub
-            ? "#0d0d0f"
+            ? dark
+              ? "#141310"
+              : "#f3efe7"
             : `rgba(${r},${g},${bl},${isHot ? 1 : lit ? 0.95 : dark ? 0.92 : 0.95})`;
           ctx.fillText(n.label, n.x, n.y + (isHub ? 0 : n.r + fs * 0.9));
         }
@@ -903,7 +906,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           </Reveal>
         </div>
       </section>
-      <Seam cyan tag="FAULT.03 ▸ CORE" />
+      <Act num="03" title={fa ? "نمودار" : "Figure"} />
     </>
   );
 }

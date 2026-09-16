@@ -1,18 +1,15 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
-  Space_Grotesk,
-  JetBrains_Mono,
+  Fraunces,
+  Archivo,
+  IBM_Plex_Mono,
   Vazirmatn,
-  Orbitron,
-  Noto_Kufi_Arabic,
+  Amiri,
 } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import GLBackground from "@/components/shell/GLBackground";
 import ProgressThread from "@/components/shell/ProgressThread";
-import GridLines from "@/components/shell/GridLines";
-import Cursor from "@/components/shell/Cursor";
 import FilterDefs from "@/components/shell/FilterDefs";
 import ServiceWorkerRegister from "@/components/shell/ServiceWorkerRegister";
 import { ViewTransitionBridge, GlobalVTNav } from "@/components/shell/ViewTransition";
@@ -35,47 +32,61 @@ import { JsonLd } from "@/components/ui/JsonLd";
 import { personJsonLd, websiteJsonLd } from "@/lib/schema";
 import "../../globals.css";
 
-// Sets the theme before first paint — no light-mode flash on load.
-// Default is DARK (the house identity); the script only restores a theme the
-// user has explicitly saved, and ignores the OS color-scheme (which would
-// otherwise light-wash the whole site on light-OS machines).
-const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.dataset.theme=t}catch(e){}`;
+// Sets the theme before first paint — no night-edition flash on load.
+// QUIRE: default is the DAY edition (paper); the script only restores a
+// theme the user has explicitly saved, and ignores the OS color-scheme
+// (which would otherwise dark-wash the whole site on dark-OS machines).
+const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="light"}document.documentElement.dataset.theme=t}catch(e){}`;
 
 // With output: "export", only render locales listed in generateStaticParams.
 // Any other value (e.g. /admin/) → 404 instead of a runtime crash.
 export const dynamicParams = false;
 
-// Display face for the ACID RAVE identity — a wide techno variable face
-// (400–900) driving --font-display for Latin headings; Kufi mirrors it in Persian.
-const orbitron = Orbitron({
+// QUIRE display voice — Fraunces, a variable serif with a real optical-size
+// axis driving --font-display for Latin headings; Amiri (Naskh) mirrors it
+// in Persian. Every face (all subsets of all five families) is build-inlined
+// as a base64 data-URI by scripts/build/inline-fonts.mjs and ships with
+// font-display:block — see that file for why `optional` is banned: a face
+// that misses the optional block period is excluded from matching for the
+// whole page lifetime, which is exactly the "type changes on refresh" bug.
+// `block` + data-URI faces means the real type paints on every load, with
+// no swap and no reflow, deterministically.
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-orbitron-var",
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  // display:"optional" — the body face must NEVER swap in after first paint
-  // (the swap re-wraps the hero roles/desc/CTA column → 0.26 CLS → -8 score).
-  // optional = Chrome skips the fetch on constrained connections and keeps
-  // the metric-compatible fallback on first visit; the real face still loads
-  // for repeat visitors (cache) and fast connections. Orbitron is the LCP
-  // display face and is build-inlined instead.
-  display: "optional",
-  // Not preloaded: the LCP element is the display name (Orbitron); preloading
-  // the body face too on a throttled mobile connection steals bandwidth+RTT
-  // from the LCP font.
+  variable: "--font-fraunces-var",
+  display: "block",
+  // Kill the generated "Fraunces Fallback" local() metric-clone face: it only
+  // softened a network swap that can no longer happen (the face is inlined as
+  // a data URI), and on Windows those clones resolve to Arial — where they
+  // hijack any glyph (arrows, punctuation, Persian) the subset lacks.
+  adjustFontFallback: false,
+  // Not preloaded: the data-URI face is already inside the stylesheet, so a
+  // preload would be a redundant network fetch of the same bytes.
   preload: false,
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-  // Below-the-fold readouts only — optional lets Chrome skip the fetch on
-  // constrained connections (no swap → no CLS from mono labels).
-  display: "optional",
-  // Below-the-fold readouts only;not preloaded (see Space Grotesk note).
+  variable: "--font-archivo-var",
+  display: "block",
+  // No "Archivo Fallback" clone — same reasoning as Fraunces (the face is
+  // inlined; the clone only ever contributed Arial glyphs).
+  adjustFontFallback: false,
+  // Not preloaded: a data-URI face is already in the stylesheet, so a preload
+  // would be a redundant fetch of the same bytes.
+  preload: false,
+});
+
+const plexMono = IBM_Plex_Mono({
+  weight: ["400", "500", "600"],
+  subsets: ["latin"],
+  variable: "--font-plex-mono-var",
+  display: "block",
+  // No "IBM Plex Mono Fallback" clone. This one was the worst offender: its
+  // local() Arial metrics HAVE Arabic coverage, so every Persian glyph in a
+  // --font-mono label painted Arial instead of falling through to Vazirmatn.
+  adjustFontFallback: false,
+  // Not preloaded (see Archivo note).
   preload: false,
 });
 
@@ -96,23 +107,33 @@ const jetbrainsMono = JetBrains_Mono({
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
   variable: "--font-vazirmatn",
-  // optional: even though subsets are arabic, Chrome eagerly fetched the
-  // latin @font-face slice on /en/ (the face is declared in the shared head
-  // CSS). optional makes Chrome skip it on constrained connections — no
-  // 34 KiB of dead weight and no swap on the English page.
-  display: "optional",
+  // block (was `optional`). Its faces are ALL build-inlined now, so on /en/
+  // nothing is fetched at all; on /fa/ the face is ready at head-parse and
+  // can never lose the optional race that used to lock in the fallback for
+  // a whole session (the reload-to-reload Persian type inconsistency).
+  display: "block",
+  // No "Vazirmatn Fallback" clone — with the faces inlined it would never
+  // soften a swap, and its local() Arial metrics have full Arabic coverage,
+  // so it would hijack Persian glyphs before any generic family.
+  adjustFontFallback: false,
   preload: false,
 });
 
-// Arabic-script geometric mirror face (replaces the removed Syne). Variable
-// (100–900) so the kinetic weight effect still works. `preload: false` keeps
-// English pages from eagerly fetching the Arabic webfont (it decodes only on
-// fa pages, where the @font-face CSS is discovered in the inlined head CSS
-// on first render).
-const notoKufiArabic = Noto_Kufi_Arabic({
+// Arabic-script serif mirror face — Amiri, the classical Naskh that answers
+// Fraunces in Persian display type. `preload: false` keeps English pages
+// from eagerly fetching the Arabic webfont (it decodes only on fa pages,
+// where the @font-face CSS is discovered in the inlined head CSS on first
+// render).
+const amiri = Amiri({
   subsets: ["arabic"],
-  variable: "--font-kufi",
-  display: "optional",
+  weight: ["400", "700"],
+  variable: "--font-amiri-var",
+  // block (was `optional`) — same reasoning as Vazirmatn; all faces are
+  // build-inlined, so no network fetch and no optional-race fallback.
+  display: "block",
+  // No "Amiri Fallback" clone (same as Vazirmatn — an Arial-metric clone
+  // would hijack Persian glyphs).
+  adjustFontFallback: false,
   preload: false,
 });
 
@@ -184,11 +205,11 @@ export default async function LocaleRootLayout({
   const locale = raw as Locale;
 
   const fontVars = [
-    orbitron.variable,
-    spaceGrotesk.variable,
-    jetbrainsMono.variable,
+    fraunces.variable,
+    archivo.variable,
+    plexMono.variable,
     vazirmatn.variable,
-    notoKufiArabic.variable,
+    amiri.variable,
   ].join(" ");
 
   // Indexable commands for the palette: pages, skills and posts (content is
@@ -238,6 +259,7 @@ export default async function LocaleRootLayout({
       lang={locale}
       dir={locale === "fa" ? "rtl" : "ltr"}
       className={fontVars}
+      data-register="quire"
       suppressHydrationWarning
     >
       <body
@@ -279,15 +301,9 @@ export default async function LocaleRootLayout({
             every route change rides a view transition, not just the chrome
             that uses VTLink. */}
         <GlobalVTNav />
-                <LazyMount mode="interaction">
-          <GLBackground />
-        </LazyMount>
+        {/* QUIRE: the GL nebula, constellation rails, film grain and cursor
+            reticle are retired — the paper ground is the shell. */}
         <FilterDefs />
-        <GridLines />
-        <div aria-hidden className="noise" />
-                <LazyMount mode="interaction">
-          <Cursor />
-        </LazyMount>
         <CommandPaletteLazy locale={locale} entries={entries} />
         <EasterEggLazy locale={locale} />
         {/* Floating assistant: lazy bridge to the deployed sinister guest agent */}

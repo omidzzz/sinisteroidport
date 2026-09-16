@@ -1,38 +1,19 @@
-"use client";
+import FigPlate from "./figure/FigPlate";
 
-import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-
-const LaptopDeck = dynamic(() => import("./laptop-deck/LaptopDeck"), {
-  ssr: false,
-  loading: () => null,
-});
-
-/** DEDICATED CONSOLE BAY — the in-flow acid laptop for narrow viewports only.
- * On ≥768px the laptop lives in the scroll-bound float layer instead
- * (components/home/prop-float/), so this section unmounts itself there and
- * takes up zero space. It renders nothing on the server either, so a desktop
- * first paint never shows an empty strip (mobile paints it after hydration). */
-export default function ConsoleBay() {
-  const [mobile, setMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767.98px)");
-    const apply = () => setMobile(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
-  if (!mobile) return null;
-
+/** DEDICATED CONSOLE BAY — the laptop, printed as FIG. 03 (QUIRE).
+ * The prop float layer is retired in the printed edition, so the deck
+ * reads as an in-flow monochrome plate on every viewport. Decorative:
+ * aria-hidden, and the chunk stays scroll-lazy inside FigPlate. */
+export default function ConsoleBay({ locale }: { locale?: string }) {
+  const fa = locale === "fa";
   return (
-    <section className="console-bay" aria-hidden="true">
-      <div className="console-bay-inner">
-        <div className="console-bay-deck">
-          <LaptopDeck />
-        </div>
-      </div>
-    </section>
+    <div aria-hidden="true">
+      <FigPlate
+        no="03"
+        caption={fa ? "لپ‌تاپ · کار می‌کند" : "The laptop · it works"}
+        prop="laptop"
+        className="quire-plate console-bay"
+      />
+    </div>
   );
 }

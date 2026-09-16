@@ -7,8 +7,8 @@ import ConsoleBay from "@/components/home/ConsoleBay";
 import ModuleBay from "@/components/home/ModuleBay";
 import SignalsSection from "@/components/home/SignalsSection";
 import ManifestoSection from "@/components/home/ManifestoSection";
-import Stratum from "@/components/home/Stratum";
-import PropFloatLayer from "@/components/home/prop-float/PropFloatLayer";
+import Quire from "@/components/home/Quire";
+import FigPlate from "@/components/home/figure/FigPlate";
 import { homeFaq } from "@/components/home/faq";
 import { getAllPosts } from "@/lib/blog/repository";
 import { isLocale, type Locale } from "@/lib/i18n";
@@ -19,16 +19,13 @@ export function generateStaticParams() {
 }
 
 /**
- * HOME — STRATUM · MANTLE (v7)
- * Tectonic cross-section: full-bleed strata bands with interlocking
- * fault edges, mineral shelves (amber → rose → violet) that re-map
- * the hot tokens per act, the core-sample rail, crossed marquee
- * crust strips, an embedded core-portrait plate, a scrubbed CORE
- * network, mirror-shelf modules, zigzag transmissions and a
- * spotlight manifesto. No coordinates, no star chart.
- *
- * The acts live in components/home/*; each is wrapped in a Stratum
- * by this page — change a section's markup there, order strata here.
+ * HOME - QUIRE (v9)
+ * The printed edition: one continuous measure of type on paper, read
+ * top to bottom like a book. Acts are separated by marginal rules
+ * (numeral + title), the chrome lives in the margin (margin index,
+ * running head, colophon), and the prop floaters return as monochrome
+ * FIG. plates mounted in the flow. Content, data and i18n are
+ * unchanged from the TERRANOMY acts - only the voice is printed.
  */
 export default async function HomePage({
   params,
@@ -40,9 +37,9 @@ export default async function HomePage({
   const fa = locale === "fa";
   // PERF: the strip renders title + date + cover only. Passing the FULL posts
   // serialized every post's content blocks (~84 KiB of JSON for three posts)
-  // into the RSC flight payload embedded in the HTML — paid on transfer AND
+  // into the RSC flight payload embedded in the HTML - paid on transfer AND
   // parse AND hydration at the 4x-throttled mobile CPU. Slim to what the strip
-  // reads (empty `content` is a valid PostTranslation — zero behavior change).
+  // reads (empty `content` is a valid PostTranslation - zero behavior change).
   const latest = getAllPosts().slice(0, 3).map((p) => ({
     slug: p.slug,
     title: p.title,
@@ -69,35 +66,46 @@ export default async function HomePage({
   const skillTotal = skillsData.reduce((n, g) => n + g.skills.length, 0);
 
   return (
-    <div className="home-acts overflow-x-clip">
+    <div className="home-acts">
       {/* GEO/SEO: machine-readable FAQ (also great for AI crawlers + rich results) */}
       <JsonLd data={faqJsonLd(homeFaq(fa))} />
 
-      {/* STRATUM · MANTLE — the home page is a tectonic cross-section.
-          Each act is a mineral shelf (amber → rose → violet) that re-tints
-          the same components via scoped tokens; fault edges interlock. */}
-      <Stratum mineral="amber">
+      <Quire locale={locale}>
         <HeroSection locale={locale} />
-      </Stratum>
-      <Stratum mineral="rose">
+
+        {/* FIG. 01 - the frog, printed as a plate after the frontispiece */}
+        <FigPlate
+          no="01"
+          caption={fa ? "قورباغه · جانب‌دار" : "The frog · it darts away"}
+          prop="frog"
+          className="quire-plate"
+        />
+
         <TelemetrySection locale={locale} skillTotal={skillTotal} />
-      </Stratum>
-      <Stratum mineral="violet">
+
+        {/* FIG. 02 - the plant, printed opposite the ledger */}
+        <FigPlate
+          no="02"
+          caption={fa ? "گیاه · تاب می‌خورد" : "The plant · it sways"}
+          prop="plant"
+          className="quire-plate"
+        />
+
         <SkillNetwork locale={locale} />
-      </Stratum>
-      <Stratum mineral="amber">
-        <ConsoleBay />
-      </Stratum>
-      <Stratum mineral="rose">
+        <ConsoleBay locale={locale} />
         <ModuleBay locale={locale} />
-      </Stratum>
-      <Stratum mineral="violet">
+
+        {/* FIG. 04 - the drone, saved for last */}
+        <FigPlate
+          no="04"
+          caption={fa ? "پرنده · فاصله را نگه می‌دارد" : "The drone · it keeps its distance"}
+          prop="drone"
+          className="quire-plate"
+        />
+
         <SignalsSection locale={locale} initial={latest} />
-      </Stratum>
-      <Stratum mineral="amber">
         <ManifestoSection locale={locale} />
-      </Stratum>
-      <PropFloatLayer />
+      </Quire>
     </div>
   );
 }

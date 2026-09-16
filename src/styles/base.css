@@ -1,46 +1,36 @@
 html {
-  color-scheme: dark;
+  /* QUIRE: the day edition is paper — light is the base, the night
+     edition is the [data-theme="dark"] overlay in theme-engine.css */
+  color-scheme: light;
   scroll-behavior: smooth;
   /* Tilted bands and bleeds must never spawn a horizontal scrollbar */
   overflow-x: clip;
 }
 
 body {
-  /* Base tint under every content layer (canvas paints beneath) */
+  /* Base tint under every content layer */
   background-color: var(--color-bg);
   overflow-x: clip;
 }
 
-/* Custom cursor takes over on precise pointers */
-@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  body,
-  a,
-  button,
-  [role="button"] {
-    cursor: none;
-  }
-}
+/* The custom cursor reticle is retired in QUIRE — the platform
+   cursor is the honest pointer on a printed page. */
 
 ::selection {
-  background: var(--color-acid);
-  color: #0d0d0f;
+  background: var(--color-accent);
+  color: var(--color-bg);
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d0d0f;
+  background: var(--color-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    var(--color-accent),
-    var(--color-accent-2) 55%,
-    var(--color-acid)
-  );
-  border-radius: 8px;
-  border: 2px solid #0d0d0f;
+  background: var(--color-muted);
+  border-radius: 0;
+  border: 3px solid var(--color-bg);
 }
 
 /* ---------- Typography helpers ---------- */
@@ -126,20 +116,8 @@ body {
     0 0 34px rgba(var(--rgb-accent-2), 0.3);
 }
 
-/* ---------- Film grain ---------- */
-/* The grain sits ABOVE page content (z 70) with an overlay blend — over a
-   transparent canvas that reads as a darkening/tint film. Keep it under the
-   nebula/content stack so neon never looks smoked. */
-
-.noise {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.06;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
-}
+/* QUIRE: the film-grain layer is retired — the paper texture is the
+   ground itself. The .noise class is gone from the shell. */
 
 /* ---------- Scroll-reveal (IntersectionObserver-driven) ---------- */
 
@@ -288,122 +266,6 @@ body {
   }
 }
 
-/* ---------- Custom cursor — targeting reticle ---------- */
-
-.cursor-dot {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 90;
-  width: 7px;
-  height: 7px;
-  border-radius: 9999px;
-  background: var(--color-acid);
-  box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.9);
-  pointer-events: none;
-}
-.cursor-ring {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 80;
-  width: 38px;
-  height: 38px;
-  border-radius: 9999px;
-  border: 1.5px solid rgba(var(--rgb-accent), 0.9);
-  background: radial-gradient(
-    closest-side,
-    rgba(var(--rgb-accent), 0.14),
-    transparent
-  );
-  pointer-events: none;
-  transition: border-color 0.25s ease, scale 0.2s ease;
-}
-/* Reticle ticks around the ring (pseudo = north/south beam pair) */
-.cursor-ring::before,
-.cursor-ring::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -6px;
-  width: 1px;
-  height: 6px;
-  margin-left: -0.5px;
-  background: rgba(var(--rgb-accent), 0.85);
-  transform-origin: center calc(19px + 6px);
-}
-.cursor-ring::after {
-  transform: rotate(180deg);
-}
-/* Over interactive elements the reticle ignites acid and tightens */
-.cursor-ring.cursor-hot {
-  border-color: rgba(var(--rgb-acid), 0.95);
-}
-.cursor-ring.cursor-hot::before,
-.cursor-ring.cursor-hot::after {
-  background: rgba(var(--rgb-acid), 0.95);
-}
-/* Labeled cursor — VIEW / OPEN / DRAG pill inside the ring. The label rides
-   data-label on the ring (written by Cursor.tsx from [data-cursor]), so no
-   extra DOM: the ring's own ::before becomes the pill when labeled. */
-.cursor-ring.cursor-label {
-  width: 64px;
-  height: 64px;
-  border-color: rgba(var(--rgb-acid), 0.95);
-  background: rgba(13, 13, 15, 0.55);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-.cursor-ring.cursor-label::before {
-  content: attr(data-label);
-  left: 50%;
-  top: 50%;
-  width: auto;
-  height: auto;
-  margin: 0;
-  padding: 0 0.2rem;
-  transform: translate(-50%, -50%);
-  background: none;
-  font-family: var(--font-mono);
-  font-size: 0.52rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-acid);
-  transform-origin: center;
-}
-.cursor-ring.cursor-label::after {
-  display: none;
-}
-.cursor-ring.cursor-label.cursor-hot::before {
-  background: none;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .cursor-ring {
-    animation: ring-spin 9s linear infinite;
-  }
-}
-@keyframes ring-spin {
-  to {
-    rotate: 360deg;
-  }
-}
-@media (pointer: coarse) {
-  .cursor-dot,
-  .cursor-ring {
-    display: none;
-  }
-}
-/* ---------- Coarse-pointer perf pass (mobile / tablet) ---------- */
-
-/* The film-grain layer is a full-screen mix-blend-mode: overlay compositing
-   every pixel above the animated background. On touch GPUs that is a
-   full-viewport blend that stays hot during scroll — and that for a 7%
-   tint. Drop it on coarse pointers; desktop keeps it. */
-@media (pointer: coarse) {
-  .noise {
-    display: none !important;
-  }
-}
 
 /* Glass panels re-sample their backdrop on every repaint under backdrop-filter;
    on mobile the backdrop is the animated nebula + scrolling neon, making blur
@@ -426,9 +288,9 @@ body {
   inset-inline-start: 1rem;
   z-index: 999;
   padding: 0.7rem 1.15rem;
-  border-radius: 6px;
-  background: var(--color-acid);
-  color: #0d0d0f;
+  border-radius: 0;
+  background: var(--color-accent);
+  color: var(--color-bg);
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
@@ -442,9 +304,6 @@ body {
   inset-block-start: 1rem;
   outline: 2px solid var(--color-ink);
   outline-offset: 2px;
-}
-[data-theme="light"] .skip-link {
-  color: #ffffff;
 }
 
 /* Default keyboard ring so every focusable element outside the hand-styled

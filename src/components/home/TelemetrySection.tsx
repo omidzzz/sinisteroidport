@@ -1,6 +1,7 @@
 import Reveal from "@/components/ui/Reveal";
 import CountUp from "@/components/ui/CountUp";
-import { Rail, Seam } from "@/components/ui/Section";
+import { Rail } from "@/components/ui/Section";
+import { Act } from "./Quire";
 import { GaugeIcon } from "@/components/ui/icons";
 import { getDict, type Locale } from "@/lib/i18n";
 
@@ -68,7 +69,7 @@ export default function TelemetrySection({
         </div>
       </section>
 
-      <Seam flip tag="FAULT.02 ▸ DRILL" />
+      <Act num="02" title={fa ? "دفتر شمار" : "Ledger"} />
     </>
   );
 }

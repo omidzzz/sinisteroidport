@@ -220,8 +220,6 @@ export default async function ContactPage({
         {/* scattered telemetry readouts — decorative */}
         <span className="contact-float cf-1" aria-hidden>{C.priority}</span>
         <span className="contact-float cf-2" aria-hidden>{C.crypto}</span>
-        <span className="contact-float cf-3" aria-hidden>{t.coords}</span>
-
         {/* EMAIL — the hero channel */}
         <Reveal className="ch-hero-wrap">
           <article className="edu-card contact-card ch-hero">

@@ -40,6 +40,8 @@
      blog-post.css     V9 — prose-post article voice
      motion-reduce.css WCAG 2.2.2 safety net — freezes every remaining
                        CSS animation for prefers-reduced-motion (LAST)
+     terranomy.css     TERRANOMY — tangent-planar survey cross-section (v8):
+                       home-page station cuts + mineral ink remap
    ------------------------------------------------------------ */
 
 @import "tailwindcss";
@@ -69,6 +71,16 @@
    bands, core-sample rail, per-shelf token morphing). Comes after the
    motion-reduce safety net because the geology is static. */
 @import "../styles/stratum.css";
+/* terranomy.css — TERRANOMY tangent-planar survey cross-section (v8).
+   Replaces the sheet chrome on the home page with one continuous
+   geological cross-section plus its own mineral ink remap. Static too,
+   so it also lands after the motion-reduce safety net. */
+@import "../styles/terranomy.css";
+/* quire.css — QUIRE · the printed edition (v9). The home page as one
+   continuous measure on paper: margin index nav, running head, colophon
+   footer, hairline act rules, a single vermilion seal. Static geology —
+   after the motion-reduce safety net, before the enhance finesse pass. */
+@import "../styles/quire.css";
 /* enhance.css MUST stay last: finesse pass whose overrides (btn-shine
    compositor lift, module energizer, seam/footer scrubs, print decay)
    need to win the cascade. */

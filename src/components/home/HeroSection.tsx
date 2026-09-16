@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import Reveal from "@/components/ui/Reveal";
 import Magnetic from "@/components/ui/Magnetic";
 import KineticTitle from "./KineticTitle";
 import HeroPlate from "./HeroPlate";
-import { Seam } from "@/components/ui/Section";
+import { Act } from "./Quire";
 import { ArrowIcon, SparkIcon } from "@/components/ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 
@@ -117,7 +117,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
                 </Magnetic>
               </div>
             </Reveal>
-            {/* Studio meta strip — availability + locale + coords. Static paint,
+            {/* Studio meta strip — availability + locale. Static paint,
                 tabular numerals, ASCII/LTR pinned like the logotype so it reads
                 identically inside the Persian layout. */}
             <Reveal delay={300}>
@@ -127,7 +127,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
                   <span dir="ltr">OPEN FOR WORK — 2026</span>
                 </span>
                 <span aria-hidden className="tx-meta-sep" />
-                <span dir="ltr">{t.coords}</span>
+                <span dir="ltr"></span>
                 <span aria-hidden className="tx-meta-sep" />
                 <span dir="ltr">{locale === "fa" ? "FA / EN" : "EN / FA"}</span>
               </p>
@@ -147,7 +147,7 @@ export default function HeroSection({ locale }: { locale: Locale }) {
       </section>
 
       {/* hazard ticker lives OUTSIDE the hero so nothing clips it */}
-      <div aria-hidden className="relative z-30 -mt-8 select-none pb-6">
+      <div aria-hidden className="tx-ticker-bleed relative z-30 -mt-8 select-none pb-6">
         <div className="hazard-band" ref={bandRef}>
           <div className="hazard-tape absolute inset-x-0 -top-[9px] h-[9px]" />
           <div className="ticker ticker-band">
@@ -182,7 +182,8 @@ export default function HeroSection({ locale }: { locale: Locale }) {
           <div className="hazard-tape absolute inset-x-0 -bottom-[9px] h-[9px]" />
         </div>
       </div>
-      <Seam cyan tag="FAULT.01 ▸ CRUST" />
+      <Act num="01" title={locale === "fa" ? "صفحه‌ی آغاز" : "Frontispiece"} />
     </>
   );
 }
+

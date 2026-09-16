@@ -1,124 +1,114 @@
 /* ============================================================
-   STRATUM · MANTLE — theme engine (total re-skin)
+   QUIRE — theme engine (day base / night edition)
    ------------------------------------------------------------
-   Dark (default) is basalt: a cold blue-graphite crust carved by
-   three mineral lights — halide amber, mantle rose and helium
-   violet. The light/dark toggle flips [data-theme] on <html>
-   and the whole palette re-maps because every utility and
-   surface below is token-driven. Light is SALT FLAT: warm
-   paper-white with the same minerals darkened for AA.
+   Day (paper) IS the base: the token set in tokens.css is the
+   light edition. The dark toggle is the NIGHT EDITION — same
+   quire, carbon stock. [data-theme="dark"] re-maps the same
+   tokens; because every surface below is token-driven, the
+   flip is one block.
    ============================================================ */
 
-/* ---- Dark: refine the hard-coded surfaces to the red void ---- */
+/* ---- Paper-native surfaces (day edition) ---- */
 ::-webkit-scrollbar-track { background: var(--color-bg); }
 .hero-plate-frame { background: var(--color-panel); }
 .glass {
-  background: linear-gradient(155deg, rgba(var(--rgb-accent-2), 0.10), rgba(22, 22, 27, 0.5));
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(243, 240, 237, 0.86));
+  border-color: rgba(var(--rgb-accent-3), 0.16);
 }
 .overlay-veil {
   background: radial-gradient(
     125% 95% at 70% -10%,
-    rgba(var(--rgb-accent), 0.18),
-    rgba(13, 13, 15, 0.9) 52%,
-    rgba(13, 13, 15, 0.98)
+    rgba(var(--rgb-accent), 0.1),
+    rgba(243, 239, 231, 0.96) 55%,
+    var(--color-bg)
   );
 }
 .command-bar {
   background:
-    linear-gradient(180deg, rgba(22, 22, 27, 0.92), rgba(13, 13, 15, 0.62)),
-    radial-gradient(130% 170% at 84% -30%, rgba(var(--rgb-accent), 0.18), transparent 62%);
-}
-
-/* ---------- Theme toggle (sun/moon) icon pairs ---------- */
-.icon-toggle { position: relative; }
-.icon-toggle .icon-sun,
-.icon-toggle .icon-moon { display: grid; place-items: center; }
-html .icon-sun { display: grid; }
-html .icon-moon { display: none; }
-@media (prefers-reduced-motion: no-preference) {
-  .icon-toggle .icon-sun,
-  .icon-toggle .icon-moon { transition: transform 0.16s ease; }
-  html .icon-sun:hover { transform: rotate(40deg) scale(1.2); }
-  html[data-theme="light"] .icon-moon:hover { transform: rotate(-24deg) scale(1.2); }
-}
-[data-theme="light"] .icon-sun { display: none; }
-[data-theme="light"] .icon-moon { display: grid; }
-
-/* ---------- LIGHT THEME: SALT FLAT --------------------------- */
-[data-theme="light"] {
-  color-scheme: light;
-
-  --color-bg: #f4f1e8;
-  --color-panel: #fdfcf7;
-  --color-line: rgba(96, 82, 66, 0.22);
-  --color-ink: #221f1a;
-  --color-muted: #6e685f;
-  /* Minerals darkened for AA: stock rose #c2401f and amber #c2401f
-     land ~5:1 on the warm paper once opacity/aliasing is applied
-     (footer logo at 100% ~6.6:1, links and labels ≥6:1). */
-  --color-accent: #c2401f;
-  --color-accent-2: #2b4bc0;
-  --color-accent-3: #87817a;
-  --color-acid: #c2401f;
-
-  /* AA-safe accent text variants (readable on --color-bg). The stock
-     minerals are ~4.5:1, too close to the 4.5 bar for small mono
-     labels (hero sig-badge, footer rail indices, logo ID). */
-  --color-acid-ink: #9c3410;
-  --color-accent-ink: #b03a14;
-  /* sulfur darkened for AA on the warm paper */
-  --warn: #8a6a00;
-
-  --rgb-accent: 194, 64, 31;
-  --rgb-accent-2: 43, 75, 192;
-  --rgb-accent-3: 135, 129, 122;
-  --rgb-acid: 194, 64, 31;
-  --rgb-warn: 138, 106, 0;
-  --rgb-ink: 34, 31, 26;
-}
-
-/* AA-safe accent labels in light mode (7.1:1 acid, 6.3:1 cyan on #f4f1e8) */
-[data-theme="light"] .sig-badge { color: var(--color-acid-ink); }
-[data-theme="light"] .logo-id { color: var(--color-accent-ink); }
-
-[data-theme="light"] ::selection { color: #fdfcf7; }
-[data-theme="light"] ::-webkit-scrollbar-track { background: #e7e3dc; }
-[data-theme="light"] ::-webkit-scrollbar-thumb { border-color: #e7e3dc; }
-
-/* Blog-post surfaces: the dark-void overlays baked into .post-tldr and
-   .prose-post pre must not bleed into light mode, or articles render as a
-   muddy half-dark hybrid (dark panels over the laboratory whiteout). */
-[data-theme="light"] .post-tldr {
-  background:
-    linear-gradient(155deg, rgba(var(--rgb-acid), 0.08), rgba(255, 255, 255, 0.75) 60%),
-    var(--color-bg);
-}
-[data-theme="light"] .prose-post pre {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-[data-theme="light"] .glass {
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(243, 240, 237, 0.86));
-  border-color: rgba(var(--rgb-accent-3), 0.16);
-}
-[data-theme="light"] .overlay-veil {
-  background: radial-gradient(
-    125% 95% at 70% -10%,
-    rgba(var(--rgb-accent), 0.12),
-    rgba(241, 238, 235, 0.96) 55%,
-    #f4f1e8
-  );
-}
-[data-theme="light"] .command-bar {
-  background:
     linear-gradient(180deg, rgba(245, 242, 239, 0.92), rgba(242, 239, 236, 0.7)),
     radial-gradient(130% 170% at 84% -30%, rgba(var(--rgb-accent), 0.07), transparent 62%);
 }
-[data-theme="light"] .hero { background: transparent; }
-[data-theme="light"] .hero-plate-img { filter: grayscale(0.25) contrast(1.02) saturate(1.1); }
-[data-theme="light"] .prism-panel::before { opacity: 0.28; }
-[data-theme="light"] .noise { opacity: 0.05; mix-blend-mode: multiply; }
-[data-theme="light"] .command-link:hover,
-[data-theme="light"] .command-link:focus-visible {
-  background: rgba(var(--rgb-accent-3), 0.08);
+.hero { background: transparent; }
+.hero-plate-img { filter: grayscale(0.25) contrast(1.02) saturate(1.1); }
+.prism-panel::before { opacity: 0.15; }
+
+/* ---------- Theme toggle (sun/moon) icon pairs ----------
+   Day edition shows the moon (tap for the night edition);
+   the night edition shows the sun (tap to return to paper). */
+.icon-toggle { position: relative; }
+.icon-toggle .icon-sun,
+.icon-toggle .icon-moon { display: grid; place-items: center; }
+html .icon-sun { display: none; }
+html .icon-moon { display: grid; }
+@media (prefers-reduced-motion: no-preference) {
+  .icon-toggle .icon-sun,
+  .icon-toggle .icon-moon { transition: transform 0.16s ease; }
+  html .icon-moon:hover { transform: rotate(-24deg) scale(1.2); }
+  html[data-theme="dark"] .icon-sun:hover { transform: rotate(40deg) scale(1.2); }
+}
+html[data-theme="dark"] .icon-sun { display: grid; }
+html[data-theme="dark"] .icon-moon { display: none; }
+
+/* ---------- NIGHT EDITION — carbon stock ---------------------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #141310;
+  --color-panel: #1c1a15;
+  --color-line: rgba(233, 227, 214, 0.16);
+  --color-ink: #e9e3d6;
+  --color-muted: #948d7d;
+  /* Seal lightened for AA on carbon (≈5:1). */
+  --color-accent: #e05a33;
+  --color-accent-2: #c9a35a;
+  --color-accent-3: #948d7d;
+  --color-acid: #e05a33;
+  --warn: #c9a35a;
+  --color-acid-ink: #e8895e;
+  --color-accent-ink: #e8895e;
+
+  --rgb-accent: 224, 90, 51;
+  --rgb-accent-2: 201, 163, 90;
+  --rgb-accent-3: 148, 141, 125;
+  --rgb-acid: 224, 90, 51;
+  --rgb-warn: 201, 163, 90;
+  --rgb-ink: 233, 227, 214;
+}
+
+/* Small seal labels ride the AA variants (day + night) */
+.sig-badge { color: var(--color-acid-ink); }
+.logo-id { color: var(--color-accent-ink); }
+
+[data-theme="dark"] ::selection { color: #141310; }
+[data-theme="dark"] ::-webkit-scrollbar-track { background: var(--color-bg); }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { border-color: var(--color-bg); }
+
+/* Blog-post overlays: the void gradients baked into .post-tldr and
+   .prose-post pre are paper-native now; the night edition gets its own
+   carbon pair so articles stay on one stock. */
+[data-theme="dark"] .post-tldr {
+  background:
+    linear-gradient(155deg, rgba(var(--rgb-acid), 0.08), rgba(28, 26, 21, 0.75) 60%),
+    var(--color-bg);
+}
+[data-theme="dark"] .prose-post pre {
+  background: rgba(28, 26, 21, 0.85);
+}
+
+[data-theme="dark"] .glass {
+  background: var(--color-panel);
+  border-color: rgba(var(--rgb-accent-3), 0.24);
+}
+[data-theme="dark"] .overlay-veil {
+  background: var(--color-bg);
+}
+[data-theme="dark"] .command-bar {
+  background: var(--color-bg);
+}
+[data-theme="dark"] .hero { background: transparent; }
+[data-theme="dark"] .hero-plate-img { filter: grayscale(0.85) contrast(1.05); }
+[data-theme="dark"] .prism-panel::before { opacity: 0.12; }
+[data-theme="dark"] .command-link:hover,
+[data-theme="dark"] .command-link:focus-visible {
+  background: rgba(var(--rgb-accent-3), 0.12);
 }

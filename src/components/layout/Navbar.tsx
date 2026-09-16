@@ -11,16 +11,16 @@ import { getDict, loc, type Locale } from "@/lib/i18n";
 import { NAV_PATHS } from "@/lib/nav";
 
 /**
- * CONSOLE DOCK NAV — readable navigation, unconventional placement.
+ * MARGIN INDEX NAV (QUIRE, v9) - readable navigation, unconventional placement.
  *
- *  • Desktop (>=1200px): a floating capsule dock pinned to the BOTTOM center.
- *    Indexed uppercase mono links stay fully legible over any background;
- *    the active route carries an acid underline beam. Brand lives in its
- *    own corner chip (top start); telemetry + language + theme sit in the
- *    dock's tail section.
- *
- *  • Mobile (<1200px): brand chip up top, a bottom-center SIGNAL pill opens ORBITAL
- *    — the fullscreen staggered display-link overlay (reused voice).
+ * - Running head (always visible): brand at the inline-start, utilities
+ *   (palette / theme / language / donate) at the inline-end, one hairline
+ *   under the whole bar.
+ * - Desktop (>=1200px): the dock becomes a MARGIN INDEX - hairline route
+ *   numerals pinned to the inline gutter; the active route carries the
+ *   vermilion seal. Labels stay as accessible names.
+ * - Mobile (<1200px): running head stays; a bottom bar carries the palette
+ *   button and a seal pill that opens the full-screen CONTENTS overlay.
  */
 export default function Navbar({ locale }: { locale: Locale }) {
   const t = getDict(locale);
@@ -31,7 +31,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
   // strip locale prefix so route matching is locale independent
   const clean = pathname.replace(/^\/(en|fa)(?=\/|$)/, "") || "/";
 
-  /* Lock page scroll + Escape closes while the orbital overlay is open */
+  /* Lock page scroll + Escape closes while the contents overlay is open */
   useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
     const onKey = (e: KeyboardEvent) => {
@@ -46,12 +46,9 @@ export default function Navbar({ locale }: { locale: Locale }) {
 
   const langSwap =
     locale === "en" ? (
-      /* The dock's only non-pill hit zone — give it a real tap target
-         (the donate pill next to it is ~27px; match that so Lighthouse's
-         target-size audit and touch users both clear it). */
       <a
         href={`/fa${clean}`}
-        className="inline-flex min-h-[28px] min-w-[28px] items-center justify-center px-1 font-bold text-acid"
+        className="lang-switch-fa inline-flex min-h-[28px] min-w-[28px] items-center justify-center px-1 font-bold text-acid"
       >
         فا
       </a>
@@ -66,7 +63,9 @@ export default function Navbar({ locale }: { locale: Locale }) {
 
   return (
     <>
-      {/* ══ BRAND CORNER CHIP (always visible) ══ */}
+      {/* == RUNNING HEAD (always visible) ==
+          Brand at the start, utilities at the end. The chip-corner /
+          chip-start class contract is kept for view-transitions. */}
       <div className="chip-corner chip-start">
         <VTLink
           href={loc(locale, "/")}
@@ -74,37 +73,13 @@ export default function Navbar({ locale }: { locale: Locale }) {
           onClick={() => setOpen(false)}
           className="flex shrink-0 items-center gap-2.5 transition-colors hover:text-acid"
         >
-          <BrandMark className="h-[30px] w-[30px]" />
+          <BrandMark className="h-[26px] w-[26px]" />
           <LogoType variant="compact" className="align-middle text-[0.92rem]" />
         </VTLink>
-      </div>
 
-      {/* ══ DESKTOP FLOATING DOCK ══════════════════════════ */}
-      <div className="dock-wrap">
-        <nav className="dock" aria-label="Primary">
-          {t.nav.map((item, i) => {
-            const active =
-              NAV_PATHS[i] === "/"
-                ? clean === "/"
-                : clean.startsWith(NAV_PATHS[i]);
-            return (
-              <VTLink
-                key={NAV_PATHS[i]}
-                href={loc(locale, NAV_PATHS[i])}
-                aria-current={active ? "page" : undefined}
-                className={`dock-link ${active ? "is-active" : ""}`}
-              >
-                <span className="dock-index">{item.index}</span>
-                {item.label}
-              </VTLink>
-            );
-          })}
-
-          <span className="dock-sep" aria-hidden />
-
-          {/* Command-palette affordance — the palette is keyboard-first
-              (Ctrl+K / /) but nothing advertised it. A real button keeps it
-              discoverable for pointer users and opens it on demand. */}
+        <div className="head-tools">
+          {/* Command-palette affordance — keyboard-first (Ctrl+K / /), but a
+              real button keeps it discoverable for pointer users. */}
           <button
             type="button"
             onClick={() =>
@@ -123,12 +98,12 @@ export default function Navbar({ locale }: { locale: Locale }) {
           </button>
 
           <ThemeToggle locale={locale} />
-          <span className="ps-3 pe-1 font-mono text-[0.72rem] uppercase tracking-[0.12em]">
+
+          <span className="font-mono text-[0.72rem] uppercase tracking-[0.12em]">
             {langSwap}
           </span>
 
-          {/* Desktop donate CTA — the only commercial link in the dock; a
-              heart pill reads as intentional, a bare text label does not. */}
+          {/* The one commercial link in the chrome. */}
           <a
             href="https://donatr.ee/sinisteroid/"
             target="_blank"
@@ -139,13 +114,39 @@ export default function Navbar({ locale }: { locale: Locale }) {
             <HeartIcon className="donate-heart" />
             {fa ? "حمایت" : "donate"}
           </a>
+        </div>
+      </div>
+
+      {/* == MARGIN INDEX (desktop) ==
+          Hairline route numerals pinned to the inline gutter. The label is
+          revealed as a margin note on hover/focus and stays visible on the
+          active row (see quire.css §2); it remains the accessible name at
+          rest. The active route carries the seal. .dock-wrap/.dock contract
+          preserved for view-transitions. */}
+      <div className="dock-wrap">
+        <nav className="dock" aria-label="Primary">
+          {t.nav.map((item, i) => {
+            const active =
+              NAV_PATHS[i] === "/"
+                ? clean === "/"
+                : clean.startsWith(NAV_PATHS[i]);
+            return (
+              <VTLink
+                key={NAV_PATHS[i]}
+                href={loc(locale, NAV_PATHS[i])}
+                aria-current={active ? "page" : undefined}
+                className={`dock-link ${active ? "is-active" : ""}`}
+              >
+                <span className="dock-index">{item.index}</span>
+                <span className="dock-label">{item.label}</span>
+              </VTLink>
+            );
+          })}
         </nav>
       </div>
 
-      {/* ══ MOBILE DOCK: search + menu (easy to find, top-end) ══ */}
+      {/* == MOBILE BAR: palette + contents (seal menu) == */}
       <div className="mob-dock gap-2">
-        {/* Command palette affordance — Ctrl+K is keyboard-only, so touch
-            users get a real button that opens the same palette. */}
         <button
           type="button"
           onClick={() =>
@@ -188,7 +189,10 @@ export default function Navbar({ locale }: { locale: Locale }) {
         </button>
       </div>
 
-      {/* ══ MOBILE ORBITAL OVERLAY ═════════════════════════ */}
+      {/* == CONTENTS OVERLAY (mobile) ==
+          The fullscreen contents page (#orbital-nav contract preserved:
+          Escape close, scroll lock, palette + language + theme + donate
+          access inside). Restyled to paper by quire.css §3. */}
       <div
         id="orbital-nav"
         className={`overlay-veil nav-mobile-only ${open ? "is-open" : ""}`}
@@ -196,10 +200,6 @@ export default function Navbar({ locale }: { locale: Locale }) {
         aria-modal="true"
         aria-label="Menu"
       >
-        <div
-          className="orbit-ring start-[-30%] top-[-35%] h-[130vw] w-[130vw]"
-          aria-hidden
-        />
         <div className="overlay-menu">
           <p className="label mb-6">{t.site}</p>
           {t.nav.map((item, i) => (
@@ -264,7 +264,7 @@ export default function Navbar({ locale }: { locale: Locale }) {
               href="https://donatr.ee/sinisteroid/"
               target="_blank"
               rel="noopener noreferrer"
-              className="donate-inline gap-1.5 text-acid transition-colors hover:text-ink"
+              className="inline-flex min-h-[44px] items-center gap-1.5 text-acid transition-colors hover:text-ink"
             >
               <HeartIcon className="donate-heart" />
               {fa ? "حمایت" : "donate"}

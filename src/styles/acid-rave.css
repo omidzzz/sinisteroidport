@@ -96,7 +96,7 @@
   padding: 0.38rem 0.6rem;
   border-radius: 9999px;
   border: 1px solid rgba(var(--rgb-acid), 0.26);
-  background: linear-gradient(155deg, rgba(22, 22, 27, 0.9), rgba(13, 13, 15, 0.84));
+  background: linear-gradient(155deg, rgba(22, 22, 27, 0.9), rgba(10, 11, 16, 0.84));
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow:
@@ -134,28 +134,51 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.48rem 0.65rem;
-  border-radius: 9999px;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--color-muted);
-  transition: color 0.22s ease, background 0.22s ease, filter 0.22s ease;
+  background: none;
+  border: 1px solid transparent;
+  transition: color 0.22s ease, background 0.22s ease, filter 0.22s ease, border-color 0.22s ease;
+  text-decoration: none;
+}
+.dock-link .dock-index {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  transition: color 0.22s ease;
+  white-space: nowrap;
+}
+.dock-link .dock-label {
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.22s ease;
 }
 .dock-link:hover,
 .dock-link:focus-visible {
   color: var(--color-ink);
   background: rgba(var(--rgb-accent), 0.1);
+  border-color: var(--color-line);
   filter: drop-shadow(0 0 8px rgba(var(--rgb-acid), 0.45));
 }
 .dock-link:focus-visible {
   outline: 2px solid var(--color-acid);
   outline-offset: 2px;
 }
-.dock-link.is-active { color: var(--color-acid); }
+.dock-link.is-active {
+  color: var(--color-acid);
+  border-color: rgba(var(--rgb-acid), 0.3);
+  background: rgba(var(--rgb-acid), 0.06);
+}
+.dock-link.is-active .dock-index {
+  color: var(--color-acid);
+}
 .dock-link.is-active::after {
   content: "";
   position: absolute;
@@ -166,7 +189,6 @@
   background: linear-gradient(90deg, var(--color-accent), var(--color-acid));
   box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.6);
 }
-.dock-index { font-size: 0.55rem; color: rgba(var(--rgb-accent), 0.85); }
 
 /* ── Persian menu face — Vazirmatn UI / Kufi geometric ──────────────────
    The chrome's mono/uppercase/letter-spacing recipe is Latin-only: JetBrains
@@ -175,9 +197,8 @@
    reads tiny+generic. Under FA, menu surfaces switch to the Vazirmatn face
    (variable Arabic/Persian UI face, already loaded in layout.tsx) with
    tracking zeroed (Persian joins stay intact) and a size bump — the tall
-   Persian ascenders need the room. Kufi (geometric Arabic) is the fallback
-   when Vazirmatn is unavailable. `.dock-index` numerals stay mono: latin
-   digits keep the techy counter look against the poster face. */
+   Persian ascenders need the room. `.dock-index` now carries full labels
+   instead of numerals, so both index and label render in Vazirmatn. */
 html[lang="fa"] .dock-link {
   font-family: var(--font-kufi), var(--font-vazirmatn), Tahoma, sans-serif;
   font-size: 0.88rem;
@@ -280,7 +301,7 @@ html[lang="fa"] .overlay-link {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-ink);
-  background: linear-gradient(155deg, rgba(22, 22, 27, 0.95), rgba(13, 13, 15, 0.9));
+  background: linear-gradient(155deg, rgba(22, 22, 27, 0.95), rgba(10, 11, 16, 0.9));
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow:
@@ -308,11 +329,11 @@ html[lang="fa"] .overlay-link {
   border-color: rgba(var(--rgb-accent-3), 0.25);
 }
 [data-theme="light"] .mob-pill {
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(244, 241, 232, 0.9));
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(239, 236, 234, 0.9));
   border-color: rgba(var(--rgb-acid), 0.55);
   box-shadow:
     0 0 22px rgba(var(--rgb-acid), 0.18),
-    0 10px 30px -12px rgba(13, 13, 15, 0.35);
+    0 10px 30px -12px rgba(10, 11, 16, 0.35);
 }
 [data-theme="light"] .overlay-index {
   color: rgba(var(--rgb-accent), 0.9);
@@ -322,12 +343,12 @@ html[lang="fa"] .overlay-link {
   filter: drop-shadow(0 0 10px rgba(var(--rgb-acid), 0.3));
 }
 [data-theme="light"] .dock {
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(244, 241, 232, 0.9));
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.94), rgba(239, 236, 234, 0.9));
   border-color: rgba(var(--rgb-accent-3), 0.32);
-  box-shadow: 0 14px 40px -16px rgba(13, 13, 15, 0.45);
+  box-shadow: 0 14px 40px -16px rgba(10, 11, 16, 0.45);
 }
 [data-theme="light"] .btn-neon,
-[data-theme="light"] .ticker-band { color: #f4f1e8; }
+[data-theme="light"] .ticker-band { color: #efecea; }
 
 /* ---------- v4 · TRANSMISSION HERO ---------- */
 
@@ -504,7 +525,7 @@ html[lang="fa"] .overlay-link {
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--color-ink);
-  background: rgba(13, 13, 15, 0.92);
+  background: rgba(10, 11, 16, 0.92);
   border: 1px solid rgba(var(--rgb-acid), 0.35);
   box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.8);
   opacity: 0;
@@ -524,7 +545,7 @@ html[lang="fa"] .overlay-link {
   padding: 1.15rem 1.25rem 1.3rem;
   border: 1px solid var(--color-line);
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 0.95rem), calc(100% - 0.95rem) 100%, 0 100%);
-  background: linear-gradient(160deg, rgba(var(--rgb-accent-3), 0.28), rgba(13, 13, 15, 0.36));
+  background: linear-gradient(160deg, rgba(var(--rgb-accent-3), 0.28), rgba(10, 11, 16, 0.36));
   transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .gauge-cell:hover {
@@ -580,7 +601,7 @@ html[lang="fa"] .overlay-link {
   overflow: hidden;
   border: 1px solid var(--color-line);
   background:
-    linear-gradient(150deg, color-mix(in srgb, var(--hue) 7%, transparent), rgba(13, 13, 15, 0.4) 58%),
+    linear-gradient(150deg, color-mix(in srgb, var(--hue) 7%, transparent), rgba(10, 11, 16, 0.4) 58%),
     var(--color-bg);
   transition: border-color 0.3s ease, box-shadow 0.35s ease;
 }
@@ -933,7 +954,7 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
 [dir="rtl"] .chip-brk::before { border-width: 1px 1px 0 0; }
 .chip-brk::after { bottom: 4px; inset-inline-end: 4px; border-width: 0 1px 1px 0; }
 [dir="rtl"] .chip-brk::after { border-width: 0 0 1px 1px; }
-.status-panel { position: relative; isolation: isolate; border: 1px solid var(--color-line); background: linear-gradient(160deg, rgba(var(--rgb-acid), 0.06), rgba(13, 13, 15, 0.42)); }
+.status-panel { position: relative; isolation: isolate; border: 1px solid var(--color-line); background: linear-gradient(160deg, rgba(var(--rgb-acid), 0.06), rgba(10, 11, 16, 0.42)); }
 .status-panel::before {
   content: ""; position: absolute; inset: -34%; z-index: -1; opacity: 0.38;
   background: conic-gradient(from 40deg, transparent, rgba(var(--rgb-acid), 0.4), transparent 35%, rgba(var(--rgb-accent), 0.4), transparent 70%);

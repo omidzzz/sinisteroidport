@@ -514,7 +514,7 @@ export default function LaptopDeck() {
           <rect x="58" y="110" width="74" height="11" rx="3" fill="none" style={{ stroke: "var(--color-acid)" }} strokeWidth="0.3" opacity="0.18" />
           <text className="lp-sticker" x="25" y="121" fontSize="8" fontWeight="bold"
             style={{ fill: "var(--warn)", filter: "drop-shadow(0 0 3px var(--warn))" }}
-            fontFamily="var(--font-orbitron-var), var(--font-mono), monospace">ACID</text>
+            fontFamily="var(--font-plex-mono-var), var(--font-mono), monospace">ACID</text>
           <rect x="146" y="112" width="30" height="10" rx="2" style={{ fill: "color-mix(in srgb, var(--color-panel) 88%, var(--color-accent-3))", stroke: "var(--color-acid)" }}  strokeWidth="0.5" opacity="0.85" />
           <text className="lp-sticker" x="161" y="119.6" fontSize="6.5" fontWeight="bold" textAnchor="middle"
             style={{ fill: "var(--color-acid)", filter: "drop-shadow(0 0 3px var(--color-acid))", animationDelay: "-1.4s" }}

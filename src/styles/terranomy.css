@@ -1,0 +1,342 @@
+/* ============================================================
+   TERRANOMY — tangent-planar survey cross-section (v8)
+   ------------------------------------------------------------
+   The home page is a classified geological survey of a fictional
+   mineral world: one continuous vertical cross-section, full-bleed
+   basalt field, stations read top-to-bottom as labeled survey
+   slices. MANTLE amber/rose/violet are the survey ANNOTATION palette
+   (tick marks, banding, stamps, index numerals) — not surface color.
+
+   Palette discipline
+   ------------------
+   Station cuts cycle amber → rose → violet in band registration
+   (a 2px survey line at the top edge of each slice). The same three
+   minerals travel as small annotation ink everywhere (axis numerals,
+   stamp marks, tick marks). No card tinting, no sheet re-mapping.
+
+   Performance
+   -----------
+   Pure CSS layout. Zero new JS. Hero image stays server-in-HTML
+   (LCP win intact); parallax is the existing HeroPlate self-sleeping
+   rAF. Reduced-motion: static survey. @media (scripting: none): readable.
+   RTL: logical properties; axis flips to the inline-end edge.
+   Imported after motion-reduce, last in the stylesheet chain.
+
+   Structure
+   ---------
+   .survey        root: the full-bleed basalt document
+   .survey-masthead  header bar + the registration strip legend
+   .survey-field  the cross-section: gutter column + station stack
+   .survey-station   one labeled slice (cut line + marker + label)
+   .survey-vtick  the axis marker sitting ON each station's cut line
+
+   Every station carries data-mineral, which re-maps the hot
+   --color-acid / --color-accent tokens for its whole subtree exactly
+   like the sister sheet module (stratum.css) — so the acts still
+   visibly re-ink as the reader descends the core.
+
+   Compatibility
+   -------------
+   Every marker (axis rule, station cut, tick, stamp) is a plain DOM
+   element with a flat background — no SVG, no canvas, no JS. The
+   stamp is drawn by ::after from the data-stamp attribute, so it is
+   decorative by construction (attributes are not announced) and
+   needs no extra markup. Stamps carry no letter-spacing: tracking
+   over locale text breaks the cursive joins between Persian glyphs.
+   ============================================================ */
+
+/* ---- 0. Survey field — the full-bleed basalt document ---- */
+.survey {
+  --station-gap: clamp(3.5rem, 7vw, 7rem);
+  /* where the ruler sits inside the gutter, and the gutter width itself */
+  --axis-x: clamp(2rem, 4.2vw, 3.4rem);
+  --gutter: clamp(4.5rem, 9vw, 8rem);
+  position: relative;
+  isolation: isolate;
+}
+
+/* ---- 1. Masthead — survey header + registration strip ---- */
+.survey-masthead {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+  align-items: end;
+  gap: clamp(1.2rem, 3vw, 2.4rem);
+  max-width: 86rem;
+  margin-inline: auto;
+  padding-block: clamp(1.8rem, 4.5vw, 3rem) clamp(0.8rem, 2vw, 1.2rem);
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.survey-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-acid);
+}
+
+.survey-title {
+  margin-block-start: 0.45rem;
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.survey-sub {
+  margin-block-start: 0.7rem;
+  max-width: 48ch;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* the legend: every station code + name, as a registration strip */
+.survey-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgba(var(--rgb-acid), 0.2);
+  background: rgba(var(--rgb-acid), 0.045);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.survey-strip .chip {
+  display: inline-flex;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+.survey-strip .chip b {
+  font-weight: 700;
+  color: var(--color-acid);
+}
+
+/* ---- 2. The cross-section — gutter column + continuous axis rule ---- */
+.survey-field {
+  position: relative;
+  max-width: 96rem;
+  margin-inline: auto;
+  padding-inline-start: var(--gutter);
+  padding-inline-end: clamp(1.25rem, 4vw, 2.5rem);
+  padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3rem, 6vw, 5rem);
+}
+
+/* the ruler: ONE continuous hairline down the whole cross-section. It is
+   drawn on the field (not per station) so it never breaks between cuts;
+   each station's marker meets it exactly at calc(gutter - axis-x). */
+.survey-field::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--gutter) - var(--axis-x));
+  width: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(var(--rgb-acid), 0.38) 2%,
+    rgba(var(--rgb-acid), 0.38) 98%,
+    transparent 100%
+  );
+}
+
+/* ---- 3. Station — one labeled slice ---- */
+.survey-station {
+  position: relative;
+  padding-block: var(--station-gap);
+  /* the annotation ink follows the station's own remapped acid, so the cut
+     line, marker and label all re-ink with the mineral — no extra vars. */
+  --station-ink: var(--color-acid);
+  border-top: 2px solid var(--station-ink);
+}
+
+/* the cut line always paints UNDER the act's own content */
+.survey-station > :not(.survey-vtick):not(.survey-station-label) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- 4. Station inks — same palette-morph contract as the sheet module ----
+   Re-maps the two operationally-hot tokens (--color-acid + its shadow
+   triplet, and --color-accent) for every descendant, so the acts visibly
+   re-ink as the reader descends the core. Values mirror stratum.css. */
+.survey-station[data-mineral="amber"] {
+  --color-acid: #ffc24a;
+  --rgb-acid: 255, 194, 74;
+  --color-accent: #ff5d7a;
+  --rgb-accent: 255, 93, 122;
+}
+.survey-station[data-mineral="rose"] {
+  --color-acid: #ff6da8;
+  --rgb-acid: 255, 109, 168;
+  --color-accent: #ff5d7a;
+  --rgb-accent: 255, 93, 122;
+}
+.survey-station[data-mineral="violet"] {
+  --color-acid: #8a6bff;
+  --rgb-acid: 138, 107, 255;
+  --color-accent: #8a5cff;
+  --rgb-accent: 138, 92, 255;
+}
+
+/* ---- 5. Axis marker — sits ON the station's cut line ---- */
+.survey-vtick {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: calc(var(--axis-x) * -1);
+  width: var(--axis-x);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: var(--station-ink);
+}
+.survey-vtick .idx {
+  font-weight: 700;
+  opacity: 0.92;
+}
+/* the tick itself — a short dash that lands on the ruler */
+.survey-vtick .rule {
+  width: 0.6rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.9;
+}
+
+/* ---- 6. Station label — code / name / depth ---- */
+.survey-station-label {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  margin-block-end: clamp(1rem, 2.4vw, 1.6rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.1vw, 0.72rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--station-ink);
+}
+.survey-station-label .code {
+  font-weight: 700;
+  text-shadow: 0 0 14px rgba(var(--rgb-acid), 0.5);
+}
+.survey-station-label .name {
+  color: var(--color-ink);
+  opacity: 0.9;
+}
+.survey-station-label .depth {
+  margin-inline-start: auto;
+  color: var(--color-muted);
+  letter-spacing: 0.14em;
+}
+
+/* the topmost cut IS the surface — give it the display voice */
+.survey-station[data-station="crust"] > .survey-station-label .name {
+  font-family: var(--font-display);
+  font-size: clamp(0.78rem, 1.5vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* ---- 7. Stamp — decorative registration mark, painted from data-stamp ----
+   content: attr() keeps the text in an attribute: never announced by a
+   screen reader, never selectable, and zero extra markup. Letter-spacing
+   is deliberately 0 so the mark never stretches locale text. */
+.survey-station::after {
+  content: attr(data-stamp);
+  position: absolute;
+  inset-block-start: clamp(1.4rem, 3.4vw, 2.4rem);
+  inset-inline-end: clamp(0.8rem, 2.4vw, 1.6rem);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--station-ink);
+  opacity: 0.16;
+  pointer-events: none;
+  rotate: -8deg;
+  z-index: 0;
+}
+/* stagger the mark down the core so the corners alternate */
+.survey-station:nth-of-type(even)::after {
+  inset-block-start: auto;
+  inset-block-end: clamp(1.4rem, 3.4vw, 2.4rem);
+  inset-inline-end: auto;
+  inset-inline-start: clamp(0.8rem, 2.4vw, 1.6rem);
+  rotate: 6deg;
+}
+
+/* ---- 8. BOND (light theme) mirrors — AA inks, mirroring stratum.css ---- */
+[data-theme="light"] .survey-station[data-mineral="amber"] {
+  --color-acid: #b45400;
+  --rgb-acid: 180, 84, 0;
+  --color-accent: #7a4a00;
+  --rgb-accent: 156, 52, 16;
+}
+[data-theme="light"] .survey-station[data-mineral="rose"] {
+  --color-acid: #a63e50;
+  --rgb-acid: 166, 62, 80;
+  --color-accent: #9c2748;
+  --rgb-accent: 156, 39, 72;
+}
+[data-theme="light"] .survey-station[data-mineral="violet"] {
+  --color-acid: #6b4fd0;
+  --rgb-acid: 107, 79, 208;
+  --color-accent: #5a3fb0;
+  --rgb-accent: 90, 63, 176;
+}
+
+/* ---- 9. RTL / Persian — the ruler flips to the inline-end edge for free
+   (every offset above is a logical property). Persian keeps its cursive
+   joins: tracking is dropped wherever locale text is rendered. ---- */
+html[lang="fa"] .survey-kicker,
+html[lang="fa"] .survey-strip,
+html[lang="fa"] .survey-title,
+html[lang="fa"] .survey-station-label {
+  letter-spacing: 0;
+}
+
+/* ---- 10. Narrow screens — the masthead stacks, the gutter tightens ---- */
+@media (max-width: 60rem) {
+  .survey-masthead {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+}
+@media (max-width: 40rem) {
+  .survey {
+    --gutter: 3.4rem;
+    --axis-x: 1.5rem;
+  }
+  .survey-station-label .depth {
+    display: none;
+  }
+}
+
+/* ---- 11. Print — the survey IS a printed section, so keep the ruler and
+   the cut lines; drop only the ink-hungry decoration. ---- */
+@media print {
+  .survey-station::after {
+    display: none;
+  }
+  .survey-station {
+    padding-block: 2rem;
+  }
+  .survey-station-label .depth {
+    display: none;
+  }
+}

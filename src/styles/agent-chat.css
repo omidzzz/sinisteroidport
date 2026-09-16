@@ -7,16 +7,10 @@
 
 /* ── Floating action button ───────────────────────────────── */
 .sin-chat-fab {
-  /* Theme-aware ALIEN surface vars (see light override below). The neon
-     accents (eye ring, smirk/grin, orbit halo) use `color`, which tracks
-     the acid token in both themes. Head greens come from the UFO alien
-     (components/home/drone) so the agent and the saucer share a face. */
-  --fab-head: #7ee657;
-  --fab-head2: #52c93c;
-  --fab-edge: #1a1330; /* the UFO's cartoon ink outline */
-  --fab-visor: #191226; /* eye fill */
-  --fab-glint: #f7f0e8;
-
+  /* The glyph is a single currentColor stroke — no per-theme art tokens are
+     needed any more (the skull's gradient, ink outline and visor fills went
+     with it). `color` tracks the acid token in the neon registers and
+     --color-ink on paper (quire.css restyles the button itself). */
   position: fixed;
   inset-inline-end: 1.25rem;
   bottom: 1.25rem;
@@ -24,8 +18,8 @@
   display: grid;
   place-items: center;
   overflow: visible;
-  width: 3.6rem;
-  height: 3.6rem;
+  width: 3.9rem;
+  height: 3.9rem;
   padding: 0;
   color: rgb(var(--rgb-acid));
   cursor: pointer;
@@ -95,10 +89,9 @@
   }
 }
 
-/* Mobile: larger tap target ONLY. The glyph itself is sized as a percentage
-   of the button (below), so PC and mobile render the IDENTICAL face — the
-   button is just a few px bigger under the thumb. No optical fudge needed:
-   the redrawn art is optically centered in its own viewBox. */
+/* Mobile: larger tap target ONLY. The glyph is a percentage of the button
+   (below), so PC and mobile draw the IDENTICAL icon — the button is just a
+   few px bigger under the thumb, which is all a hairline glyph needs. */
 @media (max-width: 640px) {
   .sin-chat-fab {
     width: 4rem;
@@ -108,26 +101,21 @@
   }
 }
 
-/* One glyph rule for EVERY device: the art fills 90% of the circle and is
-   optically centered in its viewBox (skull mass y 12–115, targeting ring
-   centered at 64,62), so grid centering is correct everywhere.
-   display:block guards against any inline baseline gap. */
+/* One glyph rule for EVERY device: the knocked-out glyph reads at ~48% of
+   the button (about 30px inside the 3.9rem seal - the canonical
+   icon-button ratio) and grid centering keeps it optically centered at
+   both breakpoints. The skull art needed per-breakpoint optical fudge (it
+   filled the circle and was scaled 2x under 640px); one stroke on a 24x24
+   grid needs none. display:block guards against any inline baseline gap. */
 .sin-chat-fab svg {
   display: block;
-  width: 90%;
-  height: 90%;
+  width: 48%;
+  height: 48%;
   transition: transform 0.25s ease;
 }
-@media (max-width: 640px) {
-  .sin-chat-fab svg {
-    width: 100%;
-    height: 100%;
-    transform: scale(2);
-    transform-origin: center;
-  }
-}
 
-/* Touch hygiene so the press/flare feels native on phones: kill the tap
+
+/* Touch hygiene so the press feels native on phones: kill the tap
    highlight, the long-press callout and double-tap-zoom delay, and keep
    the glyph unselectable. */
 .sin-chat-fab {
@@ -137,205 +125,26 @@
   user-select: none;
 }
 
-/* Light theme: deepen the alien greens a touch so the ink outline and
-   dark eyes stay crisp on the whiteout. The acid accents keep the hue. */
-html[data-theme="light"] .sin-chat-fab {
-  --fab-head: #8bef5e;
-  --fab-head2: #5ecb3c;
-  --fab-edge: #1a1330;
-  --fab-visor: #191226;
-  --fab-glint: #ffffff;
-}
+/* Light theme needs no art override any more: the glyph inherits `color`,
+   which already tracks the AA-safe acid on the whiteout (tokens.css). */
 
-/* ── The menace — hostile idle stare + press/tap flare (device-agnostic) ─
-   Idle: slanted void eyes with glowing acid slit pupils under a deep V
-   scowl, a fanged sneer, and a targeting halo counter-spinning around the
-   skull. Life signs: a slow pupil pulse + one hostile blink.
-   Press/tap: the pupils FLARE, the brows slam down, the head lunges with
-   an acid drop-glow and the sneer cracks open into a fanged jaw.
-   The flare trigger is [data-pressed] (set from pointerdown/up — fires
-   identically on touch and mouse) plus :active/:focus-visible fallbacks.
-   Desktop-only :hover lives in a (hover: hover) media query, so touch
-   devices can never get stuck in a hover state and every device shows the
-   exact same expression. Springs use a slight overshoot; everything is
-   transform/opacity-only and the infinite loops are gated behind
-   prefers-reduced-motion (motion-reduce.css freezes the rest site-wide). */
-.sin-chat-fab .al-brow,
-.sin-chat-fab .al-glint,
-.sin-chat-fab .al-pupil,
-.sin-chat-fab .al-rim,
-.sin-chat-fab .al-head,
-.sin-chat-fab .al-orbit,
-.sin-chat-fab .al-grimace,
-.sin-chat-fab .al-jaw {
-  transform-box: fill-box;
-}
-.sin-chat-fab .al-brow,
-.sin-chat-fab .al-glint,
-.sin-chat-fab .al-pupil,
-.sin-chat-fab .al-rim,
-.sin-chat-fab .al-head {
-  transform-origin: 50% 50%;
-  transition:
-    transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 220ms ease;
-}
-.sin-chat-fab .al-head {
-  transform-origin: 50% 62%;
-  transition:
-    transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    filter 320ms ease;
-}
-
-/* the flare — one trigger list for every press/tap/keyboard path */
-.sin-chat-fab[data-pressed] .al-pupil,
-.sin-chat-fab:active .al-pupil,
-.sin-chat-fab:focus-visible .al-pupil {
-  transform: scale(1.55);
-  opacity: 1;
-  animation: none;
-}
-.sin-chat-fab[data-pressed] .al-rim,
-.sin-chat-fab:active .al-rim,
-.sin-chat-fab:focus-visible .al-rim {
-  opacity: 0.9;
-}
-.sin-chat-fab[data-pressed] .al-brow,
-.sin-chat-fab:active .al-brow,
-.sin-chat-fab:focus-visible .al-brow {
-  transform: translateY(3px) scaleY(1.2);
-}
-.sin-chat-fab[data-pressed] .al-glint,
-.sin-chat-fab:active .al-glint,
-.sin-chat-fab:focus-visible .al-glint {
-  transform: translate(1.5px, -1.5px) scale(1.25);
-}
-.sin-chat-fab[data-pressed] .al-head,
-.sin-chat-fab:active .al-head,
-.sin-chat-fab:focus-visible .al-head {
-  transform: rotate(4deg) translateY(2px) scale(0.985);
-  filter: drop-shadow(0 0 8px rgba(var(--rgb-acid), 0.6));
-}
-
-/* desktop bonus: preview the flare on hover, pointer-devices only — a
-   (hover: none) device (phones) would otherwise latch :hover after the
-   first tap and stay flared forever */
-@media (hover: hover) {
-  .sin-chat-fab:hover .al-pupil {
-    transform: scale(1.55);
-    opacity: 1;
-    animation: none;
-  }
-  .sin-chat-fab:hover .al-rim {
-    opacity: 0.9;
-  }
-  .sin-chat-fab:hover .al-brow {
-    transform: translateY(3px) scaleY(1.2);
-  }
-  .sin-chat-fab:hover .al-glint {
-    transform: translate(1.5px, -1.5px) scale(1.25);
-  }
-  .sin-chat-fab:hover .al-head {
-    transform: rotate(4deg) translateY(2px) scale(0.985);
-    filter: drop-shadow(0 0 8px rgba(var(--rgb-acid), 0.6));
-  }
-}
-
-/* mouth: fanged sneer ⇄ cracked-open jaw crossfade */
-.sin-chat-fab .al-jaw {
-  opacity: 0;
-  transition: opacity 300ms ease 60ms;
-}
-.sin-chat-fab .al-grimace {
-  opacity: 1;
-  transition: opacity 220ms ease;
-}
-.sin-chat-fab[data-pressed] .al-grimace,
-.sin-chat-fab:active .al-grimace,
-.sin-chat-fab:focus-visible .al-grimace {
-  opacity: 0;
-  transition: opacity 180ms ease;
-}
-.sin-chat-fab[data-pressed] .al-jaw,
-.sin-chat-fab:active .al-jaw,
-.sin-chat-fab:focus-visible .al-jaw {
-  opacity: 1;
+/* ── The glyph — pressed, not performed ─────────────────────
+   The skull's choreography went with the art: pupil flares, brow slams, a
+   jaw crossfade, an orbiting targeting halo, blink and pulse keyframes.
+   What is left is a single transform. The glyph dips on press/tap and lifts
+   slightly on desktop hover, so the control still answers the pointer
+   without becoming the loudest thing on the page.
+   [data-pressed] is set from pointerdown/up (identical on touch and mouse);
+   :active / :focus-visible are the keyboard and no-pointer fallbacks; hover
+   stays behind (hover: hover) so a touch device can never latch it. */
+.sin-chat-fab[data-pressed] svg,
+.sin-chat-fab:active svg,
+.sin-chat-fab:focus-visible svg {
+  transform: scale(0.9);
 }
 @media (hover: hover) {
-  .sin-chat-fab:hover .al-grimace {
-    opacity: 0;
-    transition: opacity 180ms ease;
-  }
-  .sin-chat-fab:hover .al-jaw {
-    opacity: 1;
-  }
-}
-
-/* targeting halo: slow lock-on spin, sprints + brightens on press */
-.sin-chat-fab .al-orbit {
-  transform-origin: center;
-  transition: opacity 300ms ease;
-}
-.sin-chat-fab[data-pressed] .al-orbit,
-.sin-chat-fab:active .al-orbit,
-.sin-chat-fab:focus-visible .al-orbit {
-  opacity: 0.8;
-}
-@media (hover: hover) {
-  .sin-chat-fab:hover .al-orbit {
-    opacity: 0.8;
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .sin-chat-fab .al-orbit {
-    animation: al-spin 22s linear infinite;
-  }
-  .sin-chat-fab[data-pressed] .al-orbit,
-  .sin-chat-fab:active .al-orbit,
-  .sin-chat-fab:focus-visible .al-orbit {
-    animation-duration: 6s;
-  }
-  @media (hover: hover) {
-    .sin-chat-fab:hover .al-orbit {
-      animation-duration: 6s;
-    }
-  }
-  /* life signs: the pupils throb with acid light and the alien takes one
-     slow hostile blink every few seconds (the blink scales the whole eyes
-     group, so the press flare on the pupils keeps working independently) */
-  .sin-chat-fab .al-eyes {
-    transform-box: fill-box;
-    transform-origin: 50% 58%;
-    animation: al-blink 6.4s ease-in-out infinite;
-  }
-  .sin-chat-fab .al-pupil {
-    animation: al-pulse 3.2s ease-in-out infinite alternate;
-  }
-  @keyframes al-spin {
-    to {
-      transform: rotate(-360deg);
-    }
-  }
-  @keyframes al-pulse {
-    from {
-      opacity: 0.72;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes al-blink {
-    0%,
-    93.5%,
-    100% {
-      transform: scaleY(1);
-    }
-    96% {
-      transform: scaleY(0.06);
-    }
-    98.5% {
-      transform: scaleY(1);
-    }
+  .sin-chat-fab:hover svg {
+    transform: scale(1.06);
   }
 }
 
@@ -728,8 +537,8 @@ html[data-theme="light"] .sin-chat-fab {
 
 .sin-chat-bubble--error {
   color: #ffd7dd;
-  background: rgba(255, 90, 54, 0.14);
-  border: 1px solid rgba(255, 90, 54, 0.4);
+  background: rgba(255, 93, 122, 0.14);
+  border: 1px solid rgba(255, 93, 122, 0.4);
 }
 
 .sin-chat-typing {
@@ -1103,14 +912,14 @@ html[data-theme="light"] .sin-chat-fab {
 /* Stop variant of the send button (■ while streaming) */
 .sin-chat-send--stop {
   color: #ffd7dd;
-  background: rgba(255, 90, 54, 0.18);
-  border-color: rgba(255, 90, 54, 0.6);
+  background: rgba(255, 93, 122, 0.18);
+  border-color: rgba(255, 93, 122, 0.6);
 }
 
 .sin-chat-send--stop:hover:not(:disabled),
 .sin-chat-send--stop:focus-visible {
-  background: rgba(255, 90, 54, 0.3);
-  box-shadow: 0 0 14px rgba(255, 90, 54, 0.4);
+  background: rgba(255, 93, 122, 0.3);
+  box-shadow: 0 0 14px rgba(255, 93, 122, 0.4);
 }
 
 /* ── "Ask SINISTER about this post" (blog pages) ──────────── */
@@ -1322,7 +1131,7 @@ html[data-theme="light"] .sin-chat-fab {
 
 /* ── Code token colors (syntax light) ──────────────────────── */
 .sin-tok-c {
-  color: #8c877f;
+  color: #8d8a86;
 }
 
 .sin-tok-s {
@@ -1466,7 +1275,7 @@ html[data-theme="light"] .sin-chat-fab {
 .sin-chat-thread-del:hover,
 .sin-chat-thread-del:focus-visible {
   color: #ffd7dd;
-  background: rgba(255, 90, 54, 0.16);
+  background: rgba(255, 93, 122, 0.16);
 }
 
 /* ── Error retry ──────────────────────────────────────────── */
@@ -1514,7 +1323,7 @@ html[data-theme="light"] .sin-tok-s {
 }
 
 html[data-theme="light"] .sin-tok-k {
-  color: #b03060;
+  color: #a63e50;
 }
 
 html[data-theme="light"] .sin-tok-n {
@@ -1530,7 +1339,7 @@ html[data-theme="light"] .sin-chat-mood--competence {
 }
 
 html[data-theme="light"] .sin-chat-mood--snark {
-  color: #b03060;
+  color: #a63e50;
 }
 
 

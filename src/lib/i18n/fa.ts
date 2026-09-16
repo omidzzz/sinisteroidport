@@ -3,16 +3,15 @@ import type { Dictionary } from "./en";
 /** Persian dictionary — typed against the English shape. */
 const fa: Dictionary = {
   nav: [
-    { index: "01", label: "شروع" },
-    { index: "02", label: "سوابق" },
-    { index: "03", label: "مهارت‌ها" },
-    { index: "04", label: "تحصیلات" },
-    { index: "05", label: "نمونه‌کارها" },
-    { index: "06", label: "نوشته‌ها" },
+    { index: "۰۱", label: "شروع" },
+    { index: "۰۲", label: "سوابق" },
+    { index: "۰۳", label: "مهارت‌ها" },
+    { index: "۰۴", label: "تحصیلات" },
+    { index: "۰۵", label: "نمونه‌کارها" },
+    { index: "۰۶", label: "نوشته‌ها" },
     { index: "۰۷", label: "تماس" },
   ],
   site: "/ sinisteroid.ir",
-  coords: "۳۵٫۶۸۹۲ شمالی / ۵۱٫۳۸۹۰ شرقی",
   city: "تهران، ایران",
   heroName: "امید",
   heroKicker: "(نمونه‌کار) توسعه‌دهنده فرانت‌اند — از ۲۰۱۲",

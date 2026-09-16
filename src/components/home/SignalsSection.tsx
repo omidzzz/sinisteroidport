@@ -2,7 +2,8 @@ import Link from "next/link";
 import LatestPostsLive from "./LatestPostsLive";
 import RainStrip from "./RainStrip";
 import Spotlight from "@/components/ui/Spotlight";
-import { Rail, Seam } from "@/components/ui/Section";
+import { Rail } from "@/components/ui/Section";
+import { Act } from "./Quire";
 import { ArrowIcon, SignalIcon } from "@/components/ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import type { Post } from "@/lib/blog/types";
@@ -47,7 +48,7 @@ export default function SignalsSection({
         </div>
       </section>
 
-      <Seam tag="FAULT.05 ▸ SIGNAL" />
+      <Act num="05" title={fa ? "پیوست" : "Appendix"} />
     </>
   );
 }

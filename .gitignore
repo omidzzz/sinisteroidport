@@ -45,8 +45,19 @@ next-env.d.ts
 /write_p2.js
 /shot.mjs
 /src/components/home/plant.zip
+/.tmp-css.mjs
+/deck-*.png
+/font-probe*.json
+/tmp-*.mjs
+/tmp-fonts.txt
+# local one-off probe scripts (never committed; run with node, then delete)
+/scripts/tools/*-probe*.mjs
+/scripts/tools/verify-*.mjs
 
 # PSI / Lighthouse reports (downloaded locally, never committed)
 /lighthouse.html
+
+# Output log of scripts/tools/verify-quire-fixes.mjs (recreated on every run)
+/verify-quire-fixes.log
 
 .aider*

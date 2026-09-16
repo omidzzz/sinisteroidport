@@ -32,7 +32,7 @@
   padding: 1.05rem 1.2rem 1.15rem;
   border: 1px solid var(--color-line);
   background:
-    linear-gradient(155deg, rgba(var(--rgb-acid), 0.06), rgba(13, 13, 15, 0.4) 60%),
+    linear-gradient(155deg, rgba(var(--rgb-acid), 0.06), rgba(10, 11, 16, 0.4) 60%),
     var(--color-bg);
   color: var(--color-muted);
   font-size: 0.95rem;
@@ -121,7 +121,7 @@
   padding: 1rem 1.15rem;
   border: 1px solid var(--color-line);
   border-radius: 4px;
-  background: rgba(13, 13, 15, 0.6);
+  background: rgba(10, 11, 16, 0.6);
   font-family: var(--font-mono);
   font-size: 0.82rem;
   line-height: 1.6;
@@ -195,6 +195,25 @@
 .prose-post tbody tr:hover { background: rgba(var(--rgb-acid), 0.05); }
 [dir="rtl"] .prose-post table { direction: rtl; }
 
+/* TOC rail — anchored to the article's centering box (100% of main's
+   content area, which already mirrors the sidebar reserve), NOT to 100vw:
+   a viewport-based offset ignored the sidebar gutter and shoved the rail
+   into the post text. Shown only where article + rail + gaps truly fit. */
+.post-toc-rail {
+  display: none;
+}
+@media (min-width: 1520px) {
+  .post-toc-rail {
+    display: block;
+    position: absolute;
+    inset-block: 0;
+    /* article left edge − (14rem rail + 2rem gap) */
+    inset-inline-start: calc((100% - 48rem) / 2 - 16rem);
+    width: 14rem;
+    pointer-events: none;
+  }
+}
+
 /* TOC — acid active underline */
 .post-toc a.is-active {
   color: var(--color-acid);
@@ -209,7 +228,7 @@
 .post-thumb.no-cover { display: none; }
 
 /* ── Donate CTA — "power the next transmission" ── */
-.donate-cta{position:relative;display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.7rem;border-radius:9999px;overflow:hidden;font-family:var(--font-display);font-weight:800;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:#0d0d0f;background:linear-gradient(140deg,var(--color-acid) 0%,var(--color-accent) 145%);box-shadow:0 0 0 1px rgba(var(--rgb-acid),.35),0 0 24px rgba(var(--rgb-acid),.32),0 0 70px rgba(var(--rgb-accent),.16);transition:transform .3s,box-shadow .3s}
+.donate-cta{position:relative;display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.7rem;border-radius:9999px;overflow:hidden;font-family:var(--font-display);font-weight:800;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:#0a0b10;background:linear-gradient(140deg,var(--color-acid) 0%,var(--color-accent) 145%);box-shadow:0 0 0 1px rgba(var(--rgb-acid),.35),0 0 24px rgba(var(--rgb-acid),.32),0 0 70px rgba(var(--rgb-accent),.16);transition:transform .3s,box-shadow .3s}
 .donate-cta:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(var(--rgb-acid),.65),0 0 34px rgba(var(--rgb-acid),.5),0 0 100px rgba(var(--rgb-accent),.28)}
 .donate-cta:active{transform:translateY(0) scale(.97)}
 .donate-cta::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.5) 50%,transparent 68%);transform:translateX(-130%);transition:transform .7s ease}

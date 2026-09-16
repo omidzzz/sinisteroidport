@@ -1,6 +1,7 @@
 import Tilt from "@/components/ui/Tilt";
 import Spotlight from "@/components/ui/Spotlight";
-import { Rail, Seam } from "@/components/ui/Section";
+import { Rail } from "@/components/ui/Section";
+import { Act } from "./Quire";
 import { ArrowIcon, OrbitIcon } from "@/components/ui/icons";
 import { getDict, type Locale } from "@/lib/i18n";
 
@@ -55,7 +56,7 @@ export default function ModuleBay({ locale }: { locale: Locale }) {
         <Rail label={bay} icon={<OrbitIcon />} />
       </section>
 
-      <Seam cyan flip tag="FAULT.04 ▸ CYCLE" />
+      <Act num="04" title={fa ? "لوحه‌ها" : "Plates"} />
     </>
   );
 }

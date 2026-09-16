@@ -142,8 +142,8 @@
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(255, 90, 54, 0.05) 55%,
-    rgba(255, 90, 54, 0.1)
+    rgba(255, 93, 122, 0.05) 55%,
+    rgba(255, 93, 122, 0.1)
   );
   mix-blend-mode: screen;
   animation: term-scan-move 5.5s linear infinite;
@@ -172,8 +172,8 @@
 .term-flicker {
   animation: term-flicker-k 3.4s linear infinite;
   text-shadow:
-    0 0 18px rgba(255, 90, 54, 0.55),
-    0 0 64px rgba(255, 90, 54, 0.22);
+    0 0 18px rgba(255, 93, 122, 0.55),
+    0 0 64px rgba(255, 93, 122, 0.22);
 }
 
 @keyframes term-flicker-k {
@@ -196,7 +196,7 @@
 }
 
 .term-prompt {
-  border-inline-start: 2px solid rgba(255, 90, 54, 0.45);
+  border-inline-start: 2px solid rgba(255, 93, 122, 0.45);
   padding-inline-start: 0.75rem;
 }
 
@@ -334,7 +334,7 @@
 
 .hero-plate {
   rotate: 2.5deg;
-  filter: drop-shadow(0 26px 60px rgba(13, 13, 15, 0.65));
+  filter: drop-shadow(0 26px 60px rgba(10, 11, 16, 0.65));
 }
 [dir="rtl"] .hero-plate {
   rotate: -2.5deg;
@@ -345,7 +345,7 @@
   overflow: hidden;
   border: 1px solid rgba(var(--rgb-acid), 0.35);
   border-radius: 2px;
-  background: #16161b;
+  background: #10131c;
 }
 /* offset chromatic ghost frames */
 .hero-plate-frame::before,
@@ -481,7 +481,7 @@
 }
 .net-hud {
   border-color: rgba(var(--rgb-acid), 0.35);
-  background: rgba(13, 13, 15, 0.75);
+  background: rgba(10, 11, 16, 0.75);
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 /* Canvas legend — mirrors the node palette in CSS (hub cyan, cat acid,
@@ -587,7 +587,7 @@ html[lang="fa"] .net-legend {
 .gauge-cell:hover {
   box-shadow:
     inset 0 1px 0 rgba(var(--rgb-acid), 0.65),
-    0 6px 22px rgba(13, 13, 15, 0.5);
+    0 6px 22px rgba(10, 11, 16, 0.5);
 }
 .gauge-idx {
   display: block;
@@ -615,14 +615,14 @@ html[lang="fa"] .gauge-idx {
   background: repeating-linear-gradient(
     90deg,
     transparent 0 7px,
-    rgba(13, 13, 15, 0.55) 7px 8px
+    rgba(10, 11, 16, 0.55) 7px 8px
   );
 }
 [dir="rtl"] .gauge-meter::after {
   background: repeating-linear-gradient(
     -90deg,
     transparent 0 7px,
-    rgba(13, 13, 15, 0.55) 7px 8px
+    rgba(10, 11, 16, 0.55) 7px 8px
   );
 }
 .gauge-fill {
