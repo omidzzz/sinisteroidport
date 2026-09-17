@@ -211,40 +211,9 @@
   pointer-events: none;
 }
 
-/* The content-facing hairline: a single 1px rule on the plate's edge that
-   faces the main text. Two things make it "genius":
-   (1) an inline SVG mask (data URI) fades the rule at its top/bottom ~7% and
-       is densest through the middle, so it reads as a printed margin rule —
-       never a flat digital stroke; and
-   (2) the rule carries the register's vermilion (var(--color-acid)) at a
-       viewport-height-relative alpha (clamp), so it is quiet on short
-       screens and present on tall ones — proportional to the surface.
-   A 7px paper-filled lozenge (::before) rides the rule's vertical middle —
-   the plate's one piece of furniture, straddling the hairline like a folio
-   ornament. z-index:1 lifts it above the rule so the hairline passes
-   *behind* it instead of through it — the lozenge punches a clean window.
-   Persian RTL mirrors the edge. */
+/* A single fading hairline on the content-facing edge; no ornament. */
 [data-register="quire"] .dock-wrap::before {
-  content: "";
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-end: 0;
-  width: 7px;
-  height: 7px;
-  /* Center the lozenge ON the hairline: half its own width back toward the
-     content, half the 1px rule back toward the viewport edge. */
-    translate: calc(50% - 0.5px) -50%;
-  rotate: 45deg;
-  z-index: 1; /* above the hairline so the rule sits behind the lozenge */
-  background: var(--color-bg);
-  border: 1px solid var(--color-acid);
-  opacity: 0.9;
-  pointer-events: none;
-}
-[dir="rtl"] [data-register="quire"] .dock-wrap::before {
-  inset-inline-end: auto;
-  inset-inline-start: 0;
-  translate: calc(-50% + 0.5px) -50%;
+  content: none;
 }
 [data-register="quire"] .dock-wrap::after {
   content: "";
@@ -252,34 +221,25 @@
   inset-block: 0;
   inset-inline-end: 0;
   width: 1px;
-    background: var(--color-acid);
-  --divider-alpha: clamp(0.22, calc((100vh - 680px) / 1100), 0.45);
-  opacity: var(--divider-alpha);
-  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxIDEwMjQiPjxkZWZzPjxsaW5lYXJHcmFwaCByYzI9ImEiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxMDI0Ij48c3RvcCBvZmZzcz0iMCIgc3RvcHBhZD0iIzAwMCIgc3RvcDpvcGFjaXR5PSIwIi8+PHN0b3Agb2Zmc2VzPSIwLjA3IiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAuMTIiLz48c3RvcCBvZmZzcz0iMC41IiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAuOTIiLz48c3RvcCBvZmZzcz0iMC45MyIgc3RvcHBhZD0iIzAwMCIgc3RvcDpvcGFjaXR5PSIwLjEyIi8+PHN0b3Agb2Zmc2VzPSIxIiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAiLz48L2xpbmVhckJyYW5nZT48L2RlZnM+PHJlY3Qgd2lkdGg9IjEiIGhlaWdodD0iMTAyNCIgZmlsbD0idXJsKCNmKSIvPjwvc3ZnPg==");
-  mask-size: 1px 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxIDEwMjQiPjxkZWZzPjxsaW5lYXJHcmFwaCByYzI9ImEiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxMDI0Ij48c3RvcCBvZmZzcz0iMCIgc3RvcHBhZD0iIzAwMCIgc3RvcDpvcGFjaXR5PSIwIi8+PHN0b3Agb2Zmc2VzPSIwLjA3IiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAuMTIiLz48c3RvcCBvZmZzcz0iMC41IiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAuOTIiLz48c3RvcCBvZmZzcz0iMC45MyIgc3RvcHBhZD0iIzAwMCIgc3RvcDpvcGFjaXR5PSIwLjEyIi8+PHN0b3Agb2Zmc2VzPSIxIiBzdG9wcGFnPSIjMDAwIiBzdG9wOm9wYWNpdHk9IjAiLz48L2xpbmVhckJyYW5nZT48L2RlZnM+PHJlY3Qgd2lkdGg9IjEiIGhlaWdodD0iMTAyNCIgZmlsbD0idXJsKCNmKSIvPjwvc3ZnPg==");
-  -webkit-mask-size: 1px 100%;
-  -webkit-mask-repeat: no-repeat;
+  background: linear-gradient(to bottom, transparent 5%, rgba(var(--rgb-ink), 0.18) 25%, rgba(var(--rgb-ink), 0.18) 75%, transparent 95%);
+  opacity: 1;
+  mask-image: none;
+  -webkit-mask-image: none;
   pointer-events: none;
 }
 
-/* No depth cue — the plate is bare paper; the ::after hairline below is
-   the only mark on the content edge. The lozenge (z-index:1) is the sole
-   gap in the rule — its paper fill covers the hairline so it visibly
-   passes *behind* the folio ornament. */
-[data-register="quire"] .dock-wrap {
-  box-shadow: none;
-}
-
-[dir="rtl"] [data-register="quire"] .dock-wrap::after {
-  inset-inline-end: auto;
-  inset-inline-start: 0;
-}
+/* Logical inset-inline-end keeps the divider facing the content in LTR and RTL. */
 
 @media (min-width: 1200px) {
   [data-register="quire"] .dock-wrap {
     display: flex;
+    /* Frosted paper: the text stays sharp while content behind the rail softens. */
+    background:
+      repeating-linear-gradient(0deg, rgba(var(--rgb-ink), 0.025) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(90deg, rgba(var(--rgb-ink), 0.015) 0 1px, transparent 1px 5px),
+      color-mix(in srgb, var(--color-bg) 80%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
@@ -421,11 +381,38 @@ html[lang="fa"] [data-register="quire"] .dock-link .dock-label {
   justify-content: space-between;
   gap: 1rem;
   padding: 0.55rem 1.25rem;
-  background: var(--color-bg);
+  /* FROSTED MARGIN, not a slab: the head stays a paper surface but the page
+     whispers through it. Two 1px laid-paper weaves at ~2% ink (they re-tint
+     with the theme because --rgb-ink remaps per edition) float over an 86%
+     opaque ground; desktop adds a 6px backdrop blur (rule below). The grain
+     keeps it reading as stock, never as glass. */
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(var(--rgb-ink), 0.024) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(var(--rgb-ink), 0.018) 0 1px,
+      transparent 1px 3px
+    ),
+    color-mix(in srgb, var(--color-bg) 86%, transparent);
   border: 0;
   border-block-end: 1px solid var(--color-line);
   border-radius: 0;
   box-shadow: none;
+}
+/* Desktop only: a tiny frosted blur behind the running head, so content
+   scrolling under it softens instead of cutting through the hairline. Kept
+   OFF below 1200px on purpose — backdrop-filter forces extra compositing
+   work on exactly the low-power hardware the mobile budget measures, and
+   the 86% ground already carries the effect there. */
+@media (min-width: 1200px) {
+  [data-register="quire"] .chip-corner {
+    backdrop-filter: blur(6px) saturate(1.05);
+    -webkit-backdrop-filter: blur(6px) saturate(1.05);
+  }
 }
 
 /* Utility cluster inside the running head (kbd-hint, theme, lang, donate) */
@@ -829,7 +816,11 @@ html[lang="fa"] [data-register="quire"] .dock-link .dock-label {
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  /* AA fix: at 0.6rem/normal the bare muted ink measures 4.28:1 on paper —
+     Lighthouse flags it. Pull the caption's muted toward the full ink so the
+     ratio clears 4.5:1 in BOTH editions (ink is the high-contrast pole of
+     each palette, so the mix helps the night ground too). */
+  color: color-mix(in srgb, var(--color-muted) 74%, var(--color-ink));
   display: flex;
   align-items: baseline;
   gap: 0.8rem;
@@ -1016,12 +1007,18 @@ html[lang="fa"] .q-act-title {
   padding-block-start: 1.1rem;
 }
 
-/* The end-mark: a vermilion square that returns to the top. 44px target. */
+/* The end-mark: a vermilion square that returns to the top. 44px target.
+   Clear the floating assistant: the FAB is fixed to the same inline-end
+   corner at EVERY viewport (z-index 74) and parks straight over the mark
+   when the reader reaches the colophon — rendered, but behind and
+   untappable. The margin reserves the FAB's footprint (1.25rem inset +
+   3.9-4rem disc + air) so both stay tappable on desktop and mobile. */
 [data-register="quire"] .end-mark {
   display: inline-grid;
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
+  margin-inline-end: 5.6rem;
   background: var(--color-acid);
   color: var(--color-bg);
   border: 0;
@@ -1038,7 +1035,22 @@ html[lang="fa"] .q-act-title {
    the surfaces whose day form is structural (hairlines stay hairlines,
    the running head gets the carbon stock). */
 
-[data-theme="dark"] [data-register="quire"] .chip-corner,
+/* Night mirrors the frosted head: same grain over the carbon stock.
+   (.mob-dock / .overlay-veil stay opaque — they are full stops, not glass.) */
+[data-theme="dark"] [data-register="quire"] .chip-corner {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(var(--rgb-ink), 0.024) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(var(--rgb-ink), 0.018) 0 1px,
+      transparent 1px 3px
+    ),
+    color-mix(in srgb, var(--color-bg) 86%, transparent);
+}
 [data-theme="dark"] [data-register="quire"] .mob-dock,
 [data-theme="dark"] [data-register="quire"] .overlay-veil {
   background: var(--color-bg);
@@ -1087,6 +1099,38 @@ html[lang="fa"] [data-register="quire"] .tx-name .font-display {
 @media (max-width: 1199.98px) {
   [data-register="quire"] .chip-corner {
     padding-inline: 1rem;
+  }
+  /* The running head must hold brand + utilities inside a 320px phone, and
+     the donate pill was overflowing off the viewport edge. The ctrl+K hint
+     is desktop-only knowledge — the palette stays reachable from the bottom
+     bar and the contents overlay — so it drops out first; the utility
+     cluster and the pill tighten to fit what remains. */
+  [data-register="quire"] .head-tools {
+    gap: 0.55rem;
+  }
+  [data-register="quire"] .kbd-hint {
+    display: none;
+  }
+  [data-register="quire"] .donate-pill {
+    padding: 0 0.55rem;
+    gap: 0.35rem;
+    letter-spacing: 0.1em;
+  }
+  /* BACK TO TOP vs the assistant: below 1200px the floating assistant
+     (z-index 74, fixed at the inline-end corner) parks straight over the
+     colophon's end-mark — the vermilion "back to top" square rendered, but
+     behind and under the FAB. Push the mark clear of the FAB's footprint
+     (1.25rem inset + 3.9-4rem disc + air) so both stay tappable. */
+  [data-register="quire"] .end-mark {
+    margin-inline-end: 5.6rem;
+  }
+}
+
+/* Ultra-narrow phones: the wordmark steps aside so the mark + utilities
+   still fit; the brand tile keeps the lockup recognizable. */
+@media (max-width: 419.98px) {
+  [data-register="quire"] .chip-corner .logo-sinister {
+    display: none;
   }
 }
 

@@ -1,33 +1,10 @@
 /**
- * inline-fonts.mjs — make the rendered type DETERMINISTIC across reloads.
- *
- * PROBLEM (measured, see scripts/tools/font-probe*.mjs):
- * next/font ships every face with `font-display:optional`. Under `optional`,
- * a face that is not ready at first paint is not swapped in later — it is
- * EXCLUDED from font matching for the rest of the page's lifetime. Whether
- * the face "makes it" depends on cache/parse timing, so the same page paints
- * in the real face on one refresh and in the metric fallback on the next:
- * type that visibly changes shape reload-to-reload. This even hits faces
- * inlined as data URIs (if first layout wins the race against the face's
- * load task), and it hit Vazirmatn + Amiri hardest — every one of their
- * faces was still a network fetch, because the previous inliner only
- * handled the latin subset of the first-screen families.
- *
- * FIX (belt and braces):
- *  1. Inline EVERY @font-face whose src is a /_next/static/media/*.woff2 —
- *     all subsets of all families (Fraunces, Archivo, IBM Plex Mono,
- *     Vazirmatn, Amiri). No font is ever fetched over the network; a
- *     data-URI face is parsed with the stylesheet, so it is available at
- *     first paint on every load. (~519 KiB raw / ~711 KiB base64, paid once
- *     in the shared cached stylesheet.)
- *  2. Rewrite `font-display:optional` → `font-display:block` on every face.
- *     `block` never permanently excludes a face: after the block period it
- *     swaps the real face in. Combined with (1), the load completes before
- *     first layout anyway, so every reload paints the real type.
- *  3. Strip <link rel="preload" as="font"> from the exported HTML — with
- *     data-URI faces those fetches are pure dead weight.
- *
- * Wired into `npm run build` (after optimize-images). Idempotent.
+ * Inline the common Latin faces and Persian body face for stable first paint.
+ * Keep other subsets as ordinary unicode-range font URLs: embedding all 30
+ * faces forced every visitor to download 825 KiB of render-blocking CSS.
+ * font-display:block retains eventual matching (unlike optional); uncommon
+ * scripts and the Persian display face load only when actually used.
+ * Run after next build. Idempotent.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -65,6 +42,11 @@ for (const file of walk(cssDir, ".css")) {
   for (const m of css.matchAll(faceRe)) {
     const family = m[1].replace(/"/g, "");
     const href = m[3];
+    const latin = /unicode-range:u\+00\?\?/i.test(m[0]);
+    const arabic = /unicode-range:u\+06\?\?/i.test(m[0]);
+    const critical = (latin && ["Fraunces", "Archivo", "IBM Plex Mono"].includes(family)) ||
+      (arabic && family === "Vazirmatn");
+    if (!critical) continue;
     let b64 = dataUriCache.get(href);
     if (b64 === undefined) {
       const fontPath = path.join(outDir, href);

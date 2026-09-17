@@ -77,7 +77,7 @@ html[data-theme="dark"] .icon-moon { display: none; }
 
 /* Small seal labels ride the AA variants (day + night) */
 .sig-badge { color: var(--color-acid-ink); }
-.logo-id { color: var(--color-accent-ink); }
+.logo-id { color: color-mix(in srgb, var(--color-accent-ink) 90%, var(--color-ink)); }
 
 [data-theme="dark"] ::selection { color: #141310; }
 [data-theme="dark"] ::-webkit-scrollbar-track { background: var(--color-bg); }

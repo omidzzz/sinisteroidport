@@ -462,10 +462,18 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
 
     /*__P2__*/
 
-    /* Pause when scrolled out of view (battery/CPU courtesy). */
+    /* Pause when scrolled out of view (battery/CPU courtesy) — and actually
+        CANCEL the loop, not just blank its work, so a paused canvas costs
+        nothing per frame. */
     const io = new IntersectionObserver(
       (entries) => {
         hiddenRef.current = !entries[0]?.isIntersecting;
+        if (hiddenRef.current) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = 0;
+        } else if (!rafRef.current && !document.hidden) {
+          rafRef.current = requestAnimationFrame(step);
+        }
       },
       { rootMargin: "80px" },
     );
@@ -487,8 +495,14 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     let t = 0;
     let pingT = -10; // time (t) the current hover sonar ping was armed
     const step = () => {
+      rafRef.current = 0;
+      /* Fully parked when offscreen or the tab is hidden — zero per-frame JS.
+         (The previous loop re-queued itself every frame even while "paused",
+         which kept a rAF heartbeat — and its wakeups — alive through the
+         entire page-load window Lighthouse measures.) The IO and the
+         visibility handler below restart it when the canvas returns. */
+      if (hiddenRef.current || document.hidden) return;
       rafRef.current = requestAnimationFrame(step);
-      if (hiddenRef.current) return; // paused offscreen
       const w = wRef.current;
       const h = hRef.current;
       const ncx = w / 2;
@@ -790,8 +804,12 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     rafRef.current = requestAnimationFrame(step);
 
     const onVis = () => {
-      cancelAnimationFrame(rafRef.current);
-      if (!document.hidden) rafRef.current = requestAnimationFrame(step);
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      } else if (!hiddenRef.current && !rafRef.current) {
+        rafRef.current = requestAnimationFrame(step);
+      }
     };
     document.addEventListener("visibilitychange", onVis);
 
