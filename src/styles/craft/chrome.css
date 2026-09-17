@@ -1,0 +1,267 @@
+/* ============================================================
+   CODE & CRAFT — chrome primitives
+   ------------------------------------------------------------
+   (1) The .craft-* vocabulary: the surface/interaction primitives new
+       components are built from. One source of truth for glass,
+       elevation, focus and the two button voices.
+   (2) Theme glue ported from the retired theme-engine sheet: rules no
+       surviving legacy sheet provides. Kept dark-scoped exactly as
+       legacy scoped them; each retires with the legacy sheet that
+       owns the component.
+   ============================================================ */
+
+/* ---------- 1 · Surfaces ---------- */
+
+/* Glass panel — the elevated card. On charcoal it is a light veil;
+   in the light edition the token block flips it to a white sheet. */
+.craft-card {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-2);
+  box-shadow: var(--elev-1);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+/* Solid card — the #eff1f3 surface card of the brief: true light card
+   on charcoal, white sheet on the light ground, always high contrast. */
+.craft-card--solid {
+  background: var(--color-surface);
+  color: var(--color-surface-ink);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+  box-shadow: var(--elev-1);
+}
+
+/* Hairline panel — structure without weight (lists, trees, log rows) */
+.craft-panel {
+  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+}
+
+/* ---------- 2 · Interaction voices ---------- */
+
+/* Primary CTA — the yellow signature. True #fed766 fill in BOTH
+   editions, always behind charcoal ink (10.76:1, measured). */
+.craft-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px; /* touch target */
+  padding: 0.55rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-1);
+  background: var(--color-accent-fill);
+  color: var(--color-accent-on);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+[dir="rtl"] .craft-btn {
+  letter-spacing: 0;
+}
+.craft-btn:hover {
+  box-shadow: var(--glow-accent);
+  transform: translateY(-1px);
+}
+.craft-btn:active {
+  transform: translateY(0);
+}
+
+/* Secondary — teal outline, the "everything else" voice */
+.craft-btn--ghost {
+  background: transparent;
+  border-color: var(--color-accent-2);
+  color: var(--color-accent-2-ink);
+}
+.craft-btn--ghost:hover {
+  box-shadow: var(--glow-accent-2);
+}
+
+/* Chip — small mono metadata token */
+.craft-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-panel) 70%, transparent);
+  color: var(--color-ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+[dir="rtl"] .craft-chip {
+  letter-spacing: 0;
+}
+
+/* kbd hint — the Ctrl+K affordance */
+.craft-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--color-line-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-1);
+  background: color-mix(in srgb, var(--color-panel) 80%, transparent);
+  color: var(--color-ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  line-height: 1.4;
+}
+
+/* ---------- 3 · Ground decorations ---------- */
+
+/* The code grid — a faint editor grid that anchors every section.
+   background-position only under animation; static by default. */
+.craft-grid {
+  position: relative;
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Soft accent orbs — the glow that makes charcoal feel intentional.
+   aria-hidden in markup; blur is the only cost, capped by tokens. */
+.craft-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.16;
+  pointer-events: none;
+}
+.craft-orb--accent {
+  background: var(--color-accent-fill);
+}
+.craft-orb--teal {
+  background: var(--color-accent-2-fill);
+}
+
+/* Overlay veil — behind dialogs and the console tree */
+.craft-veil {
+  background: color-mix(in srgb, var(--color-bg) 78%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Status rule — the terminal-style separator line */
+.craft-rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    var(--color-line-strong),
+    var(--color-line) 40%,
+    transparent
+  );
+}
+
+/* ---------- 4 · Theme glue (ported from the retired theme-engine sheet) ----
+   Every surviving legacy sheet that styles these components was written
+   against the paper ground and used to be corrected by a
+   [data-theme="dark"] block in theme-engine.css. Dark is the base now, but
+   the components still carry their paper paint until their own phase
+   retires them — so the same corrections ride along here, unchanged in
+   scope. Each block is deleted with the legacy sheet it belongs to. */
+
+[data-theme="dark"] .glass {
+  background: var(--color-panel);
+  border-color: rgba(var(--rgb-accent-3), 0.24);
+}
+
+[data-theme="dark"] .overlay-veil {
+  background: var(--color-bg);
+}
+
+[data-theme="dark"] .command-bar {
+  background: var(--color-bg);
+}
+
+[data-theme="dark"] .command-link:hover,
+[data-theme="dark"] .command-link:focus-visible {
+  background: rgba(var(--rgb-accent-3), 0.12);
+}
+
+[data-theme="dark"] .post-tldr {
+  background:
+    linear-gradient(
+      155deg,
+      rgba(var(--rgb-accent), 0.08),
+      rgba(47, 47, 49, 0.75) 60%
+    ),
+    var(--color-bg);
+}
+
+[data-theme="dark"] .prose-post pre {
+  background: rgba(39, 39, 39, 0.85);
+}
+
+[data-theme="dark"] .hero-plate-img {
+  filter: grayscale(0.85) contrast(1.05);
+}
+
+[data-theme="dark"] .prism-panel::before {
+  opacity: 0.12;
+}
+
+/* Small seal labels ride the AA-safe ink roles in both editions. */
+.sig-badge {
+  color: var(--color-acid-ink);
+}
+.logo-id {
+  color: color-mix(
+    in srgb,
+    var(--color-acid-ink) 90%,
+    var(--color-ink)
+  );
+}
+
+/* ---------- 5 · Edition toggle icon pair ----------
+   Dark edition shows the moon (tap for light); light edition shows the
+   sun. Display flips on the html attribute the ThemeToggle writes. */
+.icon-toggle {
+  position: relative;
+}
+.icon-toggle .icon-sun,
+.icon-toggle .icon-moon {
+  display: grid;
+  place-items: center;
+}
+html .icon-sun {
+  display: none;
+}
+html .icon-moon {
+  display: grid;
+}
+html[data-theme="light"] .icon-sun {
+  display: grid;
+}
+html[data-theme="light"] .icon-moon {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .icon-toggle .icon-sun,
+  .icon-toggle .icon-moon {
+    transition: transform 0.16s ease;
+  }
+  html .icon-moon:hover {
+    transform: rotate(-24deg) scale(1.2);
+  }
+  html[data-theme="light"] .icon-sun:hover {
+    transform: rotate(40deg) scale(1.2);
+  }
+}

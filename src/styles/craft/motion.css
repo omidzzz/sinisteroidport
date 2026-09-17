@@ -1,0 +1,44 @@
+/* ============================================================
+   CODE & CRAFT — motion safety net (WCAG 2.2.2)
+   ------------------------------------------------------------
+   MUST stay LAST in globals.css. Animated components opt out
+   individually (KineticTitle/ScrambleText render inert, CountUp
+   snaps, the cursor and prop drift bail, canvases paint a static
+   frame); this net freezes every remaining pure-CSS animation for
+   visitors who request reduced motion.
+
+   Purely additive: default-motion visitors see zero change, and
+   nothing here alters layout (duration/iteration only).
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    /* base.css sets smooth scrolling — honour the user's motion choice. */
+    scroll-behavior: auto;
+  }
+
+  /* Every animation completes instantly (0.01ms ≈ one frame) and never
+     repeats: tickers/glows freeze on their start frame instead of cycling.
+     Transitions snap to their end state, so state toggles (.reveal,
+     overlay open/close, hover tints) still resolve — just without the
+     eased slide. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scroll-driven animations (animation-timeline) also fall back: engines
+   without support ignore them; engines with support stop scrubbing here. */
+@media (prefers-reduced-motion: reduce) {
+  .x-rule,
+  [data-scrub] {
+    animation: none !important;
+  }
+}

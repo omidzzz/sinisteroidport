@@ -1,60 +1,40 @@
 /* ============================================================
-   SINISTEROID // HYPERDRIVE DESIGN SYSTEM (radical redesign)
+   CODE & CRAFT — stylesheet entry point
    ------------------------------------------------------------
-   Psychedelic deep-space transmission deck:
-     • Liquid wormhole nebula painted by the WebGL shader below
-     • Acid-triad neon: cyan / magenta / UV violet + acid lime
-     • Chromatic-aberration type, prism-glow panels, stickers
-     • Vertical spine navigation instead of a top bar
-   Every animation is transform/opacity-only (compositor),
-   gated behind prefers-reduced-motion; GL is DPR-capped.
+   The site is being re-skinned from the QUIRE paper register to
+   the Code & Craft dark/charcoal register. The cascade is layered
+   so each phase can land independently and the build stays green:
+
+     1. tailwind utilities
+     2. craft foundation   tokens · themes · base   (the new system)
+     3. legacy sheets      component CSS still awaiting its phase —
+                           each import is deleted when that phase's
+                           craft sheet replaces it
+     4. craft chrome       new primitives; after legacy so the new
+                           voice wins wherever both speak
+     5. craft sections     nav / home / pages / blog / lab / footer
+                           (added by their phases, all after legacy)
+     6. craft/motion.css   LAST — the reduced-motion net
+
+   Tailwind's PostCSS pass inlines every @import at build time, so
+   the shipped CSS is still ONE file. ORDER MATTERS: keep the
+   foundation first and motion.css last.
    ============================================================ */
-
-/* ------------------------------------------------------------
-   ENTRY POINT — the stylesheet is split into section modules in
-   src/styles/ for maintainability. Tailwind v4's PostCSS pass
-   inlines every @import at build time, so the shipped CSS is
-   still ONE file (inlined into <style> by next.config's
-   experimental.inlineCss) — zero extra network round-trips.
-
-   ORDER MATTERS: this list mirrors the original single-file
-   cascade. Keep `@import "tailwindcss"` first and do not
-   reorder the section imports.
-
-     tokens.css        design tokens (@theme, :root, fonts)
-     base.css          element defaults, prose, cursor reticle
-     spine-rail.css    SPINE RAIL — fixed vertical nav dock
-     controls.css      NEON CONTROLS — buttons, panels
-     zine.css          ZINE FAMILY — signal-slab rescopes
-     logotype.css      LOGOTYPE — SINISTER[OID] lockup
-     home.css          HOME COMPOSITION · CONSTELLATION RAILS ·
-                       HERO PLATE · HOME FEED + PULL QUOTE
-     command-bar.css   COMMAND CONSOLE NAV — readable top bar
-     theme-engine.css  PSIONIC ORBIT — theme engine v2
-     console.css       REDACT CONSOLE v2 — layout + interactions
-     pages.css         FULL-SITE REBUILD — composition v3
-     acid-rave.css     PSIONIC ORBIT v4 — ACID RAVE chrome
-     showcase.css      V7 · V7b · V8 — icons, frames, bento wall
-     console-bay.css   V16 — in-flow acid laptop deck
-      prop-float.css    V17 — scroll-bound prop floaters (plant/frog/drone)
-     blog-post.css     V9 — prose-post article voice
-     motion-reduce.css WCAG 2.2.2 safety net — freezes every remaining
-                       CSS animation for prefers-reduced-motion (LAST)
-     terranomy.css     TERRANOMY — tangent-planar survey cross-section (v8):
-                       home-page station cuts + mineral ink remap
-   ------------------------------------------------------------ */
 
 @import "tailwindcss";
 
-@import "../styles/tokens.css";
-@import "../styles/base.css";
+/* ---------- 2 · craft foundation ---------- */
+@import "../styles/craft/tokens.css";
+@import "../styles/craft/themes.css";
+@import "../styles/craft/base.css";
+
+/* ---------- 3 · legacy component sheets (retiring phase by phase) ---- */
 @import "../styles/spine-rail.css";
 @import "../styles/controls.css";
 @import "../styles/zine.css";
 @import "../styles/logotype.css";
 @import "../styles/home.css";
 @import "../styles/command-bar.css";
-@import "../styles/theme-engine.css";
 @import "../styles/console.css";
 @import "../styles/pages.css";
 @import "../styles/contact.css";
@@ -66,22 +46,22 @@
 @import "../styles/agent-chat.css";
 @import "../styles/fx-modern.css";
 @import "../styles/view-transitions.css";
-@import "../styles/motion-reduce.css";
-/* stratum.css — STRATUM · MANTLE layout + mineral shelves (tectonic
-   bands, core-sample rail, per-shelf token morphing). Comes after the
-   motion-reduce safety net because the geology is static. */
+/* stratum.css — STRATUM · MANTLE layout + mineral shelves. Static, so
+   it lands after the sheets above. */
 @import "../styles/stratum.css";
-/* terranomy.css — TERRANOMY tangent-planar survey cross-section (v8).
-   Replaces the sheet chrome on the home page with one continuous
-   geological cross-section plus its own mineral ink remap. Static too,
-   so it also lands after the motion-reduce safety net. */
+/* terranomy.css — tangent-planar survey cross-section. Static too. */
 @import "../styles/terranomy.css";
-/* quire.css — QUIRE · the printed edition (v9). The home page as one
-   continuous measure on paper: margin index nav, running head, colophon
-   footer, hairline act rules, a single vermilion seal. Static geology —
-   after the motion-reduce safety net, before the enhance finesse pass. */
+/* quire.css — the printed-edition chrome (margin index nav, running
+   head, colophon, act rules). Retired when the console nav lands. */
 @import "../styles/quire.css";
-/* enhance.css MUST stay last: finesse pass whose overrides (btn-shine
-   compositor lift, module energizer, seam/footer scrubs, print decay)
-   need to win the cascade. */
+/* enhance.css — legacy finesse pass; kept above craft chrome so the
+   new primitives win the cascade. Retires with the legacy sheets. */
 @import "../styles/enhance.css";
+
+/* ---------- 4 · craft chrome (new primitives win) ---------- */
+@import "../styles/craft/chrome.css";
+
+/* ---------- 5 · craft sections (added phase by phase) ---------- */
+
+/* ---------- 6 · motion net — MUST STAY LAST ---------- */
+@import "../styles/craft/motion.css";

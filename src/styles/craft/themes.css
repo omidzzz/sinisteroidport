@@ -1,0 +1,81 @@
+/* ============================================================
+   CODE & CRAFT — the LIGHT EDITION
+   ------------------------------------------------------------
+   Dark (charcoal) is the base in tokens.css; this block re-maps
+   ONLY the surface/text/role tokens. Nothing else moves: every
+   sheet that paints with var(--…) re-inks for free, and any sheet
+   hard-coding a dark value is a bug to fix in that sheet, not here.
+
+   Edition-specific contrast notes (measured):
+   - --color-muted #696773 is 4.90:1 on #eff1f3 — AA for the small
+     structural text it carries in this edition (it is decoration-
+     only on charcoal, see tokens.css).
+   - #fed766 is illegible as text on this ground (1.55:1), so the
+     yellow signature flips to its ink form (#7a5c00, 5.52:1); the
+     FILL stays true #fed766 behind --color-accent-on charcoal.
+   - Teal text flips to #00707f (5.12:1); fills stay #009fb7.
+   ============================================================ */
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* ---- Surfaces ---- */
+  --color-bg: #eff1f3;
+  --color-panel: #ffffff;
+  --color-surface: #ffffff;
+  --color-bg-raise: #ffffff;
+  --color-line: rgba(39, 39, 39, 0.16);
+  --color-line-strong: rgba(39, 39, 39, 0.32);
+
+  /* ---- Text ---- */
+  --color-ink: #272727;
+  --color-ink-dim: #52525e;
+  --color-muted: #696773;
+  --color-surface-ink: #272727;
+
+  /* ---- Signatures: fills keep their hue, text takes its ink form ---- */
+  --color-accent: #7a5c00;
+  --color-acid: #7a5c00;
+  --color-accent-ink: #7a5c00;
+  --color-acid-ink: #7a5c00;
+  --color-accent-2: #00707f;
+  --color-accent-2-ink: #00707f;
+  --color-accent-3: #696773;
+  --warn: #8a5c00;
+
+  /* ---- Raw channel triplets ---- */
+  --rgb-bg: 239, 241, 243;
+  --rgb-panel: 255, 255, 255;
+  --rgb-surface: 255, 255, 255;
+  --rgb-ink: 39, 39, 39;
+  --rgb-muted: 105, 103, 115;
+  --rgb-accent: 122, 92, 0;
+  --rgb-accent-2: 0, 112, 127;
+  --rgb-accent-3: 105, 103, 115;
+  --rgb-acid: 122, 92, 0;
+  --rgb-warn: 138, 92, 0;
+
+  /* ---- Glass & elevation ---- */
+  --glass-bg: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.92),
+    rgba(255, 255, 255, 0.78)
+  );
+  --glass-line: rgba(39, 39, 39, 0.12);
+  --elev-1: 0 1px 2px rgba(39, 39, 39, 0.08), 0 8px 24px rgba(39, 39, 39, 0.1);
+  --elev-2: 0 2px 6px rgba(39, 39, 39, 0.1), 0 18px 48px rgba(39, 39, 39, 0.16);
+  --glow-accent: 0 0 0 1px rgba(122, 92, 0, 0.35), 0 0 24px rgba(254, 215, 102, 0.45);
+  --glow-accent-2: 0 0 0 1px rgba(0, 112, 127, 0.35), 0 0 22px rgba(0, 159, 183, 0.28);
+
+  /* The accent-fill/on pair does NOT flip: a #fed766 button is the
+     signature moment in BOTH editions, always carrying charcoal ink. */
+}
+
+[data-theme="light"] ::selection {
+  background: var(--color-accent-fill);
+  color: var(--color-accent-on);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  border-color: var(--color-bg);
+}

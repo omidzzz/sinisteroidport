@@ -1,11 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
-  Fraunces,
-  Archivo,
-  IBM_Plex_Mono,
-  Vazirmatn,
-  Amiri,
+  Space_Grotesk,
+  Inter,
+  JetBrains_Mono,
+  Cairo,
 } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -32,107 +31,89 @@ import { JsonLd } from "@/components/ui/JsonLd";
 import { personJsonLd, websiteJsonLd } from "@/lib/schema";
 import "../../globals.css";
 
-// Sets the theme before first paint — no night-edition flash on load.
-// QUIRE: default is the DAY edition (paper); the script only restores a
-// theme the user has explicitly saved, and ignores the OS color-scheme
-// (which would otherwise dark-wash the whole site on dark-OS machines).
-const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="light"}document.documentElement.dataset.theme=t}catch(e){}`;
+// Sets the theme before first paint — no edition flash on load.
+// CODE & CRAFT: the CHARCOAL edition is the base; the script only restores
+// a theme the user has explicitly saved ("light"), and ignores the OS
+// color-scheme (which would otherwise light-wash the whole site on
+// light-OS machines). Every edition is explicit: data-theme is always set.
+const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.dataset.theme=t}catch(e){}`;
 
 // With output: "export", only render locales listed in generateStaticParams.
 // Any other value (e.g. /admin/) → 404 instead of a runtime crash.
 export const dynamicParams = false;
 
-// QUIRE display voice — Fraunces, a variable serif with a real optical-size
-// axis driving --font-display for Latin headings; Amiri (Naskh) mirrors it
-// in Persian. Every face (all subsets of all five families) is build-inlined
-// as a base64 data-URI by scripts/build/inline-fonts.mjs and ships with
-// font-display:block — see that file for why `optional` is banned: a face
-// that misses the optional block period is excluded from matching for the
-// whole page lifetime, which is exactly the "type changes on refresh" bug.
-// `block` + data-URI faces means the real type paints on every load, with
-// no swap and no reflow, deterministically.
-const fraunces = Fraunces({
+// CODE & CRAFT type voices. Latin: Space Grotesk drives --font-display
+// (a distinctive engineered grotesque), Inter carries the body, JetBrains
+// Mono is the terminal voice. Persian: Cairo (variable 200–1000) serves
+// BOTH roles — display at 700–800, text at 400–500. Every critical face
+// (latin subsets of the three Latin families + the arabic subset of Cairo)
+// is build-inlined as a base64 data-URI by scripts/build/inline-fonts.mjs
+// and ships with font-display:block — see that file for why `optional` is
+// banned: a face that misses the optional block period is excluded from
+// matching for the whole page lifetime, which is exactly the "type changes
+// on refresh" bug. `block` + data-URI faces means the real type paints on
+// every load, with no swap and no reflow, deterministically.
+const grotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-fraunces-var",
+  variable: "--font-grotesk-var",
   display: "block",
-  // Kill the generated "Fraunces Fallback" local() metric-clone face: it only
-  // softened a network swap that can no longer happen (the face is inlined as
-  // a data URI), and on Windows those clones resolve to Arial — where they
-  // hijack any glyph (arrows, punctuation, Persian) the subset lacks.
+  // Kill the generated "Space Grotesk Fallback" local() metric-clone face:
+  // it only softened a network swap that can no longer happen (the face is
+  // inlined as a data URI), and on Windows those clones resolve to Arial —
+  // where they hijack any glyph (arrows, punctuation, Persian) the subset
+  // lacks.
   adjustFontFallback: false,
   // Not preloaded: the data-URI face is already inside the stylesheet, so a
   // preload would be a redundant network fetch of the same bytes.
   preload: false,
 });
 
-const archivo = Archivo({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-archivo-var",
+  variable: "--font-inter-var",
   display: "block",
-  // No "Archivo Fallback" clone — same reasoning as Fraunces (the face is
-  // inlined; the clone only ever contributed Arial glyphs).
+  // No "Inter Fallback" clone — same reasoning as Space Grotesk (the face
+  // is inlined; the clone only ever contributed Arial glyphs).
   adjustFontFallback: false,
   // Not preloaded: a data-URI face is already in the stylesheet, so a preload
   // would be a redundant fetch of the same bytes.
   preload: false,
 });
 
-const plexMono = IBM_Plex_Mono({
-  weight: ["400", "500", "600"],
+const jbMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-plex-mono-var",
+  variable: "--font-jbmono-var",
   display: "block",
-  // No "IBM Plex Mono Fallback" clone. This one was the worst offender: its
-  // local() Arial metrics HAVE Arabic coverage, so every Persian glyph in a
-  // --font-mono label painted Arial instead of falling through to Vazirmatn.
+  // No "JetBrains Mono Fallback" clone — its local() Arial metrics HAVE
+  // Arabic coverage, so any Persian glyph riding --font-mono would paint
+  // Arial instead of falling through to the Persian face.
   adjustFontFallback: false,
-  // Not preloaded (see Archivo note).
+  // Not preloaded (see Inter note).
   preload: false,
 });
 
-// NOTE: Unbounded was removed. It existed only for the small SINISTER[OID]
-// lockup, but Chrome eagerly fetches fonts used anywhere in the layout tree —
-// including the below-fold footer lockup — so every /en/ visit downloaded the
-// ~51 KiB face (the single largest font on the page) for a 0.92rem logo, and
-// its swap was the residual 0.019 logo CLS. The lockup now renders in
-// Orbitron (see tokens.css --font-logo), which is already loaded for the
-// hero display type: one display face, zero extra wire bytes, no swap shift.
-
-// Persian body text needs an Arabic-script face; Vazirmatn is variable too,
-// so the kinetic weight effect still works. Noto Kufi Arabic mirrors the
-// removed Syne — geometric Kufi letterforms, variable (100–900). `preload:
-// false` keeps English pages from eagerly fetching the Arabic webfonts (they
-// decode only on fa pages, where the @font-face CSS is discovered in the
-// inlined head CSS on first render).
-const vazirmatn = Vazirmatn({
+// Persian voice — Cairo, one variable face (200–1000) carrying BOTH roles:
+// display at 700–800 answers Space Grotesk, text rides 400–500. A single
+// arabic-subset file keeps the inlined payload close to the previous
+// edition's (the previous candidate, Noto Kufi Arabic, measured 121 KiB —
+// over half the whole inline budget — and its static-text companion would
+// have added another ~33 KiB). The weight axis also keeps the kinetic
+// title's font-variation-settings working on /fa/. `preload: false` keeps
+// English pages from eagerly fetching the Arabic webfont (it decodes only
+// on fa pages, where the @font-face CSS is discovered in the inlined head
+// CSS on first render).
+const cairo = Cairo({
   subsets: ["arabic"],
-  variable: "--font-vazirmatn",
-  // block (was `optional`). Its faces are ALL build-inlined now, so on /en/
-  // nothing is fetched at all; on /fa/ the face is ready at head-parse and
-  // can never lose the optional race that used to lock in the fallback for
-  // a whole session (the reload-to-reload Persian type inconsistency).
+  variable: "--font-cairo-var",
+  // block (was `optional` in the previous stack). The face is build-inlined
+  // now, so on /en/ nothing is fetched at all; on /fa/ the face is ready at
+  // head-parse and can never lose the optional race that used to lock in
+  // the fallback for a whole session (the reload-to-reload Persian type
+  // inconsistency).
   display: "block",
-  // No "Vazirmatn Fallback" clone — with the faces inlined it would never
-  // soften a swap, and its local() Arial metrics have full Arabic coverage,
-  // so it would hijack Persian glyphs before any generic family.
-  adjustFontFallback: false,
-  preload: false,
-});
-
-// Arabic-script serif mirror face — Amiri, the classical Naskh that answers
-// Fraunces in Persian display type. `preload: false` keeps English pages
-// from eagerly fetching the Arabic webfont (it decodes only on fa pages,
-// where the @font-face CSS is discovered in the inlined head CSS on first
-// render).
-const amiri = Amiri({
-  subsets: ["arabic"],
-  weight: ["400", "700"],
-  variable: "--font-amiri-var",
-  // block (was `optional`) — same reasoning as Vazirmatn; all faces are
-  // build-inlined, so no network fetch and no optional-race fallback.
-  display: "block",
-  // No "Amiri Fallback" clone (same as Vazirmatn — an Arial-metric clone
-  // would hijack Persian glyphs).
+  // No "Cairo Fallback" clone — with the face inlined it would never soften
+  // a swap, and its local() Arial metrics have full Arabic coverage, so it
+  // would hijack Persian glyphs before any generic family.
   adjustFontFallback: false,
   preload: false,
 });
@@ -205,11 +186,10 @@ export default async function LocaleRootLayout({
   const locale = raw as Locale;
 
   const fontVars = [
-    fraunces.variable,
-    archivo.variable,
-    plexMono.variable,
-    vazirmatn.variable,
-    amiri.variable,
+    grotesk.variable,
+    inter.variable,
+    jbMono.variable,
+    cairo.variable,
   ].join(" ");
 
   // Indexable commands for the palette: pages, skills and posts (content is
@@ -259,13 +239,13 @@ export default async function LocaleRootLayout({
       lang={locale}
       dir={locale === "fa" ? "rtl" : "ltr"}
       className={fontVars}
-      data-register="quire"
+      data-register="code-craft"
       suppressHydrationWarning
     >
       <body
         className={`min-h-screen bg-bg text-ink antialiased ${
           locale === "fa"
-            ? "[font-family:var(--font-vazirmatn),Tahoma,sans-serif]"
+            ? "[font-family:var(--font-cairo-var),Tahoma,sans-serif]"
             : "font-sans"
         }`}
         suppressHydrationWarning

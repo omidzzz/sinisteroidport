@@ -25,7 +25,7 @@ function* walk(dir, ext) {
 
 // One minified next/font @font-face with a network src. The declarations
 // between the family and the src are matched loosely ON PURPOSE: faces with
-// a width axis (Archivo) emit `font-stretch:100%` in there, and a strict
+// a width axis emit `font-stretch:100%` in there, and a strict
 // font-weight;font-display;src order silently skipped them.
 const faceRe =
   /@font-face\{font-family:("[^"]+"|[^;]+?);([^}]*?)src:url\((\/_next\/static\/media\/[^)]+\.woff2)\) format\("woff2"\)(;[^}]*)?\}/g;
@@ -44,8 +44,9 @@ for (const file of walk(cssDir, ".css")) {
     const href = m[3];
     const latin = /unicode-range:u\+00\?\?/i.test(m[0]);
     const arabic = /unicode-range:u\+06\?\?/i.test(m[0]);
-    const critical = (latin && ["Fraunces", "Archivo", "IBM Plex Mono"].includes(family)) ||
-      (arabic && family === "Vazirmatn");
+    const critical =
+      (latin && ["Space Grotesk", "Inter", "JetBrains Mono"].includes(family)) ||
+      (arabic && family === "Cairo");
     if (!critical) continue;
     let b64 = dataUriCache.get(href);
     if (b64 === undefined) {

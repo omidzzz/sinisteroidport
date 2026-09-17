@@ -1,39 +1,27 @@
+/* ============================================================
+   CODE & CRAFT — element defaults & shared helpers (1 of 2)
+   ------------------------------------------------------------
+   Ground, type hygiene and the decorative type effects the system
+   speaks (.text-outline / .rgb-split / .text-holo / .neon-text) —
+   all in token terms so both editions paint correctly with zero
+   edits. Prose + a11y live in part 2; motion in craft/motion.css
+   which stays LAST in globals.css, exactly as the legacy net did.
+   ============================================================ */
+
 html {
-  /* QUIRE: the day edition is paper — light is the base, the night
-     edition is the [data-theme="dark"] overlay in theme-engine.css */
-  color-scheme: light;
+  /* Tilted bands, bleeds and the console dock must never spawn a
+     horizontal scrollbar */
   scroll-behavior: smooth;
-  /* Tilted bands and bleeds must never spawn a horizontal scrollbar */
   overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  /* Base tint under every content layer */
   background-color: var(--color-bg);
+  color: var(--color-ink);
   overflow-x: clip;
+  text-wrap: pretty;
 }
-
-/* The custom cursor reticle is retired in QUIRE — the platform
-   cursor is the honest pointer on a printed page. */
-
-::selection {
-  background: var(--color-accent);
-  color: var(--color-bg);
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-muted);
-  border-radius: 0;
-  border: 3px solid var(--color-bg);
-}
-
-/* ---------- Typography helpers ---------- */
 
 h1,
 h2,
@@ -43,49 +31,83 @@ h2,
 .post-card-title {
   text-wrap: balance;
 }
-body {
-  text-wrap: pretty;
+
+/* ---------- Selection, scrollbar ---------- */
+
+::selection {
+  background: var(--color-accent-fill);
+  color: var(--color-accent-on);
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+  border-radius: 0;
+  border: 3px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-dim);
+}
+
+/* ---------- Typography helpers ---------- */
 
 .label {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--color-ink-dim);
 }
 
+/* Persian kickers must not be tracked — spacing breaks cursive joins. */
+[dir="rtl"] .label {
+  letter-spacing: 0;
+}
+
+/* Numeral/address runs (phones, IPs, line refs) stay LTR in any flow. */
+.ltr-num {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-family: var(--font-mono);
+}
+
+/* Hollow display text with a soft accent halo */
 .text-outline {
   color: transparent;
-  -webkit-text-stroke: 1px rgba(var(--rgb-ink), 0.55);
-  filter: drop-shadow(0 0 16px rgba(var(--rgb-accent), 0.35));
+  -webkit-text-stroke: 1px rgba(var(--rgb-ink), 0.6);
+  filter: drop-shadow(0 0 18px rgba(var(--rgb-accent), 0.3));
 }
 
-/* Chromatic aberration — glyph-split RGB echo (pure text-shadow) */
+/* Chromatic aberration — a yellow/teal glyph split (pure text-shadow) */
 .rgb-split {
   text-shadow:
     -0.03em 0 rgba(var(--rgb-accent), 0.75),
     0.03em 0 rgba(var(--rgb-accent-2), 0.75),
-    0 0.014em rgba(var(--rgb-acid), 0.4);
+    0 0.014em rgba(var(--rgb-ink), 0.4);
 }
 .rgb-split-strong:hover,
 .group:hover .rgb-split-strong {
   text-shadow:
     -0.07em 0 rgba(var(--rgb-accent), 0.95),
     0.07em 0 rgba(var(--rgb-accent-2), 0.95),
-    0 0.05em rgba(var(--rgb-acid), 0.75);
+    0 0.05em rgba(var(--rgb-ink), 0.7);
 }
 
-/* Animated holographic display text — iridescent sweep clipped to
-   the glyphs; background-position only, no relayout per frame. */
+/* Iridescent sweep clipped to the glyphs; background-position only. */
 .text-holo {
   background-image: linear-gradient(
     100deg,
     var(--color-ink) 0%,
-    var(--color-accent) 30%,
-    var(--color-accent-2) 52%,
-    var(--color-acid) 68%,
-    var(--color-accent-3) 84%,
+    var(--color-accent-ink) 30%,
+    var(--color-accent-2-ink) 52%,
+    var(--color-accent-ink) 68%,
+    var(--color-ink-dim) 84%,
     var(--color-ink) 100%
   );
   background-size: 220% 100%;
@@ -108,16 +130,13 @@ body {
   }
 }
 
-/* Soft acid halo for key words (static paint — cheap) */
+/* Soft halo for key words (static paint — cheap) */
 .neon-text {
-  color: var(--color-acid);
+  color: var(--color-acid-ink);
   text-shadow:
-    0 0 10px rgba(var(--rgb-acid), 0.6),
+    0 0 10px rgba(var(--rgb-accent), 0.55),
     0 0 34px rgba(var(--rgb-accent-2), 0.3);
 }
-
-/* QUIRE: the film-grain layer is retired — the paper texture is the
-   ground itself. The .noise class is gone from the shell. */
 
 /* ---------- Scroll-reveal (IntersectionObserver-driven) ---------- */
 
@@ -125,15 +144,15 @@ body {
   opacity: 0;
   transform: translateY(26px) scale(0.985);
   transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out);
 }
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-/* ---------- Long-form prose ---------- */
+/* ---------- Long-form prose (part 2 of base) ---------- */
 
 .prose-post p {
   margin-bottom: 1rem;
@@ -141,27 +160,25 @@ body {
 }
 
 .prose-post a {
-  color: var(--color-accent);
+  color: var(--color-accent-2-ink);
 }
 
-/* Body-level links carry an animated underline — the plain-text link
-   affordance that lifts in-prose CTR. Scoped to paragraphs/lists so
-   block-level CTAs and callouts keep their own styling. */
+/* In-prose links carry an animated underline; block CTAs keep their own. */
 .prose-post p a,
 .prose-post li a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: rgba(var(--rgb-accent), 0.45);
+  text-decoration-color: rgba(var(--rgb-accent-2), 0.5);
   text-underline-offset: 3px;
   transition: text-decoration-color 0.2s ease;
 }
 
 .prose-post p a:hover,
 .prose-post li a:hover {
-  text-decoration-color: var(--color-acid);
+  text-decoration-color: var(--color-accent-2-ink);
 }
 
-/* Justified text everywhere in posts (per editorial request) */
+/* Justified measure in posts (editorial decision, kept from the base) */
 .prose-post p,
 .prose-post li {
   text-align: justify;
@@ -175,7 +192,7 @@ body {
 .prose-post h2,
 .prose-post h3,
 .prose-post h4 {
-  scroll-margin-top: 4rem; /* sticky header offset for anchor links */
+  scroll-margin-top: 4rem; /* sticky-chrome offset for anchor links */
   text-wrap: balance;
   overflow-wrap: break-word;
 }
@@ -184,10 +201,10 @@ body {
   text-wrap: pretty;
 }
 
-/* Emphasised words pop in ink, not muted */
+/* Emphasis pops in the accent, never in muted */
 .prose-post strong,
 .prose-post b {
-  color: var(--color-acid);
+  color: var(--color-acid-ink);
   font-weight: 600;
 }
 
@@ -195,9 +212,10 @@ body {
 .prose-post code:not(pre code) {
   font-family: var(--font-mono);
   font-size: 0.85em;
-  color: var(--color-acid);
-  background: rgba(var(--rgb-acid), 0.07);
-  border: 1px solid rgba(var(--rgb-acid), 0.3);
+  color: var(--color-acid-ink);
+  background: rgba(var(--rgb-accent), 0.08);
+  border: 1px solid rgba(var(--rgb-accent), 0.28);
+  border-radius: var(--radius-1);
   padding: 0.1em 0.35em;
   word-break: break-word;
 }
@@ -208,7 +226,7 @@ body {
   height: auto;
 }
 
-/* Persian (RTL): no auto-hyphenation dictionary → looser leading */
+/* Persian has no hyphenation dictionary — loosen instead of hyphenate. */
 [dir="rtl"] .prose-post p,
 [dir="rtl"] .prose-post li {
   hyphens: manual;
@@ -217,7 +235,9 @@ body {
   line-height: 1.95;
 }
 
-/* Perf: long pages skip rendering far-offscreen prose */
+/* ---------- Perf & motion-safe primitives ---------- */
+
+/* Long pages skip rendering far-offscreen prose/sections. */
 .cv-auto {
   content-visibility: auto;
   contain-intrinsic-size: auto 720px;
@@ -233,11 +253,11 @@ body {
   height: 2px;
   background: linear-gradient(
     90deg,
-    var(--color-acid),
-    var(--color-accent),
+    var(--color-accent-fill),
+    var(--color-accent-2-fill),
     transparent
   );
-  box-shadow: 0 0 12px rgba(var(--rgb-acid), 0.5);
+  box-shadow: 0 0 12px rgba(var(--rgb-accent), 0.4);
   transform-origin: left center;
 }
 [dir="rtl"] .x-rule {
@@ -266,52 +286,41 @@ body {
   }
 }
 
-
-/* Glass panels re-sample their backdrop on every repaint under backdrop-filter;
-   on mobile the backdrop is the animated nebula + scrolling neon, making blur
-   the single most expensive compositing op there. 16px → 6px at the same
-   ~0.9 panel opacity is visually indistinguishable and far cheaper. */
-@media (pointer: coarse) {
-  :root {
-    --glass-blur: 6px;
-  }
-}
-
 /* ---------- Keyboard a11y: skip link + global focus ring ---------- */
 
-/* First tab-stop on every page — visually hidden until focused, then pinned
-   above the whole stack (docks, FAB, overlays) so it is always reachable.
-   target: <main id="top"> (rendered once in the (main) locale layout). */
+/* First tab-stop on every page — hidden until focused, then pinned above
+   the whole stack. Target: <main id="top"> in the locale layout. */
 .skip-link {
   position: fixed;
   inset-block-start: -4rem;
   inset-inline-start: 1rem;
-  z-index: 999;
+  z-index: var(--z-skip);
   padding: 0.7rem 1.15rem;
-  border-radius: 0;
-  background: var(--color-accent);
-  color: var(--color-bg);
+  border-radius: var(--radius-1);
+  background: var(--color-accent-fill);
+  color: var(--color-accent-on);
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
-  transition: inset-block-start 0.2s ease;
+  box-shadow: var(--elev-2);
+  transition: inset-block-start 0.2s var(--ease-out);
+}
+[dir="rtl"] .skip-link {
+  letter-spacing: 0;
 }
 .skip-link:focus-visible {
   inset-block-start: 1rem;
-  outline: 2px solid var(--color-ink);
+  outline: 2px solid var(--color-accent-on);
   outline-offset: 2px;
 }
 
-/* Default keyboard ring so every focusable element outside the hand-styled
-   set (palette rows, chat controls, cards, footer chips…) still shows a
-   visible indicator in both themes. Component-specific :focus-visible rules
-   (dock-link, kbd-hint, …) keep their own — higher specificity wins. */
+/* Default keyboard ring for everything outside the hand-styled set.
+   Teal = the secondary-interaction hue the system reserves for links. */
 :focus-visible {
-  outline: 2px solid var(--color-acid);
+  outline: 2px solid var(--color-accent-2-ink);
   outline-offset: 2px;
   border-radius: 2px;
 }

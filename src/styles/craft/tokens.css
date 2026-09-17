@@ -1,0 +1,179 @@
+/* ============================================================
+   CODE & CRAFT — design tokens
+   ------------------------------------------------------------
+   One palette, two editions, expressed as ROLES rather than as
+   literal colours, so a component can say "this is accent text" and
+   get an AA-safe value in both editions without knowing the theme.
+
+     dark  (base)   charcoal ground #272727 · light cards #eff1f3
+     light          light ground #eff1f3 · charcoal ink #272727
+
+   #fed766 yellow is the signature: fills, CTAs, one focal moment per
+   view. #009fb7 teal carries secondary interaction. #696773 muted is
+   STRUCTURE ONLY — it clears 4.5:1 on the light ground (4.90) but only
+   2.69:1 on charcoal, so anything that must stay readable on both
+   rides --color-ink-dim instead. Contrast measured, not eyeballed:
+   ink 13.19 · yellow 10.76 · teal 4.73 · teal-ink 7.63 · warn 8.44
+   (dark) / ink 13.19 · muted 4.90 · yellow-ink 5.52 · teal-ink 5.12
+   (light) — every value below is the one that was measured.
+
+   The dark edition is the BASE (bare :root), but <html> always carries
+   data-theme ("dark" | "light") because a dozen component sheets scope
+   their own dark variants off that attribute.
+   ============================================================ */
+
+@theme {
+  /* ---- Surfaces & structure ---- */
+  --color-bg: #272727;
+  --color-panel: #2f2f31;
+  --color-surface: #eff1f3;
+  --color-line: rgba(239, 241, 243, 0.14);
+
+  /* ---- Text ---- */
+  --color-ink: #eff1f3;
+  --color-muted: #696773;
+
+  /* ---- Signatures ---- */
+  --color-accent: #fed766;
+  --color-accent-2: #009fb7;
+  --color-accent-3: #696773;
+  --color-acid: #fed766;
+  --warn: #f4b942;
+
+  /* ---- Type ---- */
+  --font-sans: var(--font-inter-var), var(--font-cairo-var), Tahoma,
+    ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jbmono-var), var(--font-cairo-var), Tahoma,
+    ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Role tints -------------------------------------------------
+     *-ink   : the AA-safe TEXT value of a signature colour
+     *-fill  : the true hue, for fills behind --color-accent-on text
+     accent-on is the ink that sits ON a fill (never a surface colour). */
+  --color-ink-dim: #a1a0ab;
+  --color-accent-ink: #fed766;
+  --color-acid-ink: #fed766;
+  --color-accent-2-ink: #4fc9dc;
+  --color-accent-fill: #fed766;
+  --color-accent-on: #272727;
+  --color-accent-2-fill: #009fb7;
+  --color-surface-ink: #272727;
+  --color-bg-raise: #2f2f31;
+  --color-line-strong: rgba(239, 241, 243, 0.26);
+
+  /* ---- Raw channel triplets (rgba() maths in component sheets) ---- */
+  --rgb-bg: 39, 39, 39;
+  --rgb-panel: 47, 47, 49;
+  --rgb-surface: 239, 241, 243;
+  --rgb-ink: 239, 241, 243;
+  --rgb-muted: 105, 103, 115;
+  --rgb-accent: 254, 215, 102;
+  --rgb-accent-2: 0, 159, 183;
+  --rgb-accent-3: 105, 103, 115;
+  --rgb-acid: 254, 215, 102;
+  --rgb-warn: 244, 185, 66;
+
+  /* ---- Glass & elevation ---- */
+  --glass-blur: 12px;
+  --glass-bg: linear-gradient(
+    160deg,
+    rgba(239, 241, 243, 0.07),
+    rgba(239, 241, 243, 0.03)
+  );
+  --glass-line: rgba(239, 241, 243, 0.12);
+  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.28);
+  --elev-2: 0 2px 6px rgba(0, 0, 0, 0.45), 0 18px 48px rgba(0, 0, 0, 0.4);
+  --glow-accent: 0 0 0 1px rgba(254, 215, 102, 0.35),
+    0 0 28px rgba(254, 215, 102, 0.22);
+  --glow-accent-2: 0 0 0 1px rgba(0, 159, 183, 0.4),
+    0 0 24px rgba(0, 159, 183, 0.25);
+
+  /* ---- Radius ---- */
+  --radius-1: 6px;
+  --radius-2: 12px;
+  --radius-3: 20px;
+  --radius-pill: 999px;
+
+  /* ---- Motion (one vocabulary for the whole system) ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 140ms;
+  --dur-base: 260ms;
+  --dur-slow: 520ms;
+
+  /* ---- Layers (the console is chrome: it sits under overlays) ---- */
+  --z-base: 1;
+  --z-sticky: 40;
+  --z-console: 60;
+  --z-overlay: 80;
+  --z-fab: 90;
+  --z-skip: 999;
+
+  /* ---- Layout rhythm (consumed by sheets awaiting their phase) ---- */
+  --gutter: 1.25rem;
+  --nav-h: 3.25rem;
+  --rail-w: 7.5rem;
+  --sidebar-w: 7.5rem;
+  --station-ink: var(--color-ink);
+  --measure: 68ch;
+
+  /* ---- Font chains ----------------------------------------------
+     Latin display is Space Grotesk (distinctive, engineered); body is
+     Inter; the terminal voice is JetBrains Mono. Persian is Cairo —
+     one variable face for BOTH display (700–800) and text (400–500) —
+     spliced BEFORE the generic families so Persian glyphs never fall
+     through to Tahoma/Arial mid-sentence. */
+  --font-display: var(--font-grotesk-var), var(--font-inter-var),
+    var(--font-cairo-var), Tahoma, ui-sans-serif, system-ui, sans-serif;
+  --font-logo: var(--font-display);
+  --font-fa-menu: var(--font-cairo-var), Tahoma, sans-serif;
+
+  /* Legacy aliases — sheets scheduled for a later phase still reference the
+     previous face names; mapping them here keeps every one of those chains
+     resolving to the new faces instead of to nothing. Retired wholesale when
+     the last legacy sheet leaves globals.css. */
+  --font-kufi: var(--font-cairo-var);
+  --font-vazirmatn: var(--font-cairo-var);
+  --font-plex-mono-var: var(--font-jbmono-var);
+  --font-fraunces-var: var(--font-grotesk-var);
+  --font-archivo-var: var(--font-inter-var);
+  --font-amiri-var: var(--font-cairo-var);
+}
+
+html[lang="fa"] {
+  /* Persian display voice: Cairo at heavy weights answers Space Grotesk.
+     Tracking stays 0 — letter-spacing breaks the cursive joins between
+     Persian glyphs. */
+  --font-display: var(--font-cairo-var), Tahoma, sans-serif;
+  --font-sans: var(--font-cairo-var), Tahoma, ui-sans-serif, system-ui,
+    sans-serif;
+  --font-mono: var(--font-jbmono-var), var(--font-cairo-var), Tahoma,
+    ui-monospace, SFMono-Regular, monospace;
+  --font-fa-menu: var(--font-cairo-var), Tahoma, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* The "فا" pill on an EN page: the Latin chain has no Arabic face, so the
+   glyphs would resolve from Times New Roman. Plex Arabic is spliced in so
+   the pill stays in the edition's own voice, identically every load. */
+.lang-switch-fa {
+  font-family: var(--font-inter-var), var(--font-cairo-var), Tahoma,
+    sans-serif;
+  letter-spacing: 0;
+}
+
+/* Blur is the most expensive compositing op on a phone; the surface
+   opacity is high enough that a third of the radius is indistinguishable. */
+@media (pointer: coarse) {
+  :root {
+    --glass-blur: 6px;
+  }
+}
