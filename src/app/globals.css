@@ -32,12 +32,14 @@
 /* NOTE: command-bar.css and zine.css were deleted after a usage audit
    (scripts/tools/audit-css-usage.mjs) measured 0% of their classes
    referenced by any source or prerendered document — both carried chrome
-   for components this rebuild retired. */
-@import "../styles/spine-rail.css";
+   for components this rebuild retired.
+   spine-rail.css and console.css were retired the same way afterwards:
+   their surviving rules (the home ticker, the Spotlight wrap, the live
+   posts strip) were extracted verbatim into craft/ticker.css,
+   craft/spotlight.css and craft/posts-strip.css. */
 @import "../styles/controls.css";
 @import "../styles/logotype.css";
 @import "../styles/home.css";
-@import "../styles/console.css";
 @import "../styles/pages.css";
 @import "../styles/contact.css";
 @import "../styles/acid-rave.css";
@@ -70,6 +72,11 @@
    (FigPlate figures + Quire act separators). See the note below the legacy
    imports. */
 @import "../styles/craft/edition-legacy.css";
+/* ticker.css / spotlight.css / posts-strip.css — the live survivors of the
+   retired spine-rail.css and console.css, extracted verbatim. */
+@import "../styles/craft/ticker.css";
+@import "../styles/craft/spotlight.css";
+@import "../styles/craft/posts-strip.css";
 /* nav.css — the CRAFT CONSOLE (prompt dock, file tree, node ring, menu
    button). Replaces the retired Navbar + CommandPalette imports. */
 @import "../styles/craft/nav.css";
