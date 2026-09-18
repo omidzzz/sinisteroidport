@@ -29,12 +29,14 @@
 @import "../styles/craft/base.css";
 
 /* ---------- 3 · legacy component sheets (retiring phase by phase) ---- */
+/* NOTE: command-bar.css and zine.css were deleted after a usage audit
+   (scripts/tools/audit-css-usage.mjs) measured 0% of their classes
+   referenced by any source or prerendered document — both carried chrome
+   for components this rebuild retired. */
 @import "../styles/spine-rail.css";
 @import "../styles/controls.css";
-@import "../styles/zine.css";
 @import "../styles/logotype.css";
 @import "../styles/home.css";
-@import "../styles/command-bar.css";
 @import "../styles/console.css";
 @import "../styles/pages.css";
 @import "../styles/contact.css";
