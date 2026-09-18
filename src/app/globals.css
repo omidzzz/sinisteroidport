@@ -67,6 +67,10 @@
 @import "../styles/craft/nav.css";
 /* lab.css — route 06, the graphics lab (plates + palette). */
 @import "../styles/craft/lab.css";
+/* pages.css — the shared route hero voice (02–08). */
+@import "../styles/craft/pages.css";
+/* footer.css — the colophon in the new register. */
+@import "../styles/craft/footer.css";
 
 /* ---------- 6 · motion net — MUST STAY LAST ---------- */
 @import "../styles/craft/motion.css";

@@ -1,0 +1,102 @@
+/* ============================================================
+   CODE & CRAFT — the colophon (footer)
+   ------------------------------------------------------------
+   The old register scoped its footer to [data-register="quire"];
+   that attribute no longer exists, so this sheet owns the footer in
+   the new register. Same structure, different voice: a hairline
+   rule, one measure of prose whose words are the sitemap, and a
+   marginalia line of mono notes ending in the back-to-top mark.
+   ============================================================ */
+
+[data-register="code-craft"] footer {
+  position: relative;
+  margin-block-start: 7rem;
+  overflow: hidden;
+}
+
+[data-register="code-craft"] .colophon-rule {
+  border-block-start: 1px solid var(--color-line);
+  background:
+    radial-gradient(
+      90% 130% at 85% 110%,
+      rgba(var(--rgb-accent), 0.05),
+      transparent 60%
+    );
+}
+
+[data-register="code-craft"] .colophon-body {
+  max-width: 74ch;
+  color: var(--color-ink-dim);
+  font-size: 0.92rem;
+  line-height: 1.85;
+}
+[data-register="code-craft"] .colophon-body b {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+[data-register="code-craft"] .colophon-body a {
+  color: var(--color-accent-2-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(var(--rgb-accent-2), 0.45);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur-fast) var(--ease-out);
+}
+[data-register="code-craft"] .colophon-body a:hover {
+  text-decoration-color: var(--color-accent-2-ink);
+}
+
+[data-register="code-craft"] .colophon-marginalia {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+html[lang="fa"] [data-register="code-craft"] .colophon-marginalia {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+[data-register="code-craft"] .colophon-note {
+  color: var(--color-ink-dim);
+}
+[data-register="code-craft"] a.colophon-note:hover {
+  color: var(--color-accent-ink);
+}
+
+/* ---------- Back to top ---------- */
+
+/* A 44px seal in the signature yellow; the inline-end margin reserves the
+   floating assistant's footprint so both stay tappable below 1200px. */
+[data-register="code-craft"] .end-mark {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border-radius: var(--radius-1);
+  background: var(--color-accent-fill);
+  color: var(--color-accent-on);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+[data-register="code-craft"] .end-mark:hover,
+[data-register="code-craft"] .end-mark:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-accent);
+}
+@media (max-width: 1200px) {
+  [data-register="code-craft"] .end-mark {
+    margin-inline-end: 5.6rem;
+  }
+}
+@media print {
+  [data-register="code-craft"] .end-mark,
+  [data-register="code-craft"] .craft-console {
+    display: none !important;
+  }
+}

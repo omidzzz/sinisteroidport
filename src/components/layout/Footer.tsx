@@ -7,16 +7,12 @@ import { getDict, loc, type Locale } from "@/lib/i18n";
 import { NAV_PATHS } from "@/lib/nav";
 
 /**
- * FOOTER — COLOPHON (v9, QUIRE).
+ * FOOTER — COLOPHON (Code & Craft).
  *
- * Not a footer: a colophon. One justified measure under a double rule
- * states what the edition is; its words ARE the sitemap. Reach routes,
- * feeds, donate, the language swap and the edition toggle resolve as
- * marginalia beneath the paragraph. The vermilion end-mark returns the
- * reader to the top — zero-JS smooth anchor since <html> scrolls
- * smoothly. Everything the signal tower carried is re-voiced here:
- * status/city/year/domain ride the technical line, the holo-core
- * becomes the end-mark, the marquee is gone.
+ * One measure of prose whose words ARE the sitemap; reach routes, feeds,
+ * the assistant, the language swap and the theme toggle ride as marginalia
+ * beneath it. The yellow end-mark returns to the top — zero-JS smooth
+ * anchor. Styled by craft/footer.css, scoped to this register.
  */
 export default function Footer({ locale }: { locale: Locale }) {
   const t = getDict(locale);
@@ -40,8 +36,8 @@ export default function Footer({ locale }: { locale: Locale }) {
           <p className="colophon-body">
             {fa ? (
               <>
-                این مجموعه یک <b>دفعِ چاپی</b> است و از تهران می‌گذرد — یک صفحه
-                پیوسته که بالا تا پایین خوانده می‌شود.{" "}
+                این سایت یک <b>کنسول کاری</b> است — هر جا تایپ کنید
+                تا حرکت کنید، یا از میان‌برهای نوار وضعیت استفاده کنید. بخش‌هایش:{" "}
                 {t.nav.map((item, i) => (
                   <span key={NAV_PATHS[i]}>
                     <VTLink
@@ -72,14 +68,15 @@ export default function Footer({ locale }: { locale: Locale }) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  پرس چاپ
+                  حمایت
                 </a>{" "}
-                با پشتیبانی شما روشن می‌ماند.
+                با روشن ماندنش همراهی می‌کند.
               </>
             ) : (
               <>
-                This edition is <b>printed, not built</b> — one continuous
-                quire, read from the frontispiece down. Its sections are{" "}
+                This site is <b>a working console</b> — start typing
+                anywhere to navigate, or take the shortcuts in the status
+                rail. Its sections are{" "}
                 {t.nav.map((item, i) => (
                   <span key={NAV_PATHS[i]}>
                     <VTLink
@@ -109,7 +106,7 @@ export default function Footer({ locale }: { locale: Locale }) {
                   rel="noopener noreferrer"
                 >
                   the presses
-                </a>{" "}
+                </a>
                 keep running on support.
               </>
             )}
@@ -163,7 +160,7 @@ export default function Footer({ locale }: { locale: Locale }) {
               © {year} {t.rights}
             </p>
             <p aria-hidden dir="ltr" className="colophon-note">
-              SET IN FRAUNCES · ARCHIVO · PLEX MONO
+              SET IN SPACE GROTESK · INTER · JETBRAINS MONO · CAIRO
             </p>
             <p aria-hidden dir="ltr" className="colophon-note">
               NEXT.JS × REACT
