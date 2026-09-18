@@ -4,19 +4,28 @@
 
 Full details: [llms-full.txt](https://sinisteroid.ir/llms-full.txt)
 
-Last updated: 2026-08-26
+Last updated: 2026-09-18
 
 ## Key Pages
 - [Home](https://sinisteroid.ir/en/)
 - [Writing / Blog](https://sinisteroid.ir/en/blog/)
 - [Skills](https://sinisteroid.ir/en/skills/)
 - [Showcase / Projects](https://sinisteroid.ir/en/showcase/)
+- [Graphics Lab](https://sinisteroid.ir/en/lab/)
 - [Work History](https://sinisteroid.ir/en/work/)
 - [Education](https://sinisteroid.ir/en/education/)
+- [Contact](https://sinisteroid.ir/en/contact/)
 - [RSS Feed](https://sinisteroid.ir/feed.xml)
 - [JSON Feed](https://sinisteroid.ir/feed.json)
 - [Topics index](https://sinisteroid.ir/en/tags/)
 - [Sitemap](https://sinisteroid.ir/sitemap.xml)
+
+## Navigation
+The site is served in two locales: English under `/en/` and Persian (RTL) under `/fa/`.
+Every route exists at both prefixes, cross-linked with `hreflang` alternates and
+listed in the sitemap. Navigation is also available as a single-page index:
+`/en/` links every section, and the colophon at the foot of each page is a prose
+sitemap naming all eight sections.
 
 ## About
 Omid is a frontend developer with a unique background in Translation Studies. He combines linguistic precision with technical expertise to create clean, user-friendly web applications.
