@@ -53,9 +53,11 @@
 @import "../styles/stratum.css";
 /* terranomy.css — tangent-planar survey cross-section. Static too. */
 @import "../styles/terranomy.css";
-/* quire.css — the printed-edition chrome (margin index nav, running
-   head, colophon, act rules). Retired when the console nav lands. */
-@import "../styles/quire.css";
+/* quire.css is GONE: 99 of its 122 rule blocks keyed off
+   [data-register="quire"] — an attribute this rebuild renamed to
+   "code-craft", so they could never match again — and the 23 that still
+   apply (the FigPlate figures and the Quire act separators) were extracted
+   verbatim into craft/edition-legacy.css. 38.9K -> 6.4K. */
 /* enhance.css — legacy finesse pass; kept above craft chrome so the
    new primitives win the cascade. Retires with the legacy sheets. */
 @import "../styles/enhance.css";
@@ -64,6 +66,10 @@
 @import "../styles/craft/chrome.css";
 
 /* ---------- 5 · craft sections (added phase by phase) ---------- */
+/* edition-legacy.css — the verbatim survivors of the retired edition sheet
+   (FigPlate figures + Quire act separators). See the note below the legacy
+   imports. */
+@import "../styles/craft/edition-legacy.css";
 /* nav.css — the CRAFT CONSOLE (prompt dock, file tree, node ring, menu
    button). Replaces the retired Navbar + CommandPalette imports. */
 @import "../styles/craft/nav.css";
