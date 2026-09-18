@@ -17,6 +17,7 @@ import { useConsole } from "@/lib/nav/use-console";
 import { usePointerRing } from "@/lib/nav/use-pointer-ring";
 import { SITE } from "@/lib/site";
 import ConsolePrompt from "./ConsolePrompt";
+import ConsoleRail from "./ConsoleRail";
 import ConsoleRing from "./ConsoleRing";
 import ConsoleTree from "./ConsoleTree";
 import NavMenuButton from "./NavMenuButton";
@@ -223,6 +224,13 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
             onCommit={commit}
           />
         </div>
+
+        <ConsoleRail
+          routes={routes}
+          locale={locale}
+          railLabel={dict.console.rail}
+          activePath={cleanPath}
+        />
 
         <ConsolePrompt
           dict={dict}

@@ -89,6 +89,7 @@ const en = {
   },
   console: {
     label: "Primary navigation",
+    rail: "Section shortcuts",
     openMenu: "Menu",
     hint: "Type to filter · Ctrl+K",
     placeholder: "filter routes…",

@@ -493,3 +493,98 @@ html[lang="fa"] .craft-menu-label {
     animation: none;
   }
 }
+/* ---------- 12 · Status rail (the always-visible way in) ---------- */
+
+/* The discovery surface: every route as a real link, visible without any
+   interaction, styled as a status line rather than a navbar. Permanent
+   chrome earns permanence by staying out of the way — one thin line. */
+.craft-rail {
+  pointer-events: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--elev-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.craft-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.craft-rail-list {
+  display: flex;
+  align-items: stretch;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0.15rem;
+  list-style: none;
+  scroll-snap-type: x proximity;
+}
+
+.craft-rail-item {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  scroll-snap-align: center;
+}
+
+.craft-rail-link {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  white-space: nowrap;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+/* The keyboard ring must stay visible inside the scroll container. */
+.craft-rail-link:focus-visible {
+  outline-offset: -2px;
+}
+.craft-rail-link:hover {
+  color: var(--color-ink);
+  background: rgba(var(--rgb-accent-2), 0.14);
+}
+
+.craft-rail-idx {
+  font-size: 0.58rem;
+  color: var(--color-muted);
+}
+
+.craft-rail-link[data-active] {
+  background: rgba(var(--rgb-accent), 0.15);
+  color: var(--color-accent-ink);
+}
+.craft-rail-link[data-active] .craft-rail-idx {
+  color: var(--color-accent-ink);
+}
+
+html[lang="fa"] .craft-rail-link {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-cairo-var), Tahoma, sans-serif;
+  font-size: 0.78rem;
+}
+
+/* Very narrow phones: the ordinals go first; the labels carry the nav. */
+@media (max-width: 24rem) {
+  .craft-rail-idx {
+    display: none;
+  }
+  .craft-rail-link {
+    padding-inline: 0.5rem;
+  }
+}

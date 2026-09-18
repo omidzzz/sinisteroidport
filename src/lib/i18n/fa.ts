@@ -88,6 +88,7 @@ const fa: Dictionary = {
   },
   console: {
     label: "ناوبری اصلی",
+    rail: "میان‌بر بخش‌ها",
     openMenu: "منو",
     hint: "تایپ کنید تا فیلتر شود · Ctrl+K",
     placeholder: "فیلتر مسیرها…",
