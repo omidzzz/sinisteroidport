@@ -6,7 +6,7 @@ import {
   JetBrains_Mono,
   Cairo,
 } from "next/font/google";
-import Navbar from "@/components/layout/Navbar";
+import CraftConsole from "@/components/nav/CraftConsole";
 import Footer from "@/components/layout/Footer";
 import ProgressThread from "@/components/shell/ProgressThread";
 import FilterDefs from "@/components/shell/FilterDefs";
@@ -15,16 +15,8 @@ import { ViewTransitionBridge, GlobalVTNav } from "@/components/shell/ViewTransi
 import LazyMount from "@/components/ui/LazyMount";
 import { GoogleTag } from "@/components/analytics/GoogleTag";
 import { AnalyticsEvents } from "@/components/analytics/AnalyticsEvents";
-import {
-  CommandPaletteLazy,
-  EasterEggLazy,
-} from "@/components/overlays/CommandPaletteLazy";
+import { EasterEggLazy } from "@/components/overlays/CommandPaletteLazy";
 import AgentChatLazy from "@/components/overlays/AgentChatLazy";
-import type { CmdEntry } from "@/components/overlays/CommandPalette";
-import { getAllPosts } from "@/lib/blog/repository";
-import { postTitle } from "@/lib/blog/format";
-import skillsData from "@/data/skills.json";
-import { NAV_PATHS } from "@/lib/nav";
 import { isLocale, locales, loc, getDict, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 import { JsonLd } from "@/components/ui/JsonLd";
@@ -192,45 +184,7 @@ export default async function LocaleRootLayout({
     cairo.variable,
   ].join(" ");
 
-  // Indexable commands for the palette: pages, skills and posts (content is
-  // compiled at build time and serialized into the static export).
   const dict = getDict(locale);
-  const posts = getAllPosts();
-  const groupPage = locale === "fa" ? "بخش" : "Page";
-  const groupSkill = locale === "fa" ? "مهارت" : "Skills";
-  const groupPost = locale === "fa" ? "نوشته" : "Posts";
-  const entries: CmdEntry[] = [
-    {
-      id: "ask-sinister",
-      label: locale === "fa" ? "از سینیستر بپرس" : "Ask SINISTER",
-      sub: locale === "fa" ? "دستیار وب‌سایت" : "resident menace",
-      group: locale === "fa" ? "دستیار" : "Assistant",
-      action: "ask",
-    },
-    ...dict.nav.map((n, i) => ({
-      id: `page-${i}`,
-      label: n.label,
-      sub: NAV_PATHS[i],
-      group: groupPage,
-      href: loc(locale, NAV_PATHS[i]),
-    })),
-    ...skillsData.flatMap((g) =>
-      g.skills.map((s) => ({
-        id: `skill-${s.name}`,
-        label: s.name,
-        sub: g.category,
-        group: groupSkill,
-        href: loc(locale, "/skills"),
-      }))
-    ),
-    ...posts.map((p) => ({
-      id: `post-${p.slug}`,
-      label: postTitle(p, locale),
-      sub: p.date ? p.date.slice(0, 10) : undefined,
-      group: groupPost,
-      href: loc(locale, `/blog/${p.slug}`),
-    })),
-  ];
 
   return (
     // suppressHydrationWarning: the inline script below may set data-theme
@@ -284,15 +238,18 @@ export default async function LocaleRootLayout({
         {/* QUIRE: the GL nebula, constellation rails, film grain and cursor
             reticle are retired — the paper ground is the shell. */}
         <FilterDefs />
-        <CommandPaletteLazy locale={locale} entries={entries} />
+        {/* The console absorbs the old command palette: /, Ctrl+K and any
+            printable key all open it, so there is one navigation surface. */}
         <EasterEggLazy locale={locale} />
         {/* Floating assistant: lazy bridge to the deployed sinister guest agent */}
         <AgentChatLazy locale={locale} />
         {/* Structured data: site + owner entity, visible on every page */}
         <JsonLd data={[personJsonLd(locale), websiteJsonLd(locale)]} />
-        <Navbar locale={locale} />
         <main id="top" className="relative z-10">{children}</main>
         <Footer locale={locale} />
+        {/* Keyed by locale: switching language remounts the console with the
+            new route labels instead of filtering the previous locale's. */}
+        <CraftConsole key={locale} locale={locale} />
       </body>
     </html>
   );

@@ -62,6 +62,11 @@
 @import "../styles/craft/chrome.css";
 
 /* ---------- 5 · craft sections (added phase by phase) ---------- */
+/* nav.css — the CRAFT CONSOLE (prompt dock, file tree, node ring, menu
+   button). Replaces the retired Navbar + CommandPalette imports. */
+@import "../styles/craft/nav.css";
+/* lab.css — route 06, the graphics lab (plates + palette). */
+@import "../styles/craft/lab.css";
 
 /* ---------- 6 · motion net — MUST STAY LAST ---------- */
 @import "../styles/craft/motion.css";

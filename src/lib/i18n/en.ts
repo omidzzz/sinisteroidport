@@ -6,8 +6,9 @@ const en = {
     { index: "03", label: "Skills" },
     { index: "04", label: "Education" },
     { index: "05", label: "Showcase" },
-    { index: "06", label: "Writing" },
-    { index: "07", label: "Contact" },
+    { index: "06", label: "Lab" },
+    { index: "07", label: "Writing" },
+    { index: "08", label: "Contact" },
   ] as { index: string; label: string }[],
   site: "/ sinisteroid.ir",
   city: "Tehran, Iran",
@@ -68,17 +69,40 @@ const en = {
     kicker: "(05) Selected projects & clients",
     title: "SHOWCASE",
   },
+  lab: {
+    kicker: "(06) Graphics lab — canvas, SVG & CSS studies",
+    title: "GRAPHICS LAB",
+    intro:
+      "Every prop, canvas and illustration this site ships, archived in one place.",
+  },
   blog: {
-    kicker: "(06) Notes & essays",
+    kicker: "(07) Notes & essays",
     title: "WRITING",
     intro:
       "Frontend development, design, local AI tooling, and the shifting landscape of search.",
   },
   contact: {
-    kicker: "(07) Open channel",
+    kicker: "(08) Open channel",
     title: "CONTACT",
     intro:
       "Four direct routes to one inbox — no forms, no bots, no waiting rooms.",
+  },
+  console: {
+    label: "Primary navigation",
+    openMenu: "Menu",
+    hint: "Type to filter · Ctrl+K",
+    placeholder: "filter routes…",
+    askPrompt: "What should I ask the agent?",
+    copied: "copied",
+    empty: "No match — try /work, /lab, ask",
+    verbs: {
+      ask: "Ask the agent",
+      mail: "Copy the email address",
+      lang: "Switch language",
+      rss: "Open the RSS feed",
+      donate: "Support the work",
+      sudo: "Nice try",
+    },
   },
   notFound: {
     kicker: "(Error) — route not resolved",

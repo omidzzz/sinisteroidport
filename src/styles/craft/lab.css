@@ -1,0 +1,140 @@
+/* ============================================================
+   CODE & CRAFT — the graphics lab
+   ------------------------------------------------------------
+   Route 06: the archive of the site's own illustration layer.
+   Plates are hairline-framed stages; the palette section renders
+   the five inks from the same values the tokens define, so the page
+   cannot drift from the stylesheet.
+   ============================================================ */
+
+.craft-lab {
+  padding-block-end: 6rem;
+}
+
+.lab-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
+}
+.lab-cell {
+  min-width: 0;
+}
+
+.lab-plate {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+  background: var(--color-panel);
+  overflow: hidden;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+.lab-plate:hover {
+  border-color: rgba(var(--rgb-accent-2), 0.5);
+  box-shadow: var(--elev-1), var(--glow-accent-2);
+  transform: translateY(-2px);
+}
+
+/* The stage: a soft radial ground so dark and light editions both read
+   the prop against glass, not against a hard card edge. */
+.lab-stage {
+  display: grid;
+  place-items: center;
+  min-height: 15rem;
+  padding: 1.2rem;
+  background: radial-gradient(
+    120% 100% at 50% 0%,
+    rgba(var(--rgb-accent), 0.08),
+    transparent 60%
+  );
+}
+
+.lab-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.6rem 0.85rem;
+  border-block-start: 1px solid var(--color-line);
+}
+.lab-fig {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--color-accent-ink);
+}
+.lab-cap {
+  font-size: 0.8rem;
+  color: var(--color-ink-dim);
+}
+html[lang="fa"] .lab-cap,
+html[lang="fa"] .lab-fig {
+  letter-spacing: 0;
+}
+
+/* ---------- The palette ---------- */
+
+.lab-palette .lab-swatches {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(13rem, 100%), 1fr));
+}
+
+.lab-swatch {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.3rem 0.7rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  background: var(--color-panel);
+}
+.lab-swatch-chip {
+  grid-row: 1 / span 3;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: var(--radius-1);
+  border: 1px solid var(--color-line-strong);
+}
+.lab-swatch-hex {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--color-ink);
+}
+.lab-swatch-token {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-ink-dim);
+}
+.lab-swatch-role {
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+html[lang="fa"] .lab-swatch-role {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.lab-ask {
+  display: flex;
+  justify-content: center;
+}
+
+/* Narrow phones: plates go edge to edge with a tighter stage. */
+@media (max-width: 30rem) {
+  .lab-grid {
+    grid-template-columns: 1fr;
+  }
+  .lab-stage {
+    min-height: 12rem;
+  }
+}
