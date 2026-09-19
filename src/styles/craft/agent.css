@@ -1,0 +1,26 @@
+/* ============================================================
+   CODE & CRAFT — the resident agent (chat panel), typography
+   ------------------------------------------------------------
+   The panel's colours now live in agent-chat.css as ROLE tokens
+   (--color-accent-on for ink on a fill, --warn for destructive and
+   error states, --color-accent-ink / --color-accent-2-ink for the
+   mood tags and code syntax) — so this sheet only carries what the
+   legacy file cannot express: the Persian type rules.
+
+   Why it exists at all: the chat chrome is monospace and uppercase
+   with letter-spacing, a recipe that is Latin-only. On fa pages the
+   tracking must be zero (it breaks cursive joins) and the glyphs must
+   resolve through the Persian face instead of falling through to
+   Tahoma mid-word.
+   ============================================================ */
+
+html[lang="fa"] .sin-chat-fab-hint,
+html[lang="fa"] .sin-chat-mood,
+html[lang="fa"] .sin-chat-inspect-label,
+html[lang="fa"] .sin-chat-pop-item-label,
+html[lang="fa"] .sin-chat-chip,
+html[lang="fa"] .sin-chat-jump,
+html[lang="fa"] .sin-selection-ask {
+  letter-spacing: 0;
+  text-transform: none;
+}

@@ -67,6 +67,10 @@
 @import "../styles/craft/chrome.css";
 
 /* ---------- 5 · craft sections (added phase by phase) ---------- */
+/* agent.css — the resident agent chat: re-maps the retired rave palette's
+   hardcoded accents (mood tags, syntax tokens, destructive ink) to craft
+   role tokens. Must load AFTER agent-chat.css. */
+@import "../styles/craft/agent.css";
 /* edition-legacy.css — the verbatim survivors of the retired edition sheet
    (FigPlate figures + Quire act separators). See the note below the legacy
    imports. */

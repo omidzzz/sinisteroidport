@@ -60,6 +60,12 @@ check("Space Grotesk face shipped", /font-family:\s*[\"']?Space Grotesk/i.test(c
 check("Inter face shipped", /font-family:\s*[\"']?Inter[\"']?\s*;/.test(css) || /font-family:Inter/.test(css));
 check("JetBrains Mono face shipped", /JetBrains Mono/.test(css));
 check("Cairo face shipped (fa)", /font-family:\s*[\"']?Cairo/i.test(css));
+// The retired rave palette must not survive anywhere in the shipped CSS —
+// the agent chat's mood tags and syntax tokens now ride craft role tokens.
+for (const rave of ["#9dff57", "#53e0ff", "#ffb03f", "#a63e50", "#0f7a3d", "#0b6ec2"]) {
+  check(`no rave literal in the bundle: ${rave}`, !css.toLowerCase().includes(rave));
+}
+check("agent chat rides role tokens", css.includes("--color-accent-on"));
 for (const dead of ["Fraunces", "Archivo", "IBM Plex Mono", "Vazirmatn", "Noto Kufi Arabic"]) {
   check(`retired face gone: ${dead}`, !css.includes(dead));
 }
