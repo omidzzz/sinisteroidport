@@ -49,12 +49,11 @@
 @import "../styles/blog-post.css";
 @import "../styles/agent-chat.css";
 @import "../styles/fx-modern.css";
+/* stratum.css and terranomy.css are GONE, along with their components
+   (home/Stratum.tsx, home/Terranomy.tsx): both were imported by nothing, and
+   a class-level scan found zero references to any of their selectors outside
+   those files. 20K of CSS retired. */
 @import "../styles/view-transitions.css";
-/* stratum.css — STRATUM · MANTLE layout + mineral shelves. Static, so
-   it lands after the sheets above. */
-@import "../styles/stratum.css";
-/* terranomy.css — tangent-planar survey cross-section. Static too. */
-@import "../styles/terranomy.css";
 /* quire.css is GONE: 99 of its 122 rule blocks keyed off
    [data-register="quire"] — an attribute this rebuild renamed to
    "code-craft", so they could never match again — and the 23 that still

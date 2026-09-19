@@ -79,3 +79,17 @@
 [data-theme="light"] ::-webkit-scrollbar-thumb {
   border-color: var(--color-bg);
 }
+
+/* ---- Dark-theme secondary-text lifts (WCAG AA on #272727) ----
+   The base values in tokens.css are tuned for the light edition. On the
+   charcoal ground two roles that carry small text fall below 4.5:1:
+     --color-muted   #696773 → 2.69:1  (stats, dates, captions, labels)
+     --color-ink-dim #a1a0ab → 3.87:1  (colophon body, hero intro at 1rem)
+   Both are lifted here to values that clear 4.5:1 while staying muted
+   greys. The light edition is untouched — its #696773 already measures
+   4.90:1 on #eff1f3 and #52525e measures 7.26:1. */
+[data-theme="dark"] {
+  --color-muted: #96959e;
+  --color-ink-dim: #a8a7b1;
+}
+
