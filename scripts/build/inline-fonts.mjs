@@ -34,6 +34,8 @@ const dataUriCache = new Map(); // href -> base64 (same subset file may appear i
 let facesInlined = 0;
 let bytesInlined = 0;
 const perFamily = new Map();
+/** woff2 href of the Persian face, preloaded into fa documents (see below). */
+let arabicHref = "";
 
 for (const file of walk(cssDir, ".css")) {
   let css = fs.readFileSync(file, "utf8");
@@ -44,9 +46,16 @@ for (const file of walk(cssDir, ".css")) {
     const href = m[3];
     const latin = /unicode-range:u\+00\?\?/i.test(m[0]);
     const arabic = /unicode-range:u\+06\?\?/i.test(m[0]);
-    const critical =
-      (latin && ["Space Grotesk", "Inter", "JetBrains Mono"].includes(family)) ||
-      (arabic && family === "Cairo");
+    // The Persian face is deliberately NOT inlined: it is unicode-range
+    // gated, so an English page never downloads it, and inlining it put
+    // 40 KiB of unused base64 into every /en/ document's render-blocking
+    // CSS (measured: 185 KiB inlined -> 145 KiB). Persian pages get the
+    // same deterministic paint from a preload injected below instead.
+    if (arabic && family === "Cairo") {
+      if (!arabicHref) arabicHref = href;
+      continue;
+    }
+    const critical = latin && ["Space Grotesk", "Inter", "JetBrains Mono"].includes(family);
     if (!critical) continue;
     let b64 = dataUriCache.get(href);
     if (b64 === undefined) {
@@ -95,9 +104,32 @@ for (const file of walk(outDir, ".html")) {
   }
 }
 
+// (4) Persian pages: preload the (now network-served) Arabic face. Without
+// this, font-display:block would hold Persian text invisible until the
+// request resolves, which is the regression this step exists to prevent.
+let faPreloaded = 0;
+if (arabicHref) {
+  const tag = `<link rel="preload" href="${arabicHref}" as="font" type="font/woff2" crossorigin="anonymous"/>`;
+  for (const file of walk(outDir, ".html")) {
+    // Only documents under /fa/ render Persian.
+    const rel = path.relative(outDir, file).split(path.sep).join("/");
+    if (!rel.startsWith("fa/")) continue;
+    const html = fs.readFileSync(file, "utf8");
+    if (html.includes(arabicHref)) continue; // idempotent
+    if (!html.includes("</head>")) continue;
+    fs.writeFileSync(file, html.replace("</head>", `${tag}</head>`));
+    faPreloaded += 1;
+  }
+}
+
 for (const [family, n] of [...perFamily].sort()) {
   console.log(`inline-fonts: ${family} — ${n} face(s) inlined`);
 }
 console.log(
   `inline-fonts: ${facesInlined} face(s) inlined, ${Math.round(bytesInlined / 1024)}KiB total, font-display → block, font preloads stripped from ${preloadsStripped} html file(s)`
+);
+console.log(
+  arabicHref
+    ? `inline-fonts: Persian face served from ${arabicHref}, preloaded into ${faPreloaded} fa document(s)`
+    : "inline-fonts: no Arabic face found — nothing preloaded"
 );

@@ -65,6 +65,10 @@ for (const dead of ["Fraunces", "Archivo", "IBM Plex Mono", "Vazirmatn", "Noto K
 }
 check("font-display:block (no optional race)", !/font-display:\s*optional/.test(css));
 check("critical faces inlined as data URIs", /src:url\(data:font\/woff2;base64,/.test(css));
+// The Persian face is deliberately network-served (unicode-range gated, so
+// /en/ never fetches it) and preloaded into /fa/ documents instead.
+check("Persian face not inlined (saves ~40K per EN page)", !/font-family:Cairo[^}]*base64/.test(css));
+check("Persian face served as a file", /media\/[\w-]+\.woff2/.test(css));
 check("reduced-motion net shipped", /prefers-reduced-motion:\s*reduce/.test(css));
 
 console.log("\n=== CONSOLE (nav) ===");
@@ -108,6 +112,16 @@ if (faHome) {
   check("RTL direction set", /dir="rtl"/.test(faHome));
   check("console rendered in fa", faHome.includes("craft-rail") && faHome.includes("craft-prompt"));
   check("fa theme init defaults to dark", faHome.includes('"dark"'));
+  // The network-served Persian face must be preloaded here, or
+  // font-display:block would hold Persian text invisible on first paint.
+  // Attribute order is not guaranteed, so look ahead rather than in sequence.
+  check(
+    "fa preloads the Persian face",
+    /<link(?=[^>]*as="font")(?=[^>]*\.woff2)[^>]*>/.test(faHome)
+  );
+}
+if (home) {
+  check("en does NOT preload the Persian face", !/\.woff2/.test(home.slice(0, home.indexOf("</head>"))));
 }
 
 /* ── Route 06: the graphics lab ─────────────────────────────────────── */
