@@ -87,6 +87,8 @@
 @import "../styles/craft/lab.css";
 /* pages.css — the shared route hero voice (02–08). */
 @import "../styles/craft/pages.css";
+@import "../styles/craft/work.css";
+@import "../styles/craft/skills.css";
 /* footer.css — the colophon in the new register. */
 @import "../styles/craft/footer.css";
 /* home.css — the Code & Craft home acts (hero, ticker, telemetry cards). */

@@ -1,0 +1,127 @@
+/* ============================================================
+   CODE & CRAFT — 03 SKILLS · the matrix
+   ------------------------------------------------------------
+   Ten categories, each a hairline-separated block with a mono count
+   and a grid of glass cells. Proficiency reads as five ticks, which
+   is the one place on this route where the yellow is allowed to
+   repeat — it is data, not decoration. The tick row is pinned LTR by
+   the component (dir="ltr") so the meter fills the same way in both
+   editions.
+   ============================================================ */
+
+.skill-cat {
+  margin-block-end: 2.25rem;
+  padding-block-start: 1.35rem;
+  border-block-start: 1px solid var(--color-line);
+}
+
+.skill-cat-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-block-end: 1rem;
+}
+
+.skill-cat-name {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-ink);
+  padding-inline-start: 1.5rem;
+}
+/* The yellow tick: same mark the route heroes use for their eyebrow,
+   so a category header reads as part of the same system. */
+.skill-cat-name::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: 0.95rem;
+  height: 2px;
+  background: var(--color-accent-fill);
+  box-shadow: 0 0 8px rgba(var(--rgb-accent), 0.5);
+}
+
+.skill-cat-count {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+html[lang="fa"] .skill-cat-count {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-fa-menu);
+  font-size: 0.8rem;
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 0.55rem;
+}
+
+.skill-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  height: 100%;
+  padding: 0.7rem 0.85rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-2);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.skill-cell:hover,
+.skill-cell:focus-within {
+  transform: translateY(-1px);
+  border-color: rgba(var(--rgb-accent-2), 0.55);
+  box-shadow: var(--elev-1), var(--glow-accent-2);
+}
+
+.skill-cell-name {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+}
+
+/* ---- The meter ---- */
+.skill-orbit {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+}
+
+.skill-orbit i {
+  display: block;
+  width: 0.7rem;
+  height: 0.32rem;
+  border-radius: 1px;
+  background: rgba(var(--rgb-ink), 0.13);
+}
+
+.skill-orbit i.on {
+  background: var(--color-accent-fill);
+  box-shadow: 0 0 7px rgba(var(--rgb-accent), 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-cell {
+    transition: none;
+  }
+  .skill-cell:hover,
+  .skill-cell:focus-within {
+    transform: none;
+  }
+}

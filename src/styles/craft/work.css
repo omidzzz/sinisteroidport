@@ -1,0 +1,171 @@
+/* ============================================================
+   CODE & CRAFT — 02 WORK · the timeline
+   ------------------------------------------------------------
+   The work route's body is a run of roles along a vertical rail:
+   a teal hairline that never breaks, a node per role that takes the
+   yellow only while you are on it, and glass cards whose leading edge
+   is the state indicator. Logical properties throughout so the rail
+   moves to the inline-start edge in Persian without a single
+   direction-specific rule.
+   ============================================================ */
+
+.timeline {
+  position: relative;
+  padding-inline-start: 2.25rem;
+  margin-block: 1rem 3rem;
+}
+
+/* The rail: brightest at the top, dissolving into the ground at the end */
+.timeline::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.4rem 2.5rem;
+  inset-inline-start: 0.3rem;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    var(--color-accent-2-fill),
+    rgba(0, 159, 183, 0.28) 45%,
+    transparent
+  );
+}
+
+.tl-item {
+  position: relative;
+  margin-block-end: 1.1rem;
+}
+
+/* Node: hollow ring on the rail; fills with the signature on hover/focus */
+.tl-node {
+  position: absolute;
+  inset-inline-start: -2.25rem;
+  inset-block-start: 1.45rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  border: 2px solid var(--color-accent-2-fill);
+  background: var(--color-bg);
+  transform: translateX(-50%) rotate(45deg);
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+}
+[dir="rtl"] .tl-node {
+  transform: translateX(50%) rotate(45deg);
+}
+
+.tl-card {
+  position: relative;
+  padding: 1.15rem 1.25rem 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  border-inline-start: 2px solid var(--color-accent-2-fill);
+  border-radius: var(--radius-2);
+  box-shadow: var(--elev-1);
+  backdrop-filter: blur(var(--glass-blur));
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+.tl-item:hover .tl-card,
+.tl-item:focus-within .tl-card {
+  transform: translateY(-2px);
+  border-inline-start-color: var(--color-accent-fill);
+  box-shadow: var(--elev-2), var(--glow-accent-2);
+}
+.tl-item:hover .tl-node,
+.tl-item:focus-within .tl-node {
+  background: var(--color-accent-fill);
+  border-color: var(--color-accent-fill);
+  box-shadow: 0 0 12px rgba(var(--rgb-accent), 0.6);
+}
+
+/* Period: the terminal voice, boxed like a log timestamp */
+.tl-period {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-ink);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(var(--rgb-accent), 0.32);
+  border-radius: var(--radius-pill);
+}
+html[lang="fa"] .tl-period {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.78rem;
+}
+
+.tl-role {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-ink);
+  margin-block: 0.7rem 0.15rem;
+  text-wrap: balance;
+}
+
+.tl-company {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent-2-ink);
+}
+html[lang="fa"] .tl-company {
+  letter-spacing: 0;
+  font-family: var(--font-fa-menu);
+  font-size: 0.86rem;
+}
+
+.tl-points {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.tl-point {
+  position: relative;
+  padding-inline-start: 1.1rem;
+  color: var(--color-ink-dim);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+.tl-point::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.62em;
+  width: 0.45rem;
+  height: 1px;
+  background: var(--color-accent-2-fill);
+}
+
+@media (min-width: 48rem) {
+  .timeline {
+    padding-inline-start: 3rem;
+  }
+  .tl-node {
+    inset-inline-start: -3rem;
+  }
+  .tl-card {
+    padding: 1.4rem 1.6rem 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl-card,
+  .tl-node {
+    transition: none;
+  }
+  .tl-item:hover .tl-card,
+  .tl-item:focus-within .tl-card {
+    transform: none;
+  }
+}

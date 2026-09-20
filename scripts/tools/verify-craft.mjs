@@ -145,11 +145,11 @@ if (labEn) {
   // count taken from raw HTML.
   const swatches = (labEn.match(/lab-swatch-chip/g) || []).length;
   check(`palette shows 5 inks (found ${swatches})`, swatches >= 5, "expected >= 5");
-  check("lab hero uses the shared voice", labEn.includes("page-hero-title"));
+  check("lab hero uses the shared voice", labEn.includes("craft-title"));
   check("lab carries a route hero ordinal", labEn.includes("06"));
 }
 if (labFa) {
-  check("fa lab hero rendered", labFa.includes("page-hero-title"));
+  check("fa lab hero rendered", labFa.includes("craft-title"));
 }
 
 /* ── Sitemap / hreflang ─────────────────────────────────────────────── */
@@ -171,6 +171,122 @@ if (labEn) {
   check("lab page declares en+fa alternates", hasAlternates);
   check("lab page declares a canonical", /rel="canonical"/.test(labEn));
   check("canonical points at the locale-prefixed lab url", labEn.includes("/en/lab/"));
+}
+
+/* ── CSS hygiene: every var() must resolve ──────────────────────────── */
+
+console.log("\n=== CSS HYGIENE ===");
+
+// A var() pointing at a custom property that nothing defines resolves to
+// nothing, so the declaration is silently dropped — a mistyped token name
+// looks exactly like a styling bug in the browser. This walks BOTH style
+// dirs (legacy sheets still shipping + craft sheets) and reports any usage
+// with no definition anywhere.
+const definedProps = new Set();
+const usedProps = new Map(); // prop -> Set(sheet basenames)
+for (const dir of ["src/styles", "src/styles/craft"]) {
+  if (!fs.existsSync(dir)) continue;
+  for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".css"))) {
+    const sheet = fs.readFileSync(`${dir}/${file}`, "utf8");
+    for (const m of sheet.matchAll(/(--[a-z0-9-]+)\s*:/gi)) definedProps.add(m[1]);
+    for (const m of sheet.matchAll(/var\(\s*(--[a-z0-9-]+)(\s*,[^()]*)?\)/gi)) {
+      // var(--x, 0) resolves to its fallback when nothing defines --x, so an
+      // intentional optional property is not an unresolved one.
+      if (m[2]) continue;
+      if (!usedProps.has(m[1])) usedProps.set(m[1], new Set());
+      usedProps.get(m[1]).add(file);
+    }
+  }
+}
+
+// Components set some properties at runtime — inline style keys such as
+// { ["--v" as string]: "80%" }, el.style.setProperty("--x", …), or the
+// `variable:` option next/font uses to publish a face as a custom property.
+// Those are legitimately absent from CSS, so scan the source for them rather
+// than keeping a hand-maintained allowlist that would rot.
+const runtimeProps = new Set();
+(function walk(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = `${dir}/${e.name}`;
+    if (e.isDirectory()) walk(p);
+    else if (/\.(tsx|ts)$/.test(e.name)) {
+      const s = fs.readFileSync(p, "utf8");
+      // The window between the key and its colon must not cross a quote:
+      // in { "--i": index, "--n": total } a greedy window would consume the
+      // second key and its colon as part of the first match, hiding --n.
+      for (const m of s.matchAll(/["'](--[a-z0-9-]+)["'][^"'\n]{0,24}:/gi)) runtimeProps.add(m[1]);
+      for (const m of s.matchAll(/setProperty\(\s*["'](--[a-z0-9-]+)/gi)) runtimeProps.add(m[1]);
+      for (const m of s.matchAll(/variable:\s*["'](--[a-z0-9-]+)["']/gi)) runtimeProps.add(m[1]);
+    }
+  }
+})("src");
+
+const unresolved = [...usedProps].filter(
+  ([prop]) => !definedProps.has(prop) && !runtimeProps.has(prop)
+);
+check(
+  `every var() resolves (${definedProps.size} defined · ${runtimeProps.size} runtime-set)`,
+  unresolved.length === 0,
+  unresolved.map(([p, sheets]) => `${p} (used in ${[...sheets].join(", ")})`).join(" | ")
+);
+
+// A stylesheet whose closing brace goes missing doesn't fail loudly: CSS
+// nesting makes everything after the accidental opening read as *nested*
+// rules, so the rest of the sheet silently changes meaning (craft/home.css
+// shipped ~160 lines of status-line, ticker, RTL and print rules scoped
+// inside a :focus-visible rule exactly this way). The build surfaces a
+// missing brace only when the sheet ends unbalanced, so check the invariant
+// directly: a selector rule must never directly contain another selector
+// rule.
+const nestViolations = [];
+for (const dir of ["src/styles", "src/styles/craft"]) {
+  if (!fs.existsSync(dir)) continue;
+  for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".css"))) {
+    // Strip comments and quoted strings first — braces inside either are not
+    // structural, and this codebase has content: "…" declarations everywhere.
+    const text = fs
+      .readFileSync(`${dir}/${file}`, "utf8")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/"[^"\n]*"|'[^'\n]*'/g, "");
+    const stack = [];
+    let buf = "";
+    let line = 1;
+    for (const ch of text) {
+      if (ch === "\n") line += 1;
+      else if (ch === "{") {
+        const prelude = buf.trim();
+        const isAtRule = prelude.startsWith("@");
+        const parent = stack[stack.length - 1];
+        if (!isAtRule && parent && !parent.isAtRule) {
+          nestViolations.push(`${file}:${line} — "${prelude}" nested inside "${parent.prelude}"`);
+        }
+        stack.push({ isAtRule, prelude });
+        buf = "";
+      } else if (ch === "}") {
+        stack.pop();
+        buf = "";
+      } else if (ch !== "\r") buf += ch;
+    }
+    if (stack.length !== 0) nestViolations.push(`${file} — ${stack.length} unclosed block(s)`);
+  }
+}
+check(
+  "no rule swallows the rest of its sheet",
+  nestViolations.length === 0,
+  nestViolations.slice(0, 4).join(" | ")
+);
+
+/* ── Route bodies ───────────────────────────────────────────────────── */
+
+console.log("\n=== ROUTE BODIES ===");
+const workEn = read("out/en/work/index.html");
+const skillsEn = read("out/en/skills/index.html");
+check("work route prerendered", workEn !== null, missing("out/en/work/index.html"));
+check("skills route prerendered", skillsEn !== null, missing("out/en/skills/index.html"));
+if (workEn) check("work renders the timeline cards", workEn.includes("tl-card"));
+if (skillsEn) check("skills renders the matrix", skillsEn.includes("skill-orbit"));
+for (const cls of [".craft-page-hero", ".craft-title", ".timeline", ".tl-card", ".tl-period", ".skill-grid", ".skill-cell", ".skill-orbit i"]) {
+  check(`body rule shipped ${cls}`, css.includes(cls));
 }
 
 /* ── GEO / feeds ────────────────────────────────────────────────────── */
