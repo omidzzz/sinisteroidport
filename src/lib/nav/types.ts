@@ -41,7 +41,9 @@ export type ConsoleAction =
   | { type: "move"; delta: number }
   | { type: "highlight"; index: number }
   | { type: "routes"; routes: readonly NavRoute[] }
-  | { type: "commands"; commands: readonly ConsoleItem[] };
+  | { type: "commands"; commands: readonly ConsoleItem[] }
+  | { type: "history-up" }
+  | { type: "history-down" };
 
 export interface ConsoleState {
   status: ConsoleStatus;
@@ -55,6 +57,12 @@ export interface ConsoleState {
   activeIndex: number;
   /** Direction of the last open/close, for the panel's animation. */
   lastTransition: "open" | "close" | null;
+  /** Command history — most recent first. */
+  history: string[];
+  /** Position in history during recall (-1 = not recalling). */
+  historyIndex: number;
+  /** The last executed command, for the collapsed-state echo. */
+  lastCommand: string;
 }
 
 /** One row in the console tree: either a route link or a command verb. */

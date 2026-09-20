@@ -75,6 +75,14 @@ function clamp(index: number, length: number): number {
   return Math.min(Math.max(index, 0), length - 1);
 }
 
+/** The number of rows the tree currently shows — the cursor's valid range.
+ *  Clamping against the UNFILTERED count let the cursor escape past the end
+ *  of a filtered list, which made `active` null and Enter commit nothing
+ *  (five failing browser assertions traced back to this one bug). */
+function filteredCount(state: ConsoleState): number {
+  return allItems(state).filter((i) => matches(i, state.buffer)).length;
+}
+
 export function consoleReducer(
   state: ConsoleState,
   action: ConsoleAction
@@ -153,17 +161,15 @@ export function consoleReducer(
 
     case "move": {
       if (!Number.isFinite(action.delta) || action.delta === 0) return state;
-      const length = allItems(state).length;
       return {
         ...state,
-        activeIndex: clamp(state.activeIndex + action.delta, length),
+        activeIndex: clamp(state.activeIndex + action.delta, filteredCount(state)),
       };
     }
 
     case "highlight": {
       if (!Number.isInteger(action.index) || action.index < 0) return state;
-      const length = allItems(state).length;
-      const index = clamp(action.index, length);
+      const index = clamp(action.index, filteredCount(state));
       return index === state.activeIndex ? state : { ...state, activeIndex: index };
     }
 

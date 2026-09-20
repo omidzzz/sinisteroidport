@@ -94,7 +94,7 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
     if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
     noticeTimer.current = window.setTimeout(() => setNotice(null), NOTICE_MS);
   }, []);
-  /* ── Verbs ──────────────────────────────────────────────────────────
+    /* ── Verbs ───────────────────────────────────────────────────────────
      The reducer never performs side effects; the container does. `ask`
      hands the typed remainder to the resident agent through the same
      `sinister:ask` event the rest of the site already dispatches. */
@@ -159,6 +159,62 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
     },
     [close, locale, router, runVerb]
   );
+
+  /* ─ Keyboard ownership while OPEN ───────────────────────────────────
+     Focusing the prompt is the common case, but not the only one: the
+     disclosure button deliberately opens the console for BROWSING without
+     moving focus, and Escape pressed there used to do nothing at all — a
+     real a11y bug, caught by scripts/tools/verify-mobile-chrome.mjs. While
+     open, the console therefore owns Escape, the arrow keys, Enter and any
+     printable key wherever focus happens to be, focusing the field when a
+     keystroke belongs in the filter.
+
+     When the prompt DOES have focus its own handler runs first and calls
+     preventDefault, so this listener defers to it and nothing is handled
+     twice. */
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.defaultPrevented) return;
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+        return;
+      }
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+      const target = event.target as HTMLElement | null;
+      if (target === inputRef.current) return; // the prompt owns it
+      if (
+        target?.isContentEditable ||
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA"
+      ) {
+        return;
+      }
+
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        dispatch({ type: "move", delta: event.key === "ArrowDown" ? 1 : -1 });
+        return;
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        commit(active);
+        return;
+      }
+      if (event.key.length === 1) {
+        event.preventDefault();
+        inputRef.current?.focus();
+        dispatch({ type: "type", char: event.key });
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, active, close, commit, dispatch]);
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {

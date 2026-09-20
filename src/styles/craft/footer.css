@@ -11,6 +11,11 @@
 [data-register="code-craft"] footer {
   position: relative;
   margin-block-start: 7rem;
+  /* The console dock is fixed to the viewport bottom, so the footer's last
+     row would otherwise sit under it whenever the page is scrolled to the
+     end — the back-to-top mark became untappable (found by
+     scripts/tools/verify-mobile-chrome.mjs). Reserve the dock's footprint. */
+  padding-block-end: var(--console-h, 9rem);
   overflow: hidden;
 }
 

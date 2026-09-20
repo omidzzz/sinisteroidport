@@ -241,6 +241,23 @@ test("the cursor reaches command rows too (the regression this guards)", () => {
   s = consoleReducer(s, { type: "move", delta: ROUTES.length });
   assert.equal(s.activeIndex, ROUTES.length, "should land on the first verb");
 });
+test("the cursor cannot escape a FILTERED list (browser test regression)", () => {
+  let s = consoleReducer(base(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "w" });
+  // "w" matches only the Work route: one row. Moving 5 must clamp to 0 —
+  // clamping against the unfiltered count left activeIndex in the verb
+  // range, where the filtered list has no row, and Enter then committed
+  // nothing.
+  s = consoleReducer(s, { type: "move", delta: 5 });
+  assert.equal(s.activeIndex, 0);
+  assert.equal(selectItems(s).length, 1);
+});
+test("highlight clamps against the filtered list too", () => {
+  let s = consoleReducer(base(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "w" });
+  s = consoleReducer(s, { type: "highlight", index: 12 });
+  assert.equal(s.activeIndex, 0);
+});
 
 /* ── Registry ───────────────────────────────────────────────────────── */
 
