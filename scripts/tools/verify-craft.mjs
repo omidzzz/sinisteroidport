@@ -289,7 +289,11 @@ const educationEn = read("out/en/education/index.html");
 const showcaseEn = read("out/en/showcase/index.html");
 if (educationEn) check("education renders the record deck", educationEn.includes("edu-card"));
 if (showcaseEn) check("showcase renders the bento wall", showcaseEn.includes("bento-frame"));
-for (const cls of [".craft-page-hero", ".craft-title", ".timeline", ".tl-card", ".tl-period", ".skill-grid", ".skill-cell", ".skill-orbit i", ".edu-card", ".edu-degree", ".bento", ".bento-frame", ".bento-name", ".bento-tags", ".bento-up"]) {
+const contactEn = read("out/en/contact/index.html");
+const blogEn = read("out/en/blog/index.html");
+if (contactEn) check("contact renders the channel board", contactEn.includes("contact-value"));
+if (blogEn) check("blog renders the issue grid", blogEn.includes("issue-card"));
+for (const cls of [".craft-page-hero", ".craft-title", ".timeline", ".tl-card", ".tl-period", ".skill-grid", ".skill-cell", ".skill-orbit i", ".edu-card", ".edu-degree", ".bento", ".bento-frame", ".bento-name", ".bento-tags", ".bento-up", ".contact-hero", ".contact-value", ".contact-copy", ".contact-console", ".live-dot", ".issue-grid", ".issue-card", ".issue-title", ".issue-tags"]) {
   check(`body rule shipped ${cls}`, css.includes(cls));
 }
 

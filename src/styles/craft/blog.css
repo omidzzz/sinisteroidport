@@ -1,0 +1,169 @@
+/* ============================================================
+   CODE & CRAFT — 06 BLOG · the issue grid
+   ------------------------------------------------------------
+   The index is an editorial grid of issue cards: a mono number and
+   an arrow in the margins, the date in the terminal voice, the
+   title in display, and slash-cut tag slivers. Cards ride the same
+   glass as the rest of the system, and the issue number is the one
+   ghost-ink numeral per card. The topic filter row reuses the
+   bento tag chips, so the index reads as one system with showcase.
+   ============================================================ */
+
+.issue-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-block: 1.5rem 3rem;
+}
+
+/* Cards are plain anchors (see the component note on client routing),
+   so the link resets live here, not in a shared sheet. */
+.issue-card {
+  position: relative;
+  display: block;
+  height: 100%;
+  padding: 1.15rem 1.25rem 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-2);
+  box-shadow: var(--elev-1);
+  backdrop-filter: blur(var(--glass-blur));
+  text-decoration: none;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+.issue-card:hover,
+.issue-card:focus-visible {
+  transform: translateY(-3px);
+  border-color: rgba(var(--rgb-accent), 0.45);
+  box-shadow: var(--elev-2), var(--glow-accent);
+}
+
+/* Ghost issue number — one outlined numeral per card */
+.issue-number {
+  position: absolute;
+  inset-block-start: 0.35rem;
+  inset-inline-end: 2.6rem;
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(var(--rgb-ink), 0.12);
+  pointer-events: none;
+  user-select: none;
+}
+
+.issue-arrow {
+  position: absolute;
+  inset-block-start: 1.25rem;
+  inset-inline-end: 1.1rem;
+  inline-size: 0.9rem;
+  block-size: 0.9rem;
+  color: var(--color-accent-2-ink);
+  transition: transform var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+.issue-card:hover .issue-arrow,
+.issue-card:focus-visible .issue-arrow {
+  transform: translateX(3px);
+  color: var(--color-accent-ink);
+}
+[dir="rtl"] .issue-arrow {
+  transform: scaleX(-1);
+}
+[dir="rtl"] .issue-card:hover .issue-arrow,
+[dir="rtl"] .issue-card:focus-visible .issue-arrow {
+  transform: scaleX(-1) translateX(-3px);
+}
+
+.issue-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-block-end: 0.6rem;
+}
+html[lang="fa"] .issue-meta {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-fa-menu);
+  font-size: 0.8rem;
+}
+
+.issue-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-ink);
+  margin-block: 0 0.45rem;
+  text-wrap: balance;
+}
+.issue-card:hover .issue-title {
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--rgb-accent), 0.6);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.issue-excerpt {
+  color: var(--color-ink-dim);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.issue-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-block-start: 0.8rem;
+}
+/* Slash-cut slivers — the one non-pill chip in the system */
+.issue-tags i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-2-ink);
+  padding: 0.18rem 0.55rem;
+  border: 1px solid rgba(var(--rgb-accent-2), 0.4);
+  clip-path: polygon(0.45rem 0, 100% 0, calc(100% - 0.45rem) 100%, 0 100%);
+}
+html[lang="fa"] .issue-tags i {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-fa-menu);
+  font-size: 0.74rem;
+}
+
+/* Cover frame reuses the bento frame voice; hide gracefully when
+   the image fails (the component adds no-cover on error). */
+.post-thumb.no-cover {
+  display: none;
+}
+
+@media (min-width: 44rem) {
+  .issue-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .issue-card,
+  .issue-arrow {
+    transition: none;
+  }
+  .issue-card:hover,
+  .issue-card:focus-visible {
+    transform: none;
+  }
+}

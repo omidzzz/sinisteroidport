@@ -1,0 +1,183 @@
+/* ============================================================
+   CODE & CRAFT — 07 CONTACT · the channel board
+   ------------------------------------------------------------
+   The channel board reuses the education deck's record cards and
+   adds contact-only deltas: a head row (icon + name chip), a
+   mono LTR-pinned value line, a tilted mail hero, tilted telegram /
+   github siblings, a full-width tel strip, a copy chip, and the
+   availability console at the foot. All `contact-*` rules live here,
+   after the legacy sheets, so the voice wins without specificity
+   hacks.
+   ============================================================ */
+
+/* The email hero gets the timeline's leading-edge treatment */
+.contact-hero {
+  border-block-start-width: 3px;
+}
+
+/* The email card is interactive, so it lifts on hover/focus */
+a.contact-hero {
+  display: block;
+  text-decoration: none;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+a.contact-hero:hover,
+a.contact-hero:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--elev-2), var(--glow-accent);
+}
+
+/* Head row: channel icon left, name chip right */
+.contact-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-block-end: 0.55rem;
+}
+
+.contact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  flex: none;
+  color: var(--color-accent-2-ink);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-1);
+}
+.contact-icon svg {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+}
+a.contact-card:hover .contact-icon,
+a.contact-card:focus-visible .contact-icon {
+  color: var(--color-accent-ink);
+  border-color: rgba(var(--rgb-accent), 0.5);
+}
+
+/* Value: technical text — pinned LTR by the component */
+.contact-value {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+.contact-tel-num {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Tilted siblings: lean into each other like propped cards */
+.contact-tilt-a {
+  rotate: -0.6deg;
+}
+.contact-tilt-b {
+  rotate: 0.6deg;
+}
+
+/* Full-width tel strip: UTC chip rides the value row */
+.contact-strip .contact-value {
+  max-inline-size: 100%;
+}
+.contact-utc {
+  display: inline-block;
+  margin-block-start: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+}
+
+/* Copy chip: the "copied" state takes the yellow */
+.contact-copy {
+  margin-block-start: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  background: transparent;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-pill);
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+html[lang="fa"] .contact-copy {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.82rem;
+}
+.contact-copy:hover,
+.contact-copy:focus-visible {
+  color: var(--color-accent-ink);
+  border-color: rgba(var(--rgb-accent), 0.55);
+  box-shadow: var(--glow-accent);
+}
+
+/* Foot console: availability status + agent entry, hairline-separated */
+.contact-console {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-block: 2.5rem 0;
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--color-line);
+}
+
+.contact-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-dim);
+}
+html[lang="fa"] .contact-status {
+  letter-spacing: 0;
+  font-family: var(--font-fa-menu);
+  font-size: 0.86rem;
+}
+
+.live-dot {
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-accent-fill);
+  box-shadow: 0 0 10px rgba(var(--rgb-accent), 0.65);
+}
+
+/* Span helpers: channel variants that stretch across the grid */
+.contact-span,
+.contact-strip {
+  grid-column: 1 / -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a.contact-hero,
+  .contact-copy {
+    transition: none;
+  }
+  a.contact-hero:hover,
+  a.contact-hero:focus-visible {
+    transform: none;
+  }
+}
