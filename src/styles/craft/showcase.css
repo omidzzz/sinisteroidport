@@ -1,0 +1,269 @@
+/* ============================================================
+   CODE & CRAFT — 05 SHOWCASE · the broadcast wall
+   ------------------------------------------------------------
+   The bento wall keeps its architecture (container-query spans,
+   drift offsets, ghost numerals) and loses the acid: ghost indices
+   sink to the structure tone, tiles are glass with a teal scanline
+   on hover, tags are hairline chips, and the type line rides the
+   teal voice.
+   ============================================================ */
+
+.bento-cq {
+  container-type: inline-size;
+  container-name: bento;
+}
+
+.bento-wall {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-block: 1rem 3rem;
+}
+
+.bento-cellwrap {
+  min-width: 0;
+}
+
+.bento {
+  position: relative;
+  height: 100%;
+  padding: 1.1rem 1.2rem 1.2rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-2);
+  box-shadow: var(--elev-1);
+  backdrop-filter: blur(var(--glass-blur));
+  overflow: hidden;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+/* Ghost index behind the tile — structure tone, not ink */
+.bento-ghost {
+  position: absolute;
+  inset-block-start: -0.4rem;
+  inset-inline-end: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 5.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(var(--rgb-ink), 0.12);
+  pointer-events: none;
+  user-select: none;
+}
+
+.bento:hover,
+.bento:focus-within {
+  transform: translateY(-3px);
+  border-color: rgba(var(--rgb-accent), 0.45);
+  box-shadow: var(--elev-2), var(--glow-accent);
+}
+
+.bento-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-block-end: 0.7rem;
+}
+
+.bento-index {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--color-accent-ink);
+}
+html[lang="fa"] .bento-index {
+  letter-spacing: 0;
+  font-family: var(--font-fa-menu);
+  font-size: 0.8rem;
+}
+
+.bento-type {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-2-ink);
+}
+html[lang="fa"] .bento-type {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-fa-menu);
+  font-size: 0.8rem;
+}
+
+.bento-frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-1);
+}
+.bento-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.bento:hover .bento-frame img,
+.bento:focus-within .bento-frame img {
+  transform: scale(1.03);
+}
+
+.bento-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-block-start: 0.85rem;
+}
+
+.bento-tag {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-pill);
+}
+html[lang="fa"] .bento-tag {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-fa-menu);
+  font-size: 0.76rem;
+}
+.bento-tag-dim {
+  color: var(--color-muted);
+}
+.bento:hover .bento-tag:not(.bento-tag-dim),
+.bento:focus-within .bento-tag:not(.bento-tag-dim) {
+  border-color: rgba(var(--rgb-accent), 0.5);
+  color: var(--color-accent-ink);
+}
+
+.bento-arrow {
+  inline-size: 0.85rem;
+  block-size: 0.85rem;
+  color: var(--color-accent-2-ink);
+  margin-inline-start: auto;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.bento:hover .bento-arrow,
+.bento:focus-within .bento-arrow {
+  transform: translateX(3px);
+}
+[dir="rtl"] .bento-arrow {
+  transform: scaleX(-1);
+}
+[dir="rtl"] .bento:hover .bento-arrow,
+[dir="rtl"] .bento:focus-within .bento-arrow {
+  transform: scaleX(-1) translateX(-3px);
+}
+
+/* ---- spans + drift (grid config is part of the look contract, so it
+   moves with the voice; hover-lift composes with drift, not cancelling) */
+@container bento (min-width: 30rem) {
+  .bento-wall {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento-s2 {
+    grid-column: span 2;
+  }
+}
+@container bento (min-width: 54rem) {
+  .bento-wall {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .bento-s2 {
+    grid-column: span 2;
+  }
+  .bento-up {
+    transform: translateY(-1.5rem);
+  }
+  .bento-down {
+    transform: translateY(1.5rem);
+  }
+  .bento-up:hover,
+  .bento-up:focus-within {
+    transform: translateY(calc(-1.5rem - 3px));
+  }
+  .bento-down:hover,
+  .bento-down:focus-within {
+    transform: translateY(calc(1.5rem - 3px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento,
+  .bento-frame img,
+  .bento-scan,
+  .bento-arrow {
+    transition: none;
+    animation: none;
+  }
+  .bento:hover,
+  .bento:focus-within,
+  .bento-up:hover,
+  .bento-down:hover,
+  .bento-up:focus-within,
+  .bento-down:focus-within {
+    transform: none;
+  }
+  .bento:hover .bento-scan,
+  .bento:focus-within .bento-scan {
+    opacity: 0;
+  }
+}
+
+/* Scanline: a teal band that sweeps the frame on hover */
+.bento-scan {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: -30%;
+  height: 30%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(var(--rgb-accent-2), 0.18),
+    transparent
+  );
+  transform: translateY(0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.bento:hover .bento-scan,
+.bento:focus-within .bento-scan {
+  opacity: 1;
+  animation: bento-scan 1.1s var(--ease-in-out) 1 both;
+}
+@keyframes bento-scan {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(420%);
+  }
+}
+
+.bento-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-ink);
+  margin-block: 0.85rem 0.3rem;
+}
+
+.bento-desc {
+  color: var(--color-ink-dim);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}

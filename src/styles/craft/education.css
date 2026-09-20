@@ -1,0 +1,101 @@
+/* ============================================================
+   CODE & CRAFT — 04 EDUCATION · the record deck
+   ------------------------------------------------------------
+   Three records as glass cards in a row: a mono year chip boxed like
+   a log timestamp, the degree set large, the detail in the reading
+   voice, the institution in teal. Same material as the timeline
+   cards, tighter rhythm — credentials, not narrative.
+   ============================================================ */
+
+.edu-deck {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-block: 1rem 3rem;
+}
+
+.edu-card {
+  height: 100%;
+  padding: 1.25rem 1.35rem 1.35rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  border-block-start: 2px solid var(--color-accent-fill);
+  border-radius: var(--radius-2);
+  box-shadow: var(--elev-1);
+  backdrop-filter: blur(var(--glass-blur));
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+.edu-card:hover,
+.edu-card:focus-within {
+  transform: translateY(-2px);
+  border-block-start-color: var(--color-accent-2-fill);
+  box-shadow: var(--elev-2), var(--glow-accent);
+}
+
+/* Year: mono, boxed like the work route's period chip */
+.edu-year {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-ink);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(var(--rgb-accent), 0.32);
+  border-radius: var(--radius-pill);
+}
+html[lang="fa"] .edu-year {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.78rem;
+}
+
+.edu-degree {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-ink);
+  margin-block: 0.75rem 0.35rem;
+  text-wrap: balance;
+}
+
+.edu-detail {
+  color: var(--color-ink-dim);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.edu-inst {
+  margin-block-start: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  color: var(--color-accent-2-ink);
+}
+html[lang="fa"] .edu-inst {
+  letter-spacing: 0;
+  font-family: var(--font-fa-menu);
+  font-size: 0.85rem;
+}
+
+@media (min-width: 48rem) {
+  .edu-deck {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edu-card {
+    transition: none;
+  }
+  .edu-card:hover,
+  .edu-card:focus-within {
+    transform: none;
+  }
+}

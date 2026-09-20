@@ -89,6 +89,8 @@
 @import "../styles/craft/pages.css";
 @import "../styles/craft/work.css";
 @import "../styles/craft/skills.css";
+@import "../styles/craft/education.css";
+@import "../styles/craft/showcase.css";
 /* footer.css — the colophon in the new register. */
 @import "../styles/craft/footer.css";
 /* home.css — the Code & Craft home acts (hero, ticker, telemetry cards). */

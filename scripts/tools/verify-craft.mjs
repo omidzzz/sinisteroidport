@@ -285,7 +285,11 @@ check("work route prerendered", workEn !== null, missing("out/en/work/index.html
 check("skills route prerendered", skillsEn !== null, missing("out/en/skills/index.html"));
 if (workEn) check("work renders the timeline cards", workEn.includes("tl-card"));
 if (skillsEn) check("skills renders the matrix", skillsEn.includes("skill-orbit"));
-for (const cls of [".craft-page-hero", ".craft-title", ".timeline", ".tl-card", ".tl-period", ".skill-grid", ".skill-cell", ".skill-orbit i"]) {
+const educationEn = read("out/en/education/index.html");
+const showcaseEn = read("out/en/showcase/index.html");
+if (educationEn) check("education renders the record deck", educationEn.includes("edu-card"));
+if (showcaseEn) check("showcase renders the bento wall", showcaseEn.includes("bento-frame"));
+for (const cls of [".craft-page-hero", ".craft-title", ".timeline", ".tl-card", ".tl-period", ".skill-grid", ".skill-cell", ".skill-orbit i", ".edu-card", ".edu-degree", ".bento", ".bento-frame", ".bento-name", ".bento-tags", ".bento-up"]) {
   check(`body rule shipped ${cls}`, css.includes(cls));
 }
 
