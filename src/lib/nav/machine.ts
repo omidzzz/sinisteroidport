@@ -1,15 +1,15 @@
-/**
- * Console reducer — the CRAFT CONSOLE's entire behaviour as a pure
- * (state, action) → state function.
+﻿/**
+ * Console reducer â€” the CRAFT CONSOLE's entire behaviour as a pure
+ * (state, action) â†’ state function.
  *
  * DOM-free by design: no window, no document, no timers, no imports. Every
  * state transition the console can make is expressed here and exercised by
  * scripts/tools/verify-nav-machine.mjs (which loads this file directly with
- * Node's type stripping — hence zero imports and erasable syntax only).
+ * Node's type stripping â€” hence zero imports and erasable syntax only).
  * Components never invent state: they dispatch actions and read selectors.
  */
 
-/** The buffer is a filter, not an editor — keep it tight. Owned here so the
+/** The buffer is a filter, not an editor â€” keep it tight. Owned here so the
  *  invariant and its enforcement live in the same file. */
 
 import type {
@@ -19,8 +19,9 @@ import type {
   NavRoute,
 } from "./types";
 export const MAX_BUFFER = 32;
+export const MAX_HISTORY = 8;
 
-/** Initial state — collapsed, empty buffer, no rows until the layout
+/** Initial state â€” collapsed, empty buffer, no rows until the layout
  *  dispatches them (server-rendered data crosses on mount). */
 export function createConsoleState(
   routes: readonly NavRoute[] = [],
@@ -33,6 +34,9 @@ export function createConsoleState(
     buffer: "",
     activeIndex: 0,
     lastTransition: null,
+    history: [],
+    historyIndex: -1,
+    lastCommand: "",
   };
 }
 
@@ -69,13 +73,13 @@ export function selectItems(state: ConsoleState): ConsoleItem[] {
   return allItems(state).filter((i) => matches(i, state.buffer));
 }
 
-/** Clamp helper — the active row can never escape the list. */
+/** Clamp helper â€” the active row can never escape the list. */
 function clamp(index: number, length: number): number {
   if (length <= 0) return 0;
   return Math.min(Math.max(index, 0), length - 1);
 }
 
-/** The number of rows the tree currently shows — the cursor's valid range.
+/** The number of rows the tree currently shows â€” the cursor's valid range.
  *  Clamping against the UNFILTERED count let the cursor escape past the end
  *  of a filtered list, which made `active` null and Enter commit nothing
  *  (five failing browser assertions traced back to this one bug). */
@@ -90,7 +94,7 @@ export function consoleReducer(
   switch (action.type) {
     case "open": {
       if (state.status === "open") return state;
-      // Re-opening starts a fresh filter — the buffer is ephemeral.
+      // Re-opening starts a fresh filter â€” the buffer is ephemeral.
       return {
         ...state,
         status: "open",
@@ -121,7 +125,7 @@ export function consoleReducer(
       // Control characters and multi-char pastes never ride "type".
       if (!char || char.length !== 1) return state;
       if (state.status !== "open") {
-        // Typing while collapsed opens first — the console IS the menu.
+        // Typing while collapsed opens first â€” the console IS the menu.
         // ORDER MATTERS: `open` clears the buffer by design, so the typed
         // character must land AFTER it. Seeding the buffer before the open
         // dispatch silently swallowed the first key (caught by the machine
@@ -184,10 +188,48 @@ export function consoleReducer(
       return { ...state, commands: action.commands, activeIndex: 0 };
     }
 
+    case "history-up": {
+      if (state.history.length === 0) return state;
+      if (state.historyIndex === -1) {
+        return {
+          ...state,
+          historyIndex: 0,
+          buffer: state.history[0],
+          activeIndex: 0,
+        };
+      }
+      if (state.historyIndex >= state.history.length - 1) return state;
+      return {
+        ...state,
+        historyIndex: state.historyIndex + 1,
+        buffer: state.history[state.historyIndex + 1],
+        activeIndex: 0,
+      };
+    }
+
+    case "history-down": {
+      if (state.historyIndex === -1) return state;
+      if (state.historyIndex === 0) {
+        return {
+          ...state,
+          historyIndex: -1,
+          buffer: "",
+          activeIndex: 0,
+        };
+      }
+      return {
+        ...state,
+        historyIndex: state.historyIndex - 1,
+        buffer: state.history[state.historyIndex - 1] || "",
+        activeIndex: 0,
+      };
+    }
+
     default: {
-      // Exhaustiveness guard — a new action variant must be handled above.
+      // Exhaustiveness guard â€” a new action variant must be handled above.
       const exhaustive: never = action;
       return exhaustive;
     }
   }
 }
+
