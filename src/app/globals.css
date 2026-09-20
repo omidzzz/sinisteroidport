@@ -89,6 +89,8 @@
 @import "../styles/craft/pages.css";
 /* footer.css — the colophon in the new register. */
 @import "../styles/craft/footer.css";
+/* home.css — the Code & Craft home acts (hero, ticker, telemetry cards). */
+@import "../styles/craft/home.css";
 
 /* ---------- 6 · motion net — MUST STAY LAST ---------- */
 @import "../styles/craft/motion.css";
