@@ -59,8 +59,8 @@
     transparent 85%
   );
 }
-@media (hover: hover) and (pointer: fine) {
-  @media (prefers-reduced-motion: no-preference) {
+@media (hover: hover) and (pointer: fine){
+  @media (prefers-reduced-motion: no-preference){
     .module-card:hover .mod-halo,
     .module-card:focus-within .mod-halo {
       opacity: 1;
@@ -68,7 +68,7 @@
     }
   }
 }
-@keyframes eh-energize { to { rotate: 360deg; } }
+@keyframes eh-energize{ to { rotate: 360deg; } }
 /* §3 GHOST-CTA SHEEN — mirrors the btn-neon shine so every CTA
    family speaks the same language. Hover-only, transform/opacity,
    clipped inside the button (box-shadow still paints outside). */
@@ -93,15 +93,15 @@
     transparent 100%
   );
 }
-@media (hover: hover) and (pointer: fine) {
-  @media (prefers-reduced-motion: no-preference) {
+@media (hover: hover) and (pointer: fine){
+  @media (prefers-reduced-motion: no-preference){
     .btn-ghost:hover::after {
       opacity: 1;
       animation: eh-ghost-sheen 0.8s ease forwards;
     }
   }
 }
-@keyframes eh-ghost-sheen {
+@keyframes eh-ghost-sheen{
   from { translate: -130% 0; }
   to { translate: 130% 0; }
 }
@@ -111,31 +111,13 @@
    keyframes to drive `translate` keeps the exact same geometry
    on the compositor. Unsupported browsers drop `translate` and
    simply keep the static base — no visual regression. */
-@keyframes btn-shine {
+@keyframes btn-shine{
   from { translate: 0 0; }
   to { translate: 467% 0; }
 }
-
-/* §5 FOOTER EXIT SIGNAL — a scrubbed closing line under the
-   colophon: the page's last beat. view() only, static fallback. */
-.foot-edition { position: relative; }
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .foot-edition::before {
-      content: "";
-      position: absolute;
-      inset-inline: 0;
-      bottom: -1.1rem;
-      height: 2px;
-      border-radius: 9999px;
-      background: linear-gradient(90deg, var(--color-acid), var(--color-accent));
-      transform-origin: left center;
-      animation: eh-footer-signal linear both;
-      animation-timeline: view();
-      animation-range: entry 0% exit 0%;
-    }
-    [dir="rtl"] .foot-edition::before { transform-origin: right center; }
-    @keyframes eh-footer-signal {
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+    @keyframes eh-footer-signal{
       from { transform: scaleX(0.04); opacity: 0.35; }
       to { transform: scaleX(1); opacity: 0.95; }
     }
@@ -145,14 +127,10 @@
 /* §6 LIGHT-THEME PARITY — the new surfaces and the legacy chrome
    props get softened glows for the laboratory whiteout. */
 [data-theme="light"] .module-card:hover .mod-halo { opacity: 0.7; }
-[data-theme="light"] .status-panel::before { opacity: 0.22; }
-[data-theme="light"] .holo-core {
-  filter: drop-shadow(0 2px 6px rgba(var(--rgb-acid), 0.2));
-}
 
 /* §7 PRINT DECAY — the 2026 additions print as ink, never neon;
    the giant closer keeps a thin stroke instead of a solid slab. */
-@media print {
+@media print{
   .seam::after,
   .foot-edition::before,
   .module-card .mod-halo,
@@ -164,10 +142,6 @@
   .live-dot,
   .thread {
     display: none !important;
-  }
-  .foot-giant {
-    -webkit-text-stroke: 0.4px #000;
-    opacity: 1;
   }
   .module-card {
     background: #fff !important;

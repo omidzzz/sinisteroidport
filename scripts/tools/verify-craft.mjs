@@ -297,6 +297,51 @@ for (const cls of [".craft-page-hero", ".craft-title", ".timeline", ".tl-card", 
   check(`body rule shipped ${cls}`, css.includes(cls));
 }
 
+/* ── Legacy sheets: live rules must survive a prune ─────────────────── */
+
+// The prune pass (scripts/tools/prune-dead-css.mjs) removes legacy rules whose
+// every class token is unreachable, keeping the sheets honest without a
+// rewrite. These selectors style markup that ships, so their rules must still
+// be present afterwards — this is the guard that says "the prune was lossless".
+console.log("\n=== LEGACY LIVE RULES ===");
+for (const sel of [
+  ".timeline",
+  ".tl-card",
+  ".tl-node",
+  ".skill-cell",
+  ".skill-orbit i",
+  ".edu-card",
+  ".bento-frame",
+  ".bento-tag",
+  ".issue-card",
+  ".post-toc",
+  ".reading-progress",
+  ".prose-post",
+  ".sin-chat-panel",
+  ".sin-tok-c",
+  ".contact-value",
+  ".ch-strip",
+  ".logo-sinister",
+  ".prop-float",
+  ".gauge-fill",
+  ".ticker-track",
+  ".post-strip",
+  ".mani-block",
+  ".sig-wave",
+  ".module-card",
+  ".net-legend",
+  ".lab-plate",
+  ".craft-prompt",
+]) {
+  check(`live legacy rule shipped ${sel}`, css.includes(sel));
+}
+
+// Chrome retired by the rebuild (old navbar/dock, the rave-era hero props) must
+// not come back: these tokens have no markup and no sheet should reintroduce them.
+for (const gone of [".mob-burger", ".mob-pill", ".planet-ring", ".sun-core", ".foot-giant"]) {
+  check(`retired chrome gone ${gone}`, !css.includes(gone));
+}
+
 /* ── GEO / feeds ────────────────────────────────────────────────────── */
 
 console.log("\n=== GEO ===");

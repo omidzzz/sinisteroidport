@@ -1,68 +1,5 @@
-/* ============================================================
-   NEON CONTROLS + PANEL PRIMITIVES
-   ============================================================ */
 
-/* Primary CTA — slanted acid plasma chip (clip-path, glow via
-   drop-shadow so the silhouette lights up too). */
-.btn-neon {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.78rem 1.5rem;
-  clip-path: polygon(
-    0.7rem 0,
-    100% 0,
-    calc(100% - 0.7rem) 100%,
-    0 100%
-  );
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #0a0b10;
-  background: linear-gradient(
-    100deg,
-    var(--color-acid),
-    var(--color-accent) 55%,
-    var(--color-accent-2)
-  );
-  filter: drop-shadow(0 0 16px rgba(var(--rgb-acid), 0.35))
-    drop-shadow(0 10px 24px rgba(10, 11, 16, 0.5));
-  transition:
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.3s ease;
-}
-.btn-neon:hover {
-  transform: translateY(-2px) skewX(-1.5deg);
-  filter: drop-shadow(0 0 26px rgba(var(--rgb-acid), 0.55))
-    drop-shadow(0 14px 30px rgba(10, 11, 16, 0.55));
-}
-.btn-neon:active {
-  transform: translateY(0);
-}
-.btn-neon::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  bottom: -50%;
-  left: -80%;
-  width: 45%;
-  background: linear-gradient(
-    105deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
-  transform: skewX(-20deg);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .btn-neon:hover::after {
-    animation: btn-shine 0.9s ease forwards;
-  }
-}
-@keyframes btn-shine {
+@keyframes btn-shine{
   to {
     left: 130%;
   }
@@ -94,65 +31,7 @@
     inset 0 0 18px rgba(var(--rgb-accent), 0.08);
   transform: translateY(-2px);
 }
-
-/* Generic frosted card surface (deep-space tint) */
-.glass {
-  background: linear-gradient(
-    155deg,
-    rgba(216, 255, 77, 0.07),
-    rgba(22, 22, 27, 0.46)
-  );
-  border: 1px solid var(--color-line);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-}
-
-/* Prism panel — frosted slab wrapped in a slowly orbiting conic
-   halo (rotation via transform on an oversized pseudo-layer; the
-   panels overflow is clipped, so no scrollbar side-effects). */
-.prism-panel {
-  position: relative;
-  isolation: isolate;
-  background: linear-gradient(
-    160deg,
-    rgba(255, 93, 122, 0.09),
-    rgba(10, 11, 16, 0.72) 58%
-  );
-  border: 1px solid rgba(var(--rgb-accent-3), 0.28);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  transition:
-    border-color 0.35s ease,
-    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.35s ease;
-}
-.prism-panel::before {
-  content: "";
-  position: absolute;
-  inset: -38%;
-  z-index: -1;
-  opacity: 0.5;
-  /* Masked instead of blurred: the 16s orbit stays a pure GPU transform
-     with zero blur passes — same technique as .status-panel::before. */
-  -webkit-mask-image: radial-gradient(58% 58% at 50% 50%, #000 30%, transparent 78%);
-  mask-image: radial-gradient(58% 58% at 50% 50%, #000 30%, transparent 78%);
-  background: conic-gradient(
-    from 90deg,
-    transparent,
-    rgba(var(--rgb-accent), 0.55),
-    transparent 30%,
-    rgba(var(--rgb-accent-2), 0.55),
-    transparent 62%,
-    rgba(var(--rgb-acid), 0.4),
-    transparent
-  );
-}
-@media (prefers-reduced-motion: no-preference) {
-  .prism-panel::before {
-    animation: prism-orbit 16s linear infinite;
-  }
-}
-@keyframes prism-orbit {
+@keyframes prism-orbit{
   to {
     rotate: 360deg;
   }
@@ -162,38 +41,7 @@
   border-color: rgba(var(--rgb-acid), 0.5);
   box-shadow: 0 24px 60px rgba(10, 11, 16, 0.55);
 }
-
-/* ============================================================
-   EMBELLISHMENT PASS — beam sheen (hero primary CTA only)
-   ------------------------------------------------------------
-   .btn-neon is a clip-path chip, so a border-box conic ring is
-   impossible (clip-path clips borders). Instead the existing
-   ::after shine sweep auto-plays on the hero CTA only — same
-   transform-only sweep as the hover shine, compositor-safe and
-   clipped to the chip silhouette. Repeating cards keep the
-   hover-only shine so the animation budget stays flat.
-   ============================================================ */
-.btn-neon.beam::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  bottom: -50%;
-  left: -80%;
-  width: 45%;
-  background: linear-gradient(
-    105deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
-  transform: skewX(-20deg);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .btn-neon.beam::after {
-    animation: beam-sheen 3.8s ease-in-out infinite;
-  }
-}
-@keyframes beam-sheen {
+@keyframes beam-sheen{
   0% {
     left: -80%;
     opacity: 0;
@@ -211,17 +59,12 @@
     opacity: 0;
   }
 }
-@media (prefers-reduced-motion: reduce), (pointer: coarse) {
-  .btn-neon.beam::after {
-    animation: none;
-  }
-}
 
 /* ── Touch targets (Lighthouse target-size audit) ──
    Ensure every interactive element meets the 44 px minimum on coarse
    pointers. We pad the hit area with transparent space so the visual
    layout is unchanged — only the tap zone expands. */
-@media (pointer: coarse) {
+@media (pointer: coarse){
   .dock-link,
   .chip-brk,
   .foot-idx,
@@ -236,8 +79,5 @@
     min-width: 44px;
     padding-top: max(0.5rem, calc((44px - 1em) / 2));
     padding-bottom: max(0.5rem, calc((44px - 1em) / 2));
-  }
-  .chip-brk {
-    padding: 0.55rem 0.75rem;
   }
 }

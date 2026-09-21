@@ -14,13 +14,13 @@
   box-shadow: 0 0 10px rgba(var(--rgb-acid), 0.65);
 }
 [dir="rtl"] .reading-progress { transform-origin: right center; }
-@supports (animation-timeline: scroll()) {
+@supports (animation-timeline: scroll()){
   .reading-progress {
     animation: progress-grow linear both;
     animation-timeline: scroll(root block);
   }
 }
-@keyframes progress-grow {
+@keyframes progress-grow{
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
@@ -109,7 +109,7 @@
   pointer-events: none;
   background: linear-gradient(180deg, transparent, rgba(var(--rgb-acid), 0.1), transparent);
 }
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference){
   .post-cover:hover .post-cover-scan { animation: plate-scan 0.9s ease; }
 }
 
@@ -202,7 +202,7 @@
 .post-toc-rail {
   display: none;
 }
-@media (min-width: 1520px) {
+@media (min-width: 1520px){
   .post-toc-rail {
     display: block;
     position: absolute;
@@ -219,37 +219,15 @@
   color: var(--color-acid);
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce){
   .post-cover-img, .post-tldr, .reading-progress { transition: none !important; animation: none !important; }
 }
 /* ── V9b — featured-image thumbs on blog lists ── */
 .post-thumb { margin-bottom: 0.9rem; }
 .post-thumb img { height: clamp(6.5rem, 13vw, 9rem); }
 .post-thumb.no-cover { display: none; }
-
-/* ── Donate CTA — "power the next transmission" ── */
-.donate-cta{position:relative;display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.7rem;border-radius:9999px;overflow:hidden;font-family:var(--font-display);font-weight:800;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:#0a0b10;background:linear-gradient(140deg,var(--color-acid) 0%,var(--color-accent) 145%);box-shadow:0 0 0 1px rgba(var(--rgb-acid),.35),0 0 24px rgba(var(--rgb-acid),.32),0 0 70px rgba(var(--rgb-accent),.16);transition:transform .3s,box-shadow .3s}
-.donate-cta:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(var(--rgb-acid),.65),0 0 34px rgba(var(--rgb-acid),.5),0 0 100px rgba(var(--rgb-accent),.28)}
-.donate-cta:active{transform:translateY(0) scale(.97)}
-.donate-cta::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.5) 50%,transparent 68%);transform:translateX(-130%);transition:transform .7s ease}
-.donate-cta:hover::after{transform:translateX(130%)}
-[dir="rtl"] .donate-cta::after{transform:translateX(130%)}
-[dir="rtl"] .donate-cta:hover::after{transform:translateX(-130%)}
-.donate-ring{position:absolute;inset:-3px;border-radius:inherit;border:1px solid rgba(var(--rgb-acid),.55);opacity:0;pointer-events:none}
 @keyframes donate-pulse{0%{transform:scale(1);opacity:.85}75%{transform:scale(1.14);opacity:0}100%{transform:scale(1.14);opacity:0}}
 @keyframes heart-beat{0%,100%{transform:scale(1)}12%{transform:scale(1.16)}24%{transform:scale(1)}36%{transform:scale(1.1)}40%{transform:scale(1)}}
-.donate-heart{width:.95rem;height:.95rem;display:inline-block}
-.donate-inline{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase}
-@media (prefers-reduced-motion:no-preference){.donate-cta .donate-ring{animation:donate-pulse 2.2s ease-out infinite}.donate-heart{animation:heart-beat 1.8s ease-in-out infinite}}
-@media (prefers-reduced-motion:reduce){.donate-cta,.donate-cta::after,.donate-ring,.donate-heart{transition:none!important;animation:none!important}}
-
-/* Dock donate pill — desktop nav CTA. Mirrors .kbd-hint geometry but stays
-   acid-tinted (pill shape, tinted border) so the one commercial link in the
-   dock reads as intentional. Light theme swaps text to the AA-safe acid-ink. */
-.donate-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .68rem;border:1px solid rgba(var(--rgb-acid),.45);border-radius:9999px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--color-acid);transition:color .22s ease,border-color .22s ease,background-color .22s ease}
-.donate-pill:hover,.donate-pill:focus-visible{border-color:rgba(var(--rgb-acid),.8);background:rgba(var(--rgb-acid),.12)}
-.donate-pill:focus-visible{outline:2px solid var(--color-acid);outline-offset:2px}
-[data-theme="light"] .donate-pill{color:var(--color-acid-ink)}
 
 /* ═══════════════════════════════════════════════════════════════
    V2.2 — PERF-SAFE ORNAMENT PASS
@@ -289,57 +267,20 @@ body::after {
   opacity: 0.22;
 }
 [data-theme="light"] body::after { opacity: 0.22; }
-
-/* Conic charge-halo sweeping the back-to-top ring. The sweep rotates the
-   whole ::after via `transform` — a compositor-driven animation with zero
-   main-thread work per frame. (The previous version animated the gradient's
-   `--ring-angle` @property; custom-property animation can never run on the
-   compositor, and Lighthouse's non-composited-animations audit flagged it as
-   a CLS/jank contributor.) Visually identical: rotating the element rotates
-   the baked conic gradient with it. */
-.ring-top::after {
-  content: "";
-  position: absolute;
-  inset: -6px;
-  border-radius: 9999px;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg 295deg,
-    rgba(var(--rgb-acid), 0.9) 325deg,
-    transparent 360deg
-  );
-  -webkit-mask: radial-gradient(
-    farthest-side,
-    transparent calc(100% - 2.5px),
-    #000 calc(100% - 1.5px)
-  );
-  mask: radial-gradient(
-    farthest-side,
-    transparent calc(100% - 2.5px),
-    #000 calc(100% - 1.5px)
-  );
-  opacity: 0.65;
-  pointer-events: none;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .ring-top::after {
-    animation: ring-top-spin 5.5s linear infinite;
-  }
-}
-@keyframes ring-top-spin {
+@keyframes ring-top-spin{
   to { transform: rotate(360deg); }
 }
 
 /* Logo glitch flicker — hover/focus only, two quick steps then settles.
    clip-path slices + 1px translate are paint-only (no layout), and the
    existing oid-scan on [OID] runs alongside unchanged. */
-@keyframes logo-glitch {
+@keyframes logo-glitch{
   0%, 100% { clip-path: inset(0); translate: 0 0; }
   25% { clip-path: inset(12% -2% 56% -2%); translate: -2px 1px; }
   50% { clip-path: inset(58% -2% 8% -2%); translate: 2px -1px; }
   75% { clip-path: inset(34% -2% 38% -2%); translate: -1px 0; }
 }
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference){
   .logo-type:hover .logo-sinister,
   .logo-type:focus-visible .logo-sinister {
     animation: logo-glitch 0.45s steps(2, jump-none) 2;
@@ -376,7 +317,7 @@ body::after {
 .issue-card:focus-visible::before {
   opacity: 1;
 }
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce){
   .post-card::before,
   .issue-card::before { transition: none !important; }
 }

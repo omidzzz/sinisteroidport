@@ -28,7 +28,7 @@
   margin-top: 2.6rem;
   padding-inline: 1.25rem;
 }
-@media (min-width: 640px) {
+@media (min-width: 640px){
   .contact-deck-wild {
     padding-inline: 2rem;
   }
@@ -114,7 +114,7 @@
   display: none;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px){
   .contact-deck-wild {
     grid-template-columns: repeat(12, 1fr);
   }
@@ -157,11 +157,6 @@
     inset-inline-start: -1.8rem;
     rotate: -2deg;
   }
-  .cf-3 {
-    inset-block-end: -1.2rem;
-    inset-inline-end: 22%;
-    rotate: 1.4deg;
-  }
 }
 
 /* ── counter-tilts (mirrored for RTL, dropped on small screens) ── */
@@ -169,7 +164,7 @@
 .ch-tilt-b { rotate: -0.7deg; }
 [dir="rtl"] .ch-tilt-a { rotate: -0.7deg; }
 [dir="rtl"] .ch-tilt-b { rotate: 0.7deg; }
-@media (max-width: 1023px) {
+@media (max-width: 1023px){
   .ch-tilt-a,
   .ch-tilt-b {
     rotate: none;

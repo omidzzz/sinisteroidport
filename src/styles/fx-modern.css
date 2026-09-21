@@ -116,8 +116,8 @@ html {
    axis to full weight (and tightens its tracking) exactly while
    it crosses the viewport. Pure compositor-safe paint.
    ------------------------------------------------------------ */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
     .page-hero-title,
     .foot-brand,
     .issue-number,
@@ -126,16 +126,10 @@ html {
       animation-timeline: view();
       animation-range: entry 0% cover 40%;
     }
-    .page-hero-eyebrow,
-    .deconstrict {
-      animation: deconstrict linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 30%;
-    }
   }
 }
 
-@keyframes pump-wght {
+@keyframes pump-wght{
   from {
     font-variation-settings: "wght" 400;
   }
@@ -143,7 +137,7 @@ html {
     font-variation-settings: "wght" 900;
   }
 }
-@keyframes deconstrict {
+@keyframes deconstrict{
   from {
     letter-spacing: 0.18em;
   }
@@ -152,27 +146,14 @@ html {
   }
 }
 
-/* §3 OPTICAL ALIGNMENT of giant display type — strip the ghost
-   leading above the caps and descender slack below the baseline. */
-.page-hero-title,
-.tx-name,
-.foot-brand,
-.case-name {
-  text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
-  /* Safari 16 accelerate prefix */
-  leading-trim: both;
-  text-edge: cap;
-}
-
 /* ------------------------------------------------------------
    §4 SCROLL-DRIVEN REVEAL — where view() timelines exist the
    entrance is 100% CSS and the IntersectionObserver wrapper
    becomes a no-op for the default (up) variant. Varianted
    reveals keep the JS path.
    ------------------------------------------------------------ */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
     .reveal:not([data-rv]) {
       animation: rv-in linear both;
       animation-timeline: view();
@@ -180,7 +161,7 @@ html {
     }
   }
 }
-@keyframes rv-in {
+@keyframes rv-in{
   from {
     opacity: 0;
     transform: translateY(26px) scale(0.985);
@@ -215,7 +196,7 @@ details[open] .faq-bod {
   grid-template-rows: 1fr;
   opacity: 1;
 }
-@starting-style {
+@starting-style{
   details[open] .faq-bod {
     grid-template-rows: 1fr;
     opacity: 1;
@@ -230,37 +211,16 @@ details[open] .faq-bod {
 .palette-pop.is-closing {
   animation: palette-exit 190ms cubic-bezier(0.5, 0, 0.75, 0) both;
 }
-@keyframes overlay-exit {
+@keyframes overlay-exit{
   to {
     opacity: 0;
   }
 }
-@keyframes palette-exit {
+@keyframes palette-exit{
   to {
     opacity: 0;
     transform: translateY(-14px) scale(0.97);
   }
-}
-
-/* 5c mobile menu veil — discrete-friendly transition */
-.overlay-veil {
-  transition:
-    opacity 0.35s ease,
-    visibility 0.35s ease,
-    display 0.35s allow-discrete;
-}
-
-/* ------------------------------------------------------------
-   §6 :has() COUPLINGS
-   ------------------------------------------------------------ */
-/* When a case image is hovered, the whole row reacts: ghost
-   numeral + meta rail ignite in sync (previously only the img). */
-.case-row:has(.case-media-frame:hover) .case-ghost {
-  -webkit-text-stroke-color: rgba(var(--rgb-acid), 0.4);
-}
-.case-row:has(.case-media-frame:hover) .case-idx,
-.case-row:has(.case-media-frame:hover) .case-mark {
-  color: var(--color-acid);
 }
 
 /* Dock lights up when the active route link is present */
@@ -290,7 +250,7 @@ html[data-palette-open="true"] body {
 .bento-cq {
   container-type: inline-size;
 }
-@container (max-width: 70rem) {
+@container (max-width: 70rem){
   .bento-wall {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -302,7 +262,7 @@ html[data-palette-open="true"] body {
     translate: 0 0;
   }
 }
-@container (max-width: 40rem) {
+@container (max-width: 40rem){
   .bento-wall {
     grid-template-columns: 1fr;
   }
@@ -312,26 +272,12 @@ html[data-palette-open="true"] body {
 }
 
 /* ------------------------------------------------------------
-   §8 light-dark() — the handful of surfaces today overridden by
-   hand-written [data-theme="light"] blocks. color-scheme is set
-   on <html>, so light-dark resolves correctly.
-   ------------------------------------------------------------ */
-.noise {
-  opacity: light-dark(0.05, 0.07);
-  mix-blend-mode: light-dark(multiply, overlay);
-}
-
-/* ------------------------------------------------------------
    §9 interpolate-size / field-sizing / accent + caret
    ------------------------------------------------------------ */
-@supports (interpolate-size: allow-keywords) {
+@supports (interpolate-size: allow-keywords){
   :root {
     interpolate-size: allow-keywords;
   }
-}
-.palette-pop input {
-  field-sizing: content;
-  caret-color: var(--color-acid);
 }
 :root {
   accent-color: var(--color-acid);
@@ -350,7 +296,7 @@ body {
    §11 @media (scripting: none) — no-JS crawlers/readers must
    never see the .reveal opacity-zero trap.
    ------------------------------------------------------------ */
-@media (scripting: none) {
+@media (scripting: none){
   .reveal {
     opacity: 1 !important;
     transform: none !important;
@@ -367,13 +313,13 @@ body {
    layout). Hovering the logotype now physically tears the glyphs
    instead of only clipping slices.
    ------------------------------------------------------------ */
-@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (pointer: fine) and (prefers-reduced-motion: no-preference){
   .logo-type:hover,
   .glitchy:hover {
     animation: sig-break 0.35s steps(2, end) infinite;
   }
 }
-@keyframes sig-break {
+@keyframes sig-break{
   0%,
   100% {
     filter: url(#signal-break) drop-shadow(0 0 14px rgba(var(--rgb-acid), 0.45));
@@ -426,29 +372,14 @@ body {
 /* §14 mix-blend difference — acid-house CRT inversion on icon
    chips. Only on precise pointers; hover-only so it never
    repaints the page. */
-@media (pointer: fine) {
+@media (pointer: fine){
   .sec-ico:hover,
   .chip-brk:hover {
     mix-blend-mode: difference;
     color: #fff;
   }
 }
-
-/* ------------------------------------------------------------
-   §15 text-holo scrubbed by scroll — the iridescent sweep follows
-   the reader once instead of looping forever (calmer, cheaper).
-   Browsers without view() keep the original 9s drift.
-   ------------------------------------------------------------ */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .text-holo {
-      animation: holo-view linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 55%;
-    }
-  }
-}
-@keyframes holo-view {
+@keyframes holo-view{
   from {
     background-position-x: 115%;
   }
@@ -467,45 +398,22 @@ body {
 .hero-plate {
   view-transition-name: hero-plate;
 }
-.page-hero .page-index,
-.ghost-index {
-  view-transition-name: index-numeral;
-}
 ::view-transition-new(root) {
   animation: vt-new-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 ::view-transition-old(root) {
   animation: vt-old-out 0.25s ease both;
 }
-@keyframes vt-new-in {
+@keyframes vt-new-in{
   from {
     opacity: 0;
     translate: 0 14px;
   }
 }
-@keyframes vt-old-out {
+@keyframes vt-old-out{
   to {
     opacity: 0;
   }
-}
-
-/* ------------------------------------------------------------
-   §17 GHOST-NUMERAL DEPTH — the case ghost recedes behind the
-   row's plane (translateZ negative). The media/labels stay FLAT:
-   we deliberately do NOT push them forward, because perspective
-   scaling would make them slightly overflow their row box and
-   create the "card clipped" look. Recession only = depth with
-   zero clipping risk.
-   NOTE: .bento keeps `isolation: isolate` (needed so its ghost
-   numeral stays visible through the panel) which forces flat 3D,
-   so the bento gets no perspective stacking at all.
-   ------------------------------------------------------------ */
-.case-row {
-  perspective: 1400px;
-  transform-style: preserve-3d;
-}
-.case-ghost {
-  transform: translateZ(-48px);
 }
 
 /* ------------------------------------------------------------
@@ -535,100 +443,16 @@ body {
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
-@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (pointer: fine) and (prefers-reduced-motion: no-preference){
   .sec-ico:hover::before {
     opacity: 1;
     animation: plasma-spin 3s linear infinite;
   }
 }
-@keyframes plasma-spin {
+@keyframes plasma-spin{
   to {
     --ring-angle: 360deg;
   }
-}
-/* ------------------------------------------------------------
-   §19 CLIP-PATH SEAM UTILITIES — hazard-zigzag / cut-corner
-   section seams (paint-only). Apply .seam-cut-corner to a
-   section to notch its start-corner, or .seam-zigzag to a band
-   for a hazard-tape top edge.
-   ------------------------------------------------------------ */
-.seam-cut-corner {
-  clip-path: polygon(
-    0 0,
-    calc(100% - 1.25rem) 0,
-    100% 1.25rem,
-    100% 100%,
-    0 100%
-  );
-}
-[dir="rtl"] .seam-cut-corner {
-  clip-path: polygon(
-    1.25rem 0,
-    100% 0,
-    100% 100%,
-    0 100%,
-    0 1.25rem
-  );
-}
-.seam-zigzag {
-  clip-path: polygon(
-    0 0,
-    2.5% 40%,
-    5% 0,
-    7.5% 40%,
-    10% 0,
-    12.5% 40%,
-    15% 0,
-    17.5% 40%,
-    20% 0,
-    22.5% 40%,
-    25% 0,
-    27.5% 40%,
-    30% 0,
-    32.5% 40%,
-    35% 0,
-    37.5% 40%,
-    40% 0,
-    42.5% 40%,
-    45% 0,
-    47.5% 40%,
-    50% 0,
-    52.5% 40%,
-    55% 0,
-    57.5% 40%,
-    60% 0,
-    62.5% 40%,
-    65% 0,
-    67.5% 40%,
-    70% 0,
-    72.5% 40%,
-    75% 0,
-    77.5% 40%,
-    80% 0,
-    82.5% 40%,
-    85% 0,
-    87.5% 40%,
-    90% 0,
-    92.5% 40%,
-    95% 0,
-    97.5% 40%,
-    100% 0,
-    100% 100%,
-    0 100%
-  );
-}
-/* notch only the palette — the service rows and status panels carry
-   exterior glow pseudos (status-panel::before, prism halo) and hover
-   lift, so a clip-path on them would sever that glow and clip the
-   card tops. The palette is borderless and fully contained. */
-.palette-pop {
-  clip-path: polygon(
-    0 0,
-    calc(100% - 0.9rem) 0,
-    100% 0.9rem,
-    100% 100%,
-    0 100%
-  );
 }
 
 /* ------------------------------------------------------------
@@ -658,7 +482,7 @@ samp {
    §21 PRINT / FORCED-COLORS / CONTRAST — the neon decays
    gracefully to ink.
    ------------------------------------------------------------ */
-@media print {
+@media print{
   .noise,
   body::after,
   .cursor-dot,
@@ -687,19 +511,12 @@ samp {
     color: #000 !important;
   }
 }
-@media (forced-colors: active) {
-  .noise,
-  body::after,
-  .cursor-dot,
-  .cursor-ring,
-  .scanlines {
-    display: none !important;
-  }
+@media (forced-colors: active){
   * {
     border-color: CanvasText !important;
   }
 }
-@media (prefers-contrast: more) {
+@media (prefers-contrast: more){
   :root {
     --color-line: rgba(23, 21, 18, 0.4);
     --color-muted: #565248;

@@ -40,7 +40,7 @@
 
 /* Attention pulse — a subtle glow ring that draws the eye without being
    annoying. Respects reduced-motion. */
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference){
   .sin-chat-fab::after {
     content: "";
     position: absolute;
@@ -62,7 +62,7 @@
     animation: sin-chat-glow 3s ease-in-out infinite;
     box-shadow: 0 0 20px 4px rgba(var(--rgb-acid), 0.3);
   }
-  @keyframes sin-chat-attention {
+  @keyframes sin-chat-attention{
     0% {
       transform: scale(0.85);
       opacity: 0.7;
@@ -72,7 +72,7 @@
       opacity: 0;
     }
   }
-  @keyframes sin-chat-glow {
+  @keyframes sin-chat-glow{
     0%, 100% {
       opacity: 0;
     }
@@ -92,7 +92,7 @@
 /* Mobile: larger tap target ONLY. The glyph is a percentage of the button
    (below), so PC and mobile draw the IDENTICAL icon — the button is just a
    few px bigger under the thumb, which is all a hairline glyph needs. */
-@media (max-width: 640px) {
+@media (max-width: 640px){
   .sin-chat-fab {
     width: 4rem;
     height: 4rem;
@@ -142,7 +142,7 @@
 .sin-chat-fab:focus-visible svg {
   transform: scale(0.9);
 }
-@media (hover: hover) {
+@media (hover: hover){
   .sin-chat-fab:hover svg {
     transform: scale(1.06);
   }
@@ -157,32 +157,8 @@
     0 6px 28px rgba(0, 0, 0, 0.6);
 }
 
-/* ── Panel ────────────────────────────────────────────────── */
-.sin-chat-panel {
-  position: fixed;
-  inset-inline-end: 1.25rem;
-  bottom: 1.25rem;
-  z-index: 75;
-  display: flex;
-  flex-direction: column;
-  width: min(23rem, calc(100vw - 2.5rem));
-  height: min(34rem, calc(100dvh - 4.5rem));
-  overflow: hidden;
-  background: color-mix(in srgb, var(--color-panel) 92%, transparent);
-  border: 1px solid rgba(var(--rgb-accent), 0.4);
-  border-radius: 1rem;
-  box-shadow:
-    0 0 24px rgba(var(--rgb-accent), 0.18),
-    0 18px 48px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .sin-chat-panel {
-    animation: sin-chat-in 0.28s ease both;
-  }
-  @keyframes sin-chat-in {
+@media (prefers-reduced-motion: no-preference){
+  @keyframes sin-chat-in{
     from {
       opacity: 0;
       transform: translateY(12px) scale(0.98);
@@ -485,32 +461,6 @@
   color: var(--color-muted);
 }
 
-/* Copy buttons */
-.sin-chat-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.2rem 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.04em;
-  color: var(--color-muted);
-  cursor: pointer;
-  background: rgba(var(--rgb-accent-3), 0.4);
-  border: 1px solid rgba(var(--rgb-accent), 0.25);
-  border-radius: 0.35rem;
-  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-}
-.sin-chat-copy:hover {
-  color: rgb(var(--rgb-acid));
-  border-color: rgba(var(--rgb-acid), 0.5);
-  background: rgba(var(--rgb-acid), 0.08);
-}
-.sin-chat-copy.sin-chat-copy--done {
-  color: rgb(var(--rgb-acid));
-  border-color: rgba(var(--rgb-acid), 0.6);
-}
-
 /* Copy button for the whole message (top-right of bot bubble) */
 .sin-chat-msg-copy {
   position: absolute;
@@ -548,11 +498,11 @@
   color: var(--color-muted);
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference){
   .sin-chat-typing {
     animation: sin-chat-pulse 1.1s ease-in-out infinite;
   }
-  @keyframes sin-chat-pulse {
+  @keyframes sin-chat-pulse{
     50% {
       opacity: 0.45;
     }
@@ -623,60 +573,11 @@
   opacity: 0.4;
 }
 
-/* ── Disclosure note ──────────────────────────────────────── */
-.sin-chat-note {
-  margin: 0;
-  padding: 0.3rem 0.9rem 0.55rem;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
-  text-align: center;
-  color: var(--color-muted);
-  background: rgba(var(--rgb-accent-3), 0.3);
-  border-top: 1px solid rgba(var(--rgb-accent), 0.15);
-  opacity: 0.85;
-}
-
 /* Mobile: let the panel breathe on small screens */
-@media (max-width: 480px) {
+@media (max-width: 480px){
   .sin-chat-fab {
     inset-inline-end: 0.9rem;
     bottom: 0.9rem;
-  }
-
-  .sin-chat-panel {
-    inset-inline: 0.6rem;
-    bottom: 0.6rem;
-    width: auto;
-    height: min(30rem, calc(100dvh - 5rem));
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   ENHANCEMENTS — keep-mounted panel, chips, voice, mood tags,
-   clear button, jump pill, unhinged badge, ask button.
-   Same rules: scoped classes, design tokens, transform/opacity-only
-   animation gated behind prefers-reduced-motion.
-   ══════════════════════════════════════════════════════════════ */
-
-/* ── Keep-mounted panel show/hide ─────────────────────────── */
-.sin-chat-panel {
-  transition:
-    opacity 0.22s ease,
-    transform 0.22s ease,
-    visibility 0.22s;
-}
-
-.sin-chat-panel--hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(0.75rem) scale(0.98);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sin-chat-panel {
-    transition: none;
   }
 }
 
@@ -720,11 +621,11 @@
   border-radius: 0.4rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference){
   .sin-chat-unhinged {
     animation: sin-chat-unhinged-flicker 2.2s linear infinite;
   }
-  @keyframes sin-chat-unhinged-flicker {
+  @keyframes sin-chat-unhinged-flicker{
     0%,
     90%,
     100% {
@@ -767,16 +668,6 @@
 .sin-chat-jump:hover,
 .sin-chat-jump:focus-visible {
   background: rgb(var(--rgb-acid));
-}
-
-/* ── Mood tags ────────────────────────────────────────────── */
-.sin-chat-mood {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
 }
 
 .sin-chat-mood--hyper {
@@ -871,42 +762,6 @@
   color: var(--color-accent-on);
   background: rgba(var(--rgb-acid), 0.85);
   border-color: rgba(var(--rgb-acid), 0.9);
-}
-
-/* ── Voice input (mic) ────────────────────────────────────── */
-.sin-chat-mic {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 2.4rem;
-  height: 2.4rem;
-  padding: 0;
-  color: var(--color-muted);
-  cursor: pointer;
-  background: rgba(var(--rgb-accent), 0.08);
-  border: 1px solid rgba(var(--rgb-accent), 0.3);
-  border-radius: 0.75rem;
-  transition:
-    color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.sin-chat-mic:hover:not(:disabled),
-.sin-chat-mic:focus-visible {
-  color: rgb(var(--rgb-acid));
-  border-color: rgba(var(--rgb-acid), 0.5);
-}
-
-.sin-chat-mic--on {
-  color: rgb(var(--rgb-acid));
-  border-color: rgba(var(--rgb-acid), 0.8);
-  box-shadow: 0 0 12px rgba(var(--rgb-acid), 0.45);
-}
-
-.sin-chat-mic:disabled {
-  cursor: default;
-  opacity: 0.4;
 }
 
 /* Stop variant of the send button (■ while streaming) */
@@ -1007,10 +862,6 @@
 .sin-chat-pop-new svg {
   width: 12px;
   height: 12px;
-}
-
-.sin-chat-pop-current {
-  font-weight: 700;
 }
 
 /* ── Inspector ─────────────────────────────────────────────── */
@@ -1146,22 +997,6 @@
   color: var(--color-accent-2-ink);
 }
 
-/* ── Footer ask-chip (sits inside the chip-brk link set) ───── */
-.sin-ask-chip {
-  padding: 0.3rem 0.6rem;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--color-muted);
-}
-
-.sin-ask-chip:hover,
-.sin-ask-chip:focus-visible {
-  color: rgb(var(--rgb-acid));
-  border-color: rgba(var(--rgb-acid), 0.6);
-}
-
 /* ── Selection → Ask SINISTER ─────────────────────────────── */
 .sin-selection-ask {
   position: fixed;
@@ -1222,11 +1057,11 @@
   flex: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference){
   .sin-chat-fab-hint {
     animation: sin-chat-hint-in 0.3s ease both;
   }
-  @keyframes sin-chat-hint-in {
+  @keyframes sin-chat-hint-in{
     from {
       opacity: 0;
       transform: translateY(6px);
@@ -1236,13 +1071,6 @@
       transform: none;
     }
   }
-}
-
-/* ── Thread rows + delete ─────────────────────────────────── */
-.sin-chat-pop-row {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
 }
 
 .sin-chat-pop-row .sin-chat-pop-item {
@@ -1391,31 +1219,8 @@ html[data-theme="light"] .sin-tok-c {
   gap: 0.3rem;
   margin: 0.35rem 0 0.55rem;
 }
-.sin-chat-persona-btn {
-  padding: 0.25rem 0.55rem;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  color: var(--color-ink);
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(var(--rgb-accent), 0.35);
-  border-radius: 0.9rem;
-}
-.sin-chat-persona-btn:hover,
-.sin-chat-persona-btn:focus-visible {
-  border-color: rgba(var(--rgb-acid), 0.8);
-  color: rgb(var(--rgb-acid));
-}
 .sin-chat-persona-btn.is-on {
   background: rgba(var(--rgb-acid), 0.18);
   border-color: rgba(var(--rgb-acid), 0.85);
   color: rgb(var(--rgb-acid));
-}
-
-/* ── Voice error line ───────────────────────────────────────── */
-.sin-chat-voice-error {
-  display: block;
-  font-size: 0.62rem;
-  color: var(--color-muted);
-  margin: 0.15rem 0 0.4rem;
 }

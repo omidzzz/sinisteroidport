@@ -16,6 +16,8 @@
     "audit": "node scripts/tools/audit3.mjs",
     "verify:nav": "node scripts/tools/verify-nav-machine.mjs",
     "verify:craft": "node scripts/tools/verify-craft.mjs",
+    "prune:css": "node scripts/tools/prune-dead-css.mjs",
+    "probe:pages": "node scripts/tools/probe-pages.mjs",
     "verify-laptop": "node scripts/tools/verify-laptop-timing.mjs",
     "zip-out": "node scripts/build/zip-out.mjs",
     "deploy": "npm run build && npm run prepare-cpanel && npm run zip-out && npm run indexnow",
