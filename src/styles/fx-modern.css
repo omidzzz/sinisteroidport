@@ -41,51 +41,58 @@
    white-out bug that killed the JS version).
    ------------------------------------------------------------ */
 
-/* ---- Registered brand colors ---- */
+/* ---- Registered brand colors ----
+   Initial values MUST mirror the dark base in craft/tokens.css. These are
+   the values a registered property carries before the token sheet lands, so
+   a light initial (the old cream palette) made every first paint run a
+   0.5s warm→charcoal morph — the theme "blend" firing on load instead of
+   on toggle, and glass surfaces sampling warm mid-morph (axe's mobile
+   contrast failure on the rail was exactly that). With dark initials the
+   first paint is stable and the blend only runs on a real toggle. */
 @property --color-bg {
   syntax: "<color>";
   inherits: true;
-  initial-value: #f3efe7;
+  initial-value: #272727;
 }
 @property --color-panel {
   syntax: "<color>";
   inherits: true;
-  initial-value: #ebe5d8;
+  initial-value: #2f2f31;
 }
 @property --color-line {
   syntax: "<color>";
   inherits: true;
-  initial-value: rgba(23, 21, 18, 0.16);
+  initial-value: rgba(239, 241, 243, 0.14);
 }
 @property --color-ink {
   syntax: "<color>";
   inherits: true;
-  initial-value: #171512;
+  initial-value: #eff1f3;
 }
 @property --color-muted {
   syntax: "<color>";
   inherits: true;
-  initial-value: #6f6a5f;
+  initial-value: #696773;
 }
 @property --color-accent {
   syntax: "<color>";
   inherits: true;
-  initial-value: #b53a1a;
+  initial-value: #fed766;
 }
 @property --color-accent-2 {
   syntax: "<color>";
   inherits: true;
-  initial-value: #8a5a24;
+  initial-value: #009fb7;
 }
 @property --color-accent-3 {
   syntax: "<color>";
   inherits: true;
-  initial-value: #6f6a5f;
+  initial-value: #696773;
 }
 @property --color-acid {
   syntax: "<color>";
   inherits: true;
-  initial-value: #b53a1a;
+  initial-value: #fed766;
 }
 /* ---- Registered beam angle for future conic rings (kept for .beam
    utilities added later; the hero CTA sheen needs no registered prop).

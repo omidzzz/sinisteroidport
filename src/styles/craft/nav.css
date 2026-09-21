@@ -58,7 +58,9 @@
   padding: 0.4rem 0.75rem;
   border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-2);
-  background: color-mix(in srgb, var(--color-panel) 92%, transparent);
+  /* Same bleed-through argument as the rail: fixed chrome over scrolling
+     content needs the tint kept faint. */
+  background: color-mix(in srgb, var(--color-panel) 95%, transparent);
   box-shadow: var(--elev-2);
   -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
@@ -377,7 +379,7 @@ html[lang="fa"] .craft-node-label {
   padding-inline: 0.6rem 0.8rem;
   border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  background: color-mix(in srgb, var(--color-panel) 95%, transparent);
   color: var(--color-ink);
   box-shadow: var(--elev-1);
   cursor: pointer;
@@ -502,7 +504,10 @@ html[lang="fa"] .craft-menu-label {
   pointer-events: auto;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  /* 95%, not 88%: this is fixed chrome — bright content (the yellow CTA)
+     scrolls beneath it, and the bleed-through tint must stay too faint to
+     pull ink-dim text under AA. The blur keeps the glass read. */
+  background: color-mix(in srgb, var(--color-panel) 95%, transparent);
   -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
   box-shadow: var(--elev-1);
@@ -561,7 +566,10 @@ html[lang="fa"] .craft-menu-label {
 
 .craft-rail-idx {
   font-size: 0.58rem;
-  color: var(--color-muted);
+  /* Full ink, hierarchy by size: the ordinals sit next to the active chip's
+     yellow tint (and on glass over whatever scrolls beneath), so they get the
+     one color that passes AA on every surface the rail can overlap. */
+  color: var(--color-ink);
 }
 
 .craft-rail-link[data-active] {
