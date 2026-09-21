@@ -110,6 +110,10 @@ if (home) {
   // Fonts are inlined into the STYLESHEET (the config no longer inlines CSS
   // into the HTML), so the data-URI assertion lives in the CSS section above.
   check("no render-blocking font preload", !/<link[^>]+as="font"/.test(home));
+  // The colophon is deferred (content-visibility:auto), which keeps the only
+  // Persian glyphs an /en/ page paints — the "فا" pill — from dragging the
+  // 30 KiB Arabic face into the load window (measured at +273 ms, VeryHigh).
+  check("en defers the footer (cv-auto)", /class="[^"]*cv-auto/.test(home));
 }
 
 console.log("\n=== SHELL (FA / RTL) ===");
@@ -118,12 +122,20 @@ if (faHome) {
   check("RTL direction set", /dir="rtl"/.test(faHome));
   check("console rendered in fa", faHome.includes("craft-rail") && faHome.includes("craft-prompt"));
   check("fa theme init defaults to dark", faHome.includes('"dark"'));
-  // The network-served Persian face must be preloaded here, or
+  // The network-served Persian faces must be preloaded here, or
   // font-display:block would hold Persian text invisible on first paint.
-  // Attribute order is not guaranteed, so look ahead rather than in sequence.
+  // TWO faces are required, not one: the Arabic face carries the Persian
+  // text, the basic-Latin face carries every Latin string AND the
+  // u+2000-206f punctuation block (measured — see
+  // scripts/tools/scan-codepoints.mjs). Attribute order is not guaranteed,
+  // so look ahead rather than in sequence.
+  const faPreloads = faHome.match(/<link(?=[^>]*as="font")(?=[^>]*\.woff2)[^>]*>/g) ?? [];
+  check(`fa preloads both Persian faces (found ${faPreloads.length})`, faPreloads.length === 2);
+  // Font fetches are always CORS-mode; a preload without crossorigin is
+  // double-fetched rather than reused.
   check(
-    "fa preloads the Persian face",
-    /<link(?=[^>]*as="font")(?=[^>]*\.woff2)[^>]*>/.test(faHome)
+    "fa preloads are CORS-mode (crossorigin)",
+    faPreloads.length > 0 && faPreloads.every((tag) => /crossorigin/.test(tag))
   );
 }
 if (home) {

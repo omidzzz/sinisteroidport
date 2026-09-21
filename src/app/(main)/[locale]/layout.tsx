@@ -85,28 +85,30 @@ const jbMono = JetBrains_Mono({
 });
 
 // Persian voice — Cairo, one variable face (200–1000) carrying BOTH roles:
-// display at 700–800 answers Space Grotesk, text rides 400–500. A single
-// arabic-subset file keeps the inlined payload close to the previous
-// edition's (the previous candidate, Noto Kufi Arabic, measured 121 KiB —
-// over half the whole inline budget — and its static-text companion would
-// have added another ~33 KiB). The weight axis also keeps the kinetic
-// title's font-variation-settings working on /fa/. `preload: false` keeps
-// English pages from eagerly fetching the Arabic webfont (it decodes only
-// on fa pages, where the @font-face CSS is discovered in the inlined head
-// CSS on first render).
+// display at 700–800 answers Space Grotesk, text rides 400–500. Delivered as
+// unicode-range subsets and deliberately NEVER inlined: the stylesheet is
+// shared by both locales, so embedding the Arabic cuts would tax every /en/
+// page load with glyphs it can never render. Instead
+// scripts/build/inline-fonts.mjs injects `as="font"` preloads into the
+// prerendered /fa/ documents, so the fetch rides alongside the render-blocking
+// CSS instead of one serial round trip behind it — which is what keeps
+// font-display:block from holding Persian text invisible on first paint. The
+// weight axis also keeps the kinetic title's font-variation-settings working
+// on /fa/.
 const cairo = Cairo({
   subsets: ["arabic"],
   variable: "--font-cairo-var",
-  // block (was `optional` in the previous stack). The face is build-inlined
-  // now, so on /en/ nothing is fetched at all; on /fa/ the face is ready at
-  // head-parse and can never lose the optional race that used to lock in
-  // the fallback for a whole session (the reload-to-reload Persian type
+  // `block` (was `optional` in the previous stack). Never inlined but always
+  // preloaded on the pages that render it, so the face is resident before
+  // first text layout and can never lose the optional race that used to lock
+  // the fallback in for a whole session (the reload-to-reload Persian type
   // inconsistency).
   display: "block",
-  // No "Cairo Fallback" clone — with the face inlined it would never soften
-  // a swap, and its local() Arial metrics have full Arabic coverage, so it
-  // would hijack Persian glyphs before any generic family.
+  // No "Cairo Fallback" clone — its local() Arial metrics have full Arabic
+  // coverage, so it would hijack Persian glyphs before any generic family.
   adjustFontFallback: false,
+  // Locale-blind, therefore off: next/font would emit the preload on /en/ as
+  // well. The per-locale preload is injected post-build instead.
   preload: false,
 });
 
