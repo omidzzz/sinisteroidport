@@ -11,21 +11,35 @@
 
 .timeline {
   position: relative;
-  padding-inline-start: 2.25rem;
+  /* ONE source of truth for the rail: the gutter is the card indent, the
+     rail x is where the line sits — and the node's offset below is computed
+     from both, so line, dots and cards can never drift apart again (they
+     did: legacy pages.css leaked `translate: -50% -50%` and a 3.5rem item
+     indent under this sheet, putting the dots ~10px off the line and the
+     cards ~90px away from it). */
+  --tl-gutter: 2.25rem;
+  --tl-rail: 0.4rem;
+  padding-inline-start: var(--tl-gutter);
   margin-block: 1rem 3rem;
+  /* Legacy pages.css makes this a flex column with gap 1.25rem; the craft
+     rhythm is the item margin — without zeroing the gap the two stack
+     (37.6px between roles instead of 17.6px). */
+  gap: 0;
 }
 
-/* The rail: brightest at the top, dissolving into the ground at the end */
+/* The rail: fades in on the run-up to the first checkpoint, brightest
+   through the run, dissolving into the ground after the last one */
 .timeline::before {
   content: "";
   position: absolute;
   inset-block: 0.4rem 2.5rem;
-  inset-inline-start: 0.3rem;
+  inset-inline-start: var(--tl-rail);
   width: 1px;
   background: linear-gradient(
     to bottom,
-    var(--color-accent-2-fill),
-    rgba(0, 159, 183, 0.28) 45%,
+    transparent,
+    var(--color-accent-2-fill) 4rem,
+    rgba(0, 159, 183, 0.28) 52%,
     transparent
   );
 }
@@ -33,17 +47,35 @@
 .tl-item {
   position: relative;
   margin-block-end: 1.1rem;
+  /* Legacy indents every item 3.5rem; with the gutter now on .timeline
+     that stacked into a ~90px dead channel between the rail and the cards.
+     The rail owns the offset — cards start at the gutter edge. */
+  padding-inline-start: 0;
 }
 
-/* Node: hollow ring on the rail; fills with the signature on hover/focus */
+/* Node: hollow diamond on the rail; fills with the signature on hover */
 .tl-node {
   position: absolute;
-  inset-inline-start: -2.25rem;
+  /* Same two variables as the line, expressed from the item's box: the
+     node's centre lands exactly on var(--tl-rail). */
+  inset-inline-start: calc(var(--tl-rail) - var(--tl-gutter));
   inset-block-start: 1.45rem;
   width: 0.6rem;
   height: 0.6rem;
   border: 2px solid var(--color-accent-2-fill);
+  /* Legacy leaked 9999px — a circle reads as a circle no matter how you
+     rotate it; 2px gives the rotated square its checkpoint diamond. */
+  border-radius: 2px;
   background: var(--color-bg);
+  /* `translate` is a SEPARATE property from `transform`: legacy's -50% -50%
+     stacked with the translateX below and shoved every diamond ~5px off the
+     rail. The legacy declaration is now removed at the SOURCE (pages.css),
+     because the build's transform-merge pass folds this `none` into the
+     `transform` below — so this rule alone could never cancel it. */
+  translate: none;
+  /* Legacy also left a permanent yellow glow on the hollow ring — the
+     signature only belongs on it while you are on it (hover/focus). */
+  box-shadow: none;
   transform: translateX(-50%) rotate(45deg);
   transition:
     border-color var(--dur-base) var(--ease-out),
@@ -52,6 +84,11 @@
 }
 [dir="rtl"] .tl-node {
   transform: translateX(50%) rotate(45deg);
+}
+/* The legacy dashed pip-spin halo has no place in this register — the
+   checkpoint is the node, nothing orbits it. */
+.tl-node::after {
+  content: none;
 }
 
 .tl-card {
@@ -72,6 +109,10 @@
 .tl-item:hover .tl-card,
 .tl-item:focus-within .tl-card {
   transform: translateY(-2px);
+  /* Legacy .tl-card:hover paints border-color on every side; declaring the
+     full border here (higher specificity) keeps the signature on the
+     leading edge only. */
+  border-color: color-mix(in srgb, var(--color-accent-2-fill) 45%, transparent);
   border-inline-start-color: var(--color-accent-fill);
   box-shadow: var(--elev-2), var(--glow-accent-2);
 }
@@ -93,6 +134,9 @@
   padding: 0.2rem 0.5rem;
   border: 1px solid rgba(var(--rgb-accent), 0.32);
   border-radius: var(--radius-pill);
+  /* Legacy set margin-bottom 0.6rem — .tl-role's own margin-block owns
+     the rhythm below (0.7rem), so this would double it. */
+  margin: 0;
 }
 html[lang="fa"] .tl-period {
   letter-spacing: 0;
@@ -133,6 +177,12 @@ html[lang="fa"] .tl-company {
 .tl-point {
   position: relative;
   padding-inline-start: 1.1rem;
+  /* Legacy set mono/uppercase/tracking here and this sheet never cleared
+     them — the points are prose, not code, so they inherit the body face
+     and read sentence case. */
+  font-family: inherit;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color-ink-dim);
   font-size: 0.92rem;
   line-height: 1.6;
@@ -149,10 +199,10 @@ html[lang="fa"] .tl-company {
 
 @media (min-width: 48rem) {
   .timeline {
-    padding-inline-start: 3rem;
-  }
-  .tl-node {
-    inset-inline-start: -3rem;
+    /* The gutter grows on wide screens; the node offset is derived from
+       these two variables, so the rail follows without a second rule. */
+    --tl-gutter: 3rem;
+    padding-inline-start: var(--tl-gutter);
   }
   .tl-card {
     padding: 1.4rem 1.6rem 1.5rem;

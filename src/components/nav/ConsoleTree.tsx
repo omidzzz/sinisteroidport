@@ -35,12 +35,29 @@ export default function ConsoleTree({
   onHover: (index: number) => void;
   onCommit: (item: ConsoleItem) => void;
 }) {
+  // The listbox NEVER unmounts. The field and the disclosure button both
+  // aria-controls its id, and axe fails (aria-valid-attr-value) the moment
+  // that reference resolves to nothing — which is exactly what happened when
+  // an emptied filter replaced the whole <ul>. Keep the popup's shape: one
+  // disabled option carrying the stderr line.
   if (items.length === 0) {
     return (
-      <p className="craft-tree-empty" role="presentation">
-        <span aria-hidden>stderr: </span>
-        {dict.console.empty}
-      </p>
+      <ul
+        id={CONSOLE_IDS.list}
+        className="craft-tree"
+        role="listbox"
+        aria-label={dict.console.label}
+      >
+        <li
+          className="craft-tree-empty"
+          role="option"
+          aria-selected={false}
+          aria-disabled="true"
+        >
+          <span aria-hidden>stderr: </span>
+          {dict.console.empty}
+        </li>
+      </ul>
     );
   }
 

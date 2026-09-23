@@ -1,0 +1,242 @@
+/* ============================================================
+   CODE & CRAFT — nav enhancements
+   ------------------------------------------------------------
+   Supplementary magnetic hover and visual enhancements for the
+   console navigation system. Loaded after nav.css so it wins.
+   ============================================================ */
+
+/* ---------- Magnetic menu button hover ---------- */
+
+.craft-menu-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.craft-menu-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--btn-x, 50%) var(--btn-y, 50%),
+    color-mix(in srgb, var(--color-accent-fill) 15%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+  pointer-events: none;
+  transform: scale(0.85);
+}
+
+.craft-menu-btn:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (pointer: fine) {
+  .craft-menu-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .craft-menu-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+/* ---------- Enhanced node ring glow ---------- */
+
+.craft-console[data-open] .craft-ring {
+  filter: drop-shadow(0 0 12px rgba(var(--rgb-accent), 0.2));
+  transition: filter var(--dur-base) var(--ease-out);
+}
+
+/* ---------- Magnetic node hover ---------- */
+
+.craft-node {
+  transition:
+    transform 0.3s var(--ease-spring),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+.craft-node:hover {
+  transform:
+    rotate(calc(var(--i) * (360deg / var(--n))))
+    translateY(calc(var(--ring-radius) * -1 - 4px));
+}
+
+/* ---------- Tree row magnetic hover ---------- */
+
+.craft-row {
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.craft-row:hover {
+  transform: translateX(2px);
+}
+
+.craft-row[data-active]:hover {
+  box-shadow: 0 0 16px rgba(var(--rgb-accent), 0.2);
+}
+
+/* ---------- Status rail hover sweep ---------- */
+
+.craft-rail {
+  position: relative;
+  overflow: hidden;
+}
+
+.craft-rail::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-accent-fill) 12%, transparent),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+  pointer-events: none;
+}
+
+.craft-rail:hover::before {
+  opacity: 1;
+}
+
+/* ---------- Rail link enhancements ---------- */
+
+.craft-rail-link {
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+  border: 1px solid transparent;
+}
+
+.craft-rail-link:focus-visible {
+  border-color: var(--color-accent-2-fill);
+  outline-offset: -2px;
+}
+
+.craft-rail-link[data-active] {
+  border-color: color-mix(in srgb, var(--color-accent-fill) 30%, transparent);
+  box-shadow: 0 0 8px rgba(var(--rgb-accent), 0.15);
+}
+
+.craft-rail-link:hover {
+  border-color: var(--color-line);
+}
+
+/* ---------- Prompt scanning line animation ---------- */
+
+.craft-prompt::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius-2) + 2px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-accent-fill) 25%, transparent),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+  pointer-events: none;
+}
+
+.craft-prompt[data-open]::before {
+  opacity: 1;
+  animation: prompt-scan-line 2.5s linear infinite;
+}
+
+@keyframes prompt-scan-line {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------- Caret glow enhancement ---------- */
+
+.craft-prompt-caret {
+  text-shadow: 0 0 8px rgba(var(--rgb-accent), 0.6);
+}
+
+/* ---------- Ring idle animation (subtle breathing) ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .craft-console:not([data-open]) .craft-ring {
+    animation: ring-breathe 6s ease-in-out infinite;
+  }
+}
+
+@keyframes ring-breathe {
+  0%, 100% {
+    opacity: calc(var(--ring-a, 0) * 0.6);
+  }
+  50% {
+    opacity: calc(var(--ring-a, 0) * 0.9);
+  }
+}
+
+/* ---------- Command row teal glow ---------- */
+
+.craft-row[data-kind="command"][data-active] {
+  box-shadow: 0 0 12px rgba(var(--rgb-accent-2), 0.2);
+  border-color: color-mix(in srgb, var(--color-accent-2-fill) 30%, transparent);
+}
+
+.craft-row[data-kind="command"]:hover {
+  background: color-mix(in srgb, var(--color-accent-2-fill) 8%, transparent);
+  border-color: var(--color-line);
+}
+
+/* ---------- Row entrance stagger enhancement ---------- */
+
+.craft-console[data-open] .craft-row {
+  animation: row-in-stagger var(--dur-slow) var(--ease-out) both;
+}
+
+@keyframes row-in-stagger {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---------- Persian adjustments ---------- */
+
+html[lang="fa"] .craft-node-label {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html[lang="fa"] .craft-row-sub {
+  letter-spacing: 0;
+}
+
+/* ---------- Touch device adjustments ---------- */
+
+@media (pointer: coarse) {
+  .craft-node-label {
+    display: none;
+  }
+
+  .craft-ring {
+    display: none !important;
+  }
+}

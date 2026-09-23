@@ -1,17 +1,29 @@
 /* ============================================================
-   CODE & CRAFT — 04 EDUCATION · the record deck
+   CODE & CRAFT — 04 EDUCATION · the transcript ledger
    ------------------------------------------------------------
-   Three records as glass cards in a row: a mono year chip boxed like
-   a log timestamp, the degree set large, the detail in the reading
-   voice, the institution in teal. Same material as the timeline
-   cards, tighter rhythm — credentials, not narrative.
+   The record deck became a ledger: full-width bands ruled by
+   hairlines instead of three glass boxes — a mono year stamp
+   column at the start, the degree in display weight, the detail
+   in the reading voice, the institution in teal mono, and a
+   CSS-counter ghost index (01/02/…) riding the inline-end edge.
+
+   Everything education-specific is scoped under .edu-deck: the
+   contact channel board reuses .edu-card / .edu-year /
+   .edu-inst outside of it and keeps the glass-card contract
+   below untouched. The scoped selectors also restate — with
+   equal-or-higher specificity — every property legacy
+   pages.css sets on these children (.edu-card .edu-degree
+   etc.), because craft loads later but a (0,2,0) legacy rule
+   beats a (0,1,0) craft rule outright.
    ============================================================ */
 
 .edu-deck {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   margin-block: 1rem 3rem;
+  border-block-start: 1px solid var(--color-line);
+  counter-reset: edu;
 }
 
 .edu-card {
@@ -83,19 +95,141 @@ html[lang="fa"] .edu-inst {
   font-size: 0.85rem;
 }
 
+/* ---------- The ledger (education deck only) ---------- */
+
+.edu-deck .edu-card {
+  counter-increment: edu;
+  position: relative;
+  display: grid;
+  /* Single column by default; ≥48rem the year becomes its own stamp
+     column (see the media block below). */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "year"
+    "degree"
+    "detail"
+    "inst";
+  gap: 0.2rem 0;
+  padding: 1.35rem 0;
+  border: 0;
+  border-block-end: 1px solid var(--color-line);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  min-height: 0;
+  overflow: visible;
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+/* Ghost index — watermark behind the row text (negative z-index keeps it
+   under the copy but above the page ground). Latin counters can't
+   localize, so Persian drops it, like PageHero passes ۰۴ as real text. */
+.edu-deck .edu-card::before {
+  content: counter(edu, decimal-leading-zero);
+  position: absolute;
+  inset-block-start: 0.7rem;
+  inset-inline-end: 0.25rem;
+  z-index: -1;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  pointer-events: none;
+}
+html[lang="fa"] .edu-deck .edu-card::before {
+  content: none;
+}
+
+/* Legacy draws a radial hover glow through ::after — the ledger's hover is
+   the wash below, so the overlay goes. */
+.edu-deck .edu-card::after {
+  content: none;
+}
+
+.edu-deck .edu-year {
+  grid-area: year;
+  align-self: start;
+  justify-self: start;
+  margin-block-start: 0.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-ink);
+}
+
+.edu-deck .edu-degree {
+  grid-area: degree;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-ink);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.edu-deck .edu-detail {
+  grid-area: detail;
+  /* Legacy set mono/uppercase/tracking/yellow on this line — the ledger's
+     detail is prose in the reading voice. */
+  font-family: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-ink-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.edu-deck .edu-inst {
+  grid-area: inst;
+  /* Beats legacy's `margin-top: auto` (same longhand, later, equal count). */
+  margin-block-start: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  color: var(--color-accent-2-ink);
+}
+
+/* Hover: the band washes teal toward its end-rule. Rows don't lift —
+   movement belongs to the Tilt wrapper. (Out-specifies legacy's
+   translateY(-6px) rotate(-0.5deg) hover.) */
+.edu-deck .edu-card:hover,
+.edu-deck .edu-card:focus-within {
+  transform: none;
+  border-block-end-color: var(--color-accent-2-fill);
+  background-color: color-mix(in srgb, var(--color-accent-2-fill) 7%, transparent);
+  box-shadow: none;
+}
+
 @media (min-width: 48rem) {
-  .edu-deck {
-    grid-template-columns: repeat(3, 1fr);
-    align-items: stretch;
+  .edu-deck .edu-card {
+    grid-template-columns: minmax(7rem, max-content) minmax(0, 1fr);
+    grid-template-areas:
+      "year degree"
+      "year detail"
+      "year inst";
+    column-gap: 2rem;
+    padding-block: 1.6rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .edu-card {
+  .edu-card,
+  .edu-deck .edu-card {
     transition: none;
   }
   .edu-card:hover,
-  .edu-card:focus-within {
+  .edu-card:focus-within,
+  .edu-deck .edu-card:hover,
+  .edu-deck .edu-card:focus-within {
     transform: none;
   }
 }

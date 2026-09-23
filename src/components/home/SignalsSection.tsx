@@ -1,14 +1,13 @@
 import Link from "next/link";
 import LatestPostsLive from "./LatestPostsLive";
-import RainStrip from "./RainStrip";
 import Spotlight from "@/components/ui/Spotlight";
 import { Rail } from "@/components/ui/Section";
-import { Act } from "./Quire";
+import SysRule from "./SysRule";
 import { ArrowIcon, SignalIcon } from "@/components/ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import type { Post } from "@/lib/blog/types";
 
-/** HOME ACT IV — INCOMING TRANSMISSIONS. Rain strip + latest writings
+/** HOME ACT IV — INCOMING TRANSMISSIONS. Grid of latest writings
  * (prerendered, then refreshable from MySQL via /api/get_posts.php). */
 export default function SignalsSection({
   locale,
@@ -25,21 +24,15 @@ export default function SignalsSection({
     <>
       <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Rail label={sig} icon={<SignalIcon />} />
-        <div className="sig-zone relative min-w-0">
-          <div className="rain-bay">
-            <RainStrip />
-          </div>
-          <span aria-hidden dir="ltr" className="scrub-word bottom-0">
-            SIGNALS
-          </span>
-          <div className="mb-6 flex justify-end">
+        <div className="sig-grid relative min-w-0">
+          <div className="mb-5 flex justify-end">
             <Link
               href={loc(locale, "/blog")}
               prefetch={false}
-              className="group brk font-mono text-xs text-muted transition-colors hover:text-acid"
+              className="group font-mono text-xs text-muted transition-colors hover:text-acid"
             >
               {t.allPosts}
-              <ArrowIcon className="ms-2 inline align-[-2px] transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+              <ArrowIcon className="ms-1.5 inline align-[-2px] transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
             </Link>
           </div>
           <Spotlight className="min-w-0">
@@ -48,7 +41,7 @@ export default function SignalsSection({
         </div>
       </section>
 
-      <Act num="05" title={fa ? "پیوست" : "Appendix"} />
+      <SysRule num="05" label={fa ? "نوشته‌ها" : "Writing"} />
     </>
   );
 }

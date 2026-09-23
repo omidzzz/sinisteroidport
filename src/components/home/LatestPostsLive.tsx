@@ -100,14 +100,14 @@ export default function LatestPostsLive({
   }, []);
 
   return (
-    <div className="post-strip" dir="auto">
+    <div className="post-grid">
       {items.map((post, i) => {
         const title = postTitle(post, locale);
         const cover = post.featuredImage?.src || "";
         const fallback = isFallbackTranslation(post, locale);
         const date = postDateKey(post.date);
         const href = loc(locale, `/blog/${post.slug}`);
-        const cls = "post-card group holo-glare";
+        const cls = "post-card-grid";
         const card = (
           <>
             <span dir="ltr" aria-hidden className="post-idx">
@@ -132,13 +132,14 @@ export default function LatestPostsLive({
                 <span aria-hidden className="bento-scan" />
               </div>
             )}
-            <span className="post-card-date">
-              <span dir="ltr">{date || `00${i + 1}`}</span>
+            <div className="post-card-meta">
+              <span dir="ltr" className="post-date">
+                {date || `00${i + 1}`}
+              </span>
               <span dir="ltr" className="post-read">
                 {locale === "fa" ? "۳ دقیقه خواندن" : "3 MIN READ"}
               </span>
-              <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
-            </span>
+            </div>
             {fallback && (
               <span className="label">
                 {locale === "fa"
@@ -148,6 +149,12 @@ export default function LatestPostsLive({
             )}
             <span className="post-card-title">
               <ScrambleText text={title} />
+            </span>
+            <span className="post-card-action">
+              <ArrowIcon className="post-arrow" />
+              <span dir="ltr" className="post-action-label">
+                {locale === "fa" ? "باز کن" : "OPEN"}
+              </span>
             </span>
           </>
         );

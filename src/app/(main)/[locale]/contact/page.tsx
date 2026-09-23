@@ -222,7 +222,7 @@ export default async function ContactPage({
         <span className="contact-float cf-2" aria-hidden>{C.crypto}</span>
         {/* EMAIL — the hero channel */}
         <Reveal className="ch-hero-wrap">
-          <article className="edu-card contact-card ch-hero">
+          <article className="edu-card contact-card ch-hero contact-hero">
             <span className="ch-ghost" aria-hidden>@</span>
             <span className="ch-orbit" aria-hidden />
             <div className="contact-head">

@@ -83,6 +83,9 @@
 /* nav.css — the CRAFT CONSOLE (prompt dock, file tree, node ring, menu
    button). Replaces the retired Navbar + CommandPalette imports. */
 @import "../styles/craft/nav.css";
+/* nav-enhance.css — magnetic hover, glow effects, and visual polish
+   for the console navigation. Loaded after nav.css so it wins the cascade. */
+@import "../styles/craft/nav-enhance.css";
 /* lab.css — route 06, the graphics lab (plates + palette). */
 @import "../styles/craft/lab.css";
 /* pages.css — the shared route hero voice (02–08). */
@@ -97,6 +100,10 @@
 @import "../styles/craft/footer.css";
 /* home.css — the Code & Craft home acts (hero, ticker, telemetry cards). */
 @import "../styles/craft/home.css";
+/* home-advanced.css — Synapse, Ledger, Telemetry rework with advanced minimal styling */
+@import "../styles/craft/home-advanced.css";
+/* module-service.css — Clean service cards for ModuleBay */
+@import "../styles/craft/module-service.css";
 
 /* ---------- 6 · motion net — MUST STAY LAST ---------- */
 @import "../styles/craft/motion.css";

@@ -1,0 +1,345 @@
+/* ============================================================
+   CODE & CRAFT — MODULE BAY: RADICAL REWORK
+   ------------------------------------------------------------
+   "Mission Control" aesthetic: modules as orbital stations.
+   ============================================================ */
+
+/* ---------- Module Bay Container ---------- */
+
+.module-bay {
+  position: relative;
+  padding: 2rem 0;
+  overflow: visible;
+}
+
+.module-bay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* ---------- Orbital Track ---------- */
+
+.orbital-track {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 1rem 0;
+}
+
+.orbital-track::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 5%;
+  inset-inline-end: 5%;
+  height: 1px;
+  /* Teal hairline the orbital nodes ride on, fading at both ends — this
+     declaration and its closing brace shipped stranded at the file's far
+     end, so every rule between here and there parsed as nested inside this
+     one and never matched (a real, silent failure); caught by verify-craft's
+     "no rule swallows the rest of its sheet" check. Gradient args and tail
+     rejoined from that fragment. */
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent-2-fill) 20%,
+    var(--color-accent-2-fill) 80%,
+    transparent
+  );
+  opacity: 0.2;
+  transform: translateY(-50%);
+}
+
+/* ---------- Orbital Header (status bar) ---------- */
+
+.orbital-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 1rem;
+  background: color-mix(in srgb, var(--color-panel) 85%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  margin-bottom: 1.5rem;
+}
+
+.orbital-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.orbital-stat-label {
+  color: var(--color-muted);
+}
+
+.orbital-stat-sep {
+  color: var(--color-line);
+}
+
+.orbital-stat-value {
+  color: var(--color-accent-2-ink);
+  font-weight: 500;
+}
+
+/* ---------- Module Node ---------- */
+
+.module-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  min-width: 140px;
+  max-width: 180px;
+  background: color-mix(in srgb, var(--color-panel) 90%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+  z-index: 1;
+}
+
+.module-node::before {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent-2-fill);
+  box-shadow: 0 0 8px rgba(var(--rgb-accent-2), 0.5);
+  animation: node-pulse 2s ease-in-out infinite;
+  margin-bottom: 0.25rem;
+}
+
+@keyframes node-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.9); }
+}
+
+.module-node:hover {
+  border-color: var(--color-accent-2-fill);
+  background: color-mix(in srgb, var(--color-accent-2-fill) 10%, transparent);
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px rgba(var(--rgb-accent-2), 0.15), var(--elev-1);
+}
+
+.module-node:hover::before {
+  background: var(--color-accent-fill);
+  box-shadow: 0 0 12px rgba(var(--rgb-accent), 0.6);
+  animation: node-pulse-active 1s ease-in-out infinite;
+}
+
+@keyframes node-pulse-active {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+/* Index/ordinal chip inside a node — pinned LTR like the rest of the mono
+   chrome. (Its opener sat here while the declarations were stranded at the
+   file's tail — the same scramble that split .orbital-track::before and
+   .module-chip; rejoined so no rule nests inside another.) */
+.module-idx {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  color: var(--color-muted);
+  direction: ltr;
+}
+
+.module-telemetry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  text-align: center;
+}
+
+.module-telemetry-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.module-telemetry-label {
+  color: var(--color-muted);
+}
+
+.module-telemetry-value {
+  color: var(--color-accent-2-ink);
+  font-weight: 500;
+}
+
+.module-telemetry-sep {
+  color: var(--color-line);
+}
+
+.module-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+}
+
+.module-node:hover .module-chips {
+  max-height: 60px;
+  opacity: 1;
+}
+
+.module-chip {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.4rem;
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  color: var(--color-ink-dim);
+}
+
+.module-node[data-variant="asymmetric"] {
+  flex-direction: row;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  align-items: flex-start;
+}
+
+.module-node[data-variant="asymmetric"]::before {
+  position: absolute;
+  inset-block-start: 1rem;
+  inset-inline-end: 1rem;
+  width: 8px;
+  height: 8px;
+}
+
+.module-node[data-variant="asymmetric"] .module-idx {
+  margin-inline-end: 1rem;
+}
+
+.module-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: -1rem;
+}
+
+.module-stack .module-node {
+  margin-inline: -0.5rem;
+  margin-block-end: -0.5rem;
+}
+
+.module-diagonal {
+  position: relative;
+}
+
+.module-diagonal .module-node {
+  transform: rotate(-2deg);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.module-diagonal .module-node:nth-child(odd) {
+  transform: rotate(2deg);
+}
+
+.module-diagonal .module-node:nth-child(1) { transform: rotate(-1.5deg) translateY(0); }
+.module-diagonal .module-node:nth-child(2) { transform: rotate(1.5deg) translateY(-8px); }
+.module-diagonal .module-node:nth-child(3) { transform: rotate(-1.5deg) translateY(-16px); }
+.module-diagonal .module-node:nth-child(4) { transform: rotate(1.5deg) translateY(-24px); }
+
+.module-diagonal .module-node:hover {
+  transform: rotate(0deg) translateY(-4px);
+}
+
+/* ---------- RTL ---------- */
+
+[dir="rtl"] .module-node[data-variant="asymmetric"] {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .module-node[data-variant="asymmetric"] .module-idx {
+  margin-inline-start: 1rem;
+  margin-inline-end: 0;
+}
+
+/* ---------- Persian ---------- */
+
+html[lang="fa"] .module-title,
+html[lang="fa"] .module-telemetry,
+html[lang="fa"] .module-chip {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ---------- Reduced Motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .module-node::before { animation: none; }
+  .module-node:hover::before { animation: none; }
+}
+
+.module-connector {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  margin: 0 0.5rem;
+  z-index: 2;
+}
+
+.module-connector::after {
+  content: "";
+  position: absolute;
+  inset: 50%;
+  width: 3px;
+  height: 3px;
+  margin: -1.5px 0 0 -1.5px;
+  background: var(--color-muted);
+  border-radius: 50%;
+  opacity: 0.3;
+  transition: opacity var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+
+.module-node:hover + .module-connector::after {
+  opacity: 0.8;
+  background: var(--color-accent-2-fill);
+}
+
+.module-title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  text-align: center;
+  line-height: 1.3;
+}

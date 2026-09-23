@@ -104,16 +104,24 @@ if (home) {
   const railLinks = (home.match(/craft-rail-link/g) || []).length;
   check(`status rail carries 8 route links (found ${railLinks})`, railLinks === 8);
   check("active route marked", /aria-current="page"/.test(home));
+  // One landmark for the whole surface: the shell renders as <nav>, and the
+  // disclosure announces the listbox popup it reveals.
+  check(
+    "console is a single nav landmark",
+    /<nav[^>]*class="craft-console"/.test(home)
+  );
+  check("disclosure names its popup", home.includes('aria-haspopup="listbox"'));
   check("no legacy printed-edition copy", !home.includes("printed, not built"));
   check("colophon speaks the console register", home.includes("working console"));
   check("legacy dock chrome gone", !home.includes("dock-wrap") && !home.includes("mob-dock"));
   // Fonts are inlined into the STYLESHEET (the config no longer inlines CSS
   // into the HTML), so the data-URI assertion lives in the CSS section above.
   check("no render-blocking font preload", !/<link[^>]+as="font"/.test(home));
-  // The colophon is deferred (content-visibility:auto), which keeps the only
-  // Persian glyphs an /en/ page paints — the "فا" pill — from dragging the
-  // 30 KiB Arabic face into the load window (measured at +273 ms, VeryHigh).
-  check("en defers the footer (cv-auto)", /class="[^"]*cv-auto/.test(home));
+  // The colophon renders EAGERLY: it has no content-visibility placeholder,
+  // because a skipped footer showed as a blank band at the page end and then
+  // painted abruptly. (Its real height measures ~514px, the old `auto 720px`
+  // guess reserved 720px, so the document also jumped by the difference.)
+  check("footer renders eagerly (no cv-auto)", !/<footer[^>]*cv-auto/.test(home));
 }
 
 console.log("\n=== SHELL (FA / RTL) ===");

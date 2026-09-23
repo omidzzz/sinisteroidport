@@ -200,19 +200,15 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
         onPointerLeave={() => setPressed(false)}
         onClick={() => (visible ? close() : open())}
       >
-        {/* A plain chat glyph, drawn the way every other icon on the site is
-            drawn: one 1.5px currentColor stroke on a 24×24 grid, round caps
-            and joins, no filter, no fill. It inherits the button's `color`
-            (the acid token in the neon registers, --color-ink on paper).
-            The previous art — an elongated alien skull with an ink outline,
-            a glow filter, slanted void eyes and a fanged jaw that cracked
-            open on press — was ~145 lines of SVG plus ~190 lines of .al-*
-            animation rules, and it was the loudest object in an edition
-            built entirely from hairlines and rules. The print register draws
-            its marks as rules; so does this. Press/tap is a plain scale on
-            the glyph (agent-chat.css), not a change of face. */}
+        {/* Robot face — rounded-rect head, antenna with ball on top, two large
+            filled optic-sensor circles. The three features that read as "machine"
+            at any size: the boxy head, the antenna ball, and the optic sensors.
+            The viewBox is cropped tight (2 0 20 20) around the art: with a full
+            24x24 canvas ~60% of the box was empty padding, so even a larger
+            percentage only enlarged the padding. Same shapes, same 1.5 stroke,
+            just the face filling its frame. Inherits the button's `color`. */}
         <svg
-          viewBox="0 0 24 24"
+          viewBox="2 0 20 20"
           fill="none"
           stroke="currentColor"
           strokeWidth={1.5}
@@ -220,7 +216,11 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
           strokeLinejoin="round"
           aria-hidden
         >
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z" />
+          <rect x="3" y="7" width="18" height="12" rx="3" />
+          <line x1="12" y1="7" x2="12" y2="3" />
+          <circle cx="12" cy="2.3" r="1.5" fill="currentColor" />
+          <circle cx="8.5" cy="12" r="2" fill="currentColor" />
+          <circle cx="15.5" cy="12" r="2" fill="currentColor" />
         </svg>
         {/* unread-response dot — lit while the panel is hidden and SINISTER
             has finished scheming */}

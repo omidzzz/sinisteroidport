@@ -73,6 +73,46 @@
   box-shadow: var(--elev-2), var(--glow-accent);
 }
 
+/* Keyboard focus is its own state: [data-open] says "the console is up"
+   (and lights up even in browse mode, with focus elsewhere), this says
+   "the field owns the caret" — the input itself carries outline:none, so
+   the ring has to live on the wrapper it can actually style. */
+.craft-prompt:focus-within {
+  outline: 2px solid var(--color-accent-2-ink);
+  outline-offset: 2px;
+}
+
+/* Scanning line effect when prompt is focused/open */
+.craft-prompt::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius-2) + 2px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-accent-fill) 20%, transparent),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+  pointer-events: none;
+}
+
+.craft-prompt[data-open]::before {
+  opacity: 1;
+  animation: prompt-scan 3s linear infinite;
+}
+
+@keyframes prompt-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 .craft-prompt-host {
   flex: 0 0 auto;
   font-family: var(--font-mono);
@@ -89,7 +129,9 @@
   font-size: 0.82rem;
   line-height: 1;
   color: var(--color-accent-fill);
+  text-shadow: 0 0 8px rgba(var(--rgb-accent), 0.6);
 }
+
 @media (prefers-reduced-motion: no-preference) {
   .craft-prompt-caret {
     animation: craft-caret 1.6s steps(1, end) infinite;
@@ -113,38 +155,54 @@
   background: transparent;
   color: var(--color-ink);
   font-family: var(--font-mono);
-  font-size: 0.86rem;
-  line-height: 1.6;
-  padding: 0.15rem 0;
-}
-.craft-prompt-input::placeholder {
-  color: var(--color-muted);
-}
-.craft-prompt-input:focus {
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
   outline: none;
+  caret-color: var(--color-accent-fill);
 }
-/* The field is the focus owner, so the ring belongs on the whole pill. */
-.craft-prompt:focus-within {
-  outline: 2px solid var(--color-accent-2-ink);
-  outline-offset: 2px;
+
+.craft-prompt-input::placeholder {
+  color: var(--color-ink-dim);
+  opacity: 0.5;
 }
 
 .craft-prompt-meta {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
+  gap: 0.4rem;
   font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-ink-dim);
+  letter-spacing: 0.04em;
 }
+
 .craft-prompt-count {
-  display: inline-grid;
-  place-items: center;
-  min-width: 1.9rem;
-  padding: 0.1rem 0.35rem;
-  border: 1px solid var(--color-line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6rem;
+  height: 1.2rem;
+  padding: 0 0.3rem;
+  background: color-mix(in srgb, var(--color-accent-fill) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent-fill) 40%, transparent);
   border-radius: var(--radius-pill);
-  background: rgba(var(--rgb-accent), 0.12);
   color: var(--color-accent-ink);
-  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.craft-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  height: 1.2rem;
+  padding: 0 0.35rem;
+  background: color-mix(in srgb, var(--color-panel) 60%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  color: var(--color-ink-dim);
+  font-size: 0.58rem;
 }
 
 /* Persian: the mono chrome resolves through the Persian face. */
@@ -194,8 +252,15 @@ html[lang="fa"] .craft-prompt-host {
   border-inline-start: 2px solid transparent;
   transition:
     background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-spring);
 }
+
+/* Magnetic hover: rows drift toward the pointer slightly */
+.craft-row:hover {
+  transform: translateX(2px);
+}
+
 .craft-console[data-open] .craft-row {
   animation: craft-row-in var(--dur-base) var(--ease-out) backwards;
   animation-delay: calc(var(--row-i, 0) * 22ms);
@@ -314,6 +379,11 @@ html[lang="fa"] .craft-notice {
   pointer-events: none;
 }
 
+/* Subtle ring glow when active */
+.craft-console[data-open] .craft-ring {
+  filter: drop-shadow(0 0 12px rgba(var(--rgb-accent), 0.2));
+}
+
 .craft-node {
   position: absolute;
   inset-block-start: 0;
@@ -333,16 +403,23 @@ html[lang="fa"] .craft-notice {
   box-shadow: 0 0 10px rgba(var(--rgb-accent-2), 0.5);
   transition:
     transform var(--dur-fast) var(--ease-spring),
-    background-color var(--dur-fast) var(--ease-out);
+    background-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
 }
+
+.craft-node:hover .craft-node-dot,
 .craft-node[data-hot] .craft-node-dot {
   background: var(--color-accent-fill);
   box-shadow: var(--glow-accent);
   transform: scale(1.6);
 }
 
-/* The label appears only on the node under the cursor, counter-rotated so
-   it stays readable wherever it sits on the ring. */
+/* Magnetic hover effect on nodes */
+.craft-node:hover {
+  transform: rotate(calc(var(--i) * (360deg / var(--n))))
+    translateY(calc(var(--ring-radius) * -1 - 4px));
+}
+
 .craft-node-label {
   position: absolute;
   inset-block-start: -0.5rem;
@@ -358,10 +435,13 @@ html[lang="fa"] .craft-notice {
   transform-origin: 0 50%;
   transition: opacity var(--dur-fast) var(--ease-out);
 }
+
+.craft-node:hover .craft-node-label,
 .craft-node[data-hot] .craft-node-label {
   opacity: 1;
   color: var(--color-accent-ink);
 }
+
 html[lang="fa"] .craft-node-label {
   letter-spacing: 0;
   text-transform: none;
@@ -461,8 +541,17 @@ html[lang="fa"] .craft-menu-label {
   .craft-row-sub {
     display: none;
   }
+  /* Drop the route line from the LAYOUT, not from the accessible name:
+     display:none would strip "where am I?" from screen readers on exactly
+     the phones that hide it. Clip to 1px instead — visually gone, still
+     part of the button's name at every viewport. */
   .craft-menu-current {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 
@@ -470,6 +559,85 @@ html[lang="fa"] .craft-menu-label {
 @media (pointer: coarse) {
   .craft-ring {
     display: none;
+  }
+}
+
+/* ---------- 9b · Mobile: the console collapses to ONE menu FAB ---------- */
+/* On a phone the full dock (button + status rail + prompt ≈ 210px of fixed
+   chrome, and eight nowrap rail labels colliding at ≤412px) is too much.
+   The collapsed console becomes a single menu button stacked directly
+   ABOVE the floating assistant (.sin-chat-fab, agent-chat.css — mirror its
+   inset/size values below); everything else — filter field, nav links,
+   verbs — lives behind the tap and grows upward from the corner.
+   column-reverse flips only the visual stack: the DOM keeps the button
+   first, so tab order and the landmark reading order stay put. */
+@media (max-width: 48rem) {
+  .craft-console {
+    /* The assistant hardcodes z-index 74; the two now share a corner, so
+       the console's chrome must win (panel, button, not the FAB disc). */
+    z-index: 75;
+    align-items: flex-end;
+    padding-inline: 0;
+  }
+  .craft-dock {
+    flex-direction: column-reverse;
+    /* Children stretch to the dock's card width; the FAB keeps its base
+       align-self:flex-end and explicit width, so it stays a corner circle. */
+    align-items: stretch;
+    gap: 0.5rem;
+    width: min(24rem, calc(100vw - 2.5rem));
+    /* The button's right edge lands on the assistant's right edge … */
+    margin-inline-end: 1.25rem;
+    /* … and its bottom clears the assistant's top (1.25rem inset + a
+       3.9rem disc). The shell's own safe-area padding is the air between. */
+    margin-block-end: calc(1.25rem + 3.9rem);
+  }
+  /* Collapsed = the button alone. The rail retires here (eight labels only
+     fit as a desktop status line); prompt + notice join the open menu. */
+  .craft-dock > .craft-rail,
+  .craft-dock > .craft-prompt,
+  .craft-dock > .craft-notice,
+  .craft-dock > .craft-ring {
+    display: none;
+  }
+  .craft-console[data-open] .craft-prompt {
+    display: flex;
+  }
+  .craft-console[data-open] .craft-notice {
+    display: block;
+  }
+  /* The button reads as a FAB: circle, glyph only — label + current route
+     stay clipped (never display:none) so the accessible name still answers
+     "Menu, <route>" at every viewport. */
+  .craft-menu-btn {
+    width: 3rem;
+    height: 3rem;
+    min-height: 3rem;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .craft-menu-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+/* agent-chat.css grows the assistant to 4rem at ≤640px — mirror the stack. */
+@media (max-width: 40rem) {
+  .craft-dock {
+    margin-block-end: calc(1.25rem + 4rem);
+  }
+}
+/* … and pulls it in to a 0.9rem inset at ≤480px — mirror both numbers. */
+@media (max-width: 30rem) {
+  .craft-dock {
+    margin-inline-end: 0.9rem;
+    margin-block-end: calc(0.9rem + 4rem);
+    width: min(24rem, calc(100vw - 1.8rem));
   }
 }
 
@@ -532,7 +700,12 @@ html[lang="fa"] .craft-menu-label {
 .craft-rail-item {
   display: flex;
   flex: 1 1 auto;
-  min-width: 0;
+  /* Never shrink below the label: min-width:0 let the eight nowrap labels
+     squeeze under their own text width and paint OVER each other — the
+     text collision seen on phones. At content width the list overflows
+     instead, and the rail does what its comment promises: scroll, with
+     snap. Items still flex-grow to fill whenever everything fits. */
+  min-width: max-content;
   scroll-snap-align: center;
 }
 
@@ -542,7 +715,9 @@ html[lang="fa"] .craft-menu-label {
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  min-height: 40px;
+  /* 44px — the same touch contract as the menu button and the tree rows;
+     one target size across every control the dock ships. */
+  min-height: 44px;
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-pill);
   font-family: var(--font-mono);

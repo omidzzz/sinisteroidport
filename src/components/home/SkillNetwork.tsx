@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/ui/Reveal";
 import { Rail } from "@/components/ui/Section";
-import { Act } from "./Quire";
+import SysRule from "./SysRule";
 import { ArrowIcon, SparkIcon } from "@/components/ui/icons";
 import { trackEvent } from "@/lib/analytics";
 import { loc, type Locale } from "@/lib/i18n";
@@ -128,8 +128,8 @@ const PALETTES: Record<
   "dark" | "light",
   { acid: string; cyan: string; violet: string; ink: string }
 > = {
-  dark: { acid: "#e05a33", cyan: "#c9a35a", violet: "#948d7d", ink: "#e9e3d6" },
-  light: { acid: "#b53a1a", cyan: "#8a5a24", violet: "#6f6a5f", ink: "#171512" },
+  dark: { acid: "#009fb7", cyan: "#fed766", violet: "#a1a0ab", ink: "#eff1f3" },
+  light: { acid: "#00707f", cyan: "#7a5c00", violet: "#52525e", ink: "#272727" },
 };
 
 /**
@@ -678,16 +678,15 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           const isHub = n.kind === "hub";
           const isHot = i === hot || i === sel;
           const lit = focusGroup !== null && n.group === focusGroup;
-          /* Dark idle nodes/labels: neon acid-lime by default (matches the
-             house identity); cyan is reserved for the hovered/lit state so
-             focus always reads as a different signal. Light theme uses ink. */
-          const [r, g, bl] = isHub
-            ? A()
-            : lit || isHot
-              ? Y()
-              : dark
-                ? A()
-                : K();
+          /* Dark idle cat nodes: teal; leaf nodes: muted gray (matches legend).
+             Yellow reserved for hovered/lit/hub state. Light theme uses ink. */
+          const [r, g, bl] = isHub ? Y() : n.kind === "leaf"
+              ? (lit || isHot ? Y() : dark ? V() : K())
+              : lit || isHot
+                ? Y()
+                : dark
+                  ? A()
+                  : K();
           const breathe = reducedMotion
             ? 1
             : 1 + Math.sin(t * 2 + n.phase) * (isHub ? 0.05 : 0.025);
@@ -697,7 +696,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
              29 createRadialGradient calls per frame. Light theme stays clean
              and crisp — near-black ink on paper needs no smoke. */
           if (isHot || isHub || dark) {
-            const spr = isHot ? "cyan" : "acid";
+            const spr = (isHot || isHub) ? "cyan" : "acid";
             /* Inner tight halo — bright core glow. */
             paintGlow(spr, n.x, n.y, n.r * 4.4, isHub ? 0.95 : isHot ? 0.9 : 0.5);
             /* Outer wide bloom — hot/hub ONLY. */
@@ -749,7 +748,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
               n.y,
               n.r,
             );
-            rg.addColorStop(0, `rgba(${A()[0]},${A()[1]},${A()[2]},1)`);
+            rg.addColorStop(0, `rgba(${Y()[0]},${Y()[1]},${Y()[2]},1)`);
             rg.addColorStop(1, `rgba(${V()[0]},${V()[1]},${V()[2]},1)`);
             ctx.fillStyle = rg;
           } else {
@@ -854,77 +853,68 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
         className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8"
       >
         <Rail label={kicker} icon={<SparkIcon />} />
-        <div className="relative">
-          <span aria-hidden dir="ltr" className="scrub-word rev-dir top-[-0.45em]">
-            SYNAPSE
-          </span>
+        <Reveal>
+          <div className="net-stage relative mt-2 overflow-hidden -mx-5 sm:mx-0 rounded-none sm:rounded-2xl">
+            <div ref={wrapRef} className="relative h-[460px] sm:h-[540px] lg:h-[600px]">
+              <canvas
+                ref={canvasRef}
+                className="absolute inset-0 block cursor-default"
+                style={{ touchAction: "pan-y" }}
+                aria-label={fa ? "نقشه تعاملی مهارت‌ها" : "Interactive map of Omid's skills"}
+                role="img"
+                data-cursor={fa ? "بکش" : "DRAG"}
+              />
 
-          <Reveal>
-            <div className="net-stage relative mt-2 overflow-hidden -mx-5 sm:mx-0 rounded-none sm:rounded-2xl">
-              <div ref={wrapRef} className="relative h-[460px] sm:h-[540px] lg:h-[600px]">
-                <canvas
-                  ref={canvasRef}
-                  className="absolute inset-0 block cursor-default"
-                  style={{ touchAction: "pan-y" }}
-                  aria-label={fa ? "نقشه تعاملی مهارت‌ها" : "Interactive map of Omid's skills"}
-                  role="img"
-                  data-cursor={fa ? "بکش" : "DRAG"}
-                />
-
-                {/* HUD — active node readout */}
-                <div
-                  dir={fa ? "rtl" : "ltr"}
-                  className="pointer-events-none absolute top-4 z-10 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted"
-                  style={fa ? { left: "1rem" } : { right: "1rem" }}
-                >
-                  {active ? (
-                    <span className="net-hud block rounded-lg border px-3 py-2">
-                      <b className="font-display text-[0.8rem] tracking-normal text-[var(--color-ink)]">
-                        {active.full}
-                      </b>
-                      <span className="mt-0.5 block opacity-70">
-                        {active.level > 0
-                          ? `${hudLevel} ${active.level}/5`
-                          : fa
-                            ? "دسته‌بندی"
-                            : "category"}
-                      </span>
-                    </span>
-                  ) : (
-                    <span className="block opacity-60">{hint}</span>
-                  )}
-                </div>
-              </div>
-
+              {/* HUD — active node readout */}
               <div
                 dir={fa ? "rtl" : "ltr"}
-                className="flex flex-wrap items-center justify-between gap-3 px-5 pb-1 pt-3"
+                className="net-hud"
+                style={fa ? { left: "1rem" } : { right: "1rem" }}
               >
-                <p className="net-legend font-mono text-[0.6rem] uppercase tracking-[0.16em] text-muted">
-                  <span className="net-legend-item" data-k="hub">
-                    {fa ? "هاب" : "Hub"}
-                  </span>
-                  <span className="net-legend-item" data-k="cat">
-                    {fa ? "دسته" : "Cat"}
-                  </span>
-                  <span className="net-legend-item" data-k="leaf">
-                    {fa ? "برگ" : "Leaf"}
-                  </span>
-                </p>
-                <a
-                  href={loc(locale, "/skills")}
-                  className="btn-ghost group text-xs"
-                  onClick={() => trackEvent("skill_network_cta", { locale: locale as string })}
-                >
-                  {cta}
-                  <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
-                </a>
+                {active ? (
+                  <>
+                    <span className="net-hud-label">{fa ? "مهارت" : "skill"}</span>
+                    <span className="net-hud-value">{active.full}</span>
+                    <span className="net-hud-hint">
+                      {active.level > 0
+                        ? `${hudLevel} ${active.level}/5`
+                        : fa ? "دسته‌بندی" : "category"}
+                    </span>
+                  </>
+                ) : (
+                  <span className="net-hud-hint">{hint}</span>
+                )}
               </div>
             </div>
-          </Reveal>
-        </div>
+
+            <div className="net-legend-bar">
+              <p className="net-legend">
+                <span className="net-legend-item" data-k="hub">
+                  <span className="net-legend-dot" />
+                  {fa ? "هاب" : "Hub"}
+                </span>
+                <span className="net-legend-item" data-k="cat">
+                  <span className="net-legend-dot" />
+                  {fa ? "دسته" : "Cat"}
+                </span>
+                <span className="net-legend-item" data-k="leaf">
+                  <span className="net-legend-dot" />
+                  {fa ? "برگ" : "Leaf"}
+                </span>
+              </p>
+              <a
+                href={loc(locale, "/skills")}
+                className="net-cta"
+                onClick={() => trackEvent("skill_network_cta", { locale: locale as string })}
+              >
+                {cta}
+                <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+              </a>
+            </div>
+          </div>
+        </Reveal>
       </section>
-      <Act num="03" title={fa ? "نمودار" : "Figure"} />
+      <SysRule num="03" label={fa ? "سیناپس" : "Synapse"} />
     </>
   );
 }

@@ -12,6 +12,10 @@ import type { NavRoute } from "@/lib/nav/types";
  * guess. The rail answers that: a tmux-style status line above the prompt
  * carrying every route as a REAL link.
  *
+ * Responsive contract: desktop keeps this line always on; phones (≤48rem)
+ * retire it in favour of the single menu FAB — there the routes live inside
+ * the opened menu, and eight labels across a phone-width row only collide.
+ *
  * Why real anchors matter here and not in the tree: the rail is permanent,
  * so these eight links are what assistive tech, middle-click, "open in new
  * tab" and search crawlers all see — navigation exists in the DOM even when

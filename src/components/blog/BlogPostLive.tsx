@@ -200,7 +200,7 @@ export default function BlogPostLive({
         </div>
       )}
 
-      <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+      <article className="mx-auto max-w-3xl px-5 py-16 sm:px-6">
         <Link
           href={loc(locale, "/blog")}
           className="post-back group"

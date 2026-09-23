@@ -185,7 +185,7 @@ export default async function BlogPostPage({ params }: Props) {
         return (
           <nav
             aria-label={locale === "fa" ? "سایر نوشته‌ها" : "More posts"}
-            className="cv-auto mx-auto max-w-3xl px-4 pt-16 sm:px-6"
+            className="cv-auto mx-auto max-w-3xl px-5 pt-16 sm:px-6"
           >
             <div className="grid gap-3 sm:grid-cols-2">
               {[

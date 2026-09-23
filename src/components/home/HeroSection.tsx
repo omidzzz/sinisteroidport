@@ -1,14 +1,13 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
-import { Act } from "./Quire";
-import { ArrowIcon, SparkIcon } from "@/components/ui/icons";
+import { ArrowIcon } from "@/components/ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 
 /**
- * HOME ACT I — CRAFT CONSOLE HERO
+  * HOME ACT I — CRAFT CONSOLE HERO
  *
  * A terminal-first hero that speaks the site's navigation language:
  * a prompt line, a kinetic name, role chips, and the two primary CTAs.
@@ -69,9 +68,8 @@ export default function HeroSection({ locale }: { locale: Locale }) {
         </div>
         <Reveal delay={120} variant="right">
           <p className="craft-hero-roles">
-            {t.services.map((s, i) => (
+            {t.services.map((s) => (
               <span key={s.title} className="craft-role-chip">
-                {i > 0 && <SparkIcon className="craft-spark" />}
                 {s.title}
               </span>
             ))}
@@ -122,7 +120,6 @@ export default function HeroSection({ locale }: { locale: Locale }) {
                       locale === "fa" ? "craft-ticker-item-fa" : ""
                     }`}
                   >
-                    <SparkIcon className="craft-ticker-spark" />
                     {s.title}
                   </span>
                 ))}
@@ -131,10 +128,6 @@ export default function HeroSection({ locale }: { locale: Locale }) {
           </div>
         </div>
       </div>
-      <Act
-        num="01"
-        title={locale === "fa" ? "صفحه‌ی آغاز" : "Frontispiece"}
-      />
     </>
   );
 }

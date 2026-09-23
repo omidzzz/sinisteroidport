@@ -29,16 +29,14 @@ export default function Footer({ locale }: { locale: Locale }) {
   const foot = (i: number) => ["¹", "²", "³", "⁴"][i] ?? "";
 
   return (
-    /* `cv-auto` — the colophon is a large all-below-the-fold subtree, and
-       skipping its layout/paint until it is approached is a straight win.
-       It also defers the ONLY Persian-glyph paint on an /en/ page (the
-       footer's "فا" language pill): without it, the browser's first layout
-       pass requests Cairo's 30 KiB Arabic face inside the load window, where
-       it competes with the LCP resources — measured at +273 ms, VeryHigh
-       priority, purely for two glyphs no visitor has scrolled to yet. */
-    <footer className="cv-auto relative mt-32 overflow-hidden">
+    /* NO content-visibility here, deliberately: a skipped footer renders as a
+       blank band at the page end and then paints abruptly, and the document
+       jumps by the placeholder's error (the real colophon measures ~514px,
+       the `auto 720px` guess reserved 720px). The 30 KiB Arabic face the
+       "فا" pill pulls on /en/ is by far the cheaper cost. */
+    <footer className="relative mt-32 overflow-hidden">
       <div className="colophon-rule">
-        <div className="mx-auto max-w-[86rem] pb-14 pt-10">
+        <div className="mx-auto max-w-[86rem] px-5 pb-14 pt-10">
           {/* ── the sentence: the sitemap, set as prose ── */}
           <p className="colophon-body">
             {fa ? (

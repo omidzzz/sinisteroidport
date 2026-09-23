@@ -1,0 +1,463 @@
+/* ============================================================
+   CODE & CRAFT — HOME: SYNAPSE / LEDGER / TELEMETRY REWORK
+   ------------------------------------------------------------
+   Advanced, minimal, niche styling for three core home sections:
+   - Synapse (skill constellation canvas)
+   - Ledger (telemetry stats with segmented display aesthetic)
+   - Telemetry readout (horizontal status strip)
+
+   Design direction: terminal telemetry meets minimal HUD.
+   Thin lines, monospace numerics, subtle glow, precise spacing.
+   ============================================================ */
+
+/* ---------- SYNAPSE — skill constellation ---------- */
+
+/* Stage container — minimal frame with subtle inner glow */
+.net-stage {
+  position: relative;
+  background: color-mix(in srgb, var(--color-bg) 60%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+  box-shadow:
+    inset 0 0 60px rgba(0, 0, 0, 0.3),
+    var(--elev-1);
+  overflow: hidden;
+}
+
+/* Subtle corner accents */
+.net-stage::before,
+.net-stage::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--color-accent-2-fill);
+  opacity: 0.4;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.net-stage::before {
+  inset-block-start: 8px;
+  inset-inline-start: 8px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.net-stage::after {
+  inset-block-end: 8px;
+  inset-inline-end: 8px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.net-stage:hover::before,
+.net-stage:hover::after {
+  opacity: 0.8;
+}
+
+/* HUD — minimal readout, positioned by RTL/LTR */
+.net-hud {
+  position: absolute;
+  top: 1rem;
+  z-index: 10;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.4rem 0.6rem;
+  background: color-mix(in srgb, var(--color-panel) 85%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  backdrop-filter: blur(4px);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+[dir="ltr"] .net-hud {
+  right: 1rem;
+}
+
+[dir="rtl"] .net-hud {
+  left: 1rem;
+}
+
+.net-hud:hover {
+  border-color: color-mix(in srgb, var(--color-accent-fill) 30%, transparent);
+}
+
+.net-hud-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.net-hud-value {
+  font-size: 0.72rem;
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.net-hud-hint {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  opacity: 0.7;
+}
+
+/* Legend — refined bottom bar */
+.net-legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-bg) 40%, transparent);
+}
+
+.net-legend {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+}
+
+.net-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.net-legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ink-dim);
+}
+
+.net-legend-item[data-k="hub"] .net-legend-dot {
+  background: var(--color-accent-fill);
+  box-shadow: 0 0 6px rgba(var(--rgb-accent), 0.4);
+}
+
+.net-legend-item[data-k="cat"] .net-legend-dot {
+  background: var(--color-accent-2-fill);
+  box-shadow: 0 0 6px rgba(var(--rgb-accent-2), 0.4);
+}
+
+.net-legend-item[data-k="leaf"] .net-legend-dot {
+  background: var(--color-ink-dim);
+}
+
+/* CTA link in legend bar */
+.net-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  background: transparent;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  text-decoration: none;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.net-cta:hover {
+  border-color: var(--color-accent-2-fill);
+  color: var(--color-accent-2-ink);
+  transform: translateY(-1px);
+}
+
+.net-cta:focus-visible {
+  outline: none;
+  border-color: var(--color-accent-2-fill);
+  box-shadow: 0 0 0 2px var(--color-ink), 0 0 0 4px var(--color-accent-2-fill);
+}
+/* ---------- LEDGER — telemetry stats (segmented display style) ---------- */
+
+.ledger-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.ledger-orbital {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.ledger-orbital-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  animation: ledger-orbit-spin 12s linear infinite;
+}
+
+.ledger-orbital-dot {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  background: var(--color-accent-2-fill);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(var(--rgb-accent-2), 0.5);
+}
+
+@keyframes ledger-orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ledger-title {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+}
+
+.ledger-title-accent {
+  color: var(--color-accent-ink);
+}
+
+.ledger-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--color-line);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+  overflow: hidden;
+}
+
+@media (min-width: 48rem) {
+  .ledger-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.ledger-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.1rem;
+  background: color-mix(in srgb, var(--color-panel) 92%, transparent);
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.ledger-cell:hover {
+  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+}
+
+.ledger-cell::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-accent-fill), var(--color-accent-2-fill));
+  opacity: 0.3;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.ledger-cell:hover::before {
+  transform: scaleX(1);
+}
+
+.ledger-idx {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  direction: ltr;
+}
+
+.ledger-num {
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+  font-weight: 500;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(var(--rgb-ink), 0.1);
+  transition: text-shadow var(--dur-base) var(--ease-out);
+}
+
+.ledger-cell:hover .ledger-num {
+  text-shadow: 0 0 30px rgba(var(--rgb-accent), 0.15);
+}
+
+.ledger-cell[data-primary="true"] .ledger-num {
+  color: var(--color-accent-ink);
+  text-shadow: 0 0 30px rgba(var(--rgb-accent), 0.2);
+}
+
+.ledger-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  line-height: 1.4;
+}
+
+.ledger-meter {
+  position: relative;
+  height: 2px;
+  background: var(--color-line);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.ledger-meter-fill {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent-2-fill), var(--color-accent-fill));
+  transform: scaleX(var(--v, 0));
+  transform-origin: left center;
+  transition: transform 1s var(--ease-out);
+}
+/* ---------- TELEMETRY STATUS STRIP ---------- */
+
+.tele-strip {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 1.5rem;
+  padding: 0.6rem 1rem;
+  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  overflow: hidden;
+}
+
+.tele-strip-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  white-space: nowrap;
+  border-right: 1px solid var(--color-line);
+}
+
+.tele-strip-item:last-child {
+  border-right: 0;
+}
+
+.tele-strip-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent-2-fill);
+  box-shadow: 0 0 6px rgba(var(--rgb-accent-2), 0.4);
+  animation: tele-pulse 2s ease-in-out infinite;
+}
+
+.tele-strip-item[data-status="active"] .tele-strip-indicator {
+  background: var(--color-accent-fill);
+  box-shadow: 0 0 6px rgba(var(--rgb-accent), 0.4);
+}
+
+.tele-strip-item[data-status="warning"] .tele-strip-indicator {
+  background: var(--warn);
+  box-shadow: 0 0 6px rgba(var(--rgb-warn), 0.4);
+}
+
+@keyframes tele-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.tele-strip-value {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.tele-strip-sep {
+  color: var(--color-muted);
+  opacity: 0.3;
+  margin-inline: 0.25rem;
+}
+
+/* ---------- RTL ---------- */
+
+[dir="rtl"] .net-stage::before {
+  inset-inline-start: auto;
+  inset-inline-end: 8px;
+  border-right: 1px solid var(--color-accent-2-fill);
+  border-left: 0;
+  border-top: 0;
+  border-bottom: 1px solid var(--color-accent-2-fill);
+}
+
+[dir="rtl"] .net-stage::after {
+  inset-inline-start: 8px;
+  inset-inline-end: auto;
+  border-left: 1px solid var(--color-accent-2-fill);
+  border-right: 0;
+  border-bottom: 0;
+  border-top: 1px solid var(--color-accent-2-fill);
+}
+
+[dir="rtl"] .ledger-meter-fill {
+  transform-origin: right center;
+}
+
+[dir="rtl"] .tele-strip-item {
+  border-right: 0;
+  border-left: 1px solid var(--color-line);
+}
+
+[dir="rtl"] .tele-strip-item:last-child {
+  border-left: 0;
+}
+
+/* ---------- Persian ---------- */
+
+html[lang="fa"] .ledger-label,
+html[lang="fa"] .net-legend,
+html[lang="fa"] .tele-strip-item {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[lang="fa"] .ledger-idx {
+  letter-spacing: 0;
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ledger-orbital-ring { animation: none; }
+  .tele-strip-indicator { animation: none; }
+  .ledger-cell::before { display: none; }
+}

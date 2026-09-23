@@ -11,10 +11,14 @@
   padding-block-end: 6rem;
 }
 
+/* Every card in a row stretches to the tallest — the archive grid reads as
+   one even wall on every viewport. Together with the fixed-aspect stage
+   below, every plate renders at exactly the same size. */
 .lab-grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
+  grid-auto-rows: 1fr;
 }
 .lab-cell {
   min-width: 0;
@@ -24,6 +28,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-2);
   background: var(--color-panel);
@@ -39,12 +44,14 @@
   transform: translateY(-2px);
 }
 
-/* The stage: a soft radial ground so dark and light editions both read
-   the prop against glass, not against a hard card edge. */
+/* The stage: ONE box shape for every plate. The props keep their own
+   aspect via width/height attributes, so the sheet pins them to the stage
+   height instead (attribute presentation loses to CSS) — every asset sits
+   at the same size on glass, in both editions. */
 .lab-stage {
   display: grid;
   place-items: center;
-  min-height: 15rem;
+  aspect-ratio: 4 / 3;
   padding: 1.2rem;
   background: radial-gradient(
     120% 100% at 50% 0%,
@@ -53,12 +60,85 @@
   );
 }
 
+.lab-stage :where(svg, canvas) {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+/* Ensure SVG root elements have proper sizing */
+.lab-stage .frg-root,
+.lab-stage .plnt-root,
+.lab-stage [class*="-root"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.lab-stage svg {
+  width: 100%;
+  height: 100%;
+}
+
 .lab-caption {
   display: flex;
   align-items: baseline;
   gap: 0.6rem;
   padding: 0.6rem 0.85rem;
   border-block-start: 1px solid var(--color-line);
+}
+
+/* The asset actions — one fixed-height row on every plate, so the uniform
+   card size the grid promises is never broken by the buttons. */
+.lab-actions {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  border-block-start: 1px solid var(--color-line);
+}
+.lab-act {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.2rem;
+  padding-inline: 0.5rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  background: transparent;
+  color: var(--color-ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+html[lang="fa"] .lab-act {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.72rem;
+}
+.lab-act:hover {
+  color: var(--color-accent-2-ink);
+  border-color: rgba(var(--rgb-accent-2), 0.5);
+}
+.lab-act:focus-visible {
+  outline: 2px solid var(--color-accent-2-ink);
+  outline-offset: 2px;
+}
+.lab-act[data-done] {
+  color: var(--color-accent-ink);
+  border-color: rgba(var(--rgb-accent), 0.55);
+  box-shadow: var(--glow-accent);
 }
 .lab-fig {
   font-family: var(--font-mono);
@@ -112,6 +192,47 @@ html[lang="fa"] .lab-fig {
   font-family: var(--font-mono);
   font-size: 0.62rem;
   color: var(--color-ink-dim);
+}
+/* The hex and the token are both copy buttons — the press surface, focus
+   ring and "copied" voice live here; the grid above is untouched. */
+.lab-copy {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  text-align: start;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.lab-copy:hover .lab-copy-text {
+  color: var(--color-accent-2-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lab-copy:focus-visible {
+  outline: 2px solid var(--color-accent-2-ink);
+  outline-offset: 2px;
+}
+.lab-copy-text {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--color-ink);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.lab-copy-sub {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-ink-dim);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.lab-copy[data-done] .lab-copy-text {
+  color: var(--color-accent-ink);
+  text-decoration: none;
+}
+.lab-copy[data-done] .lab-copy-sub {
+  color: var(--color-accent-ink);
+  text-decoration: none;
 }
 .lab-swatch-role {
   font-size: 0.66rem;

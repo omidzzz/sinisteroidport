@@ -25,7 +25,11 @@
   position: absolute;
   inset-inline-start: 1.1rem;
   top: 1.6rem;
-  translate: -50% -50%;
+  /* NO `translate: -50% -50%` here: craft/work.css owns the node now, and
+     this declaration leaked beneath it — the build's transform-merge pass
+     folds craft's `translate: none` cancellation into its `transform`, so
+     only THIS rule's translate survived, shifting every diamond ~5px off
+     the rail. Centering lives in craft's transform instead. */
   width: 0.7rem;
   height: 0.7rem;
   border-radius: 9999px;

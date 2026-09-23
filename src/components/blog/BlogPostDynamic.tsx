@@ -153,7 +153,7 @@ function ShellNotice({
 }) {
   if (status === "loading") {
     return (
-      <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+      <article className="mx-auto max-w-3xl px-5 py-16 sm:px-6">
         <p className="mt-10 animate-pulse font-mono text-xs uppercase tracking-[0.2em] text-muted">
           {locale === "fa" ? "در حال بارگذاری…" : "loading…"}
         </p>
@@ -161,7 +161,7 @@ function ShellNotice({
     );
   }
   return (
-    <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <article className="mx-auto max-w-3xl px-5 py-16 sm:px-6">
       <h1 className="mt-8 text-3xl font-bold leading-tight text-ink sm:text-4xl">
         {status === "missing"
           ? locale === "fa"

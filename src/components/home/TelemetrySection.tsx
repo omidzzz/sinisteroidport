@@ -1,14 +1,14 @@
-import Reveal from "@/components/ui/Reveal";
+﻿import Reveal from "@/components/ui/Reveal";
 import CountUp from "@/components/ui/CountUp";
 import { Rail } from "@/components/ui/Section";
-import { Act } from "./Quire";
+import SysRule from "./SysRule";
 import { GaugeIcon } from "@/components/ui/icons";
 import { getDict, type Locale } from "@/lib/i18n";
 
 /**
- * HOME ACT II — TELEMETRY. Floating stat gauges (experience, projects,
- * languages, capabilities). No .cv-auto here — its paint containment clips
- * the absolutely placed TTY console that hangs off the section's lower edge.
+ * HOME ACT II — TELEMETRY / LEDGER.
+ * Advanced stats display with segmented-display aesthetic,
+ * orbital header indicator, and progress meters.
  */
 export default function TelemetrySection({
   locale,
@@ -43,25 +43,30 @@ export default function TelemetrySection({
       <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Rail label={tel} icon={<GaugeIcon />} />
         <div className="relative">
-          <span aria-hidden dir="ltr" className="scrub-word rev-dir top-[-0.45em]">
-            TELEMETRY
-          </span>
-          <div className="scatter mt-2 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="ledger-header">
+            <div className="ledger-orbital" aria-hidden="true">
+              <div className="ledger-orbital-ring" />
+              <div className="ledger-orbital-dot" />
+            </div>
+            <span className="ledger-title">
+              {fa ? "تلمتری · وضعیت پرواز" : "Telemetry · flight status"}
+            </span>
+          </div>
+
+          <div className="ledger-grid mt-2">
             {STATS.map((s, i) => (
               <Reveal key={s.label} delay={i * 80} variant={i % 2 ? "left" : "scale"}>
-                <div className="gauge-cell">
-                  <span dir="ltr" className="gauge-idx" aria-hidden>
+                <div className="ledger-cell" data-primary={i === 0 ? "true" : "false"}>
+                  <span dir="ltr" className="ledger-idx" aria-hidden>
                     S.0{i + 1}
                   </span>
-                  <span className="gauge-num block text-[clamp(1.9rem,3.2vw,2.7rem)] leading-none">
+                  <span className="ledger-num">
                     <CountUp to={s.n} suffix="+" />
                   </span>
-                  <p className="mt-2 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">
-                    {s.label}
-                  </p>
-                  <span className="gauge-meter">
-                    <span className="gauge-fill" style={{ ["--v" as string]: `${s.v}%` }} />
-                  </span>
+                  <p className="ledger-label">{s.label}</p>
+                  <div className="ledger-meter">
+                    <div className="ledger-meter-fill" style={{ "--v": `${s.v}%` } as React.CSSProperties} />
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -69,7 +74,7 @@ export default function TelemetrySection({
         </div>
       </section>
 
-      <Act num="02" title={fa ? "دفتر شمار" : "Ledger"} />
+      <SysRule num="02" label={fa ? "دفتر شمار" : "Ledger"} />
     </>
   );
 }

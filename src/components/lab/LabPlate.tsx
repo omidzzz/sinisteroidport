@@ -1,7 +1,8 @@
 "use client";
 
-import type { ComponentType } from "react";
+import { useCallback, useEffect, useRef, useState, type ComponentType } from "react";
 import { ScrollLazy } from "@/components/ui/LazyMount";
+import { buildPropSvgMarkup, downloadText, writeClipboard } from "./svgExport";
 
 /**
  * Loader registry — statically analyzable dynamic imports so the bundler
@@ -13,7 +14,7 @@ import { ScrollLazy } from "@/components/ui/LazyMount";
 const LOADERS: Record<string, () => Promise<{ default: ComponentType }>> = {
   frog: () => import("@/components/home/frog/Frog"),
   plant: () => import("@/components/home/plant/Plant"),
-  drone: () => import("@/components/home/drone/Drone"),
+  ufo: () => import("@/components/home/drone/Drone"),
   laptop: () => import("@/components/home/laptop-deck/LaptopDeck"),
 };
 
@@ -31,18 +32,56 @@ export default function LabPlate({
   prop,
   no,
   caption,
+  labels,
   className,
 }: {
-  /** A LOADERS key ("frog" | "plant" | "drone" | "laptop"). */
+  /** A LOADERS key ("frog" | "plant" | "ufo" | "laptop"). */
   prop: string;
   /** Figure number, ASCII/LTR ("01"…"04"). */
   no: string;
   caption: string;
+  /** Copy/download labels for the active locale. */
+  labels: { copy: string; copied: string; download: string };
   className?: string;
 }) {
+  const figRef = useRef<HTMLElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [done, setDone] = useState<"copy" | "dl" | null>(null);
+
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    []
+  );
+
+  const flash = useCallback((kind: "copy" | "dl") => {
+    setDone(kind);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setDone(null), 2000);
+  }, []);
+
+  /* The mounted prop lives inside the stage (see the ScrollLazy contract).
+     Both actions no-op silently when the chunk has not arrived yet — the
+     row stays honest instead of copying an empty frame. */
+  const onCopy = useCallback(async () => {
+    const stage = figRef.current?.querySelector(".lab-stage");
+    const markup = stage instanceof HTMLElement ? await buildPropSvgMarkup(stage) : null;
+    if (!markup) return;
+    if (await writeClipboard(markup)) flash("copy");
+  }, [flash]);
+
+  const onDownload = useCallback(async () => {
+    const stage = figRef.current?.querySelector(".lab-stage");
+    const markup = stage instanceof HTMLElement ? await buildPropSvgMarkup(stage) : null;
+    if (!markup) return;
+    downloadText(`<?xml version="1.0" encoding="UTF-8"?>\n${markup}`, `${prop}.svg`, "image/svg+xml");
+    flash("dl");
+  }, [flash, prop]);
+
   const load = LOADERS[prop] ?? LOADERS.frog;
   return (
-    <figure className={`lab-plate ${className ?? ""}`}>
+    <figure ref={figRef} className={`lab-plate ${className ?? ""}`}>
       <div className="lab-stage" aria-hidden>
         <ScrollLazy load={load} />
       </div>
@@ -52,6 +91,28 @@ export default function LabPlate({
         </span>
         <span className="lab-cap">{caption}</span>
       </figcaption>
+      <div className="lab-actions">
+        <button
+          type="button"
+          className="lab-act"
+          data-done={done === "copy" || undefined}
+          onClick={onCopy}
+          aria-label={`${labels.copy}: FIG. ${no}`}
+        >
+          <span aria-hidden>⧉</span>
+          <span>{done === "copy" ? labels.copied : labels.copy}</span>
+        </button>
+        <button
+          type="button"
+          className="lab-act"
+          data-done={done === "dl" || undefined}
+          onClick={onDownload}
+          aria-label={`${labels.download}: ${prop}.svg`}
+        >
+          <span aria-hidden>↓</span>
+          <span>{done === "dl" ? labels.copied : labels.download}</span>
+        </button>
+      </div>
     </figure>
   );
 }

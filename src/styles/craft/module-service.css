@@ -1,0 +1,469 @@
+/* ============================================================
+   CODE & CRAFT — MODULE BAY: CLEAN SERVICE CARDS
+   ------------------------------------------------------------
+   Styled service cards with:
+   - Subtle glow on hover
+   - Clear typography hierarchy
+   - Tech stack chips
+   - Alternating layout
+   ============================================================ */
+
+/* Grid layout - 1 column mobile, 2 columns desktop */
+.module-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 1rem !important;
+  width: 100% !important;
+}
+
+@media (min-width: 640px) {
+  .module-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .module-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.25rem !important;
+  }
+}
+
+/* Ensure grid items don't shrink */
+.module-grid > * {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* Card base */
+.service-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  width: 100%;
+  min-width: 0;
+  background: color-mix(in srgb, var(--color-panel) 90%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+  overflow: hidden;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+  cursor: pointer;
+}
+
+.service-card:hover {
+  border-color: color-mix(in srgb, var(--color-accent-2-fill) 40%, transparent);
+  box-shadow: var(--elev-1), 0 0 24px rgba(var(--rgb-accent-2), 0.1);
+  transform: translateY(-2px);
+}
+
+/* Glow effect on hover */
+.service-glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent-fill) 15%, transparent),
+    transparent 50%,
+    color-mix(in srgb, var(--color-accent-2-fill) 15%, transparent)
+  );
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+  pointer-events: none;
+}
+
+.service-card:hover .service-glow {
+  opacity: 1;
+}
+
+/* Content area */
+.service-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Header */
+.service-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.service-idx {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  direction: ltr;
+}
+
+.service-tag {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-2-ink);
+  padding: 0.15rem 0.4rem;
+  background: color-mix(in srgb, var(--color-accent-2-fill) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent-2-fill) 25%, transparent);
+  border-radius: var(--radius-1);
+}
+
+/* Title */
+.service-title {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  font-weight: 700;
+  color: var(--color-ink);
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* Description */
+.service-desc {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--color-ink-dim);
+  margin: 0;
+  flex: 1;
+}
+
+/* Tech stack chips */
+.service-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.service-chip {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-dim);
+  padding: 0.2rem 0.5rem;
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.service-card:hover .service-chip {
+  color: var(--color-ink);
+  border-color: color-mix(in srgb, var(--color-accent-2-fill) 30%, transparent);
+  background: color-mix(in srgb, var(--color-accent-2-fill) 8%, transparent);
+}
+
+/* Action arrow */
+.service-action {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.service-card:hover .service-action {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.service-arrow {
+  color: var(--color-accent-2-ink);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.service-card:hover .service-arrow {
+  transform: translateX(3px);
+}
+
+/* RTL */
+[dir="rtl"] .service-action {
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .service-arrow {
+  transform: scaleX(-1);
+}
+
+.service-card:hover .service-arrow {
+  transform: scaleX(-1) translateX(3px);
+}
+
+/* Persian */
+html[lang="fa"] .service-idx,
+html[lang="fa"] .service-title,
+html[lang="fa"] .service-desc,
+html[lang="fa"] .service-chip {
+  letter-spacing: 0;
+}
+
+html[lang="fa"] .service-title {
+  text-transform: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .service-card,
+  .service-chip,
+  .service-action,
+  .service-glow {
+    transition: none;
+  }
+
+  .service-card:hover {
+    transform: none;
+  }
+
+  .service-card:hover .service-action {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   CODE & CRAFT — HOMEPAGE WRITING GRID
+   ------------------------------------------------------------
+   2-column grid of latest writing cards with:
+   - Clean panel background (matches service cards)
+   - PK index, cover image, date, reading time, title
+   - Hover: lift, teal border glow, action slide-in
+   ============================================================ */
+
+/* Grid layout — 1 col mobile, 2 cols desktop */
+.post-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 1rem !important;
+  width: 100% !important;
+}
+
+@media (min-width: 640px) {
+  .post-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .post-grid {
+    gap: 1.25rem !important;
+  }
+}
+
+.post-grid > * {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* Card base */
+.post-card-grid {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  width: 100%;
+  min-width: 0;
+  background: color-mix(in srgb, var(--color-panel) 90%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+  overflow: hidden;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.post-card-grid:hover {
+  border-color: color-mix(in srgb, var(--color-accent-2-fill) 40%, transparent);
+  box-shadow: var(--elev-1), 0 0 24px rgba(var(--rgb-accent-2), 0.1);
+  transform: translateY(-2px);
+}
+
+/* Index badge */
+.post-idx {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  direction: ltr;
+  align-self: flex-start;
+}
+
+/* Cover image */
+.post-thumb {
+  margin-bottom: 0.9rem;
+  border-radius: var(--radius-1);
+  overflow: hidden;
+}
+
+.post-thumb img {
+  display: block;
+  width: 100%;
+  height: clamp(5rem, 12vw, 8rem);
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.post-card-grid:hover .post-thumb img {
+  transform: scale(1.03);
+}
+
+.post-thumb.no-cover {
+  display: none;
+}
+
+/* Meta row: date + reading time */
+.post-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-date {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  direction: ltr;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  background: color-mix(in srgb, var(--color-panel) 60%, transparent);
+}
+
+.post-read {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-dim);
+  direction: ltr;
+  text-transform: uppercase;
+}
+
+/* Fallback label */
+.post-card-grid .label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-1);
+  background: color-mix(in srgb, var(--color-accent-fill) 8%, transparent);
+  align-self: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+html[lang="fa"] .post-card-grid .label {
+  letter-spacing: 0;
+}
+
+/* Title */
+.post-card-title {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  transition: color var(--dur-fast) var(--ease-out);
+  margin-top: auto;
+}
+
+.post-card-grid:hover .post-card-title {
+  color: var(--color-accent);
+}
+
+html[lang="fa"] .post-card-title {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Action row */
+.post-card-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
+  border-top: 1px solid var(--color-line);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.post-card-grid:hover .post-card-action {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.post-arrow {
+  color: var(--color-accent-2-ink);
+  transition: transform var(--dur-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.post-card-grid:hover .post-arrow {
+  transform: translateX(3px);
+}
+
+.post-action-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-2-ink);
+  direction: ltr;
+}
+
+/* RTL */
+[dir="rtl"] .post-card-grid:hover .post-arrow {
+  transform: scaleX(-1) translateX(3px);
+}
+
+[dir="rtl"] .post-action-label {
+  letter-spacing: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .post-card-grid,
+  .post-thumb img,
+  .post-card-action,
+  .post-arrow {
+    transition: none;
+  }
+
+  .post-card-grid:hover {
+    transform: none;
+  }
+
+  .post-card-grid:hover .post-card-action {
+    opacity: 0;
+  }
+}

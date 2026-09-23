@@ -1,11 +1,19 @@
 /* ============================================================
-   CODE & CRAFT — the colophon (footer)
+   CODE & CRAFT — the colophon (footer) · END OF TRANSMISSION
    ------------------------------------------------------------
-   The old register scoped its footer to [data-register="quire"];
-   that attribute no longer exists, so this sheet owns the footer in
-   the new register. Same structure, different voice: a hairline
-   rule, one measure of prose whose words are the sitemap, and a
-   marginalia line of mono notes ending in the back-to-top mark.
+   The colophon closes the site like a console shutdown: a signal
+   bar over the masthead rule, the prose sitemap in a measured
+   column, and — on wide screens — the controls (feeds, agent,
+   language, edition, technical line) stacked in a hairline-ruled
+   rail beside it. The closing lockup scales up as the signature,
+   and the back-to-top mark becomes an outlined circle that fills
+   with the signature on hover.
+
+   Untouched on purpose: the transparent ground (no seam — see
+   scripts/tools/diag-footer.mjs), the --console-h tail reserve
+   that keeps the end-mark tappable under the fixed dock
+   (verify-mobile-chrome), and the eager render — no
+   content-visibility (verify-craft).
    ============================================================ */
 
 [data-register="code-craft"] footer {
@@ -17,23 +25,41 @@
      scripts/tools/verify-mobile-chrome.mjs). Reserve the dock's footprint. */
   padding-block-end: var(--console-h, 9rem);
   overflow: hidden;
+  /* Transparent: the body's background flows through so there is no
+     gradient-to-solid seam where the footer ends. */
+  background: transparent;
 }
 
+/* ---------- Masthead: a signal bar over the rule ---------- */
+
 [data-register="code-craft"] .colophon-rule {
-  border-block-start: 1px solid var(--color-line);
-  background:
-    radial-gradient(
-      90% 130% at 85% 110%,
-      rgba(var(--rgb-accent), 0.05),
-      transparent 60%
-    );
+  border-block-start: 1px solid var(--color-line-strong);
+}
+[data-register="code-craft"] .colophon-rule::before {
+  content: "";
+  display: block;
+  block-size: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-fill),
+    var(--color-accent-2-fill) 38%,
+    transparent 90%
+  );
+}
+
+/* ---------- The layout: prose + a controls rail on wide screens ---------- */
+
+[data-register="code-craft"] .colophon-rule > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.25rem;
 }
 
 [data-register="code-craft"] .colophon-body {
-  max-width: 74ch;
+  max-width: 68ch;
   color: var(--color-ink-dim);
-  font-size: 0.92rem;
-  line-height: 1.85;
+  font-size: 0.95rem;
+  line-height: 1.9;
 }
 [data-register="code-craft"] .colophon-body b {
   color: var(--color-ink);
@@ -43,23 +69,60 @@
   color: var(--color-accent-2-ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: rgba(var(--rgb-accent-2), 0.45);
-  text-underline-offset: 3px;
-  transition: text-decoration-color var(--dur-fast) var(--ease-out);
+  text-decoration-color: rgba(var(--rgb-accent-2), 0.4);
+  text-underline-offset: 4px;
+  padding-inline: 0.15rem;
+  margin-inline: -0.15rem;
+  border-radius: 3px;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    text-decoration-color var(--dur-fast) var(--ease-out);
 }
 [data-register="code-craft"] .colophon-body a:hover {
-  text-decoration-color: var(--color-accent-2-ink);
+  color: var(--color-ink);
+  background-color: color-mix(
+    in srgb,
+    var(--color-accent-2-fill) 14%,
+    transparent
+  );
+  text-decoration-color: transparent;
 }
+
+@media (min-width: 80rem) {
+  [data-register="code-craft"] .colophon-rule > div {
+    grid-template-columns: minmax(0, 1fr) minmax(19rem, 24rem);
+    column-gap: 5rem;
+  }
+  [data-register="code-craft"] .colophon-body {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+  [data-register="code-craft"] .colophon-marginalia {
+    grid-column: 2;
+  }
+  [data-register="code-craft"] .colophon-marginalia:first-of-type {
+    align-self: end;
+  }
+}
+
+/* ---------- Marginalia: the controls rail ---------- */
 
 [data-register="code-craft"] .colophon-marginalia {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.6rem 1.1rem;
+  gap: 0.65rem 1.25rem;
+  margin-block-start: 0;
   font-family: var(--font-mono);
   font-size: 0.66rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+/* The two rows read as sections of one rail, hairline-separated */
+[data-register="code-craft"] .colophon-marginalia + .colophon-marginalia {
+  border-block-start: 1px solid var(--color-line);
+  padding-block-start: 1.6rem;
 }
 html[lang="fa"] [data-register="code-craft"] .colophon-marginalia {
   letter-spacing: 0;
@@ -73,31 +136,59 @@ html[lang="fa"] [data-register="code-craft"] .colophon-marginalia {
   color: var(--color-accent-ink);
 }
 
+/* The closing lockup scales up as the footer's signature */
+[data-register="code-craft"] .colophon-marginalia .logo-type {
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  line-height: 1;
+}
+
+/* Edition toggle: a hairline chip in the rail */
+[data-register="code-craft"] .colophon-marginalia .icon-toggle {
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink-dim);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+[data-register="code-craft"] .colophon-marginalia .icon-toggle:hover,
+[data-register="code-craft"] .colophon-marginalia .icon-toggle:focus-visible {
+  color: var(--color-accent-ink);
+  border-color: var(--color-accent-fill);
+}
+
 /* ---------- Back to top ---------- */
 
-/* A 44px seal in the signature yellow; the inline-end margin reserves the
-   floating assistant's footprint so both stay tappable below 1200px. */
+/* A 44px outlined seal in the signature yellow; the inline-end margin
+   reserves the floating assistant's footprint so both stay tappable — at
+   EVERY width. The assistant is fixed at the inline-end corner on all
+   viewports (base rule: 1.25rem inset + a 3.9rem disc → 5.6rem of
+   clearance), so scoping the dodge to ≤1200px left the mark covered
+   under the FAB on desktop — found by verify-mobile-chrome at 1440px. */
 [data-register="code-craft"] .end-mark {
   display: inline-grid;
   place-items: center;
   inline-size: 2.75rem;
   block-size: 2.75rem;
-  border-radius: var(--radius-1);
-  background: var(--color-accent-fill);
-  color: var(--color-accent-on);
+  border: 1px solid var(--color-accent-fill);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-accent-fill);
   transition:
     transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
     box-shadow var(--dur-fast) var(--ease-out);
 }
 [data-register="code-craft"] .end-mark:hover,
 [data-register="code-craft"] .end-mark:focus-visible {
   transform: translateY(-2px);
+  background: var(--color-accent-fill);
+  color: var(--color-accent-on);
   box-shadow: var(--glow-accent);
 }
-@media (max-width: 1200px) {
-  [data-register="code-craft"] .end-mark {
-    margin-inline-end: 5.6rem;
-  }
+[data-register="code-craft"] .end-mark {
+  margin-inline-end: 5.6rem;
 }
 @media print {
   [data-register="code-craft"] .end-mark,

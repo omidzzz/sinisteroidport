@@ -3,6 +3,7 @@ import PageHero from "@/components/ui/PageHero";
 import Reveal from "@/components/ui/Reveal";
 import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import LabPlate from "@/components/lab/LabPlate";
+import LabSwatch from "@/components/lab/LabSwatch";
 import { getDict, isLocale, loc, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 import { JsonLd } from "@/components/ui/JsonLd";
@@ -14,7 +15,7 @@ const PLATES: { prop: string; no: string; en: string; fa: string }[] = [
   { prop: "frog", no: "01", en: "The frog · it darts", fa: "قورباغه · می‌پرد" },
   { prop: "plant", no: "02", en: "The plant · it sways", fa: "گیاه · تاب می‌خورد" },
   { prop: "laptop", no: "03", en: "The laptop · it works", fa: "لپ‌تاپ · کار می‌کند" },
-  { prop: "drone", no: "04", en: "The drone · it watches", fa: "پهپاد · تماشا می‌کند" },
+  { prop: "ufo", no: "04", en: "The UFO · it watches", fa: "یوافو · تماشا می‌کند" },
 ];
 
 /** The palette the whole edition is mixed from — rendered from the same
@@ -55,6 +56,16 @@ export default async function LabPage({
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : "en";
   const t = getDict(locale);
+  const fa = locale === "fa";
+
+  /** Button labels for the plate actions and the palette rows. */
+  const labels = fa
+    ? {
+        copy: "کپی SVG",
+        copied: "کپی شد",
+        download: "دانلود",
+      }
+    : { copy: "Copy SVG", copied: "Copied", download: "Download" };
 
   return (
     <div className="craft-lab cv-auto">
@@ -77,6 +88,7 @@ export default async function LabPage({
                 prop={plate.prop}
                 no={plate.no}
                 caption={locale === "fa" ? plate.fa : plate.en}
+                labels={labels}
               />
             </Reveal>
           ))}
@@ -88,22 +100,13 @@ export default async function LabPage({
           </h2>
           <ul className="lab-swatches">
             {SWATCHES.map((swatch) => (
-              <li key={swatch.hex} className="lab-swatch">
-                <span
-                  className="lab-swatch-chip"
-                  style={{ background: swatch.hex }}
-                  aria-hidden
-                />
-                <span className="lab-swatch-hex" dir="ltr">
-                  {swatch.hex}
-                </span>
-                <span className="lab-swatch-token" dir="ltr">
-                  {swatch.token}
-                </span>
-                <span className="lab-swatch-role">
-                  {locale === "fa" ? swatch.roleFa : swatch.role}
-                </span>
-              </li>
+              <LabSwatch
+                key={swatch.hex}
+                hex={swatch.hex}
+                token={swatch.token}
+                role={locale === "fa" ? swatch.roleFa : swatch.role}
+                labels={labels}
+              />
             ))}
           </ul>
         </section>

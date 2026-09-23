@@ -11,8 +11,10 @@ import type { Dictionary } from "@/lib/i18n";
  * would rather not summon a keyboard, and anyone who does not guess. This
  * button is therefore always on screen: a real 44px control that opens the
  * console WITHOUT focusing the field (browse mode), reports state with
- * aria-expanded, and names the current route so the chrome always answers
- * "where am I?" even when the tree is collapsed.
+ * aria-expanded, names the popup it reveals (aria-haspopup), and carries the
+ * current route so the chrome always answers "where am I?" even when the
+ * tree is collapsed — at every viewport, including the phones that clip the
+ * route line out of the visual layout (see nav.css ≤30rem).
  */
 export default function NavMenuButton({
   dict,
@@ -37,6 +39,7 @@ export default function NavMenuButton({
       type="button"
       ref={buttonRef}
       className="craft-menu-btn"
+      aria-haspopup="listbox"
       aria-expanded={open}
       aria-controls={controls}
       onClick={onToggle}

@@ -26,6 +26,7 @@
   flex-direction: column;
   gap: 2rem;
   padding-block: 1.5rem;
+  padding-inline: 1.25rem;
   max-width: 62ch;
   margin-inline: auto;
 }
@@ -190,36 +191,34 @@ html[lang="fa"] .craft-hero-kicker {
   margin-top: -1.2rem;
   padding-bottom: 1.2rem;
   overflow: hidden;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
 
 .craft-ticker-band {
   overflow: hidden;
   position: relative;
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 6%,
-    black 94%,
-    transparent 100%
-  );
-  mask-size: 100% 100%;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 6%,
-    black 94%,
-    transparent 100%
-  );
-  -webkit-mask-size: 100% 100%;
   padding-block: 0.4rem;
 }
 
 .craft-ticker-track {
   display: flex;
-  width: max-content;
+  width: 200vw;
   animation: craft-ticker-scan 34s linear infinite;
-  animation-timeline: scroll();
-  animation-range: entry 10% entry 25%;
+  animation-delay: -17s;
+}
+
+@keyframes craft-ticker-scan {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .craft-ticker-row {
@@ -229,6 +228,8 @@ html[lang="fa"] .craft-hero-kicker {
   flex-shrink: 0;
   white-space: nowrap;
   padding-inline: 1.5rem;
+  width: 100vw;
+  justify-content: space-around;
 }
 
 .craft-ticker-item {
@@ -265,6 +266,180 @@ html[lang="fa"] .craft-hero-kicker {
   .craft-ticker-track {
     animation-duration: calc(34s / var(--tick-v, 1));
   }
+}
+
+/* ---------- [NN] system rule (the section separator) ----------
+
+   The console voice that replaces the printed edition's act rule:
+   `[02] LABEL ─────────`. Decorative (aria-hidden in markup); the
+   section's own heading carries the semantics. */
+
+.sys-rule {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  max-width: 86rem;
+  margin: 4.5rem auto 0;
+  padding-inline: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+html[lang="fa"] .sys-rule {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.78rem;
+}
+
+.sys-rule-num {
+  color: var(--color-accent-ink);
+}
+
+.sys-rule-label {
+  color: var(--color-ink-dim);
+}
+
+.sys-rule i {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--color-line-strong),
+    var(--color-line) 45%,
+    transparent
+  );
+}
+
+[dir="rtl"] .sys-rule i {
+  background: linear-gradient(
+    270deg,
+    var(--color-line-strong),
+    var(--color-line) 45%,
+    transparent
+  );
+}
+
+/* ---------- channels close (the page's console tail) ----------
+
+   A static philosophy quote followed by the direct channels as console
+   rows — the email row carries copy-to-clipboard, the outgoing rows
+   carry the exit arrow. */
+
+.sys-close {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.sys-quote {
+  margin: 0;
+  max-width: 62ch;
+  padding: 1.4rem 1.5rem;
+  border: 1px solid var(--color-line);
+  border-inline-start: 2px solid var(--color-accent-fill);
+  border-radius: var(--radius-2);
+  background: color-mix(in srgb, var(--color-panel) 70%, transparent);
+}
+
+.sys-quote blockquote {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--color-ink);
+}
+
+.sys-quote figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+}
+
+html[lang="fa"] .sys-quote figcaption {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.sys-quote-ok {
+  color: var(--color-accent-2-ink);
+}
+
+.sys-channels {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+  background: color-mix(in srgb, var(--color-panel) 70%, transparent);
+  overflow: hidden;
+}
+
+.sys-channel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  border-block-start: 1px solid var(--color-line);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.sys-channel:first-child {
+  border-block-start: 0;
+}
+
+.sys-channel:hover {
+  background: rgba(var(--rgb-accent-2), 0.08);
+}
+
+.sys-channel-key {
+  flex: none;
+  width: 5.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-2-ink);
+}
+
+html[lang="fa"] .sys-channel-key {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.sys-channel-val {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  color: var(--color-ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+a.sys-channel-val:hover {
+  color: var(--color-accent-ink);
+}
+
+/* the adjacent copy chip sits at the row's inline end */
+.sys-channel .contact-copy {
+  margin-inline-start: auto;
+}
+
+.sys-more {
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* ---------- accessibility ---------- */

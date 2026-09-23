@@ -37,6 +37,16 @@ const NOTICE_MS = 3200;
  * Deliberately NOT: a top bar, a sidebar, a hamburger, a drawer, or a
  * full-screen overlay. One surface, one focus owner, one keyboard cursor,
  * sitting at the end of the document where a terminal prompt belongs.
+ * One more property makes it one navigation: the shell renders as a <nav>
+ * landmark whose dock owns the disclosure, the tree, the rail and the
+ * prompt together, and the menu closes the way a disclosure should —
+ * Escape, a committed route, a tap on the page behind it, or any
+ * navigation away.
+ *
+ * Responsive: on phones (≤48rem) the dock collapses to ONE menu button
+ * stacked above the floating assistant — rail, prompt and notice hide
+ * behind the tap, and the menu grows upward from the corner (column-reverse
+ * flips only the visual stack, so DOM/tab order stays button-first).
  *
  * Registries are INIT-ONLY (useState initializers, not effects). Syncing
  * props into reducer state would cost a second render on mount and could
@@ -58,7 +68,7 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
   );
   const open = state.status === "open";
 
-  const shellRef = useRef<HTMLDivElement>(null);
+  const shellRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);
   const noticeTimer = useRef<number | null>(null);
@@ -81,6 +91,29 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
     }
     if (document.activeElement === inputRef.current) menuRef.current?.focus();
   }, [open, focusRef]);
+
+  /* ─ Disclosure hygiene ──────────────────────────────────────────────
+     Two exits a phone menu needs that an open-forever panel lacks:
+     (1) a tap on the PAGE behind the dock collapses it — via pointerdown,
+         not blur, because iOS does not blur the field when you tap plain
+         content, so a focus-based rule alone would leave the panel up
+         over 52vh of the screen;
+     (2) a route change collapses it — rail taps navigate without running
+         `commit`, so without this the panel would survive the navigation
+         it just caused (the locale switch remounts the console anyway). */
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (target && shellRef.current?.contains(target)) return;
+      close();
+    };
+    document.addEventListener("pointerdown", onPointerDown, true);
+    return () => document.removeEventListener("pointerdown", onPointerDown, true);
+  }, [open, close]);
+
+  // Close is a no-op while collapsed, so the mount-time dispatch is free.
+  useEffect(() => close(), [pathname, close]);
 
   useEffect(
     () => () => {
@@ -197,6 +230,11 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
 
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault();
+        // The cursor only SPEAKS through the field (aria-activedescendant),
+        // so pull focus into it first when it still sits on the disclosure —
+        // an arrow key pressed in browse mode is a keyboard intent, and
+        // focus stays inside the shell either way.
+        inputRef.current?.focus();
         dispatch({ type: "move", delta: event.key === "ArrowDown" ? 1 : -1 });
         return;
       }
@@ -258,17 +296,25 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
   const activeId = open && active ? CONSOLE_IDS.row(active.value) : undefined;
 
   return (
-    <div className="craft-console" ref={shellRef} data-open={open || undefined}>
-      <NavMenuButton
-        dict={dict}
-        current={currentRoute?.label ?? ""}
-        open={open}
-        controls={CONSOLE_IDS.list}
-        buttonRef={menuRef}
-        onToggle={toggle}
-      />
-
+    <nav
+      className="craft-console"
+      ref={shellRef}
+      aria-label={dict.console.label}
+      data-open={open || undefined}
+    >
       <div className="craft-dock">
+        {/* The disclosure lives INSIDE the dock: one surface, DOM order =
+            visual order, and the button aligns with the rail/prompt edge
+            instead of floating at the viewport padding. */}
+        <NavMenuButton
+          dict={dict}
+          current={currentRoute?.label ?? ""}
+          open={open}
+          controls={CONSOLE_IDS.list}
+          buttonRef={menuRef}
+          onToggle={toggle}
+        />
+
         <ConsoleRing routes={routes} hotId={hotId} />
 
         <div className="craft-panel" hidden={!open}>
@@ -307,7 +353,7 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
           {notice}
         </p>
       </div>
-    </div>
+    </nav>
   );
 }
 
