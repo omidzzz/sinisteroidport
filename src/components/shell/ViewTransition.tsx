@@ -49,6 +49,15 @@ export function startVT(navigate: () => void): boolean {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     return false;
   }
+  // A desktop navigation is intentionally a normal Next navigation. The
+  // native View Transition snapshots the whole document and suspends live
+  // rendering while it runs, which makes the page feel frozen (including
+  // hover states and non-overlay animations). Mobile keeps the transition;
+  // desktop gets immediate, interactive navigation.
+  if (window.matchMedia("(min-width: 48rem)").matches) {
+    navigate();
+    return true;
+  }
   // A hidden document has no rendering to snapshot — startViewTransition
   // would abort with "invalid state".
   if (document.visibilityState === "hidden") return false;
@@ -101,8 +110,10 @@ export function ViewTransitionBridge() {
       const p = pending;
       pending = null;
       requestAnimationFrame(() => requestAnimationFrame(() => p.resolve()));
-    } else {
-      // A fallback (non-VT) navigation just committed — play the enter reveal.
+    } else if (!window.matchMedia("(min-width: 48rem)").matches) {
+      // A fallback (non-VT) mobile navigation just committed — play the
+      // enter reveal. Desktop uses a normal navigation and must not animate
+      // <body> after the route commits.
       const root = document.documentElement;
       root.classList.remove("page-exit");
       root.classList.add("page-enter");
@@ -119,9 +130,10 @@ export function ViewTransitionBridge() {
  * everything), not just the chrome that used VTLink. Wraps the navigation
  * in a view transition, so the whole site animates on route change.
  *
- *  - View Transitions API present → startVT() around router.push.
- *  - No API (Firefox)             → 180ms opacity "page-exit", then push;
+ *  - View Transitions API + mobile → startVT() around router.push.
+ *  - No API (Firefox)            → 180ms opacity "page-exit", then push;
  *                                   the Bridge plays "page-enter" on arrival.
+ *  - Desktop                      → normal navigation, never a document snapshot.
  *  - Reduced motion               → untouched plain navigation.
  *
  * Excluded on purpose: locale swaps (dir/lang live on <html>, which the
@@ -163,6 +175,9 @@ export function GlobalVTNav() {
         e.preventDefault();
         return;
       }
+      // Desktop never enters a document-wide fade/snapshot. Let the native
+      // link navigation proceed so hover states and ambient animations stay live.
+      if (window.matchMedia("(min-width: 48rem)").matches) return;
       // Fallback for browsers without the API (Firefox & friends).
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       e.preventDefault();

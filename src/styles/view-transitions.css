@@ -8,10 +8,12 @@
    animates; reduced-motion users get hard cuts everywhere.
    ═══════════════════════════════════════════════════════════════════ */
 
-/* Cross-document transitions (Chromium 126+, Safari 18+) — the language
-   swap <a>s and the palette's location.assign ride this for free. */
-@view-transition {
-  navigation: auto;
+/* Cross-document transitions (Chromium 126+, Safari 18+) are limited to
+   mobile. Desktop document loads stay immediate and interactive. */
+@media (max-width: 47.99rem) {
+  @view-transition {
+    navigation: auto;
+  }
 }
 ::view-transition-group(site-chrome) {
   animation: none;

@@ -279,8 +279,9 @@ h2,
   }
 }
 
-/* Cross-document View Transitions (MPA, Chromium 126+) — zero JS */
-@media (prefers-reduced-motion: no-preference) {
+/* Cross-document transitions are mobile-only. Desktop document loads stay
+   fully interactive; a document snapshot makes the entire page feel frozen. */
+@media (max-width: 47.99rem) and (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
   }
