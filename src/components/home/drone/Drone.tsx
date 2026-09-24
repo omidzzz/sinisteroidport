@@ -53,6 +53,7 @@ export default function Drone() {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="-150 -160 300 320"
         width="100%"
+        preserveAspectRatio="xMidYMid meet"
         style={{ overflow: "visible" }}
       >
         <defs>

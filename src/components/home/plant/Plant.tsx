@@ -93,6 +93,7 @@ export default function Plant() {
         className="plt-svg"
         viewBox="-120 -165 240 260"
         width="100%"
+        preserveAspectRatio="xMidYMid meet"
         style={{ pointerEvents: "none", overflow: "visible", direction: "ltr", display: "block" }}
       >
         <defs>

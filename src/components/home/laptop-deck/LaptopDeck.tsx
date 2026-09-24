@@ -161,6 +161,7 @@ export default function LaptopDeck() {
         className="lp-svg"
         viewBox="-30 -36 395 376"
         width="100%"
+        preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-label="isometric neon laptop typing npm run dev"
         style={{ pointerEvents: "none", overflow: "visible", direction: "ltr" }}

@@ -52,6 +52,7 @@ export default function Frog() {
         className="frg-svg"
         viewBox="-3 -3 54 54"
         width="100%"
+        preserveAspectRatio="xMidYMid meet"
         style={{ pointerEvents: "none", overflow: "visible", direction: "ltr", display: "block" }}
       >
         <defs>

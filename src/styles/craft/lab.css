@@ -21,13 +21,18 @@
   grid-auto-rows: 1fr;
 }
 .lab-cell {
+  display: grid;
   min-width: 0;
+  min-height: 0;
 }
 
 .lab-plate {
   margin: 0;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
   height: 100%;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-2);
@@ -47,12 +52,22 @@
 /* The stage: ONE box shape for every plate. The props keep their own
    aspect via width/height attributes, so the sheet pins them to the stage
    height instead (attribute presentation loses to CSS) — every asset sits
-   at the same size on glass, in both editions. */
+   at the same size on glass, in both editions.
+   overflow: hidden is the frame contract: the props paint with
+   overflow:visible (glow filters, the UFO's beam overshoot), and nothing —
+   paint or box — may cross into the caption row or past the card. It also
+   zeroes the stage's automatic minimum as a flex item, so content can
+   never stretch the stage past its aspect (equal rows, equal cards). */
 .lab-stage {
   display: grid;
   place-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
   aspect-ratio: 4 / 3;
-  padding: 1.2rem;
+  padding: clamp(0.75rem, 3vw, 1.2rem);
+  overflow: hidden;
   background: radial-gradient(
     120% 100% at 50% 0%,
     rgba(var(--rgb-accent), 0.08),
@@ -64,29 +79,45 @@
   width: 100%;
   height: 100%;
   max-width: 100%;
+  max-height: 100%;
   display: block;
+  /* Component styles set overflow:visible for their home-page glows. In the
+     lab, the frame is the contract: contain the paint as well as the box. */
+  overflow: hidden !important;
 }
 
-/* Ensure SVG root elements have proper sizing */
-.lab-stage .frg-root,
-.lab-stage .plnt-root,
-.lab-stage [class*="-root"] {
+/* Every wrapper fills the stage — structural, not class-based: the UFO's
+   wrapper div carries no class, so the old [class*="-root"] selector
+   missed it. Its SVG then had no definite parent, width/height:100%
+   collapsed to the intrinsic viewBox size (the saucer is 300×320 — taller
+   than any stage, worst on a phone's ~220px-tall one) and the art
+   overflowed into the caption. min/min-width:0 also kill the wrapper's
+   automatic minimum so a frame can never inflate the grid row. */
+.lab-stage > * {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden !important;
 }
 
 .lab-stage svg {
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden !important;
 }
 
 .lab-caption {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.6rem;
+  min-width: 0;
+  height: 3rem;
   padding: 0.6rem 0.85rem;
   border-block-start: 1px solid var(--color-line);
 }
@@ -96,6 +127,7 @@
 .lab-actions {
   display: flex;
   gap: 0.4rem;
+  min-height: 3.2rem;
   padding: 0.55rem 0.85rem;
   border-block-start: 1px solid var(--color-line);
 }
@@ -256,6 +288,6 @@ html[lang="fa"] .lab-swatch-role {
     grid-template-columns: 1fr;
   }
   .lab-stage {
-    min-height: 12rem;
+    padding: 0.75rem;
   }
 }
