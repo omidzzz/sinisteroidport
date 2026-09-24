@@ -8,8 +8,9 @@ import { getPostMeta } from "@/lib/blog/meta";
 import {
   formatPostDate,
   postDateKey,
+  postHref,
 } from "@/lib/blog/format";
-import { isLocale, loc, type Locale } from "@/lib/i18n";
+import { isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates, SITE } from "@/lib/seo";
 import {
   normalizeTags,
@@ -131,7 +132,7 @@ ${lead}`
           return (
             <Link
               key={p.slug}
-              href={loc(locale, `/blog/${p.slug}`)}
+              href={postHref(p, locale)}
               className="group flex flex-col gap-1.5 border-t border-line py-5 transition-colors last:border-b hover:bg-panel/40 sm:flex-row sm:items-center sm:gap-8"
             >
               <span

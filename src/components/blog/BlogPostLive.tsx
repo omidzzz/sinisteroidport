@@ -7,6 +7,7 @@ import ContentRenderer from "./ContentRenderer";
 import {
   getChosenTranslation,
   isFallbackTranslation,
+  postHref,
   postTitle,
   postExcerpt,
   formatPostDate,
@@ -94,7 +95,7 @@ export default function BlogPostLive({
     return related.map((p) => ({
       kicker,
       title: postTitle(p, locale),
-      href: loc(locale, `/blog/${p.slug}`),
+      href: postHref(p, locale),
     }));
   }, [related, locale]);
 

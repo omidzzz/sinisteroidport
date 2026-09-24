@@ -5,10 +5,11 @@ import ScrambleText from "../ui/ScrambleText";
 import type { Post } from "@/lib/blog/types";
 import {
   isFallbackTranslation,
+  postHref,
   postTitle,
   postDateKey,
 } from "@/lib/blog/format";
-import { loc, type Locale } from "@/lib/i18n";
+import { type Locale } from "@/lib/i18n";
 import { ArrowIcon } from "../ui/icons";
 
 /** Shape returned by /api/get_posts.php (subset of our Post). */
@@ -106,7 +107,7 @@ export default function LatestPostsLive({
         const cover = post.featuredImage?.src || "";
         const fallback = isFallbackTranslation(post, locale);
         const date = postDateKey(post.date);
-        const href = loc(locale, `/blog/${post.slug}`);
+        const href = postHref(post, locale);
         const cls = "post-card-grid";
         const card = (
           <>

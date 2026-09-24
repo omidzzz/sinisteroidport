@@ -1,5 +1,5 @@
 import type { Post } from "@/lib/blog/types";
-import { postTitle, postExcerpt, formatPostDate } from "@/lib/blog/format";
+import { postTitle, postExcerpt, postHref, formatPostDate } from "@/lib/blog/format";
 import { loc, type Locale } from "@/lib/i18n";
 import { tagLabel } from "@/lib/tags";
 import { ArrowIcon } from "../ui/icons";
@@ -26,7 +26,7 @@ export default function RelatedReading({
   if (!related.length) return null;
 
   const [hero, ...rest] = related;
-  const heroHref = loc(locale, `/blog/${hero.slug}`);
+  const heroHref = postHref(hero, locale);
   const heroTitle = postTitle(hero, locale);
   const heroExcerpt = postExcerpt(hero, locale);
   const heroCover = hero.featuredImage?.src || null;
@@ -60,7 +60,7 @@ export default function RelatedReading({
         return (
           <a
             key={p.slug}
-            href={loc(locale, `/blog/${p.slug}`)}
+            href={postHref(p, locale)}
             data-track="related_post_click"
             className="group flex items-center gap-4 border-t border-line py-4 transition-colors hover:bg-panel/40"
           >

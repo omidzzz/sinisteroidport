@@ -7,10 +7,11 @@ import type { Post } from "@/lib/blog/types";
 import {
   isFallbackTranslation,
   postExcerpt,
+  postHref,
   postTitle,
   formatPostDate,
 } from "@/lib/blog/format";
-import { getDict, loc, type Locale } from "@/lib/i18n";
+import { getDict, type Locale } from "@/lib/i18n";
 
 /** Shape returned by /api/get_posts.php (subset of our Post). */
 type ApiRow = {
@@ -90,7 +91,9 @@ export default function BlogListLive({
         const fallback = isFallbackTranslation(post, locale);
         const tags = Array.isArray(post.tags) ? post.tags : [];
         const cover = post.featuredImage?.src || "";
-        const href = loc(locale, `/blog/${post.slug}`);
+        // Fallback cards link to the English article: the /fa/ copy is
+        // noindexed and reads as the same English text (see postHref).
+        const href = postHref(post, locale);
         const cls = "issue-card group";
         const card = (
           <>

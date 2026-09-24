@@ -8,11 +8,12 @@ import {
   getPostBySlug,
 } from "@/lib/blog/repository";
 import { buildSeoTitle, getPostMeta, getPostKeywords } from "@/lib/blog/meta";
+import { postHref } from "@/lib/blog/format";
 import { postWordCount, postReadMinutes } from "@/lib/blog/stats";
 import { ogCardSrc, publicAssetExists } from "@/lib/blog/assets";
 import type { Post } from "@/lib/blog/types";
 import { getRelatedPosts } from "@/lib/blog/related";
-import { isLocale, loc, type Locale } from "@/lib/i18n";
+import { isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates, SITE } from "@/lib/seo";
 import {
   normalizeTags,
@@ -80,11 +81,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Canonical scheme is always the locale-prefixed URL — never bare URLs
   // or ?lang= variants. The per-post seo.canonical field in the JSON points
   // at legacy bare URLs and is intentionally not used here.
+  // Untranslated posts: the /fa/ URL exists but serves the ENGLISH article
+  // (byte-identical to /en/) inside a lang="fa" document. Offering it as an
+  // alternate — or letting it be indexed — would tell Google this site has
+  // Persian content it does not have. The alternate set is therefore the EN
+  // URL alone until a translation lands, on BOTH sides of the pair; the
+  // fallback URL itself is noindexed by the robots rule below.
+  const faReady = Boolean(post.translations?.fa);
   return {
     title: seoTitle,
     description: meta.excerpt,
     ...(keywords.length > 0 ? { keywords } : {}),
-    alternates: seoAlternates(`blog/${slug}`, locale),
+    alternates: seoAlternates(
+      `blog/${slug}`,
+      locale,
+      faReady ? ["en", "fa"] : ["en"]
+    ),
+    ...(locale === "fa" && !faReady
+      ? { robots: { index: false, follow: true } }
+      : {}),
     openGraph: {
       title: meta.title,
       description: meta.excerpt,
@@ -195,7 +210,7 @@ export default async function BlogPostPage({ params }: Props) {
                 p ? (
                   <Link
                     key={dir}
-                    href={loc(locale, `/blog/${p.slug}`)}
+                    href={postHref(p, locale)}
                     className="group border border-line p-5 transition-colors hover:border-accent/60"
                   >
                     <span className="label block">{label(dir)}</span>

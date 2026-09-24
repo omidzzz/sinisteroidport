@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { Post } from "@/lib/blog/types";
-import { postTitle } from "@/lib/blog/format";
-import { loc, type Locale } from "@/lib/i18n";
+import { postHref, postTitle } from "@/lib/blog/format";
+import { type Locale } from "@/lib/i18n";
 import { toggleTheme } from "@/lib/theme";
 
 export interface CmdEntry {
@@ -117,7 +117,7 @@ export default function CommandPalette({
                 label: postTitle(r, locale),
                 sub: r.date?.slice(0, 10),
                 group,
-                href: loc(locale, `/blog/${r.slug}`),
+                href: postHref(r, locale),
               }))
           );
         })

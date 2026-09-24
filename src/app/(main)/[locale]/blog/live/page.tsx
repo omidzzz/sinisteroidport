@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BlogPostDynamic from "@/components/blog/BlogPostDynamic";
+import { seoAlternates } from "@/lib/seo";
 import { isLocale, type Locale } from "@/lib/i18n";
 
 interface Props {
@@ -37,6 +38,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
        reserved /blog/live/ route show this placeholder; every real
        DB-published post gets its authored keywords swapped in. */
     keywords: "Sinisteroid",
+    /* Self-canonical + the three hreflang links api/post.php swaps per DB
+       post. Without alternates this shell inherits the layout's locale-root
+       canonical, so every document served through it claimed to be a
+       duplicate of the homepage. The elements must stay present: the dynamic
+       renderer only replaces values inside EXISTING head nodes (adding or
+       removing them breaks React 19 hydration — see blog-post-template.php). */
+    alternates: seoAlternates("blog/live", locale),
   };
 }
 

@@ -14,6 +14,23 @@ export function isFallbackTranslation(post: Post, locale: Locale): boolean {
   return !post.translations?.[locale] && locale !== "en";
 }
 
+/**
+ * Locale-correct href for a post.
+ *
+ * A post with no translation in `locale` is served from the English URL: its
+ * /fa/ counterpart is the English article wearing a Persian URL, and that URL
+ * is noindexed (see the blog route). Linking the readable, indexable URL keeps
+ * the crawl out of noindexed pages and never drops a reader into a copy.
+ *
+ * Lives here (client-safe, no fs) so the issue grid, related reading, prev/next
+ * and the command palette all resolve post links the same way.
+ */
+export function postHref(post: Post, locale: Locale): string {
+  return isFallbackTranslation(post, locale)
+    ? `/en/blog/${post.slug}`
+    : `/${locale}/blog/${post.slug}`;
+}
+
 export function postTitle(post: Post, locale: Locale): string {
   return getChosenTranslation(post, locale)?.title ?? post.title;
 }
