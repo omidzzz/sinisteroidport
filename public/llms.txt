@@ -1,100 +1,64 @@
 # Omid - Frontend Developer
 
-> Professional frontend developer specializing in React.js, JavaScript, and modern web development based in Tehran, Iran.
+> Professional frontend developer specializing in React.js, JavaScript, modern web development, accessible interfaces, and bilingual technical writing. Based in Tehran, Iran.
 
-Full details: [llms-full.txt](https://sinisteroid.ir/llms-full.txt)
-
-Last updated: 2026-09-18
+Last updated: 2026-09-24
 
 ## Key Pages
-- [Home](https://sinisteroid.ir/en/)
-- [Writing / Blog](https://sinisteroid.ir/en/blog/)
-- [Skills](https://sinisteroid.ir/en/skills/)
-- [Showcase / Projects](https://sinisteroid.ir/en/showcase/)
-- [Graphics Lab](https://sinisteroid.ir/en/lab/)
-- [Work History](https://sinisteroid.ir/en/work/)
-- [Education](https://sinisteroid.ir/en/education/)
-- [Contact](https://sinisteroid.ir/en/contact/)
-- [RSS Feed](https://sinisteroid.ir/feed.xml)
-- [JSON Feed](https://sinisteroid.ir/feed.json)
-- [Topics index](https://sinisteroid.ir/en/tags/)
-- [Sitemap](https://sinisteroid.ir/sitemap.xml)
+- [Home](https://sinisteroid.ir/en/) · [فارسی](https://sinisteroid.ir/fa/)
+- [Writing / Blog](https://sinisteroid.ir/en/blog/) · [فارسی](https://sinisteroid.ir/fa/blog/)
+- [Skills](https://sinisteroid.ir/en/skills/) · [فارسی](https://sinisteroid.ir/fa/skills/)
+- [Showcase / Projects](https://sinisteroid.ir/en/showcase/) · [فارسی](https://sinisteroid.ir/fa/showcase/)
+- [Graphics Lab](https://sinisteroid.ir/en/lab/) · [فارسی](https://sinisteroid.ir/fa/lab/)
+- [Work History](https://sinisteroid.ir/en/work/) · [فارسی](https://sinisteroid.ir/fa/work/)
+- [Education](https://sinisteroid.ir/en/education/) · [فارسی](https://sinisteroid.ir/fa/education/)
+- [Contact](https://sinisteroid.ir/en/contact/) · [فارسی](https://sinisteroid.ir/fa/contact/)
+- [RSS feed](https://sinisteroid.ir/feed.xml) · [JSON Feed](https://sinisteroid.ir/feed.json) · [Persian RSS](https://sinisteroid.ir/fa/feed.xml)
+- [Sitemap](https://sinisteroid.ir/sitemap.xml) · [Topics index](https://sinisteroid.ir/en/tags/)
 
-## Navigation
-The site is served in two locales: English under `/en/` and Persian (RTL) under `/fa/`.
-Every route exists at both prefixes, cross-linked with `hreflang` alternates and
-listed in the sitemap. Navigation is also available as a single-page index:
-`/en/` links every section, and the colophon at the foot of each page is a prose
-sitemap naming all eight sections.
+The site is served in two locales: English under /en/ and Persian (RTL) under /fa/. Routes are cross-linked with hreflang alternates and listed in the sitemap.
 
-## About
-Omid is a frontend developer with a unique background in Translation Studies. He combines linguistic precision with technical expertise to create clean, user-friendly web applications.
+## What Omid does
+- Frontend development with React.js, TypeScript, JavaScript, HTML, CSS, and modern component architecture.
+- Responsive, accessible, performance-minded interfaces, including Next.js static sites and WordPress themes/plugins.
+- Technical writing, content strategy, SEO/GEO, and English ↔ Persian translation.
+- Based in Tehran; available for remote freelance work worldwide.
 
-**Key Facts:**
-- **Name:** Omid
-- **Role:** Frontend Developer
-- **Location:** Tehran, Iran
-- **Experience:** 2012-Present (Translation & Development)
-- **Education:** BA in Translation Studies from Shahid Chamran University
-- **Specialization:** React.js, JavaScript, HTML/CSS, Content Strategy
+## Graphics Lab
+The [Graphics Lab](https://sinisteroid.ir/en/lab/) is the site's collection of custom animated SVG illustration props: a psychedelic frog, bioluminescent plant, isometric laptop terminal, and psychedelic UFO. Each plate has a numbered caption plus Copy SVG and Download actions. The route also documents the five-color Code & Craft palette: charcoal #272727, light ink #eff1f3, signature yellow #fed766, secondary teal #009fb7, and structure #696773.
 
-## Skills & Expertise
-- **Frontend Development:** React.js, JavaScript (ES6+), HTML5, CSS3, Tailwind CSS
-- **Tools & Technologies:** Git, Framer Motion, REST APIs, Responsive Design
-- **Soft Skills:** Technical Writing, Content Strategy, Translation (English ↔ Persian)
-- **Platforms:** WordPress, Elementor, React Applications
+## Current Writing
+The site has 12 published articles. The complete current index is in [llms-full.txt](https://sinisteroid.ir/llms-full.txt).
+- **Content Clusters for GEO: How to Build Topical Authority That AI Engines Trust** — [English](https://sinisteroid.ir/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/) · [فارسی](https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/) (2026-08-25; content-strategy)
+  Learn how to build content clusters for Generative Engine Optimization (GEO). Step-by-step framework to create topical authority that gets cited in AI Overviews, ChatGPT, and Perplexity — not just ranked in Google.
+- **Design Without Words Is Decoration** — [English](https://sinisteroid.ir/en/blog/design-without-words-is-decoration/) · [فارسی](https://sinisteroid.ir/fa/blog/design-without-words-is-decoration/) (2026-08-25; frontend-design)
+  Discover why great design is more than aesthetics. Learn how visual communication, branding, UX design, and design thinking transform design from decoration into a powerful communication tool.
+- **From Clicks to Conversations: Why Your Content Strategy is Obsolete** — [English](https://sinisteroid.ir/en/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/) · [فارسی](https://sinisteroid.ir/fa/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/) (2026-08-25; content-strategy)
+  64.82% of searches end without a click. AI agents are replacing clicks with conversations. Here's why your content strategy is obsolete and how to rebuild it for GEO, AI citations, and the conversational web.
+- **Modern Techniques in Frontend Design** — [English](https://sinisteroid.ir/en/blog/modern-frontend-design-techniques/) · [فارسی](https://sinisteroid.ir/fa/blog/modern-frontend-design-techniques/) (2026-08-25; frontend-design)
+  Explore the techniques shaping modern frontend design — from design tokens and motion systems to fluid typography, spatial depth, accessibility, and adaptive color. Build interfaces that communicate and perform.
+- **Ollama: The Engine Behind Local AI** — [English](https://sinisteroid.ir/en/blog/ollama-the-engine-behind-local-ai/) · [فارسی](https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai/) (2026-08-25; local-ai)
+  A technical deep dive into Ollama — the open-source runtime powering local large language models. Learn its architecture, quantization tradeoffs, API design, model selection, and security considerations.
+- **SEO vs GEO: What's the Difference?** — [English](https://sinisteroid.ir/en/blog/seo-vs-geo-whats-the-difference/) · [فارسی](https://sinisteroid.ir/fa/blog/seo-vs-geo-whats-the-difference/) (2026-08-25; seo-geo)
+  SEO vs GEO explained: what's the difference, why both matter, and how to optimize for traditional search and AI-generated answers in 2026. Includes comparison table, strategies, and checklist.
+- **Your AI Tools Are Spying on You. Here’s the Fix.** — [English](https://sinisteroid.ir/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/) · [فارسی](https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix/) (2026-08-25; ai-tools, ai-privacy)
+  Most AI chatbots train on your prompts by default. Learn how to run powerful private AI offline with Ollama and Open WebUI so your data never leaves your machine.
+- **Zero-Click Search Is Here. Now What?** — [English](https://sinisteroid.ir/en/blog/zero-click-search-is-here-now-what/) · [فارسی](https://sinisteroid.ir/fa/blog/zero-click-search-is-here-now-what/) (2026-08-25; seo-geo)
+  64.82% of Google searches now end without a click. AI Overviews push that to 83%. Learn what zero-click search means for SEO, which query types still drive traffic, and the five strategies that work in 2026.
+- **Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?** — [English](https://sinisteroid.ir/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/) · [فارسی](https://sinisteroid.ir/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/) (2026-08-15; ai-coding-agents, ai-tools, open-source-ai)
+  Claude Code and Cline are two of the most capable agentic coding tools of 2026 — one a polished, subscription-based product from Anthropic, the other a free, open-source, model-agnostic extension. Here's a full head-to-head on pricing, models, platforms, autonomy, and which one actually fits your workflow.
+- **The Death of Traditional Websites: Designing for AI Agents** — [English](https://sinisteroid.ir/en/blog/the-death-of-traditional-websites-designing-for-ai-agents/) · [فارسی](https://sinisteroid.ir/fa/blog/the-death-of-traditional-websites-designing-for-ai-agents/) (2026-06-22; web-architecture, seo-geo, content-strategy)
+  Over 60% of searches now end without a single click. AI agents browse your website without seeing it. The visual hierarchy you spent months refining, the hover states, the scroll animations — none of it registers. What does register is your content architecture, your structured data, and whether a machine can extract a useful answer from your HTML in under a second.
+- **Open WebUI: The Missing Interface for Local AI** — [English](https://sinisteroid.ir/en/blog/open-webui-the-missing-interface-for-local-ai/) · [فارسی](https://sinisteroid.ir/fa/blog/open-webui-the-missing-interface-for-local-ai/) (2026-06-21; local-ai, ai-tools, open-source-ai)
+  Ollama gives you the inference engine. Open WebUI gives you everything else — conversation history, document RAG, multi-user access control, voice, image generation, and a pipeline system for custom Python logic. This is how you turn a local model into a complete AI platform.
+- **Cline: The Open-Source AI Coding Agent Redefining Developer Workflows** — [English](https://sinisteroid.ir/en/blog/cline-the-open-source-ai-coding-agent/) · [فارسی](https://sinisteroid.ir/fa/blog/cline-the-open-source-ai-coding-agent/) (2026-06-19; ai-coding-agents, local-ai, ai-tools, open-source-ai)
+  Cline brings autonomous, context-aware AI coding directly into VS Code and your terminal. Explore its architecture, Plan/Act modes, local LLM integration with Ollama, and why it stands out in the 2026 AI developer tooling landscape.
 
-## Services Offered
-1. **Frontend Development** - React.js applications with modern UI/UX
-2. **WordPress Development** - Custom themes and plugins with Elementor
-3. **Content Strategy** - Technical blog writing and SEO-optimized content
-4. **Translation Services** - English ↔ Persian translation with technical accuracy
-
-## Projects & Portfolio
-- **Sinisteroid Portfolio** - Personal portfolio with React and Framer Motion
-- **Moblshuyi** - WordPress website for upholstery cleaning services
-- **CarpetDey** - Professional carpet cleaning service website
-- **Tamir Center** - Appliance repair service website
-- **Tahamtan Shop** - Educational blog content for industrial products
-- **Moj Company** - Data-driven blog content for LC financing
-- **Abzarhz** - SEO-optimized blog posts for tool buyers
-
-## Work Experience
-- **Arshita Web** (2024-Present) - Customer Support Specialist
-- **Self-Employed** (2022-2024) - Freelance Translator & Developer
-- **Hich Cafe** (2017-2022) - Barista & Shift Supervisor
-- **Self-Employed** (2012-2017) - Freelance Translator
-
-## Education
-- **BA Translation Studies** - Shahid Chamran University of Ahvaz (2010-2014)
-- **MA Translation Studies** - Allameh Tabatabaei University (2015-2017, 3 semesters)
-- **Online Courses** - Udemy, Dr. Chuck Severance (Python, Web Development)
-
-## Common Questions
-
-### Q: What technologies does Omid work with?
-A: Omid specializes in React.js, JavaScript, HTML/CSS, and modern frontend frameworks. He also works with WordPress, Elementor, and various CSS frameworks like Tailwind.
-
-### Q: Is Omid available for freelance work?
-A: Yes, Omid is available for remote frontend development projects, WordPress development, and technical content creation.
-
-### Q: What makes Omid different from other developers?
-A: Omid's background in Translation Studies brings linguistic precision to his development work, making him excellent at technical writing, content strategy, and creating user-friendly interfaces.
-
-### Q: Where is Omid based?
-A: Omid is based in Tehran, Iran, originally from Ahvaz. He works remotely with clients worldwide.
-
-## Contact Information
-- **Website:** https://sinisteroid.ir
-- **Email:** ghadamgahi.omid@gmail.com
-- **Phone:** +989367471992
-- **Telegram:** @simplyeffedup
-- **GitHub:** @omidzzz
-
-## Languages
-- **Persian (Farsi)** - Native
-- **English** - Professional Proficiency
-- **Arabic** - Basic (from Translation Studies)
+## Contact
+- Email: ghadamgahi.omid@gmail.com
+- GitHub: https://github.com/omidzzz
+- Telegram: @simplyeffedup
+- Phone: +989367471992
 
 ---
-Last Updated: 2026-08-11
+Last updated: 2026-09-24

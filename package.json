@@ -5,7 +5,7 @@
   "description": "Omid – Frontend Developer Portfolio (Next.js)",
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/build/generate-og-cards.mjs && node scripts/build/generate-sitemap.mjs && node scripts/build/generate-rss.mjs && next build --webpack && node scripts/build/fix-segment-cache-paths.mjs --prune && node scripts/build/optimize-images.mjs --out && node scripts/build/inline-fonts.mjs && node scripts/build/inline-hero.mjs",
+    "build": "node scripts/build/generate-og-cards.mjs && node scripts/build/generate-llms.mjs && node scripts/build/generate-sitemap.mjs && node scripts/build/generate-rss.mjs && next build --webpack && node scripts/build/fix-segment-cache-paths.mjs --prune && node scripts/build/optimize-images.mjs --out && node scripts/build/inline-fonts.mjs && node scripts/build/inline-hero.mjs",
     "start": "next start",
     "lint": "eslint .",
     "indexnow": "node scripts/tools/indexnow.mjs",
