@@ -158,13 +158,28 @@ export async function generateMetadata({
     openGraph: {
       siteName: "Sinisteroid",
       type: "website",
-      url: "https://sinisteroid.ir",
-      locale: isLocale(locale) && locale === "fa" ? "fa_IR" : "en_US",
-      alternateLocale: isLocale(locale) && locale === "fa" ? "en_US" : "fa_IR",
+      // Per-locale URL: the domain root is an internal rewrite of one of the
+      // two homes, so claiming it as every locale's og:url blurred them apart.
+      url: fa ? "https://sinisteroid.ir/fa/" : "https://sinisteroid.ir/en/",
+      locale: fa ? "fa_IR" : "en_US",
+      alternateLocale: fa ? "en_US" : "fa_IR",
       // Dedicated 1200x630 social card (og-default.jpg lives in /public)
-      images: [{ url: "/og-default.jpg", width: 1200, height: 630 }],
+      images: [
+        {
+          url: "/og-default.jpg",
+          width: 1200,
+          height: 630,
+          alt: fa
+            ? "امید — توسعه‌دهنده فرانت‌اند: نمونه‌کار، نوشته‌ها و آزمایشگاه گرافیک"
+            : "Omid — frontend developer: portfolio, writing and graphics lab",
+        },
+      ],
     },
-    twitter: { card: "summary_large_image", site: "@sinisteroid" },
+    twitter: {
+      card: "summary_large_image",
+      site: "@sinisteroid",
+      creator: "@sinisteroid",
+    },
   };
 }
 
