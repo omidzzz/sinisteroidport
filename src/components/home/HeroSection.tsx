@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Reveal from "@/components/ui/Reveal";
 import { ArrowIcon } from "@/components/ui/icons";
@@ -15,42 +14,6 @@ import { getDict, loc, type Locale } from "@/lib/i18n";
  */
 export default function HeroSection({ locale }: { locale: Locale }) {
   const t = getDict(locale);
-  const bandRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const band = bandRef.current;
-    if (!band) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!window.matchMedia("(pointer: fine)").matches) return;
-    let raf = 0;
-    let lastY = window.scrollY;
-    let v = 1;
-    let lastT = performance.now();
-    const tick = (now: number) => {
-      raf = 0;
-      if (document.hidden) return;
-      const y = window.scrollY;
-      const dt = Math.max(now - lastT, 16);
-      lastT = now;
-      const speed = Math.abs(y - lastY) / dt;
-      lastY = y;
-      const target = Math.min(1 + speed * 2.4, 2.2);
-      v += (target - v) * 0.12;
-      if (v < 1.02) v = 1;
-      band.style.setProperty("--tick-v", v.toFixed(2));
-      if (v > 1.02 || target > 1.02) raf = requestAnimationFrame(tick);
-    };
-    const wake = () => {
-      lastT = performance.now();
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
-    window.addEventListener("scroll", wake, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", wake);
-      if (raf) cancelAnimationFrame(raf);
-      band.style.removeProperty("--tick-v");
-    };
-  }, []);
 
   return (
     <>
@@ -108,11 +71,11 @@ export default function HeroSection({ locale }: { locale: Locale }) {
       </section>
 
       {/* hazard ticker lives OUTSIDE the hero so nothing clips it */}
-      <div aria-hidden="true" className="craft-ticker-bleed" ref={bandRef}>
+      <div aria-hidden="true" className="craft-ticker-bleed">
         <div className="craft-ticker-band">
-          <div className="craft-ticker-track">
+          <div className="craft-ticker-track" dir="ltr">
             {Array.from({ length: 2 }, (_, copy) => (
-              <div key={copy} className="craft-ticker-row">
+              <div key={copy} className="craft-ticker-row" dir="ltr">
                 {t.services.map((s) => (
                   <span
                     key={`${copy}-${s.title}`}

@@ -208,8 +208,15 @@ html[lang="fa"] .craft-hero-kicker {
 .craft-ticker-track {
   display: flex;
   width: 200vw;
+  /* The track is a physical left-to-right strip in every locale. Letting it
+     inherit RTL reverses the flex origin and leaves the first copy off-canvas. */
+  direction: ltr;
   animation: craft-ticker-scan 34s linear infinite;
-  animation-delay: -17s;
+  animation-iteration-count: infinite;
+}
+
+[dir="rtl"] .craft-ticker-track {
+  animation-name: craft-ticker-scan-rtl;
 }
 
 @keyframes craft-ticker-scan {
@@ -217,7 +224,18 @@ html[lang="fa"] .craft-hero-kicker {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    /* One exact copy = 100vw, not half of a percentage-sized track. */
+    transform: translate3d(-100vw, 0, 0);
+  }
+}
+
+@keyframes craft-ticker-scan-rtl {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Persian moves the other way, but still travels exactly one copy. */
+    transform: translate3d(100vw, 0, 0);
   }
 }
 
@@ -225,11 +243,13 @@ html[lang="fa"] .craft-hero-kicker {
   display: flex;
   align-items: center;
   gap: 2.5rem;
-  flex-shrink: 0;
+  flex: 0 0 100vw;
+  box-sizing: border-box;
   white-space: nowrap;
   padding-inline: 1.5rem;
   width: 100vw;
   justify-content: space-around;
+  direction: ltr;
 }
 
 .craft-ticker-item {
@@ -248,6 +268,8 @@ html[lang="fa"] .craft-hero-kicker {
   letter-spacing: 0;
   text-transform: none;
   font-size: 0.78rem;
+  direction: rtl;
+  unicode-bidi: isolate;
 }
 
 .craft-ticker-spark {
@@ -263,8 +285,10 @@ html[lang="fa"] .craft-hero-kicker {
   .craft-ticker-band {
     will-change: transform;
   }
+  /* Keep one stable animation timeline. Changing animation-duration during
+     scroll can restart/jump the marquee at the copy seam. */
   .craft-ticker-track {
-    animation-duration: calc(34s / var(--tick-v, 1));
+    will-change: transform;
   }
 }
 
@@ -453,8 +477,7 @@ a.sys-channel-val:hover {
 /* ---------- RTL ---------- */
 
 [dir="rtl"] .craft-meta-sep,
-[dir="rtl"] .craft-role-chip,
-[dir="rtl"] .craft-ticker-row {
+[dir="rtl"] .craft-role-chip {
   unicode-bidi: plaintext;
 }
 
