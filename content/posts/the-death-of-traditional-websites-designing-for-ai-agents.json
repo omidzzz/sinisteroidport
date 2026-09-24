@@ -81,14 +81,14 @@
           "title": "Ollama: The Engine Behind Local AI",
           "text": "Understanding the infrastructure that powers AI agents is essential. Our deep dive into Ollama covers the inference engine behind many local AI systems.",
           "buttonText": "Read About Ollama",
-          "buttonUrl": "/blog/ollama-the-engine-behind-local-ai"
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "cta",
           "title": "Open WebUI: The Missing Interface for Local AI",
           "text": "See how AI interfaces are evolving with Open WebUI — the open-source platform that wraps Ollama in a ChatGPT-class experience.",
           "buttonText": "Explore Open WebUI",
-          "buttonUrl": "/blog/open-webui-the-missing-interface-for-local-ai"
+          "buttonUrl": "/en/blog/open-webui-the-missing-interface-for-local-ai/"
         },
         {
           "type": "alert",
@@ -238,14 +238,14 @@
           "title": "Design Without Words Is Decoration",
           "text": "Explore the philosophical side of design decisions and why visual communication must serve a purpose beyond aesthetics.",
           "buttonText": "Read About Design Principles",
-          "buttonUrl": "/blog/design-without-words-is-decoration"
+          "buttonUrl": "/en/blog/design-without-words-is-decoration/"
         },
         {
           "type": "cta",
           "title": "Modern Techniques in Frontend Design",
           "text": "Learn the technical patterns that make content both human-readable and machine-accessible in modern web development.",
           "buttonText": "Explore Frontend Techniques",
-          "buttonUrl": "/blog/modern-frontend-design-techniques"
+          "buttonUrl": "/en/blog/modern-frontend-design-techniques/"
         },
         {
           "type": "alert",
@@ -409,14 +409,14 @@
           "title": "اولاما: موتور پشت هوش مصنوعی محلی",
           "text": "درک زیرساختی که ایجنت‌های هوش مصنوعی را راه‌اندازی می‌کند ضروری است. مقاله ما در مورد اولاما، موتور استنتاج پشت بسیاری از سیستم‌های هوش مصنوعی محلی را پوشش می‌دهد.",
           "buttonText": "خواندن درباره اولاما",
-          "buttonUrl": "/blog/ollama-the-engine-behind-local-ai"
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "cta",
           "title": "اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی",
           "text": "ببینید چگونه رابط‌های هوش مصنوعی با اوپن وب‌یوآی تکامل می‌یابند — پلتفرم متن‌بازی که اولاما را در یک تجربه کاربری در سطح ChatGPT می‌پوشاند.",
           "buttonText": "کشف اوپن وب‌یوآی",
-          "buttonUrl": "/blog/open-webui-the-missing-interface-for-local-ai"
+          "buttonUrl": "/fa/blog/open-webui-the-missing-interface-for-local-ai/"
         },
         {
           "type": "alert",
@@ -566,14 +566,14 @@
           "title": "طراحی بدون حرف، چیزی جز دکور نیست",
           "text": "اگر به جنبه فلسفی تصمیمات طراحی علاقه‌مندید، این مقاله بررسی می‌کند که چرا ارتباط بصری باید فراتر از زیبایی‌شناسی هدفی داشته باشد.",
           "buttonText": "خواندن درباره طراحی",
-          "buttonUrl": "/blog/design-without-words-is-decoration"
+          "buttonUrl": "/en/blog/design-without-words-is-decoration/"
         },
         {
           "type": "cta",
           "title": "تکنیک‌های مدرن در طراحی فرانت‌اند",
           "text": "الگوهای فنی که محتوا را هم برای انسان‌ها قابل خواندن و هم برای ماشین‌ها قابل دسترس می‌کنند را در این مقاله بیاموزید.",
           "buttonText": "کشف تکنیک‌های فرانت‌اند",
-          "buttonUrl": "/blog/modern-frontend-design-techniques"
+          "buttonUrl": "/en/blog/modern-frontend-design-techniques/"
         },
         {
           "type": "alert",

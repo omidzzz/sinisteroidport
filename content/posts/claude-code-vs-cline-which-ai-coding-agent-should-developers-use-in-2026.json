@@ -129,7 +129,7 @@
           "title": "Cline: The Open-Source AI Coding Agent",
           "text": "Our full breakdown of how Cline works, recommended models, and why developers are adopting it.",
           "buttonText": "Read the Cline Guide",
-          "buttonUrl": "https://sinisteroid.ir/blog/cline-the-open-source-ai-coding-agent"
+          "buttonUrl": "/en/blog/cline-the-open-source-ai-coding-agent/"
         },
         {
           "type": "cta",
@@ -243,14 +243,14 @@
           "title": "Ollama: The Engine Behind Local AI",
           "text": "Pair Cline with a fully offline model using Ollama — installation, model picks, and real-world performance.",
           "buttonText": "Read the Ollama Guide",
-          "buttonUrl": "https://sinisteroid.ir/blog/ollama-the-engine-behind-local-ai"
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "cta",
           "title": "Your AI Tools Are Spying on You. Here's the Fix.",
           "text": "The broader privacy case for local inference — and how to build a fully private AI stack, coding agents included.",
           "buttonText": "Read the Privacy Guide",
-          "buttonUrl": "https://sinisteroid.ir/blog/your-ai-tools-are-spying-on-you-heres-the-fix"
+          "buttonUrl": "/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/"
         },
         {
           "type": "image",
@@ -438,7 +438,7 @@
           "title": "کلاین: عامل کدنویسی متن‌باز هوش مصنوعی",
           "text": "بررسی کامل ما از نحوهٔ کار کلاین، مدل‌های پیشنهادی و دلیل روی‌آوردن توسعه‌دهندگان به آن.",
           "buttonText": "مطالعهٔ راهنمای کلاین",
-          "buttonUrl": "https://sinisteroid.ir/fa/blog/cline-the-open-source-ai-coding-agent"
+          "buttonUrl": "/fa/blog/cline-the-open-source-ai-coding-agent/"
         },
         {
           "type": "cta",
@@ -552,14 +552,14 @@
           "title": "اولاما: موتور پشت هوش مصنوعی محلی",
           "text": "کلاین را با یک مدل کاملاً آفلاین از طریق Ollama جفت کنید — نصب، انتخاب مدل و عملکرد واقعی.",
           "buttonText": "مطالعهٔ راهنمای اولاما",
-          "buttonUrl": "https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai"
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "cta",
           "title": "ابزارهای هوش مصنوعی شما در حال جاسوسی از شما هستند. راه‌حل اینجاست.",
           "text": "استدلال گسترده‌تر برای استنتاج محلی — و چگونگی ساخت یک پشتهٔ هوش مصنوعی کاملاً خصوصی، شامل عامل‌های کدنویسی.",
           "buttonText": "مطالعهٔ راهنمای حریم خصوصی",
-          "buttonUrl": "https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix"
+          "buttonUrl": "/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/"
         },
         {
           "type": "image",

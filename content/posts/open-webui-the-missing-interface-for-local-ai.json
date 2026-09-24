@@ -247,14 +247,14 @@
           "title": "Start with the Inference Engine",
           "text": "Before setting up Open WebUI, you need Ollama running locally. Our deep-dive covers the architecture, quantization tradeoffs, GPU offloading, and model selection that make Ollama the backbone of any local AI stack.",
           "buttonText": "Read: Ollama — The Engine Behind Local AI",
-          "buttonUrl": "https://sinisteroid.ir/blog/ollama-the-engine-behind-local-ai"
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "cta",
           "title": "Take Local AI Into Your Editor",
           "text": "Once your local stack is running, Cline connects it directly to VS Code as an autonomous coding agent — file editing, terminal execution, and MCP tool access, all routed through your own Ollama instance.",
           "buttonText": "Read: Cline — The Autonomous AI Coding Agent",
-          "buttonUrl": "https://sinisteroid.ir/blog/cline-the-open-source-ai-coding-agent"
+          "buttonUrl": "/en/blog/cline-the-open-source-ai-coding-agent/"
         }
       ],
       "faq": [
@@ -525,14 +525,14 @@
           "title": "با موتور Inference شروع کنید",
           "text": "قبل از راه‌اندازی اوپن وب‌یوآی، باید اولاما به‌صورت محلی در حال اجرا باشد. بررسی عمیق ما معماری، trade-offهای کوانتیزاسیون، انتقال بار به GPU و انتخاب مدل را پوشش می‌دهد که اولاما را ستون فقرات هر stack هوش مصنوعی محلی می‌کند.",
           "buttonText": "بخوانید: اولاما — موتور پشت هوش مصنوعی محلی",
-          "buttonUrl": "https://sinisteroid.ir/blog/ollama-the-engine-behind-local-ai"
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "cta",
           "title": "هوش مصنوعی محلی را به ویرایشگر خود ببرید",
           "text": "هنگامی که stack محلی شما در حال اجرا است، کلاین آن را مستقیماً به VS Code به عنوان یک ایجنت کدنویسی خودمختار متصل می‌کند — ویرایش فایل، اجرای ترمینال و دسترسی به ابزار MCP، همه از طریق نمونه اولاما خودتان هدایت می‌شود.",
           "buttonText": "بخوانید: کلاین — ایجنت کدنویسی هوش مصنوعی خودمختار",
-          "buttonUrl": "https://sinisteroid.ir/blog/cline-the-open-source-ai-coding-agent"
+          "buttonUrl": "/fa/blog/cline-the-open-source-ai-coding-agent/"
         }
       ],
       "faq": [

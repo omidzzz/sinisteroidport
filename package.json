@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "indexnow": "node scripts/tools/indexnow.mjs",
     "normalize-tags": "node scripts/migrations/normalize-tags.mjs",
+    "normalize-links": "node scripts/migrations/normalize-post-links.mjs",
     "extract-posts": "node scripts/migrations/extract-posts.mjs",
     "import-posts": "node scripts/migrations/import-posts.mjs",
     "prepare-cpanel": "node scripts/build/prepare-cpanel.mjs",

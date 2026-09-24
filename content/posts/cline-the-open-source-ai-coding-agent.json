@@ -93,7 +93,7 @@
           "title": "Explore Modern Frontend Design Techniques",
           "text": "Learn how modern frontend design has evolved from static pages to interactive applications.",
           "buttonText": "Read the Article",
-          "buttonUrl": "/blog/modern-frontend-design-techniques"
+          "buttonUrl": "/en/blog/modern-frontend-design-techniques/"
         },
         {
           "type": "quote",
@@ -171,7 +171,7 @@
           "title": "Discover Ollama: The Engine Behind Local AI",
           "text": "Learn how to set up and use Ollama for private, offline AI development with Cline.",
           "buttonText": "Read the Guide",
-          "buttonUrl": "/blog/ollama-the-engine-behind-local-ai"
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "paragraph",
@@ -231,7 +231,7 @@
           "title": "Read: Design Without Words is Decoration",
           "text": "Explore the philosophy that form without function is just decoration.",
           "buttonText": "Read the Article",
-          "buttonUrl": "/blog/design-without-words-is-decoration"
+          "buttonUrl": "/en/blog/design-without-words-is-decoration/"
         },
         {
           "type": "cta",
@@ -323,7 +323,7 @@
           "title": "Explore Modern Frontend Design Techniques",
           "text": "Learn how modern frontend design emphasizes component reusability and design systems.",
           "buttonText": "Read the Article",
-          "buttonUrl": "/blog/modern-frontend-design-techniques"
+          "buttonUrl": "/en/blog/modern-frontend-design-techniques/"
         },
         {
           "type": "heading",
@@ -457,7 +457,7 @@
           "title": "کشف تکنیک‌های مدرن در طراحی فرانت‌اند",
           "text": "یاد بگیرید چگونه طراحی فرانت‌اند از صفحات ایستا به اپلیکیشن‌های تعاملی تکامل یافته است.",
           "buttonText": "خواندن مقاله",
-          "buttonUrl": "/blog/modern-frontend-design-techniques"
+          "buttonUrl": "/en/blog/modern-frontend-design-techniques/"
         },
         {
           "type": "quote",
@@ -535,7 +535,7 @@
           "title": "کشف Ollama: موتور پشت هوش مصنوعی محلی",
           "text": "یاد بگیرید چگونه Ollama را برای توسعه هوش مصنوعی خصوصی و آفلاین با کلاین تنظیم کنید.",
           "buttonText": "خواندن راهنما",
-          "buttonUrl": "/blog/ollama-the-engine-behind-local-ai"
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "paragraph",
@@ -595,7 +595,7 @@
           "title": "خواندن: طراحی بدون حرف، چیزی جز دکور نیست",
           "text": "فلسفه‌ای که فرم بدون عملکرد، چیزی جز دکور نیست را کاوش کنید.",
           "buttonText": "خواندن مقاله",
-          "buttonUrl": "/blog/design-without-words-is-decoration"
+          "buttonUrl": "/en/blog/design-without-words-is-decoration/"
         },
         {
           "type": "cta",
@@ -687,7 +687,7 @@
           "title": "کشف تکنیک‌های مدرن در طراحی فرانت‌اند",
           "text": "یاد بگیرید چگونه طراحی فرانت‌اند مدرن بر استفاده مجدد کامپوننت و سیستم‌های طراحی تأکید می‌کند.",
           "buttonText": "خواندن مقاله",
-          "buttonUrl": "/blog/modern-frontend-design-techniques"
+          "buttonUrl": "/en/blog/modern-frontend-design-techniques/"
         },
         {
           "type": "heading",
