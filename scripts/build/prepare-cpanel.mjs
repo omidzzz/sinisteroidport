@@ -86,6 +86,13 @@ const htaccessContent = `<IfModule mod_rewrite.c>
   RewriteCond %{HTTPS} off
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
+  # ── Collapse duplicate slashes in the path ──────────────────────────
+  # /en// and /fa// are answered with a 200 as duplicates of the locale
+  # roots (they used to be the canonical those pages advertised). Collapse
+  # one pair per pass; R=301 makes the client re-request until it is clean.
+  RewriteCond %{REQUEST_URI} ^(.*)//(.*)$
+  RewriteRule ^ %1/%2 [R=301,L]
+
   # ── RSC payloads (index.txt) — if present, serve them untouched ──────
   # Next.js prefetches these files for instant client-side navigation.
   # This short-circuit guarantees a real payload is never swallowed by an
@@ -289,6 +296,12 @@ for (const f of ["_redirects", "_headers", "llms.txt", "llms-full.txt"]) {
 // Patch the reference before copying: keep deployment-specific paths/fixes out
 // of the ignored build artifact, including the root route (never /en//) and the
 // production schema (date_updated, not updated).
+// Deploy stamp for the dynamic sitemap's static-section lastmod. sitemap.php
+// runs on every request, so the reference's `date('Y-m-d')` reported "today"
+// for every section every single day — and a lastmod that moves without any
+// content change is ignored wholesale, which is worse than having none.
+// Stamping the release date keeps the value stable between deploys.
+const deployStamp = new Date().toISOString().slice(0, 10);
 const sitemapSrc = fs.readFileSync(path.join(build, "sitemap.php"), "utf8");
 const sitemapFixed = sitemapSrc
   .replace(
@@ -302,8 +315,53 @@ const sitemapFixed = sitemapSrc
   )
 
   .replace(
-    "SELECT slug, date_published AS date, updated,",
-    "SELECT slug, date_published AS date, date_updated AS updated,",
+    "SELECT slug, date_published AS date, updated, featured_image",
+    "SELECT slug, date_published AS date, date_updated AS updated, featured_image, content_json",
+  )
+
+  // Static sections carry the deploy date, not "today at crawl time".
+  .replace("$today = date('Y-m-d');", `$today = '${deployStamp}';`)
+
+  // changefreq and priority are ignored by every major engine: drop both
+  // emission lines so the deployed file stops carrying dead fields.
+  .replace(
+    /[ \t]*\$block \.= "    <changefreq>\{\$changefreq\}<\/changefreq>\\n";\r?\n/,
+    "",
+  )
+  .replace(
+    /[ \t]*\$block \.= "    <priority>\{\$priority\}<\/priority>\\n";\r?\n/,
+    "",
+  )
+
+  // sitemapUrl() drops priority/changefreq and gains the image + a flag that
+  // suppresses the Persian alternate for posts with no Persian translation.
+  .replace(
+    /function sitemapUrl\(string \$hostname, string \$path, string \$lastmod,\r?\n\s*string \$priority, string \$changefreq,\r?\n\s*\?string \$image = null\): string \{/,
+    "function sitemapUrl(string $hostname, string $path, string $lastmod, ?string $image = null, bool $withFa = true): string {",
+  )
+
+  .replace(
+    /([ \t]*)\$block \.= "    <xhtml:link rel=\\"alternate\\" hreflang=\\"fa\\" href=\\"\{\$locFa\}\\" \/>\\n";\r?\n/,
+    (_full, indent) =>
+      `${indent}if ($withFa) {\n${indent}    $block .= "    <xhtml:link rel=\\"alternate\\" hreflang=\\"fa\\" href=\\"{$locFa}\\" />\\n";\n${indent}}\n`,
+  )
+
+  // Section call site: two fewer arguments.
+  .replace(
+    /[ \t]*\$xml \.= sitemapUrl\(\$hostname, \$path, \$today,\r?\n[ \t]*\$meta\['priority'\], \$meta\['changefreq'\]\);/,
+    () => "    $xml .= sitemapUrl($hostname, $path, $today);",
+  )
+
+  // Posts loop: decode the translation map once, then pass the flag through.
+  .replace(
+    "$slug = $p['slug'];",
+    "$slug = $p['slug'];\n    $i18n = json_decode($p['content_json'] ?? '', true);\n    $hasFa = is_array($i18n) && !empty($i18n['fa']['title']);",
+  )
+
+  // Post call site: image, then the Persian flag.
+  .replace(
+    /[ \t]*\$xml \.= sitemapUrl\(\$hostname, "\/blog\/\{\$slug\}\/", \$lastmod,\r?\n[ \t]*'0\.8', 'monthly', \$image\);/,
+    () => '    $xml .= sitemapUrl($hostname, "/blog/{$slug}/", $lastmod, $image, $hasFa);',
   )
 
   .replace(
@@ -332,14 +390,30 @@ const sitemapFixed = sitemapSrc
 const sitemapRequirements = [
   ["api/config.php fallback", "file_exists(__DIR__ . '/api/config.php')"],
   ["production date_updated column", "date_updated AS updated"],
+  ["post translations selected", "featured_image, content_json"],
   ["static XML fallback", "readfile($staticSitemap)"],
   ["successful fallback status", "http_response_code(200)"],
   ["locale separator normalization", "$normalizedPath = '/' . ltrim($path, '/')"],
   ["clean English URL", "rtrim($hostname . '/en' . $normalizedPath, '/')"],
   ["clean Persian URL", "rtrim($hostname . '/fa' . $normalizedPath, '/')"],
+  ["deploy-stamped section lastmod", `$today = '${deployStamp}';`],
+  ["translation-gated Persian alternate", "if ($withFa) {"],
+  ["Persian alternate flag", "bool $withFa = true"],
+  ["post translation lookup", "!empty($i18n['fa']['title'])"],
+];
+// Fields the deployed file must NOT carry any more: every major engine ignores
+// both, and a stale pair silently asserts a priority nobody honours.
+const sitemapRejections = [
+  ["changefreq removed", "<changefreq>"],
+  ["priority removed", "<priority>"],
 ];
 for (const [label, expected] of sitemapRequirements) {
   if (!sitemapFixed.includes(expected)) {
+    throw new Error(`sitemap patch failed: ${label}`);
+  }
+}
+for (const [label, rejected] of sitemapRejections) {
+  if (sitemapFixed.includes(rejected)) {
     throw new Error(`sitemap patch failed: ${label}`);
   }
 }
