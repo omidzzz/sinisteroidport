@@ -139,7 +139,7 @@ export async function generateMetadata({
     manifest: "/manifest.json",
     icons: {
       icon: [
-        { url: "/favicon.ico", sizes: "48x48" },
+        { url: "/favicon.ico", sizes: "32x32" },
         { url: "/logo192.png", type: "image/png", sizes: "192x192" },
       ],
       apple: "/apple-touch-icon.png",

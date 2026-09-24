@@ -16,10 +16,10 @@ import path from "node:path";
 const root = path.resolve(import.meta.dirname, "..", "..");
 const svg = fs.readFileSync(path.join(root, "public", "brand-mark.svg"), "utf8");
 
-// Opaque backing plate (same paper as --color-bg) for touch icons.
+// Opaque backing plate (the charcoal site ground) for touch icons.
 const opaque = svg.replace(
   "<rect ",
-  '<rect width="48" height="48" fill="#f3efe7"/><rect '
+  '<rect width="48" height="48" fill="#272727"/><rect '
 );
 
 const sharp = (await import("sharp")).default;

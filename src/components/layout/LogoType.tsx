@@ -2,11 +2,10 @@
  * Brand logotype — the SINISTER[OID] lockup.
  *
  * Two registers that telegraph the dev-translator persona:
- *  • SINISTER  — bold refusal register in Unbounded (via --font-logo),
- *                which fills acid on hover (CSS-backed in globals.css).
- *  • [OID]     — an "electronic suffix" in the mono voice, with a live
- *                outlined ring-O and a blinking cursor. Reads like a
- *                status readout, echoing the site-wide label idiom.
+ *  • SINISTER  — a bold display word that inherits the current Code & Craft
+ *                yellow → teal signature gradient,
+ *  • [OID]     — an electronic suffix in the mono voice, with a live outlined
+ *                ring-O and blinking cursor. Reads like a status readout.
  *
  * Purely presentational + server-safe (no hooks). The brand is ASCII so
  * it is pinned LTR and reads unchanged inside the Persian layout.
