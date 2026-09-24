@@ -39,6 +39,20 @@ const SINISTER_LOG_API =
   process.env.NEXT_PUBLIC_SINISTER_LOG_API ??
   "https://sinister-mu.vercel.app/api/log";
 
+/**
+ * The assistant's stable website context. The guest endpoint also receives a
+ * live post index, but that index is intentionally about writing only. These
+ * facts make the agent useful when a visitor asks about the rest of the site
+ * — especially the Graphics Lab, which is not represented in the blog feed.
+ */
+const WEBSITE_CONTEXT = `WEBSITE KNOWLEDGE — Sinisteroid / Omid
+Canonical site: https://sinisteroid.ir
+The site is bilingual: English at /en/ and Persian (RTL) at /fa/.
+Main sections: /en/, /en/blog/, /en/showcase/, /en/skills/, /en/education/, /en/work/, /en/lab/, /en/contact/.
+The owner is Omid, a Tehran-based frontend developer and translator. The site presents React/TypeScript, Next.js static export, CSS, accessibility, performance, WordPress, and technical writing.
+GRAPHICS LAB: /en/lab/ (Persian: /fa/lab/) is a collection of the site's own animated SVG illustration props: frog, bioluminescent plant, isometric laptop terminal, and psychedelic UFO. Each plate has a fixed 4:3 stage, a numbered caption, and Copy SVG / Download actions. The lab also renders the five-color Code & Craft palette: charcoal #272727, light ink #eff1f3, signature yellow #fed766, secondary teal #009fb7, and structure #696773.
+The assistant should link to the locale-prefixed routes and should not invent posts or routes. Current blog titles, URLs, tags, and excerpts are supplied separately as the live post index.`;
+
 /* ── History persistence ─────────────────────────────────────────────
  * The whole conversation is stored per anonymous browser session so it
  * survives refresh / panel close, and is re-sent to the model with the next
@@ -788,7 +802,9 @@ export default function AgentChat({
       new DefaultChatTransport({
         api: SINISTER_API,
         body: () => ({
-          ...(liveContext ? { context: liveContext } : {}),
+          ...(liveContext || WEBSITE_CONTEXT
+             ? { context: [WEBSITE_CONTEXT, liveContext].filter(Boolean).join("\n\n") }
+             : {}),
           ...(sessionId ? { sessionId } : {}),
           ...(persona !== "standard" ? { persona } : {}),
           ...(profile.trim() ? { profile: profile.trim().slice(0, 40) } : {}),
