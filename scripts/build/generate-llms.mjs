@@ -40,10 +40,20 @@ const routes = [
 const routeList = routes
   .map(([label, en, fa]) => `- [${label}](${site}${en}) · [فارسی](${site}${fa})`)
   .join("\n");
+/** Locale links for one post. The Persian URL is only offered when the post
+ *  HAS a Persian translation: the /fa/ fallback renders the English article
+ *  and is noindexed, so linking an `fa` URL for it would misrepresent the
+ *  corpus to the engines that read this file. */
+const localeLinks = (post) =>
+  [
+    `[English](${url("en", post.slug)})`,
+    ...(post.translations?.fa ? [`[فارسی](${url("fa", post.slug)})`] : []),
+  ].join(" · ");
+
 const postList = posts
   .map(
     (post) =>
-      `- **${title(post)}** — [English](${url("en", post.slug)}) · [فارسی](${url("fa", post.slug)}) (${date(post)}${tags(post) ? `; ${tags(post)}` : ""})\n  ${excerpt(post)}`,
+      `- **${title(post)}** — ${localeLinks(post)} (${date(post)}${tags(post) ? `; ${tags(post)}` : ""})\n  ${excerpt(post)}`,
   )
   .join("\n");
 const lab = `The [Graphics Lab](${site}/en/lab/) is the site's collection of custom animated SVG illustration props: a psychedelic frog, bioluminescent plant, isometric laptop terminal, and psychedelic UFO. Each plate has a numbered caption plus Copy SVG and Download actions. The route also documents the five-color Code & Craft palette: charcoal #272727, light ink #eff1f3, signature yellow #fed766, secondary teal #009fb7, and structure #696773.`;

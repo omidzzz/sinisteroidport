@@ -45,21 +45,21 @@ The [Graphics Lab](https://sinisteroid.ir/en/lab/) is the site's collection of c
 
 ## Published Writing
 All 12 current posts are listed below. Dates use the most recent publication/update date in the source JSON.
-- **Content Clusters for GEO: How to Build Topical Authority That AI Engines Trust** — [English](https://sinisteroid.ir/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/) · [فارسی](https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/) (2026-08-25; content-strategy)
+- **Content Clusters for GEO: How to Build Topical Authority That AI Engines Trust** — [English](https://sinisteroid.ir/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/) (2026-08-25; content-strategy)
   Learn how to build content clusters for Generative Engine Optimization (GEO). Step-by-step framework to create topical authority that gets cited in AI Overviews, ChatGPT, and Perplexity — not just ranked in Google.
-- **Design Without Words Is Decoration** — [English](https://sinisteroid.ir/en/blog/design-without-words-is-decoration/) · [فارسی](https://sinisteroid.ir/fa/blog/design-without-words-is-decoration/) (2026-08-25; frontend-design)
+- **Design Without Words Is Decoration** — [English](https://sinisteroid.ir/en/blog/design-without-words-is-decoration/) (2026-08-25; frontend-design)
   Discover why great design is more than aesthetics. Learn how visual communication, branding, UX design, and design thinking transform design from decoration into a powerful communication tool.
-- **From Clicks to Conversations: Why Your Content Strategy is Obsolete** — [English](https://sinisteroid.ir/en/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/) · [فارسی](https://sinisteroid.ir/fa/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/) (2026-08-25; content-strategy)
+- **From Clicks to Conversations: Why Your Content Strategy is Obsolete** — [English](https://sinisteroid.ir/en/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/) (2026-08-25; content-strategy)
   64.82% of searches end without a click. AI agents are replacing clicks with conversations. Here's why your content strategy is obsolete and how to rebuild it for GEO, AI citations, and the conversational web.
-- **Modern Techniques in Frontend Design** — [English](https://sinisteroid.ir/en/blog/modern-frontend-design-techniques/) · [فارسی](https://sinisteroid.ir/fa/blog/modern-frontend-design-techniques/) (2026-08-25; frontend-design)
+- **Modern Techniques in Frontend Design** — [English](https://sinisteroid.ir/en/blog/modern-frontend-design-techniques/) (2026-08-25; frontend-design)
   Explore the techniques shaping modern frontend design — from design tokens and motion systems to fluid typography, spatial depth, accessibility, and adaptive color. Build interfaces that communicate and perform.
-- **Ollama: The Engine Behind Local AI** — [English](https://sinisteroid.ir/en/blog/ollama-the-engine-behind-local-ai/) · [فارسی](https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai/) (2026-08-25; local-ai)
+- **Ollama: The Engine Behind Local AI** — [English](https://sinisteroid.ir/en/blog/ollama-the-engine-behind-local-ai/) (2026-08-25; local-ai)
   A technical deep dive into Ollama — the open-source runtime powering local large language models. Learn its architecture, quantization tradeoffs, API design, model selection, and security considerations.
-- **SEO vs GEO: What's the Difference?** — [English](https://sinisteroid.ir/en/blog/seo-vs-geo-whats-the-difference/) · [فارسی](https://sinisteroid.ir/fa/blog/seo-vs-geo-whats-the-difference/) (2026-08-25; seo-geo)
+- **SEO vs GEO: What's the Difference?** — [English](https://sinisteroid.ir/en/blog/seo-vs-geo-whats-the-difference/) (2026-08-25; seo-geo)
   SEO vs GEO explained: what's the difference, why both matter, and how to optimize for traditional search and AI-generated answers in 2026. Includes comparison table, strategies, and checklist.
-- **Your AI Tools Are Spying on You. Here’s the Fix.** — [English](https://sinisteroid.ir/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/) · [فارسی](https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix/) (2026-08-25; ai-tools, ai-privacy)
+- **Your AI Tools Are Spying on You. Here’s the Fix.** — [English](https://sinisteroid.ir/en/blog/your-ai-tools-are-spying-on-you-heres-the-fix/) (2026-08-25; ai-tools, ai-privacy)
   Most AI chatbots train on your prompts by default. Learn how to run powerful private AI offline with Ollama and Open WebUI so your data never leaves your machine.
-- **Zero-Click Search Is Here. Now What?** — [English](https://sinisteroid.ir/en/blog/zero-click-search-is-here-now-what/) · [فارسی](https://sinisteroid.ir/fa/blog/zero-click-search-is-here-now-what/) (2026-08-25; seo-geo)
+- **Zero-Click Search Is Here. Now What?** — [English](https://sinisteroid.ir/en/blog/zero-click-search-is-here-now-what/) (2026-08-25; seo-geo)
   64.82% of Google searches now end without a click. AI Overviews push that to 83%. Learn what zero-click search means for SEO, which query types still drive traffic, and the five strategies that work in 2026.
 - **Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?** — [English](https://sinisteroid.ir/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/) · [فارسی](https://sinisteroid.ir/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/) (2026-08-15; ai-coding-agents, ai-tools, open-source-ai)
   Claude Code and Cline are two of the most capable agentic coding tools of 2026 — one a polished, subscription-based product from Anthropic, the other a free, open-source, model-agnostic extension. Here's a full head-to-head on pricing, models, platforms, autonomy, and which one actually fits your workflow.
