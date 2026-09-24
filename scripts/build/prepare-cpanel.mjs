@@ -209,8 +209,9 @@ const htaccessContent = `<IfModule mod_rewrite.c>
   # domains only): script-src allows the gtag.js loader from
   # googletagmanager.com; connect-src allows GA4 collect beacons from
   # google-analytics.com / analytics.google.com (incl. EU region
-  # subdomains such as region1.*).
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://sinister-mu.vercel.app; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" env=!SINISTEROID_API
+  # subdomains such as region1.* and the analytics.google.com apex);
+  # img-src allows GA4 audiences image beacons from Google regional domains.
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google.com https://*.google.de; font-src 'self' data:; connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://analytics.google.com https://www.google.com https://sinister-mu.vercel.app; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" env=!SINISTEROID_API
 
   # ── Keep the JSON endpoints out of search indexes ─────────────────
   Header set X-Robots-Tag "noindex, nofollow" env=SINISTEROID_API
@@ -285,23 +286,67 @@ for (const f of ["_redirects", "_headers", "llms.txt", "llms-full.txt"]) {
 // Deploy dynamic sitemap that reads ALL posts from MySQL (includes DB-only posts).
 // The .htaccess rewrites sitemap.xml → sitemap.php so Google always sees a
 // fresh sitemap with every published post, even ones added after the last build.
-// Patch the seed before copying: the root route must produce /en/ and /fa/,
-// never the malformed /en// (a double-slash <loc> Google flags as a crawl error).
+// Patch the reference before copying: keep deployment-specific paths/fixes out
+// of the ignored build artifact, including the root route (never /en//) and the
+// production schema (date_updated, not updated).
 const sitemapSrc = fs.readFileSync(path.join(build, "sitemap.php"), "utf8");
 const sitemapFixed = sitemapSrc
   .replace(
+    "require_once __DIR__ . '/db.php';",
+    "if (!file_exists(__DIR__ . '/api/config.php')) { header('Content-Type: application/xml; charset=utf-8'); readfile(__DIR__ . '/sitemap.xml'); exit; }\n    require_once __DIR__ . '/api/db.php';",
+  )
+
+  .replace(
+    "    'contact'  => ['priority' => '0.6', 'changefreq' => 'monthly'],",
+    "    'lab'      => ['priority' => '0.6', 'changefreq' => 'monthly'],\n    'contact'  => ['priority' => '0.6', 'changefreq' => 'monthly'],",
+  )
+
+  .replace(
+    "SELECT slug, date_published AS date, updated,",
+    "SELECT slug, date_published AS date, date_updated AS updated,",
+  )
+
+  .replace(
+    /} catch \(Exception \$e\) \{\r?\n    error_log\('\[sinisteroid\] sitemap PHP query failed: ' \. \$e->getMessage\(\)\);\r?\n    http_response_code\(500\);\r?\n    echo '<!-- sitemap unavailable -->';\r?\n    exit;\r?\n}/,
+    `} catch (Throwable $e) {
+    error_log('[sinisteroid] sitemap PHP query failed: ' . $e->getMessage());
+    $staticSitemap = __DIR__ . '/sitemap.xml';
+    if (is_file($staticSitemap) && readfile($staticSitemap) !== false) {
+        http_response_code(200);
+        exit;
+    }
+    http_response_code(500);
+    echo '<!-- sitemap unavailable -->';
+    exit;
+}`,
+  )
+
+  .replace(
     "$loc  = $hostname . '/en' . $path . '/';",
-    "$loc  = rtrim($hostname . '/en' . $path, '/') . '/';",
+    "$normalizedPath = '/' . ltrim($path, '/');\n    $loc  = rtrim($hostname . '/en' . $normalizedPath, '/') . '/';",
   )
   .replace(
     "$locFa = $hostname . '/fa' . $path . '/';",
-    "$locFa = rtrim($hostname . '/fa' . $path, '/') . '/';",
+    "$locFa = rtrim($hostname . '/fa' . $normalizedPath, '/') . '/';",
   );
+const sitemapRequirements = [
+  ["api/config.php fallback", "file_exists(__DIR__ . '/api/config.php')"],
+  ["production date_updated column", "date_updated AS updated"],
+  ["static XML fallback", "readfile($staticSitemap)"],
+  ["successful fallback status", "http_response_code(200)"],
+  ["locale separator normalization", "$normalizedPath = '/' . ltrim($path, '/')"],
+  ["clean English URL", "rtrim($hostname . '/en' . $normalizedPath, '/')"],
+  ["clean Persian URL", "rtrim($hostname . '/fa' . $normalizedPath, '/')"],
+];
+for (const [label, expected] of sitemapRequirements) {
+  if (!sitemapFixed.includes(expected)) {
+    throw new Error(`sitemap patch failed: ${label}`);
+  }
+}
 fs.writeFileSync(path.join(out, "sitemap.php"), sitemapFixed);
-console.log("✓ deployed sitemap.php (dynamic, reads from MySQL, clean root URLs)");
-// Copy static sitemap.xml from public/ as fallback (locale-prefixed URLs).
-// The .htaccess rewrite serves sitemap.php when PHP is available; this static
-// file is served only if PHP is not configured.
+console.log("✓ deployed sitemap.php (dynamic, DB-safe, static XML fallback)");
+// Copy static sitemap.xml from public/ as the no-PHP/query-failure fallback.
+// The .htaccess routes through sitemap.php while live DB data is available.
 const publicSitemap = path.join(root, "public", "sitemap.xml");
 if (fs.existsSync(publicSitemap)) {
   fs.copyFileSync(publicSitemap, path.join(out, "sitemap.xml"));

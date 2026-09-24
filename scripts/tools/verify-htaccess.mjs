@@ -104,6 +104,18 @@ check(
     actualContent.includes("Referrer-Policy"),
 );
 
+// 8. GA4 collection uses both regional and apex Google hosts.
+check(
+  "CSP permits GA4 collect hosts",
+  /connect-src [^;]*https:\/\/analytics\.google\.com[^;]*https:\/\/www\.google\.com/.test(actualContent),
+);
+
+// 9. GA4 audience image beacons require Google image sources.
+check(
+  "CSP permits GA4 audience image beacons",
+  /img-src [^;]*https:\/\/\*\.google\.com[^;]*https:\/\/\*\.google\.de/.test(actualContent),
+);
+
 console.log(fails === 0 ? "\n✓ all Cache-Control checks passed" : `\n✗ ${fails} check(s) failed`);
 
 if (fails > 0) process.exit(1);

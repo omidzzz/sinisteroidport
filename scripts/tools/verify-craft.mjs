@@ -176,12 +176,27 @@ if (labFa) {
 
 console.log("\n=== SITEMAP & HREFLANG ===");
 const sitemap = read("out/sitemap.xml");
+const dynamicSitemap = read("out/sitemap.php");
 check("sitemap written", sitemap !== null, missing("out/sitemap.xml"));
+check("dynamic sitemap packaged", dynamicSitemap !== null, missing("out/sitemap.php"));
 if (sitemap) {
   check("sitemap lists /en/lab/", sitemap.includes("/en/lab/"));
   check("sitemap lists /fa/lab/", sitemap.includes("/fa/lab/"));
   check("sitemap cross-links hreflang", sitemap.includes('hreflang="fa"') && sitemap.includes('hreflang="en"'));
+  check("sitemap root URLs have no double slash", !sitemap.includes("/en//") && !sitemap.includes("/fa//"));
 }
+if (dynamicSitemap) {
+  check("dynamic sitemap uses production date_updated column", dynamicSitemap.includes("date_updated AS updated"));
+  check("dynamic sitemap falls back to static XML", dynamicSitemap.includes("readfile($staticSitemap)") && dynamicSitemap.includes("http_response_code(200)"));
+  check(
+    "dynamic sitemap normalizes locale path separators",
+    dynamicSitemap.includes("$normalizedPath = '/' . ltrim($path, '/')") &&
+      dynamicSitemap.includes("rtrim($hostname . '/en' . $normalizedPath, '/')") &&
+      dynamicSitemap.includes("rtrim($hostname . '/fa' . $normalizedPath, '/')"),
+  );
+}
+const htaccess = read("out/.htaccess");
+check("sitemap.xml routes through the dynamic handler", (htaccess ?? "").includes("RewriteRule ^sitemap\\.xml$ sitemap.php"));
 if (labEn) {
   // Next serializes these as hrefLang="…" (camelCase). HTML attribute names
   // are case-insensitive and crawlers read them as hreflang, so match on a
