@@ -44,6 +44,22 @@ function abs_url($src) {
     return 'https://sinisteroid.ir' . ($src[0] === '/' ? $src : '/' . $src);
 }
 
+/** Meta description from a post excerpt: collapse whitespace, then cut on a
+ *  word boundary at (or just under) $max characters. The previous hard
+ *  mb_substr() cut left SERP snippets ending mid-word — "...maps three
+ *  competing fram" — which reads like a broken page in search results. */
+function meta_description($text, $max = 158) {
+    $text = trim(preg_replace('/\s+/u', ' ', strip_tags((string)$text)));
+    if ($text === '') return '';
+    if (mb_strlen($text) <= $max) return $text;
+    $cut = mb_substr($text, 0, $max);
+    // Drop the partial trailing word, then any dangling punctuation, and mark
+    // the truncation so the snippet never looks chopped off.
+    $cut = preg_replace('/\s+\S*$/u', '', $cut);
+    $cut = rtrim($cut, " \t\n\r\0\x0B.,;:!?،؛-");
+    return $cut . '…';
+}
+
 /** Replace the value of the first `$attr="…"` inside the first tag
  *  matched by `$tagPattern` — an IN-PLACE swap that never removes or
  *  adds elements (required so React hydration of the shell head stays
@@ -97,6 +113,16 @@ if (!is_array($t) || empty($t['content'])) fail($locale, 404);
 
 $title   = (string)($t['title'] ?? $row['title'] ?? $slug);
 $excerpt = (string)($t['excerpt'] ?? '');
+if (trim($excerpt) === '') {
+    // No authored excerpt: build one from the first paragraph so a DB-published
+    // post never ships an empty description (or an empty og:description).
+    foreach (($t['content'] ?? []) as $block) {
+        if (($block['type'] ?? '') === 'paragraph' && !empty($block['text'])) {
+            $excerpt = (string)$block['text'];
+            break;
+        }
+    }
+}
 $feat    = json_decode($row['featured_image'] ?? '', true);
 $cover   = is_array($feat) && !empty($feat['src']) ? abs_url($feat['src']) : '';
 $fa      = ($locale === 'fa');
@@ -121,8 +147,8 @@ $dbLocale = $fa ? 'fa_IR' : 'en_US';
 /* <title> — replace text inside the existing element */
 $html = preg_replace('~<title>.*?</title>~is', '<title>' . $dbTitle . ' — Sinisteroid</title>', $html, 1);
 
-/* name="description" */
-$html = set_attr($html, '~<meta\s+[^>]*name="description"[^>]*/?>~i', 'content', esc(mb_substr($excerpt, 0, 160)));
+/* name="description" — word-safe, never mid-word (see meta_description) */
+$html = set_attr($html, '~<meta\s+[^>]*name="description"[^>]*/?>~i', 'content', esc(meta_description($excerpt)));
 
 /* name="keywords" — authored per-locale SEO payload: focus keyword first,
    then the keyword string split on ASCII and Persian commas, deduped.
