@@ -1,7 +1,8 @@
 {
   "slug": "open-webui-the-missing-interface-for-local-ai",
+  "status": "published",
   "title": "Open WebUI: The Missing Interface for Local AI",
-  "date": "2026-06-21 00:00:00",
+  "date": "2026-06-21 12:27:23",
   "tags": [
     "local-ai",
     "ai-tools",
@@ -210,9 +211,10 @@
         },
         {
           "type": "image",
-          "src": "/api/uploads/open-webui-architecture-diagram.webp",
+          "src": "/api/uploads/1782044707-open-webui-architecture-diagram.webp",
           "alt": "Open WebUI architecture diagram showing the relationship between the browser client, Open WebUI container, Ollama inference backend, ChromaDB vector store, and connected search providers",
-          "caption": "Figure 1: Open WebUI sits between the user's browser and the Ollama inference backend, adding session management, RAG, and multi-user access control without modifying the underlying inference stack."
+          "caption": "Figure 1: Open WebUI sits between the user's browser and the Ollama inference backend, adding session management, RAG, and multi-user access control without modifying the underlying inference stack.",
+          "altText": "Open WebUI architecture diagram showing the relationship between the browser client, Open WebUI container, Ollama inference backend, ChromaDB vector store, and connected search providers"
         },
         {
           "type": "heading",
@@ -488,9 +490,10 @@
         },
         {
           "type": "image",
-          "src": "/api/uploads/open-webui-architecture-diagram.webp",
+          "src": "/api/uploads/1782044913-open-webui-architecture-diagram.webp",
           "alt": "نمودار معماری اوپن وب‌یوآی که رابطه بین client مرورگر، کانتینر اوپن وب‌یوآی، backend inference اولاما، vector store ChromaDB و ارائه‌دهندگان جستجوی متصل را نشان می‌دهد",
-          "caption": "شکل ۱: اوپن وب‌یوآی بین مرورگر کاربر و backend inference اولاما قرار می‌گیرد و مدیریت session، RAG و کنترل دسترسی چند‌کاربره را بدون تغییر stack inference زیرین اضافه می‌کند."
+          "caption": "شکل ۱: اوپن وب‌یوآی بین مرورگر کاربر و backend inference اولاما قرار می‌گیرد و مدیریت session، RAG و کنترل دسترسی چند‌کاربره را بدون تغییر stack inference زیرین اضافه می‌کند.",
+          "altText": "نمودار معماری اوپن وب‌یوآی که رابطه بین client مرورگر، کانتینر اوپن وب‌یوآی، backend inference اولاما، vector store ChromaDB و ارائه‌دهندگان جستجوی متصل را نشان می‌دهد"
         },
         {
           "type": "heading",
@@ -525,7 +528,7 @@
           "title": "با موتور Inference شروع کنید",
           "text": "قبل از راه‌اندازی اوپن وب‌یوآی، باید اولاما به‌صورت محلی در حال اجرا باشد. بررسی عمیق ما معماری، trade-offهای کوانتیزاسیون، انتقال بار به GPU و انتخاب مدل را پوشش می‌دهد که اولاما را ستون فقرات هر stack هوش مصنوعی محلی می‌کند.",
           "buttonText": "بخوانید: اولاما — موتور پشت هوش مصنوعی محلی",
-          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
+          "buttonUrl": "/fa/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "cta",
@@ -546,7 +549,7 @@
         },
         {
           "question": "آیا اوپن وب‌یوآی می‌تواند به مدل‌های ابری مثل OpenAI یا Anthropic متصل شود؟",
-          "answer": "بله. اوپن وب‌یوآی به هر endpoint API سازگار با OpenAI متصل می‌شود، از جمله OpenAI واقعی، API Anthropic، Google Gemini و دیگران. می‌توانید مدل‌های اولاما محلی و مدل‌های ابری را در یک رابط ترکیب کنید و مکالمات مختلف را به backend‌های مختلف هدایت کنید."
+          "answer": "بله. اوپن وب‌یوآی ��ه هر endpoint API سازگار با OpenAI متصل می‌شود، از جمله OpenAI واقعی، API Anthropic، Google Gemini و دیگران. می‌توانید مدل‌های اولاما محلی و مدل‌های ابری را در یک رابط ترکیب کنید و مکالمات مختلف را به backend‌های مختلف هدایت کنید."
         },
         {
           "question": "اوپن وب‌یوآی از چه پایگاه‌های داده برداری برای RAG پشتیبانی می‌کند؟",

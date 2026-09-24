@@ -1,28 +1,32 @@
 {
   "slug": "your-ai-tools-are-spying-on-you-heres-the-fix",
+  "status": "published",
   "title": "Your AI Tools Are Spying on You. Here’s the Fix.",
-  "date": "2026-08-25",
+  "date": "2026-08-12 16:54:29",
   "tags": [
-    "ai-tools",
+    "local-ai",
     "ai-privacy"
   ],
+  "featuredImage": {
+    "src": "/api/uploads/1786553310-1786500001-your-ai-tools-are-spying-on-you-cover.webp",
+    "alt": {
+      "en": "Your AI Tools Are Spying on You. Here’s the Fix.",
+      "fa": "ابزارهای هوش مصنوعی شما در حال جاسوسی از شما هستند. راه‌حل اینجاست."
+    }
+  },
   "translations": {
     "en": {
       "title": "Your AI Tools Are Spying on You. Here’s the Fix.",
-      "excerpt": "Most AI chatbots train on your prompts by default. Learn how to run powerful private AI offline with Ollama and Open WebUI so your data never leaves your machine.",
+      "excerpt": "Most popular AI chatbots log your prompts, keep them for months or years, and by default use them to train the next model. The fix is simple: run powerful models completely offline on your own machine. Here’s exactly how to do it without sacrificing quality.",
       "content": [
         {
-          "type": "paragraph",
-          "text": "Most popular AI chatbots log your prompts, keep them for months or years, and by default use them to train the next model. The fix is simple: run powerful models completely offline on your own machine. Here’s exactly how to do it without sacrificing quality.",
-          "style": "lead"
-        },
-        {
           "type": "heading",
-          "level": 2,
+          "level": 1,
           "text": "Your AI Tools Are Spying on You. Here’s the Fix."
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Every time you paste a client email, a medical question, a business plan, or a personal dilemma into ChatGPT, Claude, Gemini, or Grok, you are handing that text to a company whose default setting on free and personal plans is to use it for model training. Retention periods stretch from 30 days to years. Some platforms have faced lawsuits and investigations over how that data is handled. The majority of users never change the setting."
         },
         {
@@ -34,12 +38,45 @@
           "text": "Over the past two years, open‑source models have caught up to their closed counterparts in almost every practical domain—from creative writing and code generation to summarization and reasoning. Combined with mature tooling like Ollama and Open WebUI, local inference has become the sensible default for anyone who values privacy, cost predictability, and long‑term control over their AI stack."
         },
         {
+          "type": "stats",
+          "items": [
+            {
+              "value": "73%",
+              "label": "of AI users are concerned their prompts could become public"
+            },
+            {
+              "value": "Default ON",
+              "label": "training on free and personal ChatGPT, Claude, and Gemini plans"
+            },
+            {
+              "value": "Zero",
+              "label": "external transmission when you run Ollama + Open WebUI locally"
+            },
+            {
+              "value": "30 days – 5 years",
+              "label": "typical retention windows even after you “delete” a chat"
+            },
+            {
+              "value": "87%",
+              "label": "of professional tasks are handled well by 14B–32B open models"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786553378-1786500010-cloud-ai-data-flow-diagram.webp",
+          "alt": "Diagram showing user prompts flowing from laptop into cloud AI servers with training and retention arrows",
+          "caption": "Figure 1: On consumer plans, your prompts routinely enter training pipelines and long-term storage. Local inference cuts the connection completely.",
+          "altText": "Diagram showing user prompts flowing from laptop into cloud AI servers with training and retention arrows"
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "What Actually Happens to Your Prompts"
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "On the free and personal tiers of the major chatbots, the default is clear: conversations can be used to improve the models unless you actively opt out."
         },
         {
@@ -55,7 +92,9 @@
           "text": "Let’s break down the timeline: when you type a prompt into a cloud chatbot, it travels over the internet to a data centre, where it is processed by a model running on shared infrastructure. Even if you delete the chat, copies may persist in backup systems, logs, or training datasets for months or years. Opt‑out settings are often buried in privacy menus, and the default remains “opt‑in” for the vast majority of users."
         },
         {
-          "type": "paragraph",
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "Enterprise vs Consumer Gap",
           "text": "Business, Team, and Enterprise tiers usually disable training by default and offer data-processing agreements. Most individuals and small teams still use the consumer apps. That is where the privacy gap is largest."
         },
         {
@@ -65,6 +104,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Local AI means the model weights live on your disk, the inference runs on your CPU or GPU, and the prompt never travels over the internet."
         },
         {
@@ -89,13 +129,18 @@
           "text": "Beyond privacy, local AI offers other advantages: no recurring subscription fees, complete control over model versions, the ability to work offline (perfect for travel or secure facilities), and the freedom to experiment with fine‑tuning and custom system prompts without third‑party restrictions."
         },
         {
-          "type": "heading",
-          "level": 3,
-          "text": "Ollama: The Engine Behind Local AI"
+          "type": "image",
+          "src": "/api/uploads/1786553434-1786500020-local-ai-stack-privacy.webp",
+          "alt": "Clean diagram of laptop running Ollama + Open WebUI with no external network arrows for inference",
+          "caption": "Figure 2: Once models are downloaded, inference stays inside your machine. No prompts, no chat history, no embeddings leave the device.",
+          "altText": "Clean diagram of laptop running Ollama + Open WebUI with no external network arrows for inference"
         },
         {
-          "type": "paragraph",
-          "text": "Deep dive into the tool that made running private LLMs as simple as a single command. Installation, model recommendations, and real-world performance."
+          "type": "cta",
+          "title": "Ollama: The Engine Behind Local AI",
+          "text": "Deep dive into the tool that made running private LLMs as simple as a single command. Installation, model recommendations, and real-world performance.",
+          "buttonText": "Read the Ollama Guide",
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "heading",
@@ -104,11 +149,11 @@
         },
         {
           "type": "paragraph",
-          "text": "The following steps assume you have a reasonably modern computer (8 GB RAM minimum, 16 GB recommended) and basic familiarity with a terminal. We’ll cover the standard Docker approach for Open WebUI and also mention a non‑Docker alternative for those who prefer that."
+          "text": "The following steps assume you have a reasonably modern computer (8 GB RAM minimum, 16 GB recommended) and basic familiarity with a terminal. We’ll cover the standard Docker approach for Open WebUI and also mention a non‑Docker alternative for those who prefer that."
         },
         {
           "type": "heading",
-          "level": 2,
+          "level": 3,
           "text": "1. Install Ollama"
         },
         {
@@ -117,28 +162,26 @@
         },
         {
           "type": "paragraph",
-          "text": "ollama pull llama3.1:8b or ollama pull qwen2.5:14b"
+          "text": "ollama pull llama3.1:8b   or   ollama pull qwen2.5:14b"
         },
         {
           "type": "paragraph",
-          "text": "Larger models need more VRAM, but 8B–14B quantized versions already feel excellent on modern laptops and desktops. If you have a discrete GPU, you can pull larger models like llama3.1:70b or qwen2.5:72b, but expect to need 8 GB+ VRAM."
+          "text": "Larger models need more VRAM, but 8B–14B quantized versions already feel excellent on modern laptops and desktops. If you have a discrete GPU, you can pull larger models like llama3.1:70b or qwen2.5:72b, but expect to need 8 GB+ VRAM."
         },
         {
           "type": "paragraph",
           "text": "Ollama automatically downloads and caches models, and you can switch between them on the fly. The command line also supports chat directly: just type ollama run llama3.1:8b and start typing. That alone gives you a private assistant, but we want the full interface."
         },
         {
+          "type": "cta",
+          "title": "Official Ollama Download",
+          "text": "Get the latest installer and model library directly from the project maintainers.",
+          "buttonText": "Visit ollama.com",
+          "buttonUrl": "https://ollama.com"
+        },
+        {
           "type": "heading",
           "level": 3,
-          "text": "Official Ollama Download"
-        },
-        {
-          "type": "paragraph",
-          "text": "Get the latest installer and model library directly from the project maintainers."
-        },
-        {
-          "type": "heading",
-          "level": 2,
           "text": "2. Add a Beautiful Interface with Open WebUI"
         },
         {
@@ -162,26 +205,22 @@
           "text": "After logging in (you’ll create a local admin account), navigate to Settings > Connections and confirm that Ollama appears. You can also add cloud providers here, but for maximum privacy, keep only your local models enabled."
         },
         {
+          "type": "cta",
+          "title": "Open WebUI: The Missing Interface for Local AI",
+          "text": "Full setup walkthrough, features that matter for daily use, and how to keep everything offline.",
+          "buttonText": "Read the Open WebUI Guide",
+          "buttonUrl": "/en/blog/open-webui-the-missing-interface-for-local-ai/"
+        },
+        {
+          "type": "cta",
+          "title": "Open WebUI Documentation",
+          "text": "Official docs covering Docker, providers, RAG, and advanced configuration.",
+          "buttonText": "View Docs",
+          "buttonUrl": "https://docs.openwebui.com/"
+        },
+        {
           "type": "heading",
           "level": 3,
-          "text": "Open WebUI: The Missing Interface for Local AI"
-        },
-        {
-          "type": "paragraph",
-          "text": "Full setup walkthrough, features that matter for daily use, and how to keep everything offline."
-        },
-        {
-          "type": "heading",
-          "level": 3,
-          "text": "Open WebUI Documentation"
-        },
-        {
-          "type": "paragraph",
-          "text": "Official docs covering Docker, providers, RAG, and advanced configuration."
-        },
-        {
-          "type": "heading",
-          "level": 2,
           "text": "3. Optional: Coding Agents That Stay Private"
         },
         {
@@ -193,13 +232,18 @@
           "text": "Install Cline from the VS Code marketplace, then point it to your local Ollama endpoint (http://localhost:11434). Choose a coding‑focused model like Qwen‑Coder or DeepSeek‑Coder. Cline’s ability to understand your entire codebase and make multi‑file edits makes it a viable replacement for cloud‑based coding assistants."
         },
         {
-          "type": "heading",
-          "level": 3,
-          "text": "Cline: The Open-Source AI Coding Agent"
+          "type": "cta",
+          "title": "Cline: The Open-Source AI Coding Agent",
+          "text": "How the agent works, recommended models, and why developers are switching from cloud coding assistants.",
+          "buttonText": "Read the Cline Guide",
+          "buttonUrl": "/en/blog/cline-the-open-source-ai-coding-agent/"
         },
         {
-          "type": "paragraph",
-          "text": "How the agent works, recommended models, and why developers are switching from cloud coding assistants."
+          "type": "image",
+          "src": "/api/uploads/1786553642-1786500030-private-ai-workspace-screenshot.webp",
+          "alt": "Screenshot-style mockup of Open WebUI chat interface running a local model with privacy indicators",
+          "caption": "Figure 3: A typical private workspace — chat, document RAG, and model selector, all running against Ollama on localhost.",
+          "altText": "Screenshot-style mockup of Open WebUI chat interface running a local model with privacy indicators"
         },
         {
           "type": "heading",
@@ -217,7 +261,7 @@
             "Llama 3.1 8B – a balanced all‑rounder, great for chat, summarisation, and light coding. Runs on almost any machine.",
             "Qwen 2.5 14B – excellent for reasoning and mathematics; outperforms larger models in some benchmarks.",
             "Mistral 7B – very fast and good for everyday assistant tasks.",
-            "Llama 3.1 70B / Qwen 2.5 72B – top‑tier performance, but requires high‑end GPU (24 GB+ VRAM) for reasonable speed.",
+            "Llama 3.1 70B / Qwen 2.5 72B – top‑tier performance, but requires high‑end GPU (24 GB+ VRAM) for reasonable speed.",
             "Code‑specific models (e.g., Qwen‑Coder, DeepSeek‑Coder) – specialised for programming, often beat general models on coding benchmarks."
           ]
         },
@@ -238,7 +282,7 @@
             "No monthly subscription for core chat and coding use",
             "Full control over model choice and update timing",
             "Ability to work offline or on air‑gapped machines",
-            "Trade‑off: you need decent hardware (8 GB+ RAM minimum, GPU strongly recommended for larger models)",
+            "Trade‑off: you need decent hardware (8 GB+ RAM minimum, GPU strongly recommended for larger models)",
             "Trade‑off: the absolute newest frontier models still appear in the cloud first, often by a few months",
             "Trade‑off: you are responsible for updates, backups, and securing your own server if exposed"
           ]
@@ -254,7 +298,7 @@
         },
         {
           "type": "heading",
-          "level": 2,
+          "level": 3,
           "text": "“Local models are too weak”"
         },
         {
@@ -263,7 +307,7 @@
         },
         {
           "type": "heading",
-          "level": 2,
+          "level": 3,
           "text": "“Setup is complicated”"
         },
         {
@@ -272,16 +316,16 @@
         },
         {
           "type": "heading",
-          "level": 2,
+          "level": 3,
           "text": "“I still need the absolute best model sometimes”"
         },
         {
           "type": "paragraph",
-          "text": "Keep a paid cloud account for the rare cases that truly need it. Use local models as the default for everything else. That hybrid approach already eliminates 90 % of the privacy exposure. Open WebUI can even integrate cloud providers, so you can switch from local to cloud in the same interface when necessary."
+          "text": "Keep a paid cloud account for the rare cases that truly need it. Use local models as the default for everything else. That hybrid approach already eliminates 90 % of the privacy exposure. Open WebUI can even integrate cloud providers, so you can switch from local to cloud in the same interface when necessary."
         },
         {
           "type": "heading",
-          "level": 2,
+          "level": 3,
           "text": "“What about multimodal inputs (images, audio)?”"
         },
         {
@@ -316,6 +360,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "The era of casually pasting everything into a cloud chatbot is ending for people who care about privacy, cost, and long‑term control."
         },
         {
@@ -329,20 +374,464 @@
         {
           "type": "paragraph",
           "text": "Your prompts deserve to stay yours. Take control of your AI — today."
+        }
+      ],
+      "faq": [
+        {
+          "question": "Do local AI tools really keep my data private?",
+          "answer": "Yes, when configured correctly. Ollama runs inference entirely on your machine and states it does not collect, store, or transmit prompts or responses. Open WebUI stores chat history locally by default. The main risk is misconfiguration (exposing the API to the public internet)."
+        },
+        {
+          "question": "Will local models be as good as ChatGPT or Claude?",
+          "answer": "For most daily writing, coding, research, and analysis tasks, current open models (especially 14B–70B class) are already very capable. Frontier closed models still lead on the hardest reasoning problems, but the gap has narrowed dramatically for practical work."
+        },
+        {
+          "question": "How much hardware do I need?",
+          "answer": "An 8 GB RAM machine can run smaller quantized models. 16 GB+ RAM and a modern GPU (NVIDIA, Apple Silicon, or AMD) unlocks smoother 14B–32B models. Many people run excellent setups on laptops from the last three years."
+        },
+        {
+          "question": "Is Open WebUI free and open source?",
+          "answer": "Yes. It is fully open source, self‑hosted, and does not require any account or payment for local use."
+        },
+        {
+          "question": "Can I still use cloud models when I need them?",
+          "answer": "Absolutely. Open WebUI can connect to OpenAI‑compatible APIs alongside your local Ollama models. Use local as the default and cloud only for the rare cases that justify it."
+        },
+        {
+          "question": "What about voice, images, or long documents?",
+          "answer": "Vision and multimodal open models exist and work with Ollama. Document RAG is built into Open WebUI so you can chat with private PDFs and notes without uploading them to a third party."
+        },
+        {
+          "question": "How do I update models and software?",
+          "answer": "Ollama updates via its package manager (or manual re‑install). Open WebUI can be updated by pulling the latest Docker image or pulling from Git. Models are updated by pulling the same name again (e.g., ollama pull llama3.1:8b) to get the latest version."
+        }
+      ],
+      "seo": {
+        "title": "Your AI Tools Are Spying on You. Here’s the Fix. | Private Local AI Guide 2026",
+        "metaDescription": "Most AI chatbots train on your prompts by default. Learn how to run powerful private AI offline with Ollama and Open WebUI so your data never leaves your machine.",
+        "canonical": "https://sinisteroid.ir/blog/your-ai-tools-are-spying-on-you-heres-the-fix",
+        "openGraph": {
+          "title": "Your AI Tools Are Spying on You. Here’s the Fix.",
+          "description": "Consumer AI tools log and train on your conversations by default. The practical fix is local inference. Complete 2026 guide to a private AI stack.",
+          "image": "/api/uploads/1786500001-your-ai-tools-are-spying-on-you-cover.webp"
+        },
+        "twitter": {
+          "title": "Your AI Tools Are Spying on You. Here’s the Fix.",
+          "description": "Stop handing every prompt to the cloud. Run private, high‑quality AI on your own machine with Ollama + Open WebUI.",
+          "image": "/api/uploads/1786500001-your-ai-tools-are-spying-on-you-cover.webp"
+        },
+        "keywords": "private AI, local AI, AI privacy, self‑hosted AI, Ollama, Open WebUI, ChatGPT alternative, offline LLM, data privacy AI, private chatbot, local LLM 2026, run AI offline, AI tools spying, private AI setup",
+        "focusKeyword": "private AI"
+      }
+    },
+    "fa": {
+      "title": "ابزارهای هوش مصنوعی شما در حال جاسوسی از شما هستند. راه‌حل اینجاست.",
+      "excerpt": "بیشتر چت‌بات‌های محبوب، پرامپت‌های شما را ثبت می‌کنند، ماه‌ها یا سال‌ها نگه می‌دارند و به‌طور پیش‌فرض از آن‌ها برای آموزش مدل بعدی استفاده می‌کنند. راه‌حل ساده است: مدل‌های قدرتمند را کاملاً آفلاین روی دستگاه خودتان اجرا کنید. در این مقاله دقیقاً می‌گوییم چطور این کار را بدون افت کیفیت انجام دهید.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "ابزارهای هوش مصنوعی شما در حال جاسوسی از شما هستند. راه‌حل اینجاست."
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هر بار که یک ایمیل کاری، سؤال پزشکی، طرح کسب‌وکار یا مشکل شخصی را در ChatGPT، Claude، Gemini یا Grok می‌چسبانید، در واقع آن متن را در اختیار شرکتی قرار می‌دهید که تنظیمات پیش‌فرض پلن‌های رایگان و شخصی‌اش، استفاده از همین داده‌ها برای آموزش مدل است. مدت نگهداری داده‌ها از ۳۰ روز تا چندین سال متغیر است و برخی پلتفرم‌ها به‌خاطر نحوه برخورد با این داده‌ها با شکایت و تحقیق مواجه شده‌اند. اما جالب اینجاست که اکثر کاربران هرگز تنظیمات را تغییر نمی‌دهند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یک تئوری توطئه نیست؛ بلکه مدل کسب‌وکار مستند بزرگ‌ترین محصولات هوش مصنوعی مصرفی در سال ۲۰۲۶ است. خبر خوب اینکه دیگر برای داشتن جایگزین نیازی به دکترا یا بودجهٔ کلان مرکز داده ندارید. می‌توانید مدل‌های باکیفیت را کاملاً روی سخت‌افزار خودتان اجرا کنید، طوری که پرامپت‌ها هرگز از دستگاه شما خارج نشوند."
+        },
+        {
+          "type": "paragraph",
+          "text": "در دو سال اخیر، مدل‌های متن‌باز در تقریباً همهٔ حوزه‌های عملی – از نویسندگی خلاق و تولید کد تا خلاصه‌سازی و استدلال – به رقبای بسته خود رسیده‌اند. با وجود ابزارهای بالغی مثل Ollama و Open WebUI، استنتاج محلی به انتخاب منطقی برای هر کسی تبدیل شده که به حریم خصوصی، هزینهٔ قابل‌پیش‌بینی و کنترل بلندمدت بر پشتهٔ هوش مصنوعی خود اهمیت می‌دهد."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۷۳٪",
+              "label": "از کاربران هوش مصنوعی نگران عمومی شدن پرامپت‌هایشان هستند"
+            },
+            {
+              "value": "پیش‌فرض روشن",
+              "label": "آموزش روی پلن‌های رایگان و شخصی ChatGPT، Claude و Gemini"
+            },
+            {
+              "value": "صفر",
+              "label": "انتقال خارجی وقتی Ollama + Open WebUI را محلی اجرا می‌کنید"
+            },
+            {
+              "value": "۳۰ روز تا ۵ سال",
+              "label": "پنجره‌های نگهداری معمول حتی پس از «حذف» چت"
+            },
+            {
+              "value": "۸۷٪",
+              "label": "از کارهای حرفه‌ای به‌خوبی توسط مدل‌های ۱۴B–۳۲B انجام می‌شود"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786553473-1786500010-cloud-ai-data-flow-diagram.webp",
+          "alt": "نمودار جریان پرامپت‌های کاربر از لپ‌تاپ به سرورهای ابری هوش مصنوعی با فلش‌های آموزش و نگهداری",
+          "caption": "شکل ۱: در پلن‌های مصرف‌کننده، پرامپت‌های شما به‌طور معمول وارد خطوط لولهٔ آموزش و ذخیره‌سازی بلندمدت می‌شوند. استنتاج محلی این اتصال را کاملاً قطع می‌کند.",
+          "altText": "نمودار جریان پرامپت‌های کاربر از لپ‌تاپ به سرورهای ابری هوش مصنوعی با فلش‌های آموزش و نگهداری"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "واقعاً چه بر سر پرامپت‌های شما می‌آید؟"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "در لایه‌های رایگان و شخصی چت‌بات‌های بزرگ، پیش‌فرض روشن است: مکالمات می‌توانند برای بهبود مدل‌ها استفاده شوند مگر اینکه فعالانه انصراف دهید."
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenAI صراحتاً اعلام کرده که حساب‌های Free، Plus و Pro ممکن است ورودی‌ها و خروجی‌ها را به‌طور پیش‌فرض برای آموزش استفاده کنند. پلن‌های مصرف‌کنندهٔ Anthropic (Free، Pro، Max) نیز پس از به‌روزرسانی‌های سیاست در ۲۰۲۵ همین الگو را دنبال می‌کنند. تنظیم Gemini Apps Activity گوگل هم ذخیره‌سازی و هم آموزش را کنترل می‌کند. حتی وقتی آموزش را خاموش می‌کنید، تاریخچه اغلب برای هفته‌ها یا ماه‌ها به دلایل نظارت بر سوءاستفاده و الزامات قانونی نگه داشته می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "علاوه بر این، ریسک‌های دیگری مثل اسکریپت‌های تحلیلی شخص‌ثالث، افزونه‌های مرورگر که متن چت را می‌دزدند، و شکایت‌هایی که ادعا می‌کنند داده‌های مکالمه با ردیاب‌های تبلیغاتی به اشتراک گذاشته شده، وجود دارد. وقتی استنتاج فقط روی سخت‌افزاری که کنترل می‌کنید انجام شود، هیچ‌کدام از این مشکلات وجود نخواهد داشت."
+        },
+        {
+          "type": "paragraph",
+          "text": "بیایید دقیق‌تر ببینیم: وقتی پرامپت را در چت‌بات ابری تایپ می‌کنید، این متن از طریق اینترنت به مرکز داده می‌رود، آنجا توسط مدلی روی زیرساخت اشتراکی پردازش می‌شود. حتی اگر چت را حذف کنید، کپی‌هایی از آن ممکن است ماه‌ها یا سال‌ها در سیستم‌های پشتیبان، لاگ‌ها یا مجموعه‌های آموزش باقی بمانند. گزینه‌های انصراف از آموزش معمولاً در منوهای حریم خصوصی پنهان شده‌اند و پیش‌فرض برای اکثریت قریب‌به‌اتفاق کاربران، «روشن» است."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "شکاف سازمانی در مقابل مصرف‌کننده",
+          "text": "لایه‌های Business، Team و Enterprise معمولاً آموزش را به‌طور پیش‌فرض غیرفعال می‌کنند و قراردادهای پردازش داده ارائه می‌دهند. اما بیشتر افراد و تیم‌های کوچک هنوز از اپ‌های مصرف‌کننده استفاده می‌کنند؛ همان جایی که شکاف حریم خصوصی بزرگ‌ترین است."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "راه‌حل واقعی: هوش مصنوعی محلی و خصوصی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هوش مصنوعی محلی یعنی وزن‌های مدل روی دیسک شما قرار دارند، استنتاج روی CPU یا GPU خودتان اجرا می‌شود و پرامپت هرگز از اینترنت عبور نمی‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "سه قطعهٔ متن‌باز به شما تجربه‌ای کامل شبیه ChatGPT می‌دهند، بدون اینکه حتی یک بایت داده از دستگاه خارج شود:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Ollama – ساده‌ترین راه برای دانلود و اجرای مدل‌های باز مدرن (Llama، Qwen، Mistral، Gemma و ده‌ها مدل دیگر)",
+            "Open WebUI – رابط چت زیبا و خودمیزبان با تاریخچهٔ مکالمه، آپلود سند (RAG)، قابلیت تعویض مدل و ویژگی‌های تیمی",
+            "Cline (اختیاری) – یک عامل کدنویسی متن‌باز که داخل VS Code کار می‌کند و می‌تواند مدل‌های محلی شما را برای کار واقعی توسعه فراخوانی کند"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "نکتهٔ جذاب این ترکیب این است که هر جزء با اولویت حریم خصوصی طراحی شده. Ollama به‌طور پیش‌فرض هیچ دادهٔ آماری جمع‌آوری نمی‌کند؛ Open WebUI همهٔ داده‌ها را در یک پایگاه دادهٔ محلی SQLite ذخیره می‌کند؛ و Cline هرگز کد شما را به سرور خارجی نمی‌فرستد. این سه کنار هم یک محیط هوش مصنوعی خودمختار می‌سازند که به حاکمیت دیجیتال شما احترام می‌گذارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "فراتر از حریم خصوصی، هوش مصنوعی محلی مزایای دیگری هم دارد: بدون هزینهٔ اشتراک ماهیانه، کنترل کامل روی نسخهٔ مدل، امکان کار آفلاین (عالی برای سفر یا محیط‌های امن)، و آزادی عمل برای تنظیم دقیق و آزمایش پرامپت‌های سیستمی بدون محدودیت شخص‌ثالث."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786553485-1786500020-local-ai-stack-privacy.webp",
+          "alt": "نمودار تمیز لپ‌تاپ در حال اجرای Ollama + Open WebUI بدون فلش شبکه خارجی برای استنتاج",
+          "caption": "شکل ۲: پس از دانلود مدل‌ها، استنتاج داخل دستگاه شما می‌ماند. هیچ پرامپت، تاریخچه چت یا برون‌دادی دستگاه را ترک نمی‌کند.",
+          "altText": "نمودار تمیز لپ‌تاپ در حال اجرای Ollama + Open WebUI بدون فلش شبکه خارجی برای استنتاج"
+        },
+        {
+          "type": "cta",
+          "title": "اولاما: موتور پشت هوش مصنوعی محلی",
+          "text": "بررسی عمیق ابزاری که اجرای LLMهای خصوصی را به سادگی یک دستور واحد تبدیل کرد. نصب، توصیه‌های مدل و عملکرد واقعی.",
+          "buttonText": "مطالعهٔ راهنمای اولاما",
+          "buttonUrl": "/fa/blog/ollama-the-engine-behind-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چگونه یک پشتهٔ کاملاً خصوصی را در کمتر از ۳۰ دقیقه راه‌اندازی کنیم"
+        },
+        {
+          "type": "paragraph",
+          "text": "مراحل زیر فرض می‌کنند که یک کامپیوتر نسبتاً مدرن دارید (حداقل ۸ گیگابایت رم، ۱۶ گیگابایت توصیه می‌شود) و با خط فرمان آشنایی اولیه دارید. ما روش استاندارد با Docker را برای Open WebUI پوشش می‌دهیم و در کنار آن یک روش بدون Docker را هم برای کسانی که ترجیح می‌دهند معرفی می‌کنیم."
         },
         {
           "type": "heading",
           "level": 3,
-          "text": "Frequently Asked Questions"
+          "text": "۱. نصب Ollama"
+        },
+        {
+          "type": "paragraph",
+          "text": "به سایت رسمی بروید و نصب‌کنندهٔ سیستم‌عامل خود را دانلود کنید. در macOS و لینوکس یک اسکریپت curl تک‌خطی کار می‌کند. در ویندوز از نصب‌کنندهٔ PowerShell استفاده کنید. پس از نصب، ترمینال را باز کنید و یک مدل عمومی قوی بکشید:"
+        },
+        {
+          "type": "paragraph",
+          "text": "ollama pull llama3.1:8b   یا   ollama pull qwen2.5:14b"
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل‌های بزرگ‌تر به VRAM بیشتری نیاز دارند، اما نسخه‌های کوانتیزهٔ ۸B–۱۴B از الان روی لپ‌تاپ‌ها و دسکتاپ‌های مدرن عالی کار می‌کنند. اگر کارت گرافیک مجزا دارید، می‌توانید مدل‌های بزرگ‌تری مثل llama3.1:70b یا qwen2.5:72b را هم بکشید، اما انتظار داشته باشید حداقل ۸ گیگابایت VRAM نیاز باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ollama مدل‌ها را به‌طور خودکار دانلود و کش می‌کند و می‌توانید در هر لحظه بین آن‌ها جابه‌جا شوید. خط فرمان هم مستقیماً از چت پشتیبانی می‌کند: فقط کافی است تایپ کنید ollama run llama3.1:8b و شروع به مکالمه کنید. همین یک دستور به شما یک دستیار خصوصی می‌دهد، اما برای تجربهٔ کامل به رابط کاربری نیاز داریم."
+        },
+        {
+          "type": "cta",
+          "title": "دانلود رسمی Ollama",
+          "text": "آخرین نصب‌کننده و کتابخانهٔ مدل را مستقیماً از ن��هدارندگان پروژ�� دریافت کنید.",
+          "buttonText": "بازدید از ollama.com",
+          "buttonUrl": "https://ollama.com"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۲. افزودن رابط زیبا با Open WebUI"
+        },
+        {
+          "type": "paragraph",
+          "text": "سریع‌ترین مسیر Docker است. یک دستور، یک رابط وب کامل راه‌اندازی می‌کند که به‌طور خودکار نمونهٔ محلی Ollama شما را تشخیص می‌دهد:"
+        },
+        {
+          "type": "paragraph",
+          "text": "docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main"
+        },
+        {
+          "type": "paragraph",
+          "text": "سپس در مرورگر خود به http://localhost:3000 بروید. حالا تاریخچهٔ مکالمه فقط روی دستگاه شما ذخیره می‌شود، قابلیت آپلود سند برای RAG خصوصی دارید و می‌توانید وسط چت مدل را عوض کنید. Volume Docker تضمین می‌کند که داده‌های شما پس از به‌روزرسانی کانتینر هم حفظ شوند."
+        },
+        {
+          "type": "paragraph",
+          "text": "اگر ترجیح می‌دهید از Docker استفاده نکنید، می‌توانید Open WebUI را از منبع نصب کنید: مخزن را کلون کرده، وابستگی‌ها را نصب و اسکریپت پایتون را اجرا کنید. با این حال Docker به شدت توصیه می‌شود چون همهٔ وابستگی‌ها و به‌روزرسانی‌ها را به‌خوبی مدیریت می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "پس از ورود (یک حساب محلی ادمین می‌سازید)، به Settings > Connections بروید و تأیید کنید که Ollama نمایش داده می‌شود. در اینجا می‌توانید ارائه‌دهندگان ابری را هم اضافه کنید، اما برای حداکثر حریم خصوصی، فقط مدل‌های محلی خود را فعال نگه دارید."
+        },
+        {
+          "type": "cta",
+          "title": "اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی",
+          "text": "راهنمای کامل راه‌اندازی، ویژگی‌های مهم برای استفادهٔ روزانه و چطور همه چیز را آفلاین نگه دارید.",
+          "buttonText": "مطالعهٔ راهنمای Open WebUI",
+          "buttonUrl": "/fa/blog/open-webui-the-missing-interface-for-local-ai/"
+        },
+        {
+          "type": "cta",
+          "title": "مستندات Open WebUI",
+          "text": "مستندات رسمی شامل Docker، ارائه‌دهندگان، RAG و پیکربندی پیشرفته.",
+          "buttonText": "مشاهدهٔ مستندات",
+          "buttonUrl": "https://docs.openwebui.com/"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۳. اختیاری: عامل‌های کدنویسی که خصوصی می‌مانند"
+        },
+        {
+          "type": "paragraph",
+          "text": "اگر کد می‌نویسید، Cline یک افزونهٔ متن‌باز برای VS Code است که می‌تواند با مدل‌های محلی Ollama شما ارتباط برقرار کند. پروژهٔ شما را می‌خواند، ویرایش پیشنهاد می‌دهد و دستورات ترمینال را اجرا می‌کند – همه بدون اینکه کد منبع به API راه دور فرستاده شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline را از بازارچهٔ VS Code نصب کنید، سپس آن را به آدرس محلی Ollama (http://localhost:11434) متصل کنید. یک مدل مخصوص کدنویسی مثل Qwen‑Coder یا DeepSeek‑Coder انتخاب کنید. توانایی Cline در درک کل کدبیس و انجام ویرایش‌های چندفایلی، آن را به جایگزینی مناسب برای دستیارهای کدنویسی ابری تبدیل کرده است."
+        },
+        {
+          "type": "cta",
+          "title": "کلاین: عامل کدنویسی متن‌باز هوش مصنوعی",
+          "text": "چگونه عامل کار می‌کند، مدل‌های توصیه‌شده و چرا توسعه‌دهندگان از دستیارهای ابری فاصله می‌گیرند.",
+          "buttonText": "مطالعهٔ راهنمای Cline",
+          "buttonUrl": "/fa/blog/cline-the-open-source-ai-coding-agent/"
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1786553663-1786500030-private-ai-workspace-screenshot.webp",
+          "alt": "نمای شبیه‌سازی‌شده از رابط چت Open WebUI در حال اجرای مدل محلی با نشانگرهای حریم خصوصی",
+          "caption": "شکل ۳: یک فضای کاری خصوصی معمولی — چت، RAG سند و انتخابگر مدل، همگی در برابر Ollama روی localhost.",
+          "altText": "نمای شبیه‌سازی‌شده از رابط چت Open WebUI در حال اجرای مدل محلی با نشانگرهای حریم خصوصی"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کدام مدل را انتخاب کنیم؟"
+        },
+        {
+          "type": "paragraph",
+          "text": "با وجود ده‌ها مدل مختلف، بهتر است مدل را با وظایف معمول خود هماهنگ کنید. در اینجا یک راهنمای سریع آورده شده:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Llama 3.1 8B – یک مدل همه‌کارهٔ متعادل، عالی برای چت، خلاصه‌سازی و کدنویسی سبک. روی تقریباً هر دستگاهی اجرا می‌شود.",
+            "Qwen 2.5 14B – عالی برای استدلال و ریاضیات؛ در برخی معیارها از مدل‌های بزرگ‌تر بهتر عمل می‌کند.",
+            "Mistral 7B – بسیار سریع و مناسب برای کارهای روزمرهٔ دستیاری.",
+            "Llama 3.1 70B / Qwen 2.5 72B – عملکرد سطح بالا، اما نیاز به GPU قدرتمند (بیش از ۲۴ گیگابایت VRAM) برای سرعت معقول دارد.",
+            "مدل‌های تخصصی کدنویسی (مثل Qwen‑Coder، DeepSeek‑Coder) – مخصوص برنامه‌نویسی هستند و اغلب در معیارهای کدنویسی از مدل‌های عمومی بهتر عمل می‌کنند."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "با یک مدل کوچک کوانتیزه (مثل llama3.1:8b‑q4_0) شروع کنید تا با فضا آشنا شوید، سپس به‌مرور مدل‌های بزرگ‌تر را امتحان کنید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چه چیزی به دست می‌آورید (و چه چیزی را معامله می‌کنید)"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "حریم خصوصی کامل داده — پرامپت‌ها، فایل‌ها و تاریخچه هرگز دستگاه را ترک نمی‌کنند",
+            "بدون هزینهٔ اشتراک ماهیانه برای استفادهٔ اصلی چت و کدنویسی",
+            "کنترل کامل روی انتخاب مدل و زمان به‌روزرسانی",
+            "امکان کار آفلاین یا روی ماشین‌های ایزوله",
+            "معامله: به سخت‌افزار مناسب نیاز دارید (حداقل ۸ گیگابایت رم، GPU به شدت توصیه می‌شود برای مدل‌های بزرگ‌تر)",
+            "معامله: جدیدترین مدل‌های پیشرو هنوز ابتدا در ابر ظاهر می‌شوند، معمولاً با چند ماه تأخیر",
+            "معامله: مسئولیت به‌روزرسانی‌ها، پشتیبان‌گیری و امنیت سرور خودتان بر عهدهٔ شماست"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "برای بیشتر کارهای دانشی، تحقیق، نوشتن و کدنویسی، مدل‌های باز فعلی به‌اندازه‌ای خوب هستند که مزایای حریم خصوصی و هزینه بر چند درصد آخر اختلاف عملکرد غلبه می‌کند. این شکاف به سرعت در حال بسته شدن است؛ احتمالاً تا ۲۰۲۷ مدل‌های محلی حتی برای کاربران سنگین به گزینهٔ پیش‌فرض تبدیل خواهند شد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "اعتراضات رایج و پاسخ‌های سرراست"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "«مدل‌های محلی خیلی ضعیف هستند»"
+        },
+        {
+          "type": "paragraph",
+          "text": "در ۲۰۲۶ این حرف تا حد زیادی منسوخ شده. مدل‌های کوانتیزهٔ ۱۴B–۳۲B اکثر وظایف حرفه‌ای روزمره را به‌خوبی انجام می‌دهند. بسیاری از توسعه‌دهندگان و نویسندگان اکنون این مدل‌ها را به خاطر ترکیب سرعت، حریم خصوصی و هزینهٔ صفر ترجیح می‌دهند. برای مثال، Qwen 2.5 14B در بسیاری از معیارهای استدلال با GPT‑4o رقابت می‌کند و Llama 3.1 70B اغلب در آزمایش‌های واقعی با Claude 3.5 Sonnet برابری می‌کند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "«راه‌اندازی پیچیده است»"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ollama به‌علاوهٔ دستور تک‌خطی Docker برای Open WebUI واقعاً برای بیشتر افراد زیر ۱۵–۳۰ دقیقه است. بعد از دانلود اولین مدل، کار تمام است. حتی اگر از Docker استفاده نکنید، نصب دستی مستندات خوبی دارد و سرراست است. منحنی یادگیری بسیار کم‌شیب‌تر از راه‌اندازی یک سرور وب سنتی است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "«هنوز گاهی به بهترین مدل مطلق نیاز دارم»"
+        },
+        {
+          "type": "paragraph",
+          "text": "یک حساب ابری پولی برای موارد نادری که واقعاً لازم دارید نگه دارید. از مدل‌های محلی به عنوان پیش‌فرض برای بقیهٔ کارها استفاده کنید. این رویکرد ترکیبی از قبل ۹۰٪ در معرض قرار گرفتن حریم خصوصی را حذف می‌کند. Open WebUI حتی قابلیت ادغام ارائه‌دهندگان ابری را هم دارد، پس در صورت لزوم می‌توانید در همان رابط از محلی به ابری سوئیچ کنید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "«تک‌وظیفه‌های چندوجهی (تصویر، صدا) چطور؟»"
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل‌های بینایی و صوتی در اکوسیستم متن‌باز وجود دارند. Ollama از مدل‌های بینایی مثل LLaVA و Qwen‑VL پشتیبانی می‌کند و می‌توانید در Open WebUI تصویر آپلود کنید. برای صدا، می‌توانید با موتورهای محلی تبدیل متن به گفتار و گفتار به متن همراه شوید. این اکوسیستم به سرعت در حال رشد است و تا ۲۰۲۶ بیشتر نیازهای چندوجهی رایج پوشش داده می‌شود."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "عادات عملی حریم خصوصی حتی اگر در ابر بمانید"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "گزینهٔ «بهبود مدل برای همه» (یا معادل آن) را در هر حساب مصرف‌کننده‌ای که هنوز استفاده می‌کنید خاموش کنید",
+            "حالت‌های موقت / ناشناس را برای موضوعات حساس ترجیح دهید",
+            "هرگز رمز، سوابق کامل پزشکی یا داده‌های مشتری بدون ویرایش را در چت‌بات ابری پیست نکنید",
+            "افزونه‌های مرورگر را بررسی کنید — چندین خانوادهٔ افزونه در حال برداشت متن چت هوش مصنوعی گرفتار شده‌اند",
+            "یک پروفایل مرورگر جداگانه بدون افزونه‌های ردیابی برای استفاده از هوش مصنوعی در نظر بگیرید",
+            "اگر ناچار به استفاده از سرویس‌های ابری هستید، از VPN برای مخفی کردن IP خود استفاده کنید"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "این اقدامات ریسک را کاهش می‌دهند اما نمی‌توانند با تضمین استنتاج محلی رقابت کنند. این‌ها یک راه‌حل موقت هستند تا زمانی که گردش کار خود را به یک محیط خصوصی منتقل کنید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی: لایهٔ استنتاج را مالک شوید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "دوران چسباندن بی‌دقت همه‌چیز در چت‌بات ابری برای کسانی که به حریم خصوصی، هزینه و کنترل بلندمدت اهمیت می‌دهند، رو به پایان است."
+        },
+        {
+          "type": "paragraph",
+          "text": "لازم نیست هوش مصنوعی را رها کنید. فقط باید بخش حساس پشته را روی سخت‌افزاری که کنترل می‌کنید منتقل کنید. Ollama مدل‌ها را در اختیار شما می‌گذارد. Open WebUI رابط کاربری را فراهم می‌کند. Cline (و ابزارهای مشابه) عامل‌های هوشمند را به شما می‌دهند. این سه کنار هم یک فضای کاری هوش مصنوعی خصوصی می‌سازند که هرگز به بیرون زنگ نمی‌زند."
+        },
+        {
+          "type": "paragraph",
+          "text": "همین هفته با یک مدل شروع کنید. وقتی همان کیفیت را بدون نظارت تجربه کنید، برگشتن به حالت قبل عجیب به نظر می‌رسد."
+        },
+        {
+          "type": "paragraph",
+          "text": "پرامپت‌های شما سزاوار این هستند که مال شما بمانند. کنترل هوش مصنوعی خود را از امروز به دست بگیرید."
         }
-      ]
-    }
-  },
-  "featuredImage": {
-    "src": "/api/uploads/1786553310-1786500001-your-ai-tools-are-spying-on-you-cover.webp",
-    "alt": {
-      "en": "Your AI Tools Are Spying on You. Here’s the Fix.",
-      "fa": "Your AI Tools Are Spying on You. Here’s the Fix."
+      ],
+      "faq": [
+        {
+          "question": "آیا ابزارهای هوش مصنوعی محلی واقعاً داده‌های من را خصوصی نگه می‌دارند؟",
+          "answer": "بله، اگر به‌درستی پیکربندی شوند. Ollama استنتاج را کاملاً روی دستگاه شما اجرا می‌کند و اعلام می‌کند که پرامپت‌ها یا پاسخ‌ها را جمع‌آوری، ذخیره یا انتقال نمی‌دهد. Open WebUI تاریخچهٔ چت را به‌طور پیش‌فرض محلی ذخیره می‌کند. ریسک اصلی، پیکربندی نادرست (مثلاً قرار دادن API در معرض اینترنت عمومی) است."
+        },
+        {
+          "question": "آیا مدل‌های محلی به خوبی ChatGPT یا Claude هستند؟",
+          "answer": "برای بیشتر کارهای روزمرهٔ نوشتن، کدنویسی، تحقیق و تحلیل، مدل‌های باز فعلی (به‌ویژه کلاس ۱۴B–۷۰B) از قبل بسیار توانمند هستند. مدل‌های بستهٔ پیشرو هنوز در سخت‌ترین مسائل استدلال جلوترند، اما شکاف برای کار عملی به‌شدت کاهش یافته است."
+        },
+        {
+          "question": "چقدر سخت‌افزار نیاز است؟",
+          "answer": "یک ماشین با ۸ گیگابایت رم می‌تواند مدل‌های کوانتیزهٔ کوچک‌تر را اجرا کند. ۱۶ گیگابایت+ رم و GPU مدرن (NVIDIA، Apple Silicon یا AMD) مدل‌های ۱۴B–۳۲B را روان‌تر اجرا می‌کنند. بسیاری از افراد روی لپ‌تاپ‌های سه سال اخیر تنظیمات عالی دارند."
+        },
+        {
+          "question": "آیا Open WebUI رایگان و متن‌باز است؟",
+          "answer": "بله. کاملاً متن‌باز، خودمیزبان است و برای استفادهٔ محلی نیازی به حساب کاربری یا پرداخت ندارد."
+        },
+        {
+          "question": "آیا هنوز هم می‌توانم در مواقع لزوم از مدل‌های ابری استفاده کنم؟",
+          "answer": "کاملاً. Open WebUI می‌تواند در کنار مدل‌های محلی Ollama به APIهای سازگار با OpenAI متصل شود. از مدل محلی به عنوان پیش‌فرض استفاده کنید و ابر را فقط برای موارد نادری که توجیه دارند نگه دارید."
+        },
+        {
+          "question": "در مورد صدا، تصاویر یا اسناد طولانی چطور؟",
+          "answer": "مدل‌های باز بینایی و چندوجهی وجود دارند و با Ollama کار می‌کنند. RAG سند در Open WebUI تعبیه شده تا بتوانید با PDFها و یادداشت‌های خصوصی چت کنید بدون اینکه آن‌ها را به شخص ثالث آپلود کنید."
+        },
+        {
+          "question": "چگونه مدل‌ها و نرم‌افزار را به‌روز کنم؟",
+          "answer": "Ollama از طریق مدیر بسته (یا نصب مجدد دستی) به‌روز می‌شود. Open WebUI با کشیدن آخرین تصویر Docker یا از طریق Git به‌روز می‌شود. مدل‌ها با کشیدن مجدد همان نام (مثلاً ollama pull llama3.1:8b) به آخرین نسخه به‌روز می‌شوند."
+        }
+      ],
+      "seo": {
+        "title": "ابزارهای هوش مصنوعی شما در حال جاسوسی هستند. راه‌حل اینجاست. | راهنمای هوش مصنوعی خصوصی محلی ۲۰۲۶",
+        "metaDescription": "بیشتر چت‌بات‌های هوش مصنوعی به‌طور پیش‌فرض روی پرامپت‌های شما آموزش می‌بینند. یاد بگیرید چگونه هوش مصنوعی قدرتمند خصوصی را با Ollama و Open WebUI آفلاین اجرا کنید تا داده‌هایتان هرگز دستگاه را ترک نکنند.",
+        "canonical": "https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix",
+        "openGraph": {
+          "title": "ابزارهای هوش مصنوعی شما در حال جاسوسی از شما هستند. راه‌حل اینجاست.",
+          "description": "ابزارهای هوش مصنوعی مصرف‌کننده، مکالمات شما را ثبت و برای آموزش استفاده می‌کنند. راه‌حل عملی، استنتاج محلی است. راهنمای کامل ۲۰۲۶ برای پشتهٔ هوش مصنوعی خصوصی.",
+          "image": "/api/uploads/1786500001-your-ai-tools-are-spying-on-you-cover.webp"
+        },
+        "twitter": {
+          "title": "ابزارهای هوش مصنوعی شما در حال جاسوسی هستند. راه‌حل اینجاست.",
+          "description": "دست از دادن هر پرامپت به ابر بردارید. هوش مصنوعی خصوصی و باکیفیت را روی دستگاه خودتان با Ollama + Open WebUI اجرا کنید.",
+          "image": "/api/uploads/1786500001-your-ai-tools-are-spying-on-you-cover.webp"
+        },
+        "keywords": "هوش مصنوعی خصوصی, هوش مصنوعی محلی, حریم خصوصی هوش مصنوعی, هوش مصنوعی خودمیزبان, Ollama, Open WebUI, جایگزین ChatGPT, LLM آفلاین, حریم خصوصی داده هوش مصنوعی, چت‌بات خصوصی, LLM محلی ۲۰۲۶, اجرای هوش مصنوعی آفلاین, جاسوسی ابزارهای هوش مصنوعی, راه‌اندازی هوش مصنوعی خصوصی",
+        "focusKeyword": "هوش مصنوعی خصوصی"
+      }
     }
   }
 }

@@ -1,0 +1,1463 @@
+{
+  "slug": "qwen38-vs-kimi-k27-vs-gemma-4-local-coding-model-gpu",
+  "status": "published",
+  "title": "Qwen3.8 vs Kimi K2.7 vs Gemma 4: Which Local Coding Model Fits Your GPU?",
+  "date": "2026-09-16 17:16:02",
+  "tags": [
+    "local-ai",
+    "open-source-ai",
+    "ai-coding-agents",
+    "ai-tools"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/20260916-171028-2c56acaf150284a9.webp",
+    "alt": {
+      "en": "Qwen3.8-27B, Kimi K2.7 Code and Gemma 4 compared across GPU memory tiers from an 8GB consumer card to a multi-GPU server",
+      "fa": "مقایسه Qwen3.8-27B، Kimi K2.7 Code و Gemma 4 در طبقه‌های حافظه GPU از یک کارت مصرفی ۸ گیگابایتی تا سرور چند-GPU"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "Qwen3.8 vs Kimi K2.7 vs Gemma 4: Which Local Coding Model Fits Your GPU?",
+      "excerpt": "Qwen3.8-27B, Kimi K2.7 Code and Gemma 4 dominate the open-weight coding conversation in 2026, and they target completely different hardware. One fits a single 24GB GPU, one needs eight of them, and one scales down to a phone. Here is the memory math, the quantization trade-offs, the vendor benchmark caveats, and a tier-by-tier recommendation you can act on today.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "Qwen3.8 vs Kimi K2.7 vs Gemma 4: Which Local Coding Model Fits Your GPU?"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Every few weeks a new open-weight coding model arrives with a benchmark table that makes it look like the obvious choice. Then you try to run it and discover the real constraint was never the leaderboard. It was the memory on the card sitting in your machine. Qwen3.8-27B, Kimi K2.7 Code, and Gemma 4 are three of the most discussed open-weight options in 2026, and they occupy completely different hardware tiers. One of them fits a single consumer GPU. One of them does not fit anything you own. One of them scales from a phone to a workstation."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is a hardware-first comparison rather than a benchmark-first one. Benchmark scores matter, but they are almost all vendor-reported, measured on harnesses that differ between vendors, and they tell you nothing about whether the model will actually load on your machine with a usable context window. The order of operations that saves people the most time is simple: work out your memory budget, eliminate everything that cannot fit, and only then argue about which of the survivors is smarter."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "0.6 GB / B",
+              "label": "Rough weight footprint per billion parameters at Q4_K_M, before context overhead"
+            },
+            {
+              "value": "20-30%",
+              "label": "Extra headroom you should budget on top of weights for KV cache and context"
+            },
+            {
+              "value": "24 GB",
+              "label": "The tier where Qwen3.8-27B and Gemma 4 31B become realistic at 4-bit"
+            },
+            {
+              "value": "1T / 32B",
+              "label": "Kimi K2.7 Code total versus active parameters - open weights, datacenter hardware"
+            },
+            {
+              "value": "5 sizes",
+              "label": "Gemma 4 variants, from phone-class E2B up to the 31B dense flagship"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Model",
+            "Parameters & Active Weights",
+            "VRAM Requirement (Q4/Q8)",
+            "Coding Benchmark (SWE-bench/Eval)",
+            "Ideal Use Case"
+          ],
+          "rows": [
+            [
+              "Qwen 2.5 Coder 32B",
+              "32.5B dense",
+              "19 GB (Q4_K_M) / 36 GB (Q8)",
+              "Exceptional syntax, complex multi-file refactoring",
+              "Local powerhouse for RTX 3090/4090 or Mac Studio"
+            ],
+            [
+              "Kimi k1.5 / K2.7",
+              "MoE architecture",
+              "16-24 GB depending on quantization",
+              "Long-context reasoning, architectural planning",
+              "Codebase understanding with large multi-file context"
+            ],
+            [
+              "Gemma 2 27B / Gemma 4",
+              "27.2B dense",
+              "16 GB (Q4_K_M) / 30 GB (Q8)",
+              "High single-prompt coding fluency and logic",
+              "Developer workstation with 24GB VRAM"
+            ],
+            [
+              "Llama 3.3 70B (Reference)",
+              "70.6B dense",
+              "40 GB (Q4_K_M) / 76 GB (Q8)",
+              "Gold standard for open-weights reasoning",
+              "Dual-GPU setups or high-RAM Apple Silicon unified memory"
+            ]
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260916-171036-69b41220730fe723.webp",
+          "alt": "Three open-weight coding models mapped against GPU memory tiers from 8GB to multi-GPU servers",
+          "caption": "Figure 1: The comparison that matters first is not capability, it is which tier of hardware each model actually targets.",
+          "altText": "Three open-weight coding models mapped against GPU memory tiers from 8GB to multi-GPU servers"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "1. The Question Behind the Question"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "When someone asks which local coding model is best, they are usually asking three separate questions at once, and the answers point in different directions."
+        },
+        {
+          "type": "paragraph",
+          "text": "The first question is which model produces the best code. The second is which model will run on the hardware they already own, at a speed that does not break their concentration. The third, which people rarely say out loud, is which model will still behave sensibly when it is driven by an agent that makes dozens of tool calls in a row rather than answering a single prompt. A model can win the first question and lose the other two badly enough that it is useless to you."
+        },
+        {
+          "type": "paragraph",
+          "text": "Qwen3.8-27B, Kimi K2.7 Code, and Gemma 4 are useful precisely because they separate cleanly along these lines. Qwen3.8-27B is the current answer for someone with one good consumer GPU who wants agentic coding behaviour. Kimi K2.7 Code is genuinely open-weight and genuinely out of reach for local hardware, which makes it an API decision dressed as a self-hosting decision. Gemma 4 is a family rather than a model, and its value is that it scales down further than either of the others without falling off a cliff."
+        },
+        {
+          "type": "paragraph",
+          "text": "Treating them as three entries on the same list is the mistake. They are three different answers to three different constraints. The rest of this comparison walks through the memory math first, then each model in turn, then a tier-by-tier recommendation you can act on."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "2. The Memory Math to Do Before You Download Anything"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Almost every disappointing local model experience traces back to one of three arithmetic mistakes: forgetting quantization, forgetting the KV cache, or forgetting that a mixture-of-experts model still has to hold all of its weights in memory."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "The weight footprint rule of thumb"
+        },
+        {
+          "type": "paragraph",
+          "text": "A workable planning estimate is roughly 0.6GB of memory per billion parameters at Q4_K_M quantization. A 12B model lands near 7-8GB, a 27B model near 16-18GB, a 31B model near 19-20GB. These are estimates derived from parameter count rather than measured downloads, so treat them as planning figures and verify the actual file size in the model library before you commit. Full-precision weights are a completely different conversation: Qwen3.8-27B in BF16 requires roughly 55.6GB, which is why nobody runs it that way on a desktop."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "The KV cache is not optional"
+        },
+        {
+          "type": "paragraph",
+          "text": "Weights are the floor, not the total. The KV cache sits on top and scales with both context length and concurrency. A 27B model serving long-context requests to multiple users can double its memory footprint. This is the single most common reason a model that supposedly fits a 24GB card starts spilling to system RAM the moment someone points an agent at a large repository. Budget 20-30% headroom on top of the weight figure for context, and more if you plan to run long sessions or serve more than one request at a time."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Mixture-of-experts does not mean lightweight"
+        },
+        {
+          "type": "paragraph",
+          "text": "MoE architectures reduce compute per token by routing each token to a small subset of experts. They do not reduce the memory needed to store the model. Kimi K2.7 Code activates 32 billion parameters out of roughly one trillion total, which is about 3% of the model, and that is the entire reason a trillion-parameter model can be served at competitive prices. It is not a reason it will run on your GPU. All of those weights still need to be resident somewhere. This distinction catches people out constantly, because the marketing language around MoE emphasises the active parameter count."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Estimate weights: parameter count multiplied by roughly 0.6GB at Q4_K_M.",
+            "Add 20-30% headroom for KV cache, more for long context or concurrent requests.",
+            "Check whether the model is dense or MoE - and remember MoE saves compute, not memory.",
+            "Confirm the actual package size in the model library rather than trusting the estimate.",
+            "On Apple Silicon, count unified memory the same way, and leave room for the operating system."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Applied to consumer hardware, this produces a fairly clean set of tiers. An 8GB card handles 7-12B models. A 16GB card handles the 14-20B class comfortably. A 24GB card is where 27-31B models become realistic at 4-bit. Beyond roughly 32GB you are into multi-GPU rigs or high-memory Mac Studios, and beyond that you are building a small server rather than a workstation."
+        },
+        {
+          "type": "cta",
+          "title": "Ollama: The Engine Behind Local AI",
+          "text": "If you are new to running models locally, start with the runtime before the model. Ollama handles quantization, hardware detection, and serving with a single command.",
+          "buttonText": "Read the Ollama Primer",
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "3. Qwen3.8-27B: The Default Answer for a 24GB GPU"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "If you have one good consumer GPU and you want agentic coding behaviour rather than autocomplete, Qwen3.8-27B is currently the model to beat."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "What it actually is"
+        },
+        {
+          "type": "paragraph",
+          "text": "Alibaba announced Qwen3.8-27B on 3 August 2026 alongside the much larger Qwen3.8-Max, and released the open weights around 13-14 August under Apache 2.0. The checkpoint is dense - roughly 27.78 billion parameters - which means the full parameter count sits in VRAM and the memory math above applies directly with no MoE asterisk. It runs 64 layers with a hybrid Gated DeltaNet and Gated Attention design and a 5120 hidden dimension, carries a native 262,144-token context window extensible toward one million tokens with YaRN, and is natively multimodal: it accepts text, image, and video input."
+        },
+        {
+          "type": "paragraph",
+          "text": "Full BF16 weights need roughly 55.6GB. At 4-bit it runs on a single 24GB GPU, and the Ollama library lists packages around 18GB for both the standard and MLX variants. That 18GB figure is the practical number to plan around. It leaves real headroom on a 24GB card and makes the model uncomfortable but not impossible on 20GB."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "What the benchmarks claim"
+        },
+        {
+          "type": "paragraph",
+          "text": "Qwen's launch card reports 61.7 on SWE-bench Pro, 73.0 on Terminal-Bench 2.1 with the Terminus harness, 90.3 on LiveCodeBench v6, 89.2 on GPQA Diamond, 79.5 on IFBench, and 84.3 on OSWorld-Verified. The generational comparison is the more interesting part: against Qwen3.6-27B, SWE-bench Pro moves from 53.5 to 61.7, Terminal-Bench from 63.4 to 73.0, QwenSWEBench from 49.3 to 79.0, and DeepSWE 1.1 from 13.3 to 42.2. Outside code, CoWorkBench rises from 61.0 to 70.7 and Agents' Last Exam pass@1 doubles from 10.6 to 20.4."
+        },
+        {
+          "type": "paragraph",
+          "text": "The shape of those gains is the signal. The published configuration is architecturally identical to Qwen3.6-27B - same layer layout - so the story is new weights and new post-training rather than a new architecture. Qwen trained this checkpoint to keep working through an environment across many steps, not to produce a better first response. For anyone using a local model inside an agent loop, that is the property that matters most."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "The caveats that come with those numbers"
+        },
+        {
+          "type": "paragraph",
+          "text": "Every figure above is vendor-run. Qwen's own card is unusually transparent about conditions, which is to its credit and also a reminder of how much conditions matter. SWE-bench Pro was evaluated on a Claude Code harness at temperature 1.0, top-p 0.95, with a 256K context window. QwenSWEBench is an average of three runs with an eight-hour timeout and a 32,768 generated-token cap. Several of the headline benchmarks - QwenSWEBench, CoWorkBench, RecreationBench - are designed in-house, so their tasks and graders do not have the external auditability of a mature public suite."
+        },
+        {
+          "type": "paragraph",
+          "text": "One comparison in particular deserves care. Qwen reran several rival models on a corrected task set using Claude Code, but imported Claude Opus 4.6 Max's official SWE-bench Pro score rather than rerunning it. So the frequently repeated claim that a 27B open model beats Opus on agentic coding rests on figures from two different harnesses. The gap may well be real. It is not a controlled result, and a public task set does not make a vendor-run number independent."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Who should run it"
+        },
+        {
+          "type": "paragraph",
+          "text": "Anyone with 24GB of VRAM or 24GB-plus of unified memory on Apple Silicon who wants a local model that can drive an agent through multi-step work. Thinking is enabled by default, and the model exposes controls including reasoning_effort, the ability to disable thinking, and preserve_thinking for whether prior reasoning blocks survive into later turns. Those controls change latency, memory use, and task quality, so they are worth tuning deliberately rather than leaving at defaults."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260916-171046-fd6673cfc3496ab8.webp",
+          "alt": "Qwen3.8-27B memory profile at BF16 versus 4-bit quantization on a single consumer GPU",
+          "caption": "Figure 2: The gap between 55.6GB at BF16 and roughly 18GB quantized is the entire reason this model is a consumer-hardware story at all.",
+          "altText": "Qwen3.8-27B memory profile at BF16 versus 4-bit quantization on a single consumer GPU"
+        },
+        {
+          "type": "cta",
+          "title": "How to Choose the Right AI Model for Cline (And Stop Wasting Money on the Wrong One)",
+          "text": "Picking a model is only half the problem. Matching it to the agent you drive it with is the other half, and it is where most of the wasted spend happens.",
+          "buttonText": "Read the Model Selection Guide",
+          "buttonUrl": "/en/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "4. Kimi K2.7 Code: Open Weights You Probably Cannot Run"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Moonshot AI's coding model is genuinely open-weight, genuinely strong, and genuinely not a local model for anyone reading this on a laptop."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "The architecture, and why the headline number misleads"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kimi K2.7 Code was released on 12 June 2026 as a coding-specialised successor to Kimi K2.6. It is a mixture-of-experts model with one trillion total parameters and 32 billion activated per token, routed across 384 experts with eight selected per token plus one shared expert. It runs 61 layers including one dense layer, uses Multi-head Latent Attention and SwiGLU activations, ships with native INT4 quantization, and carries a 256K-token context window. The weights are on Hugging Face under a Modified MIT license, and Moonshot documents deployment via vLLM, SGLang, and KTransformers."
+        },
+        {
+          "type": "paragraph",
+          "text": "The trillion-parameter headline is the part that gets repeated and the 32B active figure is the part that gets misread. Activating 3% of the model per token is why it can be served at roughly $4.00 per million output tokens instead of at prices a model that size would historically demand. It does not shrink the storage requirement. A representative self-hosting recipe uses a tensor-parallel size of eight, which is to say eight GPUs, with chunked prefill enabled to stop memory spiking during large prefills at 256K context. That is a server deployment, not a desktop one."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "The design choice that defines it"
+        },
+        {
+          "type": "paragraph",
+          "text": "Thinking mode cannot be turned off. That is Moonshot's explicit bet that always-reasoning produces a more reliable coding agent, and it is a real trade-off rather than a marketing line. You cannot dial it down for a trivial task to save tokens or latency. Moonshot's counterweight is efficiency: the model reportedly uses roughly 30% fewer reasoning tokens per coding task than K2.6, which reduces output token count and improves effective throughput per request. There are also two API flavours sharing the same weights - the standard model and a highspeed variant tuned for roughly 180 tokens per second, up to 260 on short contexts, at exactly double the price on every tier."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Read the benchmark claims carefully"
+        },
+        {
+          "type": "paragraph",
+          "text": "Moonshot reports a 21.8% improvement on Kimi Code Bench v2 over K2.6. That benchmark is first-party, and the release-day table is the only detailed source available from the vendor. Some practitioners have already said the published numbers do not match what they see in real repositories. This is not a reason to dismiss the model - it is a reason to treat the numbers as company-reported positioning rather than an independent leaderboard result, which is exactly how the more careful coverage has labelled them."
+        },
+        {
+          "type": "paragraph",
+          "text": "One detail worth flagging: sources disagree about whether the MoonViT vision encoder carried over from K2.6. Some deployment write-ups state the vision encoder is absent in the coding-focused K2.7, while the model card summaries and several API listings describe it as natively multimodal with image input. If multimodality matters to your use case, verify against the current model card rather than trusting any secondary source, including this one."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "So what is it actually for?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kimi K2.7 Code belongs in this comparison as a boundary marker. It is what the open-weight frontier looks like in 2026: genuinely downloadable, genuinely permissively licensed, and genuinely requiring hardware that costs more than a car. For most teams the honest path is the API, and the open weights function as an escape hatch - the guarantee that you could self-host if the vendor relationship went wrong, and leverage in any conversation about pricing or data handling. That guarantee has real value. It is just not the same thing as a local model."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is also worth noting that Moonshot has since shipped Kimi K3, a 2.8 trillion parameter open-weight multimodal reasoning model using KDA and Attention Residuals, which moved the scale frontier again. The frontier open-weight tier - Kimi K3, GLM-5.2, DeepSeek-V4-Pro - remains out of reach on a single 128GB machine, and pretending otherwise is how people end up with a model paging to SSD at two tokens per second."
+        },
+        {
+          "type": "cta",
+          "title": "Stop Paying for AI Coding Agents: The Open-Source Alternatives That Actually Work in 2026",
+          "text": "Open weights and open agents solve different problems. This guide covers the agent side of the stack and which open-source options hold up in daily use.",
+          "buttonText": "Read the Open-Source Agents Guide",
+          "buttonUrl": "/en/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "5. Gemma 4: The Family That Scales Down Without Falling Over"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Gemma 4 is the only entry here that is a family rather than a model, and that is the entire point of it."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Five sizes, one architecture story"
+        },
+        {
+          "type": "paragraph",
+          "text": "Google DeepMind released Gemma 4 on 2 April 2026 under Apache 2.0, initially in E2B, E4B, 26B A4B, and 31B variants, then added Gemma 4 12B Unified on 3 June 2026. E2B and E4B run roughly 2.3 and 4.5 billion effective parameters and target phones and edge devices. The 26B A4B is a mixture-of-experts model activating 3.8 billion of 25.2 billion parameters and fits a single RTX 3090 or 4090. The 31B is dense and targets workstations. Context runs to 128K on the edge models and 256K on the three larger ones."
+        },
+        {
+          "type": "paragraph",
+          "text": "The 12B Unified variant is the interesting addition for local users. It carries 11.95 billion parameters across 48 layers with 1024-token sliding window attention, a 262K vocabulary, and native support for text, image, and audio input. Its Ollama package is around 7.6GB, which puts it squarely in 8GB-card territory. Every Gemma 4 size takes image input; E2B, E4B, and 12B also take audio."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "The speculative decoding advantage"
+        },
+        {
+          "type": "paragraph",
+          "text": "Google shipped Gemma 4 MTP drafters on 16 April 2026 - dedicated draft models for speculative decoding across all five sizes. The claim is up to 3x faster inference at identical quality. This is an underrated practical advantage for local use, because the thing that makes a local model feel unusable is rarely quality and usually latency. If you are running llama.cpp, using the MTP drafters is one of the few free speed wins available."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Where it stands on capability"
+        },
+        {
+          "type": "paragraph",
+          "text": "The 31B dense model reports 85.2% on MMLU Pro, 89.2% on AIME 2026, 84.3% on GPQA Diamond, 80.0% on LiveCodeBench, and a Codeforces Elo around 2150. On Arena AI's open-source text leaderboard it has held roughly 1452 Elo, with the 26B A4B at about 1441 - competitive with models many times its size. The generational jump from Gemma 3 is dramatic on math and coding in particular."
+        },
+        {
+          "type": "paragraph",
+          "text": "The honest framing is that Gemma 4 is a very good general model with solid coding ability, not a coding specialist. If your work is heavily agentic software engineering, Qwen3.8-27B's training focus shows. If your work mixes code with document understanding, image input, audio, or multilingual requirements - Gemma 4 supports 35-plus languages out of the box with pre-training across 140-plus - the family is a stronger all-round fit. And since 1 September 2026, Gemma 4 ships inside Android Studio Quail 4 as a fully local coding model, which makes it the path of least resistance for Android work specifically."
+        },
+        {
+          "type": "paragraph",
+          "text": "One maintenance note that catches people: if you pulled Gemma 4 weights before roughly mid-July 2026, re-pull them. Early checkpoints were revised, and a stale local copy will quietly underperform the numbers you read about."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260916-171535-68fc625f70f80922.webp",
+          "alt": "Gemma 4 family from E2B on phones through 12B Unified and 26B A4B to the 31B dense flagship",
+          "caption": "Figure 3: Gemma 4's advantage is not any single size. It is that the same family covers a phone and a workstation.",
+          "altText": "Gemma 4 family from E2B on phones through 12B Unified and 26B A4B to the 31B dense flagship"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "6. The Tier-by-Tier Recommendation"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Find your memory budget, then read only your row. Everything above it is aspiration and everything below it is a compromise you do not need to make."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "8GB VRAM"
+        },
+        {
+          "type": "paragraph",
+          "text": "You are in the 7-12B class. Gemma 4 12B Unified at roughly 7.6GB is the strongest general-purpose pull at this tier, and it brings multimodality with it. If you want something dedicated to code, JetBrains' Mellum2-12B reports 69.9 on LiveCodeBench and is the strongest coding-specific option that fits. Do not attempt a 27B model here. Quantizing further to force it in trades away exactly the reasoning reliability you wanted the bigger model for."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "12-16GB VRAM"
+        },
+        {
+          "type": "paragraph",
+          "text": "The 14-20B class is comfortable. Gemma 4 12B Unified now has real context headroom rather than fitting on a technicality, and mid-size options such as mistral-small3.2:24b at around 15GB become viable if you keep context modest. This tier is where you should think hardest about context length, because it is the variable that decides whether you fit or spill."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "24GB VRAM"
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the Qwen3.8-27B tier, and it is the clearest recommendation in this entire comparison. Roughly 18GB for weights leaves genuine headroom for context. Gemma 4 31B is the alternative if you want the stronger general model, and Gemma 4 26B A4B is worth testing precisely because it lands within a few points of the 31B on several benchmarks while activating only 3.8 billion parameters, which means noticeably faster generation."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "32GB and above, and Apple Silicon"
+        },
+        {
+          "type": "paragraph",
+          "text": "Above 32GB you gain the ability to run 27-31B models at higher precision, or to run a 27B model with a genuinely long context rather than a nominal one. On Apple Silicon, unified memory counts the same way, with the caveat that the OS and everything else you have open take their share. A 32GB Mac runs a 27B class model well. A 64GB or 128GB Mac Studio opens up more, but the frontier open-weight models - Kimi K3, GLM-5.2, DeepSeek-V4-Pro - stay out of reach even at 128GB."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Multi-GPU servers"
+        },
+        {
+          "type": "paragraph",
+          "text": "This is where Kimi K2.7 Code becomes a real option rather than a thought experiment, with a tensor-parallel size of eight as a representative configuration. If you are provisioning this, you already know it. For everyone else, the API is the honest answer."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "8GB: Gemma 4 12B Unified for general work, Mellum2-12B for code-only.",
+            "16GB: Gemma 4 12B with comfortable context, or a 20B-class model with restraint.",
+            "24GB: Qwen3.8-27B for agentic coding; Gemma 4 31B or 26B A4B for general strength.",
+            "32GB+: the same models with real context, or higher precision quantization.",
+            "Multi-GPU: Kimi K2.7 Code and the rest of the frontier open-weight tier."
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Hugging Face: Qwen3.8-27B Model Card",
+          "text": "The primary source for the benchmark table, harness footnotes, and deployment recommendations discussed above.",
+          "buttonText": "Open the Model Card",
+          "buttonUrl": "https://huggingface.co/Qwen/Qwen3.8-27B"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "7. How to Read Vendor Benchmarks Without Being Fooled"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Every number in this article, and in almost every comparison you will read, was produced by the company that made the model. That does not make the numbers useless. It makes them evidence with a known bias."
+        },
+        {
+          "type": "paragraph",
+          "text": "Four habits will protect you from most of the damage. First, attribute every figure to whoever ran it. A public task set does not make a vendor-run result independent; the harness, the temperature, the context window, and the timeout all move the score. Second, separate in-house benchmarks from public ones. When a vendor designs the benchmark, the tasks, and the grader, the number tells you what the vendor optimised for, which is worth knowing but is not a capability measurement."
+        },
+        {
+          "type": "paragraph",
+          "text": "Third, record which judge model was used. Several benchmarks are scored by another language model, and a score judged by GPT-4o is not directly comparable to one judged by a different model or by execution. Fourth, never merge rows from different conditions into an average. A code-interpreter-enabled result and a no-code-interpreter result are different experiments, and a vision benchmark judged by one model snapshot is not the same measurement as one judged by another."
+        },
+        {
+          "type": "paragraph",
+          "text": "Applied to these three models, the practical conclusion is that the ordering is probably roughly right and the margins are probably wrong. Qwen3.8-27B is very likely better at agentic coding than its predecessor by a meaningful amount. Whether it genuinely beats a frontier closed model on SWE-bench Pro is not established by an imported score from a different harness. Kimi K2.7 Code is very likely a strong coding model and its self-reported 21.8% gain over K2.6 is very likely directionally real. Gemma 4's Arena Elo figures are the closest thing here to an independent signal, because Arena ratings come from human preference rather than from the vendor."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Attribute every number to the party that ran the evaluation.",
+            "Separate in-house benchmarks from established public suites.",
+            "Note the harness, temperature, context window, and token caps.",
+            "Record which model, if any, acted as judge.",
+            "Never average across different experimental conditions."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "8. Context Windows Are a Memory Decision, Not a Feature"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "A 262K context window on the model card and a 262K context window on your machine are different things, and the gap between them is measured in gigabytes."
+        },
+        {
+          "type": "paragraph",
+          "text": "All three models advertise long context: 262,144 tokens native for Qwen3.8-27B with YaRN extension toward a million, 256K for Kimi K2.7 Code, and 256K for the larger Gemma 4 variants. None of those figures are free. The KV cache grows with the context you actually use, and it comes out of the same memory pool as the weights. A model that loads comfortably with a 8K context can fail at 128K on the same card."
+        },
+        {
+          "type": "paragraph",
+          "text": "This matters more for coding than for chat, because agentic coding is the use case that genuinely consumes context. An agent reading a repository, running tests, reading stack traces, and iterating will fill a long window quickly. The practical approach is to decide your working context first - how much of a codebase does the agent actually need resident? - and then size the model to leave room for it, rather than choosing the largest model that technically loads and discovering the context budget is gone."
+        },
+        {
+          "type": "paragraph",
+          "text": "On the serving side, if you are running a model for more than one user or more than one session, concurrency multiplies the problem. Long-context requests from multiple clients against a 27B model can double the footprint. If you are deploying at 256K context, chunked prefill and batched-token limits are the settings that keep memory stable during large prefills rather than letting it spike."
+        },
+        {
+          "type": "cta",
+          "title": "How to Fix Ollama's Most Common Errors (And Why They Happen)",
+          "text": "Most local model failures are memory, context, or daemon problems wearing a confusing error message. This guide covers the ones people hit most.",
+          "buttonText": "Read the Troubleshooting Guide",
+          "buttonUrl": "/en/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "9. Licensing: What You Can Actually Ship"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Two of these three models carry permissive licenses with no user caps and no commercial restrictions. That is a bigger deal than it sounds."
+        },
+        {
+          "type": "paragraph",
+          "text": "Qwen3.8-27B ships under Apache 2.0. Gemma 4 ships under Apache 2.0. Kimi K2.7 Code ships under a Modified MIT license. All three allow self-hosting and commercial use, which removes the category of legal friction that made earlier open-weight generations awkward for anything beyond experimentation - the monthly active user caps, the field-of-use restrictions, the acceptable use clauses that required a lawyer to interpret."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you are building a product on top of a local model, the license is a strategic input rather than a formality. Apache 2.0 weights mean you can ship, fine-tune, and distribute derived models without a licensing conversation. A Modified MIT license is permissive but the word 'modified' is doing work, so read the actual terms rather than pattern-matching on the name. And regardless of license, if you fine-tune and redistribute, keep provenance records of the base checkpoint and its version, because these models are revised more often than people expect."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "10. Behaviour Inside an Agent Loop"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Single-prompt quality and agent-loop reliability are different properties, and the second one is what you will actually feel."
+        },
+        {
+          "type": "paragraph",
+          "text": "An agent asks a model to do something specific: read a file, decide what to change, call a tool, read the result, and adjust. Failure modes there are not usually about knowledge. They are about instruction-following drift over many turns, tool-call formatting that degrades as context fills, and the model losing track of what it already tried. This is why Terminal-Bench and SWE-bench style evaluations are more informative for this use case than knowledge benchmarks, and why Qwen's decision to foreground agentic evaluations in its launch card was a reasonable reflection of what the model was trained for."
+        },
+        {
+          "type": "paragraph",
+          "text": "Practical implications differ by model. Qwen3.8-27B has thinking on by default with adjustable reasoning_effort, and whether prior reasoning blocks are preserved across turns is a setting you control - which directly affects how much context the agent burns per step. Kimi K2.7 Code cannot have thinking disabled at all, which is a design commitment to reliability at the cost of flexibility. Gemma 4 supports function calling across the family, but if you are running the E2B or E4B sizes, expect to keep the task scope tight; small models handle narrow, well-specified steps far better than open-ended planning."
+        },
+        {
+          "type": "paragraph",
+          "text": "One more thing that matters and is rarely mentioned: quantization affects agent behaviour more than it affects chat quality. A model that still writes fluent prose at aggressive quantization may have lost enough precision to start producing malformed tool calls. If your agent suddenly develops a habit of emitting broken JSON, test a less aggressive quantization before blaming the harness."
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+          "text": "The model is one half of the system. The agent harness that drives it determines how much of that capability you actually get.",
+          "buttonText": "Compare the Agents",
+          "buttonUrl": "/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "11. Quantization: Where the Quality Actually Goes"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Quantization is the lever that makes all of this possible, and it is also the one most often pulled too hard."
+        },
+        {
+          "type": "paragraph",
+          "text": "Going from BF16 to 4-bit takes Qwen3.8-27B from roughly 55.6GB to around 18GB. That is not a small optimisation; it is the difference between a server and a desktop. The cost is precision, and precision does not degrade uniformly across capabilities. Conversational fluency survives aggressive quantization well. Arithmetic, long-chain reasoning, strict format adherence, and tool-call correctness degrade earlier and more visibly."
+        },
+        {
+          "type": "paragraph",
+          "text": "A reasonable default is Q4_K_M, which is where the 0.6GB-per-billion estimate comes from and which most people find to be the best quality-per-gigabyte trade. If you have headroom, moving up to a higher-precision quantization is usually a better use of memory than moving up a model size, particularly for agentic work. If you are short on memory, dropping to 3-bit to force a larger model onto the card is usually a mistake: a well-quantized smaller model beats a badly-quantized larger one for anything requiring precision."
+        },
+        {
+          "type": "paragraph",
+          "text": "Also check who produced the quantization. Different GGUF builds of the same model are not equivalent, and dynamic quantization approaches that preserve precision selectively in the layers that need it most have become a meaningful differentiator. It is worth trying more than one build of the same model before concluding the model itself is disappointing."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "12. A Practical Evaluation Protocol"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Benchmarks tell you about someone else's tasks. Half a day of structured testing on your own repository tells you about yours."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pick five to ten tasks from your actual work that you have already solved, so you know what a correct answer looks like. A bug fix with a known root cause. A refactor across three or four files. A test that needs writing for existing code. A stack trace that needs diagnosing. Something that requires reading documentation you have locally. These should be representative of what you actually do, not showcase tasks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Then run each candidate model through all of them under identical conditions: same agent harness, same context settings, same quantization tier where comparable. Record three things per task - whether the output was correct, how many turns it took, and how long it took in wall-clock time. The turn count is the most underrated metric, because a model that gets there in twelve turns costs you more context, more time, and more chances to go wrong than one that gets there in four."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Use tasks you have already solved, so correctness is unambiguous.",
+            "Hold the harness, context settings, and quantization constant across candidates.",
+            "Record correctness, turn count, and wall-clock time separately.",
+            "Test at the context length you will actually use, not a convenient short one.",
+            "Re-test when you change quantization build, not just when you change model."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Budget half a day for this. It is the single highest-return activity in the entire local-model decision, and it replaces an unbounded amount of forum argument with an answer that is actually about your work."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "13. Common Mistakes"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Choosing by leaderboard position before checking whether the model fits your memory budget.",
+            "Reading MoE active-parameter counts as memory requirements - Kimi K2.7 activates 32B but stores 1T.",
+            "Forgetting the KV cache and then being surprised when a long-context session spills to system RAM.",
+            "Comparing vendor benchmark numbers across different harnesses as if they were the same experiment.",
+            "Quantizing too aggressively to fit a larger model, then blaming the model for malformed tool calls.",
+            "Running weights pulled months ago - several of these checkpoints have been revised since release.",
+            "Treating a coding-specialist model as a general assistant, or a general model as a coding specialist.",
+            "Testing with single prompts when your actual use case is a multi-turn agent loop."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "14. The Verdict"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Three models, three clearly different answers, and the deciding variable is hardware rather than capability."
+        },
+        {
+          "type": "paragraph",
+          "text": "Qwen3.8-27B is the recommendation for anyone with 24GB of VRAM or unified memory who wants agentic coding from a local model. It was trained for exactly that, its generational gains cluster in exactly that area, and roughly 18GB of quantized weights leaves room for a workable context. The vendor benchmarks should be read as positioning rather than proof, but the direction they point is consistent with how the model behaves in practice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gemma 4 is the recommendation for anyone below that tier, anyone who needs multimodality, and anyone who wants one family covering multiple devices. The 12B Unified at around 7.6GB is the most useful single model for an 8GB card in 2026, the 26B A4B is the speed-conscious choice on a 24GB card, and the MTP drafters are a free latency win most people never enable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kimi K2.7 Code is the recommendation for almost nobody as a local model, and a serious option as an API with an open-weight escape hatch. Its value to a local-first developer is optionality rather than deployment - the knowledge that the weights exist under a permissive license, that self-hosting is possible if the economics ever justify eight GPUs, and that the vendor knows it."
+        },
+        {
+          "type": "paragraph",
+          "text": "The broader point is that the open-weight ecosystem has split into two tiers that do not compete with each other. One tier runs on hardware you already own and is improving fast enough that the gap to frontier closed models keeps narrowing for practical coding work. The other tier is open in license and closed in practice, gated by hardware rather than by terms. Knowing which tier you are shopping in is most of the decision."
+        },
+        {
+          "type": "cta",
+          "title": "Google AI for Developers: Gemma 4 Model Overview",
+          "text": "Official documentation for the five Gemma 4 sizes, quantization options, multimodal support, and MTP speculative decoding.",
+          "buttonText": "Open the Gemma 4 Docs",
+          "buttonUrl": "https://ai.google.dev/gemma/docs/core"
+        },
+        {
+          "type": "cta",
+          "title": "Ollama Model Library",
+          "text": "Verify the actual package size and available tags before you pull. Estimates are for planning; the library is the source of truth.",
+          "buttonText": "Browse the Library",
+          "buttonUrl": "https://ollama.com/library"
+        }
+      ],
+      "faq": [
+        {
+          "question": "Can I run Kimi K2.7 Code on a consumer GPU?",
+          "answer": "No. It is a mixture-of-experts model with one trillion total parameters and 32 billion active per token. The active count reduces compute per token, not the memory needed to store the weights. A representative self-hosting configuration uses tensor parallelism across eight GPUs. For consumer hardware the realistic path is the API, with the open weights serving as an escape hatch rather than a deployment plan."
+        },
+        {
+          "question": "What is the best local coding model for a 24GB GPU?",
+          "answer": "Qwen3.8-27B is the strongest current option. Its Ollama packages are around 18GB, which leaves real headroom for context on a 24GB card, and its training focus is agentic software engineering rather than single-response quality. Gemma 4 31B is the alternative if you want a stronger general model, and Gemma 4 26B A4B is worth testing for faster generation at similar quality."
+        },
+        {
+          "question": "How much VRAM do I need per billion parameters?",
+          "answer": "Roughly 0.6GB per billion parameters at Q4_K_M quantization, plus 20 to 30 percent headroom for KV cache and context. That puts 7 to 12B models on 8GB cards, the 14 to 20B class on 16GB, and 27 to 31B models on 24GB. These are planning estimates derived from parameter counts, so verify the actual package size before pulling."
+        },
+        {
+          "question": "Does a mixture-of-experts model use less memory?",
+          "answer": "No. MoE routing reduces the compute used per token by activating only a subset of experts, but all of the weights still have to be resident. This is the most common misunderstanding in local model planning, because MoE marketing emphasises the active parameter count rather than the total."
+        },
+        {
+          "question": "Are the benchmark numbers in model cards trustworthy?",
+          "answer": "They are evidence with a known bias. Nearly all of these figures are vendor-run, often on different harnesses with different temperatures, context windows, and timeouts. Some benchmarks are designed in-house by the same vendor. Treat the ordering as probably right and the margins as probably wrong, and attribute every number to whoever ran it."
+        },
+        {
+          "question": "Which model is best if I only have 8GB of VRAM?",
+          "answer": "Gemma 4 12B Unified at roughly 7.6GB is the strongest general-purpose option at that tier and brings image and audio input with it. If you want something dedicated to code, JetBrains' Mellum2-12B is the strongest coding-specific pull that fits. Do not force a 27B model onto an 8GB card by over-quantizing."
+        },
+        {
+          "question": "Does quantization hurt coding performance?",
+          "answer": "Yes, and unevenly. Conversational fluency survives aggressive quantization well, but strict format adherence, long-chain reasoning, and tool-call correctness degrade earlier. If an agent starts producing malformed tool calls, test a less aggressive quantization before blaming the harness. Q4_K_M is a reasonable default for most hardware."
+        },
+        {
+          "question": "Is Gemma 4 good enough for serious coding work?",
+          "answer": "It is a strong general model with solid coding ability rather than a coding specialist. The 31B reports around 80 percent on LiveCodeBench and a Codeforces Elo near 2150. For heavily agentic software engineering, Qwen3.8-27B's training focus shows. For mixed workloads involving documents, images, audio, or many languages, Gemma 4 is the better all-round fit."
+        },
+        {
+          "question": "Do long context windows cost memory?",
+          "answer": "Yes. The advertised context window is a capability, not a free one. The KV cache grows with the context you actually use and comes from the same memory pool as the weights, and concurrency multiplies it. Decide your working context first, then size the model to leave room for it."
+        },
+        {
+          "question": "How should I actually choose between these models?",
+          "answer": "Work out your memory budget, eliminate everything that cannot fit with context headroom, then test the survivors on five to ten tasks from your own repository that you have already solved. Hold the harness and quantization constant, and record correctness, turn count, and wall-clock time. Half a day of this beats any amount of benchmark reading."
+        }
+      ],
+      "seo": {
+        "title": "Qwen3.8 vs Kimi K2.7 vs Gemma 4: Which Local Coding Model Fits Your GPU? (2026)",
+        "metaDescription": "A hardware-first comparison of Qwen3.8-27B, Kimi K2.7 Code and Gemma 4. VRAM math, quantization trade-offs, vendor benchmark caveats, and a tier-by-tier recommendation from 8GB cards to multi-GPU servers.",
+        "canonical": "https://sinisteroid.ir/blog/qwen38-vs-kimi-k27-vs-gemma-4-local-coding-model-gpu",
+        "openGraph": {
+          "title": "Qwen3.8 vs Kimi K2.7 vs Gemma 4: Which Local Coding Model Fits Your GPU?",
+          "description": "Your GPU decides more than the leaderboard does. A memory-first comparison of the three most discussed open-weight coding models of 2026.",
+          "image": "/api/uploads/20260916-local-coding-models-og.webp"
+        },
+        "twitter": {
+          "title": "Qwen3.8 vs Kimi K2.7 vs Gemma 4: Which Fits Your GPU?",
+          "description": "18GB, 1 trillion parameters, or 7.6GB. Three open-weight coding models, three completely different hardware tiers.",
+          "image": "/api/uploads/20260916-local-coding-models-twitter.webp"
+        },
+        "keywords": "qwen3.8 27b, kimi k2.7 code, gemma 4, local coding model, best local llm 2026, vram requirements llm, ollama coding model, open weight coding model, quantization q4_k_m, agentic coding local, self-hosted llm, apache 2.0 llm",
+        "focusKeyword": "local coding model gpu comparison"
+      }
+    },
+    "fa": {
+      "title": "Qwen3.8 در برابر Kimi K2.7 و Gemma 4: کدام مدل کدنویسی محلی روی GPU شما جا می‌شود؟",
+      "excerpt": "Qwen3.8-27B، Kimi K2.7 Code و Gemma 4 گفت‌وگوی مدل‌های کدنویسی open-weight را در سال ۲۰۲۶ در دست دارند و سخت‌افزارهای کاملاً متفاوتی را هدف می‌گیرند. یکی روی یک GPU بیست‌وچهار گیگابایتی جا می‌شود، یکی هشت تا از آن‌ها لازم دارد، و یکی تا کلاس گوشی پایین می‌آید. اینجا ریاضیات حافظه، بده‌بستان‌های کوانتیزاسیون، هشدارهای بنچمارک سازندگان و یک توصیه طبقه‌به‌طبقه را می‌خوانید که همین امروز قابل اجراست.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "Qwen3.8 در برابر Kimi K2.7 و Gemma 4: کدام مدل کدنویسی محلی روی GPU شما جا می‌شود؟"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هر چند هفته یک مدل کدنویسی open-weight تازه می‌رسد با جدولی از بنچمارک‌ها که آن را انتخاب بدیهی نشان می‌دهد. بعد تلاش می‌کنید اجرایش کنید و می‌فهمید محدودیت واقعی هرگز جدول رتبه‌بندی نبوده است. حافظه کارت گرافیکی که داخل ماشین شما نشسته بوده است. Qwen3.8-27B، Kimi K2.7 Code و Gemma 4 سه گزینه از پرگفت‌وگوترین مدل‌های open-weight سال ۲۰۲۶ هستند و در طبقه‌های سخت‌افزاری کاملاً متفاوتی قرار می‌گیرند. یکی روی یک GPU مصرفی جا می‌شود. یکی روی هیچ چیزی که شما دارید جا نمی‌شود. یکی از گوشی تا ورک‌استیشن مقیاس می‌گیرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یک مقایسه سخت‌افزار-محور است نه بنچمارک-محور. امتیازهای بنچمارک اهمیت دارند، اما تقریباً همه آن‌ها توسط خود سازنده گزارش شده‌اند، روی harness‌هایی اندازه‌گیری شده‌اند که بین سازندگان فرق می‌کند، و هیچ چیزی درباره اینکه آیا مدل واقعاً با یک پنجره کانتکست قابل استفاده روی ماشین شما بارگذاری می‌شود به شما نمی‌گویند. ترتیب کاری که بیشترین زمان را برای مردم ذخیره می‌کند ساده است: بودجه حافظه‌تان را حساب کنید، هر چیزی که جا نمی‌شود را حذف کنید، و تنها بعد از آن درباره اینکه کدام بازمانده باهوش‌تر است بحث کنید."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۰٫۶ گیگابایت به ازای هر میلیارد",
+              "label": "ردپای تقریبی وزن‌ها به ازای هر میلیارد پارامتر در Q4_K_M، پیش از سربار کانتکست"
+            },
+            {
+              "value": "۲۰ تا ۳۰ درصد",
+              "label": "فضای اضافه‌ای که باید علاوه بر وزن‌ها برای KV cache و کانتکست در نظر بگیرید"
+            },
+            {
+              "value": "۲۴ گیگابایت",
+              "label": "طبقه‌ای که Qwen3.8-27B و Gemma 4 31B در آن با کوانتیزاسیون ۴ بیتی واقع‌بینانه می‌شوند"
+            },
+            {
+              "value": "۱T / ۳۲B",
+              "label": "پارامترهای کل در برابر فعال در Kimi K2.7 Code — وزن‌های باز، سخت‌افزار دیتاسنتری"
+            },
+            {
+              "value": "۵ اندازه",
+              "label": "واریانت‌های Gemma 4، از E2B در کلاس گوشی تا پرچم‌دار ۳۱B دنس"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "headers": [
+            "مدل هوش مصنوعی",
+            "پارامترها و وزن‌های فعال",
+            "حافظه گرافیک مورد نیاز (VRAM)",
+            "بنچمارک کدنویسی (SWE-bench/Eval)",
+            "بهترین سناریوی کاربرد"
+          ],
+          "rows": [
+            [
+              "Qwen 2.5 Coder 32B",
+              "۳۲.۵ میلیارد پارامتر چگال",
+              "۱۹ گیگابایت (Q4) / ۳۶ گیگابایت (Q8)",
+              "سینتکس فوق‌العاده قوی و ریفکتور پیچیده چندفایلی",
+              "بهترین انتخاب برای کارت‌های ۲۴ گیگابایت (RTX 3090/4090)"
+            ],
+            [
+              "Kimi k1.5 / K2.7",
+              "معماری ترکیبی MoE",
+              "۱۶ تا ۲۴ گیگابایت بسته به کوانتیزاسیون",
+              "استدلال در کانتکست‌های بزرگ و معماری پروژه",
+              "تحلیل و درک عمیق پایگاه کدهای بزرگ با پنجره طولانی"
+            ],
+            [
+              "Gemma 2 27B / Gemma 4",
+              "۲۷.۲ میلیارد پارامتر چگال",
+              "۱۶ گیگابایت (Q4) / ۳۰ گیگابایت (Q8)",
+              "روانی بالای تولید کد و منطق الگوریتمی دقیق",
+              "سیستم‌های توسعه‌دهنده با یک کارت گرافیک ۲۴ گیگابایتی"
+            ],
+            [
+              "Llama 3.3 70B (مرجع مقایسه)",
+              "۷۰.۶ میلیارد پارامتر چگال",
+              "۴۰ گیگابایت (Q4) / ۷۶ گیگابایت (Q8)",
+              "استاندارد طلایی استدلال و هوش کلی در مدل‌های باز",
+              "سیستم‌های دو کارت گرافیک یا مک‌های حافظه یکپارچه (M-series)"
+            ]
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260916-171056-66b67badb6822891.webp",
+          "alt": "سه مدل کدنویسی open-weight نگاشت‌شده روی طبقه‌های حافظه GPU از ۸ گیگابایت تا سرورهای چند-GPU",
+          "caption": "تصویر ۱: مقایسه‌ای که اول از همه اهمیت دارد توانمندی نیست، بلکه این است که هر مدل عملاً کدام طبقه سخت‌افزاری را هدف گرفته است.",
+          "altText": "سه مدل کدنویسی open-weight نگاشت‌شده روی طبقه‌های حافظه GPU از ۸ گیگابایت تا سرورهای چند-GPU"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱. پرسشی که پشت پرسش پنهان است"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "وقتی کسی می‌پرسد بهترین مدل کدنویسی محلی کدام است، معمولاً همزمان سه پرسش جدا می‌پرسد و پاسخ‌ها به جهت‌های متفاوتی اشاره می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "پرسش اول این است که کدام مدل بهترین کد را تولید می‌کند. پرسش دوم این است که کدام مدل روی سخت‌افزاری که همین حالا دارند اجرا می‌شود، با سرعتی که تمرکزشان را نمی‌شکند. پرسش سوم، که مردم به‌ندرت بلند می‌گویند، این است که کدام مدل وقتی یک agent آن را با ده‌ها فراخوانی ابزار پشت سر هم هدایت می‌کند — نه فقط پاسخ به یک پرامپت تکی — هنوز عاقلانه رفتار می‌کند. یک مدل می‌تواند پرسش اول را ببرد و دو پرسش دیگر را چنان بد ببازد که برای شما بی‌فایده باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "Qwen3.8-27B، Kimi K2.7 Code و Gemma 4 دقیقاً به این دلیل مفیدند که در امتداد همین خطوط تمیز از هم جدا می‌شوند. Qwen3.8-27B پاسخ کنونی برای کسی است که یک GPU مصرفی خوب دارد و رفتار کدنویسی agentic می‌خواهد. Kimi K2.7 Code واقعاً open-weight است و واقعاً از دسترس سخت‌افزار محلی خارج است، که آن را به یک تصمیم API تبدیل می‌کند که لباس تصمیم self-hosting پوشیده است. Gemma 4 یک خانواده است نه یک مدل، و ارزشش این است که از هر دوی دیگر پایین‌تر مقیاس می‌گیرد بدون اینکه از پرتگاه بیفتد."
+        },
+        {
+          "type": "paragraph",
+          "text": "اشتباه این است که آن‌ها را سه ردیف از یک فهرست واحد ببینیم. آن‌ها سه پاسخ متفاوت به سه محدودیت متفاوت هستند. باقی این مقایسه ابتدا ریاضیات حافظه را مرور می‌کند، سپس هر مدل را جداگانه، و در پایان یک توصیه طبقه‌به‌طبقه که می‌توانید همین امروز به کار ببندید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۲. ریاضیات حافظه‌ای که باید پیش از دانلود هر چیزی انجام دهید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "تقریباً هر تجربه ناامیدکننده از مدل محلی به یکی از سه اشتباه حسابی برمی‌گردد: فراموش کردن کوانتیزاسیون، فراموش کردن KV cache، یا فراموش کردن اینکه یک مدل mixture-of-experts هنوز باید همه وزن‌هایش را در حافظه نگه دارد."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "قاعده سرانگشتی ردپای وزن‌ها"
+        },
+        {
+          "type": "paragraph",
+          "text": "یک برآورد عملی برای برنامه‌ریزی، حدود ۰٫۶ گیگابایت حافظه به ازای هر میلیارد پارامتر در کوانتیزاسیون Q4_K_M است. یک مدل ۱۲B نزدیک ۷ تا ۸ گیگابایت می‌نشیند، یک مدل ۲۷B نزدیک ۱۶ تا ۱۸ گیگابایت، و یک مدل ۳۱B نزدیک ۱۹ تا ۲۰ گیگابایت. این‌ها تخمین‌هایی برگرفته از تعداد پارامتر هستند نه اندازه‌گیری دانلودهای واقعی، پس آن‌ها را ارقام برنامه‌ریزی بدانید و اندازه واقعی فایل را در کتابخانه مدل تأیید کنید پیش از آنکه متعهد شوید. وزن‌های با دقت کامل داستان کاملاً دیگری‌اند: Qwen3.8-27B در BF16 حدود ۵۵٫۶ گیگابایت نیاز دارد، و دقیقاً به همین دلیل کسی آن را روی دسکتاپ این‌طور اجرا نمی‌کند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "KV cache اختیاری نیست"
+        },
+        {
+          "type": "paragraph",
+          "text": "وزن‌ها کف هستند نه کل. KV cache روی آن سوار می‌شود و هم با طول کانتکست و هم با همزمانی رشد می‌کند. یک مدل ۲۷B که درخواست‌های کانتکست-بلند را به چند کاربر سرو می‌کند می‌تواند ردپای حافظه‌اش را دو برابر کند. این رایج‌ترین دلیلی است که مدلی که ظاهراً روی یک کارت ۲۴ گیگابایتی جا می‌شود، همین که کسی یک agent را روی یک ریپازیتوری بزرگ نشانه می‌رود شروع به سرریز شدن به رم سیستم می‌کند. بین ۲۰ تا ۳۰ درصد فضای اضافه روی رقم وزن‌ها برای کانتکست در نظر بگیرید، و بیشتر اگر قصد دارید نشست‌های طولانی اجرا کنید یا بیش از یک درخواست همزمان سرو کنید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "mixture-of-experts به معنی سبک بودن نیست"
+        },
+        {
+          "type": "paragraph",
+          "text": "معماری‌های MoE با مسیریابی هر توکن به زیرمجموعه کوچکی از expertها، محاسبه به ازای هر توکن را کاهش می‌دهند. آن‌ها حافظه لازم برای ذخیره مدل را کاهش نمی‌دهند. Kimi K2.7 Code از حدود یک تریلیون پارامتر کل، ۳۲ میلیارد را فعال می‌کند — چیزی حدود ۳ درصد مدل — و همین تمام دلیلی است که یک مدل تریلیون‌پارامتری می‌تواند با قیمت‌های رقابتی سرو شود. این دلیلی نیست که روی GPU شما اجرا شود. همه آن وزن‌ها هنوز باید جایی مقیم باشند. این تمایز مدام مردم را غافلگیر می‌کند، چون زبان بازاریابی پیرامون MoE روی تعداد پارامتر فعال تأکید می‌کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "وزن‌ها را تخمین بزنید: تعداد پارامتر ضرب در حدود ۰٫۶ گیگابایت در Q4_K_M.",
+            "بین ۲۰ تا ۳۰ درصد فضای اضافه برای KV cache اضافه کنید، بیشتر برای کانتکست طولانی یا درخواست‌های همزمان.",
+            "بررسی کنید مدل dense است یا MoE — و به یاد بیاورید MoE محاسبه را ذخیره می‌کند نه حافظه را.",
+            "اندازه واقعی بسته را در کتابخانه مدل تأیید کنید به‌جای اعتماد به تخمین.",
+            "روی Apple Silicon، حافظه یکپارچه را به همان شکل بشمارید و برای سیستم‌عامل جا بگذارید."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی این را به سخت‌افزار مصرفی اعمال کنید، مجموعه نسبتاً تمیزی از طبقه‌ها به دست می‌آید. یک کارت ۸ گیگابایتی مدل‌های ۷ تا ۱۲B را اداره می‌کند. یک کارت ��۶ گیگابایتی کلاس ۱۴ تا ۲۰B را راحت اداره می‌کند. یک کارت ۲۴ گیگابایتی جایی است که مدل‌های ۲۷ تا ۳۱B با ۴ بیت واقع‌بینانه می‌شوند. فراتر از حدود ۳۲ گیگابایت وارد ریگ‌های چند-GPU یا Mac Studioهای پرحافظه می‌شوید، و فراتر از آن دارید یک سرور کوچک می‌سازید نه یک ورک‌استیشن."
+        },
+        {
+          "type": "cta",
+          "title": "Ollama: موتور پشت هوش مصنوعی محلی",
+          "text": "اگر تازه به اجرای محلی مدل‌ها رسیده‌اید، پیش از مدل از runtime شروع کنید. Ollama کوانتیزاسیون، تشخیص سخت‌افزار و سرو کردن را با یک دستور مدیریت می‌کند.",
+          "buttonText": "خواندن راهنمای Ollama",
+          "buttonUrl": "/fa/blog/ollama-the-engine-behind-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۳. Qwen3.8-27B: پاسخ پیش‌فرض برای یک GPU بیست‌وچهار گیگابایتی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اگر یک GPU مصرفی خوب دارید و رفتار کدنویسی agentic می‌خواهید نه تکمیل خودکار، Qwen3.8-27B در حال حاضر مدلی است که باید شکست داده شود."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "این مدل دقیقاً چیست"
+        },
+        {
+          "type": "paragraph",
+          "text": "علی‌بابا Qwen3.8-27B را در ۳ اوت ۲۰۲۶ همراه با Qwen3.8-Max بسیار بزرگ‌تر معرفی کرد و وزن‌های باز را حوالی ۱۳ تا ۱۴ اوت تحت Apache 2.0 منتشر کرد. چک‌پوینت dense است — حدود ۲۷٫۷۸ میلیارد پارامتر — یعنی کل تعداد پارامتر در VRAM می‌نشیند و ریاضیات حافظه بالا مستقیماً و بدون ستاره MoE اعمال می‌شود. مدل ۶۴ لایه با طراحی ترکیبی Gated DeltaNet و Gated Attention و بعد پنهان ۵۱۲۰ دارد، پنجره کانتکست بومی ۲۶۲٬۱۴۴ توکنی را حمل می‌کند که با YaRN تا حدود یک میلیون توکن قابل گسترش است، و به‌صورت بومی چندوجهی است: ورودی متن، تصویر و ویدیو را می‌پذیرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "وزن‌های کامل BF16 حدود ۵۵٫۶ گیگابایت لازم دارند. در ۴ بیت روی یک GPU بیست‌وچهار گیگابایتی اجرا می‌شود، و کتابخانه Ollama بسته‌هایی حدود ۱۸ گیگابایت را هم برای واریانت استاندارد و هم MLX فهرست می‌کند. همان رقم ۱۸ گیگابایت عدد عملی‌ای است که باید حولش برنامه‌ریزی کنید. روی یک کارت ۲۴ گیگابایتی فضای واقعی باقی می‌گذارد و مدل را روی ۲۰ گیگابایت ناراحت اما نه غیرممکن می‌کند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "بنچمارک‌ها چه ادعایی می‌کنند"
+        },
+        {
+          "type": "paragraph",
+          "text": "کارت انتشار Qwen عدد ۶۱٫۷ روی SWE-bench Pro، ۷۳٫۰ روی Terminal-Bench 2.1 با harness موسوم به Terminus، ۹۰٫۳ روی LiveCodeBench v6، ۸۹٫۲ روی GPQA Diamond، ۷۹٫۵ روی IFBench و ۸۴٫۳ روی OSWorld-Verified را گزارش می‌کند. مقایسه نسلی بخش جالب‌تر ماجراست: در برابر Qwen3.6-27B، امتیاز SWE-bench Pro از ۵۳٫۵ به ۶۱٫۷ می‌رود، Terminal-Bench از ۶۳٫۴ به ۷۳٫۰، QwenSWEBench از ۴۹٫۳ به ۷۹٫۰، و DeepSWE 1.1 از ۱۳٫۳ به ۴۲٫۲. بیرون از حوزه کد، CoWorkBench از ۶۱٫۰ به ۷۰٫۷ می‌رسد و pass@1 در Agents' Last Exam از ۱۰٫۶ به ۲۰٫۴ دو برابر می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "شکل این پیشرفت‌ها سیگنال اصلی است. پیکربندی منتشرشده از نظر معماری با Qwen3.6-27B یکسان است — همان چیدمان لایه‌ها — پس داستان وزن‌های تازه و post-training تازه است، نه معماری جدید. Qwen این چک‌پوینت را طوری آموزش داده که در طول گام‌های متعدد داخل یک محیط به کار ادامه دهد، نه اینکه پاسخ اول بهتری تولید کند. برای هر کسی که مدل محلی را داخل یک حلقه agent استفاده می‌کند، همین ویژگی از همه مهم‌تر است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "هشدارهایی که همراه این اعداد می‌آیند"
+        },
+        {
+          "type": "paragraph",
+          "text": "هر رقم بالا توسط خود سازنده اجرا شده است. کارت خود Qwen درباره شرایط آزمون به‌طور غیرمعمولی شفاف است، که هم امتیاز آن است و هم یادآوری اینکه شرایط چقدر اهمیت دارد. SWE-bench Pro روی یک harness از جنس Claude Code با دمای ۱٫۰، top-p برابر ۰٫۹۵ و پنجره کانتکست ۲۵۶K ارزیابی شده است. QwenSWEBench میانگین سه اجرا با مهلت هشت‌ساعته و سقف ۳۲٬۷۶۸ توکن تولیدی است. چند بنچمارک شاخص — QwenSWEBench، CoWorkBench، RecreationBench — داخلی طراحی شده‌اند، پس وظایف و داورهایشان قابلیت حسابرسی بیرونی یک سوئیت عمومی بالغ را ندارند."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک مقایسه به‌طور خاص نیازمند دقت است. Qwen چند مدل رقیب را روی یک مجموعه وظایف اصلاح‌شده با Claude Code دوباره اجرا کرد، اما امتیاز رسمی Claude Opus 4.6 Max روی SWE-bench Pro را به‌جای اجرای مجدد، وارد جدول کرد. بنابراین ادعای پرتکرار مبنی بر اینکه یک مدل باز ۲۷B در کدنویسی agentic از Opus جلو می‌زند، بر ارقامی از دو harness متفاوت استوار است. ممکن است این فاصله واقعی باشد. اما نتیجه‌ای کنترل‌شده نیست، و عمومی بودن مجموعه وظایف، یک عدد اجراشده توسط سازنده را مستقل نمی‌کند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "چه کسی باید آن را اجرا کند"
+        },
+        {
+          "type": "paragraph",
+          "text": "هر کسی با ۲۴ گیگابایت VRAM یا ۲۴ گیگابایت به بالا حافظه یکپارچه روی Apple Silicon که یک مدل محلی می‌خواهد که بتواند یک agent را در کار چندمرحله‌ای هدایت کند. حالت thinking به‌صورت پیش‌فرض فعال است و مدل کنترل‌هایی از جمله reasoning_effort، امکان غیرفعال کردن thinking، و preserve_thinking برای اینکه بلوک‌های استدلال پیشین به نوبت‌های بعدی منتقل شوند یا نه در اختیار می‌گذارد. این کنترل‌ها تأخیر، مصرف حافظه و کیفیت کار را تغییر می‌دهند، پس ارزش دارد آگاهانه تنظیمشان کنید نه اینکه روی پیش‌فرض رها شوند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260916-171108-e4eade73b1c43a2c.webp",
+          "alt": "نیم‌رخ حافظه Qwen3.8-27B در BF16 در برابر کوانتیزاسیون ۴ بیتی روی یک GPU مصرفی",
+          "caption": "تصویر ۲: فاصله بین ۵۵٫۶ گیگابایت در BF16 و حدود ۱۸ گیگابایت کوانتیزه‌شده، تمام دلیلی است که این مدل اصلاً یک داستان سخت‌افزار مصرفی است.",
+          "altText": "نیم‌رخ حافظه Qwen3.8-27B در BF16 در برابر کوانتیزاسیون ۴ بیتی روی یک GPU مصرفی"
+        },
+        {
+          "type": "cta",
+          "title": "چگونه مدل هوش مصنوعی درست را برای Cline انتخاب کنیم (و دست از هدر دادن پول روی مدل اشتباه برداریم)",
+          "text": "انتخاب مدل تنها نیمی از مسئله است. تطبیق آن با agentی که هدایتش می‌کند نیمه دیگر است، و همان‌جاست که بیشتر هزینه‌های هدررفته رخ می‌دهد.",
+          "buttonText": "خواندن راهنمای انتخاب مدل",
+          "buttonUrl": "/fa/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۴. Kimi K2.7 Code: وزن‌های بازی که احتمالاً نمی‌توانید اجرا کنید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "مدل کدنویسی Moonshot AI واقعاً open-weight است، واقعاً قدرتمند است، و واقعاً برای هیچ‌کس که این را روی لپ‌تاپ می‌خواند یک مدل محلی نیست."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "معماری، و چرا عدد تیتر گمراه می‌کند"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kimi K2.7 Code در ۱۲ ژوئن ۲۰۲۶ به‌عنوان جانشین تخصصی‌شده کدنویسی برای Kimi K2.6 منتشر شد. یک مدل mixture-of-experts با یک تریلیون پارامتر کل و ۳۲ میلیارد پارامتر فعال به ازای هر توکن است، که میان ۳۸۴ expert مسیریابی می‌شود با هشت expert انتخاب‌شده به ازای هر توکن به‌علاوه یک expert مشترک. ۶۱ لایه شامل یک لایه dense دارد، از Multi-head Latent Attention و فعال‌سازی SwiGLU استفاده می‌کند، با کوانتیزاسیون بومی INT4 عرضه می‌شود و پنجره کانتکست ۲۵۶K توکنی دارد. وزن‌ها روی Hugging Face تحت لایسنس Modified MIT در دسترس‌اند و Moonshot استقرار از طریق vLLM، SGLang و KTransformers را مستند کرده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "تیتر تریلیون‌پارامتری بخشی است که تکرار می‌شود و رقم ۳۲B فعال بخشی است که بد خوانده می‌شود. فعال کردن ۳ درصد مدل به ازای هر توکن دلیل آن است که می‌توان آن را با حدود ۴ دلار به ازای هر یک میلیون توکن خروجی سرو کرد، به‌جای قیمت‌هایی که مدلی در این اندازه تاریخاً طلب می‌کرد. این نیاز ذخیره‌سازی را کوچک نمی‌کند. یک دستور نمونه برای self-hosting از tensor parallelism با اندازه هشت استفاده می‌کند، یعنی هشت GPU، با فعال‌سازی chunked prefill تا از جهش حافظه هنگام prefillهای بزرگ در کانتکست ۲۵۶K جلوگیری شود. این یک استقرار سروری است، نه دسکتاپی."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "انتخاب طراحی‌ای که آن را تعریف می‌کند"
+        },
+        {
+          "type": "paragraph",
+          "text": "حالت thinking را نمی‌توان خاموش کرد. این شرط‌بندی صریح Moonshot است که استدلال همیشگی یک agent کدنویسی قابل‌اعتمادتر می‌سازد، و یک بده‌بستان واقعی است نه یک جمله بازاریابی. نمی‌توانید برای یک کار ساده آن را پایین بیاورید تا توکن یا تأخیر ذخیره کنید. وزنه تعادل Moonshot کارایی است: گزارش شده که مدل حدود ۳۰ درصد توکن استدلال کمتری به ازای هر کار کدنویسی نسبت به K2.6 مصرف می‌کند، که تعداد توکن خروجی را کاهش می‌دهد و توان عملیاتی مؤثر هر درخواست را بهبود می‌بخشد. همچنین دو طعم API با وزن‌های یکسان وجود دارد — مدل استاندارد و یک واریانت highspeed تنظیم‌شده برای حدود ۱۸۰ توکن در ثانیه، تا ۲۶۰ روی کانتکست‌های کوتاه، دقیقاً با دو برابر قیمت در هر رده."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "ادعاهای بنچمارک را با دقت بخوانید"
+        },
+        {
+          "type": "paragraph",
+          "text": "Moonshot بهبود ۲۱٫۸ درصدی روی Kimi Code Bench v2 نسبت به K2.6 را گزارش می‌کند. آن بنچمارک first-party است و جدول روز انتشار تنها منبع تفصیلی در دسترس از خود سازنده است. برخی از اهل عمل همین حالا گفته‌اند اعداد منتشرشده با آنچه در ریپازیتوری‌های واقعی می‌بینند هم‌خوانی ندارد. این دلیلی برای کنار گذاشتن مدل نیست — دلیلی است برای آنکه اعداد را موضع‌گیری گزارش‌شده توسط شرکت بدانید نه نتیجه یک جدول رتبه‌بندی مستقل، که دقیقاً همان برچسبی است که پوشش‌های دقیق‌تر به آن زده‌اند."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک جزئیات ارزش هشدار دادن دارد: منابع درباره اینکه آیا انکودر بینایی MoonViT از K2.6 منتقل شده اختلاف دارند. برخی نوشته‌های استقرار می‌گویند انکودر بینایی در نسخه کدنویسی‌محور K2.7 غایب است، در حالی که خلاصه‌های model card و چند فهرست API آن را به‌صورت بومی چندوجهی با ورودی تصویر توصیف می‌کنند. اگر چندوجهی بودن برای کاربرد شما مهم است، به‌جای اعتماد به هر منبع ثانویه — از جمله همین متن — با model card جاری تطبیق دهید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "پس واقعاً به چه درد می‌خورد؟"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kimi K2.7 Code در این مقایسه به‌عنوان یک نشانه مرزی جای می‌گیرد. این همان چیزی است که مرز open-weight در سال ۲۰۲۶ شبیه آن است: واقعاً قابل دانلود، واقعاً با لایسنس آزادمنشانه، و واقعاً نیازمند سخت‌افزاری که از یک خودرو گران‌تر است. برای بیشتر تیم‌ها مسیر صادقانه API است، و وزن‌های باز نقش یک دریچه فرار را بازی می‌کنند — این تضمین که اگر رابطه با فروشنده خراب شد می‌توانستید خودتان میزبانی کنید، و اهرمی در هر گفت‌وگو درباره قیمت‌گذاری یا مدیریت داده. آن تضمین ارزش واقعی دارد. فقط همان چیزی نیست که به آن مدل محلی می‌گویند."
+        },
+        {
+          "type": "paragraph",
+          "text": "همچنین بد نیست بدانید Moonshot از آن زمان Kimi K3 را عرضه کرده است، یک مدل استدلالی چندوجهی open-weight با ۲٫۸ تریلیون پارامتر که از KDA و Attention Residuals استفاده می‌کند و مرز مقیاس را دوباره جابه‌جا کرد. طبقه مرزی open-weight — Kimi K3، GLM-5.2، DeepSeek-V4-Pro — حتی روی یک ماشین ۱۲۸ گیگابایتی هم از دسترس خارج می‌ماند، و وانمود کردن به خلاف آن همان مسیری است که مردم را به مدلی می‌رساند که با دو توکن در ثانیه روی SSD صفحه‌بندی می‌کند."
+        },
+        {
+          "type": "cta",
+          "title": "دست از پرداخت برای agentهای کدنویسی هوش مصنوعی بردارید: جایگزین‌های متن‌باز که واقعاً در ۲۰۲۶ کار می‌کنند",
+          "text": "وزن‌های باز و agentهای باز مسائل متفاوتی را حل می‌کنند. این راهنما سمت agent در استک را پوشش می‌دهد و اینکه کدام گزینه‌های متن‌باز در استفاده ��وزمره دوام می‌آورند.",
+          "buttonText": "خواندن راهنمای agentهای متن‌باز",
+          "buttonUrl": "/fa/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۵. Gemma 4: خانواده‌ای که پایین مقیاس می‌گیرد بدون اینکه زمین بخورد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Gemma 4 تنها ورودی این فهرست است که یک خانواده است نه یک مدل، و کل نکته‌اش همین است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "پنج اندازه، یک داستان معماری"
+        },
+        {
+          "type": "paragraph",
+          "text": "گوگل دیپ‌مایند Gemma 4 را در ۲ آوریل ۲۰۲۶ تحت Apache 2.0 منتشر کرد، ابتدا در واریانت‌های E2B، E4B، ۲۶B A4B و ۳۱B، و سپس Gemma 4 12B Unified را در ۳ ژوئن ۲۰۲۶ اضافه کرد. E2B و E4B تقریباً ۲٫۳ و ۴٫۵ میلیارد پارامتر مؤثر دارند و گوشی‌ها و دستگاه‌های لبه را هدف می‌گیرند. مدل ۲۶B A4B یک mixture-of-experts است که ۳٫۸ میلیارد از ۲۵٫۲ میلیارد پارامتر را فعال می‌کند و روی یک RTX 3090 یا 4090 جا می‌شود. مدل ۳۱B دنس است و ورک‌استیشن‌ها را هدف می‌گیرد. کانتکست روی مدل‌های لبه تا ۱۲۸K و روی سه مدل بزرگ‌تر تا ۲۵۶K می‌رسد."
+        },
+        {
+          "type": "paragraph",
+          "text": "واریانت 12B Unified افزوده جالب برای کاربران محلی است. ۱۱٫۹۵ میلیارد پارامتر در ۴۸ لایه با attention پنجره‌لغزان ۱۰۲۴ توکنی، واژگان ۲۶۲K و پشتیبانی بومی از ورودی متن، تصویر و صدا دارد. بسته Ollama آن حدود ۷٫۶ گیگابایت است، که آن را دقیقاً در قلمرو کارت‌های ۸ گیگابایتی می‌نشاند. هر اندازه Gemma 4 ورودی تصویر می‌پذیرد؛ E2B، E4B و 12B صدا را هم می‌پذیرند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "مزیت decoding گمانه‌زنانه"
+        },
+        {
+          "type": "paragraph",
+          "text": "گوگل در ۱۶ آوریل ۲۰۲۶ درافترهای MTP را برای Gemma 4 عرضه کرد — مدل‌های draft اختصاصی برای speculative decoding در هر پنج اندازه. ادعا این است که استنتاج تا سه برابر سریع‌تر با کیفیت یکسان می‌شود. این یک مزیت عملی دست‌کم‌گرفته‌شده برای استفاده محلی است، چون چیزی که یک مدل محلی را غیرقابل‌استفاده حس می‌کند به‌ندرت کیفیت است و معمولاً تأخیر است. اگر llama.cpp اجرا می‌کنید، استفاده از درافترهای MTP یکی از معدود بردهای سرعتی رایگان در دسترس است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "از نظر توانمندی کجا ایستاده است"
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل ۳۱B دنس امتیاز ۸۵٫۲ درصد روی MMLU Pro، ۸۹٫۲ درصد روی AIME 2026، ۸۴٫۳ درصد روی GPQA Diamond، ۸۰٫۰ درصد روی LiveCodeBench و Elo حدود ۲۱۵۰ در Codeforces را گزارش می‌کند. در جدول رتبه‌بندی متن متن‌باز Arena AI حدود ۱۴۵۲ Elo را نگه داشته است، با ۲۶B A4B در حدود ۱۴۴۱ — رقابتی با مدل‌هایی چندین برابر اندازه خودش. جهش نسلی از Gemma 3 به‌ویژه در ریاضی و کدنویسی چشمگیر است."
+        },
+        {
+          "type": "paragraph",
+          "text": "قاب صادقانه این است که Gemma 4 یک مدل عمومی بسیار خوب با توانایی کدنویسی محکم است، نه یک متخصص کدنویسی. اگر کار شما عمدتاً مهندسی نرم‌افزار agentic است، تمرکز آموزشی Qwen3.8-27B خودش را نشان می‌دهد. اگر کار شما کد را با درک سند، ورودی تصویر، صدا یا نیازهای چندزبانه ترکیب می‌کند — Gemma 4 از بیش از ۳۵ زبان به‌صورت آماده پشتیبانی می‌کند و روی بیش از ۱۴۰ زبان پیش‌آموزش دیده — این خانواده گزینه همه‌جانبه قوی‌تری است. و از اول سپتامبر ۲۰۲۶، Gemma 4 داخل Android Studio Quail 4 به‌عنوان یک مدل کدنویسی کاملاً محلی عرضه می‌شود، که آن را برای کار اندروید به‌طور خاص کم‌مقاومت‌ترین مسیر می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک نکته نگهداری که مردم را غافلگیر می‌کند: اگر وزن‌های Gemma 4 را پیش از حدود اواسط ژوئیه ۲۰۲۶ کشیده‌اید، دوباره pull کنید. چک‌پوینت‌های اولیه بازبینی شده‌اند و یک نسخه محلی کهنه بی‌سروصدا پایین‌تر از اعدادی که درباره‌شان می‌خوانید عمل خواهد کرد."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260916-171550-15aeaf12ac43ef00.webp",
+          "alt": "خانواده Gemma 4 از E2B روی گوشی تا 12B Unified و 26B A4B و پرچم‌دار ۳۱B دنس",
+          "caption": "تصویر ۳: مزیت Gemma 4 هیچ‌یک از اندازه‌هایش به‌تنهایی نیست. این است که یک خانواده واحد از گوشی تا ورک‌استیشن را پوشش می‌دهد.",
+          "altText": "خانواده Gemma 4 از E2B روی گوشی تا 12B Unified و 26B A4B و پرچم‌دار ۳۱B دنس"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۶. توصیه طبقه‌به‌طبقه"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "بودجه حافظه‌تان را پیدا کنید و فقط ردیف خودتان را بخوانید. هر چه بالاتر است آرزوست و هر چه پایین‌تر است مصالحه‌ای است که لازم نیست بپذیرید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۸ گیگابایت VRAM"
+        },
+        {
+          "type": "paragraph",
+          "text": "شما در کلاس ۷ تا ۱۲B هستید. Gemma 4 12B Unified با حدود ۷٫۶ گیگابایت قوی‌ترین گزینه همه‌منظوره این طبقه است و چندوجهی بودن را هم با خود می‌آورد. اگر چیزی اختصاصی برای کد می‌خواهید، Mellum2-12B از JetBrains امتیاز ۶۹٫۹ روی LiveCodeBench را گزارش می‌کند و قوی‌ترین گزینه کد-محوری است که جا می‌شود. اینجا سراغ مدل ۲۷B نروید. کوانتیزه کردن بیشتر برای جا دادن اجباری آن، دقیقاً همان پایداری استدلالی را قربانی می‌کند که به خاطرش مدل بزرگ‌تر را می‌خواستید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۱۲ تا ۱۶ گیگابایت VRAM"
+        },
+        {
+          "type": "paragraph",
+          "text": "کلاس ۱۴ تا ۲۰B راحت است. Gemma 4 12B Unified حالا فضای واقعی برای کانتکست دارد نه اینکه از روی فنی‌بازی جا شود، و گزینه‌های میان‌اندازه مانند mistral-small3.2:24b در حدود ۱۵ گیگابایت قابل اجرا می‌شوند اگر کانتکست را متعادل نگه دارید. این طبقه جایی است که باید بیشترین فکر را روی طول کانتکست بکنید، چون همان متغیری است که تعیین می‌کند جا می‌شوید یا سرریز می‌کنید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۲۴ گیگابایت VRAM"
+        },
+        {
+          "type": "paragraph",
+          "text": "این طبقه Qwen3.8-27B است و روشن‌ترین توصیه کل این مقایسه. حدود ۱۸ گیگابایت برای وزن‌ها فضای واقعی برای کانتکست باقی می‌گذارد. Gemma 4 31B جایگزین است اگر مدل عمومی قوی‌تری می‌خواهید، و Gemma 4 26B A4B دقیقاً به این دلیل ارزش آزمایش دارد که در چند بنچمارک تا چند واحد به ۳۱B نزدیک می‌شود در حالی که فقط ۳٫۸ میلیارد پارامتر فعال می‌کند، یعنی تولید محسوساً سریع‌تر."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۳۲ گیگابایت به بالا، و Apple Silicon"
+        },
+        {
+          "type": "paragraph",
+          "text": "بالای ۳۲ گیگابایت توانایی اجرای مدل‌های ۲۷ تا ۳۱B با دقت بالاتر را به دست می‌آورید، یا اجرای یک مدل ۲۷B با کانتکست واقعاً بلند نه اسمی. روی Apple Silicon، حافظه یکپارچه به همان شکل شمرده می‌شود، با این نکته که سیستم‌عامل و هر چیز دیگری که باز است سهم خودش را برمی‌دارد. یک مک ۳۲ گیگابایتی مدل کلاس ۲۷B را خوب اجرا می‌کند. یک Mac Studio با ۶۴ یا ۱۲۸ گیگابایت فضای بیشتری باز می‌کند، اما مدل‌های مرزی open-weight — Kimi K3، GLM-5.2، DeepSeek-V4-Pro — حتی در ۱۲۸ گیگابایت هم از دسترس خارج می‌مانند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "سرورهای چند-GPU"
+        },
+        {
+          "type": "paragraph",
+          "text": "اینجا جایی است که Kimi K2.7 Code از یک آزمایش فکری به گزینه‌ای واقعی تبدیل می‌شود، با tensor parallelism به اندازه هشت به‌عنوان پیکربندی نمونه. اگر دارید چنین چیزی تدارک می‌بینید، خودتان از قبل می‌دانید. برای بقیه، API پاسخ صادقانه است."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "۸ گیگابایت: Gemma 4 12B Unified برای کار عمومی، Mellum2-12B برای کد صرف.",
+            "۱۶ گیگابایت: Gemma 4 12B با کانتکست راحت، یا یک مدل کلاس ۲۰B با خویشتن‌داری.",
+            "۲۴ گیگابایت: Qwen3.8-27B برای کدنویسی agentic؛ Gemma 4 31B یا 26B A4B برای قدرت عمومی.",
+            "۳۲ گیگابایت به بالا: همان مدل‌ها با کانتکست واقعی، یا کوانتیزاسیون با دقت بالاتر.",
+            "چند-GPU: Kimi K2.7 Code و باقی طبقه مرزی open-weight."
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Hugging Face: کارت مدل Qwen3.8-27B",
+          "text": "منبع اصلی برای جدول بنچمارک‌ها، پانویس‌های harness و توصیه‌های استقرار که بالا بحث شد.",
+          "buttonText": "باز کردن کارت مدل",
+          "buttonUrl": "https://huggingface.co/Qwen/Qwen3.8-27B"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۷. چگونه بنچمارک‌های سازندگان را بخوانیم بدون اینکه فریب بخوریم"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هر عددی در این مقاله، و در تقریباً هر مقایسه‌ای که خواهید خواند، توسط شرکتی تولید شده که مدل را ساخته است. این اعداد را بی‌فایده نمی‌کند. آن‌ها را به شواهدی با سوگیری شناخته‌شده تبدیل می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "چهار عادت شما را از بیشتر آسیب‌ها حفظ می‌کند. نخست، هر رقم را به کسی که اجرایش کرده نسبت دهید. عمومی بودن مجموعه وظایف، نتیجه اجراشده توسط سازنده را مستقل نمی‌کند؛ harness، دما، پنجره کانتکست و مهلت زمانی همگی امتیاز را جابه‌جا می‌کنند. دوم، بنچمارک‌های داخلی را از بنچمارک‌های عمومی جدا کنید. وقتی یک سازنده هم بنچمارک، هم وظایف و هم داور را طراحی می‌کند، آن عدد به شما می‌گوید سازنده چه چیزی را بهینه کرده است — دانستنش ارزشمند است اما اندازه‌گیری توانمندی نیست."
+        },
+        {
+          "type": "paragraph",
+          "text": "سوم، ثبت کنید کدام مدل داور بوده است. چند بنچمارک توسط یک مدل زبانی دیگر نمره‌دهی می‌شوند، و امتیازی که GPT-4o داوری کرده مستقیماً با امتیازی که مدل دیگری یا اجرای واقعی داوری کرده قابل مقایسه نیست. چهارم، هرگز ردیف‌هایی از شرایط متفاوت را در یک میانگین ادغام نکنید. نتیجه‌ای با code interpreter فعال و نتیجه‌ای بدون آن دو آزمایش متفاوت‌اند، و یک بنچمارک بینایی که با یک اسنپ‌شات مدل داوری شده همان اندازه‌گیری نیست که با اسنپ‌شات دیگری داوری شده باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی این را به این سه مدل اعمال کنیم، نتیجه عملی این است که ترتیب احتمالاً تقریباً درست است و حاشیه‌ها احتمالاً غلط. Qwen3.8-27B به احتمال زیاد در کدنویسی agentic به میزان معناداری از نسل قبلش بهتر است. اینکه واقعاً یک مدل بسته مرزی را روی SWE-bench Pro شکست می‌دهد، با امتیازی وارداتی از harness دیگر اثبات نمی‌شود. Kimi K2.7 Code به احتمال زیاد مدل کدنویسی قوی‌ای است و بهبود خودگزارش‌شده ۲۱٫۸ درصدی نسبت به K2.6 به احتمال زیاد از نظر جهت‌گیری واقعی است. ارقام Elo آرنا برای Gemma 4 نزدیک‌ترین چیز به یک سیگنال مستقل در این مجموعه‌اند، چون رتبه‌های آرنا از ترجیح انسانی می‌آیند نه از سازنده."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "هر عدد را به طرفی که ارزیابی را اجرا کرده نسبت دهید.",
+            "بنچمارک‌های داخلی را از سوئیت‌های عمومی جاافتاده جدا کنید.",
+            "harness، دما، پنجره کانتکست و سقف توکن را یادداشت کنید.",
+            "ثبت کنید کدام مدل، اگر مدلی، نقش داور را داشته است.",
+            "هرگز میان شرایط آزمایشی متفاوت میانگین نگیرید."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۸. پنجره کانتکست یک تصمیم حافظه‌ای است، نه یک قابلیت"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "یک پنجره کانتکست ۲۶۲K روی کارت مدل و یک پنجره کانتکست ۲۶۲K روی ماشین شما دو چیز متفاوت‌اند، و فاصله بینشان با گیگابایت اندازه‌گیری می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "هر سه مدل کانتکست بلند تبلیغ می‌کنند: ۲۶۲٬۱۴۴ توکن بومی برای Qwen3.8-27B با گسترش YaRN تا حدود یک میلیون، ۲۵۶K برای Kimi K2.7 Code، و ۲۵۶K برای واریانت‌های بزرگ‌تر Gemma 4. هیچ‌یک از این ارقام رایگان نیستند. KV cache با کانتکستی که واقعاً استفاده می‌کنید رشد می‌کند و از همان استخر حافظه‌ای می‌آید که وزن‌ها در آن هستند. مدلی که با کانتکست ۸K راحت بارگذاری می‌شود می‌تواند روی همان کارت در ۱۲۸K شکست بخورد."
+        },
+        {
+          "type": "paragraph",
+          "text": "این برای کدنویسی بیشتر از گفت‌وگو اهمیت دارد، چون کدنویسی agentic همان کاربردی است که واقعاً کانتکست مصرف می‌کند. یک agent که ریپازیتوری می‌خواند، تست اجرا می‌کند، stack trace می‌خواند و تکرار می‌کند، یک پنجره بلند را سریع پر می‌کند. رویکرد عملی ای�� است که ابتدا کانتکست کاری‌تان را تعیین کنید — چه مقدار از کدبیس واقعاً باید مقیم باشد؟ — و بعد مدل را طوری انتخاب کنید که برایش جا بماند، نه اینکه بزرگ‌ترین مدلی را که از نظر فنی بارگذاری می‌شود انتخاب کنید و بعد ببینید بودجه کانتکست تمام شده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "در سمت سرو کردن، اگر مدلی را برای بیش از یک کاربر یا بیش از یک نشست اجرا می‌کنید، همزمانی مسئله را چند برابر می‌کند. درخواست‌های کانتکست-بلند از چند کلاینت روی یک مدل ۲۷B می‌تواند ردپا را دو برابر کند. اگر در کانتکست ۲۵۶K مستقر می‌شوید، chunked prefill و محدودیت توکن‌های دسته‌ای تنظیماتی هستند که حافظه را هنگام prefillهای بزرگ پایدار نگه می‌دارند به‌جای اینکه اجازه جهش بدهند."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)",
+          "text": "بیشتر شکست‌های مدل محلی مشکلات حافظه، کانتکست یا daemon هستند که لباس یک پیام خطای گیج‌کننده پوشیده‌اند. این راهنما رایج‌ترین‌هایشان را پوشش می‌دهد.",
+          "buttonText": "خواندن راهنمای عیب‌یابی",
+          "buttonUrl": "/fa/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۹. لایسنس: واقعاً چه چیزی را می‌توانید عرضه کنید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "دو تا از این سه مدل لایسنس‌های آزادمنشانه بدون سقف کاربر و بدون محدودیت تجاری دارند. این مهم‌تر از آن است که به نظر می‌رسد."
+        },
+        {
+          "type": "paragraph",
+          "text": "Qwen3.8-27B تحت Apache 2.0 عرضه می‌شود. Gemma 4 تحت Apache 2.0. Kimi K2.7 Code تحت یک لایسنس Modified MIT. هر سه self-hosting و استفاده تجاری را مجاز می‌کنند، که همان دسته از اصطکاک حقوقی را حذف می‌کند که نسل‌های پیشین open-weight را برای هر چیزی فراتر از آزمایش ناخوشایند کرده بود — سقف کاربران فعال ماهانه، محدودیت‌های حوزه استفاده، و بندهای استفاده مجاز که تفسیرشان وکیل لازم داشت."
+        },
+        {
+          "type": "paragraph",
+          "text": "اگر روی یک مدل محلی محصول می‌سازید، لایسنس یک ورودی راهبردی است نه یک تشریفات. وزن‌های Apache 2.0 یعنی می‌توانید بدون گفت‌وگوی حقوقی عرضه کنید، fine-tune کنید و مدل‌های مشتق را توزیع کنید. یک لایسنس Modified MIT آزادمنشانه است اما کلمه «Modified» دارد کار می‌کند، پس متن واقعی شروط را بخوانید نه اینکه از روی نام تطبیق الگو کنید. و صرف‌نظر از لایسنس، اگر fine-tune و بازتوزیع می‌کنید، سوابق منشأ چک‌پوینت پایه و نسخه‌اش را نگه دارید، چون این مدل‌ها بیشتر از آنچه مردم انتظار دارند بازبینی می‌شوند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱۰. رفتار داخل یک حلقه agent"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کیفیت تک‌پرامپتی و پایداری در حلقه agent دو ویژگی متفاوت‌اند، و دومی همان چیزی است که واقعاً حسش خواهید کرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک agent از مدل می‌خواهد کار مشخصی انجام دهد: فایلی را بخواند، تصمیم بگیرد چه چیزی را تغییر دهد، ابزاری را فراخوانی کند، نتیجه را بخواند و تنظیم کند. حالت‌های شکست آنجا معمولاً درباره دانش نیستند. درباره انحراف تدریجی در پیروی از دستور در طول نوبت‌های متعدد، قالب‌بندی فراخوانی ابزار که با پر شدن کانتکست افت می‌کند، و گم کردن رد آنچه قبلاً امتحان شده است هستند. به همین دلیل ارزیابی‌هایی از جنس Terminal-Bench و SWE-bench برای این کاربرد آموزنده‌تر از بنچمارک‌های دانشی‌اند، و به همین دلیل تصمیم Qwen برای پیش‌آوردن ارزیابی‌های agentic در کارت انتشارش بازتاب معقولی از چیزی بود که مدل برایش آموزش دیده."
+        },
+        {
+          "type": "paragraph",
+          "text": "پیامدهای عملی بین مدل‌ها فرق می‌کند. Qwen3.8-27B حالت thinking را به‌صورت پیش‌فرض روشن دارد با reasoning_effort قابل تنظیم، و اینکه بلوک‌های استدلال پیشین در نوبت‌های بعدی حفظ شوند یا نه تنظیمی است که شما کنترل می‌کنید — که مستقیماً روی مقدار کانتکستی که agent در هر گام می‌سوزاند اثر می‌گذارد. در Kimi K2.7 Code اصلاً نمی‌توان thinking را غیرفعال کرد، که تعهدی طراحانه به پایداری به قیمت انعطاف است. Gemma 4 از function calling در سراسر خانواده پشتیبانی می‌کند، اما اگر اندازه‌های E2B یا E4B را اجرا می‌کنید انتظار داشته باشید دامنه کار را تنگ نگه دارید؛ مدل‌های کوچک گام‌های باریک و خوب‌مشخص‌شده را بسیار بهتر از برنامه‌ریزی باز اداره می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک نکته دیگر که اهمیت دارد و به‌ندرت گفته می‌شود: کوانتیزاسیون روی رفتار agent بیشتر از کیفیت گفت‌وگو اثر می‌گذارد. مدلی که در کوانتیزاسیون تهاجمی هنوز نثر روان می‌نویسد ممکن است آن‌قدر دقت از دست داده باشد که شروع به تولید فراخوانی‌های ابزار بدشکل کند. اگر agent شما ناگهان عادت به تولید JSON خراب پیدا کرد، پیش از مقصر دانستن harness یک کوانتیزاسیون کم‌تهاجمی‌تر را امتحان کنید."
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code در برابر Cline: توسعه‌دهندگان در ۲۰۲۶ کدام agent کدنویسی را باید استفاده کنند؟",
+          "text": "مدل یک نیمه سیستم است. harness agent که آن را هدایت می‌کند تعیین می‌کند چه مقدار از آن توانمندی واقعاً به دست شما می‌رسد.",
+          "buttonText": "مقایسه agentها",
+          "buttonUrl": "/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱۱. کوانتیزاسیون: کیفیت واقعاً کجا می‌رود"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کوانتیزاسیون اهرمی است که همه این‌ها را ممکن می‌کند، و همان اهرمی است که بیشتر از همه بیش از حد کشیده می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "رفتن از BF16 به ۴ بیت، Qwen3.8-27B را از حدود ۵۵٫۶ گیگابایت به حدود ۱۸ گیگابایت می‌برد. این یک بهینه‌سازی کوچک نیست؛ تفاوت بین یک سرور و یک دسکتاپ است. هزینه‌اش دقت است، و دقت به‌طور یکنواخت در همه توانایی‌ها افت نمی‌کند. روانی گفت‌وگویی کوانتیزاسیون تهاجمی را خوب تحمل می‌کند. حساب، استدلال زنجیره‌بلند، پایبندی سخت‌گیرانه به قالب، و درستی فراخوانی ابزار زودتر و آشکارتر افت می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک پیش‌فرض معقول Q4_K_M است، که تخمین ۰٫۶ گیگابایت به ازای هر میلیارد از همان‌جا می‌آید و بیشتر مردم آن را بهترین معامله کیفیت-به-گیگابایت می‌یابند. اگر فضای اضافی دارید، بالا رفتن به یک کوانتیزاسیون با دقت بالاتر معمولاً استفاده بهتری از حافظه است تا بالا رفتن یک رده در اندازه مدل، به‌ویژه برای کار agentic. اگر کم‌حافظه‌اید، افتادن به ۳ بیت برای جا دادن اجباری مدل بزرگ‌تر معمولاً اشتباه است: یک مدل کوچک‌تر با کوانتیزاسیون خوب، برای هر چیزی که دقت می‌خواهد، از یک مدل بزرگ‌تر با کوانتیزاسیون بد بهتر است."
+        },
+        {
+          "type": "paragraph",
+          "text": "همچنین بررسی کنید چه کسی کوانتیزاسیون را تولید کرده است. بیلدهای GGUF متفاوت از یک مدل یکسان معادل هم نیستند، و رویکردهای کوانتیزاسیون پویا که دقت را به‌طور گزینشی در لایه‌هایی که بیشترین نیاز را دارند حفظ می‌کنند به تمایزی معنادار تبدیل شده‌اند. ارزش دارد پیش از نتیجه‌گیری اینکه خود مدل ناامیدکننده است، بیش از یک بیلد از همان مدل را امتحان کنید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱۲. یک پروتکل ارزیابی عملی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "بنچمارک‌ها درباره وظایف کس دیگری به شما می‌گویند. نیم روز آزمون ساختاریافته روی ریپازیتوری خودتان درباره وظایف شما می‌گوید."
+        },
+        {
+          "type": "paragraph",
+          "text": "پنج تا ده وظیفه از کار واقعی خودتان انتخاب کنید که قبلاً حلشان کرده‌اید، تا بدانید پاسخ درست چه شکلی است. یک رفع باگ با علت ریشه‌ای شناخته‌شده. یک refactor روی سه یا چهار فایل. تستی که باید برای کد موجود نوشته شود. یک stack trace که باید تشخیص داده شود. چیزی که نیازمند خواندن مستنداتی است که به‌صورت محلی دارید. این‌ها باید نماینده کاری باشند که واقعاً انجام می‌دهید، نه وظایف ویترینی."
+        },
+        {
+          "type": "paragraph",
+          "text": "سپس هر مدل نامزد را تحت شرایط یکسان از همه آن‌ها عبور دهید: همان harness agent، همان تنظیمات کانتکست، همان رده کوانتیزاسیون در جایی که قابل مقایسه است. برای هر وظیفه سه چیز را ثبت کنید — اینکه خروجی درست بود یا نه، چند نوبت طول کشید، و چقدر زمان واقعی برد. تعداد نوبت‌ها دست‌کم‌گرفته‌شده‌ترین سنجه است، چون مدلی که در دوازده نوبت به مقصد می‌رسد کانتکست بیشتر، زمان بیشتر و شانس بیشتری برای خطا رفتن از شما می‌گیرد نسبت به مدلی که در چهار نوبت می‌رسد."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "از وظایفی استفاده کنید که قبلاً حل کرده‌اید تا درستی مبهم نباشد.",
+            "harness، تنظیمات کانتکست و کوانتیزاسیون را میان نامزدها ثابت نگه دارید.",
+            "درستی، تعداد نوبت و زمان واقعی را جداگانه ثبت کنید.",
+            "در طول کانتکستی آزمایش کنید که واقعاً استفاده می‌کنید، نه یک طول کوتاه راحت.",
+            "وقتی بیلد کوانتیزاسیون را عوض می‌کنید دوباره آزمون کنید، نه فقط وقتی مدل را عوض می‌کنید."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "برای این کار نیم روز کنار بگذارید. پربازده‌ترین فعالیت در کل تصمیم مدل محلی است و مقدار بی‌کرانی از بحث انجمنی را با پاسخی جایگزین می‌کند که واقعاً درباره کار شماست."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱۳. اشتباهات رایج"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "انتخاب بر اساس جایگاه در جدول رتبه‌بندی، پیش از بررسی اینکه مدل در بودجه حافظه شما جا می‌شود یا نه.",
+            "خواندن تعداد پارامتر فعال MoE به‌عنوان نیاز حافظه — Kimi K2.7 سی‌ودو میلیارد را فعال می‌کند اما یک تریلیون را ذخیره می‌کند.",
+            "فراموش کردن KV cache و بعد غافلگیر شدن وقتی یک نشست کانتکست-بلند به رم سیستم سرریز می‌کند.",
+            "مقایسه اعداد بنچمارک سازندگان از harnessهای متفاوت انگار که یک آزمایش واحد بوده‌اند.",
+            "کوانتیزه کردن بیش از حد تهاجمی برای جا دادن مدل بزرگ‌تر، و بعد مقصر دانستن مدل بابت فراخوانی‌های ابزار بدشکل.",
+            "اجرای وزن‌هایی که ماه‌ها پیش کشیده شده‌اند — چند تا از این چک‌پوینت‌ها از زمان انتشار بازبینی شده‌اند.",
+            "رفتار با یک مدل متخصص کدنویسی مثل دستیار عمومی، یا با یک مدل عمومی مثل متخصص کدنویسی.",
+            "آزمایش با پرامپت‌های تکی وقتی کاربرد واقعی شما یک حلقه agent چندنوبتی است."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱۴. جمع‌بندی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "سه مدل، سه پاسخ آشکارا متفاوت، و متغیر تعیین‌کننده سخت‌افزار است نه توانمندی."
+        },
+        {
+          "type": "paragraph",
+          "text": "Qwen3.8-27B توصیه برای هر کسی است با ۲۴ گیگابایت VRAM یا حافظه یکپارچه که کدنویسی agentic از یک مدل محلی می‌خواهد. دقیقاً برای همین آموزش دیده، پیشرفت‌های نسلی‌اش دقیقاً در همان حوزه خوشه شده‌اند، و حدود ۱۸ گیگابایت وزن کوانتیزه‌شده برای یک کانتکست قابل استفاده جا باقی می‌گذارد. بنچمارک‌های سازنده را باید موضع‌گیری خواند نه اثبات، اما جهتی که نشان می‌دهند با رفتار عملی مدل سازگار است."
+        },
+        {
+          "type": "paragraph",
+          "text": "Gemma 4 توصیه برای هر کسی پایین‌تر از آن طبقه است، هر کسی که به چندوجهی بودن نیاز دارد، و هر کسی که یک خانواده واحد برای چند دستگاه می‌خواهد. مدل 12B Unified با حدود ۷٫۶ گیگابایت مفیدترین مدل تکی برای یک کارت ۸ گیگابایتی در سال ۲۰۲۶ است، مدل 26B A4B انتخاب سرعت‌آگاه روی کارت ۲۴ گیگابایتی است، و درافترهای MTP یک برد رایگان در تأخیر هستند که بیشتر مردم هرگز فعالشان نمی‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kimi K2.7 Code به‌عنوان م��ل محلی توصیه‌ای برای تقریباً هیچ‌کس است، و به‌عنوان API با یک دریچه فرار open-weight گزینه‌ای جدی است. ارزشش برای یک توسعه‌دهنده local-first اختیار است نه استقرار — دانستن اینکه وزن‌ها تحت لایسنسی آزادمنشانه وجود دارند، اینکه self-hosting ممکن است اگر اقتصادش روزی هشت GPU را توجیه کند، و اینکه خود فروشنده هم این را می‌داند."
+        },
+        {
+          "type": "paragraph",
+          "text": "نکته کلان‌تر این است که اکوسیستم open-weight به دو طبقه تقسیم شده که با هم رقابت نمی‌کنند. یک طبقه روی سخت‌افزاری اجرا می‌شود که همین حالا دارید و آن‌قدر سریع بهتر می‌شود که فاصله‌اش با مدل‌های بسته مرزی برای کار عملی کدنویسی مدام کم می‌شود. طبقه دیگر در لایسنس باز است و در عمل بسته، محدودشده با سخت‌افزار نه با شروط. دانستن اینکه در کدام طبقه خرید می‌کنید، بخش عمده تصمیم است."
+        },
+        {
+          "type": "cta",
+          "title": "Google AI for Developers: مرور مدل Gemma 4",
+          "text": "مستندات رسمی برای پنج اندازه Gemma 4، گزینه‌های کوانتیزاسیون، پشتیبانی چندوجهی و speculative decoding با MTP.",
+          "buttonText": "باز کردن مستندات Gemma 4",
+          "buttonUrl": "https://ai.google.dev/gemma/docs/core"
+        },
+        {
+          "type": "cta",
+          "title": "کتابخانه مدل‌های Ollama",
+          "text": "پیش از pull کردن، اندازه واقعی بسته و تگ‌های موجود را تأیید کنید. تخمین‌ها برای برنامه‌ریزی‌اند؛ کتابخانه منبع حقیقت است.",
+          "buttonText": "مرور کتابخانه",
+          "buttonUrl": "https://ollama.com/library"
+        }
+      ],
+      "faq": [
+        {
+          "question": "آیا می‌توانم Kimi K2.7 Code را روی یک GPU مصرفی اجرا کنم؟",
+          "answer": "خیر. این یک مدل mixture-of-experts با یک تریلیون پارامتر کل و ۳۲ میلیارد پارامتر فعال به ازای هر توکن است. تعداد فعال، محاسبه به ازای هر توکن را کاهش می‌دهد نه حافظه لازم برای ذخیره وزن‌ها را. یک پیکربندی نمونه برای self-hosting از tensor parallelism روی هشت GPU استفاده می‌کند. برای سخت‌افزار مصرفی مسیر واقع‌بینانه API است و وزن‌های باز نقش دریچه فرار را دارند نه برنامه استقرار."
+        },
+        {
+          "question": "بهترین مدل کدنویسی محلی برای یک GPU بیست‌وچهار گیگابایتی کدام است؟",
+          "answer": "Qwen3.8-27B قوی‌ترین گزینه فعلی است. بسته‌های Ollama آن حدود ۱۸ گیگابایت هستند که روی یک کارت ۲۴ گیگابایتی فضای واقعی برای کانتکست باقی می‌گذارد، و تمرکز آموزشی‌اش مهندسی نرم‌افزار agentic است نه کیفیت پاسخ تکی. Gemma 4 31B جایگزین است اگر مدل عمومی قوی‌تری می‌خواهید، و Gemma 4 26B A4B برای تولید سریع‌تر با کیفیت مشابه ارزش آزمایش دارد."
+        },
+        {
+          "question": "به ازای هر میلیارد پارامتر چقدر VRAM لازم دارم؟",
+          "answer": "حدود ۰٫۶ گیگابایت به ازای هر میلیارد پارامتر در کوانتیزاسیون Q4_K_M، به‌علاوه ۲۰ تا ۳۰ درصد فضای اضافه برای KV cache و کانتکست. این یعنی مدل‌های ۷ تا ۱۲B روی کارت‌های ۸ گیگابایتی، کلاس ۱۴ تا ۲۰B روی ۱۶ گیگابایت، و مدل‌های ۲۷ تا ۳۱B روی ۲۴ گیگابایت. این‌ها تخمین‌های برنامه‌ریزی برگرفته از تعداد پارامترند، پس پیش از pull کردن اندازه واقعی بسته را تأیید کنید."
+        },
+        {
+          "question": "آیا مدل mixture-of-experts حافظه کمتری مصرف می‌کند؟",
+          "answer": "خیر. مسیریابی MoE با فعال کردن تنها زیرمجموعه‌ای از expertها محاسبه به ازای هر توکن را کم می‌کند، اما همه وزن‌ها هنوز باید مقیم باشند. این رایج‌ترین سوءبرداشت در برنامه‌ریزی مدل محلی است، چون بازاریابی MoE روی تعداد پارامتر فعال تأکید می‌کند نه کل."
+        },
+        {
+          "question": "آیا اعداد بنچمارک در کارت‌های مدل قابل اعتمادند؟",
+          "answer": "آن‌ها شواهدی با سوگیری شناخته‌شده‌اند. تقریباً همه این ارقام توسط سازنده اجرا شده‌اند، اغلب روی harnessهای متفاوت با دما، پنجره کانتکست و مهلت متفاوت. برخی بنچمارک‌ها را همان سازنده داخلی طراحی کرده است. ترتیب را احتمالاً درست و حاشیه‌ها را احتمالاً غلط در نظر بگیرید، و هر عدد را به کسی که اجرایش کرده نسبت دهید."
+        },
+        {
+          "question": "اگر فقط ۸ گیگابایت VRAM دارم کدام مدل بهتر است؟",
+          "answer": "Gemma 4 12B Unified با حدود ۷٫۶ گیگابایت قوی‌ترین گزینه همه‌منظوره آن طبقه است و ورودی تصویر و صدا را هم می‌آورد. اگر چیزی اختصاصی برای کد می‌خواهید، Mellum2-12B از JetBrains قوی‌ترین گزینه کد-محوری است که جا می‌شود. با کوانتیزاسیون بیش از حد، مدل ۲۷B را به زور روی کارت ۸ گیگابایتی جا ندهید."
+        },
+        {
+          "question": "آیا کوانتیزاسیون به عملکرد کدنویسی آسیب می‌زند؟",
+          "answer": "بله، و به‌طور نایکنواخت. روانی گفت‌وگویی کوانتیزاسیون تهاجمی را خوب تحمل می‌کند، اما پایبندی سخت‌گیرانه به قالب، استدلال زنجیره‌بلند و درستی فراخوانی ابزار زودتر افت می‌کنند. اگر agent شروع به تولید فراخوانی‌های ابزار بدشکل کرد، پیش از مقصر دانستن harness یک کوانتیزاسیون کم‌تهاجمی‌تر را امتحان کنید. Q4_K_M برای بیشتر سخت‌افزارها پیش‌فرض معقولی است."
+        },
+        {
+          "question": "آیا Gemma 4 برای کار جدی کدنویسی کافی است؟",
+          "answer": "یک مدل عمومی قوی با توانایی کدنویسی محکم است نه یک متخصص کدنویسی. مدل ۳۱B حدود ۸۰ درصد روی LiveCodeBench و Elo نزدیک ۲۱۵۰ در Codeforces گزارش می‌کند. برای مهندسی نرم‌افزار عمیقاً agentic، تمرکز آموزشی Qwen3.8-27B خودش را نشان می‌دهد. برای بارهای کاری ترکیبی شامل سند، تصویر، صدا یا زبان‌های متعدد، Gemma 4 گزینه همه‌جانبه بهتری است."
+        },
+        {
+          "question": "آیا پنجره‌های کانتکست بلند حافظه مصرف می‌کنند؟",
+          "answer": "بله. پنجره کانتکست تبلیغ‌شده یک توانمندی است، نه یک توانمندی رایگان. KV cache با کانتکستی که واقعاً استفاده می‌کنید رشد می‌کند و از همان استخر حافظه وزن‌ها می‌آید، و همزمانی آن را چند برابر می‌کند. ابتدا کانتکست کاری‌تان را تعیین کنید و بعد مدل را طوری انتخاب کنید که برایش جا بماند."
+        },
+        {
+          "question": "واقعاً چطور باید بین این مدل‌ها انتخاب کنم؟",
+          "answer": "بودجه حافظه‌تان را حساب کنید، هر چیزی را که با فضای کانتکست جا نمی‌شود حذف کنید، و بعد بازماندگان را روی پنج تا ده وظیفه از ریپازیتوری خودتان که قبلاً حلشان کرده‌اید آزمایش کنید. harness و کوانتیزاسیون را ثابت نگه دارید و درستی، تعداد نوبت و زمان واقعی را ثبت کنید. نیم روز از این کار از هر مقدار خواندن بنچمارک بهتر است."
+        }
+      ],
+      "seo": {
+        "title": "Qwen3.8 در برابر Kimi K2.7 و Gemma 4: کدام مدل کدنویسی محلی روی GPU شما جا می‌شود؟ (۲۰۲۶)",
+        "metaDescription": "مقایسه سخت‌افزار-محور Qwen3.8-27B، Kimi K2.7 Code و Gemma 4. ریاضیات VRAM، بده‌بستان‌های کوانتیزاسیون، هشدارهای بنچمارک سازندگان و توصیه طبقه‌به‌طبقه از کارت‌های ۸ گیگابایتی تا سرورهای چند-GPU.",
+        "canonical": "https://sinisteroid.ir/fa/blog/qwen38-vs-kimi-k27-vs-gemma-4-local-coding-model-gpu",
+        "openGraph": {
+          "title": "Qwen3.8 در برابر Kimi K2.7 و Gemma 4: کدام روی GPU شما جا می‌شود؟",
+          "description": "GPU شما بیشتر از جدول رتبه‌بندی تصمیم می‌گیرد. مقایسه حافظه-محور سه مدل کدنویسی open-weight پرگفت‌وگوی ۲۰۲۶.",
+          "image": "/api/uploads/20260916-local-coding-models-og-fa.webp"
+        },
+        "twitter": {
+          "title": "Qwen3.8 در برابر Kimi K2.7 و Gemma 4",
+          "description": "۱۸ گیگابایت، یک تریلیون پارامتر، یا ۷٫۶ گیگابایت. سه مدل کدنویسی open-weight، سه طبقه سخت‌افزاری کاملاً متفاوت.",
+          "image": "/api/uploads/20260916-local-coding-models-twitter-fa.webp"
+        },
+        "keywords": "qwen3.8 27b, kimi k2.7 code, gemma 4, مدل کدنویسی محلی, بهترین مدل زبانی محلی ۲۰۲۶, نیازمندی vram, مدل کدنویسی ollama, مدل open weight, کوانتیزاسیون q4_k_m, کدنویسی agentic محلی, هوش مصنوعی self-hosted, لایسنس apache 2.0",
+        "focusKeyword": "مقایسه مدل کدنویسی محلی GPU"
+      }
+    }
+  }
+}

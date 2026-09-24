@@ -1,0 +1,633 @@
+{
+  "slug": "multi-agent-coding-is-here-most-teams-are-still-using-one-agent-at-a-time",
+  "status": "published",
+  "title": "Multi-Agent Coding Is Here. Most Teams Are Still Using One Agent at a Time",
+  "date": "2026-09-20 17:58:05",
+  "tags": [
+    "ai-coding-agents",
+    "ai-tools"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/20260920-175716-ffeb949f6ef87623.webp",
+    "alt": {
+      "en": "Multiple specialized AI coding agents collaborating on different parts of a codebase while a human orchestrates the overall workflow",
+      "fa": "چندین ایجنت کدنویسی تخصصی هوش مصنوعی در حال همکاری روی بخش‌های مختلف یک codebase در حالی که انسان گردش‌کار کلی را ارکستراسیون می‌کند"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "Multi-Agent Coding Is Here. Most Teams Are Still Using One Agent at a Time",
+      "excerpt": "Single coding agents are already powerful. The next leap is running several specialized agents in parallel — planner, implementer, reviewer, tester — coordinated by a human or a higher-level agent. Most teams are still treating agents as a better autocomplete. The productivity gap is about to widen.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "Multi-Agent Coding Is Here. Most Teams Are Still Using One Agent at a Time"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "In 2026 the average developer who uses AI still talks to one agent at a time. They open Claude Code, Cursor, Cline, or OpenCode, describe a task, watch it work, review the result, and move on. That workflow is already transformative. It is also leaving a large amount of leverage on the table."
+        },
+        {
+          "type": "paragraph",
+          "text": "The next practical step is multi-agent coding: running several specialized agents concurrently or in coordinated loops — one that plans and decomposes, one that implements, one that writes tests, one that reviews for security or style, sometimes one that keeps a long-running background task alive. Early adopters are already doing this. Most teams are not. The difference in throughput and quality is becoming visible."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "1 agent",
+              "label": "Still the default setup for the large majority of developers"
+            },
+            {
+              "value": "3+ concurrent",
+              "label": "Already common among power users of the strongest agent platforms"
+            },
+            {
+              "value": "Specialization",
+              "label": "The real gain comes from different agents optimized for different jobs"
+            },
+            {
+              "value": "Orchestration",
+              "label": "The new skill: deciding what each agent owns and how they hand off"
+            },
+            {
+              "value": "Review load",
+              "label": "Multi-agent output increases the need for strong validation and guardrails"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260920-175723-60e67f863e0695d4.webp",
+          "alt": "Side-by-side comparison of a single sequential agent workflow versus a multi-agent parallel workflow with clear handoffs",
+          "caption": "Figure 1: Most teams are still in the left column. The right column is where the next productivity gains live.",
+          "altText": "Side-by-side comparison of a single sequential agent workflow versus a multi-agent parallel workflow with clear handoffs"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "1. Why One Agent Is No Longer the Ceiling"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "A single strong agent can already handle multi-file changes, run tests, open pull requests, and iterate. The limitation is not raw intelligence. It is sequential attention and role conflict."
+        },
+        {
+          "type": "paragraph",
+          "text": "One agent that is asked to plan, implement, test, and self-review tends to compromise on each step. It optimizes for finishing the visible task. It is less reliable at maintaining long-horizon consistency, adversarial review, or specialized knowledge (security, performance, accessibility, domain rules). Splitting the work across agents with different system prompts, tools, models, or even different providers removes some of those compromises."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "2. What Multi-Agent Coding Actually Looks Like in Practice"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "There is no single canonical architecture yet. The patterns that are working share a few common traits."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Planner → Implementer → Reviewer"
+        },
+        {
+          "type": "paragraph",
+          "text": "A common lightweight setup uses one agent (often a stronger, more expensive model) to produce a detailed plan and acceptance criteria. A second agent (sometimes cheaper or faster) executes the plan in the codebase. A third agent, with a critical or security-focused prompt, reviews the diff before a human looks at it. The human remains the final gate."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Parallel specialists"
+        },
+        {
+          "type": "paragraph",
+          "text": "On larger tasks, teams spin up several implementers in parallel on different parts of the change (API layer, UI, tests, migrations), then a coordinating agent or human merges and resolves conflicts. Some platforms now support background agents and sub-agents natively, making this less manual than it was six months ago."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Long-running + interactive"
+        },
+        {
+          "type": "paragraph",
+          "text": "One agent can be left on a long-running or recurring task (dependency updates, flaky test hunting, documentation drift) while the developer works interactively with another agent on the main feature. The long-running agent reports back through issues, PRs, or a shared channel."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Skills and shared memory"
+        },
+        {
+          "type": "paragraph",
+          "text": "The more mature setups treat reusable skills, project conventions, and shared context as infrastructure. Agents load the same style guides, architecture decision records, and test strategies so their outputs stay coherent even when they work in parallel."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260920-175729-494cd90dba62c66c.webp",
+          "alt": "Diagram of common multi-agent coding patterns: sequential pipeline, parallel specialists, and long-running background agents",
+          "caption": "Figure 2: Three patterns that teams are actually using in 2026 — sequential specialization, parallel workstreams, and background agents.",
+          "altText": "Diagram of common multi-agent coding patterns: sequential pipeline, parallel specialists, and long-running background agents"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "3. The Hard Parts Nobody Advertises"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Multi-agent coding is not free leverage. It introduces new failure modes."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**Coordination overhead** — Agents that do not share a clear contract produce conflicting changes or duplicated work. Someone (human or orchestrator agent) has to own the interfaces.",
+            "**Review volume** — More agents produce more diffs. Without strong automated checks and clear ownership, the human review bottleneck simply grows.",
+            "**Context fragmentation** — Each agent sees a partial picture unless context is deliberately engineered and shared.",
+            "**Cost and noise** — Parallel agents burn tokens faster. Poorly scoped agents generate noise that humans then have to filter.",
+            "**Misalignment risk** — As we have seen in recent disclosures, more autonomous agents with tool access can find creative ways around constraints. More agents multiply the surface area that needs monitoring."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The teams getting value are treating multi-agent setups as systems engineering problems, not just “run more agents.”"
+        },
+        {
+          "type": "cta",
+          "title": "AI Agents Are Starting to Break Their Own Rules. OpenAI Just Admitted It.",
+          "text": "More agents with more autonomy increase the importance of constraints, monitoring, and honest disclosure of failure modes.",
+          "buttonText": "Read the Misalignment Analysis",
+          "buttonUrl": "/en/blog/ai-agents-are-starting-to-break-their-own-rules-openai-just-admitted-it/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "4. How to Start Without Boiling the Ocean"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "You do not need a full multi-agent platform on day one. A pragmatic path looks like this:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Keep your current primary agent for interactive work.",
+            "Add a second agent (or a second session with a different system prompt) dedicated to critical review of every non-trivial PR.",
+            "Introduce a lightweight planner step for medium-sized features before implementation begins.",
+            "Experiment with one background or scheduled agent on a low-risk recurring task.",
+            "Invest in shared project context (conventions, ADRs, test strategy) so every agent starts from the same ground truth.",
+            "Measure review time and defect rate, not just raw PR volume."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The goal is controlled specialization, not maximum concurrent agents."
+        },
+        {
+          "type": "cta",
+          "title": "AI Writes the Code. You Own the Bugs: Why Review Is the New Bottleneck",
+          "text": "Multi-agent output makes the review and validation problem more acute. The earlier analysis of the bottleneck remains essential reading.",
+          "buttonText": "Read the Review Bottleneck Piece",
+          "buttonUrl": "/en/blog/ai-writes-the-code-you-own-the-bugs-why-review-is-the-new-bottleneck/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "5. Tooling Reality in Late 2026"
+        },
+        {
+          "type": "paragraph",
+          "text": "The major agent platforms are racing to make multi-agent workflows first-class. Background agents, sub-agents, shared project memory, skills libraries, and better orchestration primitives are shipping rapidly. Open-source tools are following the same path, often with more transparency and control."
+        },
+        {
+          "type": "paragraph",
+          "text": "The differentiator is shifting from “which single agent is smartest” to “which environment lets me compose specialized agents cleanly, observe them, and keep a human in meaningful control.”"
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260920-175737-1d5990030139cba1.webp",
+          "alt": "Human orchestrator sitting above specialized coding agents with clear inputs, outputs, and feedback loops",
+          "caption": "Figure 3: The emerging shape of the work — humans and higher-level agents orchestrate specialists rather than doing every step themselves.",
+          "altText": "Human orchestrator sitting above specialized coding agents with clear inputs, outputs, and feedback loops"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "6. What This Means for Individual Engineers"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The skill that is rising in value is orchestration: deciding how to decompose work, which agent (or model) is best for each slice, how to keep context coherent, and how to validate the combined result."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pure coding speed continues to matter less. Judgment, system design, and the ability to keep multiple semi-autonomous workers aligned with the real goal matter more. This is consistent with the broader shift from senior execution to staff-level leverage."
+        },
+        {
+          "type": "cta",
+          "title": "Staff Engineer Is a Different Job (Not Just a Better Senior)",
+          "text": "Orchestrating agents is a concrete example of the leverage shift that separates senior work from staff-level impact.",
+          "buttonText": "Read the Staff Engineer Piece",
+          "buttonUrl": "/en/blog/staff-engineer-is-a-different-job-not-just-a-better-senior/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "7. Closing"
+        },
+        {
+          "type": "paragraph",
+          "text": "Single-agent coding is the new baseline. Multi-agent coding is the emerging frontier for teams that want the next step in leverage. It is not magic and it is not free. It requires clearer decomposition, stronger shared context, better automated validation, and deliberate attention to coordination and risk."
+        },
+        {
+          "type": "paragraph",
+          "text": "Most teams are still using one agent at a time. The ones that learn to run specialized agents as a coordinated system will pull ahead on both speed and quality — provided they also invest in the review, guardrails, and orchestration skills that keep the system under control."
+        },
+        {
+          "type": "paragraph",
+          "text": "The tools are ready. The question is whether the workflow and the culture are."
+        },
+        {
+          "type": "cta",
+          "title": "Stop Paying for AI Coding Agents: The Open-Source Alternatives That Actually Work in 2026",
+          "text": "Open-source agents often give you more flexibility to experiment with multi-agent setups, custom skills, and local models without per-seat lock-in.",
+          "buttonText": "Explore Open-Source Options",
+          "buttonUrl": "/en/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026/"
+        },
+        {
+          "type": "cta",
+          "title": "Qwen3.8 vs Kimi K2.7 vs Gemma 4: Which Local Coding Model Fits Your GPU?",
+          "text": "Running specialized agents locally is one of the cleanest ways to control cost and data while experimenting with multi-agent patterns.",
+          "buttonText": "Read the Local Model Comparison",
+          "buttonUrl": "/en/blog/qwen38-vs-kimi-k27-vs-gemma-4-local-coding-model-gpu/"
+        }
+      ],
+      "faq": [
+        {
+          "question": "Is multi-agent coding actually better than a single strong agent?",
+          "answer": "It can be, when the work benefits from specialization and parallel progress. A single excellent agent is still better than a poorly coordinated group of mediocre ones. The gains come from deliberate role separation and strong orchestration, not from simply running more instances."
+        },
+        {
+          "question": "Do I need special tooling to try this?",
+          "answer": "Not necessarily. You can start with multiple sessions or multiple tools (one for planning, one for implementation, one for review). Native support for background agents, sub-agents, and shared project context makes the workflow smoother, but the core idea does not require a brand-new platform."
+        },
+        {
+          "question": "Won’t this just create more code to review?",
+          "answer": "Yes, if you do not change anything else. Successful multi-agent setups invest in automated checks, clearer acceptance criteria, and specialized review agents so that human attention stays focused on the decisions that matter."
+        },
+        {
+          "question": "Which roles are most useful to separate?",
+          "answer": "Common high-value splits are planner vs implementer, implementer vs adversarial reviewer, and interactive feature work vs long-running maintenance tasks. Security, performance, and test-generation specialists also appear frequently."
+        },
+        {
+          "question": "How does this relate to the recent OpenAI misalignment disclosures?",
+          "answer": "More agents with more autonomy and tool access increase the surface area for unexpected behavior. Strong constraints, monitoring, and least-privilege design become more important, not less, as you scale the number of agents."
+        },
+        {
+          "question": "Is this only for large teams?",
+          "answer": "No. Individual developers and small teams are already running multi-agent workflows. The coordination cost is lower when fewer people are involved, but the same principles of specialization and clear handoffs apply."
+        },
+        {
+          "question": "What should I measure to know if it is working?",
+          "answer": "Look at end-to-end cycle time for features, defect rates after merge, time spent in human review, and the ratio of useful agent output to noise. Raw PR count alone is a poor signal."
+        },
+        {
+          "question": "Where should a team start this week?",
+          "answer": "Add a dedicated review agent (or review prompt) to every non-trivial change. Introduce an explicit planning step for medium-sized work. Keep one background or scheduled agent on a low-risk recurring task. Invest a little time in shared project context so every agent starts aligned."
+        }
+      ],
+      "seo": {
+        "title": "Multi-Agent Coding Is Here. Most Teams Are Still Using One Agent at a Time",
+        "metaDescription": "Single coding agents are the new baseline. Multi-agent workflows — specialized planners, implementers, reviewers, and background agents — are the next productivity leap. Here’s how teams are actually using them in 2026.",
+        "canonical": "https://sinisteroid.ir/blog/multi-agent-coding-is-here-most-teams-are-still-using-one-agent-at-a-time",
+        "openGraph": {
+          "title": "Multi-Agent Coding Is Here. Most Teams Are Still Using One Agent at a Time",
+          "description": "The next leap after single-agent coding is coordinated specialization. Most teams haven’t made the jump yet.",
+          "image": "/api/uploads/20260920-multi-agent-og.webp"
+        },
+        "twitter": {
+          "title": "Multi-Agent Coding Is Here",
+          "description": "One agent is the baseline. Coordinated specialists are the next advantage.",
+          "image": "/api/uploads/20260920-multi-agent-twitter.webp"
+        },
+        "keywords": "multi-agent coding, multi-agent AI, agent orchestration, concurrent coding agents, specialized AI agents, background agents, AI coding workflow 2026, agent skills, multi-agent development",
+        "focusKeyword": "multi-agent coding"
+      }
+    },
+    "fa": {
+      "title": "کدنویسی چندایجنتی اینجاست. بیشتر تیم‌ها هنوز از یک ایجنت در یک زمان استفاده می‌کنند",
+      "excerpt": "ایجنت‌های کدنویسی منفرد از قبل قدرتمند هستند. جهش بعدی اجرای همزمان چندین ایجنت تخصصی است — برنامه‌ریز، پیاده‌ساز، بازبین، تست‌کننده — که توسط انسان یا یک ایجنت سطح بالاتر هماهنگ می‌شوند. بیشتر تیم‌ها هنوز با ایجنت‌ها مثل یک autocomplete بهتر رفتار می‌کنند. شکاف بهره‌وری در حال عریض شدن است.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "کدنویسی چندایجنتی اینجاست. بیشتر تیم‌ها هنوز از یک ایجنت در یک زمان استفاده می‌کنند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "در ۲۰۲۶ متوسط توسعه‌دهنده‌ای که از هوش مصنوعی استفاده می‌کند هنوز با یک ایجنت در یک زمان صحبت می‌کند. Claude Code، Cursor، Cline یا OpenCode را باز می‌کند، وظیفه را توصیف می‌کند، کارش را تماشا می‌کند، نتیجه را بازبینی می‌کند و جلو می‌رود. آن گردش‌کار از قبل تحول‌آفرین است. همچنین مقدار زیادی اهرم را روی میز می‌گذارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "گام عملی بعدی کدنویسی چندایجنتی است: اجرای چندین ایجنت تخصصی به‌صورت همزمان یا در حلقه‌های هماهنگ — یکی که برنامه‌ریزی و تجزیه می‌کند، یکی که پیاده‌سازی می‌کند، یکی که تست می‌نویسد، یکی که از نظر امنیت یا سبک بازبینی می‌کند، گاهی یکی که یک وظیفه پس‌زمینه طولانی را زنده نگه می‌دارد. پذیرندگان اولیه از قبل این کار را می‌کنند. بیشتر تیم‌ها نه. تفاوت در توان عملیاتی و کیفیت در حال آشکار شدن است."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۱ ایجنت",
+              "label": "هنوز راه‌اندازی پیش‌فرض برای اکثریت بزرگ توسعه‌دهندگان"
+            },
+            {
+              "value": "۳+ همزمان",
+              "label": "از قبل در میان کاربران قدرتمند قوی‌ترین پلتفرم‌های ایجنت رایج است"
+            },
+            {
+              "value": "تخصصی‌سازی",
+              "label": "سود واقعی از ایجنت‌های مختلف بهینه‌شده برای کارهای مختلف می‌آید"
+            },
+            {
+              "value": "ارکستراسیون",
+              "label": "مهارت جدید: تصمیم‌گیری درباره اینکه هر ایجنت مالک چیست و چگونه تحویل می‌دهد"
+            },
+            {
+              "value": "بار بازبینی",
+              "label": "خروجی چندایجنتی نیاز به اعتبارسنجی و نگهبان‌های قوی را افزایش می‌دهد"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260920-175747-7f6226f0eaf3c2db.webp",
+          "alt": "مقایسه کنار هم گردش‌کار ایجنت منفرد ترتیبی در برابر گردش‌کار چندایجنتی موازی با تحویل‌های واضح",
+          "caption": "شکل ۱: بیشتر تیم‌ها هنوز در ستون چپ هستند. ستون راست جایی است که سودهای بهره‌وری بعدی زندگی می‌کنند.",
+          "altText": "مقایسه کنار هم گردش‌کار ایجنت منفرد ترتیبی در برابر گردش‌کار چندایجنتی موازی با تحویل‌های واضح"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱. چرا یک ایجنت دیگر سقف نیست"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "یک ایجنت قوی منفرد از قبل می‌تواند تغییرات چندفایلی را مدیریت کند، تست اجرا کند، pull request باز کند و تکرار کند. محدودیت هوش خام نیست. توجه ترتیبی و تعارض نقش است."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک ایجنت که از آن خواسته می‌شود برنامه‌ریزی، پیاده‌سازی، تست و خودبازبینی کند تمایل دارد در هر گام مصالحه کند. برای تمام کردن وظیفه قابل‌مشاهده بهینه‌سازی می‌کند. در حفظ سازگاری افق بلند، بازبینی خصمانه، یا دانش تخصصی (امنیت، عملکرد، دسترسی‌پذیری، قوانین دامنه) کمتر قابل‌اطمینان است. تقسیم کار بین ایجنت‌ها با system prompt، ابزار، مدل یا حتی ارائه‌دهنده متفاوت برخی از آن ��صالحه‌ها را حذف می‌کند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۲. کدنویسی چندایجنتی واقعاً در عمل چگونه به نظر می‌رسد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هنوز معماری استاندارد واحدی وجود ندارد. الگوهایی که کار می‌کنند چند ویژگی مشترک دارند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "برنامه‌ریز → پیاده‌ساز → بازبین"
+        },
+        {
+          "type": "paragraph",
+          "text": "یک راه‌اندازی سبک رایج از یک ایجنت (اغلب مدل قوی‌تر و گران‌تر) برای تولید برنامه تفصیلی و معیارهای پذیرش استفاده می‌کند. ایجنت دوم (گاهی ارزان‌تر یا سریع‌تر) برنامه را در codebase اجرا می‌کند. ایجنت سوم، با پرامپت انتقادی یا امنیت‌محور، diff را قبل از اینکه انسان نگاه کند بازبینی می‌کند. انسان دروازه نهایی باق�� می‌ماند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "متخصصان موازی"
+        },
+        {
+          "type": "paragraph",
+          "text": "در وظایف بزرگ‌تر، تیم‌ها چندین پیاده‌ساز را به‌صورت موازی روی بخش‌های مختلف تغییر (لایه API، UI، تست‌ها، migrations) راه‌اندازی می‌کنند، سپس یک ایجنت هماهنگ‌کننده یا انسان ادغام می‌کند و تعارض‌ها را حل می‌کند. برخی پلتفرم‌ها اکنون از ایجنت‌های پس‌زمینه و ساب‌ایجنت به‌صورت بومی پشتیبانی می‌کنند و این را کمتر دستی از شش ماه پیش می‌کنند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "طولانی‌مدت + تعاملی"
+        },
+        {
+          "type": "paragraph",
+          "text": "یک ایجنت می‌تواند روی یک وظیفه طولانی‌مدت یا تکراری (به‌روزرسانی وابستگی‌ها، شکار تست‌های flaky، انحراف مستندات) رها شود در حالی که توسعه‌دهنده به‌صورت تعاملی با ایجنت دیگری روی ویژگی اصلی کار می‌کند. ایجنت طولانی‌مدت از طریق issueها، PRها یا یک کانال مشترک گزارش می‌دهد."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "مهارت‌ها و حافظه مشترک"
+        },
+        {
+          "type": "paragraph",
+          "text": "راه‌اندازی‌های بالغ‌تر مهارت‌های قابل‌استفاده مجدد، قراردادهای پروژه و زمینه مشترک را به‌عنوان زیرساخت در نظر می‌گیرند. ایجنت‌ها همان راهنماهای سبک، سوابق تصمیم معماری و استراتژی‌های تست را بارگذاری می‌کنند تا خروجی‌هایشان حتی وقتی موازی کار می‌کنند منسجم بماند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260920-175754-d4cbac7f6a9ff15b.webp",
+          "alt": "نمودار الگوهای رایج کدنویسی چندایجنتی: خط لوله ترتیبی، متخصصان موازی، و ایجنت‌های پس‌زمینه طولانی‌مدت",
+          "caption": "شکل ۲: سه الگویی که تیم‌ها واقعاً در ۲۰۲۶ استفاده می‌کنند — تخصصی‌سازی ترتیبی، جریان‌های کاری موازی، و ایجنت‌های پس‌زمینه.",
+          "altText": "نمودار الگوهای رایج کدنویسی چندایجنتی: خط لوله ترتیبی، متخصصان موازی، و ایجنت‌های پس‌زمینه طولانی‌مدت"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۳. بخش‌های سختی که هیچ‌کس تبلیغ نمی‌کند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کدنویسی چندایجنتی اهرم رایگان نیست. حالت‌های شکست جدیدی معرفی می‌کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**سربار هماهنگی** — ایجنت‌هایی که قرارداد واضحی به اشتراک نمی‌گذارند تغییرات متعارض یا کار تکراری تولید می‌کنند. کسی (انسان یا ایجنت ارکستراتور) باید مالک رابط‌ها باشد.",
+            "**حجم بازبینی** — ایجنت‌های بیشتر diffهای بیشتر تولید می‌کنند. بدون بررسی‌های خودکار قوی و مالکیت واضح، گلوگاه بازبینی انسانی فقط رشد می‌کند.",
+            "**تکه‌تکه شدن زمینه** — هر ایجنت تصویر جزئی می‌بیند مگر اینکه زمینه عمداً مهندسی و به اشتراک گذاشته شود.",
+            "**هزینه و نویز** — ایجنت‌های موازی توکن را سریع‌تر می‌سوزانند. ایجنت‌های ضعیف محدود نویزی تولید می‌کنند که انسان‌ها سپس باید فیلتر کنند.",
+            "**ریسک misalignment** — همان‌طور که در افشاهای اخیر دیده‌ایم، ایجنت‌های خودمختارتر با دسترسی ابزار می‌توانند راه‌های خلاقانه‌ای برای دور زدن محدودیت‌ها پیدا کنند. ایجنت‌های بیشتر سطح نظارتی که نیاز به نظارت دارد را چند برابر می‌کنند."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "تیم‌هایی که ارزش می‌گیرند راه‌اندازی‌های چندایجنتی را مسائل مهندسی سیستم در نظر می‌گیرند، نه فقط «ایجنت‌های بیشتر اجرا کنید»."
+        },
+        {
+          "type": "cta",
+          "title": "ایجنت‌های هوش مصنوعی شروع به شکستن قوانین خود کرده‌اند. OpenAI تازه اعتراف کرد.",
+          "text": "ایجنت‌های بیشتر با خودمختاری بیشتر اهمیت محدودیت‌ها، نظارت و افشای صادقانه حالت‌های شکست را افزایش می‌دهد.",
+          "buttonText": "مطالعه تحلیل Misalignment",
+          "buttonUrl": "/fa/blog/ai-agents-are-starting-to-break-their-own-rules-openai-just-admitted-it/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۴. چگونه بدون جوشاندن اقیانوس شروع کنیم"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "نیازی به یک پلتفرم کامل چندایجنتی در روز اول ندارید. یک مسیر عمل‌گرایانه این‌گونه به نظر می‌رسد:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "ایجنت اصلی فعلی خود را برای کار تعاملی نگه دارید.",
+            "یک ایجنت دوم (یا نشست دوم با system prompt متفاوت) اختصاص‌یافته به بازبینی انتقادی هر PR غیرپیش‌پاافتاده اضافه کنید.",
+            "یک گام برنامه‌ریزی سبک برای ویژگی‌های متوسط قبل از شروع پیاده‌سازی معرفی کنید.",
+            "با یک ایجنت پس‌زمینه یا زمان‌بندی‌شده روی یک وظیفه تکراری کم‌ریسک آزمایش کنید.",
+            "در زمینه مشترک پروژه (قراردادها، ADRها، استراتژی تست) سرمایه‌گذاری کنید تا هر ایجنت از همان حقیقت پایه شروع کند.",
+            "زمان بازبینی و نرخ نقص را اندازه بگیرید، نه فقط حجم خام PR."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "هدف تخصصی‌سازی کنترل‌شده است، نه حداکثر ایجنت‌های همزمان."
+        },
+        {
+          "type": "cta",
+          "title": "هوش مصنوعی کد را می‌نویسد. شما مالک باگ‌ها هستید: چرا بازبینی گلوگاه جدید است",
+          "text": "خروجی چندایجنتی مشکل بازبینی و اعتبارسنجی را حادتر می‌کند. تحلیل قبلی گلوگاه خواندن ضروری باقی می‌ماند.",
+          "buttonText": "مطالعه مطلب گلوگاه بازبینی",
+          "buttonUrl": "/fa/blog/ai-writes-the-code-you-own-the-bugs-why-review-is-the-new-bottleneck/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۵. واقعیت ابزار در اواخر ۲۰۲۶"
+        },
+        {
+          "type": "paragraph",
+          "text": "پلتفرم‌های عمده ایجنت در حال مسابقه برای first-class کردن گردش‌کارهای چندایجنتی هستند. ایجنت‌های پس‌زمینه، ساب‌ایجنت‌ها، حافظه مشترک پروژه، کتابخانه‌های مهارت، و primitives ارکستراسیون بهتر به‌سرعت در حال ارسال هستند. ابزارهای متن‌باز همان مسیر را دنبال می‌کنند، اغلب با شفافیت و کنترل بیشتر."
+        },
+        {
+          "type": "paragraph",
+          "text": "تمایز از «کدام ایجنت منفرد باهوش‌تر است» به «کدام محیط به من اجازه می‌دهد ایجنت‌های تخصصی را تمیز ترکیب کنم، آن‌ها را مشاهده کنم، و انسان را در کنترل معنادار نگه دارم» در حال جابه‌جایی است."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260920-175801-a078fd6ed597cbd4.webp",
+          "alt": "ارکستراتور انسانی نشسته بالای ایجنت‌های کدنویسی تخصصی با ورودی‌ها، خروجی‌ها و حلقه‌های بازخورد واضح",
+          "caption": "شکل ۳: شکل نوظهور کار — انسان‌ها و ایجنت‌های سطح بالاتر متخصصان را ارکستراسیون می‌کنند به جای انجام هر گام خودشان.",
+          "altText": "ارکستراتور انسانی نشسته بالای ایجنت‌های کدنویسی تخصصی با ورودی‌ها، خروجی‌ها و حلقه‌های بازخورد واضح"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۶. این برای مهندسان فردی چه معنایی دارد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "مهارتی که در ارزش در حال افزایش است ارکستراسیون است: تصمیم‌گیری درباره نحوه تجزیه کار، اینکه کدام ایجنت (یا مدل) برای هر برش بهترین است، چگونه زمینه را منسجم نگه داریم، و چگونه نتیجه ترکیبی را اعتبارسنجی کنیم."
+        },
+        {
+          "type": "paragraph",
+          "text": "سرعت خالص کدنویسی کمتر اهمیت پیدا می‌کند. قضاوت، طراحی سیستم، و توانایی نگه داشتن چندین کارگر نیمه‌خودمختار هم‌تراز با هدف واقعی بیشتر اهمیت پیدا می‌کند. این با جابه‌جایی گسترده‌تر از اجرای ارشد به اهرم سطح staff سازگار است."
+        },
+        {
+          "type": "cta",
+          "title": "مهندس Staff یک شغل متفاوت است (نه فقط یک ارشد بهتر)",
+          "text": "ارکستراسیون ایجنت‌ها مثال مشخصی از جابه‌جایی اهرمی است که کار ارشد را از تأثیر سطح staff جدا می‌کند.",
+          "buttonText": "مطالعه مطلب مهندس Staff",
+          "buttonUrl": "/fa/blog/staff-engineer-is-a-different-job-not-just-a-better-senior/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۷. نتیجه‌گیری"
+        },
+        {
+          "type": "paragraph",
+          "text": "کدنویسی تک‌ایجنتی پایه جدید است. کدنویسی چندایجنتی مرز نوظهور برای تیم‌هایی است که گام بعدی اهرم را می‌خواهند. جادو نیست و رایگان نیست. نیاز به تجزیه واضح‌تر، زمینه مشترک قوی‌تر، اعتبارسنجی خودکار بهتر، و توجه عمدی به هماهنگی و ریسک دارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "بیشتر تیم‌ها هنوز از یک ایجنت در یک زمان استفاده می‌کنند. کسانی که یاد بگیرند ایجنت‌های تخصصی را به‌عنوان یک سیستم هماهنگ اجرا کنند در هر دو سرعت و کیفیت جلو خواهند افتاد — به شرطی که همچنین در مهارت‌های بازبینی، نگهبان و ارکستراسیونی که سیستم را تحت کنترل نگه می‌دارد سرمایه‌گذاری کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "ابزارها آماده‌اند. سؤال این است که آیا گردش‌کار و فرهنگ آماده‌اند."
+        },
+        {
+          "type": "cta",
+          "title": "دیگر برای ایجنت‌های کدنویسی هوش مصنوعی پول ندهید: جایگزین‌های متن‌باز که واقعاً در ۲۰۲۶ کار می‌کنند",
+          "text": "ایجنت‌های متن‌باز اغلب انعطاف بیشتری برای آزمایش راه‌اندازی‌های چندایجنتی، مهارت‌های سفارشی و مدل‌های محلی بدون قفل per-seat به شما می‌دهند.",
+          "buttonText": "کاوش گزینه‌های متن‌باز",
+          "buttonUrl": "/fa/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026/"
+        },
+        {
+          "type": "cta",
+          "title": "Qwen3.8 در برابر Kimi K2.7 در برابر Gemma 4: کدام مدل کدنویسی محلی با GPU شما سازگار است؟",
+          "text": "اجرای ایجنت‌های تخصصی به‌صورت محلی یکی از تمیزترین راه‌ها برای کنترل هزینه و داده در حین آزمایش الگوهای چندایجنتی است.",
+          "buttonText": "مطالعه مقایسه مدل محلی",
+          "buttonUrl": "/fa/blog/qwen38-vs-kimi-k27-vs-gemma-4-local-coding-model-gpu/"
+        }
+      ],
+      "faq": [
+        {
+          "question": "آیا کدنویسی چندایجنتی واقعاً بهتر از یک ایجنت قوی منفرد است؟",
+          "answer": "می‌تواند باشد، وقتی کار از تخصصی‌سازی و پیشرفت موازی سود می‌برد. یک ایجنت عالی منفرد هنوز بهتر از یک گروه بد هماهنگ‌شده از ایجنت‌های متوسط است. سودها از جداسازی عمدی نقش و ارکستراسیون قوی می‌آید، نه صرفاً از اجرای نمونه‌های بیشتر."
+        },
+        {
+          "question": "آیا برای امتحان این به ابزار خاصی نیاز دارم؟",
+          "answer": "نه لزوماً. می‌توانید با چندین نشست یا چندین ابزار شروع کنید (یکی برای برنامه‌ریزی، یکی برای پیاده‌سازی، یکی برای بازبینی). پشتیبانی بومی از ایجنت‌های پس‌زمینه، ساب‌ایجنت‌ها و زمینه مشترک پروژه گردش‌کار را نرم‌تر می‌کند، اما ایده اصلی نیاز به پلتفرم کاملاً جدید ندارد."
+        },
+        {
+          "question": "آیا این فقط کد بیشتری برای بازبینی ایجاد نمی‌کند؟",
+          "answer": "بله، اگر چیز دیگری را تغییر ندهید. راه‌اندازی‌های چندایجنتی موفق در بررسی‌های خودکار، معیارهای پذیرش واضح‌تر و ایجنت‌های بازبینی تخصصی سرمایه‌گذاری می‌کنند تا توجه انسانی روی تصمیم‌هایی که اهمیت دارند متمرکز بماند."
+        },
+        {
+          "question": "جدا کردن کدام نقش‌ها مفیدترین است؟",
+          "answer": "تقسیم‌های با ارزش بالا رایج عبارتند از برنامه‌ریز در برابر پیاده‌ساز، پیاده‌ساز در برابر بازبین خصمانه، و کار ویژگی تعاملی در برابر وظایف نگهداری طولانی‌مدت. متخصصان امنیت، عملکرد و تولید تست نیز اغلب ظاهر می‌شوند."
+        },
+        {
+          "question": "این چگونه به افشاهای اخیر misalignment OpenAI مرتبط است؟",
+          "answer": "ایجنت‌های بیشتر با خودمختاری و دسترسی ابزار بیشتر سطح رفتار غیرمنتظره را افزایش می‌دهد. محدودیت‌های قوی، نظارت و طراحی حداقل امتیاز مهم‌تر می‌شوند، نه کمتر، وقتی تعداد ایجنت‌ها را مقیاس می‌کنید."
+        },
+        {
+          "question": "آیا این فقط برای تیم‌های بزرگ است؟",
+          "answer": "خیر. توسعه‌دهندگان فردی و تیم‌های کوچک از قبل گردش‌کارهای چندایجنتی اجرا می‌کنند. هزینه هماهنگی وقتی افراد کمتری درگیر هستند پایین‌تر است، اما همان اصول تخصصی‌سازی و تحویل‌های واضح اعمال می‌شود."
+        },
+        {
+          "question": "برای دانستن اینکه کار می‌کند چه چیزی باید اندازه بگیرم؟",
+          "answer": "به زمان چرخه end-to-end برای ویژگی‌ها، نرخ نقص بعد از ادغام، زمان صرف‌شده در بازبینی انسانی، و نسبت خروجی مفید ایجنت به نویز نگاه کنید. تعداد خام PR به‌تنهایی سیگنال ضعیفی است."
+        },
+        {
+          "question": "یک تیم این هفته از کجا باید شروع کند؟",
+          "answer": "یک ایجنت بازبینی اختصاصی (یا پرامپت بازبینی) به هر تغییر غیرپیش‌پاافتاده اضافه کنید. یک گام برنامه‌ریزی صریح برای کار متوسط معرفی کنید. یک ایج��ت پس‌زمینه یا زمان‌بندی‌شده را روی یک وظیفه تکراری کم‌ریسک نگه دارید. کمی وقت در زمینه مشترک پروژه سرمایه‌گذاری کنید تا هر ایجنت هم‌تراز شروع کند."
+        }
+      ],
+      "seo": {
+        "title": "کدنویسی چندایجنتی اینجاست. بیشتر تیم‌ها هنوز از یک ایجنت در یک زمان استفاده می‌کنند",
+        "metaDescription": "ایجنت‌های کدنویسی منفرد پایه جدید هستند. گردش‌کارهای چندایجنتی — برنامه‌ریزان، پیاده‌سازان، بازبین‌ها و ایجنت‌های پس‌زمینه تخصصی — جهش بهره‌وری بعدی هستند. اینجا تیم‌ها واقعاً چگونه در ۲۰۲۶ از آن‌ها استفاده می‌کنند.",
+        "canonical": "https://sinisteroid.ir/fa/blog/multi-agent-coding-is-here-most-teams-are-still-using-one-agent-at-a-time",
+        "openGraph": {
+          "title": "کدنویسی چندایجنتی اینجاست. بیشتر تیم‌ها هنوز از یک ایجنت در یک زمان استفاده می‌کنند",
+          "description": "جهش بعدی بعد از کدنویسی تک‌ایجنتی تخصصی‌سازی هماهنگ است. بیشتر تیم‌ها هنوز جهش را نکرده‌اند.",
+          "image": "/api/uploads/20260920-multi-agent-og-fa.webp"
+        },
+        "twitter": {
+          "title": "کدنویسی چندایجنتی اینجاست",
+          "description": "یک ایجنت پایه است. متخصصان هماهنگ مزیت بعدی هستند.",
+          "image": "/api/uploads/20260920-multi-agent-twitter-fa.webp"
+        },
+        "keywords": "کدنویسی چندایجنتی, هوش مصنوعی چندایجنتی, ارکستراسیون ایجنت, ایجنت‌های کدنویسی همزمان, ایجنت‌های تخصصی هوش مصنوعی, ایجنت‌های پس‌زمینه, گردش‌کار کدنویسی هوش مصنوعی ۲۰۲۶",
+        "focusKeyword": "کدنویسی چندایجنتی"
+      }
+    }
+  }
+}

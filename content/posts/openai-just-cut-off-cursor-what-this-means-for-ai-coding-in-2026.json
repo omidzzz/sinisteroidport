@@ -1,0 +1,869 @@
+{
+  "slug": "openai-just-cut-off-cursor-what-this-means-for-ai-coding-in-2026",
+  "status": "published",
+  "title": "OpenAI Just Cut Off Cursor. What This Means for AI Coding in 2026",
+  "date": "2026-09-10 00:13:33",
+  "tags": [
+    "ai-coding-agents",
+    "ai-tools",
+    "local-ai"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/20260910-001240-b3b2f9f851c35a55.webp",
+    "alt": {
+      "en": "OpenAI logo colliding with Cursor editor interface under a SpaceX rocket silhouette, symbolizing the 2026 partnership cutoff",
+      "fa": "لوگوی OpenAI در حال برخورد با رابط ادیتور Cursor زیر سایهٔ موشک SpaceX، نماد قطع همکاری ۲۰۲۶"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "OpenAI Just Cut Off Cursor. What This Means for AI Coding in 2026",
+      "excerpt": "OpenAI is ending its model partnership with Cursor after SpaceX’s $60 billion acquisition. The November 12, 2026 cutoff is more than a contract dispute — it signals a permanent realignment of power in AI coding tools. Here’s the full timeline, what developers actually lose, the rise of Anthropic and local alternatives, and how to future-proof your stack before the switch.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "OpenAI Just Cut Off Cursor. What This Means for AI Coding in 2026"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "On August 28, 2026, OpenAI published a short, carefully worded blog post. It was not a product announcement. It was a divorce notice. The company informed SpaceX that it would wind down the contract supplying OpenAI models to Cursor, with a proposed shutoff date of November 12, 2026. The stated reason was trust: OpenAI said it could no longer be confident that SpaceX would honor its terms of service, citing past violations by Elon Musk’s companies. Behind the polite corporate language sits one of the most consequential moves in the AI coding market this decade."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cursor was not a side project. It had become one of OpenAI’s largest customers. Internal estimates shared with reporters put the partnership’s annualized revenue potential above one billion dollars. OpenAI still walked away. That decision tells us more about the future of AI coding tools than any model release this year. The age of neutral, multi-provider coding agents is ending. The age of vertically integrated, vendor-locked, politically charged stacks is beginning."
+        },
+        {
+          "type": "paragraph",
+          "text": "This post is a complete map of what just happened, why it happened, what developers lose on November 12, which alternatives actually work in 2026, and how the entire AI coding landscape is being rewritten in real time. If you use Cursor daily, or if you are deciding between Claude Code, Cline, local models, or building your own agent, the next few thousand words matter."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "$60B",
+              "label": "SpaceX all-stock acquisition price for Anysphere (Cursor parent), closed August 2026"
+            },
+            {
+              "value": "Nov 12",
+              "label": "Proposed OpenAI model shutoff date for Cursor under the change-of-control clause"
+            },
+            {
+              "value": "~5%",
+              "label": "Share of Cursor traffic that currently runs on OpenAI models, according to Cursor’s CEO"
+            },
+            {
+              "value": "$1B+",
+              "label": "OpenAI’s internal estimate of annualized revenue from the Cursor partnership before the cutoff"
+            },
+            {
+              "value": "2.5 mo",
+              "label": "Maximum notice period OpenAI says its contract allowed after the change of control"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260910-001247-17491432dbd4e709.webp",
+          "alt": "Timeline graphic showing SpaceX acquisition of Cursor in June–August 2026, OpenAI notice on August 28, and November 12 proposed cutoff",
+          "caption": "Figure 1: From acquisition to cutoff — the compressed timeline that forced OpenAI’s hand.",
+          "altText": "Timeline graphic showing SpaceX acquisition of Cursor in June–August 2026, OpenAI notice on August 28, and November 12 proposed cutoff"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "1. What Exactly Happened — The Timeline Without Spin"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "SpaceX and Cursor first announced a strategic partnership in April 2026. The deal included an option for SpaceX to acquire Anysphere for sixty billion dollars or pay a ten-billion-dollar break-up fee. In June the acquisition was agreed in an all-stock transaction. On August 14 the deal closed. Two weeks later OpenAI exercised the change-of-control clause in its custom contract with Cursor."
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenAI’s official post is short. It states that the company notified SpaceX of its intent to wind down the contract, proposed November 12 as the shutoff date, and gave the maximum notice the contract allowed. The core sentence is blunt: “We are making this choice because we cannot be confident that SpaceX will use our technology within our terms of service, based on our experience with Elon Musk’s companies violating contracts.”"
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenAI specifically referenced two earlier incidents. First, after Musk acquired Twitter (now part of SpaceX), the platform breached OpenAI’s terms. Second, Musk admitted under oath earlier in 2026 that xAI had violated OpenAI’s terms of service — terms that are substantially similar to xAI’s own. With the next frontier model, internally referred to as Astra, approaching release, OpenAI decided the risk of placing advanced capabilities inside a Musk-controlled ecosystem was no longer acceptable."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cursor’s response was measured. Co-founder and CEO Michael Truell noted that OpenAI models account for roughly five percent of Cursor user traffic and that the company is in discussion with OpenAI. Elon Musk’s public reply was shorter: “I couldn’t care less.” Anthropic, for its part, immediately announced it would increase compute support for Claude models inside Cursor. The market did not wait for the November date. The realignment started the same weekend."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "2. Why OpenAI Walked Away From a Billion-Dollar Customer"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "From a pure revenue perspective the decision looks irrational. Cursor had become one of OpenAI’s top five customers by early 2026. By spring the partnership was on track to generate more than one billion dollars in annualized revenue. OpenAI still terminated it. The explanation is not revenue. It is control, competitive positioning, and legal risk management ahead of an expected public listing."
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenAI is preparing to go public in 2027. Investors want predictable, defensible revenue streams. Heavy dependence on a single partner controlled by a long-time adversary creates concentration risk and headline risk. By cutting Cursor off before Astra ships, OpenAI removes the possibility that its most advanced model will be reverse-engineered, distilled, or used to train competing systems inside the SpaceX/xAI stack. The company also signals to other large customers that change-of-control clauses will be enforced."
+        },
+        {
+          "type": "paragraph",
+          "text": "There is a deeper structural point. Coding agents are no longer neutral wrappers around frontier models. They are becoming the primary distribution surface for model capability. Whoever owns the agent owns the developer relationship, the usage data, the fine-tuning signals, and the upsell path into enterprise seats. OpenAI decided it would rather lose short-term revenue than continue feeding a distribution channel controlled by its most vocal critic."
+        },
+        {
+          "type": "paragraph",
+          "text": "The move also mirrors earlier industry behavior. In 2025 Anthropic cut Windsurf off Claude after reports that OpenAI was exploring an acquisition. The same year Anthropic revoked OpenAI’s own API access after detecting internal benchmarking. Model providers have already shown they will weaponize access when ownership or competitive intent shifts. OpenAI simply applied the same logic at larger scale."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "3. What Developers Actually Lose on November 12"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Not every Cursor user is affected equally. Cursor itself states that OpenAI models currently serve about five percent of traffic. The pain is concentrated on teams that standardized on GPT models inside Cursor’s native picker for Chat, Agent, Tab, Auto, Cloud Agents, Background Agents, and the CLI."
+        },
+        {
+          "type": "paragraph",
+          "text": "After the cutoff, native selection of OpenAI models through Cursor’s own infrastructure ends. Users who bring their own OpenAI API key can still route supported Chat and Agent requests directly. OpenAI’s Codex IDE extension also continues to work because Cursor is built on VS Code. However, features that depend on Cursor’s managed OpenAI integration — certain Tab completions, cloud agents, automations, and SDK surfaces — will lose access unless Cursor negotiates a new arrangement or routes through a third-party gateway."
+        },
+        {
+          "type": "paragraph",
+          "text": "Future OpenAI models, including Astra, are explicitly excluded from the existing agreement. Even if a temporary commercial bridge is found, the next generation of capability will not land inside Cursor under the old terms. That is the real long-term loss. Teams that want continuous access to the absolute frontier will need either a direct OpenAI relationship or a different agent stack."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**Immediate impact**: Native OpenAI model selection inside Cursor ends on the proposed November 12 date (still subject to final confirmation between the parties).",
+            "**Workaround that works today**: Bring your own OpenAI API key for Chat and Agent surfaces; install the Codex extension for VS Code-compatible workflows.",
+            "**Surfaces that stay dark**: Managed Tab, Auto, Cloud Agents, Background Agents, and certain CLI/SDK paths that rely on Cursor’s direct OpenAI contract.",
+            "**Future models**: Astra and subsequent releases will not be supplied to Cursor under the terminated agreement.",
+            "**Unaffected models**: Claude, Gemini, Grok, open-weight models, and any other providers Cursor continues to support remain available."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "4. The Immediate Winners: Anthropic, Local Models, and Multi-Provider Agents"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Anthropic moved first. Within hours of OpenAI’s announcement, Anthropic co-founder Tom Brown stated that Cursor has been a trusted partner since Sonnet 3.5 and that Anthropic would expand compute capacity to support Claude models inside Cursor. In a market where model access can be revoked overnight, reliability becomes a product feature. Anthropic is positioning Claude as the default high-capability option for developers who refuse single-vendor risk."
+        },
+        {
+          "type": "paragraph",
+          "text": "Local and open-weight models also gain strategic value. Teams that already run Ollama, Open WebUI, or private inference endpoints suddenly look prescient. When a frontier lab can cut off a billion-dollar customer for political and competitive reasons, the argument for keeping a local fallback stops being theoretical. The same logic applies to agent frameworks that treat models as interchangeable backends rather than fixed dependencies."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is exactly why tools such as Cline and Claude Code have been gaining mindshare among serious developers. Cline’s open-source approach and ability to point at any OpenAI-compatible endpoint, including local servers, make it resilient to exactly this kind of upstream decision. Claude Code’s tight integration with Anthropic’s models now carries less concentration risk than a Cursor + OpenAI stack did two months ago. The market is rewarding architectural optionality."
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+          "text": "The OpenAI–Cursor breakup makes the choice between tightly integrated and open agent architectures more urgent than ever. This detailed comparison walks through real workflows, cost, autonomy, and lock-in risk.",
+          "buttonText": "Read the Claude Code vs Cline Comparison",
+          "buttonUrl": "/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "5. The Structural Shift: From Model Wrappers to Platform Wars"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "For the last three years most AI coding tools were essentially sophisticated wrappers. They provided a better UI, better context management, and better scaffolding around a frontier model that lived somewhere else. The OpenAI–Cursor episode marks the end of that era. Model providers have realized that the agent layer is the real product. Whoever controls the agent controls the developer, the data, and the upgrade path."
+        },
+        {
+          "type": "paragraph",
+          "text": "SpaceX’s acquisition of Cursor was never just about owning a popular editor. It was about owning a high-signal distribution surface for Grok and future SpaceX AI models, plus a direct pipeline of developer usage data into Colossus-scale training runs. OpenAI’s response was the mirror image: refuse to feed that surface. Both sides are treating coding agents as strategic infrastructure rather than neutral software."
+        },
+        {
+          "type": "paragraph",
+          "text": "The same dynamic is visible across the rest of the stack. Microsoft continues to deepen GitHub Copilot’s integration with its own models and Azure. Google pushes Gemini into Android Studio and Colab. Anthropic is expanding Claude’s presence inside Cursor and other third-party surfaces while also building its own deeper tooling. The result is a rapid consolidation into a handful of vertically integrated platforms, each with its own preferred models, its own safety policies, and its own commercial incentives."
+        },
+        {
+          "type": "paragraph",
+          "text": "For individual developers and small teams this creates a new set of trade-offs. Staying on a single platform maximizes convenience and feature velocity. Spreading across multiple agents and model providers maximizes resilience and bargaining power. In 2026 the second strategy is no longer optional for anyone who treats AI coding as core infrastructure."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260910-001258-79a2e91b0627bd30.webp",
+          "alt": "Diagram of competing AI coding platforms in 2026: OpenAI + its own tools, Anthropic + Claude surfaces, SpaceX/xAI + Cursor, Microsoft Copilot, and open local stacks",
+          "caption": "Figure 2: The 2026 AI coding landscape is no longer a free market of interchangeable models — it is a set of competing platforms.",
+          "altText": "Diagram of competing AI coding platforms in 2026: OpenAI + its own tools, Anthropic + Claude surfaces, SpaceX/xAI + Cursor, Microsoft Copilot, and open local stacks"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "6. Practical Migration Paths Before November 12"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "If you currently rely on OpenAI models inside Cursor, you have roughly two months of runway. The smartest teams are already testing three parallel paths."
+        },
+        {
+          "type": "paragraph",
+          "text": "Path one is the minimal-change path. Keep Cursor as the primary editor, add your own OpenAI API key for Chat and Agent, and install the official Codex extension for the remaining surfaces. This preserves muscle memory while removing dependence on Cursor’s managed OpenAI contract. It does not protect you from future model exclusions, but it buys time."
+        },
+        {
+          "type": "paragraph",
+          "text": "Path two is the Anthropic-centric path. Switch the default model inside Cursor to Claude and increase Claude’s share of daily usage. Anthropic’s public commitment to expand support makes this the lowest-friction way to stay inside Cursor while reducing OpenAI exposure. Many teams that already prefer Claude for long-context and agentic work will simply accelerate that preference."
+        },
+        {
+          "type": "paragraph",
+          "text": "Path three is the multi-agent or local path. Introduce Cline, Claude Code, or a custom agent built on the Vercel AI SDK or similar frameworks. Point those agents at Claude, Grok, Gemini, or local models via Ollama. Keep Cursor for the editor experience if you like it, but stop treating it as the sole source of intelligence. This is the highest-effort path and the most resilient."
+        },
+        {
+          "type": "paragraph",
+          "text": "Teams that already maintain a private model router or a small fleet of local endpoints are in the best position. The OpenAI cutoff is simply one more data point confirming that upstream model access is a political and commercial decision, not a pure technical one. Designing for that reality is now table stakes."
+        },
+        {
+          "type": "cta",
+          "title": "How to Choose the Right AI Model for Cline (And Stop Wasting Money on the Wrong One)",
+          "text": "If you are moving part of your workflow to Cline as a hedge against single-provider risk, model selection becomes the highest-leverage decision. This guide breaks down cost, latency, and capability trade-offs for 2026.",
+          "buttonText": "Read the Cline Model Selection Guide",
+          "buttonUrl": "/en/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "7. Local AI and Self-Hosted Agents Suddenly Look Strategic"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Every time a frontier lab cuts off a major customer, the case for local inference strengthens. Ollama, Open WebUI, and private vLLM or TGI deployments are no longer just privacy tools. They are continuity tools. A team that can fall back to a strong open-weight model on its own hardware does not experience the same disruption as a team that lives entirely inside a managed agent."
+        },
+        {
+          "type": "paragraph",
+          "text": "The performance gap between the absolute frontier and the best open-weight models continues to narrow for many coding tasks. For autocomplete, refactoring, test generation, and medium-complexity agent loops, a well-tuned local model is often “good enough” and sometimes preferable because of latency and data-control advantages. The OpenAI–Cursor episode will accelerate investment in exactly these workloads."
+        },
+        {
+          "type": "paragraph",
+          "text": "Of course local models still require operational competence. Cold starts, GPU memory management, quantization choices, and prompt engineering all matter. But the alternative — remaining fully dependent on a single commercial relationship that can be terminated for reasons outside your control — is now visibly riskier than it was in 2025."
+        },
+        {
+          "type": "cta",
+          "title": "How to Fix Ollama’s Most Common Errors (And Why They Happen)",
+          "text": "If you are standing up a local fallback for your coding agents, you will hit the classic Ollama failure modes. This guide covers the nine root causes and the exact fixes.",
+          "buttonText": "Read the Ollama Troubleshooting Guide",
+          "buttonUrl": "/en/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "8. What This Means for AI Coding Agent Design in 2026"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The most important design lesson is that model access is not a permanent property of a product. It is a commercial relationship that can be revoked. Any agent architecture that hard-codes a single provider, or that assumes continuous access to the absolute frontier, is now incomplete."
+        },
+        {
+          "type": "paragraph",
+          "text": "Robust agents in 2026 will treat models as interchangeable backends. They will maintain a small set of primary providers, a secondary set of open-weight or local options, and clear degradation paths when a primary provider becomes unavailable or too expensive. They will also surface the provider choice to the user so that teams can enforce their own risk policies."
+        },
+        {
+          "type": "paragraph",
+          "text": "Personality and system-prompt design remain important, but they are secondary to the control plane. An agent that has a brilliant persona but cannot switch models without a code change is fragile. An agent that can swap backends in seconds and still maintain coherent memory and tool use is the one that survives the next cutoff."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is also why research logging and anonymous session persistence matter. When you own the conversation history and the evaluation data, you can retrain or re-prompt against a new model with far less friction. Agents that treat every interaction as ephemeral are harder to migrate."
+        },
+        {
+          "type": "cta",
+          "title": "My Portfolio’s AI Agent Insults Visitors, Remembers Them, and Never Repeats a Joke",
+          "text": "A concrete example of a personality-driven agent built with serverless architecture, localStorage persistence, and live context — designed from day one to survive model provider changes.",
+          "buttonText": "See the Full Build Walkthrough",
+          "buttonUrl": "/en/blog/my-portfolio-ai-agent-insults-visitors-remembers-them-and-never-repeats-a-joke/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "9. Competitive and Regulatory Ripples"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The OpenAI–Cursor decision will be studied by every other model provider and every other coding-tool company. Change-of-control clauses are about to become standard in large model-supply contracts. Acquirers will factor the risk of model cutoff into their valuations. Targets will negotiate longer notice periods or transitional licenses."
+        },
+        {
+          "type": "paragraph",
+          "text": "Regulators may also take interest. In Europe, cloud-switching rules already protect customers who want to leave a provider. They do not symmetrically protect customers when a provider decides to leave them. If model access becomes a systemic dependency for large numbers of developers, the same policy conversation that occurred around cloud and payment infrastructure will eventually reach AI models."
+        },
+        {
+          "type": "paragraph",
+          "text": "For now the market is solving the problem through competition. Anthropic’s expanded support, the continued rise of open-weight models, and the growth of multi-provider agents are the private-sector response. Whether that response remains sufficient depends on how frequently similar cutoffs occur and how concentrated the remaining providers become."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "10. How to Future-Proof Your AI Coding Stack in the Next 90 Days"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Treat the November 12 date as a forcing function, not a distant deadline. The following checklist is designed for individual developers and small-to-medium teams that currently lean on Cursor + OpenAI."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**Inventory current usage**: Measure what percentage of your daily AI coding traffic still goes through OpenAI models inside Cursor. If it is above 30 percent, prioritize migration.",
+            "**Enable bring-your-own-key**: Configure your OpenAI API key inside Cursor today for Chat and Agent surfaces. Test the Codex extension in parallel.",
+            "**Increase Claude share**: Switch default and secondary models to Claude where quality is comparable. Document any capability regressions.",
+            "**Stand up a local fallback**: Install Ollama or an equivalent, pull a strong coding-oriented open-weight model, and verify that at least one of your agents can target it.",
+            "**Evaluate a second agent**: Spend one full week doing real work in Cline or Claude Code. Measure friction, cost, and output quality against your current Cursor workflow.",
+            "**Externalize memory and evaluation**: Move conversation history and evaluation datasets out of any single vendor’s control so you can replay them against new models.",
+            "**Update procurement and risk docs**: If you are in a company, document model-provider concentration risk and the new mitigation plan. Treat it as infrastructure risk, not a nice-to-have."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Teams that complete this checklist before the cutoff will experience the change as a minor reconfiguration. Teams that ignore it will experience it as a sudden productivity cliff followed by a scramble."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260909-future-proof-ai-coding-stack.webp",
+          "alt": "Checklist visualization of a resilient 2026 AI coding stack with primary, secondary, and local model paths plus multi-agent support",
+          "caption": "Figure 3: A minimal resilient stack — primary commercial model, secondary commercial model, and a local open-weight fallback, all reachable from more than one agent.",
+          "altText": "Checklist visualization of a resilient 2026 AI coding stack with primary, secondary, and local model paths plus multi-agent support"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "11. The Longer Arc: AI Coding After the Platform Wars"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Looking past November 2026, the OpenAI–Cursor episode is an early data point in a larger shift. Coding agents are becoming the primary interface between developers and frontier intelligence. That interface is too strategically important to remain neutral. Every major model provider will eventually prefer to own or tightly control its own agent surface."
+        },
+        {
+          "type": "paragraph",
+          "text": "The open-source and open-weight communities will continue to provide an escape hatch, but the absolute frontier will remain concentrated. The practical question for most developers is not whether they can avoid platforms entirely. It is whether they can maintain enough optionality that no single platform decision can strand them."
+        },
+        {
+          "type": "paragraph",
+          "text": "In that light, the best response to OpenAI’s cutoff is not panic or loyalty. It is architectural humility. Assume that any commercial model relationship can end. Design your tools, your prompts, your evaluation harnesses, and your team practices accordingly. The developers who internalize that lesson in 2026 will be the ones still shipping at full speed in 2028."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cursor itself will almost certainly survive and continue to innovate under SpaceX ownership. Anthropic will gain share. Local models will improve. New agents will appear. The underlying technology keeps moving. What changed on August 28 is the assumption that the best models will always be available through the most popular tools. That assumption is dead. Plan accordingly."
+        },
+        {
+          "type": "cta",
+          "title": "The Best Frontend Agent Skills in 2026 (Official + Community)",
+          "text": "As agent architectures fragment across providers, the skills and tool definitions that work across models become more valuable. This curated list covers the current state of the art.",
+          "buttonText": "Explore Frontend Agent Skills",
+          "buttonUrl": "/en/blog/the-best-frontend-agent-skills-in-2026-official-community/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "12. Final Takeaways for Developers and Engineering Leaders"
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenAI’s decision to cut Cursor off is simultaneously a narrow contractual action and a broad strategic signal. On the narrow level it is a change-of-control enforcement that ends native OpenAI model access inside Cursor on a proposed November 12, 2026 date. On the broad level it confirms that model providers will treat coding agents as competitive terrain and will revoke access when ownership or incentives shift."
+        },
+        {
+          "type": "paragraph",
+          "text": "Developers who treat AI coding tools as disposable utilities will adapt quickly. Developers who treated a single vendor stack as permanent infrastructure will feel the cost. The practical response is the same in both cases: reduce concentration, increase optionality, and treat model access as a renewable commercial relationship rather than a permanent technical property."
+        },
+        {
+          "type": "paragraph",
+          "text": "The teams that emerge strongest from this episode will be the ones that already had a second and third path ready. Everyone else now has a two-month window to build them. Use it."
+        },
+        {
+          "type": "cta",
+          "title": "Prompt Injection Is the Bug AI Companies Can’t Fully Patch. Should You Worry?",
+          "text": "As agents become more autonomous and more deeply integrated into development workflows, the security surface expands. This analysis covers the current state of prompt-injection risk and practical mitigations.",
+          "buttonText": "Read the Prompt Injection Analysis",
+          "buttonUrl": "/en/blog/prompt-injection-is-the-bug-ai-companies-cant-fully-patch-should-you-worry/"
+        },
+        {
+          "type": "cta",
+          "title": "OpenAI Official Decision on Cursor",
+          "text": "Read the primary source: OpenAI’s own statement announcing the wind-down of the Cursor partnership and the rationale based on prior contract violations.",
+          "buttonText": "Read OpenAI’s Blog Post",
+          "buttonUrl": "https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/"
+        }
+      ],
+      "faq": [
+        {
+          "question": "When exactly does OpenAI stop providing models to Cursor?",
+          "answer": "OpenAI proposed November 12, 2026 as the shutoff date and stated that this is the maximum notice period allowed under its contract after the change of control. The final confirmed date may still be adjusted by mutual agreement, but teams should treat mid-November as the operational deadline."
+        },
+        {
+          "question": "Will I still be able to use OpenAI models inside Cursor after the cutoff?",
+          "answer": "Yes, for certain surfaces. You can continue to use OpenAI models by supplying your own OpenAI API key for supported Chat and Agent requests, and by installing OpenAI’s Codex IDE extension. Features that depend on Cursor’s managed OpenAI integration (certain Tab, Auto, Cloud Agents, and related paths) will lose access unless a new commercial arrangement is reached."
+        },
+        {
+          "question": "Why did OpenAI cut off a customer that was generating hundreds of millions in revenue?",
+          "answer": "OpenAI cited lack of confidence that SpaceX would honor its terms of service, based on prior violations by Musk-controlled companies (X and xAI). With its next frontier model (Astra) approaching release and an expected public listing, OpenAI chose to eliminate the risk of advanced model access inside a competitor-controlled distribution channel."
+        },
+        {
+          "question": "How much of Cursor’s traffic actually uses OpenAI models?",
+          "answer": "According to Cursor’s CEO Michael Truell, OpenAI models currently serve roughly five percent of Cursor user traffic. The impact is therefore concentrated on teams that deliberately standardized on GPT models inside the editor rather than on the entire Cursor user base."
+        },
+        {
+          "question": "Is Anthropic increasing support for Claude inside Cursor because of this decision?",
+          "answer": "Yes. Anthropic publicly stated that Cursor has been a trusted partner since Sonnet 3.5 and that it will expand compute capacity to support Claude models in Cursor. This positions Claude as the primary high-capability alternative for developers who want to remain inside the Cursor environment."
+        },
+        {
+          "question": "Should I switch entirely away from Cursor?",
+          "answer": "Not necessarily. Cursor remains a strong editor and continues to support other model providers. The more important decision is whether to reduce concentration risk by enabling bring-your-own-key, increasing Claude usage, and introducing a second agent (Cline, Claude Code, or a custom stack) that can target local or alternative commercial models."
+        },
+        {
+          "question": "What is the best long-term hedge against future model cutoffs?",
+          "answer": "Maintain at least three paths: a primary commercial model, a secondary commercial model from a different provider, and a local or open-weight fallback reachable from more than one agent. Externalize conversation history and evaluation data so you can replay workloads against new models without depending on any single vendor’s memory layer."
+        },
+        {
+          "question": "Does this affect OpenAI’s own IDE extensions or API access?",
+          "answer": "No. OpenAI’s Codex extension and direct API access continue to work. The termination is limited to the managed model-supply contract between OpenAI and Cursor. Developers who already use OpenAI models outside of Cursor’s native picker are largely unaffected."
+        },
+        {
+          "question": "How does this change the competitive landscape for AI coding tools in 2026?",
+          "answer": "It accelerates the shift from neutral model wrappers toward vertically integrated platforms. Model providers now treat coding agents as strategic distribution surfaces and will revoke access when ownership or incentives conflict. Multi-provider and local-capable agents gain strategic value as resilience tools."
+        }
+      ],
+      "seo": {
+        "title": "OpenAI Just Cut Off Cursor — What This Means for AI Coding in 2026 (Full Analysis)",
+        "metaDescription": "OpenAI is ending its model partnership with Cursor after SpaceX’s $60B acquisition. Full timeline, developer impact, Anthropic response, local alternatives, and how to future-proof your AI coding stack before the November 12, 2026 cutoff.",
+        "canonical": "https://sinisteroid.ir/blog/openai-just-cut-off-cursor-what-this-means-for-ai-coding-in-2026",
+        "openGraph": {
+          "title": "OpenAI Just Cut Off Cursor. What This Means for AI Coding in 2026",
+          "description": "The full story behind OpenAI’s decision to wind down its Cursor partnership, the November 12 cutoff, and the structural realignment of AI coding tools.",
+          "image": "/api/uploads/20260909-openai-cursor-cutoff-og.webp"
+        },
+        "twitter": {
+          "title": "OpenAI Cut Off Cursor — AI Coding in 2026 Just Changed",
+          "description": "SpaceX bought Cursor for $60B. OpenAI walked away from a potential $1B+ customer. Here’s what developers need to do before November 12.",
+          "image": "/api/uploads/20260909-openai-cursor-cutoff-twitter.webp"
+        },
+        "keywords": "OpenAI Cursor cutoff, Cursor SpaceX acquisition, AI coding agents 2026, Claude vs OpenAI Cursor, Cline alternative, local AI coding, Astra model, change of control AI, Anthropic Cursor support, future of AI coding tools",
+        "focusKeyword": "OpenAI Cursor cutoff 2026"
+      }
+    },
+    "fa": {
+      "title": "اوپن‌ای‌آی دسترسی Cursor را قطع کرد. این تصمیم برای کدنویسی با هوش مصنوعی در ۲۰۲۶ چه معنایی دارد",
+      "excerpt": "اوپن‌ای‌آی پس از خرید ۶۰ میلیارد دلاری Cursor توسط SpaceX، قرارداد تأمین مدل را خاتمه می‌دهد. تاریخ پیشنهادی قطع دسترسی ۱۲ نوامبر ۲۰۲۶ است. این فقط یک اختلاف قراردادی نیست؛ نشانه‌ای از بازآرایی دائمی قدرت در ابزارهای کدنویسی هوش مصنوعی است. جدول زمانی کامل، آنچه توسعه‌دهندگان واقعاً از دست می‌دهند، ظهور Anthropic و جایگزین‌های محلی، و نحوهٔ مقاوم‌سازی پشتهٔ کاری قبل از تغییر.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "اوپن‌ای‌آی دسترسی Cursor را قطع کرد. این تصمیم برای کدنویسی با هوش مصنوعی در ۲۰۲۶ چه معنایی دارد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "در ۲۸ اوت ۲۰۲۶ اوپن‌ای‌آی یک پست وبلاگ کوتاه و با دقت نوشته‌شده منتشر کرد. این یک اعلام محصول نبود. اعلامیهٔ طلاق بود. شرکت به SpaceX اطلاع داد که قرارداد تأمین مدل‌های اوپن‌ای‌آی به Cursor را خاتمه می‌دهد و تاریخ پیشنهادی قطع دسترسی را ۱۲ نوامبر ۲۰۲۶ اعلام کرد. دلیل اعلام‌شده اعتماد بود: اوپن‌ای‌آی گفت دیگر نمی‌تواند مطمئن باشد که SpaceX شرایط استفاده را رعایت کند و به نقض‌های قبلی شرکت‌های ایلان ماسک اشاره کرد. پشت زبان مودبانهٔ شرکتی، یکی از مهم‌ترین حرکت‌های بازار ابزارهای کدنویسی هوش مصنوعی در این دهه پنهان است."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cursor یک پروژهٔ جانبی نبود. به یکی از بزرگ‌ترین مشتریان اوپن‌ای‌آی تبدیل شده بود. برآوردهای داخلی که با خبرنگاران به اشتراک گذاشته شد، پتانسیل درآمد سالانهٔ این همکاری را بیش از یک میلیارد دلار نشان می‌داد. اوپن‌ای‌آی با این وجود کنار کشید. این تصمیم بیش از هر انتشار مدلی در سال جاری دربارهٔ آیندهٔ ابزارهای کدنویسی هوش مصنوعی حرف می‌زند. دوران ایجنت‌های خنثی و چندارائه‌دهنده‌ای در حال پایان است. دوران پشته‌های یکپارچهٔ عمودی، قفل‌شده به فروشنده، و سیاسی‌شده آغاز شده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "این مطلب نقشهٔ کامل آنچه رخ داد، چرایی آن، آنچه توسعه‌دهندگان در ۱۲ نوامبر از دست می‌دهند، کدام جایگزین‌ها در ۲۰۲۶ واقعاً کار می‌کنند، و اینکه چگونه کل چشم‌انداز کدنویسی با هوش مصنوعی در حال بازنویسی است را ارائه می‌دهد. اگر روزانه از Cursor استفاده می‌کنید، یا بین Claude Code، Cline، مدل‌های محلی یا ساخت ایجنت خودتان تصمیم می‌گیرید، چند هزار کلمهٔ بعدی اهمیت دارد."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۶۰ میلیارد دلار",
+              "label": "قیمت خرید تمام‌سهامی SpaceX برای Anysphere (شرکت مادر Cursor) که در اوت ۲۰۲۶ بسته شد"
+            },
+            {
+              "value": "۱۲ نوامبر",
+              "label": "تاریخ پیشنهادی قطع دسترسی مدل‌های اوپن‌ای‌آی به Cursor بر اساس بند تغییر کنترل"
+            },
+            {
+              "value": "حدود ۵٪",
+              "label": "سهم ترافیک Cursor که طبق گفتهٔ مدیرعامل روی مدل‌های اوپن‌ای‌آی اجرا می‌شود"
+            },
+            {
+              "value": "بیش از ۱ میلیارد دلار",
+              "label": "برآورد داخلی اوپن‌ای‌آی از درآمد سالانهٔ همکاری با Cursor قبل از قطع"
+            },
+            {
+              "value": "۲٫۵ ماه",
+              "label": "حداکثر دورهٔ اخطاری که اوپن‌ای‌آی می‌گوید قرارداد پس از تغییر کنترل اجازه می‌داد"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260910-001319-eb3ebc36400e97a1.webp",
+          "alt": "نمودار زمانی خرید Cursor توسط SpaceX از ژوئن تا اوت ۲۰۲۶، اعلام اوپن‌ای‌آی در ۲۸ اوت و تاریخ پیشنهادی قطع در ۱۲ نوامبر",
+          "caption": "شکل ۱: از خرید تا قطع دسترسی — جدول زمانی فشرده‌ای که دست اوپن‌ای‌آی را مجبور کرد.",
+          "altText": "نمودار زمانی خرید Cursor توسط SpaceX از ژوئن تا اوت ۲۰۲۶، اعلام اوپن‌ای‌آی در ۲۸ اوت و تاریخ پیشنهادی قطع در ۱۲ نوامبر"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱. دقیقاً چه اتفاقی افتاد — جدول زمانی بدون چرخش"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "SpaceX و Cursor ابتدا در آوریل ۲۰۲۶ یک همکاری استراتژیک اعلام کردند. این توافق شامل گزینه‌ای برای خرید Anysphere توسط SpaceX به قیمت شصت میلیارد دلار یا پرداخت ده میلیارد دلار جریمهٔ فسخ بود. در ژوئن خرید به صورت معاملهٔ تمام‌سهامی توافق شد. در ۱۴ اوت معامله بسته شد. دو هفته بعد اوپن‌ای‌آی بند تغییر کنترل قرارداد سفارشی خود با Cursor را فعال کرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "پست رسمی اوپن‌ای‌آی کوتاه است. اعلام می‌کند که به SpaceX اطلاع داده قصد خاتمهٔ قرارداد را دارد، تاریخ ۱۲ نوامبر را پیشنهاد کرده و حداکثر اخطار مجاز قرارداد را داده است. جملهٔ اصلی صریح است: «این انتخاب را می‌کنیم چون نمی‌توانیم مطمئن باشیم که SpaceX از فناوری ما در چارچوب شرایط استفاده استفاده کند، بر اساس تجربهٔ ما با نقض قرارداد توسط شرکت‌های ایلان ماسک.»"
+        },
+        {
+          "type": "paragraph",
+          "text": "اوپن‌ای‌آی مشخصاً به دو حادثهٔ قبلی اشاره کرد. اول، پس از خرید توییتر توسط ماسک (که اکنون بخشی از SpaceX است)، پلتفرم شرایط اوپن‌ای‌آی را نقض کرد. دوم، ماسک در اوایل ۲۰۲۶ زیر سوگند اعتراف کرد که xAI شرایط خدمات اوپن‌ای‌آی را نقض کرده — شرایطی که اساساً مشابه شرایط خود xAI است. با نزدیک شدن مدل مرزی بعدی که داخلیاً Astra نامیده می‌شود، اوپن‌ای‌آی تصمیم گرفت ریسک قرار دادن قابلیت‌های پیشرفته در اکوسیستم تحت کنترل ماسک دیگر قابل‌قبول نیست."
+        },
+        {
+          "type": "paragraph",
+          "text": "پاسخ Cursor سنجیده بود. بنیان‌گذار و مدیرعامل مایکل ترول گفت مدل‌های اوپن‌ای‌آی حدود پنج درصد ترافیک کاربران Cursor را تشکیل می‌دهند و شرکت در حال مذاکره با اوپن‌ای‌آی است. پاسخ عمومی ایلان ماسک کوتاه‌تر بود: «اصلاً برام مهم نیست.» Anthropic نیز بلافاصله اعلام کرد ظرفیت محاسباتی پشتیبانی از مدل‌های Claude داخل Cursor را افزایش می‌دهد. بازار منتظر تاریخ نوامبر نماند. بازآرایی از همان آخر هفته آغاز شد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۲. چرا اوپن‌ای‌آی از یک مشتری میلیارد دلاری کنار کشید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "از منظر خالص درآمد این تصمیم غیرمنطقی به نظر می‌رسد. Cursor تا اوایل ۲۰۲۶ به یکی از پنج مشتری برتر اوپن‌ای‌آی تبدیل شده بود. تا بهار همکاری در مسیر تولید بیش از یک میلیارد دلار درآمد سالانه بود. اوپن‌ای‌آی با این وجود آن را خاتمه داد. توضیح درآمد نیست. کنترل، موقعیت رقابتی و مدیریت ریسک حقوقی پیش از عرضهٔ عمومی مورد انتظار است."
+        },
+        {
+          "type": "paragraph",
+          "text": "اوپن‌ای‌آی در حال آماده‌سازی برای عرضهٔ عمومی در ۲۰۲۷ است. سرمایه‌گذاران جریان‌های درآمدی قابل‌پیش‌بینی و قابل‌دفاع می‌خواهند. وابستگی سنگین به یک شریک واحد که توسط یک رقیب دیرینه کنترل می‌شود، ریسک تمرکز و ریسک تیتر ایجاد می‌کند. با قطع Cursor قبل از عرضهٔ Astra، اوپن‌ای‌آی امکان مهندسی معکوس، تقطیر یا استفاده از مدل پیشرفته‌اش برای آموزش سیستم‌های رقیب در پشتهٔ SpaceX/xAI را حذف می‌کند. شرکت همچنین به سایر مشتریان بزرگ سیگنال می‌دهد که بندهای تغییر کنترل اجرا خواهند شد."
+        },
+        {
+          "type": "paragraph",
+          "text": "نکتهٔ ساختاری عمیق‌تری هم وجود دارد. ایجنت‌های کدنویسی دیگر پوشش‌های خنثی دور مدل‌های مرزی نیستند. به سطح اصلی توزیع قابلیت مدل تبدیل شده‌اند. هرکس ایجنت را مالک باشد، رابطه با توسعه‌دهنده، داده‌های استفاده، سیگنال‌های fine-tuning و مسیر فروش صعودی به صندلی‌های سازمانی را مالک است. اوپن‌ای‌آی تصمیم گرفت درآمد کوتاه‌مدت را از دست بدهد تا به تغذیهٔ کانال توزیعی که توسط منتقدترین صدایش کنترل می‌شود ادامه ندهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "این حرکت همچنین رفتار قبلی صنعت را بازتاب می‌دهد. در ۲۰۲۵ Anthropic پس از گزارش‌هایی مبنی بر بررسی خرید Windsurf توسط اوپن‌ای‌آی، دسترسی Claude را قطع کرد. همان سال Anthropic دسترسی API خود اوپن‌ای‌آی را پس از تشخیص بنچمارک داخلی لغو کرد. ارائه‌دهندگان مدل از قبل نشان داده‌اند که وقتی مالکیت یا قصد رقابتی تغییر کند، دسترسی را به سلاح تبدیل می‌کنند. اوپن‌ای‌آی همان منطق را در مقیاس بزرگ‌تر اعمال کرد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۳. توسعه‌دهندگان در ۱۲ نوامبر واقعاً چه چیزی را از دست می‌دهند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "همهٔ کاربران Cursor به یک اندازه تحت تأثیر قرار نمی‌گیرند. خود Cursor می‌گوید مدل‌های اوپن‌ای‌آی در حال حاضر حدود پنج درصد ترافیک را تشکیل می‌دهند. درد روی تیم‌هایی متمرکز است که مدل‌های GPT را داخل انتخاب‌گر بومی Cursor برای Chat، Agent، Tab، Auto، Cloud Agents، Background Agents و CLI استاندارد کرده‌اند."
+        },
+        {
+          "type": "paragraph",
+          "text": "پس از قطع، انتخاب بومی مدل‌های اوپن‌ای‌آی از طریق زیرساخت خود Cursor پایان می‌یابد. کاربرانی که کلید API خود اوپن‌ای‌آی را بیاورند همچنان می‌توانند درخواست‌های پشتیبانی‌شدهٔ Chat و Agent را مستقیماً هدایت کنند. افزونهٔ Codex IDE اوپن‌ای‌آی نیز به کار خود ادامه می‌دهد چون Cursor روی VS Code ساخته شده. با این حال، ویژگی‌هایی که به یکپارچه‌سازی مدیریت‌شدهٔ اوپن‌ای‌آی توسط Cursor وابسته هستند — برخی تکمیل‌های Tab، ایجنت‌های ابری، اتوماسیون‌ها و سطوح SDK — دسترسی را از دست می‌دهند مگر اینکه Cursor ترتیب تجاری جدیدی مذاکره کند یا از طریق درگاه شخص ثالث هدایت کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل‌های آیندهٔ اوپن‌ای‌آی، از جمله Astra، صراحتاً از توافق موجود مستثنی شده‌اند. حتی اگر پل تجاری موقتی پیدا شود، نسل بعدی قابلیت تحت شرایط قدیمی داخل Cursor قرار نمی‌گیرد. این زیان واقعی بلندمدت است. تیم‌هایی که می‌خواهند دسترسی مداوم به مرز مطلق داشته باشند، یا به رابطهٔ مستقیم با اوپن‌ای‌آی نیاز دارند یا به پشتهٔ ایجنت متفاوت."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**تأثیر فوری**: انتخاب بومی مدل‌های اوپن‌ای‌آی داخل Cursor در تاریخ پیشنهادی ۱۲ نوامبر (هنوز مشروط به تأیید نهایی طرفین) پایان می‌یابد.",
+            "**راه‌حل موقت که امروز کار می‌کند**: کلید API خود اوپن‌ای‌آی را برای سطوح Chat و Agent اضافه کنید؛ افزونهٔ Codex را برای گردش‌کارهای سازگار با VS Code نصب کنید.",
+            "**سطوحی که تاریک می‌مانند**: Tab مدیریت‌شده، Auto، Cloud Agents، Background Agents و برخی مسیرهای CLI/SDK که به قرارداد مستقیم Cursor با اوپن‌ای‌آی وابسته هستند.",
+            "**مدل‌های آینده**: Astra و نسخه‌های بعدی تحت توافق خاتمه‌یافته به Cursor عرضه نخواهند شد.",
+            "**مدل‌های تحت تأثیر قرارنگرفته**: Claude، Gemini، Grok، مدل‌های وزن‌باز و هر ارائه‌دهندهٔ دیگری که Cursor به پشتیبانی ادامه دهد در دسترس می‌مانند."
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۴. برنده‌های فوری: Anthropic، مدل‌های محلی و ایجنت‌های چندارائه‌دهنده"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Anthropic اول حرکت کرد. چند ساعت پس از اعلام اوپن‌ای‌آی، تام براون بنیان‌گذار Anthropic اعلام کرد Cursor از زمان Sonnet 3.5 شریک مورد اعتماد بوده و Anthropic ظرفیت محاسباتی پشتیبانی از مدل‌های Claude داخل Cursor را گسترش می‌دهد. در بازاری که دسترسی مدل می‌تواند یک‌شبه لغو شود، قابلیت اطمینان به ویژگی محصول تبدیل می‌شود. Anthropic در حال موقعیت‌یابی Claude به عنوان گزینهٔ پیش‌فرض با قابلیت بالا برای توسعه‌دهندگانی است که ریسک تک‌فروشنده را رد می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل‌های محلی و وزن‌باز نیز ارزش استراتژیک پیدا می‌کنند. تیم‌هایی که از قبل Ollama، Open WebUI یا نقاط پایانی استنتاج خصوصی اجرا می‌کنند ناگهان آینده‌نگر به نظر می‌رسند. وقتی یک آزمایشگاه مرزی می‌تواند مشتری میلیارد دلاری را به دلایل سیاسی و رقابتی قطع کند، استدلال نگه داشتن پشتیبان محلی دیگر نظری نیست. همین منطق برای چارچوب‌های ایجنتی که مدل‌ها را به عنوان بک‌اندهای قابل‌تعویض در نظر می‌گیرند نه وابستگی‌های ثابت، صدق می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "دقیقاً به همین دلیل ابزارهایی مانند Cline و Claude Code در میان توسعه‌دهندگان جدی در حال کسب ذهنیت هستند. رویکرد متن‌باز Cline و توانایی اشاره به هر نقطهٔ پایانی سازگار با OpenAI، از جمله سرورهای محلی، آن را در برابر دقیقاً این نوع تصمیم بالادستی مقاوم می‌کند. یکپارچه‌سازی تنگاتنگ Claude Code با مدل‌های Anthropic اکنون ریسک تمرکز کمتری نسبت به پشتهٔ Cursor + اوپن‌ای‌آی دو ماه پیش دارد. بازار در حال پاداش دادن به اختیار معماری است."
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code در برابر Cline: کدام ایجنت کدنویسی هوش مصنوعی را در ۲۰۲۶ انتخاب کنیم؟",
+          "text": "قطع همکاری اوپن‌ای‌آی و Cursor انتخاب بین معماری‌های یکپارچه و باز ایجنت را فوری‌تر از همیشه کرده است. این مقایسهٔ دقیق گردش‌کارهای واقعی، هزینه، خودمختاری و ریسک قفل‌شدگی را بررسی می‌کند.",
+          "buttonText": "مطالعهٔ مقایسهٔ Claude Code و Cline",
+          "buttonUrl": "/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۵. تغییر ساختاری: از پوشش‌های مدل تا جنگ پلتفرم‌ها"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "در سه سال گذشته بیشتر ابزارهای کدنویسی هوش مصنوعی اساساً پوشش‌های پیچیده بودند. رابط کاربری بهتر، مدیریت زمینهٔ بهتر و اسکفولدینگ بهتر دور یک مدل مرزی که جای دیگری زندگی می‌کرد ارائه می‌دادند. اپیزود اوپن‌ای‌آی–Cursor پایان آن دوران را رقم می‌زند. ارائه‌دهندگان مدل دریافته‌اند که لایهٔ ایجنت محصول واقعی است. هرکس ایجنت را کنترل کند، توسعه‌دهنده، داده و مسیر ارتقا را کنترل می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "خرید Cursor توسط SpaceX هرگز فقط دربارهٔ مالکیت یک ادیتور محبوب نبود. دربارهٔ مالکیت سطح توزیع با سیگنال بالا برای Grok و مدل‌های آیندهٔ هوش مصنوعی SpaceX، به علاوهٔ خط لولهٔ مستقیم داده‌های استفادهٔ توسعه‌دهندگان به اجراهای آموزشی مقیاس Colossus بود. پاسخ اوپن‌ای‌آی تصویر آینه‌ای بود: از تغذیهٔ آن سطح خودداری کند. هر دو طرف ایجنت‌های کدنویسی را به عنوان زیرساخت استراتژیک در نظر می‌گیرند نه نرم‌افزار خنثی."
+        },
+        {
+          "type": "paragraph",
+          "text": "همین پویایی در بقیهٔ پشته قابل مشاهده است. مایکروسافت به عمیق‌تر کردن یکپارچه‌سازی GitHub Copilot با مدل‌های خود و Azure ادامه می‌دهد. گوگل Gemini را به Android Studio و Colab هل می‌دهد. Anthropic حضور Claude را داخل Cursor و سطوح شخص ثالث دیگر گسترش می‌دهد در حالی که ابزارهای عمیق‌تر خود را نیز می‌سازد. نتیجه تثبیت سریع به تعداد انگشت‌شماری پلتفرم یکپارچهٔ عمودی است، هرکدام با مدل‌های ترجیحی، سیاست‌های ایمنی و مشوق‌های تجاری خود."
+        },
+        {
+          "type": "paragraph",
+          "text": "برای توسعه‌دهندگان فردی و تیم‌های کوچک این مجموعهٔ جدیدی از مبادله‌ها ایجاد می‌کند. ماندن روی یک پلتفرم راحتی و سرعت ویژگی را به حداکثر می‌رساند. پخش شدن در چندین ایجنت و ارائه‌دهندهٔ مدل تاب‌آوری و قدرت چانه‌زنی را به حداکثر می‌رساند. در ۲۰۲۶ استراتژی دوم دیگر برای هرکسی که کدنویسی با هوش مصنوعی را زیرساخت اصلی می‌داند اختیاری نیست."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260910-001328-87c641f0ada8035a.webp",
+          "alt": "نمودار پلتفرم‌های رقیب کدنویسی هوش مصنوعی در ۲۰۲۶: اوپن‌ای‌آی و ابزارهایش، Anthropic و سطوح Claude، SpaceX/xAI و Cursor، Microsoft Copilot و پشته‌های محلی باز",
+          "caption": "شکل ۲: چشم‌انداز کدنویسی هوش مصنوعی ۲۰۲۶ دیگر بازار آزاد مدل‌های قابل‌تعویض نیست — مجموعه‌ای از پلتفرم‌های رقیب است.",
+          "altText": "نمودار پلتفرم‌های رقیب کدنویسی هوش مصنوعی در ۲۰۲۶: اوپن‌ای‌آی و ابزارهایش، Anthropic و سطوح Claude، SpaceX/xAI و Cursor، Microsoft Copilot و پشته‌های محلی باز"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۶. مسیرهای عملی مهاجرت قبل از ۱۲ نوامبر"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اگر در حال حاضر به مدل‌های اوپن‌ای‌آی داخل Cursor وابسته هستید، حدود دو ماه زمان دارید. تیم‌های هوشمند از قبل سه مسیر موازی را آزمایش می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مسیر یک مسیر تغییر حداقلی است. Cursor را به عنوان ادیتور اصلی نگه دارید، کلید API خود اوپن‌ای‌آی را برای Chat و Agent اضافه کنید و افزونهٔ رسمی Codex را برای سطوح باقی‌مانده نصب کنید. این حافظهٔ عضلانی را حفظ می‌کند در حالی که وابستگی به قرارداد مدیریت‌شدهٔ اوپن‌ای‌آی Cursor را حذف می‌کند. شما را در برابر استثناهای مدل آینده محافظت نمی‌کند، اما زمان می‌خرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "مسیر دو مسیر محور Anthropic است. مدل پیش‌فرض داخل Cursor را به Claude تغییر دهید و سهم Claude از استفادهٔ روزانه را افزایش دهید. تعهد عمومی Anthropic به گسترش پشتیبانی این را کم‌اصطکاک‌ترین راه برای ماندن داخل Cursor در حالی که قرار گرفتن در معرض اوپن‌ای‌آی را کاهش می‌دهد، می‌کند. بسیاری از تیم‌هایی که از قبل Claude را برای کار با زمینهٔ طولانی و ایجنتی ترجیح می‌دهند، صرفاً آن ترجیح را تسریع می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مسیر سه مسیر چندایجنتی یا محلی است. Cline، Claude Code یا یک ایجنت سفارشی ساخته‌شده روی Vercel AI SDK یا چارچوب‌های مشابه را معرفی کنید. آن ایجنت‌ها را به Claude، Grok، Gemini یا مدل‌های محلی از طریق Ollama اشاره دهید. اگر از Cursor خوشتان می‌آید آن را برای تجربهٔ ادیتور نگه دارید، اما دیگر آن را تنها منبع هوش در نظر نگیرید. این پرزحمت‌ترین مسیر و مقاوم‌ترین است."
+        },
+        {
+          "type": "paragraph",
+          "text": "تیم‌هایی که از قبل یک مسیریاب مدل خصوصی یا ناوگان کوچکی از نقاط پایانی محلی نگهداری می‌کنند در بهترین موقعیت هستند. قطع اوپن‌ای‌آی صرفاً یک نقطهٔ دادهٔ دیگر است که تأیید می‌کند دسترسی مدل بالادستی یک تصمیم سیاسی و تجاری است، نه صرفاً فنی. طراحی برای آن واقعیت اکنون شرط اساسی است."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه مدل هوش مصنوعی درست را برای Cline انتخاب کنیم (و دیگر پول خود را هدر ندهیم)",
+          "text": "اگر بخشی از گردش‌کار خود را به عنوان محافظ در برابر ریسک تک‌ارائه‌دهنده به Cline منتقل می‌کنید، انتخاب مدل به تصمیم با بالاترین اهرم تبدیل می��شود. این راهنما مبادله‌های هزینه، تأخیر و قابلیت را برای ۲۰۲۶ تجزیه می‌کند.",
+          "buttonText": "مطالعهٔ راهنمای انتخاب مدل Cline",
+          "buttonUrl": "/fa/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۷. هوش مصنوعی محلی و ایجنت‌های خودمیزبان ناگهان استراتژیک به نظر می‌رسند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هر بار که یک آزمایشگاه مرزی مشتری بزرگ را قطع می‌کند، پروندهٔ استنتاج محلی قوی‌تر می‌شود. Ollama، Open WebUI و استقرارهای خصوصی vLLM یا TGI دیگر فقط ابزارهای حریم خصوصی نیستند. ابزارهای تداوم هستند. تیمی که بتواند به یک مدل وزن‌باز قوی روی سخت‌افزار خود بازگردد، همان اختلال تیمی که کاملاً داخل یک ایجنت مدیریت‌شده زندگی می‌کند را تجربه نمی‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "شکاف عملکرد بین مرز مطلق و بهترین مدل‌های وزن‌باز برای بسیاری از وظایف کدنویسی همچنان در حال باریک شدن است. برای تکمیل خودکار، بازآرایی، تولید تست و حلقه‌های ایجنتی با پیچیدگی متوسط، یک مدل محلی خوب تنظیم‌شده اغلب «به اندازهٔ کافی خوب» است و گاهی به دلیل مزایای تأخیر و کنترل داده ترجیح داده می‌شود. اپیزود اوپن‌ای‌آی–Cursor سرمایه‌گذاری دقیقاً در این بارهای کاری را تسریع می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "البته مدل‌های محلی همچنان به صلاحیت عملیاتی نیاز دارند. شروع سرد، مدیریت حافظهٔ GPU، انتخاب‌های quantize و مهندسی پرامپت همه مهم هستند. اما جایگزین — باقی ماندن کاملاً وابسته به یک رابطهٔ تجاری واحد که می‌تواند به دلایلی خارج از کنترل شما خاتمه یابد — اکنون به‌طور قابل‌مشاهده‌ای پرریسک‌تر از ۲۰۲۵ است."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)",
+          "text": "اگر در حال برپایی یک پشتیبان محلی برای ایجنت‌های کدنویسی خود هستید، با حالت‌های شکست کلاسیک Ollama مواجه می‌شوید. این راهنما نه علت ریشه‌ای و رفع دقیق آن‌ها را پوشش می‌دهد.",
+          "buttonText": "مطالعهٔ راهنمای عیب‌یابی اولاما",
+          "buttonUrl": "/fa/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۸. این تصمیم برای طراحی ایجنت کدنویسی هوش مصنوعی در ۲۰۲۶ چه معنایی دارد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "مهم‌ترین درس طراحی این است که دسترسی مدل یک ویژگی دائمی محصول نیست. یک رابطهٔ تجاری است که می‌تواند لغو شود. هر معماری ایجنتی که یک ارائه‌دهندهٔ واحد را سخت‌کد کند، یا دسترسی مداوم به مرز مطلق را فرض کند، اکنون ناقص است."
+        },
+        {
+          "type": "paragraph",
+          "text": "ایجنت‌های مقاوم در ۲۰۲۶ مدل‌ها را به عنوان بک‌اندهای قابل‌تعویض در نظر می‌گیرند. مجموعهٔ کوچکی از ارائه‌دهندگان اصلی، مجموعهٔ ثانویه‌ای از گزینه‌های وزن‌باز یا محلی، و مسیرهای تخریب واضح وقتی ارائه‌دهندهٔ اصلی در دسترس نباشد یا خیلی گران شود را نگهداری می‌کنند. همچنین انتخاب ارائه‌دهنده را به کاربر نشان می‌دهند تا تیم‌ها بتوانند سیاست‌های ریسک خود را اجرا کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "طراحی شخصیت و پرامپت سیستم همچنان مهم است، اما نسبت به صفحهٔ کنترل ثانویه است. ایجنتی که شخصیت درخشان دارد اما نمی‌تواند بدون تغییر کد مدل عوض کند، شکننده است. ایجنتی که می‌تواند در چند ثانیه بک‌اند عوض کند و همچنان حافظه و استفاده از ابزار منسجم نگه دارد، همانی است که از قطع بعدی جان سالم به در می‌برد."
+        },
+        {
+          "type": "paragraph",
+          "text": "به همین دلیل لاگینگ پژوهشی و تداوم نشست ناشناس اهمیت دارد. وقتی تاریخچهٔ مکالمه و داده‌های ارزیابی را مالک باشید، می‌توانید با اصطکاک بسیار کمتر در برابر مدل جدید بازآموزش یا بازپرامپت کنید. ایجنت‌هایی که هر تعامل را زودگذر در نظر می‌گیرند سخت‌تر مهاجرت می‌شوند."
+        },
+        {
+          "type": "cta",
+          "title": "عامل هوش مصنوعی نمونه‌کار من به بازدیدکنندگان توهین می‌کند، آن‌ها را به خاطر می‌سپارد و هیچ‌وقت یک جوک را تکرار نمی‌کند",
+          "text": "نمونهٔ مشخصی از یک ایجنت شخصیت‌محور ساخته‌شده با معماری سرورلس، تداوم localStorage و زمینهٔ زنده — از روز اول طراحی‌شده تا تغییرات ارائه‌دهندهٔ مدل را تحمل کند.",
+          "buttonText": "مشاهدهٔ راهنمای کامل ساخت",
+          "buttonUrl": "/fa/blog/my-portfolio-ai-agent-insults-visitors-remembers-them-and-never-repeats-a-joke/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۹. امواج رقابتی و نظارتی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "تصمیم اوپن‌ای‌آی–Cursor توسط هر ارائه‌دهندهٔ مدل دیگر و هر شرکت ابزار کدنویسی دیگر مطالعه خواهد شد. بندهای تغییر کنترل به زودی در قراردادهای بزرگ تأمین مدل استاندارد می‌شوند. خریداران ریسک قطع مدل را در ارزش‌گذاری‌های خود لحاظ می‌کنند. اهداف دوره‌های اخطار طولانی‌تر یا مجوزهای انتقالی مذاکره می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "ناظران نیز ممکن است علاقه نشان دهند. در اروپا قوانین تغییر ابر از قبل از مشتریانی که می‌خواهند ارائه‌دهنده را ترک کنند محافظت می‌کنند. به طور متقارن از مشتریانی که ارائه‌دهنده تصمیم می‌گیرد آن‌ها را ترک کند محافظت نمی‌کنند. اگر دسترسی مدل به وابستگی سیستمی برای تعداد زیادی از توسعه‌دهندگان تبدیل شود، همان گفتگوی سیاستی که حول زیرساخت ابر و پرداخت رخ داد در نهایت به مدل‌های هوش مصنوعی می‌رسد."
+        },
+        {
+          "type": "paragraph",
+          "text": "در حال حاضر بازار از طریق رقابت مشکل را حل می‌کند. پشتیبانی گسترش‌یافتهٔ Anthropic، ادامهٔ رشد مدل‌های وزن‌باز و رشد ایجنت‌های چندارائه‌دهنده پاسخ بخش خصوصی است. اینکه آیا این پاسخ کافی می‌ماند به اینکه چند وقت یک‌بار قطع‌های مشابه رخ دهد و ارائه‌دهندگان باقی‌مانده چقدر متمرکز شوند بستگی دارد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱۰. چگونه پشتهٔ کدنویسی هوش مصنوعی خود را در ۹۰ روز آینده مقاوم‌سازی کنید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "تاریخ ۱۲ نوامبر را به عنوان یک تابع اجباری در نظر بگیرید، نه یک ضرب‌الاجل دور. چک‌لیست زیر برای توسعه‌دهندگان فردی و تیم‌های کوچک تا متوسط که در حال حاضر به Cursor + اوپن‌ای‌آی تکیه می‌کنند طراحی شده است."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**فهرست‌برداری از استفادهٔ فعلی**: اندازه‌گیری کنید چه درصدی از ترافیک روزانهٔ کدنویسی هوش مصنوعی شما هنوز از طریق مدل‌های اوپن‌ای‌آی داخل Cursor می‌گذرد. اگر بالای ۳۰ درصد است، مهاجرت را اولویت دهید.",
+            "**فعال‌سازی کلید خودی**: امروز کلید API اوپن‌ای‌آی خود را داخل Cursor برای سطوح Chat و Agent پیکربندی کنید. افزونهٔ Codex را به صورت موازی آزمایش کنید.",
+            "**افزایش سهم Claude**: مدل پیش‌فرض و ثانویه را جایی که کیفیت قابل‌مقایسه است به Claude تغییر دهید. هر پسرفت قابلیتی را مست ۲۰۲۶، اپیزود اوپن‌ای‌آی–Cursor یک نقطهٔ دادهٔ اولیه در یک تغییر بزرگ‌تر است. ایجنت‌های کدنویسی به رابط اصلی بین توسعه‌دهندگان و هوش مرزی تبدیل می‌شوند. آن رابط برای باقی ماندن خنثی خیلی استراتژیک است. هر ارائه‌دهندهٔ مدل عمده در نهایت ترجیح می‌دهد سطح ایجنت خود را مالک باشد یا محکم کنترل کند."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "جوامع متن‌باز و وزن‌باز به ارائهٔ دریچهٔ فرار ادامه می‌دهند، اما مرز مطلق متمرکز باقی می‌ماند. سؤال عملی برای بیشتر توسعه‌دهندگان این نیست که آیا می‌توانند کاملاً از پلتفرم‌ها اجتناب کنند. این است که آیا می‌توانند به اندازهٔ کافی اختیار نگه دارند که هیچ تصمیم پلتفرم واحدی آن‌ها را سرگردان نکند."
+        },
+        {
+          "type": "paragraph",
+          "text": "در آن نور، بهترین پاسخ به قطع اوپن‌ای‌آی وحشت یا وفاداری نیست. فروتنی معماری است. فرض کنید هر رابطهٔ مدل تجاری می‌تواند پایان یابد. ابزارها، پرامپت‌ها، harnessهای ارزیابی و شیوه‌های تیمی خود را بر این اساس طراحی کنید. توسعه‌دهندگانی که این درس را در ۲۰۲۶ درونی کنند همان‌هایی خواهند بود که در ۲۰۲۸ همچنان با سرعت کامل تحویل می‌دهند."
+        },
+        {
+          "type": "paragraph",
+          "text": "خود Cursor تقریباً قطعاً تحت مالکیت SpaceX زنده می‌ماند و به نوآوری ادامه می‌دهد. Anthropic سهم می‌گیرد. مدل‌های محلی بهبود می‌یابند. ایجنت‌های جدید ظاهر می‌شوند. فناوری زیربنایی به حرکت ادامه می‌دهد. آنچه در ۲۸ اوت تغییر کرد فرض این بود که بهترین مدل‌ها همیشه از طریق محبوب‌ترین ابزارها در دسترس خواهند بود. آن فرض مرده است. بر این اساس برنامه‌ریزی کنید."
+        },
+        {
+          "type": "cta",
+          "title": "بهترین مهارت‌های ایجنت فرانت‌اند در ۲۰۲۶ (رسمی + جامعه)",
+          "text": "با تکه‌تکه شدن معماری‌های ایجنت در میان ارائه‌دهندگان، مهارت‌ها و تعاریف ابزاری که در مدل‌ها کار می‌کنند ارزشمندتر می‌شوند. این فهرست گزینشی وضعیت فعلی هنر را پوشش می‌دهد.",
+          "buttonText": "کاوش مهارت‌های ایجنت فرانت‌اند",
+          "buttonUrl": "/fa/blog/the-best-frontend-agent-skills-in-2026-official-community/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱۲. نکات پایانی برای توسعه‌دهندگان و رهبران مهندسی"
+        },
+        {
+          "type": "paragraph",
+          "text": "تصمیم اوپن‌ای‌آی برای قطع Cursor همزمان یک اقدام قراردادی محدود و یک سیگنال استراتژیک گسترده است. در سطح محدود، اجرای بند تغییر کنترل است که دسترسی بومی مدل اوپن‌ای‌آی داخل Cursor را در تاریخ پیشنهادی ۱۲ نوامبر ۲۰۲۶ پایان می‌دهد. در سطح گسترده تأیید می‌کند که ارائه‌دهندگان مدل ایجنت‌های کدنویسی را به عنوان زمین رقابتی در نظر می‌گیرند و وقتی مالکیت یا مشوق‌ها تغییر کند دسترسی را لغو می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "توسعه‌دهندگانی که ابزارهای کدنویسی هوش مصنوعی را به عنوان ابزارهای دورریختنی در نظر می‌گیرند سریع سازگار می‌شوند. توسعه‌دهندگانی که یک پشتهٔ فروشندهٔ واحد را زیرساخت دائمی در نظر گرفتند هزینه را احساس می‌کنند. پاسخ عملی در هر دو مورد یکسان است: کاهش تمرکز، افزایش اختیار، و در نظر گرفتن دسترسی مدل به عنوان یک رابطهٔ تجاری قابل‌تجدید نه یک ویژگی فنی دائمی."
+        },
+        {
+          "type": "paragraph",
+          "text": "تیم‌هایی که از این اپیزود قوی‌تر بیرون می‌آیند همان‌هایی خواهند بود که از قبل مسیر دوم و سوم آماده داشتند. بقیه اکنون یک پنجرهٔ دوماهه برای ساخت آن‌ها دارند. از آن استفاده کنید."
+        },
+        {
+          "type": "cta",
+          "title": "پرامپت اینجکشن باگی است که شرکت‌های هوش مصنوعی نمی‌توانند کاملاً وصله کنند. باید نگران باشید؟",
+          "text": "با خودمختارتر شدن ایجنت‌ها و یکپارچه‌سازی عمیق‌تر در گردش‌کارهای توسعه، سطح حملهٔ امنیتی گسترش می‌یابد. این تحلیل وضعیت فعلی ریسک پرامپت اینجکشن و کاهش‌های عملی را پوشش می‌دهد.",
+          "buttonText": "مطالعهٔ تحلیل پرامپت اینجکشن",
+          "buttonUrl": "/fa/blog/prompt-injection-is-the-bug-ai-companies-cant-fully-patch-should-you-worry/"
+        },
+        {
+          "type": "cta",
+          "title": "تصمیم رسمی اوپن‌ای‌آی دربارهٔ Cursor",
+          "text": "منبع اصلی را بخوانید: بیانیهٔ خود اوپن‌ای‌آی اعلام خاتمهٔ همکاری با Cursor و منطق مبتنی بر نقض‌های قراردادی قبلی.",
+          "buttonText": "مطالعهٔ پست وبلاگ اوپن‌ای‌آی",
+          "buttonUrl": "https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/"
+        }
+      ],
+      "faq": [
+        {
+          "question": "اوپن‌ای‌آی دقیقاً چه زمانی تأمین مدل به Cursor را متوقف می‌کند؟",
+          "answer": "اوپن‌ای‌آی تاریخ ۱۲ نوامبر ۲۰۲۶ را به عنوان تاریخ قطع پیشنهاد کرد و گفت این حداکثر دورهٔ اخطار مجاز تحت قرارداد پس از تغییر کنترل است. تاریخ نهایی تأییدشده ممکن است هنوز با توافق مت��ابل تنظیم شود، ��ما تیم‌ها باید اواسط نوامبر را به عنوان ضرب‌الاجل عملیاتی در نظر بگیرند."
+        },
+        {
+          "question": "آیا پس از قطع همچنان می‌توانم از مدل‌های اوپن‌ای‌آی داخل Cursor استفاده کنم؟",
+          "answer": "بله، برای برخی سطوح. می‌توانید با ارائهٔ کلید API خود اوپن‌ای‌آی برای درخواست‌های پشتیبانی‌شدهٔ Chat و Agent و با نصب افزونهٔ Codex IDE اوپن‌ای‌آی ادامه دهید. ویژگی‌هایی که به یکپارچه‌سازی مدیریت‌شدهٔ اوپن‌ای‌آی Cursor وابسته هستند (برخی Tab، Auto، Cloud Agents و مسیرهای مرتبط) دسترسی را از دست می‌دهند مگر اینکه ترتیب تجاری جدیدی حاصل شود."
+        },
+        {
+          "question": "چرا اوپن‌ای‌آی مشتری‌ای را که صدها میلیون دلار درآمد تولید می‌کرد قطع کرد؟",
+          "answer": "اوپن‌ای‌آی به عدم اطمینان از اینکه SpaceX شرایط استفاده را رعایت کند، بر اساس نقض‌های قبلی شرکت‌های تحت کنترل ماسک (X و xAI) استناد کرد. با نزدیک شدن مدل مرزی بعدی (Astra) و عرضهٔ عمومی مورد انتظار، اوپن‌ای‌آی ترجیح داد ریسک دسترسی مدل پیشرفته داخل کانال توزیع تحت کنترل رقیب را حذف کند."
+        },
+        {
+          "question": "چه مقدار از ترافیک Cursor واقعاً از مدل‌های اوپن‌ای‌آی استفاده می‌کند؟",
+          "answer": "طبق گفتهٔ مدیرعامل Cursor مایکل ترول، مدل‌های اوپن‌ای‌آی در حال حاضر حدود پنج درصد ترافیک کاربران Cursor را تشکیل می‌دهند. بنابراین تأثیر روی تیم‌هایی متمرکز است که عمداً مدل‌های GPT را داخل ادیتور استاندارد کرده‌اند نه کل پایگاه کاربران Cursor."
+        },
+        {
+          "question": "آیا Anthropic به خاطر این تصمیم پشتیبانی Claude داخل Cursor را افزایش می‌دهد؟",
+          "answer": "بله. Anthropic علناً اعلام کرد Cursor از زمان Sonnet 3.5 شریک مورد اعتماد بوده و ظرفیت محاسباتی پشتیبانی از مدل‌های Claude در Cursor را گسترش می‌دهد. این Claude را به عنوان جایگزین اصلی با قابلیت بالا برای توسعه‌دهندگانی که می‌خواهند داخل محیط Cursor بمانند موقعیت‌یابی می‌کند."
+        },
+        {
+          "question": "آیا باید کاملاً از Cursor دور شوم؟",
+          "answer": "لزوماً نه. Cursor همچنان یک ادیتور قوی باقی می‌ماند و به پشتیبانی از ارائه‌دهندگان مدل دیگر ادامه می‌دهد. تصمیم مهم‌تر این است که آیا ریسک تمرکز را با فعال‌سازی کلید خودی، افزایش استفاده از Claude و معرفی ایجنت دوم (Cline، Claude Code یا پشتهٔ سفارشی) که بتواند مدل‌های محلی یا تجاری جایگزین را هدف قرار دهد کاهش دهید."
+        },
+        {
+          "question": "بهترین محافظ بلندمدت در برابر قطع‌های مدل آینده چیست؟",
+          "answer": "حداقل سه مسیر نگه دارید: یک مدل تجاری اصلی، یک مدل تجاری ثانویه از ارائه‌دهندهٔ متفاوت، و یک پشتیبان محلی یا وزن‌باز که از بیش از یک ایجنت قابل‌دسترسی باشد. تاریخچهٔ مکالمه و داده‌های ارزیابی را خارجی کنید تا بتوانید بارهای کاری را در برابر مدل‌های جدید بدون وابستگی به لایهٔ حافظهٔ هر فروشندهٔ واحد بازپخش کنید."
+        },
+        {
+          "question": "آیا این روی افزونه‌های IDE خود اوپن‌ای‌آی یا دسترسی API تأثیر می‌گذارد؟",
+          "answer": "خیر. افزونهٔ Codex اوپن‌ای‌آی و دسترسی مستقیم API به کار خود ادامه می‌دهند. خاتمه محدود به قرارداد تأمین مدل مدیریت‌شده بین اوپن‌ای‌آی و Cursor است. توسعه‌دهندگانی که از قبل از مدل‌های اوپن‌ای‌آی خارج از انتخاب‌گر بومی Cursor استفاده می‌کنند عمدتاً تحت تأثیر قرار نمی‌گیرند."
+        },
+        {
+          "question": "این چگونه چشم‌انداز رقابتی ابزارهای کدنویسی هوش مصنوعی در ۲۰۲۶ را تغییر می‌دهد؟",
+          "answer": "تغییر از پوشش‌های خنثی مدل به سمت پلتفرم‌های یکپارچهٔ عمودی را تسریع می‌کند. ارائه‌دهندگان مدل اکنون ایجنت‌های کدنویسی را به عنوان سطوح توزیع استراتژیک در نظر می‌گیرند و وقتی مالکیت یا مشوق‌ها در تضاد باشد دسترسی را لغو می‌کنند. ایجنت‌های چندارائه‌دهنده و قادر به محلی به عنوان ابزارهای تاب‌آوری ارزش استراتژیک پیدا می‌کنند."
+        }
+      ],
+      "seo": {
+        "title": "اوپن‌ای‌آی دسترسی Cursor را قطع کرد — معنای این تصمیم برای کدنویسی هوش مصنوعی در ۲۰۲۶ (تحلیل کامل)",
+        "metaDescription": "اوپن‌ای‌آی پس از خرید ۶۰ میلیارد دلاری Cursor توسط SpaceX همکاری مدل را خاتمه می‌دهد. جدول زمانی کامل، تأثیر بر توسعه‌دهندگان، پاسخ Anthropic، جایگزین‌های محلی و نحوهٔ مقاوم‌سازی پشتهٔ کدنویسی هوش مصنوعی قبل از قطع ۱۲ نوامبر ۲۰۲۶.",
+        "canonical": "https://sinisteroid.ir/fa/blog/openai-just-cut-off-cursor-what-this-means-for-ai-coding-in-2026",
+        "openGraph": {
+          "title": "اوپن‌ای‌آی دسترسی Cursor را قطع کرد. این تصمیم برای کدنویسی با هوش مصنوعی در ۲۰۲۶ چه معنایی دارد",
+          "description": "داستان کامل پشت تصمیم اوپن‌ای‌آی برای خاتمهٔ همکاری با Cursor، قطع ۱۲ نوامبر و بازآرایی ساختاری ابزارهای کدنویسی هوش مصنوعی.",
+          "image": "/api/uploads/20260909-openai-cursor-cutoff-og-fa.webp"
+        },
+        "twitter": {
+          "title": "اوپن‌ای‌آی Cursor را قطع کرد — کدنویسی هوش مصنوعی در ۲۰۲۶ تازه تغییر کرد",
+          "description": "SpaceX Cursor را به قیمت ۶۰ میلیارد دلار خرید. اوپن‌ای‌آی از مشتری بالقوهٔ بیش از ۱ میلیارد دلاری کنار کشید. آنچه توسعه‌دهندگان باید قبل از ۱۲ نوامبر انجام دهند.",
+          "image": "/api/uploads/20260909-openai-cursor-cutoff-twitter-fa.webp"
+        },
+        "keywords": "قطع اوپن‌ای‌آی Cursor, خرید Cursor توسط SpaceX, ایجنت کدنویسی هوش مصنوعی ۲۰۲۶, Claude در برابر اوپن‌ای‌آی Cursor, جایگزین Cline, کدنویسی هوش مصنوعی محلی, مدل Astra, تغییر کنترل هوش مصنوعی, پشتیبانی Anthropic Cursor, آینده ابزارهای کدنویسی هوش مصنوعی",
+        "focusKeyword": "قطع اوپن‌ای‌آی Cursor ۲۰۲۶"
+      }
+    }
+  }
+}

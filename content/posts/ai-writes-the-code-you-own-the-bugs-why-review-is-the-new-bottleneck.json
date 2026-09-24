@@ -1,0 +1,632 @@
+{
+  "slug": "ai-writes-the-code-you-own-the-bugs-why-review-is-the-new-bottleneck",
+  "status": "published",
+  "title": "AI Writes the Code. You Own the Bugs: Why Review Is the New Bottleneck",
+  "date": "2026-09-17 16:18:48",
+  "tags": [
+    "ai-coding-agent",
+    "code-review",
+    "developer-productivity",
+    "agentic-ai",
+    "software-engineering",
+    "ai-engineering",
+    "debugging",
+    "engineering-culture",
+    "claude-code",
+    "cursor",
+    "open-source-ai",
+    "validation",
+    "technical-debt",
+    "career-growth",
+    "llm"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/20260917-161759-54e0d50425a5900d.webp",
+    "alt": {
+      "en": "Developer overwhelmed by a flood of AI-generated pull requests and subtle bugs while the code itself is produced instantly",
+      "fa": "توسعه‌دهنده غرق در سیل pull requestهای تولیدشده توسط هوش مصنوعی و باگ‌های ظریف در حالی که خود کد فوراً تولید می‌شود"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "AI Writes the Code. You Own the Bugs: Why Review Is the New Bottleneck",
+      "excerpt": "AI coding agents now write a large share of the code for many developers. The time saved on typing has not returned as free time. It has moved into reviewing, debugging, and validating AI output. Review is the new bottleneck — and most teams are still treating it like the old one.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "AI Writes the Code. You Own the Bugs: Why Review Is the New Bottleneck"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "In 2026 a striking pattern has become clear across surveys and engineering teams: AI now writes a substantial portion of the code, yet developers report they are not freer. The hours saved on pure coding are almost entirely reinvested in reviewing AI-generated changes, debugging subtle failures the models introduce, and learning the next tool. Coding velocity went up. The bottleneck simply moved."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is not a temporary adjustment period. It is the new shape of the work. When agents can produce multi-file changes, tests, and pull requests in minutes, the scarce resource becomes human judgment: deciding what is correct, what is safe to merge, and what the long-term consequences will be. Teams that keep treating review as a quick final gate are discovering the queue is now the constraint."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "42%",
+              "label": "Developers who say AI now writes at least half their code (up from ~12% a year earlier)"
+            },
+            {
+              "value": "13 hrs/week",
+              "label": "Average coding time developers report AI saves them"
+            },
+            {
+              "value": "0 hrs",
+              "label": "Of those saved hours that returned as free time for most respondents"
+            },
+            {
+              "value": "67%",
+              "label": "Developers spending more time reviewing AI-generated code than a year ago"
+            },
+            {
+              "value": "Review & validation",
+              "label": "The new primary bottleneck once coding velocity is no longer the constraint"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260917-161806-e6c2288392676ffc.webp",
+          "alt": "Diagram showing the shift from coding as the bottleneck to review, validation, and judgment as the new constraint",
+          "caption": "Figure 1: When agents accelerate code production, the constraint moves downstream to human review and validation.",
+          "altText": "Diagram showing the shift from coding as the bottleneck to review, validation, and judgment as the new constraint"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "1. What the Data Actually Shows"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Multiple 2026 surveys and internal engineering reports converge on the same story. AI assistance has dramatically reduced the time required to produce code. At the same time, the proportion of the week spent writing new code from scratch has fallen, while time spent reviewing, debugging AI-introduced issues, and learning tools has risen."
+        },
+        {
+          "type": "paragraph",
+          "text": "The net result is higher output measured in pull requests and features, but no corresponding increase in free capacity. The work did not disappear. It changed character. Developers are spending more of their cognitive budget on verification than on generation."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "2. Why AI-Generated Code Is Harder to Review"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "AI output is not simply “more code.” It has characteristics that make traditional review practices less effective:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**Volume and speed** — Agents can generate large, multi-file changes faster than a human can carefully read them. Review queues grow even when individual engineers feel productive.",
+            "**Subtle correctness issues** — Models are good at producing plausible, compiling, and even test-passing code that is still wrong in edge cases, concurrency, security, or long-term maintainability.",
+            "**Loss of author context** — When the human did not struggle through the implementation, the mental model of why certain decisions were made is weaker. Reviewers (including the original author) have less intuition for what might break.",
+            "**Inconsistent style and abstraction** — Different sessions or models produce slightly different patterns, increasing the cognitive load of reading a stream of AI-touched PRs.",
+            "**Tests that confirm the happy path** — Agents are excellent at writing tests that pass for the cases they considered. They are less reliable at surfacing the cases they missed."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The result is a review process that feels both more necessary and more exhausting than before."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260917-161811-b3c2ac4cfaa7ce9f.webp",
+          "alt": "Illustration of a reviewer facing dense AI-generated diffs with hidden edge-case bugs and weak mental models",
+          "caption": "Figure 2: AI-generated changes often look clean while still requiring deeper scrutiny than human-written code of similar size.",
+          "altText": "Illustration of a reviewer facing dense AI-generated diffs with hidden edge-case bugs and weak mental models"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "3. The New Bottleneck in Practice"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Engineering leaders report that code review queue time and clarity of requirements/specs have become the top constraints once AI is widely adopted. The old advice of “just review carefully” does not scale when the volume of changes increases several times over."
+        },
+        {
+          "type": "paragraph",
+          "text": "Teams that fail to adapt see two failure modes: either review becomes a rubber stamp (and subtle bugs ship), or review becomes a painful gate that re-introduces the latency AI was supposed to remove. Neither is sustainable."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "4. What Actually Helps"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The teams handling this shift better are changing both process and tooling around review and validation."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Treat review as a first-class skill and capacity"
+        },
+        {
+          "type": "paragraph",
+          "text": "Review is no longer a quick side task. It needs explicit time, training, and sometimes dedicated capacity. Senior and staff engineers who are good at spotting systemic issues in AI output become disproportionately valuable."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Raise the quality of the input to the agent"
+        },
+        {
+          "type": "paragraph",
+          "text": "Better specs, clearer acceptance criteria, stronger existing tests, and tighter architectural guardrails reduce the volume of low-quality AI output that reaches human review. Garbage in still produces garbage out — only faster."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Automate the easy parts of validation"
+        },
+        {
+          "type": "paragraph",
+          "text": "Strong CI, comprehensive test suites, static analysis, security scanning, and automated style/architecture checks catch a large class of problems before a human ever looks at the diff. The human review can then focus on judgment, design, and risk."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Change the shape of the PR"
+        },
+        {
+          "type": "paragraph",
+          "text": "Many teams are moving toward smaller, more focused agent-generated changes, explicit “AI-assisted” labels, and required human confirmation of key invariants. Some experiment with agent-generated review comments as a first pass, with humans responsible for the final decision."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Build better mental models on purpose"
+        },
+        {
+          "type": "paragraph",
+          "text": "When you did not write the code, you need deliberate practices to reconstruct understanding: walking through the change, writing a short design note, or pairing on the review. Skipping this step is how subtle bugs survive."
+        },
+        {
+          "type": "cta",
+          "title": "Stop Paying for AI Coding Agents: The Open-Source Alternatives That Actually Work in 2026",
+          "text": "The tools you choose affect both the volume and the character of the code that reaches review. Understanding the open landscape helps you control the input side of the bottleneck.",
+          "buttonText": "Read the Open-Source Agents Guide",
+          "buttonUrl": "/en/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "5. Implications for Individual Engineers"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The skills that matter most are shifting. Pure coding speed is less differentiating. The ability to rapidly evaluate correctness, risk, and long-term cost of AI-generated changes is becoming central."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is one reason the jump from senior to staff remains difficult for many: staff-level impact increasingly involves shaping the systems, guardrails, and review culture that make high-volume AI assistance safe and effective, not just producing more code personally."
+        },
+        {
+          "type": "cta",
+          "title": "Staff Engineer Is a Different Job (Not Just a Better Senior)",
+          "text": "The shift toward review, validation, and orchestration makes the distinction between senior execution and staff-level leverage even clearer.",
+          "buttonText": "Read the Staff Engineer Piece",
+          "buttonUrl": "/en/blog/staff-engineer-is-a-different-job-not-just-a-better-senior/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "6. What Teams Should Stop Doing"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Measuring success primarily by lines of code or number of PRs generated.",
+            "Assuming that because the agent wrote tests, the change is well-tested.",
+            "Treating review as an afterthought that can be squeezed into the gaps.",
+            "Giving agents broad write access without corresponding investment in automated guardrails and human review capacity.",
+            "Expecting individual engineers to absorb unbounded review load without changes to process or staffing."
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260917-161821-fe7a084973b18da6.webp",
+          "alt": "Team adjusting process and tooling so review capacity scales with AI-generated output volume",
+          "caption": "Figure 3: Sustainable AI-assisted development requires deliberate investment in review and validation capacity, not just generation tools.",
+          "altText": "Team adjusting process and tooling so review capacity scales with AI-generated output volume"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "7. Closing"
+        },
+        {
+          "type": "paragraph",
+          "text": "AI coding agents have made generating code dramatically cheaper and faster. That is a real productivity gain. It is not a free lunch. The work of ensuring the code is correct, safe, maintainable, and aligned with the system’s long-term health still belongs to humans — and that work has become the bottleneck."
+        },
+        {
+          "type": "paragraph",
+          "text": "Teams and individuals who treat review and validation as first-class concerns, invest in better inputs and automated checks, and develop stronger judgment skills will capture the upside. Those who only celebrate the generation speed will eventually drown in the consequences."
+        },
+        {
+          "type": "paragraph",
+          "text": "The code is easy now. Owning the bugs is the hard part."
+        },
+        {
+          "type": "cta",
+          "title": "The Mid-Level Trap: Why Senior Engineers Stop Growing",
+          "text": "The shift in where value is created also changes what growth looks like after the senior level.",
+          "buttonText": "Read the Mid-Level Trap",
+          "buttonUrl": "/en/blog/the-mid-level-trap-why-senior-engineers-stop-growing/"
+        },
+        {
+          "type": "cta",
+          "title": "Prompt Injection Is the Bug AI Companies Can’t Fully Patch",
+          "text": "When agents have write access and tool use, new classes of risk appear. Understanding the security surface remains essential.",
+          "buttonText": "Read the Prompt Injection Analysis",
+          "buttonUrl": "/en/blog/prompt-injection-is-the-bug-ai-companies-cant-fully-patch-should-you-worry/"
+        }
+      ],
+      "faq": [
+        {
+          "question": "Is AI really writing half of developers’ code now?",
+          "answer": "Surveys in 2026 show a sharp rise: a significant share of developers (around 42% in one major survey) report that AI writes at least half their code, up dramatically from the previous year. The exact percentage varies by team and tooling, but the direction is clear."
+        },
+        {
+          "question": "Why didn’t the time savings turn into free time?",
+          "answer": "The hours saved on pure coding were reinvested into reviewing AI output, debugging issues the models introduced, and learning new tools and workflows. Output volume rose; available capacity did not."
+        },
+        {
+          "question": "Why is AI-generated code harder to review than human code?",
+          "answer": "It arrives in higher volume, often lacks the author’s deep mental model, can contain subtle plausible-but-wrong logic, and may come with tests that only cover the cases the model considered. Traditional review habits do not scale cleanly."
+        },
+        {
+          "question": "What is the most effective way to reduce review burden?",
+          "answer": "Improve the quality of inputs to the agent (clearer specs, stronger tests, architectural guardrails), automate as much validation as possible in CI, and keep human review focused on judgment and risk rather than catching basic issues."
+        },
+        {
+          "question": "Should we slow down AI adoption until review processes catch up?",
+          "answer": "Not necessarily. The higher-leverage approach is to evolve review, validation, and guardrails in parallel with generation capability. Teams that only generate faster without changing the downstream process create new problems."
+        },
+        {
+          "question": "How does this change what senior and staff engineers should focus on?",
+          "answer": "The ability to evaluate, shape, and systemically improve AI-assisted work becomes more valuable than pure personal coding throughput. Staff-level impact increasingly includes the systems and culture that make high-volume AI assistance safe."
+        },
+        {
+          "question": "Are open-source agents better or worse for this problem?",
+          "answer": "They give you more control over models, prompts, and tooling, which can help with consistency and guardrails. They do not remove the fundamental need for strong human review and validation."
+        },
+        {
+          "question": "What should individual developers do differently starting this week?",
+          "answer": "Treat review of AI output as deliberate work, not a quick scan. Strengthen the tests and checks that run before human review. Practice reconstructing understanding of changes you did not fully author. And protect time for the judgment work that agents cannot do."
+        }
+      ],
+      "seo": {
+        "title": "AI Writes the Code. You Own the Bugs: Why Review Is the New Bottleneck",
+        "metaDescription": "AI now writes a large share of code, but the time saved is spent on review and debugging. Learn why validation is the new bottleneck and what teams and individuals can do about it in 2026.",
+        "canonical": "https://sinisteroid.ir/blog/ai-writes-the-code-you-own-the-bugs-why-review-is-the-new-bottleneck",
+        "openGraph": {
+          "title": "AI Writes the Code. You Own the Bugs: Why Review Is the New Bottleneck",
+          "description": "Coding got faster. Review and validation became the constraint. Here’s what the data shows and how to adapt.",
+          "image": "/api/uploads/20260917-ai-review-bottleneck-og.webp"
+        },
+        "twitter": {
+          "title": "AI Writes the Code. You Own the Bugs",
+          "description": "The productivity gain is real. The free time is not. Review is the new bottleneck in 2026.",
+          "image": "/api/uploads/20260917-ai-review-bottleneck-twitter.webp"
+        },
+        "keywords": "AI code review, AI coding bottleneck, reviewing AI generated code, developer productivity 2026, agentic coding problems, AI debugging, code review capacity, AI writes code",
+        "focusKeyword": "AI code review bottleneck"
+      }
+    },
+    "fa": {
+      "title": "هوش مصنوعی کد را می‌نویسد. شما مالک باگ‌ها هستید: چرا بازبینی گلوگاه جدید است",
+      "excerpt": "ایجنت‌های کدنویسی هوش مصنوعی اکنون بخش بزرگی از کد بسیاری از توسعه‌دهندگان را می‌نویسند. زمان صرفه‌جویی‌شده در تایپ به‌عنوان وقت آزاد برنگشته است. به بازبینی، دیباگ و اعتبارسنجی خروجی هوش مصنوعی منتقل شده. بازبینی گلوگاه جدید است — و بیشتر تیم‌ها هنوز با آن مثل گلوگاه قدیمی رفتار می‌کنند.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "هوش مصنوعی کد را می‌نویسد. شما مالک باگ‌ها هستید: چرا بازبینی گلوگاه جدید است"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "در ۲۰۲۶ یک الگوی چشمگیر در میان نظرسنجی‌ها و تیم‌های مهندسی واضح شده: هوش مصنوعی اکنون بخش قابل‌توجهی از کد را می‌نویسد، با این حال توسعه‌دهندگان گزارش می‌دهند آزادتر نشده‌اند. ساعت‌های صرفه‌جویی‌شده در کدنویسی خالص تقریباً به‌طور کامل در بازبینی تغییرات تولیدشده توسط هوش مصنوعی، دیباگ شکست‌های ظریفی که مدل‌ها معرفی می‌کنند، و یادگیری ابزار بعدی سرمایه‌گذاری مجدد شده است. سرعت کدنویسی بالا رفت. گلوگاه فقط جابه‌جا شد."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یک دوره تنظیم موقت نیست. شکل جدید کار است. وقتی ایجنت‌ها می‌توانند تغییرات چندفایلی، تست‌ها و pull requestها را در چند دقیقه تولید کنند، منبع کمیاب قضاوت انسانی می‌شود: تصمیم‌گیری درباره اینکه چه چیزی درست است، چه چیزی برای ادغام ایمن است، و پیامدهای بلندمدت چه خواهد بود. تیم‌هایی که همچنان بازبینی را یک دروازه نهایی سریع می‌دانند در حال کشف این هستند که صف اکنون محدودیت است."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۴۲٪",
+              "label": "توسعه‌دهندگانی که می‌گویند هوش مصنوعی اکنون حداقل نیمی از کد آن‌ها را می‌نویسد (افزایش از حدود ۱۲٪ یک سال قبل)"
+            },
+            {
+              "value": "۱۳ ساعت در هفته",
+              "label": "میانگین زمان کدنویسی که توسعه‌دهندگان گزارش می‌دهند هوش مصنوعی برایشان صرفه‌جویی می‌کند"
+            },
+            {
+              "value": "۰ ساعت",
+              "label": "از آن ساعت‌های صرفه‌جویی‌شده که برای بیشتر پاسخ‌دهندگان به‌عنوان وقت آزاد برگشت"
+            },
+            {
+              "value": "۶۷٪",
+              "label": "توسعه‌دهندگانی که بیشتر از یک سال قبل وقت صرف بازبینی کد تولیدشده توسط هوش مصنوعی می‌کنند"
+            },
+            {
+              "value": "بازبینی و اعتبارسنجی",
+              "label": "گلوگاه اصلی جدید وقتی سرعت کدنویسی دیگر محدودیت نیست"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260917-161830-96fd675550fcbcac.webp",
+          "alt": "نمودار نشان‌دهنده جابه‌جایی از کدنویسی به‌عنوان گلوگاه به بازبینی، اعتبارسنجی و قضاوت به‌عنوان محدودیت جدید",
+          "caption": "شکل ۱: وقتی ایجنت‌ها تولید کد را تسریع می‌کنند، محدودیت به پایین‌دست به بازبینی و اعتبارسنجی انسانی منتقل می‌شود.",
+          "altText": "نمودار نشان‌دهنده جابه‌جایی از کدنویسی به‌عنوان گلوگاه به بازبینی، اعتبارسنجی و قضاوت به‌عنوان محدودیت جدید"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱. داده‌ها واقعاً چه نشان می‌دهند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "چندین نظرسنجی ۲۰۲۶ و گزارش‌های داخلی مهندسی روی یک داستان همگرا می‌شوند. کمک هوش مصنوعی زمان لازم برای تولید کد را به‌طور چشمگیری کاهش داده. در عین حال، سهم هفته‌ای که صرف نوشتن کد جدید از صفر می‌شود کاهش یافته، در حالی که زمان صرف‌شده برای بازبینی، دیباگ مسائل معرفی‌شده توسط هوش مصنوعی و یادگیری ابزارها افزایش یافته است."
+        },
+        {
+          "type": "paragraph",
+          "text": "نتیجه خالص خروجی بالاتر اندازه‌گیری‌شده در pull requestها و ویژگی‌هاست، اما بدون افزایش متناظر در ظرفیت آزاد. کار ناپدید نشد. شخصیت آن تغییر کرد. توسعه‌دهندگان بودجه شناختی بیشتری را صرف تأیید می‌کنند تا تولید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۲. چرا کد تولیدشده توسط هوش مصنوعی سخت‌تر بازبینی می‌شود"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "خروجی هوش مصنوعی صرفاً «کد بیشتر» نیست. ویژگی‌هایی دارد که شیوه‌های سنتی بازبینی را کمتر مؤثر می‌کند:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**حجم و سرعت** — ایجنت‌ها می‌توانند تغییرات بزرگ چندفایلی را سریع‌تر از آنچه یک انسان بتواند با دقت بخواند تولید کنند. صف‌های بازبینی رشد می‌کنند حتی وقتی مهندسان فردی احساس مولد بودن می‌کنند.",
+            "**مسائل صحت ظریف** — مدل‌ها در تولید کد قابل‌قبول، کامپایل‌شونده و حتی تست‌گذر که هنوز در موارد لبه، همزمانی، امنیت یا نگهداری بلندمدت اشتباه است خوب هستند.",
+            "**از دست رفتن زمینه نویسنده** — وقتی انسان از پیاده‌سازی تقلا نکرده، مدل ذهنی چرایی تصمیمات خاص ضعیف‌تر است. بازبین‌ها (از جمله نویسنده اصلی) شهود کمتری برای آنچه ممکن است بشکند دارند.",
+            "**سبک و انتزاع ناسازگار** — نشست‌ها یا مدل‌های مختلف الگوهای کمی متفاوت تولید می‌کنند و بار شناختی خواندن جریان PRهای لمس‌شده توسط هوش مصنوعی را افزایش می‌دهند.",
+            "**تست‌هایی که مسیر خوشحال را تأیید می‌کنند** — ایجنت‌ها در نوشتن تست‌هایی که برای موارد در نظر گرفته‌شده پاس می‌شوند عالی هستند. در آشکار کردن مواردی که از دست داده‌اند کمتر قابل‌اطمینان‌اند."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "نتیجه فرآیندی از بازبینی است که هم ضروری‌تر و هم خسته‌کننده‌تر از قبل به نظر می‌رسد."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260917-161835-a0324e6ebf8e477b.webp",
+          "alt": "تصویر بازبینی‌کننده روبه‌رو با diffهای متراکم تولیدشده توسط هوش مصنوعی با باگ‌های لبه پنهان و مدل‌های ذهنی ضعیف",
+          "caption": "شکل ۲: تغییرات تولیدشده توسط هوش مصنوعی اغلب تمیز به نظر می‌رسند در حالی که هنوز نیاز به بررسی عمیق‌تری نسبت به کد نوشته‌شده توسط انسان با اندازه مشابه دارند.",
+          "altText": "تصویر بازبینی‌کننده روبه‌رو با diffهای متراکم تولیدشده توسط هوش مصنوعی با باگ‌های لبه پنهان و مدل‌های ذهنی ضعیف"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۳. گلوگاه جدید در عمل"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "رهبران مهندسی گزارش می‌دهند که زمان صف بازبینی کد و وضوح نیازمندی‌ها/مشخصات به محدودیت‌های اصلی تبدیل شده‌اند وقتی هوش مصنوعی به‌طور گسترده پذیرفته می‌شود. نصیحت قدیمی «فقط با دقت بازبینی کنید» وقتی حجم تغییرات چند برابر می‌شود مقیاس نمی‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "تیم‌هایی که سازگار نمی‌شوند دو حالت شکست می‌بینند: یا بازبینی به مهر لاستیکی تبدیل می‌شود (و باگ‌های ظریف ارسال می‌شوند)، یا بازبینی به دروازه‌ای دردناک تبدیل می‌شود که تأخیری را که هوش مصنوعی قرار بود حذف کند دوباره معرفی می‌کند. هیچ‌کدام پایدار نیست."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۴. چه چیزی واقعاً کمک می‌کند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "تیم‌هایی که این جابه‌جایی را بهتر مدیریت می‌کنند هم فرآیند و هم ابزار را حول بازبینی و اعتبارسنجی تغییر می‌دهند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "بازبینی را به‌عنوان مهارت و ظرفیت درجه یک در نظر بگیرید"
+        },
+        {
+          "type": "paragraph",
+          "text": "بازبینی دیگر یک وظیفه جانبی سریع نیست. به زمان صریح، آموزش و گاهی ظرفیت اختصاصی نیاز دارد. مهندسان ارشد و staff که در تشخیص مسائل سیستمی در خروجی هوش مصنوعی خوب هستند به‌طور نامتناسبی ارزشمند می‌شوند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "کیفیت ورودی به ایجنت را بالا ببرید"
+        },
+        {
+          "type": "paragraph",
+          "text": "مشخصات بهتر، معیارهای پذیرش واضح‌تر، تست‌های موجود قوی‌تر و نگهبان‌های معماری محکم‌تر حجم خروجی کم‌کیفیت هوش مصنوعی که به بازبینی انسانی می‌رسد را کاهش می‌دهد. زباله داخل هنوز زباله خارج تولید می‌کند — فقط سریع‌تر."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "بخش‌های آسان اعتبارسنجی را خودکار کنید"
+        },
+        {
+          "type": "paragraph",
+          "text": "CI قوی، مجموعه‌های تست جامع، تحلیل استاتیک، اسکن امنیتی و بررسی‌های خودکار سبک/معماری طبقه بزرگی از مشکلات را قبل از اینکه انسان هرگز به diff نگاه کند می‌گیرند. بازبینی انسانی سپس می‌تواند روی قضاوت، طراحی و ریسک متمرکز شود."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "شکل PR را تغییر دهید"
+        },
+        {
+          "type": "paragraph",
+          "text": "بسیاری از تیم‌ها به سمت تغییرات کوچک‌تر و متمرکزتر تولیدشده توسط ایجنت، برچسب‌های صریح «کمک‌گرفته از هوش مصنوعی» و تأیید انسانی اجباری از invariants کلیدی حرکت می‌کنند. برخی با نظرات بازبینی تولیدشده توسط ایجنت به‌عنوان گذر اول آزمایش می‌کنند، با انسان‌ها مسئول تصمیم نهایی."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "عمداً مدل‌های ذهنی بهتر بسازید"
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی کد را ننوشته‌اید، به شیوه‌های عمدی برای بازسازی درک نیاز دارید: قدم زدن در تغییر، نوشتن یک یادداشت طراحی کوتاه، یا جفت شدن روی بازبینی. رد شدن از این گام راهی است که باگ‌های ظریف زنده می‌مانند."
+        },
+        {
+          "type": "cta",
+          "title": "دیگر برای ایجنت‌های کدنویسی هوش مصنوعی پول ندهید: جایگزین‌های متن‌باز که واقعاً در ۲۰۲۶ کار می‌کنند",
+          "text": "ابزارهایی که انتخاب می‌کنید هم روی حجم و هم شخصیت کدی که به بازبینی می‌رسد تأثیر می‌گذارند. درک چشم‌انداز متن‌باز به شما کمک می‌کند سمت ورودی گلوگاه را کنترل کنید.",
+          "buttonText": "مطالعه راهنمای ایجنت‌های متن‌باز",
+          "buttonUrl": "/fa/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۵. پیامدها برای مهندسان فردی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "مهارت‌هایی که بیشتر اهمیت دارند در حال جابه‌جایی هستند. سرعت خالص کدنویسی کمتر تمایزدهنده است. توانایی ارزیابی سریع صحت، ریسک و هزینه بلندمدت تغییرات تولیدشده توسط هوش مصنوعی مرکزی می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یکی از دلایلی است که جهش از ارشد به staff برای بسیاری دشوار باقی می‌ماند: تأثیر سطح staff به‌طور فزاینده شامل شکل دادن سیستم‌ها، نگهبان‌ها و فرهنگ بازبینی است که کمک با حجم بالای هوش مصنوعی را ایمن و مؤثر می‌کند، نه فقط تولید کد بیشتر به‌صورت شخصی."
+        },
+        {
+          "type": "cta",
+          "title": "مهندس Staff یک شغل متفاوت است (نه فقط یک ارشد بهتر)",
+          "text": "جابه‌جایی به سمت بازبینی، اعتبارسنجی و ارکستراسیون تمایز بین اجرای ارشد و اهرم سطح staff را حتی واضح‌تر می‌کند.",
+          "buttonText": "مطالعه مطلب مهندس Staff",
+          "buttonUrl": "/fa/blog/staff-engineer-is-a-different-job-not-just-a-better-senior/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۶. تیم‌ها چه کارهایی را باید متوقف کنند"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "اندازه‌گیری موفقیت عمدتاً با خطوط کد یا تعداد PRهای تولیدشده.",
+            "فرض اینکه چون ایجنت تست نوشته، تغییر خوب تست شده است.",
+            "در نظر گرفتن بازبینی به‌عنوان فکر بعدی که می‌توان در شکاف‌ها فشرده کرد.",
+            "دادن دسترسی نوشتن گسترده به ایجنت‌ها بدون سرمایه‌گذاری متناظر در نگهبان‌های خودکار و ظرفیت بازبینی انسانی.",
+            "انتظار اینکه مهندسان فردی بار بازبینی نامحدود را بدون تغییر در فرآیند یا نیروی انسانی جذب کنند."
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260917-161844-62f9c9482665c18c.webp",
+          "alt": "تیم در حال تنظیم فرآیند و ابزار تا ظرفیت بازبینی با حجم خروجی تولیدشده توسط هوش مصنوعی مقیاس شود",
+          "caption": "شکل ۳: توسعه پایدار کمک‌گرفته از هوش مصنوعی نیاز به سرمایه‌گذاری عمدی در ظرفیت بازبینی و اعتبارسنجی دارد، نه فقط ابزارهای تولید.",
+          "altText": "تیم در حال تنظیم فرآیند و ابزار تا ظرفیت بازبینی با حجم خروجی تولیدشده توسط هوش مصنوعی مقیاس شود"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۷. نتیجه‌گیری"
+        },
+        {
+          "type": "paragraph",
+          "text": "ایجنت‌های کدنویسی هوش مصنوعی تولید کد را به‌طور چشمگیری ارزان‌تر و سریع‌تر کرده‌اند. این یک سود واقعی بهره‌وری است. ناهار رایگان نیست. کار اطمینان از اینکه کد درست، ایمن، قابل‌نگهداری و هم‌تراز با سلامت بلندمدت سیستم است هنوز به انسان‌ها تعلق دارد — و آن کار به گلوگاه تبدیل شده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "تیم‌ها و اف��ادی که بازبینی و اعتبارسنجی را نگرانی‌های درجه یک می‌دانند، در ورودی‌های بهتر و بررسی‌های خودکار سرمایه‌گذاری می‌کنند، و مهارت‌های قضاوت قوی‌تر توسعه می‌دهند، صعود را تصاحب خواهند کرد. کسانی که فقط سرعت تولید را جشن می‌گیرند در نهایت در پیامدها غرق خواهند شد."
+        },
+        {
+          "type": "paragraph",
+          "text": "کد حالا آسان است. مالکیت باگ‌ها بخش سخت است."
+        },
+        {
+          "type": "cta",
+          "title": "تله سطح میانی: چرا مهندسان ارشد رشد را متوقف می‌کنند",
+          "text": "جابه‌جایی در جایی که ارزش ایجاد می‌شود همچنین آنچه رشد بعد از سطح ارشد به نظر می‌رسد را تغییر می‌دهد.",
+          "buttonText": "مطالعه تله سطح میانی",
+          "buttonUrl": "/fa/blog/the-mid-level-trap-why-senior-engineers-stop-growing/"
+        },
+        {
+          "type": "cta",
+          "title": "پرامپت اینجکشن باگی است که شرکت‌های هوش مصنوعی نمی‌توانند کاملاً وصله کنند",
+          "text": "وقتی ایجنت‌ها دسترسی نوشتن و استفاده از ابزار دارند، طبقات جدیدی از ریسک ظاهر می‌شود. درک سطح امنیتی ضروری باقی می‌ماند.",
+          "buttonText": "مطالعه تحلیل پرامپت اینجکشن",
+          "buttonUrl": "/fa/blog/prompt-injection-is-the-bug-ai-companies-cant-fully-patch-should-you-worry/"
+        }
+      ],
+      "faq": [
+        {
+          "question": "آیا هوش مصنوعی واقعاً نیمی از کد توسعه‌دهندگان را می‌نویسد؟",
+          "answer": "نظرسنجی‌های ۲۰۲۶ افزایش تندی نشان می‌دهند: سهم قابل‌توجهی از توسعه‌دهندگان (حدود ۴۲٪ در یک نظرسنجی عمده) گزارش می‌دهند که هوش مصنوعی حداقل نیمی از کد آن‌ها را می‌نویسد، افزایش چشمگیر نسبت به سال قبل. درصد دقیق بر اساس تیم و ابزار متفاوت است، اما جهت واضح است."
+        },
+        {
+          "question": "چرا صرفه‌جویی زمانی به وقت آزاد تبدیل نشد؟",
+          "answer": "ساعت‌های صرفه‌جویی‌شده در کدنویسی خالص در بازبینی خروجی هوش مصنوعی، دیباگ مسائل معرفی‌شده توسط مدل‌ها، و یادگیری ابزارها و گردش‌کارهای جدید سرمایه‌گذاری مجدد شد. حجم خروجی بالا رفت؛ ظرفیت موجود نه."
+        },
+        {
+          "question": "چرا کد تولیدشده توسط هوش مصنوعی سخت‌تر از کد انسانی بازبینی می‌شود؟",
+          "answer": "با حجم بالاتر می‌آید، اغلب فاقد مدل ذهنی عمیق نویسنده است، می‌تواند منطق ظریف قابل‌قبول اما اشتباه داشته باشد، و ممکن است با تست‌هایی بیاید که فقط موارد در نظر گرفته‌شده توسط مدل را پوشش می‌دهند. عادت‌های سنتی بازبینی به‌طور تمیز مقیاس نمی‌شوند."
+        },
+        {
+          "question": "مؤثرترین راه برای کاهش بار بازبینی چیست؟",
+          "answer": "کیفیت ورودی‌ها به ایجنت را بهبود دهید (مشخصات واضح‌تر، تست‌های قوی‌تر، نگهبان‌های معماری)، تا حد ممکن اعتبارسنجی را در CI خودکار کنید، و بازبینی انسانی را روی قضاوت و ریسک متمرکز نگه دارید نه گرفتن مسائل پایه."
+        },
+        {
+          "question": "آیا باید پذیرش هوش مصنوعی را تا وقتی فرآیندهای بازبینی برسند کند کنیم؟",
+          "answer": "نه لزوماً. رویکرد با اهرم بالاتر تکامل بازبینی، اعتبارسنجی و نگهبان‌ها به‌موازات قابلیت تولید است. تیم‌هایی که فقط سریع‌تر تولید می‌کنند بدون تغییر فرآیند پایین‌دست مشکلات جدیدی ایجاد می‌کنند."
+        },
+        {
+          "question": "این چگونه آنچه مهندسان ارشد و staff باید روی آن تمرکز کنند را تغییر می‌دهد؟",
+          "answer": "توانایی ارزیابی، شکل دادن و بهبود سیستمی کار کمک‌گرفته از هوش مصنوعی ارزشمندتر از توان عملیاتی خالص کدنویسی شخصی می‌شود. تأثیر سطح staff به‌طور فزاینده شامل سیستم‌ها و فرهنگی است که کمک با حجم بالای هوش مصنوعی را ایمن می‌کند."
+        },
+        {
+          "question": "آیا ایجنت‌های متن‌باز برای این مشکل بهتر یا بدتر هستند؟",
+          "answer": "کنترل بیشتری روی مدل‌ها، پرامپت‌ها و ابزار به شما می‌دهند که می‌تواند به سازگاری و نگهبان‌ها کمک کند. نیاز اساسی به بازبینی و اعتبارسنجی انسانی قوی را حذف نمی‌کنند."
+        },
+        {
+          "question": "توسعه‌دهندگان فردی از این هفته چه کار متفاوتی باید انجام دهند؟",
+          "answer": "بازبینی خروجی هوش مصنوعی را کار عمدی در نظر بگیرید، نه اسکن سریع. تست‌ها و بررسی‌هایی که قبل از بازبینی انسانی اجرا می‌شوند را تقویت کنید. بازسازی درک تغییرات را که کاملاً نویسنده آن نبوده‌اید تمرین کنید. و زمان را برای کار قضاوتی که ایجنت‌ها نمی‌توانند انجام دهند محافظت کنید."
+        }
+      ],
+      "seo": {
+        "title": "هوش مصنوعی کد را می‌نویسد. شما مالک باگ‌ها هستید: چرا بازبینی گلوگاه جدید است",
+        "metaDescription": "هوش مصنوعی اکنون بخش بزرگی از کد را می‌نویسد، اما زمان صرفه‌جویی‌شده صرف بازبینی و دیباگ می‌شود. بیاموزید چرا اعتبارسنجی گلوگاه جدید است و تیم‌ها و افراد در ۲۰۲۶ چه کاری می‌توانند انجام دهند.",
+        "canonical": "https://sinisteroid.ir/fa/blog/ai-writes-the-code-you-own-the-bugs-why-review-is-the-new-bottleneck",
+        "openGraph": {
+          "title": "هوش مصنوعی کد را می‌نویسد. شما مالک باگ‌ها هستید: چرا بازبینی گلوگاه جدید است",
+          "description": "کدنویسی سریع‌تر شد. بازبینی و اعتبارسنجی محدودیت شد. اینجا داده‌ها چه نشان می‌دهند و چگونه سازگار شویم.",
+          "image": "/api/uploads/20260917-ai-review-bottleneck-og-fa.webp"
+        },
+        "twitter": {
+          "title": "هوش مصنوعی کد را می‌نویسد. شما مالک باگ‌ها هستید",
+          "description": "سود بهره‌وری واقعی است. وقت آزاد نه. بازبینی گلوگاه جدید در ۲۰۲۶ است.",
+          "image": "/api/uploads/20260917-ai-review-bottleneck-twitter-fa.webp"
+        },
+        "keywords": "بازبینی کد هوش مصنوعی, گلوگاه کدنویسی هوش مصنوعی, بازبینی کد تولیدشده توسط هوش مصنوعی, بهره‌وری توسعه‌دهنده ۲۰۲۶, مشکلات کدنویسی ایجنتی, دیباگ هوش مصنوعی, ظرفیت بازبینی کد",
+        "focusKeyword": "گلوگاه بازبینی کد هوش مصنوعی"
+      }
+    }
+  }
+}

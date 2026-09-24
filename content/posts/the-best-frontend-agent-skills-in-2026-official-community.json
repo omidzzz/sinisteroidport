@@ -1,0 +1,946 @@
+{
+  "slug": "the-best-frontend-agent-skills-in-2026-official-community",
+  "status": "published",
+  "title": "The Best Frontend Agent Skills in 2026 (Official + Community)",
+  "date": "2026-09-07 14:48:01",
+  "tags": [
+    "frontend-design",
+    "ai-coding-agents",
+    "ai-tools"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/20260907-144754-bfd995ac00926d2c.webp",
+    "alt": {
+      "en": "The Best Frontend Agent Skills in 2026 (Official + Community)",
+      "fa": "بهترین مهارت‌های ایجنت فرانت‌اند در ۲۰۲۶"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "The Best Frontend Agent Skills in 2026 (Official + Community)",
+      "excerpt": "Most AI coding agents still ship generic “AI slop” interfaces by default. The right Agent Skills change that. Here is a practical, ranked guide to the official and community skills that actually improve React, TypeScript, and design-system output in 2026 — with install commands, when to use each one, and how to combine them.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "The Best Frontend Agent Skills in 2026 (Official + Community)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "By mid-2026 the difference between mediocre and production-grade frontend output from an AI coding agent is rarely the model. It is almost always the skills the agent is running. Without them, Claude Code, Cline, Cursor, OpenCode and the rest converge on the same safe defaults: Inter or Space Grotesk, purple-to-blue gradients, identical rounded cards, and layouts that feel assembled rather than designed. With the right skills loaded, the same agents produce distinctive typography, coherent color systems, proper accessibility, and components that respect an existing design system instead of inventing a new one on every request."
+        },
+        {
+          "type": "paragraph",
+          "text": "Agent Skills are portable instruction packages — usually a folder containing a SKILL.md file plus optional references and scripts — that the agent loads on demand. They are not permanent system prompts and they do not bloat every conversation. They activate when the task matches their description, giving the model specialized constraints, anti-patterns, and workflows exactly when they are needed. For frontend work this turns out to be decisive. A single well-written skill can ban the most common AI aesthetics, force a deliberate design direction before any code is written, or inject 40+ React performance rules that the model would otherwise ignore."
+        },
+        {
+          "type": "paragraph",
+          "text": "This guide ranks the skills that matter most for frontend developers in 2026. It separates official Anthropic and Vercel skills from high-signal community packs, explains what each one actually changes in the output, and shows practical combinations that work with both cloud agents and local models. The focus is on skills that improve visual quality, component correctness, accessibility, and design-system fidelity — not general coding helpers."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "277K+",
+              "label": "installs of Anthropic’s official frontend-design skill, the most widely adopted design skill in the ecosystem"
+            },
+            {
+              "value": "175K+",
+              "label": "GitHub stars on the anthropics/skills repository that ships the core official design skills"
+            },
+            {
+              "value": "40+",
+              "label": "React and Next.js performance rules in Vercel’s react-best-practices skill"
+            },
+            {
+              "value": "3 layers",
+              "label": "the practical stack most high-performing frontend teams now run: direction skill + review skill + accessibility skill"
+            },
+            {
+              "value": "1 command",
+              "label": "typical install time for any of the skills in this guide via npx skills add"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260907-143927-3a313b8262c57d29.webp",
+          "alt": "Diagram showing the three-layer frontend agent skill stack: design direction, quality review, and accessibility audit",
+          "caption": "Figure 1: The highest-leverage pattern in 2026 is a three-layer stack — one skill that sets visual direction, one that reviews for craft and correctness, and one that enforces accessibility.",
+          "altText": "Diagram showing the three-layer frontend agent skill stack: design direction, quality review, and accessibility audit"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Why Frontend Skills Matter More Than Better Models in 2026"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Frontier models have become extremely good at producing working React and TypeScript. What they have not become good at, by default, is producing interfaces that look intentional. The failure mode is consistent across Claude, GPT, Gemini and open-weight coding models: they optimize for “safe and modern” and land on the same narrow band of visual decisions."
+        },
+        {
+          "type": "paragraph",
+          "text": "Skills solve this by injecting constraints the model would not invent on its own. A strong frontend skill does three things. First, it forces an explicit design decision before code is written — palette, typography, spatial language, motion philosophy. Second, it names the anti-patterns the model should refuse (generic fonts, identical card grids, decorative gradients that carry no hierarchy). Third, it supplies domain rules the model only partially internalized during training: WCAG success criteria, design-token discipline, React 19 patterns, shadcn/ui composition rules, and performance budgets."
+        },
+        {
+          "type": "paragraph",
+          "text": "The practical result is measurable. Teams that run a curated skill stack report fewer redesign cycles, higher first-pass acceptance of generated UI, and less time spent stripping “AI aesthetics” out of otherwise functional components. Skills also travel with the project. A skill committed to the repository becomes part of the team’s shared context, so every agent session — human or automated — starts from the same visual and engineering standards."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "How to Evaluate a Frontend Agent Skill"
+        },
+        {
+          "type": "paragraph",
+          "text": "Not every skill that claims to improve frontend output is worth installing. The criteria used in this guide are practical rather than theoretical:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Provenance and maintenance — official Anthropic or Vercel skills and actively maintained community packs rank higher than abandoned one-off files",
+            "Install volume and real usage signals — high install counts from skills.sh and independent registries are a useful proxy for whether the skill survives contact with real projects",
+            "Specificity of constraints — skills that ban concrete anti-patterns and prescribe concrete processes outperform vague “make it beautiful” instructions",
+            "Compatibility — the skill should work with Claude Code, Cline, Cursor, and ideally local-model setups without requiring a proprietary runtime",
+            "Composable design — the best skills do one job well and combine cleanly with others rather than trying to own the entire frontend workflow"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Official Skills: The Non-Negotiable Baseline"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "1. frontend-design (Anthropic) — The Anti-Slop Baseline"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "If you install only one design skill in 2026, install this one. Anthropic’s official frontend-design skill is the most widely adopted design skill in the ecosystem, with hundreds of thousands of installs and continuous maintenance inside the anthropics/skills repository."
+        },
+        {
+          "type": "paragraph",
+          "text": "Its core instruction is simple and powerful: treat the task as if you are the design lead at a studio known for giving every client a distinct visual identity. Before any code is written, the agent must commit to a bold aesthetic direction grounded in the actual subject matter of the product. It explicitly rejects the default AI cluster of warm cream backgrounds with terracotta accents, acid-green-on-black, and identical SaaS card kits. Typography guidance bans the most overused families (Inter, Roboto, Arial, Space Grotesk) and pushes distinctive display + refined body pairings. Color, motion, and spatial composition are treated as deliberate choices rather than decorative afterthoughts."
+        },
+        {
+          "type": "paragraph",
+          "text": "The skill is framework-agnostic in philosophy but produces excellent results with React and Tailwind. It is the correct starting point for greenfield landing pages, marketing sites, and any UI that needs to feel intentional rather than templated. For established design systems it should be paired with a brand or component-context skill so it does not override existing tokens."
+        },
+        {
+          "type": "paragraph",
+          "text": "Install: `npx skills add anthropics/skills -s frontend-design` (or the equivalent for your agent’s skill loader)."
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+          "text": "Skills only help if the underlying agent can actually follow them. This comparison covers the practical differences between Claude Code and Cline for frontend work.",
+          "buttonText": "Read the Agent Comparison",
+          "buttonUrl": "/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "2. web-design-guidelines (Vercel Labs) — The Automated UI Reviewer"
+        },
+        {
+          "type": "paragraph",
+          "text": "Where frontend-design sets direction, Vercel’s web-design-guidelines skill acts as a senior reviewer. It encodes more than 100 rules covering accessibility, performance, and UX best practices and applies them as a structural audit of existing or newly generated UI code. The output is typically file-and-line findings rather than a full rewrite, which makes it ideal as a second-pass skill after a direction skill has done its work."
+        },
+        {
+          "type": "paragraph",
+          "text": "This skill is especially valuable on teams that already have a design system and need the agent to respect it while still catching accessibility and interaction problems. It pairs cleanly with frontend-design: one skill for taste, one for correctness."
+        },
+        {
+          "type": "paragraph",
+          "text": "Install: `npx skills add vercel-labs/agent-skills --skill web-design-guidelines`"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "3. vercel-react-best-practices — Performance and Modern React Patterns"
+        },
+        {
+          "type": "paragraph",
+          "text": "Visual quality is only half of frontend craft. Vercel’s React best-practices skill injects 40+ prioritized rules for React and Next.js performance, covering data fetching, re-render optimization, Server Components, streaming, and common anti-patterns that still appear in agent-generated code. When the agent is writing or reviewing React components, this skill keeps the output closer to what a senior engineer at a performance-conscious company would ship."
+        },
+        {
+          "type": "paragraph",
+          "text": "It is less about aesthetics and more about engineering discipline. Use it on any non-trivial React or Next.js codebase, especially when the agent is doing larger refactors or generating new feature surfaces."
+        },
+        {
+          "type": "paragraph",
+          "text": "Install: `npx skills add vercel-labs/agent-skills --skill react-best-practices` (exact skill name may vary slightly by registry; check the current vercel-labs/agent-skills repository)."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "4. Supporting Official Skills Worth Knowing"
+        },
+        {
+          "type": "paragraph",
+          "text": "Anthropic also ships several complementary skills that solve narrower jobs:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "theme-factory — generates and applies cohesive design tokens and theming in one pass",
+            "brand-guidelines — encodes an existing brand system so the agent stays on-brand instead of inventing a new look",
+            "web-artifacts-builder — full pipeline for multi-component React + Tailwind + shadcn artifacts that need to be bundled into a single HTML file",
+            "canvas-design and algorithmic-art — useful when the task is more visual or generative than a conventional product UI"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "These are not required for every project, but they fill gaps that the core three skills leave open."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260907-144101-99d94cf2739d736d.webp",
+          "alt": "Comparison diagram of official Anthropic/Vercel skills versus high-signal community frontend skills",
+          "caption": "Figure 2: Official skills provide trusted baselines and review loops. Community skills often go deeper on anti-pattern detection, motion, or specialized design systems.",
+          "altText": "Comparison diagram of official Anthropic/Vercel skills versus high-signal community frontend skills"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "High-Signal Community Skills"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "5. Impeccable (Paul Bakaus) — Deterministic Anti-Slop and Craft"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Impeccable is the community skill that most consistently appears next to Anthropic’s frontend-design in serious recommendations. Created by Paul Bakaus (long track record in UI engineering and design systems), it takes a more deterministic approach: dozens of explicit anti-pattern detectors, product-mode versus brand-mode separation, and commands that force the agent to critique and refine rather than just generate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Where frontend-design pushes a bold direction, Impeccable is excellent at cleaning up an already-generated interface or enforcing a higher craft bar on product UI and dashboards. Many teams run both: frontend-design for the first pass, Impeccable for the craft and consistency pass."
+        },
+        {
+          "type": "paragraph",
+          "text": "Install patterns vary; the canonical entry point is the pbakaus/impeccable repository and its documented install command (commonly `npx impeccable install` or the skills-add equivalent)."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "6. taste-skill (Leonxlnx) — Opinionated Anti-Slop Framework"
+        },
+        {
+          "type": "paragraph",
+          "text": "taste-skill takes a structured three-phase approach: infer the brief, lock a design direction, then ship non-templated UI. It maps briefs onto established design systems (Material, Fluent, Carbon, Polaris and others) when appropriate and is particularly strong for marketing and portfolio-style pages that need to escape the generic AI look. It is one of the higher-starred community design skills and is frequently recommended alongside the official baseline."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "7. ui-ux-pro-max — Pattern Intelligence and Design System Breadth"
+        },
+        {
+          "type": "paragraph",
+          "text": "This skill ships a large library of styles, color palettes, font pairings and chart types, and tends to explain the reasoning behind recommendations. It is useful when you want the agent to propose a coherent system rather than a single page, and when you need more variety than the stricter anti-slop skills allow. Treat it as a strong complement rather than a replacement for frontend-design."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "8. Motion and Interaction Skills (emil-design-eng and similar)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Most direction skills mention motion; few treat it as a first-class craft. Emil Kowalski’s design-engineering skills and related motion-focused packs give the agent better language for purposeful animation, reduced-motion respect, and interaction polish. Add one of these when the interface needs to feel alive rather than static."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "9. Accessibility Skills"
+        },
+        {
+          "type": "paragraph",
+          "text": "Accessibility is still the area where agent-generated frontend code fails most often. Dedicated a11y skills (packages such as fixing-accessibility from ui-skills collections, or fuller suites like accessibility-skills focused on WCAG 2.2 planning, critique, testing and reporting) turn accessibility from an afterthought into an explicit stage. The highest-leverage pattern is to run an accessibility skill as a mandatory final pass on any user-facing surface the agent produces."
+        },
+        {
+          "type": "cta",
+          "title": "How to Edit SVG Like a Pro (Without Opening Illustrator)",
+          "text": "Many agent-generated icons and illustrations still need human or skill-assisted cleanup. This guide covers practical SVG editing techniques that pair well with design skills.",
+          "buttonText": "Read the SVG Guide",
+          "buttonUrl": "/en/blog/how-to-edit-svg-like-a-pro-without-opening-illustrator/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Recommended Stacks by Use Case"
+        },
+        {
+          "type": "paragraph",
+          "text": "You do not need every skill at once. The following combinations cover the majority of real frontend work:"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Greenfield marketing or portfolio site"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "frontend-design (direction and anti-slop)",
+            "taste-skill or ui-ux-pro-max (additional aesthetic range)",
+            "web-design-guidelines or Impeccable (review pass)",
+            "An accessibility skill as the final gate"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Product UI / dashboard inside an existing design system"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "brand-guidelines or a custom skill that encodes your tokens and components",
+            "vercel-react-best-practices",
+            "web-design-guidelines or Impeccable",
+            "Accessibility skill"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Local-model / privacy-first setup (Ollama + Cline or OpenCode)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Most of the skills above are pure instruction packages and work with local models, though smaller models benefit from shorter, more forceful skills. Start with frontend-design and a focused accessibility skill; add review skills only if the local model can follow multi-step critique instructions reliably. Pairing with a strong local coding model remains more important than stacking many skills."
+        },
+        {
+          "type": "cta",
+          "title": "How to Choose the Right AI Model for Cline (And Stop Wasting Money on the Wrong One)",
+          "text": "Skills amplify a good model; they cannot rescue a weak one. This guide helps you match models to agentic frontend work.",
+          "buttonText": "Read the Model Selection Guide",
+          "buttonUrl": "/en/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "How to Install and Manage Skills Cleanly"
+        },
+        {
+          "type": "paragraph",
+          "text": "The dominant installation pattern in 2026 is the skills CLI:"
+        },
+        {
+          "type": "paragraph",
+          "text": "`npx skills add <owner/repo> [-s skill-name]`"
+        },
+        {
+          "type": "paragraph",
+          "text": "Skills typically land in a project-local or user-level skills directory that the agent is configured to read. Prefer project-local installation for anything that encodes brand or design-system rules so the constraints travel with the repository. Keep the set small — three to five high-quality skills outperform a large collection of overlapping ones. Review the SKILL.md of any third-party skill before trusting it; skills are executable context and should be treated with the same caution as other third-party code."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Common Mistakes That Waste the Power of Skills"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Installing only a direction skill and never running a review or accessibility pass",
+            "Letting a bold design skill override an existing design system instead of pairing it with brand or component-context skills",
+            "Stacking five overlapping anti-slop skills that fight each other",
+            "Expecting skills to fix a fundamentally weak or poorly prompted model",
+            "Never reading the SKILL.md and therefore not knowing what constraints are actually active"
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260907-144150-b5c7c9bb5e04050f.webp",
+          "alt": "Flowchart showing how to choose and combine frontend agent skills based on project type",
+          "caption": "Figure 3: Start with project type, pick one direction skill, add one review skill, and always finish with an accessibility pass.",
+          "altText": "Flowchart showing how to choose and combine frontend agent skills based on project type"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What Is Still Missing in 2026"
+        },
+        {
+          "type": "paragraph",
+          "text": "The ecosystem is strong on visual direction and React performance. It is still weaker on deep design-system enforcement for large existing component libraries, on automated visual regression loops that feed back into the agent, and on skills that reliably improve output from smaller local models. Custom skills that encode a specific company’s tokens, component APIs, and review checklists remain one of the highest-ROI things a team can build. The official and community skills in this guide give you the foundation; the lasting advantage comes from the skills you write yourself for your own product."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Practical Next Steps"
+        },
+        {
+          "type": "paragraph",
+          "text": "1. Install Anthropic’s frontend-design skill today and run it on a small greenfield page so you can see the difference in direction and anti-slop behavior."
+        },
+        {
+          "type": "paragraph",
+          "text": "2. Add Vercel’s web-design-guidelines or Impeccable as a second-pass reviewer."
+        },
+        {
+          "type": "paragraph",
+          "text": "3. Add an accessibility skill and make it a required final step for any user-facing output."
+        },
+        {
+          "type": "paragraph",
+          "text": "4. If you have an established design system, write a short custom skill that points the agent at your tokens and component patterns."
+        },
+        {
+          "type": "paragraph",
+          "text": "5. Keep the total skill count low and review the actual SKILL.md files so you understand what is being injected into the agent’s context."
+        },
+        {
+          "type": "paragraph",
+          "text": "Used this way, Agent Skills become one of the highest-leverage tools available to frontend developers in 2026 — more reliable than hoping the next model release will suddenly develop better taste, and more portable than any single prompt you keep rewriting."
+        },
+        {
+          "type": "cta",
+          "title": "Content Clusters for GEO: How to Build Topical Authority That AI Engines Trust",
+          "text": "Skills improve the code your agents write. Content clusters improve whether AI search engines cite the articles you publish about those skills.",
+          "buttonText": "Read the GEO Cluster Guide",
+          "buttonUrl": "/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/"
+        },
+        {
+          "type": "cta",
+          "title": "Anthropic Official Skills Repository",
+          "text": "The source of the frontend-design skill and other official Agent Skills. Browse the full collection, read the SKILL.md files, and install them directly.",
+          "buttonText": "View Official Skills on GitHub",
+          "buttonUrl": "https://github.com/anthropics/skills"
+        },
+        {
+          "type": "cta",
+          "title": "Vercel Agent Skills",
+          "text": "Home of web-design-guidelines and react-best-practices — the official Vercel skills that improve accessibility, performance, and React patterns in agent output.",
+          "buttonText": "Explore Vercel Agent Skills",
+          "buttonUrl": "https://github.com/vercel-labs/agent-skills"
+        }
+      ],
+      "faq": [
+        {
+          "question": "What is the single best Agent Skill for frontend design in 2026?",
+          "answer": "Anthropic’s official frontend-design skill. It has the highest adoption, continuous maintenance, and the clearest anti-slop and direction-setting behavior. Most serious recommendations start with it as the baseline."
+        },
+        {
+          "question": "Do these skills work with Cline and local models via Ollama?",
+          "answer": "Yes. The majority are pure instruction packages (SKILL.md files) and work with any agent that supports the skills format, including Cline and OpenCode pointed at local models. Smaller local models benefit from shorter, more forceful skills and may not follow complex multi-step critique instructions as reliably as frontier models."
+        },
+        {
+          "question": "Should I install every skill listed in this guide?",
+          "answer": "No. Three to five high-quality skills that do not overlap are more effective than a large collection. A practical default is frontend-design + one review skill (web-design-guidelines or Impeccable) + one accessibility skill, then add brand or React-performance skills only when the project needs them."
+        },
+        {
+          "question": "How is an Agent Skill different from a system prompt or custom instruction?",
+          "answer": "Skills are loaded on demand when the task matches their description, rather than occupying permanent context. They are also portable files that can live in a repository, be versioned, and be shared across agents and team members."
+        },
+        {
+          "question": "Can skills override my existing design system?",
+          "answer": "A pure direction skill such as frontend-design can push a new aesthetic if you do not constrain it. For established systems, pair it with brand-guidelines or a custom skill that encodes your tokens and components so the agent stays inside the existing system."
+        },
+        {
+          "question": "Are community skills safe to install?",
+          "answer": "Treat them like any third-party code. Prefer packs with clear authorship, active maintenance, and readable SKILL.md files. Review the instructions before enabling them on sensitive codebases. Official Anthropic and Vercel skills carry lower risk on this axis."
+        },
+        {
+          "question": "Do I still need to review agent-generated UI if I use these skills?",
+          "answer": "Yes. Skills dramatically raise the floor and reduce the most common failure modes, but they do not replace human judgment on hierarchy, content, brand fit, or edge-case accessibility. The goal is fewer redesign cycles, not zero review."
+        },
+        {
+          "question": "Where can I find the current install commands and skill files?",
+          "answer": "Start with the anthropics/skills and vercel-labs/agent-skills repositories on GitHub, plus the skills.sh registry and individual community repositories linked in this article. Install commands and exact skill names can shift; always check the repository README for the current recommended command."
+        }
+      ],
+      "seo": {
+        "title": "The Best Frontend Agent Skills in 2026 (Official + Community) | Ranked Guide",
+        "metaDescription": "Ranked guide to the best Agent Skills for frontend work in 2026. Official Anthropic and Vercel skills plus high-signal community packs that kill AI slop, improve React output, and enforce accessibility.",
+        "canonical": "https://sinisteroid.ir/blog/the-best-frontend-agent-skills-in-2026-official-community",
+        "openGraph": {
+          "title": "The Best Frontend Agent Skills in 2026 (Official + Community)",
+          "description": "Which Agent Skills actually improve React, TypeScript, and design-system output in 2026 — official baselines, community craft packs, and practical stacks.",
+          "image": "/api/uploads/20260907-frontend-agent-skills-cover.webp"
+        },
+        "twitter": {
+          "title": "The Best Frontend Agent Skills in 2026 (Official + Community)",
+          "description": "Stop shipping AI-slop interfaces. The ranked list of official and community Agent Skills that give coding agents real frontend taste and discipline.",
+          "image": "/api/uploads/20260907-frontend-agent-skills-cover.webp"
+        },
+        "keywords": "frontend agent skills, Claude Code skills, Cline skills, Anthropic frontend-design, Vercel agent skills, AI slop, React agent skills, design system skills, accessibility agent skills, 2026",
+        "focusKeyword": "frontend agent skills 2026"
+      }
+    },
+    "fa": {
+      "title": "بهترین مهارت‌های ایجنت فرانت‌اند در ۲۰۲۶",
+      "excerpt": "بیشتر ایجنت‌های کدنویسی هوش مصنوعی هنوز به‌طور پیش‌فرض رابط‌های عمومی و «AI-slop» تولید می‌کنند. مهارت‌های درست ایجنت این وضعیت را تغییر می‌دهند. این راهنمای عملی و رتبه‌بندی‌شده، مهارت‌های رسمی و جامعه را معرفی می‌کند که واقعاً خروجی React، TypeScript و سیستم طراحی را در ۲۰۲۶ بهتر می‌کنند — همراه با دستور نصب، زمان استفاده از هرکدام، و نحوهٔ ترکیب آن‌ها.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "بهترین مهارت‌های ایجنت فرانت‌اند در ۲۰۲۶"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "تا اواسط ۲۰۲۶ تفاوت بین خروجی متوسط و خروجی در سطح تولید فرانت‌اند از یک ایجنت کدنویسی هوش مصنوعی به‌ندرت به خود مدل برمی‌گردد. تقریباً همیشه به مهارت‌هایی مربوط است که ایجنت در حال اجرای آن‌هاست. بدون آن‌ها، Claude Code، Cline، Cursor، OpenCode و بقیه به همان پیش‌فرض‌های امن همگرا می‌شوند: فونت Inter یا Space Grotesk، گرادیان بنفش-به-آبی، کارت‌های گرد یکسان، و چیدمان‌هایی که بیشتر سرهم‌شده به نظر می‌رسند تا طراحی‌شده. با بارگذاری مهارت‌های درست، همان ایجنت‌ها تایپوگرافی متمایز، سیستم رنگ منسجم، دسترسی‌پذیری مناسب، و کامپوننت‌هایی تولید می‌کنند که به سیستم طراحی موجود احترام می‌گذارند به‌جای این‌که در هر درخواست یکی جدید اختراع کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مهارت‌های ایجنت بسته‌های دستورالعمل قابل‌حمل هستند — معمولاً یک پوشه شامل فایل SKILL.md به‌همراه منابع و اسکریپت‌های اختیاری — که ایجنت در صورت نیاز بارگذاری می‌کند. آن‌ها پرامپت سیستم دائمی نیستند و هر مکالمه را متورم نمی‌کنند. وقتی وظیفه با توصیفشان مطابقت داشته باشد فعال می‌شوند و دقیقاً در لحظهٔ نیاز، محدودیت‌ها، ضدالگوها و جریان‌های کاری تخصصی به مدل می‌دهند. برای کار فرانت‌اند این موضوع تعیین‌کننده از آب درآمده است. یک مهارت خوب نوشته‌شده می‌تواند رایج‌ترین زیبایی‌شناسی‌های هوش مصنوعی را ممنوع کند، پیش از نوشتن هر کدی جهت طراحی عمدی تحمیل کند، یا بیش از ۴۰ قانون عملکرد React را تزریق کند که مدل در غیر این صورت نادیده می‌گرفت."
+        },
+        {
+          "type": "paragraph",
+          "text": "این راهنما مهارت‌هایی را رتبه‌بندی می‌کند که در ۲۰۲۶ برای توسعه‌دهندگان فرانت‌اند بیشترین اهمیت را دارند. مهارت‌های رسمی Anthropic و Vercel را از بسته‌های باسیگنال بالای جامعه جدا می‌کند، توضیح می‌دهد هرکدام واقعاً چه تغییری در خروجی ایجاد می‌کند، و ترکیب‌های عملی‌ای نشان می‌دهد که هم با ایجنت‌های ابری و هم با مدل‌های محلی کار می‌کنند. تمرکز روی مهارت‌هایی است که کیفیت بصری، صحت کامپوننت، دسترسی‌پذیری و وفاداری به سیستم طراحی را بهبود می‌دهند — نه کمک‌های عمومی کدنویسی."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "بیش از ۲۷۷ هزار",
+              "label": "نصب مهارت رسمی frontend-design از Anthropic، پراستفاده‌ترین مهارت طراحی در اکوسیستم"
+            },
+            {
+              "value": "بیش از ۱۷۵ هزار",
+              "label": "ستارهٔ گیت‌هاب روی مخزن anthropics/skills که مهارت‌های رسمی اصلی طراحی را منتشر می‌کند"
+            },
+            {
+              "value": "بیش از ۴۰",
+              "label": "قانون عملکرد React و Next.js در مهارت react-best-practices از Vercel"
+            },
+            {
+              "value": "۳ لایه",
+              "label": "استک عملی که بیشتر تیم‌های فرانت‌اند باعملکرد بالا اکنون اجرا می‌کنند: مهارت جهت‌دهی + مهارت بازبینی + مهارت دسترسی‌پذیری"
+            },
+            {
+              "value": "۱ دستور",
+              "label": "زمان نصب معمولی هر یک از مهارت‌های این راهنما از طریق npx skills add"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260907-agent-skills-landscape-fa.webp",
+          "alt": "نمودار نشان‌دهندهٔ استک سه‌لایهٔ مهارت ایجنت فرانت‌اند: جهت طراحی، بازبینی کیفیت، و ممیزی دسترسی‌پذیری",
+          "caption": "شکل ۱: الگوی با بالاترین اهرم در ۲۰۲۶ یک استک سه‌لایه است — یک مهارت که جهت بصری را تعیین می‌کند، یکی که از نظر دقت و صحت بازبینی می‌کند، و یکی که دسترسی‌پذیری را تحمیل می‌کند.",
+          "altText": "نمودار نشان‌دهندهٔ استک سه‌لایهٔ مهارت ایجنت فرانت‌اند: جهت طراحی، بازبینی کیفیت، و ممیزی دسترسی‌پذیری"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چرا مهارت‌های فرانت‌اند در ۲۰۲۶ از مدل‌های بهتر مهم‌ترند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "مدل‌های مرزی د�� تولید React و TypeScript کارآمد بسیار خوب شده‌اند. چیزی که به‌طور پیش‌فرض در آن خوب نشده‌اند، تولید رابط‌هایی است که عمدی به نظر برسند. حالت شکست در سراسر Claude، GPT، Gemini و مدل‌های وزن‌باز کدنویسی یکسان است: آن‌ها برای «امن و مدرن» بهینه‌سازی می‌کنند و در همان باند باریک تصمیم‌های بصری فرود می‌آیند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مهارت‌ها با تزریق محدودیت‌هایی که مدل خودش اختراع نمی‌کند این مشکل را حل می‌کنند. یک مهارت قوی فرانت‌اند سه کار انجام می‌دهد. اول، پیش از نوشتن کد تصمیم طراحی صریح تحمیل می‌کند — پالت، تایپوگرافی، زبان فضایی، فلسفهٔ حرکت. دوم، ضدالگوهایی را نام می‌برد که مدل باید رد کند (فونت‌های عمومی، شبکه‌های کارت یکسان، گرادیان‌های تزئینی بدون سلسله‌مراتب). سوم، قوانین دامنه‌ای را تأمین می‌کند که مدل در طول آموزش فقط تا حدی درونی کرده: معیارهای موفقیت WCAG، انضباط توکن طراحی، الگوهای React 19، قوانین ترکیب shadcn/ui، و بودجه‌های عملکرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "نتیجهٔ عملی قابل‌اندازه‌گیری است. تیم‌هایی که استک مهارت انتخاب‌شده اجرا می‌کنند، چرخه‌های بازطراحی کمتر، پذیرش بالاتر اولین خروجی تولیدشده، و زمان کمتری صرف حذف زیبایی‌شناسی هوش مصنوعی از کامپوننت‌های در غیر این صورت کارآمد گزارش می‌دهند. مهارت‌ها همچنین با پروژه سفر می‌کنند. مهارتی که در مخزن commit شده بخشی از زمینهٔ مشترک تیم می‌شود، پس هر نشست ایجنت — انسانی یا خودکار — از همان استانداردهای بصری و مهندسی شروع می‌کند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چگونه یک مهارت ایجنت فرانت‌اند را ارزیابی کنیم"
+        },
+        {
+          "type": "paragraph",
+          "text": "هر مهارتی که ادعای بهبود خروجی فرانت‌اند دارد ارزش نصب ندارد. معیارهای استفاده‌شده در این راهنما عملی هستند نه نظری:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "منشأ و نگهداری — مهارت‌های رسمی Anthropic یا Vercel و بسته‌های جامعه با نگهداری فعال بالاتر از فایل‌های یک‌بارمصرف رهاشده رتبه می‌گیرند",
+            "حجم نصب و سیگنال‌های استفادهٔ واقعی — تعداد نصب بالا از skills.sh و رجیستری‌های مستقل پروکسی مفیدی برای این است که آیا مهارت در تماس با پروژه‌های واقعی زنده می‌ماند",
+            "خاص‌بودن محدودیت‌ها — مهارت‌هایی که ضدالگوهای مشخص را ممنوع و فرآیندهای مشخص تجویز می‌کنند از دستورالعمل‌های مبهم «زیبا کن» بهتر عمل می‌کنند",
+            "سازگاری — مهارت باید با Claude Code، Cline، Cursor و در حالت ایده‌آل راه‌اندازی‌های مدل محلی بدون نیاز به رانتایم اختصاصی کار کند",
+            "طراحی ترکیب‌پذیر — بهترین مهارت‌ها یک کار را خوب انجام می‌دهند و تمیز با دیگران ترکیب می‌شوند به‌جای تلاش برای مالکیت کل جریان کاری فرانت‌اند"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "مهارت‌های رسمی: پایهٔ غیرقابل‌مذاکره"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۱. frontend-design (Anthropic) — پایهٔ ضدسلوپ"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اگر در ۲۰۲۶ فقط یک مهارت طراحی نصب می‌کنید، این را نصب کنید. مهارت رسمی frontend-design از Anthropic پراستفاده‌ترین مهارت طراحی در اکوسیستم است، با صدها هزار نصب و نگهداری مداوم داخل مخزن anthropics/skills."
+        },
+        {
+          "type": "paragraph",
+          "text": "دستور اصلی آن ساده و قدرتمند است: با وظیفه طوری برخورد کن که انگار لید طراحی استودیویی هستی که به هر مشتری هویت بصری متمایزی می‌دهد که با هیچ‌کس دیگری اشتباه گرفته نمی‌شود. پیش از نوشتن هر کدی، ایجنت باید به یک جهت زیبایی‌شناختی جسورانه که در موضوع واقعی محصول ریشه دارد متعهد شود. صریحاً خوشهٔ پیش‌فرض هوش مصنوعی پس‌زمینه‌های کرم گرم با لهجهٔ تراکوتا، سبز اسیدی روی سیاه، و کیت‌های کارت SaaS یکسان را رد می‌کند. راهنمای تایپوگرافی پراستفاده‌ترین خانواده‌ها (Inter، Roboto، Arial، Space Grotesk) را ممنوع می‌کند و جفت‌های نمایش متمایز + بدنهٔ پالوده‌شده را پیش می‌برد. رنگ، حرکت و ترکیب فضایی به‌عنوان انتخاب‌های عمدی رفتار می‌شوند نه پس‌اندیشه‌های تزئینی."
+        },
+        {
+          "type": "paragraph",
+          "text": "این مهارت از نظر فلسفه مستقل از فریم‌ورک است اما با React و Tailwind نتایج عالی تولید می‌کند. نقطهٔ شروع درست برای صفحات فرود سبز، سایت‌های بازاریابی، و هر رابطی است که باید عمدی به نظر برسد نه قالبی. برای سیستم‌های طراحی تثبیت‌شده باید با مهارت برند یا زمینهٔ کامپوننت جفت شود تا توکن‌های موجود را بازنویسی نکند."
+        },
+        {
+          "type": "paragraph",
+          "text": "نصب: `npx skills add anthropics/skills -s frontend-design` (یا معادل آن برای بارگذار مهارت ایجنت شما)."
+        },
+        {
+          "type": "cta",
+          "title": "کلود کد در برابر کلاین: توسعه‌دهندگان در ۲۰۲۶ کدام عامل کدنویسی هوش مصنوعی را انتخاب کنند؟",
+          "text": "مهارت‌ها فقط وقتی کمک می‌کنند که ایجنت زیربنایی واقعاً بتواند از آن‌ها پیروی کند. این مقایسه تفاوت‌های عملی بین Claude Code و Cline برای کار فرانت‌اند را پوشش می‌دهد.",
+          "buttonText": "مطالعهٔ مقایسهٔ ایجنت‌ها",
+          "buttonUrl": "/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۲. web-design-guidelines (Vercel Labs) — بازبین خودکار رابط کاربری"
+        },
+        {
+          "type": "paragraph",
+          "text": "جایی که frontend-design جهت را تعیین می‌کند، مهارت web-design-guidelines از Vercel به‌عنوان بازبین ارشد عمل می‌کند. بیش از ۱۰۰ قانون پوشش‌دهندهٔ دسترسی‌پذیری، عملکرد و بهترین شیوه‌های UX را کدگذاری می‌کند و آن‌ها را به‌عنوان ممیزی ساختاری کد رابط موجود یا تازه‌تولیدشده اعمال می‌کند. خروجی معمولاً یافته‌های فایل‌وخط است نه بازنویسی کامل، که آن را به‌عنوان مهارت پاس دوم پس از مهارت جهت‌دهی ایده‌آل می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این مهارت به‌ویژه برای تیم‌هایی ارزشمند است که از قبل سیستم طراحی دارند و نیاز دارند ایجنت به آن احترام بگذارد درحالی‌که هنوز مشکلات دسترسی‌پذیری و تعامل را بگیرد. تمیز با frontend-design جفت می‌شود: یکی برای سلیقه، یکی برای صحت."
+        },
+        {
+          "type": "paragraph",
+          "text": "نصب: `npx skills add vercel-labs/agent-skills --skill web-design-guidelines`"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۳. vercel-react-best-practices — عملکرد و الگوهای مدرن React"
+        },
+        {
+          "type": "paragraph",
+          "text": "کیفیت بصری فقط نیمی از مهارت فرانت‌اند است. مهارت بهترین شیوه‌های React از Vercel بیش از ۴۰ قانون اولویت‌بندی‌شده برای عملکرد React و Next.js تزریق می‌کند، شامل واکشی داده، بهینه‌سازی رندر مجدد، Server Components، استریمینگ، و ضدالگوهای رایجی که هنوز در کد تولیدشده توسط ایجنت ظاهر می‌شوند. وقتی ایجنت در حال نوشتن یا بازبینی کامپوننت‌های React است، این مهارت خروجی را نزدیک‌تر به چیزی نگه می‌دارد که یک مهندس ارشد در شرکت حساس به عملکرد منتشر می‌کرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "کمتر دربارهٔ زیبایی‌شناسی و بیشتر دربارهٔ انضباط مهندسی است. روی هر کدبیس غیرجزئی React یا Next.js استفاده کنید، به‌ویژه وقتی ایجنت در حال انجام ریفکتورهای بزرگ‌تر یا تولید سطوح ویژگی جدید است."
+        },
+        {
+          "type": "paragraph",
+          "text": "نصب: `npx skills add vercel-labs/agent-skills --skill react-best-practices` (نام دقیق مهارت ممکن است کمی بر اساس رجیستری متفاوت باشد؛ مخزن فعلی vercel-labs/agent-skills را بررسی کنید)."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۴. مهارت‌های رسمی پشتیبانی‌کننده که ارزش دانستن دارند"
+        },
+        {
+          "type": "paragraph",
+          "text": "Anthropic همچنین چندین مهارت مکمل منتشر می‌کند که کارهای باریک‌تری را حل می‌کنند:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "theme-factory — توکن‌های طراحی منسجم و تم‌سازی را در یک پاس تولید و اعمال می‌کند",
+            "brand-guidelines — سیستم برند موجود را کدگذاری می‌کند تا ایجنت روی برند بماند به‌جای اختراع ظاهر جدید",
+            "web-artifacts-builder — خط لولهٔ کامل برای آرتیفکت‌های چندکامپوننتی React + Tailwind + shadcn که باید در یک فایل HTML واحد بسته‌بندی شوند",
+            "canvas-design و algorithmic-art — وقتی وظیفه بیشتر بصری یا مولد است تا رابط محصول متعارف مفیدند"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "این‌ها برای هر پروژه‌ای لازم نیستند، اما شکاف‌هایی را پر می‌کنند که سه مهارت اصلی باز می‌گذارند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260907-official-vs-community-skills-fa.webp",
+          "alt": "نمودار مقایسهٔ مهارت‌های رسمی Anthropic/Vercel در برابر مهارت‌های فرانت‌اند جامعه با سیگنال بالا",
+          "caption": "شکل ۲: مهارت‌های رسمی پایه‌های قابل‌اعتماد و حلقه‌های بازبینی فراهم می‌کنند. مهارت‌های جامعه اغلب در تشخیص ضدالگو، حرکت، یا سیستم‌های طراحی تخصصی عمیق‌تر می‌روند.",
+          "altText": "نمودار مقایسهٔ مهارت‌های رسمی Anthropic/Vercel در برابر مهارت‌های فرانت‌اند جامعه با سیگنال بالا"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "مهارت‌های جامعه با سیگنال بالا"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۵. Impeccable (Paul Bakaus) — ضدسلوپ قطعی و مهارت"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Impeccable مهارت جامعه‌ای است که به‌طور مداوم در توصیه‌های جدی کنار frontend-design از Anthropic ظاهر می‌شود. ساختهٔ Paul Bakaus (سابقهٔ طولانی در مهندسی UI و سیستم‌های طراحی)، رویکرد قطعی‌تری دارد: ده‌ها آشکارساز ضدالگوی صریح، جداسازی حالت محصول در برابر حالت برند، و دستورهایی که ایجنت را مجبور به نقد و پالایش می‌کنند نه فقط تولید."
+        },
+        {
+          "type": "paragraph",
+          "text": "جایی که frontend-design جهت جسورانه می‌دهد، Impeccable در تمیز کردن رابط از قبل تولیدشده یا تحمیل نوار مهارت بالاتر روی UI محصول و داشبوردها عالی است. بسیاری از تیم‌ها هر دو را اجرا می‌کنند: frontend-design برای پاس اول، Impeccable برای پاس مهارت و سازگاری."
+        },
+        {
+          "type": "paragraph",
+          "text": "الگوهای نصب متفاوت است؛ نقطهٔ ورود متعارف مخزن pbakaus/impeccable و دستور نصب مستند آن است (معمولاً `npx impeccable install` یا معادل skills-add)."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۶. taste-skill (Leonxlnx) — چارچوب ضدسلوپ نظرمند"
+        },
+        {
+          "type": "paragraph",
+          "text": "taste-skill رویکرد ساختاریافتهٔ سه‌مرحله‌ای دارد: استنباط بریف، قفل کردن جهت طراحی، سپس ارسال UI غیرقالبی. بریف‌ها را در صورت مناسب‌بودن روی سیستم‌های طراحی تثبیت‌شده (Material، Fluent، Carbon، Polaris و دیگران) نگاشت می‌کند و به‌ویژه برای صفحات بازاریابی و پورتفولیو که نیاز به فرار از ظاهر عمومی هوش مصنوعی دارند قوی است. یکی از مهارت‌های طراحی جامعه با ستارهٔ بالاتر است و مکرراً در کنار پایهٔ رسمی توصیه می‌شود."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۷. ui-ux-pro-max — هوش الگو و وسعت سیستم طراحی"
+        },
+        {
+          "type": "paragraph",
+          "text": "این مهارت کتابخانهٔ بزرگی از سبک‌ها، پالت‌های رنگ، جفت‌های فونت و انواع نمودار حمل می‌کند و تمایل دارد استدلال پشت توصیه‌ها را توضیح دهد. وقتی می‌خواهید ایجنت یک سیستم منسجم پیشنهاد دهد نه یک صفحهٔ منفرد، و وقتی به تنوع بیشتری از آنچه مهارت‌های سخت‌گیرانه‌تر ضدسلوپ اجازه می‌دهند نیاز دارید مفید است. آن را به‌عنوان مکمل قوی نه جایگزین frontend-design در نظر بگیرید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۸. مهارت‌های حرکت و تعامل (emil-design-eng و مشابه)"
+        },
+        {
+          "type": "paragraph",
+          "text": "بیشتر مهارت‌های جهت به حرکت اشاره می‌کنند؛ تعداد کمی آن را به‌عنوان مهارت درجهٔ اول رفتار می‌کنند. مهارت‌های طراحی-مهندسی Emil Kowalski و بسته‌های متمرکز بر حرکت مرتبط، زبان بهتری برای انیمیشن هدفمند، احترام به حرکت کاهش‌یافته، و پالایش تعامل به ایجنت می‌دهند. وقتی رابط نیاز دارد زنده به نظر برسد نه ایستا، یکی از این‌ها را اضافه کنید."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "۹. مهارت‌های دسترسی‌پذیری"
+        },
+        {
+          "type": "paragraph",
+          "text": "دسترسی‌پذیری هنوز حوزه‌ای است که کد فرانت‌اند تولیدشده توسط ایجنت بیشتر در آن شکست می‌خورد. مهارت‌های اختصاصی a11y (بسته‌هایی مانند fixing-accessibility از مجموعه‌های ui-skills، یا سوئیت‌های کامل‌تر مانند accessibility-skills متمرکز بر برنامه‌ریزی، نقد، تست و گزارش WCAG 2.2) دسترسی‌پذیری را از پس‌اندیشه به مرحلهٔ صریح تبدیل می‌کنند. الگوی با بالاترین اهرم اجرای یک مهارت دسترسی‌پذیری به‌عنوان پاس نهایی اجباری روی هر سطح کاربر-روبه‌رویی است که ایجنت تولید می‌کند."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه SVG را مثل یک حرفه‌ای ویرایش کنیم (بدون باز کردن ایلوستریتور)",
+          "text": "بسیاری از آیکون‌ها و تصاویر تولیدشده توسط ایجنت هنوز به تمیزکاری انسانی یا کمک‌شده با مهارت نیاز دارند. این راهنما تکنیک‌های عملی ویرایش SVG را پوشش می‌دهد که خوب با مهارت‌های طراحی جفت می‌شوند.",
+          "buttonText": "مطالعهٔ راهنمای SVG",
+          "buttonUrl": "/fa/blog/how-to-edit-svg-like-a-pro-without-opening-illustrator/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "استک‌های توصیه‌ش��ه بر اساس مورد استفاده"
+        },
+        {
+          "type": "paragraph",
+          "text": "به همهٔ مهارت‌ها هم‌زمان نیاز ندارید. ترکیب‌های زیر اکثریت کار واقعی فرانت‌اند را پوشش می‌دهند:"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "سایت بازاریابی یا پورتفولیو سبز"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "frontend-design (جهت و ضدسلوپ)",
+            "taste-skill یا ui-ux-pro-max (دامنهٔ زیبایی‌شناختی اضافی)",
+            "web-design-guidelines یا Impeccable (پاس بازبینی)",
+            "یک مهارت دسترسی‌پذیری به‌عنوان دروازهٔ نهایی"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "UI محصول / داشبورد داخل سیستم طراحی موجود"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "brand-guidelines یا مهارت سفارشی که توکن‌ها و کامپوننت‌های شما را کدگذاری می‌کند",
+            "vercel-react-best-practices",
+            "web-design-guidelines یا Impeccable",
+            "مهارت دسترسی‌پذیری"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "راه‌اندازی مدل محلی / حریم‌خصوصی‌اول (Ollama + Cline یا OpenCode)"
+        },
+        {
+          "type": "paragraph",
+          "text": "بیشتر مهارت‌های بالا بسته‌های دستورالعمل خالص هستند و با مدل‌های محلی کار می‌کنند، هرچند مدل‌های کوچک‌تر از مهارت‌های کوتاه‌تر و قوی‌تر سود می‌برند. با frontend-design و یک مهارت دسترسی‌پذیری متمرکز شروع کنید؛ مهارت‌های بازبینی را فقط اگر مدل محلی بتواند دستورات نقد چندمرحله‌ای را به‌طور قابل‌اعتماد دنبال کند اضافه کنید. جفت‌شدن با یک مدل کدنویسی محلی قوی همچنان مهم‌تر از انباشتن مهارت‌های زیاد است."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه مدل هوش مصنوعی درست را برای Cline انتخاب کنیم (و دیگر پول خود را هدر ندهیم)",
+          "text": "مهارت‌ها یک مدل خوب را تقویت می‌کنند؛ نمی‌توانند مدل ضعیف را نجات دهند. این راهنما به شما کمک می‌کند مدل‌ها را با کار فرانت‌اند عاملی مطابقت دهید.",
+          "buttonText": "مطالعهٔ راهنمای انتخاب مدل",
+          "buttonUrl": "/fa/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چگونه مهارت‌ها را تمیز نصب و مدیریت کنیم"
+        },
+        {
+          "type": "paragraph",
+          "text": "الگوی نصب غالب در ۲۰۲۶ CLI مهارت‌هاست:"
+        },
+        {
+          "type": "paragraph",
+          "text": "`npx skills add <owner/repo> [-s skill-name]`"
+        },
+        {
+          "type": "paragraph",
+          "text": "مهارت‌ها معمولاً در یک دایرکتوری مهارت محلی‌پروژه یا سطح‌کاربر فرود می‌آیند که ایجنت برای خواندن پیکربندی شده است. برای هر چیزی که قوانین برند یا سیستم طراحی را کدگذاری می‌کند نصب محلی‌پروژه را ترجیح دهید تا محدودیت‌ها با مخزن سفر کنند. مجموعه را کوچک نگه دارید — سه تا پنج مهارت باکیفیت از مجموعهٔ بزرگی از مهارت‌های همپوشان بهتر عمل می‌کنند. SKILL.md هر مهارت شخص ثالث را پیش از اعتماد بررسی کنید؛ مهارت‌ها زمینهٔ اجرایی هستند و باید با همان احتیاط کد شخص ثالث دیگر رفتار شوند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "اشتباهات رایجی که قدرت مهارت‌ها را هدر می‌دهند"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "نصب فقط یک مهارت جهت‌دهی و هرگز اجرای پاس بازبینی یا دسترسی‌پذیری",
+            "اجازه به یک مهارت طراحی جسورانه برای بازنویسی سیستم طراحی موجود به‌جای جفت‌کردن آن با مهارت‌های برند یا زمینهٔ کامپوننت",
+            "انباشتن پنج مهارت همپوشان ضدسلوپ که با هم می‌جنگند",
+            "انتظار داشتن از مهارت‌ها برای رفع مدلی که اساساً ضعیف یا بد پرامپت شده",
+            "هرگز نخواندن SKILL.md و بنابراین ندانستن اینکه واقعاً چه محدودیت‌هایی در زمینهٔ ایجنت فعال است"
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260907-skill-combination-flowchart-fa.webp",
+          "alt": "فلوچارت نشان‌دهندهٔ نحوهٔ انتخاب و ترکیب مهارت‌های ایجنت فرانت‌اند بر اساس نوع پروژه",
+          "caption": "شکل ۳: با نوع پروژه شروع کنید، یک مهارت جهت انتخاب کنید، یک مهارت بازبینی اضافه کنید، و همیشه با پاس دسترسی‌پذیری تمام کنید.",
+          "altText": "فلوچارت نشان‌دهندهٔ نحوهٔ انتخاب و ترکیب مهارت‌های ایجنت فرانت‌اند بر اساس نوع پروژه"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چه چیزی هنوز در ۲۰۲۶ کم است"
+        },
+        {
+          "type": "paragraph",
+          "text": "اکوسیستم در جهت بصری و عملکرد React قوی است. هنوز در تحمیل عمیق سیستم طراحی برای کتابخانه‌های کامپوننت موجود بزرگ، حلقه‌های رگرسیون بصری خودکار که به ایجنت بازخورد می‌دهند، و مهارت‌هایی که به‌طور قابل‌اعتماد خروجی مدل‌های محلی کوچک‌تر را بهبود می‌دهند ضعیف‌تر است. مهارت‌های سفارشی که توکن‌ها، APIهای کامپوننت و چک‌لیست‌های بازبینی شرکت خاصی را کدگذاری می‌کنند همچنان یکی از بالاترین ROIهایی هستند که یک تیم می‌تواند بسازد. مهارت‌های رسمی و جامعه در این راهنما پایه را به شما می‌دهند؛ مزیت ماندگار از مهارت‌هایی می‌آید که خودتان برای محصول خودتان می‌نویسید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام‌های عملی بعدی"
+        },
+        {
+          "type": "paragraph",
+          "text": "۱. امروز مهارت frontend-design از Anthropic را نصب کنید و آن را روی یک صفحهٔ سبز کوچک اجرا کنید تا تفاوت در جهت و رفتار ضدسلوپ را ببینید."
+        },
+        {
+          "type": "paragraph",
+          "text": "۲. web-design-guidelines از Vercel یا Impeccable را به‌عنوان بازبین پاس دوم اضافه کنید."
+        },
+        {
+          "type": "paragraph",
+          "text": "۳. یک مهارت دسترسی‌پذیری اضافه کنید و آن را گام نهایی اجباری برای هر خروجی کاربر-روبه‌رو کنید."
+        },
+        {
+          "type": "paragraph",
+          "text": "۴. اگر سیستم طراحی تثبیت‌شده دارید، یک مهارت سفارشی کوتاه بنویسید که ایجنت را به توکن‌ها و الگوهای کامپوننت شما اشاره دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "۵. تعداد کل مهارت‌ها را کم نگه دارید و فایل‌های واقعی SKILL.md را بررسی کنید تا بفهمید چه چیزی به زمینهٔ ایجنت تزریق می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "با این روش استفاده، مهارت‌های ایجنت به یکی از ابزارهای با بالاترین اهرم در دسترس توسعه‌دهندگان فرانت‌اند در ۲۰۲۶ تبدیل می‌شوند — قابل‌اعتمادتر از امید به اینکه انتشار مدل بعدی ناگهان سلیقهٔ بهتری پیدا کند، و قابل‌حمل‌تر از هر پرامپت واحدی که مدام بازنویسی می‌کنید."
+        },
+        {
+          "type": "cta",
+          "title": "کلسترهای محتوا برای GEO: چگونه اقتدار موضوعی بسازیم که موتورهای هوش مصنوعی به آن اعتماد کنند",
+          "text": "مهارت‌ها کدی را که ایجنت‌هایتان می‌نویسند بهبود می‌دهند. کلسترهای محتوا این را بهبود می‌دهند که آیا موتورهای جستجوی هوش مصنوعی مقالاتی را که دربارهٔ آن مهارت‌ها منتشر می‌کنید استناد می‌کنند یا نه.",
+          "buttonText": "مطالعهٔ راهنمای کلستر GEO",
+          "buttonUrl": "/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/"
+        },
+        {
+          "type": "cta",
+          "title": "مخزن رسمی مهارت‌های Anthropic",
+          "text": "منبع مهارت frontend-design و دیگر مهارت‌های رسمی ایجنت. مجموعهٔ کامل را ببینید، فایل‌های SKILL.md را بخوانید و مستقیم نصب کنید.",
+          "buttonText": "مشاهدهٔ مهارت‌های رسمی در گیت‌هاب",
+          "buttonUrl": "https://github.com/anthropics/skills"
+        },
+        {
+          "type": "cta",
+          "title": "مهارت‌های ایجنت Vercel",
+          "text": "خانهٔ web-design-guidelines و react-best-practices — مهارت‌های رسمی Vercel که دسترسی‌پذیری، عملکرد و الگوهای React را در خروجی ایجنت بهبود می‌دهند.",
+          "buttonText": "کاوش مهارت‌های ایجنت Vercel",
+          "buttonUrl": "https://github.com/vercel-labs/agent-skills"
+        }
+      ],
+      "faq": [
+        {
+          "question": "بهترین مهارت ایجنت منفرد برای طراحی فرانت‌اند در ۲۰۲۶ چیست؟",
+          "answer": "مهارت رسمی frontend-design از Anthropic. بالاترین پذیرش، نگهداری مداوم، و واضح‌ترین رفتار ضدسلوپ و تعیین جهت را دارد. بیشتر توصیه‌های جدی با آن به‌عنوان پایه شروع می‌کنند."
+        },
+        {
+          "question": "آیا این مهارت‌ها با Cline و مدل‌های محلی از طریق Ollama کار می‌کنند؟",
+          "answer": "بله. اکثریت بسته‌های دستورالعمل خالص (فایل‌های SKILL.md) هستند و با هر ایجنتی که از فرمت مهارت‌ها پشتیبانی می‌کند کار می‌کنند، از جمله Cline و OpenCode که به مدل‌های محلی اشاره می‌کنند. مدل‌های محلی کوچک‌تر از مهارت‌های کوتاه‌تر و قوی‌تر سود می‌برند و ممکن است دستورات نقد چندمرحله‌ای پیچیده را به‌اندازهٔ مدل‌های مرزی قابل‌اعتماد دنبال نکنند."
+        },
+        {
+          "question": "آیا باید همهٔ مهارت‌های فهرست‌شده در این راهنما را نصب کنم؟",
+          "answer": "خیر. سه تا پنج مهارت باکیفیت که همپوشانی ندارند از مجموعهٔ بزرگ مؤثرترند. پیش‌فرض عملی frontend-design + یک مهارت بازبینی (web-design-guidelines یا Impeccable) + یک مهارت دسترسی‌پذیری است، سپس مهارت‌های برند یا عملکرد React را فقط وقتی پروژه به آن‌ها نیاز دارد اضافه کنید."
+        },
+        {
+          "question": "مهارت ایجنت با پرامپت سیستم یا دستورالعمل سفارشی چه تفاوتی دارد؟",
+          "answer": "مهارت‌ها وقتی وظیفه با توصیفشان مطابقت داشته باشد در صورت تقاضا بارگذاری می‌شوند، نه این‌که زمینهٔ دائمی اشغال کنند. آن‌ها همچنین فایل‌های قابل‌حملی هستند که می‌توانند در مخزن زندگی کنند، نسخه‌بندی شوند، و در سراسر ایجنت‌ها و اعضای تیم به اشتراک گذاشته شوند."
+        },
+        {
+          "question": "آیا مهارت‌ها می‌توانند سیستم طراحی موجود من را بازنویسی کنند؟",
+          "answer": "یک مهارت جهت خالص مانند frontend-design می‌تواند زیبایی‌شناسی جدید را پیش ببرد اگر آن را محدود نکنید. برای سیستم‌های تثبیت‌شده، آن را با brand-guidelines یا مهارت سفارشی که توکن‌ها و کامپوننت‌های شما را کدگذاری می‌کند جفت کنید تا ایجنت داخل سیستم موجود بماند."
+        },
+        {
+          "question": "آیا مهارت‌های جامعه برای نصب امن هستند؟",
+          "answer": "با آن‌ها مثل هر کد شخص ثالث رفتار کنید. بسته‌هایی با نویسندگی واضح، نگهداری فعال، و فایل‌های SKILL.md خوانا را ترجیح دهید. دستورالعمل‌ها را پیش از فعال‌کردن روی کدبیس‌های حساس بررسی کنید. مهارت‌های رسمی Anthropic و Vercel در این محور ریسک کمتری دارند."
+        },
+        {
+          "question": "اگر از این مهارت‌ها استفاده کنم هنوز نیاز به بازبینی UI تولیدشده توسط ایجنت دارم؟",
+          "answer": "بله. مهارت‌ها به‌طور چشمگیری کف را بالا می‌برند و رایج‌ترین حالت‌های شکست را کاهش می‌دهند، اما جایگزین قضاوت انسانی روی سلسله‌مراتب، محتوا، تناسب برند، یا دسترسی‌پذیری موارد لبه نمی‌شوند. هدف چرخه‌های بازطراحی کمتر است، نه بازبینی صفر."
+        },
+        {
+          "question": "دستورات نصب فعلی و فایل‌های مهارت را کجا پیدا کنم؟",
+          "answer": "با مخازن anthropics/skills و vercel-labs/agent-skills در گیت‌هاب، به‌علاوهٔ رجیستری skills.sh و مخازن جامعهٔ فردی لینک‌شده در این مقاله شروع کنید. دستورات نصب و نام‌های دقیق مهارت می‌توانند جابه‌جا شوند؛ همیشه README مخزن را برای دستور توصیه‌شدهٔ فعلی بررسی کنید."
+        }
+      ],
+      "seo": {
+        "title": "بهترین مهارت‌های ایجنت فرانت‌اند در ۲۰۲۶ | راهنمای رتبه‌بندی‌شده",
+        "metaDescription": "راهنمای رتبه‌بندی‌شده بهترین مهارت‌های ایجنت برای کار فرانت‌اند در ۲۰۲۶. مهارت‌های رسمی Anthropic و Vercel به‌علاوهٔ بسته‌های جامعه که AI-slop را از بین می‌برند، خروجی React را بهتر می‌کنند و دسترسی‌پذیری را جدی می‌گیرند.",
+        "canonical": "https://sinisteroid.ir/fa/blog/the-best-frontend-agent-skills-in-2026-official-community",
+        "openGraph": {
+          "title": "بهترین مهارت‌های ایجنت فرانت‌اند در ۲۰۲۶",
+          "description": "کدام مهارت‌های ایجنت واقعاً خروجی React، TypeScript و سیستم طراحی را در ۲۰۲۶ بهتر می‌کنند — پایه‌های رسمی و بسته‌های قوی جامعه.",
+          "image": "/api/uploads/20260907-frontend-agent-skills-cover.webp"
+        },
+        "twitter": {
+          "title": "بهترین مهارت‌های ایجنت فرانت‌اند در ۲۰۲۶",
+          "description": "دیگر رابط‌های AI-slop منتشر نکنید. فهرست رتبه‌بندی‌شده مهارت‌های ایجنت که به عوامل کدنویسی سلیقه و انضباط واقعی فرانت‌اند می‌دهند.",
+          "image": "/api/uploads/20260907-frontend-agent-skills-cover.webp"
+        },
+        "keywords": "مهارت‌های ایجنت فرانت‌اند, مهارت‌های Claude Code, مهارت‌های Cline, frontend-design Anthropic, مهارت‌های ایجنت Vercel, AI slop, مهارت‌های React, مهارت‌های سیستم طراحی, ۲۰۲۶",
+        "focusKeyword": "مهارت‌های ایجنت فرانت‌اند ۲۰۲۶"
+      }
+    }
+  }
+}

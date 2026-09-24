@@ -1,0 +1,649 @@
+{
+  "slug": "ai-overviews-are-cutting-your-click-through-rate-by-35-percent-heres-how-to-win-anyway",
+  "status": "published",
+  "title": "AI Overviews Are Cutting Your Click-Through Rate by 35%. Here's How to Win Anyway",
+  "date": "2026-08-28 06:26:56",
+  "tags": [
+    "ai-overviews",
+    "geo",
+    "generative-engine-optimization",
+    "ai-search",
+    "zero-click-search",
+    "seo",
+    "search-engine-optimization",
+    "click-through-rate",
+    "content-strategy",
+    "digital-marketing"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/1787898426-ai-overviews-ctr-35-percent-cover.webp",
+    "alt": {
+      "en": "AI Overviews Are Cutting Your Click-Through Rate by 35%. Here's How to Win Anyway",
+      "fa": "AI Overview‌ها نرخ کلیک شما را تا ۳۵٪ کاهش می‌دهند. این‌طور می‌توانید همچنان برنده شوید"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "AI Overviews Are Cutting Your Click-Through Rate by 35%. Here's How to Win Anyway",
+      "excerpt": "The number circulating in every 2026 marketing deck is 35% — the click-through-rate gap between pages that get cited inside an AI Overview and pages that don't. That gap is real, but it isn't a death sentence. Here's what the data actually shows, and the exact playbook for landing on the winning side of it.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "AI Overviews Are Cutting Your Click-Through Rate by 35%. Here's How to Win Anyway"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Open any SEO conference deck, LinkedIn post, or agency pitch in the second half of 2026 and you will run into the same number: 35%. It shows up as the click-through-rate penalty for pages that don't get cited inside an AI Overview, the click-through-rate bonus for pages that do, or some blurred combination of both, depending on who's presenting. The number is real. Seer Interactive's longitudinal tracking of AI Overview performance found that pages earning a citation inside the summary box see roughly 35% higher click-through rates than comparable competitors who rank well but don't get pulled into the AI answer. The uncomfortable flip side is that if you're not the cited source, you're very likely the one absorbing that gap."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is not another \"SEO is dead\" post. Search traffic isn't disappearing — it's consolidating around a smaller set of sources that AI systems trust enough to quote by name. That is a fundamentally different problem than the one most content teams are still solving for, and it means the tactics that used to guarantee a click — rank in the top three, write 2,000 words, build some backlinks — now guarantee something much weaker: a chance at being one of several sources an AI system might skim before writing its own summary in someone else's voice. This piece breaks down exactly how big the gap is, why ranking well no longer guarantees a citation, and the specific, testable moves that move the needle in late 2026."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "35%",
+              "label": "higher click-through rate for pages cited inside an AI Overview vs. comparable non-cited competitors (Seer Interactive)"
+            },
+            {
+              "value": "38%",
+              "label": "of AI Overview citations now come from pages ranking in Google's top 10 — down from 76% just seven months earlier (Ahrefs)"
+            },
+            {
+              "value": "~48%",
+              "label": "of Google searches now trigger an AI Overview, up from roughly 31% in early 2025 (Averi.ai / Conductor)"
+            },
+            {
+              "value": "8% vs 15%",
+              "label": "share of visits ending in a traditional-result click when an AI summary appears vs. when it doesn't (Pew Research)"
+            },
+            {
+              "value": "2.5x",
+              "label": "higher odds of appearing in an AI answer for pages with structured schema markup (Maintouch / SE Ranking data)"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787898181-ai-overview-prevalence-ctr-drop-chart.webp",
+          "alt": "Line chart showing the rising percentage of Google searches that trigger an AI Overview from early 2025 through mid-2026, alongside the falling organic click-through rate on those same queries",
+          "caption": "Figure 1: As AI Overview prevalence climbed from roughly 31% of searches to nearly half of all searches in eighteen months, the organic click-through rate on those queries fell in step.",
+          "altText": "Line chart showing the rising percentage of Google searches that trigger an AI Overview from early 2025 through mid-2026, alongside the falling organic click-through rate on those same queries"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "How Big Is the AI Overview Click Problem, Actually?"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The 35% figure is the one getting quoted, but it's a comparison between two groups of already-visible pages. The bigger, blunter number is what happens to click behavior overall once an AI Overview shows up on the page at all."
+        },
+        {
+          "type": "paragraph",
+          "text": "Pew Research's 2026 analysis of real user browsing sessions found that people clicked through to a traditional organic result in only about 8% of visits when an AI-generated summary appeared at the top of the page, compared with roughly 15% of visits when no summary was present. That's close to a 47% relative drop in the odds of any click happening at all, before you even ask which specific page absorbed what was left. Conductor's study of 21.9 million searches put AI Overview prevalence at roughly 25% of queries in the first quarter of 2026 alone, and more recent tracking from Averi.ai puts the current figure closer to 48% — meaning roughly one in every two searches a person runs today returns an AI-written answer before a single blue link."
+        },
+        {
+          "type": "paragraph",
+          "text": "Layer the citation data on top of that, and the picture gets sharper. Ahrefs' March 2026 dataset found that only 38% of AI Overview citations now come from pages that also rank in Google's traditional top 10 for the same query — a steep fall from 76% just seven months earlier. In practical terms: ranking #1 organically used to be a reasonably reliable predictor of also winning the AI Overview citation. In 2026, it is closer to a coin flip. Google's systems increasingly break a single query into several sub-queries behind the scenes — a process generally referred to as query fan-out — and then pull citation sources from each of those expanded result sets, not just the page one you're used to competing on."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "Ranking #1 No Longer Guarantees the Citation",
+          "text": "If your GEO strategy still consists of \"rank higher and hope,\" the 2026 data says that plan is now failing more often than it succeeds. Query fan-out means an AI Overview can cite a page that never appears on the visible results page for the exact term you were targeting, because it was pulled in to answer a sub-question your content never directly addressed."
+        },
+        {
+          "type": "paragraph",
+          "text": "That shift is exactly why we've been arguing that content clusters and topical authority now matter more than any single keyword ranking — a single well-optimized page can no longer carry the whole burden of winning a citation, because the AI system answering the question is often synthesizing an answer from several angles of the same topic at once, not just the one your target page covers."
+        },
+        {
+          "type": "cta",
+          "title": "Content Clusters for GEO: Build Topical Authority AI Engines Trust",
+          "text": "If a single page can no longer guarantee a citation, the fix is structural. Here's the framework for building the kind of topical depth AI systems actually pull from.",
+          "buttonText": "Read the GEO Framework",
+          "buttonUrl": "/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Why the Gap Exists: What AI Systems Actually Reward"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Understanding the 35% gap means understanding that AI Overviews and traditional rankings are graded on two different rubrics, even though they're pulling from the same underlying web."
+        },
+        {
+          "type": "paragraph",
+          "text": "Traditional ranking systems reward relevance signals accumulated over time: backlinks, domain history, keyword coverage, page experience. AI citation systems are graded on extractability in the moment a query is asked — can the model find a clean, self-contained, verifiable answer it can lift and attribute without misrepresenting the source. Maintouch's 2026 research on citation behavior found that brand mentions across the web correlate roughly three times more strongly with AI visibility than backlinks do (a correlation coefficient of 0.66 versus 0.22), and that pages carrying structured schema markup are about 2.5 times more likely to be pulled into an AI answer than pages without it. Neither of those signals — being talked about elsewhere, or being machine-readable — has ever been a primary ranking factor in classic SEO, which is exactly why teams optimizing purely for rankings keep losing citations to competitors with weaker domain authority but cleaner structure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Freshness matters more here too. The same research found that content updated within the last 90 days gets cited roughly 4.3 times more often than stale pages covering the same topic, and a separate analysis from the Digital Bloom AI Visibility Report found that adding original statistics to a page increased its AI visibility by 22%, while including attributed quotations raised it by 37%. Neither of those levers requires a redesign or a technical migration — they require an editorial habit most content calendars don't currently have: revisiting and re-substantiating existing pages instead of only publishing new ones."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787898254-ai-citation-signals-backlinks-vs-brand-mentions.webp",
+          "alt": "Comparison chart showing brand mentions correlating roughly three times more strongly with AI search visibility than traditional backlinks",
+          "caption": "Figure 2: AI citation systems weight signals differently than classic SEO. Brand mentions and structured, machine-readable content now correlate with AI visibility far more strongly than link volume alone.",
+          "altText": "Comparison chart showing brand mentions correlating roughly three times more strongly with AI search visibility than traditional backlinks"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Seven Levers That Actually Move Citation Odds"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Strip away the vendor jargon and the 2026 research converges on a short, testable list. None of these are exotic. Most content teams are simply not doing all seven at once."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Answer first, explain second — lead every section with a standalone sentence that fully answers the implied question, since roughly 55% of AI Overview citations are pulled from content sitting in the top 30% of a page, not buried under a long preamble",
+            "Back every claim with a number or a named source — pages carrying original statistics see about 22% higher AI visibility, and attributed quotations raise it by roughly 37%, according to the Digital Bloom AI Visibility Report",
+            "Ship structured schema markup on your highest-value pages — Article, FAQPage, and HowTo schema correlate with roughly 2.5x higher odds of being pulled into an AI answer",
+            "Refresh your best-performing pages on a fixed cadence — content updated in the last 90 days is cited about 4.3 times more often than stale content on the same topic",
+            "Build entity clarity and topical depth, not isolated keyword pages — cover a subject from every angle a query fan-out might split it into, not just the single phrase you're chasing in a rank tracker",
+            "Earn third-party mentions deliberately — brand mentions correlate roughly three times more strongly with AI visibility than backlinks do, which makes digital PR and industry citations a GEO tactic now, not just a brand-awareness play",
+            "Publish comparison and decision-stage content — commercial and comparison queries cite listicle and comparison formats at a notably higher rate than simple definitional content, because those formats are harder for a model to fully replace with its own summary"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "How to Get Cited in AI Overviews: An Engine-by-Engine Guide",
+          "text": "Google, ChatGPT, Gemini, Claude, and Perplexity each pull citations from a different index. This independent breakdown covers what each one actually rewards.",
+          "buttonText": "Read the Full Guide",
+          "buttonUrl": "https://www.thehoth.com/blog/how-to-get-cited-in-ai-overviews/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Formats Still Winning Clicks Even Without a Citation"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Not every page needs to win the citation battle to survive the AI Overview era. Some formats are simply harder for a model to fully replace with a paragraph of its own writing, and they keep earning clicks even when they don't get quoted."
+        },
+        {
+          "type": "paragraph",
+          "text": "Interactive tools and calculators are the clearest example — an AI system can summarize what a mortgage calculator does, but it generally cannot replace the experience of using one, so the click still happens. Comparison content behaves similarly: a model can describe the differences between two products in general terms, but a reader making an actual purchase decision still tends to click through to see the full spec table, the pricing, and the real reviews. Wix's 2026 research into query-intent citation patterns found that roughly 41% of commercial and comparison-style queries cite listicle-format content specifically, a notably higher share than purely informational \"what is\" queries, which are far more likely to be answered entirely inside the AI Overview with no click at all."
+        },
+        {
+          "type": "paragraph",
+          "text": "Video is the fastest-growing exception of all. Ahrefs' 2026 citation dataset found that YouTube is now the single most-cited domain across Google AI Overviews, with YouTube citations growing roughly 34% over a six-month window, and accounting for about 5.6% of all AI Overview citations in their sample. More strikingly, among cited pages that didn't rank anywhere in Google's top 100 organic results for the same keyword, 18.2% were YouTube URLs — meaning video content is winning citations through a completely different door than the one text-based SEO has always used. For most content teams, that's the single most under-exploited channel sitting in this data: a video explainer of the exact same article can now win a citation slot that the article itself is losing."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787898369-citation-source-breakdown-formats-2026.webp",
+          "alt": "Bar chart showing which content formats earn the most AI Overview citations in 2026, with YouTube, comparison content, and original research leading the way",
+          "caption": "Figure 3: Not all content formats are equally replaceable by an AI summary. Video, comparison tables, and original data consistently outperform simple definitional pages in citation rate.",
+          "altText": "Bar chart showing which content formats earn the most AI Overview citations in 2026, with YouTube, comparison content, and original research leading the way"
+        },
+        {
+          "type": "cta",
+          "title": "Zero-Click Search Is Here. Now What?",
+          "text": "A practical breakdown of which content formats still earn a click on an AI-summarized results page, and how to build a strategy around the ones that do.",
+          "buttonText": "Read the Zero-Click Playbook",
+          "buttonUrl": "/en/blog/zero-click-search-is-here-now-what/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "How to Actually Measure Whether Any of This Is Working"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Most standard analytics setups were built for a link-click world and quietly fail to surface the metric that now matters most: how often you're the source an AI system decided to trust, whether or not that translated into a visit."
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Search Console will show you impressions and clicks, but it does not currently separate AI Overview citations from standard organic listings inside its default reporting, which means a page can be losing clicks specifically because of an AI Overview citation gap and the dashboard will simply show \"CTR declining\" with no obvious cause. Closing that visibility gap requires either running a fixed set of prompts through ChatGPT, Perplexity, Gemini, and Google's AI Mode on a recurring schedule and logging when your brand or domain shows up, or using one of the purpose-built tracking tools — Ahrefs Brand Radar, SE Ranking's AI Overview tracker, Otterly.ai, Profound, and Maintouch all launched or expanded this exact capability in 2026, precisely because demand for it is now high enough to support a whole new tooling category."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Separate referral traffic from ChatGPT, Perplexity, Gemini, and Copilot in your analytics platform — most default dashboards lump this in with generic 'referral' or miss it entirely",
+            "Run a fixed set of 10-20 prompts relevant to your business through each major AI engine monthly and log citation frequency by source, not just by ranking position",
+            "Track branded search volume as a leading indicator — being searched for by name is one of the few visibility signals an AI Overview cannot fully absorb, since the answer to a branded query is usually the brand itself",
+            "Audit your highest-traffic pages against the seven citation levers above before writing anything new — refreshing what already ranks is consistently cheaper than producing net-new content from scratch",
+            "Benchmark citation share of voice against direct competitors on shared queries, not just your own historical baseline, since a flat citation rate can still mean you're losing ground if competitors are climbing"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Is ChatGPT Search Killing Google? What the Data Actually Shows",
+          "text": "The full market-share and click-through-rate picture behind the shift this article builds on — including where the 35% figure fits into the bigger 2026 story.",
+          "buttonText": "Read the Full Data Breakdown",
+          "buttonUrl": "/en/blog/is-chatgpt-search-killing-google-what-the-data-actually-shows/"
+        },
+        {
+          "type": "paragraph",
+          "text": "It's worth being realistic about the limits of this measurement problem too. No tracking setup, purpose-built or manual, can capture every prompt a potential customer might type, and AI answers are non-deterministic enough that the same prompt run twice can return different sources on different days. The goal of citation tracking isn't a perfectly complete picture — it's a directional one, good enough to tell you whether last month's content changes moved your citation share up, down, or sideways relative to the competitors you actually care about beating."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "A 30-Day Plan to Close the Gap"
+        },
+        {
+          "type": "paragraph",
+          "text": "None of the tactics above require a full content-strategy overhaul to start moving the needle. A focused month looks like this: in week one, audit your ten highest-traffic pages against the citation checklist and flag anything older than six months with no schema markup. In week two, rewrite the opening 100-150 words of each flagged page into a standalone, quotable answer, and add or update FAQPage and Article schema. In week three, add at least one original statistic, one named expert quote, or one first-hand data point to each page — genuinely new information a model cannot already know, not a rephrased version of a competitor's claim. In week four, set up citation tracking across the major AI engines and establish your baseline, so the next round of edits has something real to measure against."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is deliberately not a plan to chase every AI engine's algorithm in isolation. It's a plan to make your best content harder to fully replace with a three-sentence summary — which is the one strategy that keeps paying off regardless of which engine ends up dominating discovery a year from now."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Mistakes That Quietly Waste All of the Above"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Most of the teams losing the citation gap aren't ignoring GEO entirely — they're undermining their own efforts with a handful of habits carried over from a link-and-rank era that no longer rewards them the same way."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Burying the answer under a long narrative introduction — a 400-word story before the actual answer might read well to a human, but it pushes the extractable sentence out of the top third of the page where most citations are pulled from",
+            "Treating schema as a one-time technical task instead of a content discipline — schema markup that isn't updated when the underlying content changes becomes a mismatch signal, not a trust signal",
+            "Keyword-stuffing instead of building genuine topical depth — AI systems increasingly detect thin, repetitive coverage of the same phrase and treat it as a weaker source than a page with real subtopic coverage, even at a lower keyword density",
+            "Gating strong data behind logins, paywalls, or JavaScript-only rendering — AI crawlers overwhelmingly cite open-access, easily parsed content, so your best original research is worthless for citation purposes if a model can't actually read it",
+            "Publishing and forgetting — a page that ranked well in 2024 and hasn't been touched since is now competing against freshly updated competitors that get cited roughly 4.3 times more often purely on recency"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "None of these mistakes require an agency retainer to fix. They require someone on the content team treating an existing page the way a product team treats a shipped feature — something that gets monitored, iterated on, and occasionally rebuilt, instead of something that's finished the day it's published."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Honest Bottom Line"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The 35% figure isn't a scare stat designed to sell a course or a tool. It's a measurable, reproducible gap between two groups of pages that are otherwise comparable in every way that used to matter."
+        },
+        {
+          "type": "paragraph",
+          "text": "The pages closing that gap in 2026 aren't necessarily the ones with the biggest domain authority or the largest content teams. They're the ones treating extractability as seriously as they used to treat keyword density — answering questions in the first sentence instead of the fifth paragraph, backing claims with real numbers instead of vague assertions, keeping their best pages current instead of letting them age quietly in a CMS, and building the kind of topical depth that survives a query fan-out instead of betting everything on a single target phrase. None of that guarantees a citation on any individual query. But it is, at this point, the closest thing to a repeatable playbook the 2026 data actually supports — and it's a playbook that keeps working whether the citation ends up coming from Google's AI Overview, ChatGPT, Gemini, or whatever answer engine is dominant by the time this gap gets measured again next year."
+        }
+      ],
+      "faq": [
+        {
+          "question": "Where does the 35% click-through-rate figure actually come from?",
+          "answer": "It comes from Seer Interactive's 2026 longitudinal tracking of AI Overview performance, which found that pages earning a citation inside an AI Overview see roughly 35% higher click-through rates than comparable competitors who rank well organically but aren't cited. It's best understood as a citation gap, not a universal traffic-loss number — the overall click-through decline on AI-Overview queries, measured separately, runs considerably higher in several other studies."
+        },
+        {
+          "question": "Does ranking #1 on Google still guarantee an AI Overview citation?",
+          "answer": "No. Ahrefs' 2026 data found that only 38% of AI Overview citations now come from pages ranking in the traditional top 10 for the same query, down sharply from 76% less than a year earlier. Google's query fan-out process increasingly pulls citations from pages answering related sub-questions, not just the page ranking highest for the exact keyword being tracked."
+        },
+        {
+          "question": "What's the single highest-leverage change I can make this week?",
+          "answer": "Rewrite the opening 100-150 words of your best-performing pages into a self-contained answer that fully addresses the query without requiring the reader to scroll further, and add or update FAQPage and Article schema markup. Roughly 55% of AI Overview citations pull from content in the top third of a page, and structured pages see about 2.5 times higher odds of being cited."
+        },
+        {
+          "question": "Do backlinks still matter for AI search visibility?",
+          "answer": "They still matter, but less than they used to relative to other signals. 2026 research found brand mentions across the web correlate roughly three times more strongly with AI visibility than backlinks do. That doesn't make link building worthless, but it does mean digital PR and being mentioned by name on other trusted sites deserves at least as much budget as traditional link acquisition."
+        },
+        {
+          "question": "Is video worth investing in for AI search visibility specifically?",
+          "answer": "Increasingly, yes. YouTube is now the single most-cited domain across Google AI Overviews, with citations growing roughly 34% in six months, and a meaningful share of those cited videos don't rank anywhere in Google's top 100 organic text results for the same keyword. A video explainer can win a citation slot that a text article covering the identical topic is losing."
+        },
+        {
+          "question": "How often should I refresh existing content instead of publishing new pages?",
+          "answer": "The data suggests refreshing should be a scheduled, recurring part of a content calendar, not an afterthought. Content updated within the last 90 days is cited roughly 4.3 times more often than stale pages on the same topic, which in most cases makes updating a high-traffic page a better use of time than publishing a brand-new one from scratch."
+        },
+        {
+          "question": "How do I actually track whether I'm getting cited in AI Overviews?",
+          "answer": "Google Search Console doesn't separate AI Overview citations from standard listings by default, so most teams either run a fixed set of prompts through ChatGPT, Perplexity, Gemini, and Google's AI Mode on a recurring schedule and log the results manually, or use a dedicated tracking tool such as Ahrefs Brand Radar, Otterly.ai, Profound, or Maintouch, several of which expanded this exact capability in 2026."
+        },
+        {
+          "question": "Should small websites even try to compete for AI Overview citations?",
+          "answer": "Yes, and arguably more urgently than larger sites, since the citation gap disproportionately affects smaller publishers whose traffic is more concentrated in a handful of pages. Because citation signals now weight structure, freshness, and original data more heavily than raw domain authority, a small, well-maintained site focused on a narrow topic can realistically out-cite a much larger competitor that hasn't updated its content in years."
+        }
+      ],
+      "seo": {
+        "title": "AI Overviews Cut CTR by 35%. How to Win the Citation Anyway | 2026 Guide",
+        "metaDescription": "Pages cited in AI Overviews get 35% higher CTR than similarly-ranked competitors that aren't cited. Here's the 2026 data on why, and the exact playbook to close the gap.",
+        "canonical": "https://sinisteroid.ir/blog/ai-overviews-are-cutting-your-click-through-rate-by-35-percent-heres-how-to-win-anyway",
+        "openGraph": {
+          "title": "AI Overviews Are Cutting Your Click-Through Rate by 35%. Here's How to Win Anyway",
+          "description": "The citation gap between AI-Overview-cited pages and everyone else is real and measurable. Here's the 2026 data and the exact playbook to close it.",
+          "image": "/api/uploads/1787900001-ai-overviews-ctr-35-percent-cover.webp"
+        },
+        "twitter": {
+          "title": "AI Overviews Are Cutting Your Click-Through Rate by 35%. Here's How to Win Anyway",
+          "description": "Cited pages get 35% more clicks than similarly-ranked competitors that aren't cited. Here's exactly how to become the cited page.",
+          "image": "/api/uploads/1787900001-ai-overviews-ctr-35-percent-cover.webp"
+        },
+        "keywords": "AI Overviews CTR, AI Overview citation, how to get cited in AI Overviews, generative engine optimization, GEO strategy 2026, AI search click-through rate, zero-click search, schema markup AI citations, query fan-out, AI search visibility",
+        "focusKeyword": "AI Overviews click-through rate"
+      }
+    },
+    "fa": {
+      "title": "AI Overview‌ها نرخ کلیک شما را تا ۳۵٪ کاهش می‌دهند. این‌طور می‌توانید همچنان برنده شوید",
+      "excerpt": "عددی که در تمام ارائه‌های بازاریابی سال ۲۰۲۶ دست‌به‌دست می‌شود ۳۵٪ است — فاصلهٔ نرخ کلیک میان صفحاتی که درون یک AI Overview استناد می‌شوند و صفحاتی که نمی‌شوند. این فاصله واقعی است، اما حکم اعدام نیست. این‌جا داده‌های واقعی، و برنامهٔ دقیقی برای قرارگرفتن در سمت برندهٔ این ماجرا را می‌بینید.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "AI Overview‌ها نرخ کلیک شما را تا ۳۵٪ کاهش می‌دهند. این‌طور می‌توانید همچنان برنده شوید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هر ارائهٔ کنفرانس SEO، پست لینکدین یا پیشنهاد آژانسی را در نیمهٔ دوم ۲۰۲۶ باز کنید، به یک عدد ثابت برمی‌خورید: ۳۵٪. این عدد گاهی به‌عنوان جریمهٔ نرخ کلیک برای صفحاتی که درون یک AI Overview استناد نمی‌شوند ظاهر می‌شود، گاهی به‌عنوان پاداش نرخ کلیک برای صفحاتی که استناد می‌شوند، و گاهی ترکیبی مبهم از هر دو، بسته به این‌که چه کسی آن را ارائه می‌دهد. این عدد واقعی است. ردیابی بلندمدت Seer Interactive از عملکرد AI Overviews نشان داد صفحاتی که درون خلاصهٔ هوش مصنوعی استناد می‌شوند، حدود ۳۵٪ نرخ کلیک بالاتری نسبت به رقبای قابل‌مقایسه‌ای دارند که رتبهٔ خوبی می‌گیرند اما استناد نمی‌شوند. روی ناخوشایند ماجرا این است که اگر شما منبع استنادشده نباشید، به احتمال زیاد همان کسی هستید که این فاصله را متحمل می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یک مطلب دیگر با عنوان «SEO مرده است» نیست. ترافیک جستجو ناپدید نمی‌شود — بلکه حول مجموعهٔ کوچک‌تری از منابعی که سیستم‌های هوش مصنوعی به‌اندازهٔ کافی برای نقل‌قول به نام اعتماد دارند، متمرکز می‌شود. این مسئله‌ای اساساً متفاوت از چیزی است که بیشتر تیم‌های محتوا هنوز برای آن راه‌حل می‌جویند، و یعنی تاکتیک‌هایی که قبلاً کلیک را تضمین می‌کردند — رتبهٔ سه اول را بگیر، ۲۰۰۰ کلمه بنویس، چند بک‌لینک بساز — اکنون چیز خیلی ضعیف‌تری تضمین می‌کنند: شانسی برای این‌که یکی از چند منبعی باشید که یک سیستم هوش مصنوعی پیش از نوشتن خلاصهٔ خودش با صدای شخص دیگری، آن را مرور می‌کند. این مقاله دقیقاً نشان می‌دهد این فاصله چقدر بزرگ است، چرا رتبهٔ خوب دیگر استناد را تضمین نمی‌کند، و اقدامات مشخص و قابل‌آزمایشی که در اواخر ۲۰۲۶ واقعاً تأثیر می‌گذارند."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۳۵٪",
+              "label": "نرخ کلیک بالاتر برای صفحات استنادشده درون AI Overview نسبت به رقبای قابل‌مقایسهٔ استنادنشده (Seer Interactive)"
+            },
+            {
+              "value": "۳۸٪",
+              "label": "از استنادهای AI Overview اکنون از صفحاتی می‌آید که در ۱۰ نتیجهٔ برتر گوگل هم رتبه دارند — کاهش از ۷۶٪ فقط هفت ماه پیش (Ahrefs)"
+            },
+            {
+              "value": "حدود ۴۸٪",
+              "label": "از جستجوهای گوگل اکنون یک AI Overview را فعال می‌کنند، افزایش از حدود ۳۱٪ در اوایل ۲۰۲۵ (Averi.ai / Conductor)"
+            },
+            {
+              "value": "۸٪ در برابر ۱۵٪",
+              "label": "سهم بازدیدهایی که با کلیک روی یک نتیجهٔ سنتی پایان می‌یابند، وقتی خلاصهٔ هوش مصنوعی نمایش داده می‌شود در برابر وقتی نمایش داده نمی‌شود (Pew Research)"
+            },
+            {
+              "value": "۲.۵ برابر",
+              "label": "شانس بالاتر برای ظاهرشدن در یک پاسخ هوش مصنوعی برای صفحات دارای نشانه‌گذاری ساختاریافتهٔ schema (داده‌های Maintouch / SE Ranking)"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787898393-ai-overview-prevalence-ctr-drop-chart.webp",
+          "alt": "نمودار خطی نشان‌دهندهٔ افزایش درصد جستجوهای گوگل که یک AI Overview را از اوایل ۲۰۲۵ تا اواسط ۲۰۲۶ فعال می‌کنند، همراه با افت نرخ کلیک ارگانیک در همان پرسش‌ها",
+          "caption": "شکل ۱: با افزایش شیوع AI Overview از حدود ۳۱٪ جستجوها به نزدیک نیمی از کل جستجوها در هجده ماه، نرخ کلیک ارگانیک در همان پرسش‌ها هم‌گام با آن افت کرد.",
+          "altText": "نمودار خطی نشان‌دهندهٔ افزایش درصد جستجوهای گوگل که یک AI Overview را از اوایل ۲۰۲۵ تا اواسط ۲۰۲۶ فعال می‌کنند، همراه با افت نرخ کلیک ارگانیک در همان پرسش‌ها"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "مشکل کلیک AI Overview واقعاً چقدر بزرگ است؟"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "عدد ۳۵٪ همان چیزی است که نقل‌قول می‌شود، اما مقایسه‌ای میان دو گروه از صفحات از قبل دیده‌شده است. عدد بزرگ‌تر و خام‌تر این است که وقتی اصلاً یک AI Overview روی صفحه ظاهر می‌شود، رفتار کلیک به‌طور کلی چه می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "تحلیل ۲۰۲۶ Pew Research روی نشست‌های واقعی مرور کاربران نشان داد مردم فقط در حدود ۸٪ از بازدیدها وقتی خلاصهٔ تولیدشده توسط هوش مصنوعی در بالای صفحه ظاهر می‌شود، روی یک نتیجهٔ ارگانیک سنتی کلیک می‌کنند، در مقایسه با حدود ۱۵٪ از بازدیدها وقتی خلاصه‌ای وجود ندارد. این تقریباً افتی نسبی ۴۷٪ در احتمال وقوع هر نوع کلیکی است، پیش از آن‌که حتی بپرسیم کدام صفحهٔ خاص باقی‌ماندهٔ آن را جذب کرده. مطالعهٔ Conductor روی ۲۱.۹ میلیون جستجو، شیوع AI Overview را تنها در سه‌ماههٔ اول ۲۰۲۶ حدود ۲۵٪ از پرسش‌ها برآورد کرد، و ردیابی جدیدتر Averi.ai این رقم را اکنون نزدیک به ۴۸٪ نشان می‌دهد — یعنی تقریباً یکی از هر دو جستجویی که امروز یک نفر انجام می‌دهد، پیش از یک لینک آبی، یک پاسخ نوشته‌شده توسط هوش مصنوعی برمی‌گرداند."
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی داده‌های استناد را روی این تصویر بگذاریم، تصویر شفاف‌تر می‌شود. مجموعه‌دادهٔ مارس ۲۰۲۶ Ahrefs نشان داد فقط ۳۸٪ از استنادهای AI Overview اکنون از صفحاتی می‌آید که برای همان پرسش در ۱۰ نتیجهٔ برتر سنتی گوگل هم رتبه دارند — افتی شدید از ۷۶٪ فقط هفت ماه پیش. به زبان عملی: رتبهٔ اول ارگانیک قبلاً پیش‌بینی‌کنندهٔ نسبتاً قابل‌اعتمادی برای برنده‌شدن استناد AI Overview هم بود. در ۲۰۲۶، این به شیر یا خط نزدیک‌تر است. سیستم‌های گوگل به‌طور فزاینده یک پرسش را در پس‌زمینه به چند زیرپرسش تقسیم می‌کنند — فرآیندی که عموماً «فن‌آوت پرسش» نامیده می‌شود — و سپس منابع استناد را از هر کدام از این مجموعه‌نتایج گسترش‌یافته می‌کشند، نه فقط از صفحهٔ اولی که برای رقابت با آن عادت دارید."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "رتبهٔ اول دیگر استناد را تضمین نمی‌کند",
+          "text": "اگر استراتژی GEO شما هنوز فقط «رتبه را بالاتر ببر و امیدوار باش» است، داده‌های ۲۰۲۶ می‌گویند این برنامه اکنون بیشتر از قبل شکست می‌خورد. فن‌آوت پرسش یعنی یک AI Overview می‌تواند صفحه‌ای را استناد کند که هرگز در صفحهٔ نتایج قابل‌مشاهده برای عبارت دقیقی که هدف قرار داده‌اید ظاهر نمی‌شود، چون برای پاسخ به زیرپرسشی کشیده شده که محتوای شما هرگز مستقیم به آن نپرداخته."
+        },
+        {
+          "type": "paragraph",
+          "text": "همین تغییر دقیقاً همان چیزی است که ما همواره استدلال کرده‌ایم: کلسترهای محتوا و اقتدار موضوعی اکنون بیش از هر رتبهٔ تک‌کلیدواژه‌ای اهمیت دارند — یک صفحهٔ به‌خوبی بهینه‌شده دیگر نمی‌تواند به‌تنهایی بار برنده‌شدن یک استناد را بر دوش بکشد، چون سیستم هوش مصنوعی پاسخ‌دهنده اغلب پاسخ را از چند زاویهٔ همان موضوع هم‌زمان ترکیب می‌کند، نه فقط زاویه‌ای که صفحهٔ هدف شما پوشش می‌دهد."
+        },
+        {
+          "type": "cta",
+          "title": "کلسترهای محتوا برای GEO: اقتدار موضوعی که موتورهای هوش مصنوعی به آن اعتماد کنند",
+          "text": "اگر یک صفحهٔ تنها دیگر نمی‌تواند استناد را تضمین کند، راه‌حل ساختاری است. این‌جا چارچوب ساختن عمق موضوعی‌ای که سیستم‌های هوش مصنوعی واقعاً از آن استفاده می‌کنند را می‌بینید.",
+          "buttonText": "مطالعهٔ چارچوب GEO",
+          "buttonUrl": "/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چرا این فاصله وجود دارد: سیستم‌های هوش مصنوعی واقعاً به چه چیزی پاداش می‌دهند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "فهم فاصلهٔ ۳۵٪ یعنی فهم این‌که AI Overviews و رتبه‌بندی‌های سنتی با دو معیار متفاوت نمره می‌گیرند، حتی اگر هر دو از همان وب زیربنایی برداشت می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "سیستم‌های رتبه‌بندی سنتی به سیگنال‌های ارتباطی که در طول زمان انباشته شده‌اند پاداش می‌دهند: بک‌لینک، سابقهٔ دامنه، پوشش کلیدواژه، تجربهٔ صفحه. سیستم‌های استناد هوش مصنوعی در همان لحظه‌ای که پرسش مطرح می‌شود بر اساس قابلیت‌استخراج نمره می‌گیرند — این‌که آیا مدل می‌تواند پاسخی تمیز، خودکفا و قابل‌راستی‌آزمایی پیدا کند که بتواند بدون تحریف منبع، آن را بردارد و استناد دهد. تحقیقات ۲۰۲۶ Maintouch دربارهٔ رفتار استناد نشان داد ذکرشدن نام برند در سراسر وب تقریباً سه برابر قوی‌تر از بک‌لینک با دیده‌شدن هوش مصنوعی هم‌بستگی دارد (ضریب هم‌بستگی ۰.۶۶ در برابر ۰.۲۲)، و صفحات دارای نشانه‌گذاری ساختاریافتهٔ schema حدود ۲.۵ برابر بیشتر احتمال دارد درون یک پاسخ هوش مصنوعی کشیده شوند. هیچ‌کدام از این سیگنال‌ها — دیده‌شدن نام‌تان در جای دیگر، یا قابل‌خواندن‌بودن توسط ماشین — هرگز عامل رتبه‌بندی اصلی در SEO کلاسیک نبوده، و دقیقاً به همین دلیل تیم‌هایی که فقط برای رتبه‌بندی بهینه می‌کنند، همچنان استنادها را به رقبایی با اقتدار دامنهٔ ضعیف‌تر اما ساختار تمیزتر می‌بازند."
+        },
+        {
+          "type": "paragraph",
+          "text": "تازگی محتوا هم این‌جا بیشتر اهمیت دارد. همان تحقیق نشان داد محتوایی که در ۹۰ روز اخیر به‌روزرسانی شده، حدود ۴.۳ برابر بیشتر از صفحات قدیمی دربارهٔ همان موضوع استناد می‌شود، و تحلیل جداگانه‌ای از گزارش Digital Bloom AI Visibility نشان داد افزودن آمار اصیل به یک صفحه، دیده‌شدنش در هوش مصنوعی را ۲۲٪ افزایش می‌دهد، درحالی‌که گنجاندن نقل‌قول‌های منسوب، آن را ۳۷٪ بالا می‌برد. هیچ‌کدام از این اهرم‌ها به بازطراحی یا مهاجرت فنی نیاز ندارد — به یک عادت تحریریه نیاز دارند که بیشتر تقویم‌های محتوایی اکنون ندارند: بازبینی و مستندسازی مجدد صفحات موجود، به‌جای انتشار صرف محتوای جدید."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787898403-ai-citation-signals-backlinks-vs-brand-mentions.webp",
+          "alt": "نمودار مقایسه‌ای نشان‌دهندهٔ هم‌بستگی حدوداً سه‌برابری ذکرشدن نام برند با دیده‌شدن در جستجوی هوش مصنوعی نسبت به بک‌لینک‌های سنتی",
+          "caption": "شکل ۲: سیستم‌های استناد هوش مصنوعی سیگنال‌ها را متفاوت از SEO کلاسیک وزن‌دهی می‌کنند. ذکرشدن نام برند و محتوای ساختاریافتهٔ قابل‌خواندن توسط ماشین، اکنون بسیار قوی‌تر از حجم لینک تنها با دیده‌شدن هوش مصنوعی هم‌بسته‌اند.",
+          "altText": "نمودار مقایسه‌ای نشان‌دهندهٔ هم‌بستگی حدوداً سه‌برابری ذکرشدن نام برند با دیده‌شدن در جستجوی هوش مصنوعی نسبت به بک‌لینک‌های سنتی"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "هفت اهرمی که واقعاً شانس استناد را تغییر می‌دهند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اصطلاحات بازاریابی فروشندگان را کنار بگذارید، تحقیقات ۲۰۲۶ به یک فهرست کوتاه و قابل‌آزمایش می‌رسد. هیچ‌کدام از این‌ها عجیب‌وغریب نیستند. بیشتر تیم‌های محتوا صرفاً هر هفت مورد را هم‌زمان انجام نمی‌دهند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "اول پاسخ بده، بعد توضیح بده — هر بخش را با جمله‌ای خودکفا شروع کن که کاملاً به پرسش ضمنی پاسخ دهد، چون حدود ۵۵٪ از استنادهای AI Overview از محتوای واقع در یک‌سوم بالایی صفحه کشیده می‌شود، نه دفن‌شده زیر یک مقدمهٔ طولانی",
+            "هر ادعا را با یک عدد یا منبع نام‌دار پشتیبانی کن — صفحات دارای آمار اصیل حدود ۲۲٪ دیده‌شدگی بالاتری در هوش مصنوعی دارند، و نقل‌قول‌های منسوب آن را حدود ۳۷٪ بالا می‌برد، طبق گزارش Digital Bloom AI Visibility",
+            "نشانه‌گذاری ساختاریافتهٔ schema را روی باارزش‌ترین صفحاتت اجرا کن — schema نوع Article، FAQPage و HowTo با حدود ۲.۵ برابر شانس بالاتر برای کشیده‌شدن به یک پاسخ هوش مصنوعی هم‌بسته‌اند",
+            "بهترین صفحاتت را با یک برنامهٔ زمانی ثابت به‌روزرسانی کن — محتوایی که در ۹۰ روز اخیر به‌روز شده، حدود ۴.۳ برابر بیشتر از محتوای قدیمی دربارهٔ همان موضوع استناد می‌شود",
+            "به‌جای صفحات کلیدواژه‌محور مجزا، وضوح موجودیت و عمق موضوعی بساز — موضوع را از هر زاویه‌ای که یک فن‌آوت پرسش ممکن است آن را بشکافد پوشش بده، نه فقط عبارتی که در ابزار رتبه‌سنجی دنبال می‌کنی",
+            "به‌طور آگاهانه ذکرشدن توسط اشخاص ثالث را کسب کن — ذکر نام برند تقریباً سه برابر قوی‌تر از بک‌لینک با دیده‌شدن هوش مصنوعی هم‌بسته است، که PR دیجیتال و استنادهای صنعتی را اکنون به یک تاکتیک GEO تبدیل می‌کند، نه فقط یک بازی آگاهی از برند",
+            "محتوای مقایسه‌ای و مرحلهٔ تصمیم‌گیری منتشر کن — پرسش‌های تجاری و مقایسه‌ای فرمت‌های لیستی و مقایسه‌ای را با نرخ به‌طور محسوسی بالاتری نسبت به محتوای صرفاً تعریفی استناد می‌کنند، چون این فرمت‌ها برای یک مدل سخت‌تر است که به‌طور کامل با خلاصهٔ خودش جایگزین کند"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "How to Get Cited in AI Overviews: An Engine-by-Engine Guide",
+          "text": "گوگل، ChatGPT، Gemini، Claude و Perplexity هرکدام استنادها را از نمایه‌ای متفاوت می‌کشند. این تحلیل مستقل نشان می‌دهد هر کدام واقعاً به چه چیزی پاداش می‌دهند.",
+          "buttonText": "مطالعهٔ راهنمای کامل",
+          "buttonUrl": "https://www.thehoth.com/blog/how-to-get-cited-in-ai-overviews/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "فرمت‌هایی که حتی بدون استناد هم کلیک می‌گیرند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هر صفحه‌ای نیازی ندارد جنگ استناد را ببرد تا در دورهٔ AI Overview دوام بیاورد. برخی فرمت‌ها به‌سادگی برای یک مدل سخت‌تر است که با یک پاراگراف از نوشتهٔ خودش کاملاً جایگزین‌شان کند، و حتی وقتی نقل‌قول نمی‌شوند هم کلیک می‌گیرند."
+        },
+        {
+          "type": "paragraph",
+          "text": "ابزارها و ماشین‌حساب‌های تعاملی روشن‌ترین نمونه هستند — یک سیستم هوش مصنوعی می‌تواند خلاصه کند که یک ماشین‌حساب وام مسکن چه کاری انجام می‌دهد، اما معمولاً نمی‌تواند تجربهٔ استفاده از آن را جایگزین کند، پس کلیک همچنان اتفاق می‌افتد. محتوای مقایسه‌ای هم مشابه رفتار می‌کند: یک مدل می‌تواند تفاوت‌های دو محصول را به‌طور کلی توصیف کند، اما خواننده‌ای که در حال تصمیم‌گیری خرید واقعی است هنوز تمایل دارد روی جدول مشخصات کامل، قیمت‌گذاری و نظرات واقعی کلیک کند. تحقیق ۲۰۲۶ Wix دربارهٔ الگوهای استناد بر اساس نیت پرسش نشان داد حدود ۴۱٪ از پرسش‌های تجاری و مقایسه‌ای، محتوای فرمت لیستی را به‌طور خاص استناد می‌کنند، سهمی به‌طور محسوسی بالاتر از پرسش‌های صرفاً اطلاعاتی «چیست» که خیلی بیشتر احتمال دارد به‌طور کامل درون AI Overview بدون هیچ کلیکی پاسخ داده شوند."
+        },
+        {
+          "type": "paragraph",
+          "text": "ویدیو سریع‌رشدترین استثنا است. مجموعه‌دادهٔ استناد ۲۰۲۶ Ahrefs نشان داد یوتیوب اکنون پراستنادترین دامنهٔ منفرد در سراسر AI Overviews گوگل است، با رشد استنادهای یوتیوب حدود ۳۴٪ در یک بازهٔ شش‌ماهه، و مسئولیت حدود ۵.۶٪ از کل استنادهای AI Overview در نمونهٔ آن‌ها. جالب‌تر این‌که، از میان صفحات استنادشده‌ای که در هیچ‌کجای ۱۰۰ نتیجهٔ برتر ارگانیک گوگل برای همان کلیدواژه رتبه نداشتند، ۱۸.۲٪ آدرس‌های یوتیوب بودند — یعنی محتوای ویدیویی استنادها را از دری کاملاً متفاوت با دری که SEO متن‌محور همیشه از آن استفاده کرده، برنده می‌شود. برای بیشتر تیم‌های محتوا، این تک‌تنها‌ترین کانال کم‌استفاده‌شده در این داده‌هاست: یک ویدیوی توضیحی از همان مقاله می‌تواند اکنون استنادی را ببرد که خود مقاله در حال باختنش است."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787898412-citation-source-breakdown-formats-2026.webp",
+          "alt": "نمودار میله‌ای نشان‌دهندهٔ این‌که کدام فرمت‌های محتوا بیشترین استنادهای AI Overview را در سال ۲۰۲۶ کسب می‌کنند، با پیشتازی یوتیوب، محتوای مقایسه‌ای و تحقیق اصیل",
+          "caption": "شکل ۳: همهٔ فرمت‌های محتوا به یک اندازه با خلاصهٔ هوش مصنوعی قابل‌جایگزینی نیستند. ویدیو، جدول‌های مقایسه‌ای و داده‌های اصیل، به‌طور مداوم از صفحات صرفاً تعریفی در نرخ استناد پیشی می‌گیرند.",
+          "altText": "نمودار میله‌ای نشان‌دهندهٔ این‌که کدام فرمت‌های محتوا بیشترین استنادهای AI Overview را در سال ۲۰۲۶ کسب می‌کنند، با پیشتازی یوتیوب، محتوای مقایسه‌ای و تحقیق اصیل"
+        },
+        {
+          "type": "cta",
+          "title": "جستجوی بدون کلیک آمده. حالا چه کار کنیم؟",
+          "text": "تحلیلی عملی از این‌که کدام فرمت‌های محتوا هنوز در صفحهٔ نتایج خلاصه‌شدهٔ هوش مصنوعی کلیک می‌گیرند، و چگونه استراتژی خود را حول همان‌ها بسازید.",
+          "buttonText": "مطالعهٔ راهنمای بدون کلیک",
+          "buttonUrl": "/fa/blog/zero-click-search-is-here-now-what/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چگونه واقعاً بسنجیم که این کارها جواب می‌دهند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "بیشتر تنظیمات تحلیل‌گر استاندارد برای دنیای کلیک-روی-لینک ساخته شده‌اند و به‌آرامی نمی‌توانند معیاری را که اکنون بیشترین اهمیت را دارد نشان دهند: این‌که چند بار شما منبعی بودید که یک سیستم هوش مصنوعی تصمیم گرفت به آن اعتماد کند، چه این به بازدید تبدیل شود چه نشود."
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Search Console نمایش و کلیک را نشان می‌دهد، اما در گزارش‌دهی پیش‌فرض خود، استنادهای AI Overview را از فهرست‌های ارگانیک استاندارد جدا نمی‌کند، یعنی یک صفحه می‌تواند دقیقاً به‌خاطر شکاف استناد AI Overview کلیک از دست بدهد و داشبورد فقط «افت CTR» را بدون علت مشخص نشان دهد. بستن این شکاف دید نیازمند این است که یا مجموعه‌ای ثابت از پرامپت‌ها را به‌طور دوره‌ای در ChatGPT، Perplexity، Gemini و AI Mode گوگل اجرا کنید و نتایج را دستی ثبت کنید، یا از یکی از ابزارهای ردیابی اختصاصی استفاده کنید — Ahrefs Brand Radar، ردیاب AI Overview در SE Ranking، Otterly.ai، Profound و Maintouch همگی دقیقاً همین قابلیت را در ۲۰۲۶ عرضه یا گسترش دادند، دقیقاً چون تقاضا برای آن اکنون به‌اندازهٔ کافی بالاست تا از یک دستهٔ کاملاً جدید ابزاری پشتیبانی کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "ترافیک ارجاعی از ChatGPT، Perplexity، Gemini و Copilot را در پلتفرم تحلیل‌گر خود جدا کنید — بیشتر داشبوردهای پیش‌فرض این را با «ارجاعی» عمومی یکی می‌کنند ��ا کاملاً از قلم می‌اندازند",
+            "ماهانه مجموعه‌ای ثابت از ۱۰ تا ۲۰ پرامپت مرتبط با کسب‌وکارتان را در هر موتور اصلی هوش مصنوعی اجرا کنید و فراوانی استناد را بر اساس منبع، نه فقط جایگاه رتبه‌بندی، ثبت کنید",
+            "حجم جستجوی برندی را به‌عنوان یک شاخص پیشرو ردیابی کنید — جستجوشدن با نام یکی از معدود سیگنال‌های دیده‌شدگی است که یک AI Overview نمی‌تواند به‌طور کامل جذب کند، چون پاسخ به یک پرسش برندی معمولاً خود برند است",
+            "پیش از نوشتن هر محتوای جدید، پرترافیک‌ترین صفحاتتان را در برابر هفت اهرم استناد بالا ممیزی کنید — به‌روزرسانی چیزی که از قبل رتبه دارد، همواره ارزان‌تر از تولید محتوای کاملاً تازه از صفر است",
+            "سهم صدای استناد را نسبت به رقبای مستقیم روی پرسش‌های مشترک بسنجید، نه فقط نسبت به خط پایهٔ تاریخی خودتان، چون نرخ استناد ثابت هم می‌تواند به‌معنای عقب‌ماندن باشد اگر رقبا در حال پیشروی باشند"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "آیا جستجوی ChatGPT در حال کشتن گوگل است؟ داده‌ها واقعاً چه می‌گویند",
+          "text": "تصویر کامل سهم بازار و نرخ کلیک پشت این تغییری که این مقاله روی آن ساخته شده — از جمله این‌که عدد ۳۵٪ کجای روایت بزرگ‌تر ۲۰۲۶ قرار می‌گیرد.",
+          "buttonText": "مطالعهٔ تحلیل کامل داده‌ها",
+          "buttonUrl": "/fa/blog/is-chatgpt-search-killing-google-what-the-data-actually-shows/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "یک برنامهٔ ۳۰ روزه برای بستن شکاف"
+        },
+        {
+          "type": "paragraph",
+          "text": "هیچ‌کدام از تاکتیک‌های بالا برای شروع تأثیرگذاری، نیازمند یک بازسازی کامل استراتژی محتوا نیست. یک ماه متمرکز این‌طور به نظر می‌رسد: در هفتهٔ اول، ده صفحهٔ پرترافیک‌تان را در برابر چک‌لیست استناد ممیزی کنید و هر چیزی قدیمی‌تر از شش ماه بدون schema را علامت‌گذاری کنید. در هفتهٔ دوم، ۱۰۰ تا ۱۵۰ کلمهٔ آغازین هر صفحهٔ علامت‌گذاری‌شده را به پاسخی خودکفا و قابل‌نقل‌قول بازنویسی کنید، و schema نوع FAQPage و Article را اضافه یا به‌روز کنید. در هفتهٔ سوم، حداقل یک آمار اصیل، یک نقل‌قول کارشناس نام‌دار، یا یک دادهٔ دست‌اول به هر صفحه اضافه کنید — اطلاعاتی واقعاً تازه که یک مدل از قبل نمی‌تواند بداند، نه بازنویسی ادعای رقیب. در هفتهٔ چهارم، ردیابی استناد را در موتورهای اصلی هوش مصنوعی راه‌اندازی کنید و خط پایهٔ خود را تعیین کنید، تا دور بعدی ویرایش‌ها چیزی واقعی برای سنجش داشته باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "این عمداً برنامه‌ای برای تعقیب جداگانهٔ الگوریتم هر موتور هوش مصنوعی نیست. برنامه‌ای است برای سخت‌تر کردن جایگزینی کامل بهترین محتوایتان با یک خلاصهٔ سه‌جمله‌ای — که همان استراتژی‌ای است که فارغ از این‌که کدام موتور یک سال دیگر بر کشف مسلط شود، همچنان جواب می‌دهد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "اشتباهاتی که به‌آرامی همهٔ تلاش‌های بالا را هدر می‌دهند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "بیشتر تیم‌هایی که در شکاف استناد می‌بازند، GEO را به‌طور کامل نادیده نمی‌گیرند — بلکه تلاش‌های خودشان را با چند عادت باقی‌مانده از دوران لینک‌و‌رتبه که دیگر به همان شکل پاداش نمی‌گیرد، تضعیف می‌کنند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "دفن‌کردن پاسخ زیر یک مقدمهٔ روایی طولانی — یک داستان ۴۰۰ کلمه‌ای پیش از پاسخ واقعی ممکن است برای یک انسان خوب خوانده شود، اما جملهٔ قابل‌استخراج را از یک‌سوم بالایی صفحه که بیشتر استنادها از آن‌جا کشیده می‌شود بیرون می‌راند",
+            "برخورد با schema به‌عنوان یک وظیفهٔ فنی یک‌باره به‌جای یک انضباط محتوایی — نشانه‌گذاری schema‌ای که همراه با تغییر محتوای زیربنایی به‌روز نشود، به سیگنال ناهماهنگی تبدیل می‌شود، نه سیگنال اعتماد",
+            "پرکردن کلیدواژه به‌جای ساختن عمق موضوعی واقعی — سیستم‌های هوش مصنوعی به‌طور فزاینده پوشش کم‌عمق و تکراری یک عبارت را تشخیص می‌دهند و آن را منبعی ضعیف‌تر از صفحه‌ای با پوشش واقعی زیرموضوعات، حتی با تراکم کلیدواژهٔ پایین‌تر، در نظر می‌گیرند",
+            "قفل‌کردن داده‌های قوی پشت لاگین، پی‌وال، یا رندر صرفاً جاوااسکریپتی — خزنده‌های هوش مصنوعی به‌طور غالب محتوای باز و به‌آسانی قابل‌تجزیه را استناد می‌کنند، پس بهترین تحقیق اصیل شما اگر یک مدل واقعاً نتواند آن را بخواند، برای اهداف استناد بی‌ارزش است",
+            "منتشرکردن و فراموش‌کردن — صفحه‌ای که در ۲۰۲۴ رتبهٔ خوبی گرفته و از آن زمان دست‌نخورده مانده، اکنون در حال رقابت با رقبای تازه‌به‌روزشده‌ای است که صرفاً به‌خاطر تازگی، حدود ۴.۳ برابر بیشتر استناد می‌شوند"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "هیچ‌کدام از این اشتباهات برای رفع‌شدن به قرارداد یک آژانس نیاز ندارند. نیاز دارند کسی در تیم محتوا با یک صفحهٔ موجود همان‌طور رفتار کند که یک تیم محصول با یک ویژگی عرضه‌شده رفتار می‌کند — چیزی که رصد، تکرار و گاهی بازسازی می‌شود، نه چیزی که روز انتشارش تمام‌شده تلقی می‌شود."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی صادقانه"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "عدد ۳۵٪ یک آمار ترسناک برای فروش یک دوره یا ابزار نیست. شکافی قابل‌سنجش و تکرارپذیر میان دو گروه از صفحاتی است که در هر جهت دیگری که قبلاً اهمیت داشت، قابل‌مقایسه هستند."
+        },
+        {
+          "type": "paragraph",
+          "text": "صفحاتی که در ۲۰۲۶ این شکاف را می‌بندند، لزوماً آن‌هایی نیستند که بیشترین اقتدار دامنه یا بزرگ‌ترین تیم محتوا را دارند. آن‌هایی هستند که قابلیت‌استخراج را به‌همان جدیتی می‌گیرند که قبلاً تراکم کلیدواژه را می‌گرفتند — پاسخ‌دادن به پرسش‌ها در جملهٔ اول، نه پاراگراف پنجم، پشتیبانی ادعاها با اعداد واقعی به‌جای گزاره‌های مبهم، به‌روز نگه‌داشتن بهترین صفحاتشان به‌جای رهاکردن آرام آن‌ها در یک CMS، و ساختن نوعی عمق موضوعی که از یک فن‌آوت پرسش جان سالم به در می‌برد، به‌جای شرط‌بندی همه‌چیز روی یک عبارت هدف تنها. هیچ‌کدام از این‌ها استناد را در هیچ پرسش خاصی تضمین نمی‌کند. اما در این نقطه، نزدیک‌ترین چیز به یک برنامهٔ عملی تکرارپذیر است که داده‌های ۲۰۲۶ واقعاً از آن پشتیبانی می‌کنند — و برنامه‌ای است که همچنان کار می‌کند، چه استناد نهایتاً از AI Overview گوگل بیاید، چه از ChatGPT، Gemini، یا هر موتور پاسخی که تا زمان سنجش مجدد این شکاف در سال آینده مسلط باشد."
+        }
+      ],
+      "faq": [
+        {
+          "question": "عدد ۳۵٪ نرخ کلیک واقعاً از کجا آمده؟",
+          "answer": "این عدد از ردیابی بلندمدت ۲۰۲۶ Seer Interactive از عملکرد AI Overviews می‌آید، که نشان داد صفحات استنادشده درون یک AI Overview حدود ۳۵٪ نرخ کلیک بالاتری نسبت به رقبای قابل‌مقایسه‌ای دارند که رتبهٔ ارگانیک خوبی می‌گیرند اما استناد نمی‌شوند. بهتر است آن را شکاف استناد بدانیم، نه یک عدد کلی افت ترافیک — افت کلی نرخ کلیک در پرسش‌های دارای AI Overview، وقتی جداگانه سنجیده شود، در چند مطالعهٔ دیگر به‌مراتب بالاتر است."
+        },
+        {
+          "question": "آیا رتبهٔ اول در گوگل هنوز استناد AI Overview را تضمین می‌کند؟",
+          "answer": "خیر. داده‌های ۲۰۲۶ Ahrefs نشان داد فقط ۳۸٪ از استنادهای AI Overview اکنون از صفحاتی می‌آید که برای همان پرسش در ۱۰ نتیجهٔ برتر سنتی هم رتبه دارند، افتی شدید از ۷۶٪ کمتر از یک سال پیش. فرآیند فن‌آوت پرسش گوگل به‌طور فزاینده استنادها را از صفحاتی می‌کشد که به زیرپرسش‌های مرتبط پاسخ می‌دهند، نه فقط صفحه‌ای که برای دقیقاً همان کلیدواژهٔ ردیابی‌شده بالاترین رتبه را دارد."
+        },
+        {
+          "question": "بهترین تغییری که می‌توانم همین هفته انجام دهم چیست؟",
+          "answer": "۱۰۰ تا ۱۵۰ کلمهٔ آغازین بهترین صفحاتتان را به پاسخی خودکفا بازنویسی کنید که کاملاً به پرسش پاسخ دهد بدون نیاز به اسکرول بیشتر، و schema نوع FAQPage و Article را اضافه یا به‌روز کنید. حدود ۵۵٪ از استنادهای AI Overview از محتوای یک‌سوم بالایی صفحه کشیده می‌شود، و صفحات ساختاریافته حدود ۲.۵ برابر شانس بالاتری برای استناد دارند."
+        },
+        {
+          "question": "آیا بک‌لینک‌ها هنوز برای دیده‌شدگی در جستجوی هوش مصنوعی اهمیت دارند؟",
+          "answer": "هنوز اهمیت دارند، اما نسبت به سیگنال‌های دیگر کمتر از قبل. تحقیقات ۲۰۲۶ نشان داد ذکرشدن نام برند در سراسر وب تقریباً سه برابر قوی‌تر از بک‌لینک با دیده‌شدگی هوش مصنوعی هم‌بسته است. این به‌معنای بی‌ارزش‌بودن لینک‌سازی نیست، اما یعنی PR دیجیتال و ذکرشدن نام‌تان در سایت‌های معتبر دیگر، دست‌کم به‌اندازهٔ کسب لینک سنتی سزاوار بودجه است."
+        },
+        {
+          "question": "آیا سرمایه‌گذاری روی ویدیو مشخصاً برای دیده‌شدگی در جستجوی هوش مصنوعی ارزشش را دارد؟",
+          "answer": "به‌طور فزاینده‌ای، بله. یوتیوب اکنون پراستنادترین دامنهٔ منفرد در سراسر AI Overviews گوگل است، با رشد استنادها حدود ۳۴٪ در شش ماه، و سهم قابل‌توجهی از آن ویدیوهای استنادشده در هیچ‌کجای ۱۰۰ نتیجهٔ برتر ارگانیک متنی گوگل برای همان کلیدواژه رتبه ندارند. یک ویدیوی توضیحی می‌تواند جایگاه استنادی را ببرد که یک مقالهٔ متنی دربارهٔ همان موضوع در حال باختنش است."
+        },
+        {
+          "question": "چند وقت یک‌بار باید محتوای موجود را به‌جای انتشار صفحات جدید به‌روزرسانی کنم؟",
+          "answer": "داده‌ها نشان می‌دهند به‌روزرسانی باید بخشی زمان‌بندی‌شده و مکرر از تقویم محتوا باشد، نه یک فکر بعدی. محتوایی که در ۹۰ روز اخیر به‌روز شده حدود ۴.۳ برابر بیشتر از محتوای قدیمی دربارهٔ همان موضوع استناد می‌شود، که در بیشتر موارد به‌روزرسانی یک صفحهٔ پرترافیک را استفادهٔ بهتری از زمان نسبت به انتشار یک صفحهٔ کاملاً تازه از صفر می‌کند."
+        },
+        {
+          "question": "چگونه واقعاً بسنجم که در AI Overviews استناد می‌شوم؟",
+          "answer": "Google Search Console به‌طور پیش‌فرض استنادهای AI Overview را از فهرست‌های استاندارد جدا نمی‌کند، پس بیشتر تیم‌ها یا مجموعه‌ای ثابت از پرامپت‌ها را به‌طور دوره‌ای در ChatGPT، Perplexity، Gemini و AI Mode گوگل اجرا و نتایج را دستی ثبت می‌کنند، یا از یک ابزار ردیابی اختصاصی مانند Ahrefs Brand Radar، Otterly.ai، Profound یا Maintouch استفاده می‌کنند، که چند مورد از آن‌ها دقیقاً همین قابلیت را در ۲۰۲۶ گسترش دادند."
+        },
+        {
+          "question": "آیا وب‌سایت‌های کوچک اصلاً باید برای استنادهای AI Overview رقابت کنند؟",
+          "answer": "بله، و شاید حتی فوری‌تر از سایت‌های بزرگ‌تر، چون شکاف استناد به‌طور نامتناسبی به ناشران کوچک‌تری آسیب می‌زند که ترافیک‌شان در چند صفحهٔ معدود متمرکز است. چون سیگنال‌های استناد اکنون به ساختار، تازگی و داده‌های اصیل بیشتر از اقتدار خام دامنه وزن می‌دهند، یک سایت کوچک و به‌خوبی نگهداری‌شده که روی موضوعی محدود متمرکز است، می‌تواند به‌طور واقع‌بینانه از رقیب بسیار بزرگ‌تری که سال‌هاست محتوایش را به‌روز نکرده، بیشتر استناد بگیرد."
+        }
+      ],
+      "seo": {
+        "title": "AI Overviewها نرخ کلیک را ۳۵٪ کاهش می‌دهند. چگونه استناد را ببریم | راهنمای ۲۰۲۶",
+        "metaDescription": "صفحات استنادشده در AI Overview نسبت به رقبای هم‌رتبهٔ استنادنشده ۳۵٪ نرخ کلیک بالاتری دارند. داده‌های ۲۰۲۶ دربارهٔ دلیل این شکاف، و برنامهٔ دقیق بستن آن را ببینید.",
+        "canonical": "https://sinisteroid.ir/fa/blog/ai-overviews-are-cutting-your-click-through-rate-by-35-percent-heres-how-to-win-anyway",
+        "openGraph": {
+          "title": "AI Overview‌ها نرخ کلیک ��ما را تا ۳۵٪ کاهش می‌دهند. این‌طور می‌توانید همچنان برنده شوید",
+          "description": "شکاف استناد میان صفحات استنادشده در AI Overview و بقیه واقعی و قابل‌سنجش است. داده‌های ۲۰۲۶ و برنامهٔ دقیق بستن آن را ببینید.",
+          "image": "/api/uploads/1787900001-ai-overviews-ctr-35-percent-cover.webp"
+        },
+        "twitter": {
+          "title": "AI Overview‌ها نرخ کلیک شما را تا ۳۵٪ کاهش می‌دهند. این‌طور می‌توانید همچنان برنده شوید",
+          "description": "صفحات استنادشده ۳۵٪ کلیک بیشتری نسبت به رقبای هم‌رتبهٔ استنادنشده می‌گیرند. این‌جا دقیقاً چگونگی تبدیل‌شدن به صفحهٔ استنادشده را می‌بینید.",
+          "image": "/api/uploads/1787900001-ai-overviews-ctr-35-percent-cover.webp"
+        },
+        "keywords": "نرخ کلیک AI Overview, استناد AI Overview, چگونه در AI Overview استناد شویم, بهینه‌سازی موتور مولد, استراتژی GEO ۲۰۲۶, نرخ کلیک جستجوی هوش مصنوعی, جستجوی بدون کلیک, نشانه‌گذاری schema برای استناد هوش مصنوعی, فن‌آوت پرسش, دیده‌شدگی جستجوی هوش مصنوعی",
+        "focusKeyword": "نرخ کلیک AI Overview"
+      }
+    }
+  }
+}

@@ -1,0 +1,650 @@
+{
+  "slug": "is-chatgpt-search-killing-google-what-the-data-actually-shows",
+  "status": "published",
+  "title": "Is ChatGPT Search Killing Google? What the Data Actually Shows",
+  "date": "2026-08-23 04:11:16",
+  "tags": [
+    "seo-geo"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/1787457836-1787000001-is-chatgpt-search-killing-google-cover.webp",
+    "alt": {
+      "en": "Is ChatGPT Search Killing Google? What the Data Actually Shows",
+      "fa": "آیا جستجوی ChatGPT در حال کشتن گوگل است؟ داده‌ها واقعاً چه می‌گویند"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "Is ChatGPT Search Killing Google? What the Data Actually Shows",
+      "excerpt": "Every few months a new headline declares Google dead and ChatGPT the new king of search. The market-share numbers, the earnings reports, and the click-through data tell a messier, more interesting story. Here's what actually happened in 2026.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "Is ChatGPT Search Killing Google? What the Data Actually Shows"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Type \"is Google dying\" into any search bar in 2026 and you will find hundreds of confident takes, most of them contradicting each other. One camp points to ChatGPT crossing a billion monthly active users and declares the search giant finished. The other camp points to Alphabet's quarterly earnings, where Search revenue keeps climbing, and calls the whole panic overblown. Both camps are quoting real numbers. That is the actual problem."
+        },
+        {
+          "type": "paragraph",
+          "text": "This piece pulls together the market-share reports, the click-through-rate studies, and Alphabet's own financial filings to answer the question properly, instead of picking whichever statistic fits a punchy headline. The short version: Google's business is not collapsing. But the search experience that built modern SEO, and an entire economy of publishers who lived off organic clicks, is being restructured in real time — and the restructuring is happening faster than most content strategies can keep up with."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "89.5%",
+              "label": "of the global search engine market Google still holds as of mid-2026"
+            },
+            {
+              "value": "1B+",
+              "label": "monthly active users ChatGPT reached in May 2026 — the fastest app ever to do so"
+            },
+            {
+              "value": "17%",
+              "label": "year-over-year growth in Google's Search advertising revenue, Q2 2026"
+            },
+            {
+              "value": "58–65%",
+              "label": "drop in organic click-through rate on queries where an AI Overview appears"
+            },
+            {
+              "value": "~60%",
+              "label": "of all searches globally now end without any click to a website"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787457963-1787000010-google-vs-chatgpt-market-share-chart.webp",
+          "alt": "Bar chart comparing Google's global search engine market share against ChatGPT's share of AI chatbot traffic in 2026",
+          "caption": "Figure 1: Two different markets, two different stories. Google still dominates the search-engine market; ChatGPT dominates a much smaller, faster-growing AI-chatbot category.",
+          "altText": "Bar chart comparing Google's global search engine market share against ChatGPT's share of AI chatbot traffic in 2026"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Number Everyone Cites, and Why It's Misleading"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The confusion starts with a basic measurement problem: \"search market share\" and \"share of information discovery\" are not the same metric, and most viral headlines quietly swap one for the other."
+        },
+        {
+          "type": "paragraph",
+          "text": "By the narrowest, most literal definition — which search engine's address bar or app you typed a query into — Google is barely dented. StatCounter's July 2026 data puts Google at roughly 89.5% of global search engine traffic, down only slightly from around 91% in 2023. Bing sits a distant second at about 4%. ChatGPT Search, the dedicated search product inside the ChatGPT app, still shows up as a rounding error in this dataset, well under half a percent of raw search-engine queries."
+        },
+        {
+          "type": "paragraph",
+          "text": "Widen the lens to \"where do people go to have a question answered,\" and the picture changes substantially. Several independent analyses tracking combined search-plus-AI-chatbot usage estimate that Google's share of total information discovery — every query typed into a browser, a chatbot, or an AI assistant — has fallen from roughly 89% in late 2022 to somewhere between 57% and 80%, depending on the methodology and whether AI Overviews inside Google Search are counted as \"Google\" or as a separate AI layer. ChatGPT, across all its interfaces, is now estimated to account for somewhere around 17–20% of that combined query volume."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "Read the Methodology Before You Share the Stat",
+          "text": "Three of the most-cited 2026 reports on \"Google vs ChatGPT market share\" use three different definitions of a query, three different data panels, and three different date ranges. A single month's swing in one report (First Page Sage recorded ChatGPT's own AI-search share falling more than 14 points in six months, then partially recovering) says more about measurement noise inside a fast-moving category than about Google's health."
+        },
+        {
+          "type": "paragraph",
+          "text": "So both statements — \"Google controls 89% of search\" and \"Google's share of discovery has collapsed by 30 points\" — are technically defensible, because they are answering different questions. That distinction matters enormously for anyone deciding how to allocate a content or marketing budget in the second half of 2026, which is exactly why we built out the SEO-versus-GEO comparison in more detail in an earlier piece."
+        },
+        {
+          "type": "cta",
+          "title": "SEO vs GEO: What's the Difference?",
+          "text": "If the market-share confusion above left you wondering which discipline actually protects your traffic going forward, this is the deeper breakdown.",
+          "buttonText": "Read SEO vs GEO",
+          "buttonUrl": "/en/blog/seo-vs-geo-whats-the-difference/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What Google's Own Earnings Say"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "If ChatGPT were genuinely killing Google's core business, it would show up first in the one place a public company cannot spin: the quarterly earnings release."
+        },
+        {
+          "type": "paragraph",
+          "text": "It has not shown up there yet. Alphabet's Q2 2026 results, published July 22, reported Google Search & other revenue of $63.3 billion, up 17% year over year — an acceleration compared to prior quarters, not a slowdown. Total Alphabet revenue grew 24% to $119.8 billion. On the earnings call, CEO Sundar Pichai told investors that search queries were at an all-time high and credited AI Overviews and the newer AI Mode experience with driving that growth, noting that AI Mode alone had surpassed one billion monthly active users inside Google's own products."
+        },
+        {
+          "type": "paragraph",
+          "text": "That framing deserves a healthy dose of skepticism — it is Google's own interpretation of Google's own numbers, and the company has every incentive to describe AI as a tailwind rather than a threat. But the underlying figures are independently verifiable through Alphabet's SEC filings, and they are consistent across the last several quarters: 19% Search revenue growth in Q1 2026, 17% in Q2 2026, with queries described as growing rather than shrinking in every quarter of the year so far."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787458085-1787000020-alphabet-search-revenue-growth-q2-2026.webp",
+          "alt": "Line chart showing Alphabet's Google Search advertising revenue growing quarter over quarter through Q2 2026",
+          "caption": "Figure 2: Google Search & other advertising revenue by quarter. Growth accelerated, not decelerated, through the first half of 2026 despite AI Overviews reaching roughly half of all queries.",
+          "altText": "Line chart showing Alphabet's Google Search advertising revenue growing quarter over quarter through Q2 2026"
+        },
+        {
+          "type": "paragraph",
+          "text": "The honest caveat, made by several analysts covering the results, is that revenue holding up is not proof that the underlying click economy is healthy. Google can keep growing ad revenue on fewer, more expensive clicks for a long time before real strain shows up in the topline numbers. That distinction — Google-the-company doing fine, while the open web that depends on Google clicks does not — is the real story hiding underneath the earnings headlines."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Real Casualty: Publisher Clicks, Not Google's Revenue"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The most consistent finding across every independent study published in 2026 is not that Google is losing. It's that the pages Google used to send traffic to are losing, even while Google itself keeps growing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Zero-click search — a query answered directly on the results page, with no click to any external website — has been rising for years, but AI Overviews accelerated the trend sharply. Research based on large clickstream panels put the global zero-click rate at roughly 58–60% of all searches, climbing to around 77% on mobile. When an AI Overview specifically appears above the results, the traditional organic click rate falls even further: multiple studies converge on somewhere between a 58% and 65% reduction in click-through rate compared to a results page without one, and one publisher's submission to UK regulators described drops as steep as 89% for some of its content."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Organic click-through rate on AI-Overview queries fell from roughly 1.76% (mid-2024 baseline) to around 0.61% by late 2025 — a 65% decline, according to Seer Interactive's longitudinal tracking",
+            "HubSpot's own leadership publicly acknowledged organic traffic falling from around 13.5 million monthly visits to under 7 million after AI Overviews scaled — a 70–80% drop from its peak",
+            "The median publisher tracked in a 2025–2026 industry analysis saw organic traffic decline roughly 10% year over year, with non-news content sites losing more (around 14%) than hard-news publishers (around 7%)",
+            "Digital Content Next found an additional 10% search-traffic decline among member publishers in a single two-month window",
+            "Brands that are directly cited inside an AI Overview see the opposite effect — one analysis found cited brands earning roughly 35% more organic clicks and 91% more paid clicks than uncited competitors on the same query"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "That last point is the one most \"Google is dying\" headlines skip entirely. The click economy isn't vanishing uniformly — it's redistributing toward whichever handful of sources the AI layer decides to cite, and away from everyone else. For a large publisher with dozens of writers and a diversified traffic base, a 10% dip is painful but survivable. For a small business blog or a niche affiliate site built entirely around ranking for informational queries, the same dynamic can be existential. We covered exactly this shift, and what to do about it, in our earlier look at zero-click search."
+        },
+        {
+          "type": "cta",
+          "title": "Zero-Click Search Is Here. Now What?",
+          "text": "A practical breakdown of how zero-click behavior changes content strategy, and which formats still earn clicks in an AI-summarized search results page.",
+          "buttonText": "Read the Zero-Click Playbook",
+          "buttonUrl": "/en/blog/zero-click-search-is-here-now-what/"
+        },
+        {
+          "type": "cta",
+          "title": "Search Engine Journal: AI Overviews' Impact on Publishers",
+          "text": "One of the most detailed independent write-ups of how AI Overviews changed click-through behavior across major publisher categories.",
+          "buttonText": "Read the Full Report",
+          "buttonUrl": "https://www.searchenginejournal.com/impact-of-ai-overviews-how-publishers-need-to-adapt/556843/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Where ChatGPT Is Actually Winning — and Where It Isn't"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Strip away the Google comparison for a moment and look at ChatGPT purely against its AI-chatbot rivals. That is a market it dominates, and one where its lead is shrinking fast."
+        },
+        {
+          "type": "paragraph",
+          "text": "ChatGPT crossed one billion monthly active users in May 2026, the fastest any consumer app has hit that milestone. Average session length reportedly runs longer than most competing chatbots, which analysts read as a sign of genuinely deep engagement rather than casual, one-off use. But within the AI-chatbot category specifically — ChatGPT versus Gemini, Claude, Grok, and Perplexity — ChatGPT's own share of that traffic has been sliding. Multiple traffic-analytics firms tracking the category independently found ChatGPT's share of AI-chatbot web traffic falling from roughly the high-80s percentage range in early 2025 to somewhere in the mid-to-high 60s by early-to-mid 2026, with Google's own Gemini the biggest beneficiary of that shift, and Grok posting rapid gains after its deeper integration into X."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787458231-1787000030-ai-chatbot-category-share-shift-2026.webp",
+          "alt": "Stacked area chart showing ChatGPT's declining share of AI chatbot web traffic against rising shares for Gemini and Grok through 2026",
+          "caption": "Figure 3: Inside the AI-chatbot category, ChatGPT is still the largest single player — but its share of that category has been eroding as Gemini and Grok scale.",
+          "altText": "Stacked area chart showing ChatGPT's declining share of AI chatbot web traffic against rising shares for Gemini and Grok through 2026"
+        },
+        {
+          "type": "paragraph",
+          "text": "Meanwhile, ChatGPT's direct referral traffic to third-party websites — the number that matters most to publishers — remains small in absolute terms even as it grows quickly in relative terms. Referral-tracking firms monitoring hundreds of brand websites recorded ChatGPT's slice of AI-driven referral sessions rising noticeably year over year, even as ChatGPT's internal share of the AI-chatbot category itself was falling; one analysis measured a jump from under 0.2% to nearly 0.3% of total site referrals, which sounds tiny until you remember Google alone still sends the overwhelming majority of external referral traffic on the open web. The pattern is consistent: ChatGPT is becoming a meaningfully larger discovery surface, but it has not come close to matching Google as a traffic-sending mechanism, because that was never really the product's design goal in the first place."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the piece that gets lost in most \"ChatGPT vs Google\" framing. ChatGPT was built to answer questions inside its own interface, the same way AI Overviews were built to answer questions inside Google's results page. Neither product was designed to maximize outbound clicks. Both are, structurally, zero-click-first experiences — they just arrived at that destination from different starting points, which is the argument we made when we first wrote about AI agents reshaping how websites need to be built."
+        },
+        {
+          "type": "cta",
+          "title": "The Death of Traditional Websites: Designing for AI Agents",
+          "text": "If AI answers, not links, are becoming the default discovery layer, your site's structure needs to change. Here's what that means in practice.",
+          "buttonText": "Read the Full Guide",
+          "buttonUrl": "/en/blog/the-death-of-traditional-websites-designing-for-ai-agents/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "So, Is ChatGPT Killing Google? The Honest Answer"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "No — not in the sense the headline implies. But yes, in a much narrower and more important sense than most coverage admits."
+        },
+        {
+          "type": "paragraph",
+          "text": "Google-the-company is not dying. Search revenue is growing at double-digit rates, query volume is at an all-time high by Google's own account, and the company is spending well over $150 billion a year on infrastructure specifically because demand for its AI products is outstripping supply. If ChatGPT were meaningfully siphoning off Google's core revenue engine, that spending pattern and those growth numbers would not exist in their current form."
+        },
+        {
+          "type": "paragraph",
+          "text": "What is dying, or at least shrinking hard, is the specific economic relationship that funded the last two decades of the open web: rank well on Google, receive a click, monetize that click with ads or subscriptions or product sales. That mechanism is being replaced, query by query, by a summarize-and-cite mechanism where AI systems — Google's own AI Overviews chief among them, not just ChatGPT — answer the question directly and send a click only to a small, often shrinking, set of cited sources. ChatGPT accelerated public awareness of that shift by being the first mainstream product to make \"just ask the AI instead of searching\" feel normal. But Google built and shipped the version of that same behavior that is doing the most damage to publisher click-through rates right now, inside its own results page, largely in response to the competitive pressure ChatGPT created."
+        },
+        {
+          "type": "paragraph",
+          "text": "In other words: ChatGPT didn't kill Google. It pushed Google to compete with itself in a way that is quietly killing the open web's click economy — and Google's revenue is currently strong enough to absorb that trade-off without it showing up on a balance sheet."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What This Means for Your Content Strategy Right Now"
+        },
+        {
+          "type": "paragraph",
+          "text": "None of this is an argument for abandoning search-driven content. It's an argument for updating what \"winning\" a search query actually means in 2026."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Stop measuring success only in clicks. Citation frequency inside AI Overviews, ChatGPT, and Perplexity is becoming a leading indicator of brand visibility even when it doesn't show up in Google Search Console",
+            "Prioritize the content types that still earn clicks: comparisons, tools, calculators, original data, and anything requiring a decision rather than a definition",
+            "Structure pages so both traditional crawlers and AI answer engines can extract a clean, citable summary near the top of the page, not buried under 800 words of preamble",
+            "Track referral traffic from ChatGPT, Perplexity, and Gemini separately in your analytics — most standard SEO dashboards still don't surface this by default",
+            "Treat branded search volume as a health metric. Being asked about by name inside a chatbot is one of the few discovery channels AI Overviews cannot fully absorb"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "This is precisely the shift we mapped out when we argued that content strategy built purely around click volume was already becoming obsolete, and it's the same reasoning behind building topical authority deliberately, in clusters, rather than chasing individual keywords one article at a time."
+        },
+        {
+          "type": "cta",
+          "title": "Content Clusters for GEO: Build Topical Authority AI Engines Trust",
+          "text": "The practical framework for structuring content so AI search engines cite you, not just rank you.",
+          "buttonText": "Read the GEO Framework",
+          "buttonUrl": "/en/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/"
+        },
+        {
+          "type": "cta",
+          "title": "Alphabet Q2 2026 Earnings — Sundar Pichai's Remarks",
+          "text": "The primary source for Google's own account of Search revenue growth and AI Mode adoption, straight from the earnings call transcript.",
+          "buttonText": "Read the Official Recap",
+          "buttonUrl": "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q2-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Conclusion: Wrong Question, Useful Data"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "\"Is ChatGPT killing Google\" is the wrong question to be asking in 2026, but chasing the answer surfaces exactly the data anyone running a content, marketing, or SEO strategy actually needs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Google's core business is not under near-term threat — the earnings prove that. The open web's dependence on Google-sent clicks is under very real, already-measurable threat — the click-through-rate studies prove that too. ChatGPT is a meaningful and fast-growing part of that second story, but it's competing inside a shift that Google itself is driving through AI Overviews and AI Mode, largely because it has no better option than to compete with the very thing threatening its click economy before someone else does it first."
+        },
+        {
+          "type": "paragraph",
+          "text": "The practical takeaway isn't to panic about ChatGPT specifically. It's to stop assuming that a page one Google ranking guarantees a visitor, because for a growing share of queries, it no longer does — regardless of which company's logo is doing the summarizing."
+        }
+      ],
+      "faq": [
+        {
+          "question": "Is ChatGPT actually taking search market share away from Google?",
+          "answer": "In the narrowest sense — which search engine people type queries into — barely. Google still holds roughly 89.5% of global search engine traffic as of mid-2026. ChatGPT's dedicated search product remains under 1% of that specific metric. The bigger shift shows up in a broader measure of 'information discovery' that includes chatbot usage, where Google's combined share has fallen substantially over the past three years."
+        },
+        {
+          "question": "If ChatGPT isn't hurting Google's search share, why does Google keep changing its results page?",
+          "answer": "Because the threat Google is responding to isn't really ChatGPT market share — it's ChatGPT changing user expectations. Once people got used to getting a direct answer instead of a list of links, Google had to ship AI Overviews and AI Mode to avoid losing that behavior to a competitor, even though doing so also reduces clicks to the websites Google's own results used to send traffic to."
+        },
+        {
+          "question": "Why is Google's revenue growing if AI Overviews reduce clicks?",
+          "answer": "Because revenue and clicks aren't the same thing. Google can serve fewer, more targeted ad impressions per search and still grow revenue if advertisers pay more for the remaining clicks, or if overall query volume rises. Alphabet's Q2 2026 results showed 17% Search revenue growth alongside record query volume, even as independent studies show organic click-through rates falling sharply on AI-Overview queries."
+        },
+        {
+          "question": "Which websites are losing the most traffic from AI search?",
+          "answer": "Sites built around simple, factual, informational queries — 'what is,' 'how to,' basic definitions — are losing the most, since AI systems answer those directly. Comparison content, tools, calculators, and pages requiring a decision rather than a fact tend to hold up better, because they're harder for an AI summary to fully replace."
+        },
+        {
+          "question": "Should I stop investing in SEO because of AI search?",
+          "answer": "No, but the goal needs to expand beyond ranking. Being cited inside AI Overviews, ChatGPT, and Perplexity answers is becoming its own visibility channel, separate from traditional organic rankings, and it rewards clear structure, original data, and topical authority more than keyword density."
+        },
+        {
+          "question": "Is Bing or another search engine gaining from this instead of ChatGPT?",
+          "answer": "Slightly. Bing has grown to roughly 4% of global search engine share, partly through its OpenAI-powered Copilot integration, but it remains far behind Google. No single competitor has captured a large enough share to represent an immediate threat to Google's core search dominance."
+        }
+      ],
+      "seo": {
+        "title": "Is ChatGPT Search Killing Google? What the Data Actually Shows | 2026 Report",
+        "metaDescription": "Google's search revenue is growing 17% year over year while click-through rates on AI-Overview queries fall 58-65%. Here's what the 2026 data really shows about ChatGPT vs Google.",
+        "canonical": "https://sinisteroid.ir/blog/is-chatgpt-search-killing-google-what-the-data-actually-shows",
+        "openGraph": {
+          "title": "Is ChatGPT Search Killing Google? What the Data Actually Shows",
+          "description": "Market share, earnings reports, and click-through-rate studies don't agree on a single story. Here's the full 2026 picture, sourced and explained.",
+          "image": "/api/uploads/1787000001-is-chatgpt-search-killing-google-cover.webp"
+        },
+        "twitter": {
+          "title": "Is ChatGPT Search Killing Google? What the Data Actually Shows",
+          "description": "Google's Search revenue is up 17% YoY. Publisher click-through rates are down up to 65%. Both are true. Here's how.",
+          "image": "/api/uploads/1787000001-is-chatgpt-search-killing-google-cover.webp"
+        },
+        "keywords": "ChatGPT vs Google, is Google dying, ChatGPT search market share, AI Overviews impact, zero-click search 2026, Google search revenue, generative engine optimization, GEO, AI search statistics, publisher traffic decline",
+        "focusKeyword": "ChatGPT vs Google search"
+      }
+    },
+    "fa": {
+      "title": "آیا جستجوی ChatGPT در حال کشتن گوگل است؟ داده‌ها واقعاً چه می‌گویند",
+      "excerpt": "هر چند ماه یک‌بار تیتر تازه‌ای اعلام می‌کند که گوگل مرده و ChatGPT پادشاه جدید جستجوست. اما آمار سهم بازار، گزارش‌های مالی و داده‌های نرخ کلیک، روایتی پیچیده‌تر و جالب‌تر را روایت می‌کنند. این مقاله می‌گوید در سال ۲۰۲۶ واقعاً چه اتفاقی افتاده است.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "آیا جستجوی ChatGPT در حال کشتن گوگل است؟ داده‌ها واقعاً چه می‌گویند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "عبارت «آیا گوگل در حال مردن است» را در هر جعبهٔ جستجویی در سال ۲۰۲۶ تایپ کنید، صدها تحلیل مطمئن پیدا می‌کنید که اکثرشان با هم تناقض دارند. یک گروه به عبور ChatGPT از مرز یک میلیارد کاربر فعال ماهانه اشاره می‌کند و اعلام پایان کار غول جستجو را می‌دهد. گروه دیگر به گزارش‌های مالی سه‌ماههٔ Alphabet نگاه می‌کند، جایی که درآمد جستجو همچنان بالا می‌رود، و کل این هراس را اغراق‌آمیز می‌داند. هر دو گروه دارند از آمار واقعی نقل قول می‌کنند. مشکل اصلی همین‌جاست."
+        },
+        {
+          "type": "paragraph",
+          "text": "این مقاله گزارش‌های سهم بازار، مطالعات نرخ کلیک و اسناد مالی رسمی Alphabet را کنار هم می‌گذارد تا به این سؤال درست پاسخ دهد، به‌جای انتخاب هر آماری که با یک تیتر جذاب هم‌خوانی داشته باشد. نسخهٔ کوتاه: کسب‌وکار گوگل در حال فروپاشی نیست. اما تجربهٔ جستجویی که پایهٔ SEO مدرن و کل اقتصاد ناشران وابسته به کلیک ارگانیک را ساخت، در حال بازسازی است — آن هم سریع‌تر از آن‌چه بیشتر استراتژی‌های محتوایی بتوانند با آن هماهنگ شوند."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۸۹.۵٪",
+              "label": "سهمی که گوگل هنوز از بازار جهانی موتورهای جستجو در نیمهٔ ۲۰۲۶ در اختیار دارد"
+            },
+            {
+              "value": "بیش از ۱ میلیارد",
+              "label": "کاربر فعال ماهانهٔ ChatGPT در مهٔ ۲۰۲۶ — سریع‌ترین اپلیکیشن تاریخ در رسیدن به این رقم"
+            },
+            {
+              "value": "۱۷٪",
+              "label": "رشد سالانهٔ درآمد تبلیغات جستجوی گوگل در سه‌ماههٔ دوم ۲۰۲۶"
+            },
+            {
+              "value": "۵۸ تا ۶۵٪",
+              "label": "افت نرخ کلیک ارگانیک در جستجوهایی که AI Overview نمایش داده می‌شود"
+            },
+            {
+              "value": "حدود ۶۰٪",
+              "label": "از کل جستجوهای جهانی اکنون بدون هیچ کلیکی به یک وب‌سایت پایان می‌یابند"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787457974-1787000010-google-vs-chatgpt-market-share-chart.webp",
+          "alt": "نمودار میله‌ای مقایسهٔ سهم جهانی گوگل از بازار موتورهای جستجو در برابر سهم ChatGPT از ترافیک چت‌بات‌های هوش مصنوعی در ۲۰۲۶",
+          "caption": "شکل ۱: دو بازار متفاوت، دو روایت متفاوت. گوگل همچنان بر بازار موتورهای جستجو مسلط است؛ ChatGPT بر دستهٔ کوچک‌تر و سریع‌الرشدتر چت‌بات‌های هوش مصنوعی.",
+          "altText": "نمودار میله‌ای مقایسهٔ سهم جهانی گوگل از بازار موتورهای جستجو در برابر سهم ChatGPT از ترافیک چت‌بات‌های هوش مصنوعی در ۲۰۲۶"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "عددی که همه نقل می‌کنند، و چرا گمراه‌کننده است"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "سردرگمی از یک مشکل اندازه‌گیری ساده شروع می‌شود: «سهم بازار جستجو» و «سهم از کشف اطلاعات» یک معیار نیستند، اما بیشتر تیترهای وایرال به‌آرامی این دو را جای هم می‌گذارند."
+        },
+        {
+          "type": "paragraph",
+          "text": "بر اساس محدودترین و لفظی‌ترین تعریف — این‌که کاربر پرسش خود را در نوار آدرس یا اپلیکیشن کدام موتور جستجو تایپ کرده — گوگل تقریباً دست‌نخورده باقی مانده. داده‌های StatCounter برای ژوئیهٔ ۲۰۲۶ سهم گوگل را حدود ۸۹.۵٪ از ترافیک جهانی موتورهای جستجو نشان می‌دهد، فقط اندکی کمتر از حدود ۹۱٪ در سال ۲۰۲۳. Bing با فاصلهٔ زیاد در جایگاه دوم و حدود ۴٪ قرار دارد. ChatGPT Search، محصول جستجوی اختصاصی داخل اپلیکیشن ChatGPT، هنوز در این مجموعه داده به‌عنوان یک عدد ناچیز، کمتر از نیم درصد از کل جستجوهای خام موتورهای جستجو، ظاهر می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "اما اگر زاویهٔ دید را به «مردم برای پاسخ‌گرفتن کجا می‌روند» گسترش دهیم، تصویر به‌طور قابل‌توجهی تغییر می‌کند. چند تحلیل مستقل که استفادهٔ ترکیبی از جستجو و چت‌بات‌های هوش مصنوعی را رصد می‌کنند، تخمین می‌زنند سهم گوگل از کل کشف اطلاعات — هر پرسشی که در مرورگر، چت‌بات یا دستیار هوش مصنوعی تایپ شود — از حدود ۸۹٪ در اواخر ۲۰۲۲ به جایی بین ۵۷ تا ۸۰٪ رسیده، بسته به روش‌شناسی و این‌که آیا AI Overviews داخل جستجوی گوگل «گوگل» محسوب می‌شود یا یک لایهٔ جداگانهٔ هوش مصنوعی. ChatGPT، در مجموع تمام رابط‌هایش، اکنون تخمین زده می‌شود حدود ۱۷ تا ۲۰٪ از این حجم ترکیبی پرسش را در اختیار دارد."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "قبل از اشتراک‌گذاری آمار، روش‌شناسی را بخوانید",
+          "text": "سه مورد از پراستنادترین گزارش‌های ۲۰۲۶ دربارهٔ «سهم بازار گوگل در برابر ChatGPT» از سه تعریف متفاوت برای «پرسش»، سه مجموعهٔ دادهٔ متفاوت و سه بازهٔ زمانی متفاوت استفاده می‌کنند. نوسان یک ماهه در یک گزارش (First Page Sage افت بیش از ۱۴ واحدی سهم ChatGPT در بازار جستجوی هوش مصنوعی را در شش ماه ثبت کرد، و سپس بازگشت جزئی آن را) بیشتر از آن‌که چیزی دربارهٔ سلامت گوگل بگوید، نویز اندازه‌گیری در یک دستهٔ به‌سرعت در حال تغییر را نشان می‌دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "بنابراین هر دو گزاره — «گوگل ۸۹٪ جستجو را کنترل می‌کند» و «سهم گوگل از کشف اطلاعات ۳۰ واحد سقوط کرده» — از نظر فنی قابل‌دفاع هستند، چون به دو سؤال متفاوت پاسخ می‌دهند. این تمایز برای هر کسی که در نیمهٔ دوم ۲۰۲۶ می‌خواهد بودجهٔ محتوایی یا بازاریابی خود را تخصیص دهد اهمیت زیادی دارد؛ دقیقاً به همین دلیل در مطلب قبلی، مقایسهٔ SEO و GEO را با جزئیات بیشتری بررسی کردیم."
+        },
+        {
+          "type": "cta",
+          "title": "SEO در مقابل GEO: تفاوت چیست؟",
+          "text": "اگر سردرگمی سهم بازار در بالا شما را دربارهٔ این‌که کدام رشته واقعاً از ترافیک شما در آینده محافظت می‌کند مردد کرده، این تحلیل عمیق‌تر را بخوانید.",
+          "buttonText": "مطالعهٔ SEO در مقابل GEO",
+          "buttonUrl": "/fa/blog/seo-vs-geo-whats-the-difference/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گزارش‌های مالی خود گوگل چه می‌گویند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اگر ChatGPT واقعاً در حال از بین بردن کسب‌وکار اصلی گوگل بود، اول از همه باید در جایی ظاهر می‌شد که یک شرکت سهامی عام نمی‌تواند آن را رنگ‌آمیزی کند: گزارش سود سه‌ماهه."
+        },
+        {
+          "type": "paragraph",
+          "text": "و هنوز چنین اتفاقی نیفتاده. نتایج سه‌ماههٔ دوم ۲۰۲۶ Alphabet، منتشرشده در ۲۲ ژوئیه، درآمد جستجو و سایر خدمات گوگل را ۶۳.۳ میلیارد دلار، با رشد ۱۷٪ نسبت به سال قبل، گزارش کرد — شتاب‌گیری نسبت به سه‌ماهه‌های پیشین، نه کندشدن. کل درآمد Alphabet با ۲۴٪ رشد به ۱۱۹.۸ میلیارد دلار رسید. سوندار پیچای، مدیرعامل، در تماس با سرمایه‌گذاران گفت پرسش‌های جستجو در بالاترین سطح تاریخ خود قرار دارند و این رشد را به AI Overviews و تجربهٔ جدیدتر AI Mode نسبت داد، و اشاره کرد که تنها AI Mode از مرز یک میلیارد کاربر فعال ماهانه در محصولات خود گوگل عبور کرده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "این روایت سزاوار مقداری تردید سالم است — این تفسیر خود گوگل از اعداد خودش است، و شرکت انگیزهٔ کاملی دارد تا هوش مصنوعی را به‌عنوان یک نیروی مثبت توصیف کند، نه یک تهدید. اما ارقام زیربنایی از طریق اسناد رسمی SEC مستقل قابل‌راستی‌آزمایی هستند و در چند سه‌ماههٔ اخیر ثابت مانده‌اند: ۱۹٪ رشد درآمد جستجو در سه‌ماههٔ اول ۲۰۲۶، ۱۷٪ در سه‌ماههٔ دوم، با توصیف پرسش‌ها به‌عنوان روند رو به رشد، نه کاهش، در هر سه‌ماههٔ سال تا این لحظه."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787458247-1787000020-alphabet-search-revenue-growth-q2-2026.webp",
+          "alt": "نمودار خطی رشد درآمد تبلیغات جستجوی گوگل در Alphabet سه‌ماهه به سه‌ماهه تا سه‌ماههٔ دوم ۲۰۲۶",
+          "caption": "شکل ۲: درآمد تبلیغات جستجو و سایر خدمات گوگل به تفکیک سه‌ماهه. رشد در نیمهٔ اول ۲۰۲۶ شتاب گرفت، نه کند شد، با وجود این‌که AI Overviews تقریباً به نیمی از کل جستجوها رسیده است.",
+          "altText": "نمودار خطی رشد درآمد تبلیغات جستجوی گوگل در Alphabet سه‌ماهه به سه‌ماهه تا سه‌ماههٔ دوم ۲۰۲۶"
+        },
+        {
+          "type": "paragraph",
+          "text": "نکتهٔ صادقانه‌ای که چند تحلیل‌گر پوشش‌دهندهٔ این نتایج مطرح کردند این است که پایدار ماندن درآمد، به‌معنای سالم بودن اقتصاد زیربنایی کلیک نیست. گوگل می‌تواند برای مدت طولانی با کلیک‌های کمتر اما گران‌تر، درآمد تبلیغاتی خود را همچنان رشد دهد، پیش از آن‌که فشار واقعی در ارقام کلی نمایان شود. همین تمایز — سلامت شرکت گوگل، در برابر ناسالمی وب باز که به کلیک‌های گوگل وابسته است — روایت واقعی است که زیر تیترهای گزارش‌های مالی پنهان شده است."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "قربانی واقعی: کلیک ناشران، نه درآمد گوگل"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "ثابت‌ترین یافته در تمام مطالعات مستقل منتشرشده در ۲۰۲۶ این نیست که گوگل در حال باختن است. این است که صفحاتی که گوگل قبلاً برایشان ترافیک می‌فرستاد، در حال باختن‌اند، درحالی‌که خود گوگل همچنان در حال رشد است."
+        },
+        {
+          "type": "paragraph",
+          "text": "جستجوی بدون کلیک — پرسشی که مستقیماً در صفحهٔ نتایج پاسخ داده می‌شود، بدون هیچ کلیکی به هیچ وب‌سایت خارجی — سال‌هاست در حال افزایش است، اما AI Overviews این روند را به‌شدت شتاب داد. تحقیقاتی که بر پایهٔ پنل‌های بزرگ کلیک‌استریم انجام شده، نرخ جهانی جستجوی بدون کلیک را حدود ۵۸ تا ۶۰٪ از کل جستجوها برآورد می‌کند که در موبایل به حدود ۷۷٪ می‌رسد. وقتی AI Overview دقیقاً بالای نتایج ظاهر می‌شود، نرخ کلیک ارگانیک سنتی حتی بیشتر افت می‌کند: چند مطالعه به کاهشی بین ۵۸ تا ۶۵٪ در نرخ کلیک نسبت به صفحه‌ای بدون آن اشاره می‌کنند، و یک ناشر در گزارش خود به نهاد نظارتی بریتانیا از افت تا ۸۹٪ برای بخشی از محتوایش خبر داده است."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "نرخ کلیک ارگانیک در جستجوهای دارای AI Overview از حدود ۱.۷۶٪ (خط پایه اواسط ۲۰۲۴) به حدود ۰.۶۱٪ تا اواخر ۲۰۲۵ رسید — افتی ۶۵٪ درصدی، طبق ردیابی بلندمدت Seer Interactive",
+            "مدیریت HubSpot علناً پذیرفت که ترافیک ارگانیک از حدود ۱۳.۵ میلیون بازدید ماهانه به کمتر از ۷ میلیون پس از گسترش AI Overviews سقوط کرده — افتی ۷۰ تا ۸۰٪ نسبت به اوج خود",
+            "ناشر میانه در تحلیل صنعتی ۲۰۲۵–۲۰۲۶ افتی حدود ۱۰٪ سالانه در ترافیک ارگانیک تجربه کرد، با افت بیشتر برای سایت‌های محتوای غیرخبری (حدود ۱۴٪) نسبت به ناشران خبری (حدود ۷٪)",
+            "Digital Content Next افت اضافی ۱۰٪ ترافیک جستجو را در میان ناشران عضو خود در یک بازهٔ دوماهه ثبت کرد",
+            "برندهایی که مستقیماً درون یک AI Overview استناد می‌شوند، اثر معکوس می‌بینند — یک تحلیل نشان داد برندهای استنادشده حدود ۳۵٪ کلیک ارگانیک و ۹۱٪ کلیک تبلیغاتی بیشتر نسبت به رقبای استنادنشده در همان پرسش به دست می‌آورند"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "همین نکتهٔ آخر چیزی است که بیشتر تیترهای «گوگل در حال مردن است» به‌طور کامل نادیده می‌گیرند. اقتصاد کلیک به‌شکل یکنواخت ناپدید نمی‌شود — بلکه به سمت هر منبعی که لایهٔ هوش مصنوعی تصمیم بگیرد استناد کند بازتوزیع می‌شود، و از همه‌کس دیگر دور می‌شود. برای یک ناشر بزرگ با ده‌ها نویسنده و پایگاه ترافیکی متنوع، افت ۱۰٪ دردناک اما قابل‌بقاست. برای یک وبلاگ کسب‌وکار کوچک یا سایت وابستهٔ نیچ که کاملاً حول رتبه‌گرفتن برای پرسش‌های اطلاعاتی ساخته شده، همین پویایی می‌تواند وجودی باشد. ما دقیقاً همین تغییر، و راه‌حل آن را، در مطلب قبلی دربارهٔ جستجوی بدون کلیک بررسی کردیم."
+        },
+        {
+          "type": "cta",
+          "title": "جستجوی بدون کلیک آمده. حالا چه کار کنیم؟",
+          "text": "تحلیلی عملی از این‌که چگونه رفتار بدون کلیک استراتژی محتوا را تغییر می‌دهد، و کدام فرمت‌ها هنوز در صفحهٔ نتایج خلاصه‌شدهٔ هوش مصنوعی کلیک می‌گیرند.",
+          "buttonText": "مطالعهٔ راهنمای بدون کلیک",
+          "buttonUrl": "/fa/blog/zero-click-search-is-here-now-what/"
+        },
+        {
+          "type": "cta",
+          "title": "Search Engine Journal: تأثیر AI Overviews بر ناشران",
+          "text": "یکی از دقیق‌ترین تحلیل‌های مستقل دربارهٔ چگونگی تغییر رفتار نرخ کلیک در دسته‌های اصلی ناشران توسط AI Overviews.",
+          "buttonText": "مطالعهٔ گزارش کامل",
+          "buttonUrl": "https://www.searchenginejournal.com/impact-of-ai-overviews-how-publishers-need-to-adapt/556843/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کجا ChatGPT واقعاً برنده است — و کجا نیست"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "برای لحظه‌ای مقایسه با گوگل را کنار بگذارید و فقط ChatGPT را در برابر رقبای چت‌بات هوش مصنوعی‌اش ببینید. این بازاری است که بر آن مسلط است، و بازاری که برتری‌اش در آن به‌سرعت در حال کوچک‌شدن است."
+        },
+        {
+          "type": "paragraph",
+          "text": "ChatGPT در مهٔ ۲۰۲۶ از مرز یک میلیارد کاربر فعال ماهانه عبور کرد، سریع‌ترین اپلیکیشن مصرف‌کننده‌ای که تا کنون به این نقطه رسیده. گزارش شده که مدت‌زمان میانگین هر نشست از بیشتر چت‌بات‌های رقیب طولانی‌تر است، که تحلیل‌گران آن را نشانه‌ای از تعامل واقعاً عمیق تفسیر می‌کنند، نه استفادهٔ گاه‌به‌گاه و یک‌باره. اما دقیقاً درون دستهٔ چت‌بات‌های هوش مصنوعی — ChatGPT در برابر Gemini، Claude، Grok و Perplexity — سهم خود ChatGPT از این ترافیک در حال کاهش بوده است. چند شرکت تحلیل ترافیک که به‌طور مستقل این دسته را رصد می‌کنند دریافتند سهم ChatGPT از ترافیک وب چت‌بات‌های هوش مصنوعی از حدود بالای ۸۰٪ در اوایل ۲۰۲۵ به جایی بین ۶۰ تا ۷۰٪ تا اوایل تا اواسط ۲۰۲۶ رسیده، درحالی‌که Gemini خود گوگل بزرگ‌ترین برنده از این جابه‌جایی بوده و Grok نیز پس از ادغام عمیق‌تر با X، رشدی سریع داشته است."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787458255-1787000030-ai-chatbot-category-share-shift-2026.webp",
+          "alt": "نمودار ناحیه‌ای پشته‌ای نشان‌دهندهٔ کاهش سهم ChatGPT از ترافیک وب چت‌بات‌های هوش مصنوعی در برابر افزایش سهم Gemini و Grok تا ۲۰۲۶",
+          "caption": "شکل ۳: درون دستهٔ چت‌بات‌های هوش مصنوعی، ChatGPT همچنان بزرگ‌ترین بازیگر منفرد است — اما سهمش از این دسته با رشد Gemini و Grok در حال فرسایش بوده است.",
+          "altText": "نمودار ناحیه‌ای پشته‌ای نشان‌دهندهٔ کاهش سهم ChatGPT از ترافیک وب چت‌بات‌های هوش مصنوعی در برابر افزایش سهم Gemini و Grok تا ۲۰۲۶"
+        },
+        {
+          "type": "paragraph",
+          "text": "در همین حال، ترافیک ارجاعی مستقیم ChatGPT به وب‌سایت‌های شخص‌ثالث — عددی که برای ناشران بیشترین اهمیت را دارد — از نظر مطلق هنوز کوچک است، حتی اگر از نظر نسبی به‌سرعت در حال رشد باشد. شرکت‌های ردیابی ارجاع که صدها وب‌سایت برند را رصد می‌کنند، افزایش محسوس سهم ChatGPT از نشست‌های ارجاعی مبتنی بر هوش مصنوعی را سال به سال ثبت کرده‌اند، حتی درحالی‌که سهم داخلی خود ChatGPT از دستهٔ چت‌بات‌های هوش مصنوعی در حال کاهش بود؛ یک تحلیل جهشی از زیر ۰.۲٪ به نزدیک ۰.۳٪ از کل ارجاعات سایت را اندازه‌گیری کرد، که تا زمانی که به یاد نیاورید گوگل به‌تنهایی هنوز اکثریت قریب‌به‌اتفاق ترافیک ارجاعی خارجی وب باز را می‌فرستد، بی‌اهمیت به نظر می‌رسد. الگو ثابت است: ChatGPT در حال تبدیل‌شدن به سطح کشف قابل‌توجه‌تری است، اما هنوز نزدیک به رقابت با گوگل به‌عنوان مکانیزم ارسال ترافیک نشده، چون این هرگز واقعاً هدف طراحی این محصول نبوده است."
+        },
+        {
+          "type": "paragraph",
+          "text": "این همان بخشی است که در بیشتر چارچوب‌بندی‌های «ChatGPT در برابر گوگل» گم می‌شود. ChatGPT برای پاسخ‌دادن به پرسش‌ها درون رابط خودش ساخته شده، دقیقاً همان‌طور که AI Overviews برای پاسخ‌دادن به پرسش‌ها درون صفحهٔ نتایج گوگل ساخته شد. هیچ‌کدام از این دو محصول برای بیشینه‌سازی کلیک‌های خروجی طراحی نشده‌اند. هر دو، از نظر ساختاری، تجربه‌هایی هستند که اولویت‌شان بدون‌کلیک است — فقط از نقاط شروع متفاوتی به این مقصد رسیده‌اند، همان استدلالی که اولین بار وقتی دربارهٔ بازطراحی وب‌سایت‌ها برای ایجنت‌های هوش مصنوعی نوشتیم مطرح کردیم."
+        },
+        {
+          "type": "cta",
+          "title": "مرگ وب‌سایت‌های سنتی: طراحی برای ایجنت‌های هوش مصنوعی",
+          "text": "اگر پاسخ‌های هوش مصنوعی، نه لینک‌ها، در حال تبدیل‌شدن به لایهٔ پیش‌فرض کشف هستند، ساختار سایت شما باید تغییر کند. در عمل یعنی چه؟",
+          "buttonText": "مطالعهٔ راهنمای کامل",
+          "buttonUrl": "/fa/blog/the-death-of-traditional-websites-designing-for-ai-agents/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "پس آیا ChatGPT در حال کشتن گوگل است؟ پاسخ صادقانه"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "نه — نه به معنایی که تیتر خبری القا می‌کند. اما بله، به معنایی ب��یار محدودتر و مهم‌تر از آن‌چه بیشتر پوشش‌های خبری اعتراف می‌کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "شرکت گوگل در حال مردن نیست. درآمد جستجو با نرخی دو‌رقمی رشد می‌کند، حجم پرسش‌ها به گفتهٔ خود گوگل در بالاترین سطح تاریخ است، و شرکت سالانه بیش از ۱۵۰ میلیارد دلار روی زیرساخت هزینه می‌کند، دقیقاً چون تقاضا برای محصولات هوش مصنوعی‌اش از عرضه پیشی گرفته است. اگر ChatGPT واقعاً موتور اصلی درآمدی گوگل را می‌مکید، این الگوی هزینه‌کرد و این ارقام رشد به این شکل وجود نداشتند."
+        },
+        {
+          "type": "paragraph",
+          "text": "آن‌چه در حال مردن، یا دست‌کم کوچک‌شدن شدید است، رابطهٔ اقتصادی خاصی است که دو دههٔ اخیر وب باز را تأمین مالی کرد: رتبهٔ خوب در گوگل بگیر، کلیک دریافت کن، آن کلیک را با تبلیغات یا اشتراک یا فروش محصول تبدیل به درآمد کن. این مکانیزم، پرسش به پرسش، با مکانیزم خلاصه‌سازی و استناد جایگزین می‌شود؛ جایی که سیستم‌های هوش مصنوعی — که AI Overviews خود گوگل در صدر آن‌ها قرار دارد، نه فقط ChatGPT — مستقیماً به پرسش پاسخ می‌دهند و فقط به مجموعهٔ کوچک و اغلب رو‌به‌کاهشی از منابع استنادشده کلیک می‌فرستند. ChatGPT آگاهی عمومی از این تغییر را شتاب داد، چون اولین محصول جریان‌اصلی بود که «فقط از هوش مصنوعی بپرس به‌جای جستجوکردن» را عادی جلوه داد. اما این خود گوگل بود که نسخه‌ای از همین رفتار را ساخت و عرضه کرد که در حال حاضر بیشترین آسیب را به نرخ کلیک ناشران وارد می‌کند، درون صفحهٔ نتایج خودش، عمدتاً در واکنش به فشار رقابتی‌ای که ChatGPT ایجاد کرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "به عبارت دیگر: ChatGPT گوگل را نکشت. آن را وادار کرد با خودش به شکلی رقابت کند که به‌آرامی در حال کشتن اقتصاد کلیک وب باز است — و درآمد گوگل در حال حاضر به‌اندازهٔ کافی قوی است که این معامله را بدون نمایش در ترازنامه جذب کند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "این یعنی چه برای استراتژی محتوای شما همین حالا"
+        },
+        {
+          "type": "paragraph",
+          "text": "هیچ‌کدام از این‌ها استدلالی برای کنار گذاشتن محتوای مبتنی بر جستجو نیست. استدلالی است برای به‌روزرسانی معنای واقعی «برنده‌شدن» در یک پرسش جستجو در سال ۲۰۲۶."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "موفقیت را فقط با کلیک نسنجید. فراوانی استناد درون AI Overviews، ChatGPT و Perplexity در حال تبدیل‌شدن به شاخصی پیشرو برای دیده‌شدن برند است، حتی وقتی در Google Search Console نمایان نشود",
+            "به فرمت‌های محتوایی که هنوز کلیک می‌گیرند اولویت دهید: مقایسه‌ها، ابزارها، ماشین‌حساب‌ها، داده‌های اصلی و هر چیزی که نیازمند تصمیم‌گیری باشد، نه فقط تعریف",
+            "صفحات را طوری ساختار دهید که هم خزنده‌های سنتی و هم موتورهای پاسخ‌دهندهٔ هوش مصنوعی بتوانند خلاصه‌ای تمیز و قابل‌استناد را نزدیک بالای صفحه استخراج کنند، نه دفن‌شده زیر ۸۰۰ کلمه مقدمه",
+            "ترافیک ارجاعی از ChatGPT، Perplexity و Gemini را جداگانه در تحلیل‌گر خود ردیابی کنید — بیشتر داشبوردهای استاندارد SEO هنوز این را به‌طور پیش‌فرض نشان نمی‌دهند",
+            "حجم جستجوی برندی را به‌عنوان یک شاخص سلامت در نظر بگیرید. پرسیده‌شدن با نام برند درون یک چت‌بات یکی از معدود کانال‌های کشفی است که AI Overviews نمی‌تواند به‌طور کامل جذب کند"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "این دقیقاً همان تغییری است که وقتی استدلال کردیم استراتژی محتوایی که صرفاً حول حجم کلیک ساخته شده، از قبل در حال منسوخ‌شدن است ترسیم کردیم، و همان استدلالی است که پشت ساخت عمدی اقتدار موضوعی، در قالب کلستر، به‌جای دنبال‌کردن کلیدواژه‌های تک‌تک، قرار دارد."
+        },
+        {
+          "type": "cta",
+          "title": "کلسترهای محتوا برای GEO: اقتدار موضوعی که موتورهای هوش مصنوعی به آن اعتماد کنند",
+          "text": "چارچوب عملی برای ساختاردهی محتوا طوری که موتورهای جستجوی هوش مصنوعی به شما استناد کنند، نه فقط رتبه‌بندی‌تان کنند.",
+          "buttonText": "مطالعهٔ چارچوب GEO",
+          "buttonUrl": "/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/"
+        },
+        {
+          "type": "cta",
+          "title": "گزارش مالی سه‌ماههٔ دوم Alphabet در ۲۰۲۶ — سخنان سوندار پیچای",
+          "text": "منبع اصلی روایت خود گوگل از رشد درآمد جستجو و پذیرش AI Mode، مستقیماً از رونوشت تماس با سرمایه‌گذاران.",
+          "buttonText": "مطالعهٔ خلاصهٔ رسمی",
+          "buttonUrl": "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q2-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی: سؤال اشتباه، دادهٔ مفید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "«آیا ChatGPT در حال کشتن گوگل است» سؤال اشتباهی است که باید در ۲۰۲۶ پرسید، اما دنبال‌کردن پاسخ آن، دقیقاً همان داده‌ای را آشکار می‌کند که هر کسی که استراتژی محتوا، بازاریابی یا SEO را مدیریت می‌کند واقعاً به آن نیاز دارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "کسب‌وکار اصلی گوگل در معرض تهدید کوتاه‌مدت نیست — گزارش‌های مالی این را ثابت می‌کنند. اما وابستگی وب باز به کلیک‌های ارسالی از گوگل در معرض تهدیدی بسیار واقعی و از قبل قابل‌اندازه‌گیری است — مطالعات نرخ کلیک این را هم ثابت می‌کنند. ChatGPT بخش مهم و به‌سرعت در حال رشدی از این روایت دوم است، اما درون تغییری رقابت می‌کند که خود گوگل از طریق AI Overviews و AI Mode آن را هدایت می‌کند، عمدتاً چون گزینهٔ بهتری جز رقابت با همان چیزی که اقتصاد کلیکش را تهدید می‌کند ندارد، پیش از آن‌که کس دیگری این کار را زودتر انجام دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "نتیجهٔ عملی این نیست که به‌طور خاص دربارهٔ ChatGPT وحشت کنید. نتیجه این است که دیگر فرض نکنید رتبهٔ صفحهٔ اول گوگل بازدیدکننده را تضمین می‌کند، چون برای سهم رو‌به‌رشدی از پرسش‌ها، دیگر این‌طور نیست — فارغ از این‌که لوگوی کدام شرکت کار خلاصه‌سازی را انجام می‌دهد."
+        }
+      ],
+      "faq": [
+        {
+          "question": "آیا ChatGPT واقعاً سهم بازار جستجو را از گوگل می‌گیرد؟",
+          "answer": "در محدودترین معنا — این‌که مردم پرسش خود را در کدام موتور جستجو تایپ می‌کنند — تقریباً نه. گوگل هنوز حدود ۸۹.۵٪ از ترافیک جهانی موتورهای جستجو را در اختیار دارد تا نیمهٔ ۲۰۲۶. محصول جستجوی اختصاصی ChatGPT همچنان زیر ۱٪ از این معیار خاص است. تغییر بزرگ‌تر در معیاری گسترده‌تر از «کشف اطلاعات» که استفاده از چت‌بات را هم شامل می‌شود دیده می‌شود، جایی که سهم ترکیبی گوگل در سه سال اخیر به‌طور قابل‌توجهی کاهش یافته است."
+        },
+        {
+          "question": "اگر ChatGPT به سهم جستجوی گوگل آسیب نمی‌زند، چرا گوگل مدام صفحهٔ نتایجش را تغییر می‌دهد؟",
+          "answer": "چون تهدیدی که گوگل به آن واکنش نشان می‌دهد واقعاً سهم بازار ChatGPT نیست — بلکه تغییر انتظارات کاربر توسط ChatGPT است. وقتی مردم به دریافت پاسخ مستقیم به‌جای فهرست لینک‌ها عادت کردند، گوگل مجبور شد AI Overviews و AI Mode را عرضه کند تا این رفتار را به یک رقیب نبازد، حتی اگر همین کار کلیک به وب‌سایت‌هایی که نتایج خود گوگل قبلاً برایشان ترافیک می‌فرستاد را هم کاهش دهد."
+        },
+        {
+          "question": "اگر AI Overviews کلیک را کاهش می‌دهد، چرا درآمد گوگل در حال رشد است؟",
+          "answer": "چون درآمد و کلیک یک چیز نیستند. گوگل می‌تواند تعداد کمتری نمایش تبلیغاتی هدفمندتر در هر جستجو ارائه دهد و همچنان درآمد را رشد دهد، اگر تبلیغ‌دهندگان برای کلیک‌های باقی‌مانده بیشتر بپردازند یا حجم کل پرسش‌ها افزایش یابد. نتایج سه‌ماههٔ دوم ۲۰۲۶ Alphabet رشد ۱۷٪ درآمد جستجو را همراه با حجم رکورد پرسش‌ها نشان داد، درحالی‌که مطالعات مستقل افت شدید نرخ کلیک ارگانیک در جستجوهای دارای AI Overview را نشان می‌دهند."
+        },
+        {
+          "question": "کدام وب‌سایت‌ها بیشترین ترافیک را از جستجوی هوش مصنوعی از دست می‌دهند؟",
+          "answer": "سایت‌هایی که حول پرسش‌های ساده، واقعیت‌محور و اطلاعاتی ساخته شده‌اند — «چیست»، «چگونه»، تعریف‌های پایه — بیشترین آسیب را می‌بینند، چون سیستم‌های هوش مصنوعی مستقیماً به آن‌ها پاسخ می‌دهند. محتوای مقایسه‌ای، ابزارها، ماشین‌حساب‌ها و صفحاتی که نیازمند تصمیم‌گیری هستند نه صرفاً یک واقعیت، معمولاً بهتر دوام می‌آورند، چون جایگزینی کامل آن‌ها توسط خلاصهٔ هوش مصنوعی سخت‌تر است."
+        },
+        {
+          "question": "آیا باید به‌خاطر جستجوی هوش مصنوعی سرمایه‌گذاری روی SEO را متوقف کنم؟",
+          "answer": "نه، اما هدف باید فراتر از رتبه‌بندی گسترش یابد. استناد‌شدن درون AI Overviews، ChatGPT و پاسخ‌های Perplexity در حال تبدیل‌شدن به یک کانال دیده‌شدن مستقل، جدا از رتبه‌بندی‌های ارگانیک سنتی است، و بیشتر از تراکم کلیدواژه، به ساختار روشن، داده‌های اصلی و اقتدار موضوعی پاداش می‌دهد."
+        },
+        {
+          "question": "آیا Bing یا موتور جستجوی دیگری به‌جای ChatGPT از این وضعیت سود می‌برد؟",
+          "answer": "کمی. Bing به حدود ۴٪ از سهم جهانی موتورهای جستجو رسیده، تا حدی به‌خاطر ادغام Copilot مبتنی بر OpenAI، اما همچنان با فاصلهٔ زیاد از گوگل عقب است. هیچ رقیب منفردی سهم به‌اندازهٔ کافی بزرگی به دست نیاورده که تهدید فوری برای سلطهٔ اصلی گوگل بر جستجو محسوب شود."
+        }
+      ],
+      "seo": {
+        "title": "آیا جستجوی ChatGPT در حال کشتن گوگل است؟ داده‌ها واقعاً چه می‌گویند | گزارش ۲۰۲۶",
+        "metaDescription": "درآمد جستجوی گوگل ۱۷٪ سالانه رشد می‌کند درحالی‌که نرخ کلیک در جستجوهای دارای AI Overview بین ۵۸ تا ۶۵٪ افت کرده. داده‌های واقعی ۲۰۲۶ دربارهٔ ChatGPT در برابر گوگل را ببینید.",
+        "canonical": "https://sinisteroid.ir/fa/blog/is-chatgpt-search-killing-google-what-the-data-actually-shows",
+        "openGraph": {
+          "title": "آیا جستجوی ChatGPT در حال کشتن گوگل است؟ داده‌ها واقعاً چه می‌گویند",
+          "description": "سهم بازار، گزارش‌های مالی و مطالعات نرخ کلیک روی یک روایت واحد توافق ندارند. تصویر کامل ۲۰۲۶، مستند و تحلیل‌شده.",
+          "image": "/api/uploads/1787000001-is-chatgpt-search-killing-google-cover.webp"
+        },
+        "twitter": {
+          "title": "آیا جستجوی ChatGPT در حال کشتن گوگل است؟ داده‌ها واقعاً چه می‌گویند",
+          "description": "درآمد جستجوی گوگل ۱۷٪ سالانه رشد کرده. نرخ کلیک ناشران تا ۶۵٪ افت کرده. هر دو درست‌اند. این‌جا توضیح می‌دهیم چطور.",
+          "image": "/api/uploads/1787000001-is-chatgpt-search-killing-google-cover.webp"
+        },
+        "keywords": "ChatGPT در برابر گوگل, آیا گوگل در حال مردن است, سهم بازار جستجوی ChatGPT, تأثیر AI Overviews, جستجوی بدون کلیک ۲۰۲۶, درآمد جستجوی گوگل, بهینه‌سازی موتور مولد, GEO, آمار جستجوی هوش مصنوعی, افت ترافیک ناشران",
+        "focusKeyword": "ChatGPT در برابر گوگل"
+      }
+    }
+  }
+}

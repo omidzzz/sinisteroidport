@@ -1,0 +1,660 @@
+{
+  "slug": "how-to-fix-ollamas-most-common-errors-and-why-they-happen",
+  "status": "published",
+  "title": "How to Fix Ollama's Most Common Errors (And Why They Happen)",
+  "date": "2026-09-05 17:25:49",
+  "tags": [
+    "local-ai",
+    "ai-tools",
+    "open-source-ai"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/20260905-171819-4cc050d66c7add41.webp",
+    "alt": {
+      "en": "How to Fix Ollama's Most Common Errors (And Why They Happen)",
+      "fa": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "How to Fix Ollama's Most Common Errors (And Why They Happen)",
+      "excerpt": "From 'address already in use' the moment you type ollama serve to a model silently running on your CPU instead of your GPU, Ollama's errors almost always trace back to one of nine root causes. Here's how to diagnose and fix every one of them, and why they happen in the first place.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "How to Fix Ollama's Most Common Errors (And Why They Happen)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Ollama has become the default on-ramp for running large language models on your own hardware, with a public GitHub repository that has crossed 180,000 stars and a model library covering everything from small quantized models that run on a laptop to massive open-weight models that need serious GPU memory. That popularity means an enormous range of hardware, operating systems, and downstream tools — Open WebUI, Cline, AnythingLLM, custom scripts — all talking to the same local server, which is exactly why Ollama's error messages can feel more cryptic than a cloud API's: there's no vendor status page to check, and the failure could be coming from Ollama itself, your GPU driver, your firewall, or whatever client is trying to talk to it."
+        },
+        {
+          "type": "paragraph",
+          "text": "The good news is that almost every Ollama error reported across GitHub issues, community forums, and troubleshooting guides collapses into a small number of root causes: a port conflict, a model that was never actually pulled correctly, a GPU that silently isn't being used, running out of VRAM, a networking mismatch between Ollama and whatever's trying to reach it, a context window quietly overflowing, a corrupted download, an outdated Ollama version that doesn't understand a newer model's format, or an authentication mismatch with Ollama's cloud features. This guide walks through each one, explains why it happens under the hood, and gives you the exact fix, so the next time Ollama throws an error you recognize it in seconds instead of guessing."
+        },
+        {
+          "type": "paragraph",
+          "text": "It's worth knowing upfront what this guide doesn't cover: genuine model-quality problems, like a model hallucinating facts or ignoring instructions in a system prompt, aren't errors in the sense addressed here — they're a different category of issue best solved by trying a different model or refining your prompt, not a configuration fix. Keeping that distinction in mind saves time, since chasing a settings change for what's actually a model-behavior issue, or the reverse, is one of the more common ways people burn an evening on something a five-minute fix elsewhere would have resolved."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "180K+",
+              "label": "GitHub stars on the open-source ollama/ollama repository"
+            },
+            {
+              "value": "11434",
+              "label": "the default port Ollama binds to on 127.0.0.1, and the single most common source of 'address already in use' errors when a second instance tries to start"
+            },
+            {
+              "value": "127.0.0.1 only",
+              "label": "Ollama listens on localhost by default, which is exactly why Docker containers and remote clients frequently report 'connection refused' until this is explicitly changed"
+            },
+            {
+              "value": "Silent",
+              "label": "how Ollama drops requests when a long agentic session hits the context window ceiling — no error dialog, just a dropped or truncated response"
+            },
+            {
+              "value": "1 command",
+              "label": "the number of terminal commands needed to fix the majority of errors covered in this guide, once you know which one applies"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260905-172025-e270e57774bb61b8.webp",
+          "alt": "Diagram categorizing the nine most common Ollama error types by root cause: port conflicts, model pull failures, GPU memory exhaustion, CPU fallback, networking mismatches, context overflow, corrupted downloads, version mismatches, and cloud authentication",
+          "caption": "Figure 1: Nearly every Ollama error reported across GitHub issues and community forums falls into one of nine root-cause categories — and most have a fix that takes under a minute.",
+          "altText": "Diagram categorizing the nine most common Ollama error types by root cause: port conflicts, model pull failures, GPU memory exhaustion, CPU fallback, networking mismatches, context overflow, corrupted downloads, version mismatches, and cloud authentication"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Why Ollama Errors Feel Different From a Cloud API Failure"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "When a cloud AI API fails, you check a status page and wait. When Ollama fails, the failure could be happening in any one of four separate layers you personally own: the Ollama server process itself, your GPU driver and hardware, your operating system's networking rules, or whichever client application is trying to reach Ollama's API."
+        },
+        {
+          "type": "paragraph",
+          "text": "That layering is what makes Ollama troubleshooting feel harder than it actually is. A single symptom — 'nothing happens when I send a request' — could mean the server isn't running, is running on the wrong port, is running but the client is pointed at the wrong address, or is running and reachable but silently falling back to CPU inference so slow it looks frozen. None of these are exotic problems, and each has a specific, fast diagnostic step, but conflating them is why so many community troubleshooting threads start with 'Ollama isn't working' rather than a precise symptom. The fix for that is a short, ordered checklist, which this guide builds toward at the end — but first, the nine specific errors worth recognizing by name."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 1: \"Address Already in Use\" on Port 11434"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "This is the very first error many people ever see from Ollama, and it's also one of the most reassuring once you understand it: it means Ollama is already running successfully, just not the copy you're currently trying to start."
+        },
+        {
+          "type": "paragraph",
+          "text": "The exact message reads Error: listen tcp 127.0.0.1:11434: bind: address already in use on macOS and Linux, or the operating system's own phrasing, Only one usage of each socket address is normally permitted, on Windows. Both describe the same underlying event: Ollama's HTTP server tried to claim TCP port 11434 on localhost, and the operating system refused because another process already holds it — almost always either the Ollama desktop tray app or a previously started ollama serve process that never fully exited. This happens before any model or request is even involved, which is why it's one of the easiest errors to fix confidently."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Check what's actually holding the port with lsof -nP -iTCP:11434 -sTCP:LISTEN on macOS/Linux, or netstat -ano | findstr 11434 on Windows, before assuming anything is broken",
+            "If it's the Ollama desktop app or tray icon, quit it fully rather than running a second ollama serve alongside it — you only need one running copy",
+            "If you genuinely need a second instance on a different port, set OLLAMA_HOST=127.0.0.1:11435 as an environment variable before running ollama serve, and remember to point any client at the matching port",
+            "On Linux systemd installs, edit the service directly with sudo systemctl edit ollama.service rather than fighting the default unit file, then restart with sudo systemctl daemon-reload && sudo systemctl restart ollama"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 2: Model Not Found (Even Though You Just Pulled It)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The message model \"llama3.2\" not found, try pulling it first is the single most common error for people new to Ollama, and it's almost always a naming mismatch rather than anything actually broken."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ollama model names carry a tag after the colon that specifies a specific size or quantization — llama3.2:3b and llama3.2:1b are different downloads, and referencing one when you've only pulled the other produces exactly this error, even though 'a version of llama3.2' genuinely exists on your machine. Running ollama list shows precisely which models and tags are actually present locally, which resolves the ambiguity in seconds. A related but distinct version of this error shows up specifically when integrating Ollama with a downstream tool like a web UI or coding agent: the tool has a model name configured that doesn't exactly match what ollama list shows, often because a model was upgraded or renamed without updating that one configuration field."
+        },
+        {
+          "type": "cta",
+          "title": "Ollama: The Engine Behind Local AI",
+          "text": "If you're still setting up Ollama for the first time or want the fuller picture of how it fits into a local AI stack before troubleshooting it, this is the place to start.",
+          "buttonText": "Read the Full Ollama Overview",
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 3: CUDA / GPU Out-of-Memory Errors"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "An out-of-memory error when loading or running a model is rarely a bug — it's Ollama accurately reporting that the model, plus its active context, genuinely doesn't fit in the VRAM available on your GPU."
+        },
+        {
+          "type": "paragraph",
+          "text": "This shows up most often when a smaller model in a family runs fine but a larger variant fails immediately, or when a model that worked for short prompts suddenly fails once the conversation or context grows, since context consumes additional VRAM on top of the model's own footprint. The failure sometimes surfaces indirectly — a connection reset or a dropped response rather than an explicit 'out of memory' string — which makes it easy to misdiagnose as a networking problem when it's actually a memory ceiling. Running ollama ps while a model is loaded shows which layers are actually on GPU versus CPU, and nvidia-smi (or the equivalent for your GPU vendor) shows real-time VRAM usage, which together make this error straightforward to confirm rather than guess at."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Switch to a smaller parameter count or a more aggressively quantized version of the same model family before assuming your hardware can't run local models at all",
+            "Reduce how much context you're asking Ollama to hold in memory at once, since long conversation history competes directly with the model itself for the same VRAM budget",
+            "Check for other applications holding GPU memory — a browser with hardware acceleration, a game, or another model server can all quietly eat into the same pool Ollama needs",
+            "If you're running a mixed CPU/GPU setup, confirm how many layers are actually being offloaded to GPU with ollama ps rather than assuming full GPU utilization by default"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 4: Ollama Running on CPU Instead of GPU (The Silent Slowdown)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Unlike most errors in this guide, this one doesn't produce an error message at all — it produces a working but agonizingly slow response, and plenty of people run this way for weeks before realizing their GPU was never actually being used."
+        },
+        {
+          "type": "paragraph",
+          "text": "On Apple Silicon Macs, Ollama uses Metal automatically and this failure mode is rare. On Windows and Linux with an NVIDIA GPU, it's considerably more common, and usually traces back to an outdated or missing CUDA driver, a GPU that Ollama's runtime doesn't recognize, or a model too large to fit in VRAM that silently falls back to partial or full CPU execution rather than failing outright. The single fastest way to confirm what's actually happening is to run a prompt and watch nvidia-smi in a separate terminal at the same time — if GPU utilization stays near zero while a response is generating, the model is running on CPU regardless of what Ollama's own logs might suggest."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260905-172146-87d34056d3891cdf.webp",
+          "alt": "Diagram showing how to diagnose whether Ollama is using GPU or silently falling back to CPU inference, using nvidia-smi and ollama ps side by side",
+          "caption": "Figure 2: A model that's simply slow, rather than erroring outright, is the hardest Ollama problem to notice — because nothing tells you it's happening unless you check GPU utilization directly.",
+          "altText": "Diagram showing how to diagnose whether Ollama is using GPU or silently falling back to CPU inference, using nvidia-smi and ollama ps side by side"
+        },
+        {
+          "type": "cta",
+          "title": "Open WebUI: The Missing Interface for Local AI",
+          "text": "If you're running Ollama headless and want a proper chat interface with model management, RAG, and multi-user support layered on top, this covers the setup.",
+          "buttonText": "Read the Open WebUI Guide",
+          "buttonUrl": "/en/blog/open-webui-the-missing-interface-for-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 5: Connection Refused From Docker, a Web UI, or a Coding Agent"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Ollama listens on 127.0.0.1 by default for security reasons, and that single design choice is the root cause of nearly every 'can't connect to Ollama' report from a client running inside Docker or on a different machine on the network."
+        },
+        {
+          "type": "paragraph",
+          "text": "Inside a Docker container, localhost refers to the container itself, not the host machine Ollama is actually running on — which is why a containerized tool like AnythingLLM or a custom script needs http://host.docker.internal:11434 rather than the localhost address that works fine outside a container. For genuinely remote access from another device on your network, Ollama needs to be told to bind to every network interface rather than just localhost, by setting OLLAMA_HOST=0.0.0.0:11434 before starting the server. That change comes with a real security trade-off worth taking seriously: Ollama's API has no built-in authentication, so exposing it beyond localhost means anything that can reach that port on your network can use your models, which is exactly why a firewall rule or a reverse proxy in front of it is worth setting up the moment you make this change rather than after something goes wrong."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 6: Context Length Silently Truncating Long Sessions"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "This is the error category that doesn't announce itself at all — a long agentic session or an extended conversation simply stops responding correctly, or a response silently drops content, once the accumulated context crosses Ollama's configured context window ceiling."
+        },
+        {
+          "type": "paragraph",
+          "text": "This shows up most visibly when Ollama is used as a backend for an agentic coding tool running long, multi-step tasks, since those tools resend accumulated conversation history and tool results with every step, and Ollama's default context length can be considerably smaller than what a long agentic loop actually needs. Setting OLLAMA_CONTEXT_LENGTH to a larger value (131072 is a common choice for genuinely long sessions) before starting ollama serve directly raises that ceiling, at the cost of additional memory usage per loaded model. Because this failure mode is silent rather than announced, it's worth treating any unexplained truncation or dropped response during a long session as a context-length suspect first, before assuming the model itself is misbehaving."
+        },
+        {
+          "type": "cta",
+          "title": "How to Fix Cline's Most Common Errors (And Why They Happen)",
+          "text": "Context window issues aren't unique to Ollama — the exact same failure mode shows up when running any local or cloud model through an agentic coding tool. Worth reading alongside this guide if you're pairing Ollama with Cline.",
+          "buttonText": "Read the Cline Troubleshooting Guide",
+          "buttonUrl": "/en/blog/how-to-fix-clines-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 7: Corrupted or Partial Model Download"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ollama does not always detect a partial or corrupted download automatically, and an interrupted pull — a dropped connection, a closed laptop lid, a killed process — can leave behind a model file that appears present in ollama list but fails or produces garbled output the moment it's actually used. This is one of the simplest errors in this entire guide to fix and one of the easiest to misdiagnose as something more complicated: deleting the affected model with ollama rm <model-name> and re-pulling it fresh with ollama pull <model-name> resolves the overwhelming majority of cases, and is worth trying before spending time debugging anything more elaborate when a specific model behaves strangely while others on the same machine work fine."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 8: \"Unknown Model Architecture\" After Pulling a New Model"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "When a genuinely new model family ships with an architecture Ollama's current version doesn't yet recognize, the result is a specific and very literal error: Ollama tells you it doesn't know what it's looking at."
+        },
+        {
+          "type": "paragraph",
+          "text": "This has happened repeatedly as new model architectures launch faster than some users update their local Ollama installation, and the underlying cause is exactly what the error implies: Ollama's model-running components are compiled against a specific version of the underlying inference engine, and a brand-new architecture string simply isn't in that version's vocabulary yet. The fix is almost always a straightforward version update — running the latest installer for your platform, or rebuilding from source with an updated dependency if you're in a from-source setup — rather than anything wrong with the specific model file you pulled. Checking a new model's release notes for a minimum required Ollama version before pulling it saves a genuinely confusing troubleshooting detour, since the error message alone doesn't always make the version mismatch obvious."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260905-172501-d92893d783b5775c.webp",
+          "alt": "Timeline diagram showing how a new model architecture release can outpace an outdated Ollama installation, producing an unknown model architecture error until the client is updated",
+          "caption": "Figure 3: New model families sometimes ship faster than users update Ollama itself, which is why an 'unknown architecture' error is almost always a version problem, not a corrupted download.",
+          "altText": "Timeline diagram showing how a new model architecture release can outpace an outdated Ollama installation, producing an unknown model architecture error until the client is updated"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 9: Ollama Cloud 401 Unauthorized"
+        },
+        {
+          "type": "paragraph",
+          "text": "For models served through Ollama's cloud-tagged offerings rather than run fully locally, a 401 error almost always means the authentication token isn't being picked up correctly rather than an actual account problem. Running ollama signin re-establishes that connection, and ollama ls confirms whether cloud-tagged models are now showing as accessible. If the error persists after signing in again, checking that the local key file matches what's registered on your account settings page resolves most remaining cases — and it's worth resisting the instinct to delete and regenerate that key file as a first troubleshooting step, since doing so can break authentication on other machines already using the same account rather than just fixing the one that's currently failing."
+        },
+        {
+          "type": "cta",
+          "title": "Ollama Troubleshooting Guide — Community Reference",
+          "text": "For errors not covered here, or symptoms specific to a particular model family, this independent guide covers additional edge cases reproduced directly against recent Ollama releases.",
+          "buttonText": "Read the Full Community Guide",
+          "buttonUrl": "https://www.promptquorum.com/local-llms/troubleshooting-local-llm-setup"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "A 30-Second Diagnostic Checklist Before You Go Digging Further"
+        },
+        {
+          "type": "paragraph",
+          "text": "Most Ollama problems can be triaged fast by working through the same short sequence experienced users default to, rather than jumping straight to an exotic explanation. First, confirm the server is actually running and reachable at all by opening http://127.0.0.1:11434 in a browser — a working server answers with the plain text 'Ollama is running,' and anything else means the server itself is the problem, not any particular model or client. Second, if the server responds but a specific model doesn't, run ollama list and check the exact model name and tag against what your client is requesting, since a tag mismatch is behind a disproportionate share of 'model not found' reports. Third, if a model loads but responds strangely slowly, check nvidia-smi or your platform's GPU monitor during generation to rule out a silent CPU fallback before assuming anything else is wrong. Fourth, if a client running inside Docker or on another machine can't connect at all, confirm whether you're using the correct address for that context — host.docker.internal for containers, an explicit 0.0.0.0 bind for genuine remote access — rather than assuming Ollama itself is broken. That short sequence resolves a large majority of what shows up across Ollama's GitHub issues and community troubleshooting threads before you ever need to look deeper."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Pattern Behind Almost Every Ollama Error"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Strip away the specific error text, and nearly all of Ollama's common failures come down to one of three things: a resource ceiling being quietly hit (port, VRAM, or context length), a networking assumption that doesn't hold in your specific setup (Docker, remote access, firewall), or a version mismatch between Ollama and whatever it's being asked to run or talk to."
+        },
+        {
+          "type": "paragraph",
+          "text": "None of that makes a frozen terminal or a mysteriously slow response any less frustrating in the moment. But it does mean the fix is rarely a genuine mystery. Confirm the server is actually reachable, check the exact model name against ollama list, watch GPU utilization instead of assuming it, get the networking address right for whatever's trying to connect, and keep Ollama itself reasonably current against new model releases. Combined, that short list resolves the overwhelming majority of what shows up in Ollama's own issue tracker — and it's worth running through before assuming you've found a genuinely new bug, since there's a good chance the fix is already sitting in this guide."
+        }
+      ],
+      "faq": [
+        {
+          "question": "Why does Ollama say 'address already in use' when I run ollama serve?",
+          "answer": "This means Ollama is already running — either the desktop tray app or a previous ollama serve process that never fully exited — and is already holding port 11434. Check what's using the port with lsof -nP -iTCP:11434 -sTCP:LISTEN on macOS/Linux, or netstat -ano | findstr 11434 on Windows, then quit the existing instance rather than trying to run a second one, or set OLLAMA_HOST to a different port if you genuinely need two instances running."
+        },
+        {
+          "question": "Why does Ollama say a model isn't found when I already pulled it?",
+          "answer": "Almost always a tag mismatch. Ollama model names include a tag after the colon specifying size or quantization, such as llama3.2:3b versus llama3.2:1b, and these are treated as entirely separate downloads. Run ollama list to see exactly which models and tags are actually present, and confirm your client or command references the exact same name and tag."
+        },
+        {
+          "question": "Why does Ollama run out of memory even though my GPU should be big enough?",
+          "answer": "Context consumes VRAM on top of the model's own footprint, so a model that fits comfortably at a short prompt length can run out of memory once the conversation grows. Other applications using GPU memory simultaneously can also eat into the same pool. Running ollama ps shows which layers are actually on GPU, and reducing context length or switching to a smaller or more quantized model both reduce memory pressure."
+        },
+        {
+          "question": "How do I know if Ollama is actually using my GPU or silently running on CPU?",
+          "answer": "Run a prompt and watch nvidia-smi (or your GPU vendor's equivalent monitor) in a separate terminal at the same time. If GPU utilization stays near zero while a response generates, the model is running on CPU. This failure mode produces no error message, just an unusually slow response, which is why it often goes unnoticed for a long time."
+        },
+        {
+          "question": "Why can't my Docker container or web UI connect to Ollama?",
+          "answer": "Ollama listens on 127.0.0.1 by default for security, and inside a Docker container, localhost refers to the container itself rather than the host machine Ollama is running on. Containerized tools need http://host.docker.internal:11434 instead. For genuine remote access from another device, Ollama needs to be explicitly bound to 0.0.0.0 with the OLLAMA_HOST environment variable, which comes with real security implications since Ollama's API has no built-in authentication."
+        },
+        {
+          "question": "Why does a long agentic session using Ollama suddenly stop responding correctly?",
+          "answer": "This is usually a silent context length overflow rather than a crash. Ollama's default context window can be smaller than what a long multi-step agentic task actually needs, since those tasks resend accumulated history with every step. Setting OLLAMA_CONTEXT_LENGTH to a larger value before starting the server raises that ceiling, at the cost of additional memory per loaded model."
+        },
+        {
+          "question": "A specific model behaves strangely or produces garbled output, but others work fine. What's wrong?",
+          "answer": "This is frequently a corrupted or partial download from an interrupted pull, which Ollama doesn't always detect automatically. Delete the affected model with ollama rm <model-name> and re-pull it fresh with ollama pull <model-name>, which resolves the large majority of these cases without needing any deeper investigation."
+        },
+        {
+          "question": "Why does Ollama say it doesn't recognize a model's architecture right after I pulled it?",
+          "answer": "This happens when a genuinely new model architecture ships faster than your installed Ollama version's inference engine was built to recognize it. The fix is almost always updating to the latest Ollama release for your platform rather than anything wrong with the model file itself. Checking a new model's release notes for its minimum required Ollama version before pulling it avoids this entirely."
+        }
+      ],
+      "seo": {
+        "title": "How to Fix Ollama's Most Common Errors (And Why They Happen) | 2026 Guide",
+        "metaDescription": "From port 11434 conflicts to silent GPU-to-CPU fallback and context length overflows, here's how to diagnose and fix Ollama's most common errors, and why each one actually happens.",
+        "canonical": "https://sinisteroid.ir/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen",
+        "openGraph": {
+          "title": "How to Fix Ollama's Most Common Errors (And Why They Happen)",
+          "description": "Nine root causes explain almost every Ollama error reported on GitHub. Here's how to diagnose each one and fix it in under a minute.",
+          "image": "/api/uploads/1788360001-how-to-fix-ollama-common-errors-cover.webp"
+        },
+        "twitter": {
+          "title": "How to Fix Ollama's Most Common Errors (And Why They Happen)",
+          "description": "Port conflicts, GPU-to-CPU fallback, out-of-memory errors, context overflow — here's the fix for each Ollama error, explained.",
+          "image": "/api/uploads/1788360001-how-to-fix-ollama-common-errors-cover.webp"
+        },
+        "keywords": "Ollama errors, fix Ollama, Ollama address already in use, Ollama model not found, Ollama out of memory, Ollama GPU not detected, Ollama connection refused, Ollama troubleshooting, Ollama context length, local LLM errors",
+        "focusKeyword": "fix Ollama errors"
+      }
+    },
+    "fa": {
+      "title": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)",
+      "excerpt": "از «آدرس از قبل در حال استفاده است» در همان لحظه‌ای که ollama serve را تایپ می‌کنید تا مدلی که بی‌صدا روی CPU به‌جای GPU شما اجرا می‌شود، خطاهای Ollama تقریباً همیشه به یکی از نه علت ریشه‌ای برمی‌گردند. این‌جا نحوهٔ تشخیص و رفع هرکدام، و دلیل واقعی رخ‌دادنشان را می‌بینید.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Ollama به مسیر ورود پیش‌فرض برای اجرای مدل‌های زبانی بزرگ روی سخت‌افزار خودتان تبدیل شده، با یک مخزن عمومی گیت‌هاب که از ۱۸۰ هزار ستاره عبور کرده و کتابخانه‌ای از مدل‌ها که از مدل‌های کوچک کوانتیزه‌شده که روی یک لپ‌تاپ اجرا می‌شوند تا مدل‌های وزن-باز عظیمی که به حافظهٔ GPU جدی نیاز دارند را پوشش می‌دهد. آن محبوبیت به‌معنای طیف عظیمی از سخت‌افزار، سیستم‌عامل‌ها و ابزارهای پایین‌دستی — Open WebUI، Cline، AnythingLLM، اسکریپت‌های سفارشی — است که همه با همان سرور محلی صحبت می‌کنند، و دقیقاً به همین دلیل پیام‌های خطای Ollama می‌توانند از یک API ابری مرموزتر به نظر برسند: هیچ صفحهٔ وضعیت فروشنده‌ای برای بررسی وجود ندارد، و شکست می‌تواند از خود Ollama، درایور GPU شما، فایروال شما، یا هر کلاینتی که سعی می‌کند با آن صحبت کند بیاید."
+        },
+        {
+          "type": "paragraph",
+          "text": "خبر خوب این است که تقریباً هر خطای Ollama گزارش‌شده در سراسر ایشوهای گیت‌هاب، انجمن‌های جامعه و راهنماهای عیب‌یابی به تعداد کمی علت ریشه‌ای فروکاسته می‌شود: یک تعارض پورت، مدلی که واقعاً به‌درستی کشیده نشده، یک GPU که بی‌صدا استفاده نمی‌شود، تمام‌شدن VRAM، ناهماهنگی شبکه‌ای میان Ollama و هر چیزی که سعی می‌کند به آن دسترسی پیدا کند، سرریز آرام پنجرهٔ زمینه، یک دانلود خراب‌شده، نسخهٔ قدیمی Ollama که فرمت یک مدل جدیدتر را نمی‌فهمد، یا ناهماهنگی احراز هویت با ویژگی‌های ابری Ollama. این راهنما هرکدام را مرور می‌کند، دلیل واقعی رخ‌دادنش را در پس‌زمینه توضیح می‌دهد، و راه‌حل دقیق را می‌دهد تا دفعهٔ بعد که Ollama خطایی نشان داد، در چند ثانیه آن را بشناسید به‌جای حدس‌زدن."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "بیش از ۱۸۰ هزار",
+              "label": "ستارهٔ گیت‌هاب روی مخزن متن‌باز ollama/ollama"
+            },
+            {
+              "value": "۱۱۴۳۴",
+              "label": "پور�� پیش‌فرضی که Ollama روی 127.0.0.1 به آن متصل می‌شود، و رایج‌ترین منبع خطاهای «آدرس از قبل در حال استفاده است» وقتی یک نمونهٔ دوم سعی می‌کند شروع شود"
+            },
+            {
+              "value": "فقط 127.0.0.1",
+              "label": "Ollama به‌طور پیش‌فرض روی localhost گوش می‌دهد، و دقیقاً به همین دلیل کانتینرهای Docker و کلاینت‌های راه دور مکرراً «اتصال رد شد» گزارش می‌دهند تا زمانی که این صریحاً تغییر کند"
+            },
+            {
+              "value": "بی‌صدا",
+              "label": "چگونگی رها‌کردن درخواست‌ها توسط Ollama وقتی یک نشست عاملی طولانی به سقف پنجرهٔ زمینهٔ پیکربندی‌شده برخورد می‌کند — بدون هیچ پیام خطا، فقط یک پاسخ رهاشده یا کوتاه‌شده"
+            },
+            {
+              "value": "۱ دستور",
+              "label": "تعداد دستورهای ترمینال لازم برای رفع اکثریت خطاهای پوشش‌داده‌شده در این راهنما، وقتی بدانید کدام یک اعمال می‌شود"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260905-172523-ffb740251ca5302f.webp",
+          "alt": "نمودار دسته‌بندی نه نوع رایج خطای Ollama بر اساس علت ریشه‌ای: تعارض پورت، شکست کشیدن مدل، اتمام حافظهٔ GPU، بازگشت به CPU، ناهماهنگی شبکه، سرریز زمینه، دانلودهای خراب، ناهماهنگی نسخه، و احراز هویت ابری",
+          "caption": "شکل ۱: تقریباً هر خطای Ollama گزارش‌شده در سراسر ایشوهای گیت‌هاب و انجمن‌های جامعه در یکی از نه دستهٔ علت ریشه‌ای قرار می‌گیرد — و بیشترشان راه‌حلی کمتر از یک دقیقه دارند.",
+          "altText": "نمودار دسته‌بندی نه نوع رایج خطای Ollama بر اساس علت ریشه‌ای: تعارض پورت، شکست کشیدن مدل، اتمام حافظهٔ GPU، بازگشت به CPU، ناهماهنگی شبکه، سرریز زمینه، دانلودهای خراب، ناهماهنگی نسخه، و احراز هویت ابری"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چرا خطاهای Ollama از یک شکست API ابری متفاوت به نظر می‌رسند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "وقتی یک API هوش مصنوعی ابری شکست می‌خورد، یک صفحهٔ وضعیت را بررسی می‌کنید و صبر می‌کنید. وقتی Ollama شکست می‌خورد، شکست می‌تواند در هرکدام از چهار لایهٔ جداگانه‌ای که شخصاً مالک آن‌هایید رخ دهد: خود فرآیند سرور Ollama، درایور و سخت‌افزار GPU شما، قوانین شبکه‌ای سیستم‌عامل شما، یا هر برنامهٔ کلاینتی که سعی می‌کند به API Ollama دسترسی پیدا کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "همین لایه‌بندی است که عیب‌یابی Ollama را سخت‌تر از آن‌چه واقعاً هست جلوه می‌دهد. یک علامت منفرد — «وقتی درخواست می‌فرستم هیچ اتفاقی نمی‌افتد» — می‌تواند یعنی سرور در حال اجرا نیست، روی پورت اشتباه در حال اجراست، در حال اجراست اما کلاینت به آدرس اشتباه اشاره می‌کند، یا در حال اجرا و قابل‌دسترسی است اما بی‌صدا به استنتاج CPU‌ای آن‌قدر کند بازگشته که به نظر یخ‌زده می‌رسد. هیچ‌کدام از این‌ها مسائل عجیبی نیستند، و هرکدام یک گام تشخیصی خاص و سریع دارند، اما مخلوط‌کردن آن‌ها دلیل این است که چرا این‌قدر از موضوعات عیب‌یابی جامعه با «Ollama کار نمی‌کند» شروع می‌شوند به‌جای یک علامت دقیق. راه‌حل آن یک چک‌لیست کوتاه و مرتب است، که این راهنما در پایان به سمت آن پیش می‌رود — اما اول، نه خطای خاصی که ارزش شناختن با نام دارند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۱: «آدرس از قبل در حال استفاده است» روی پورت ۱۱۴۳۴"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "این اولین خطایی است که بسیاری از مردم از Ollama می‌بینند، و همچنین یکی از اطمینان‌بخش‌ترین خطاها پس از فهمیدن آن است: یعنی Ollama از قبل با موفقیت در حال اجراست، فقط نه نسخه‌ای که اکنون سعی می‌کنید شروع کنید."
+        },
+        {
+          "type": "paragraph",
+          "text": "پیام دقیق روی macOS و لینوکس Error: listen tcp 127.0.0.1:11434: bind: address already in use است، یا عبارت‌پردازی خود سیستم‌عامل، Only one usage of each socket address is normally permitted، روی ویندوز. هر دو همان رویداد زیربنایی را توصیف می‌کنند: سرور HTTP Ollama سعی کرد پورت TCP ۱۱۴۳۴ را روی localhost مطالبه کند، و سیستم‌عامل رد کرد چون فرآیند دیگری از قبل آن را در اختیار دارد — تقریباً همیشه یا اپلیکیشن دسکتاپ Ollama در تری سیستم، یا یک فرآیند ollama serve قبلاً شروع‌شده که هرگز کاملاً خارج نشده. این پیش از این‌که هیچ مدل یا درخواستی حتی درگیر شود اتفاق می‌افتد، و به همین دلیل یکی از ساده‌ترین خطاها برای رفع با اطمینان است."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "پیش از فرض این‌که چیزی خراب است، بررسی کنید واقعاً چه چیزی پورت را در اختیار دارد با lsof -nP -iTCP:11434 -sTCP:LISTEN روی macOS/لینوکس، یا netstat -ano | findstr 11434 روی ویندوز",
+            "اگر برنامهٔ دسکتاپ یا آیکون تری Ollama است، آن را کاملاً ببندید به‌جای اجرای یک ollama serve دوم در کنار آن — فقط به یک نسخهٔ در حال اجرا نیاز دارید",
+            "اگر واقعاً به یک نمونهٔ دوم روی پورت متفاوتی نیاز دارید، OLLAMA_HOST=127.0.0.1:11435 را به‌عنوان متغیر محیطی پیش از اجرای ollama serve تنظیم کنید، و به‌یاد داشته باشید هر کلاینتی را به پورت مطابق اشاره دهید",
+            "روی نصب‌های systemd لینوکس، سرویس را مستقیم با sudo systemctl edit ollama.service ویرایش کنید به‌جای دست‌وپنجه‌نرم‌کردن با فایل واحد پیش‌فرض، سپس با sudo systemctl daemon-reload && sudo systemctl restart ollama دوباره‌راه‌اندازی کنید"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۲: مدل پیدا نشد (حتی با این‌که همین حالا آن را کشیدید)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "پیام model \"llama3.2\" not found, try pulling it first رایج‌ترین خطا برای تازه‌واردان به Ollama است، و تقریباً همیشه یک ناهماهنگی نام‌گذاری است نه چیزی واقعاً خراب."
+        },
+        {
+          "type": "paragraph",
+          "text": "نام‌های مدل Ollama یک برچسب پس از دونقطه حمل می‌کنند که یک اندازه یا کوانتیزاسیون خاص را مشخص می‌کند — llama3.2:3b و llama3.2:1b دانلودهای متفاوتی هستند، و ارجاع‌دادن به یکی وقتی فقط دیگری را کشیده‌اید دقیقاً همین خطا را تولید می‌کند، حتی با این‌که «نسخه‌ای از llama3.2» واقعاً روی ماشین شما وجود دارد. اجرای ollama list دقیقاً نشان می‌دهد کدام مدل‌ها و برچسب‌ها واقعاً به‌صورت محلی حاضرند، که ابهام را در چند ثانیه برطرف می‌کند. نسخهٔ مرتبط اما متمایزی از این خطا مشخصاً هنگام یکپارچه‌سازی Ollama با یک ابزار پایین‌دستی مانند یک وب‌یوآی یا عامل کدنویسی ظاهر می‌شود: ابزار یک نام مدل پیکربندی‌شده دارد که دقیقاً با آن‌چه ollama list نشان می‌دهد مطابقت ندارد، اغلب چون یک مدل ارتقا یا تغییرنام یافته بدون به‌روزرسانی آن یک فیلد پیکربندی."
+        },
+        {
+          "type": "cta",
+          "title": "اولاما: موتور پشت هوش مصنوعی محلی",
+          "text": "اگر هنوز برای اولین‌بار Ollama را راه‌اندازی می‌کنید یا می‌خواهید پیش از عیب‌یابی، تصویر کامل‌تری از این‌که چگونه در یک استک هوش مصنوعی محلی جا می‌گیرد ببینید، این‌جا نقطهٔ شروع خوبی است.",
+          "buttonText": "مطالعهٔ معرفی کامل اولاما",
+          "buttonUrl": "/fa/blog/ollama-the-engine-behind-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۳: اتمام حافظهٔ CUDA / GPU"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "خطای اتمام حافظه هنگام بارگذاری یا اجرای یک مدل به‌ندرت یک باگ است — Ollama دقیقاً گزارش می‌دهد که مدل، به‌همراه زمینهٔ فعالش، واقعاً در VRAM موجود روی GPU شما جا نمی‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "این بیشتر وقتی ظاهر می‌شود که یک مدل کوچک‌تر در یک خانواده خوب کار می‌کند اما نسخهٔ بزرگ‌تر بلافاصله شکست می‌خورد، یا وقتی مدلی که برای پرامپت‌های کوتاه کار می‌کرد ناگهان همین‌که مکالمه یا زمینه رشد می‌کند شکست می‌خورد، چون زمینه علاوه بر ردپای خود مدل، VRAM اضافی مصرف می‌کند. شکست گاهی غیرمستقیم ظاهر می‌شود — یک ریست اتصال یا یک پاسخ رهاشده به‌جای یک رشتهٔ صریح «اتمام حافظه» — که این باعث می‌شود به‌راحتی به‌عنوان یک مشکل شبکه‌ای اشتباه تشخیص داده شود درحالی‌که واقعاً یک سقف حافظه است. اجرای ollama ps درحالی‌که یک مدل بارگذاری شده نشان می‌دهد کدام لایه‌ها واقعاً روی GPU در برابر CPU هستند، و nvidia-smi (یا معادل آن برای فروشندهٔ GPU شما) مصرف VRAM بلادرنگ را نشان می‌دهد، که با هم این خطا را ساده برای تأیید به‌جای حدس‌زدن می‌کنند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "پیش از فرض این‌که سخت‌افزارتان اصلاً نمی‌تواند مدل‌های محلی را اجرا کند، به تعداد پارامتر کوچک‌تر یا نسخهٔ به‌طور تهاجمی‌تری کوانتیزه‌شده از همان خانوادهٔ مدل تغییر دهید",
+            "مقدار زمینه‌ای که از Ollama می‌خواهید هم‌زمان در حافظه نگه دارد را کاهش دهید، چون تاریخچهٔ مکالمهٔ طولانی مستقیماً برای همان بودجهٔ VRAM با خود مدل رقابت می‌کند",
+            "برنامه‌های دیگری که حافظهٔ GPU را در اختیار دارند بررسی کنید — یک مرورگر با شتاب سخت‌افزاری، یک بازی، یا یک سرور مدل دیگر همگی می‌توانند بی‌صدا در همان استخری که Ollama نیاز دارد بخورند",
+            "اگر یک راه‌اندازی ترکیبی CPU/GPU اجرا می‌کنید، با ollama ps تأیید کنید واقعاً چند لایه به GPU منتقل می‌شوند به‌جای فرض بهره‌برداری کامل GPU به‌طور پیش‌فرض"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۴: اجرای Ollama روی CPU به‌جای GPU (کندی بی‌صدا)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "برخلاف بیشتر خطاهای این راهنما، این یکی اصلاً پیام خطایی تولید نمی‌کند — یک پاسخ کارآمد اما به‌طرز رنج‌آوری کند تولید می‌کند، و بسیاری از مردم هفته‌ها به همین شکل اجرا می‌کنند پیش از این‌که متوجه شوند GPU‌شان هرگز واقعاً استفاده نشده."
+        },
+        {
+          "type": "paragraph",
+          "text": "روی مک‌های اپل سیلیکون، Ollama به‌طور خودکار از Metal استفاده می‌کند و این حالت شکست نادر است. روی ویندوز و لینوکس با یک GPU انویدیا، به‌مراتب رایج‌تر است، و معمولاً به یک درایور CUDA قدیمی یا موجودنبودن، یک GPU که رانتایم Ollama آن را نمی‌شناسد، یا مدلی که برای جای‌گرفتن در VRAM خیلی بزرگ است و بی‌صدا به اجرای جزئی یا کامل CPU برمی‌گردد به‌جای شکست‌خوردن آشکار برمی‌گردد. سریع‌ترین راه برای تأیید این‌که واقعاً چه اتفاقی می‌افتد این است که یک پرامپت را اجرا کنید و هم‌زمان nvidia-smi را در یک ترمینال جداگانه تماشا کنید — اگر بهره‌برداری GPU درحالی‌که پاسخی تولید می‌شود نزدیک صفر باقی بماند، مدل روی CPU در حال اجراست فارغ از آن‌چه لاگ‌های خود Ollama ممکن است نشان دهند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260905-172534-8e8e4b7e9ae0e6d5.webp",
+          "alt": "نمودار نشان‌دهندهٔ نحوهٔ تشخیص این‌که آیا Ollama از GPU استفاده می‌کند یا بی‌صدا به استنتاج CPU بازگشته، با استفاده از nvidia-smi و ollama ps کنار هم",
+          "caption": "شکل ۲: مدلی که به‌سادگی کند است، به‌جای شکست‌خوردن آشکار، سخت‌ترین مشکل Ollama برای متوجه‌شدن است — چون هیچ‌چیز به شما نمی‌گوید در حال وقوع است مگر این‌که مستقیماً بهره‌برداری GPU را بررسی کنید.",
+          "altText": "نمودار نشان‌دهندهٔ نحوهٔ تشخیص این‌که آیا Ollama از GPU استفاده می‌کند یا بی‌صدا به استنتاج CPU بازگشته، با استفاده از nvidia-smi و ollama ps کنار هم"
+        },
+        {
+          "type": "cta",
+          "title": "اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی",
+          "text": "اگر Ollama را به‌شکل headless اجرا می‌کنید و می‌خواهید یک رابط چت مناسب با مدیریت مدل، RAG و پشتیبانی چندکاربره روی آن لایه‌بندی شود، این‌جا راه‌اندازی را پوشش می‌دهد.",
+          "buttonText": "مطالعهٔ راهنمای Open WebUI",
+          "buttonUrl": "/fa/blog/open-webui-the-missing-interface-for-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۵: اتصال رد شد از Docker، یک وب‌یوآی، یا یک عامل کدنویسی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Ollama به‌طور پیش‌فرض به دلایل امنیتی روی 127.0.0.1 گوش می‌دهد، و همین یک تصمیم طراحی علت ریشه‌ای تقریباً هر گزارش «نمی‌توانم به Ollama متصل شوم» از یک کلاینت در حال اجرا درون Docker یا روی ماشین دیگری در شبکه است."
+        },
+        {
+          "type": "paragraph",
+          "text": "درون یک کانتینر Docker، localhost به خود کانتینر اشاره می‌کند، نه ماشین میزبانی که Ollama واقعاً روی آن اجرا می‌شود — و به همین دلیل یک ابزار کانتینری مانند AnythingLLM یا یک اسکریپت ��فارشی به http://host.docker.internal:11434 نیاز دارد به‌جای آدرس localhost که بیرون یک کانتینر خوب کار می‌کند. برای دسترسی راه دور واقعی از دستگاه دیگری در شبکه‌تان، Ollama باید گفته شود به هر رابط شبکه‌ای متصل شود به‌جای فقط localhost، با تنظیم OLLAMA_HOST=0.0.0.0:11434 پیش از شروع سرور. آن تغییر با یک مصالحهٔ امنیتی واقعی همراه است که ارزش جدی‌گرفتن دارد: API Ollama هیچ احراز هویت داخلی‌ای ندارد، پس افشای آن فراتر از localhost یعنی هر چیزی که بتواند به آن پورت در شبکه‌تان دسترسی پیدا کند می‌تواند از مدل‌های شما استفاده کند، و دقیقاً به همین دلیل یک قانون فایروال یا یک reverse proxy جلوی آن، ارزش راه‌اندازی همان لحظه که این تغییر را انجام می‌دهید را دارد، نه پس از این‌که چیزی اشتباه پیش برود."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۶: پنجرهٔ زمینه به‌آرامی نشست‌های طولانی را کوتاه می‌کند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "این دستهٔ خطایی است که اصلاً خودش را اعلام نمی‌کند — یک نشست عاملی طولانی یا مکالمهٔ گسترده به‌سادگی درست پاسخ‌دادن را متوقف می‌کند، یا یک پاسخ بی‌صدا محتوا را رها می‌کند، همین‌که زمینهٔ انباشته‌شده از سقف پنجرهٔ زمینهٔ پیکربندی‌شدهٔ Ollama عبور کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این بیشتر وقتی به‌طور مشهود ظاهر می‌شود که Ollama به‌عنوان بک‌اند برای یک ابزار کدنویسی عاملی در حال اجرای وظایف طولانی و چندمرحله‌ای استفاده می‌شود، چون آن ابزارها تاریخچهٔ مکالمهٔ انباشته‌شده و نتایج ابزار را با هر گام دوباره می‌فرستند، و طول زمینهٔ پیش‌فرض Ollama می‌تواند به‌طور قابل‌توجهی کوچک‌تر از آن‌چه یک حلقهٔ عاملی طولانی واقعاً نیاز دارد باشد. تنظیم OLLAMA_CONTEXT_LENGTH به یک مقدار بزرگ‌تر (۱۳۱۰۷۲ انتخاب رایجی برای نشست‌های واقعاً طولانی است) پیش از شروع ollama serve مستقیماً آن سقف را بالا می‌برد، به قیمت مصرف حافظهٔ اضافی به‌ازای هر مدل بارگذاری‌شده. چون این حالت شکست بی‌صدا است نه اعلام‌شده، ارزش دارد هر کوتاه‌شدگی یا پاسخ رهاشدهٔ توضیح‌ندادنی در طول یک نشست طولانی را ابتدا به‌عنوان مظنون طول زمینه در نظر بگیرید، پیش از فرض این‌که خود مدل بدرفتاری می‌کند."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)",
+          "text": "مسائل پنجرهٔ زمینه منحصر به Ollama نیستند — دقیقاً همان حالت شکست هنگام اجرای هر مدل محلی یا ابری از طریق یک ابزار کدنویسی عاملی ظاهر می‌شود. ارزش دارد در کنار این راهنما بخوانید اگر Ollama را با Cline جفت می‌کنید.",
+          "buttonText": "مطالعهٔ راهنمای عیب‌یابی Cline",
+          "buttonUrl": "/fa/blog/how-to-fix-clines-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۷: دانلود خراب یا ناقص مدل"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ollama همیشه یک دانلود ناقص یا خراب را به‌طور خودکار تشخیص نمی‌دهد، و یک کشیدن قطع‌شده — یک اتصال رهاشده، یک درپوش لپ‌تاپ بسته‌شده، یک فرآیند کشته‌شده — می‌تواند یک فایل مدل باقی بگذارد که در ollama list حاضر به نظر می‌رسد اما همین‌که واقعاً استفاده می‌شود شکست می‌خورد یا خروجی نامفهوم تولید می‌کند. این یکی از ساده‌ترین خطاها در کل این راهنما برای رفع و یکی از آسان‌ترین‌ها برای اشتباه‌تشخیص‌دادن به‌عنوان چیزی پیچیده‌تر است: حذف مدل تحت‌تأثیر با ollama rm <model-name> و کشیدن دوبارهٔ تازه با ollama pull <model-name> اکثریت قریب‌به‌اتفاق موارد را حل می‌کند، و ارزش امتحان‌کردن پیش از صرف زمان برای عیب‌یابی چیز پیچیده‌تری را دارد وقتی یک مدل خاص عجیب رفتار می‌کند درحالی‌که دیگران روی همان ماشین خوب کار می‌کنند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۸: «معماری مدل ناشناخته» درست پس از کشیدن یک مدل جدید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "وقتی یک خانوادهٔ مدل واقعاً جدید با معماری‌ای که نسخهٔ فعلی Ollama هنوز نمی‌شناسد عرضه می‌شود، نتیجه یک خطای خاص و بسیار لفظی است: Ollama به شما می‌گوید نمی‌داند به چه چیزی نگاه می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این بارها اتفاق افتاده چون معماری‌های مدل جدید سریع‌تر از به‌روزرسانی نصب محلی Ollama توسط برخی کاربران عرضه می‌شوند، و علت زیربنایی دقیقاً همان چیزی است که خطا القا می‌کند: اجزای اجرای مدل Ollama در برابر نسخهٔ خاصی از موتور استنتاج زیربنایی کامپایل شده‌اند، و یک رشتهٔ معماری کاملاً جدید به‌سادگی هنوز در واژگان آن نسخه نیست. راه‌حل تقریباً همیشه یک به‌روزرسانی نسخهٔ ساده است — اجرای آخرین نصب‌کننده برای پلتفرم شما، یا بازسازی از سورس با یک وابستگی به‌روزشده اگر در یک راه‌اندازی از-سورس هستید — نه چیزی نادرست در فایل مدل خاصی که کشیدید. بررسی یادداشت‌های انتشار یک مدل جدید برای حداقل نسخهٔ موردنیاز Ollama پیش از کشیدن آن، یک انحراف عیب‌یابی واقعاً گیج‌کننده را صرفه‌جویی می‌کند، چون خود پیام خطا همیشه ناهماهنگی نسخه را آشکار نمی‌کند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260905-172542-bcdb2c5dc2c89423.webp",
+          "alt": "نمودار زمانی نشان‌دهندهٔ این‌که چگونه انتشار یک معماری مدل جدید می‌تواند از یک نصب قدیمی Ollama پیشی بگیرد، خطای معماری مدل ناشناخته تولید کند تا زمانی که کلاینت به‌روزرسانی شود",
+          "caption": "شکل ۳: خانواده‌های مدل جدید گاهی سریع‌تر از به‌روزرسانی خود Ollama توسط کاربران عرضه می‌شوند، و به همین دلیل یک خطای «معماری ناشناخته» تقریباً همیشه یک مشکل نسخه است، نه یک دانلود خراب.",
+          "altText": "نمودار زمانی نشان‌دهندهٔ این‌که چگونه انتشار یک معماری مدل جدید می‌تواند از یک نصب قدیمی Ollama پیشی بگیرد، خطای معماری مدل ناشناخته تولید کند تا زمانی که کلاینت به‌روزرسانی شود"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۹: Ollama Cloud 401 غیرمجاز"
+        },
+        {
+          "type": "paragraph",
+          "text": "برای مدل‌های ارائه‌شده از طریق پیشنهادهای برچسب-ابری Ollama به‌جای اجرای کاملاً محلی، یک خطای ۴۰۱ تقریباً همیشه یعنی توکن احراز هویت به‌درستی برداشت نمی‌شود نه یک مشکل واقعی حساب. اجرای ollama signin آن اتصال را دوباره برقرار می‌کند، و ollama ls تأیید می‌کند آیا مدل‌های برچسب-ابری اکنون به‌عنوان قابل‌دسترسی نشان داده می‌شوند. اگر خطا پس از ورود دوباره ادامه یابد، بررسی این‌که فایل کلید محلی با آن‌چه در صفحهٔ تنظیمات حسابتان ثبت شده مطابقت دارد بیشتر موارد باقی‌مانده را حل می‌کند — و ارزش دارد در برابر غریزهٔ حذف و بازتولید آن فایل کلید به‌عنوان اولین گام عیب‌یابی مقاومت کنید، چون این کار می‌تواند احراز هویت را روی ماشین‌های دیگری که از قبل از همان حساب استفاده می‌کنند خراب کند به‌جای این‌که فقط آن‌که اکنون شکست می‌خورد را رفع کند."
+        },
+        {
+          "type": "cta",
+          "title": "راهنمای عیب‌یابی Ollama — مرجع جامعه",
+          "text": "برای خطاهایی که این‌جا پوشش داده نشده‌اند، یا علائم خاص یک خانوادهٔ مدل خاص، این راهنمای مستقل موارد لبهٔ اضافی را که مستقیماً در برابر انتشارات اخیر Ollama بازتولید شده‌اند پوشش می‌دهد.",
+          "buttonText": "مطالعهٔ راهنمای کامل جامعه",
+          "buttonUrl": "https://www.promptquorum.com/local-llms/troubleshooting-local-llm-setup"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چک‌لیست تشخیصی ۳۰ ثانیه‌ای پیش از کاوش بیشتر"
+        },
+        {
+          "type": "paragraph",
+          "text": "بیشتر مشکلات Ollama را می‌توان سریع با گذراندن همان توالی کوتاهی که کاربران باتجربه به‌طور پیش‌فرض انجام می‌دهند تریاژ کرد، به‌جای پریدن مستقیم به یک توضیح عجیب. اول، تأیید کنید سرور واقعاً در حال اجرا و اصلاً قابل‌دسترسی است با بازکردن http://127.0.0.1:11434 در یک مرورگر — یک سرور کارآمد با متن ساده «Ollama is running» پاسخ می‌دهد، و هر چیز دیگری یعنی خود سرور مشکل است، نه هیچ مدل یا کلاینت خاصی. دوم، اگر سرور پاسخ می‌دهد اما یک مدل خاص نه، ollama list را اجرا کنید و نام و برچسب دقیق مدل را در برابر آن‌چه کلاینت‌تان درخواست می‌کند بررسی کنید، چون ناهماهنگی برچسب پشت سهم نامتناسبی از گزارش‌های «مدل پیدا نشد» است. سوم، اگر یک مدل بارگذاری می‌شود اما به‌طور عجیبی کند پاسخ می‌دهد، nvidia-smi یا مانیتور GPU پلتفرم خود را در طول تولید بررسی کنید تا یک بازگشت بی‌صدا به CPU را پیش از فرض هر چیز دیگری رد کنید. چهارم، اگر کلاینتی در حال اجرا درون Docker یا روی ماشین دیگری اصلاً نمی‌تواند متصل شود، تأیید کنید آیا از آدرس درست برای آن زمینه استفاده می‌کنید — host.docker.internal برای کانتینرها، یک اتصال صریح 0.0.0.0 برای دسترسی راه دور واقعی — به‌جای فرض این‌که خود Ollama خراب است. آن توالی کوتاه اکثریت بزرگی از آن‌چه در سراسر ایشوهای گیت‌هاب و موضوعات عیب‌یابی جامعهٔ Ollama ظاهر می‌شود را پیش از این‌که هرگز نیاز به نگاه عمیق‌تر داشته باشید حل می‌کند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "الگوی پشت تقریباً هر خطای Ollama"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "متن خطای خاص را کنار بگذارید، تقریباً همهٔ شکست‌های رایج Ollama به یکی از سه چیز برمی‌گردند: یک سقف منبع که به‌آرامی برخورد شده (پورت، VRAM یا طول زمینه)، یک فرض شبکه‌ای که در راه‌اندازی خاص شما پایدار نمی‌ماند (Docker، دسترسی راه دور، فایروال)، یا یک ناهماهنگی نسخه میان Ollama و هر چیزی که از آن خواسته می‌شود اجرا کند یا با آن صحبت کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "هیچ‌کدام از این‌ها یک ترمینال یخ‌زده یا یک پاسخ به‌طرز مرموزی کند را در همان لحظه کمتر آزاردهنده نمی‌کند. اما به این معناست که راه‌حل به‌ندرت یک معمای واقعی است. تأیید کنید سرور واقعاً قابل‌دسترسی است، نام دقیق مدل را در برابر ollama list بررسی کنید، بهره‌برداری GPU را تماشا کنید به‌جای فرض‌کردن آن، آدرس شبکه‌ای درست را برای هر چیزی که سعی می‌کند متصل شود بگیرید، و خود Ollama را نسبتاً به‌روز نگه دارید در برابر انتشارات مدل جدید. با هم، آن فهرست کوتاه اکثریت قریب‌به‌اتفاق آن‌چه در ردیاب ایشوی خود Ollama ظاهر می‌شود را حل می‌کند — و ارزش دارد پیش از فرض این‌که یک باگ واقعاً جدید پیدا کرده‌اید آن را اجرا کنید، چون احتمال زیادی وجود دارد راه‌حل از قبل در همین راهنما نشسته باشد."
+        }
+      ],
+      "faq": [
+        {
+          "question": "چرا Ollama می‌گوید «آدرس از قبل در حال استفاده است» وقتی ollama serve را اجرا می‌کنم؟",
+          "answer": "این یعنی Ollama از قبل در حال اجراست — یا برنامهٔ دسکتاپ تری یا یک فرآیند ollama serve قبلی که هرگز کاملاً خارج نشده — و از قبل پورت ۱۱۴۳۴ را در اختیار دارد. بررسی کنید چه چیزی پورت را استفاده می‌کند با lsof -nP -iTCP:11434 -sTCP:LISTEN روی macOS/لینوکس، یا netstat -ano | findstr 11434 روی ویندوز، سپس نمونهٔ موجود را ببندید به‌جای تلاش برای اجرای یک دومی، یا OLLAMA_HOST را به پورت متفاوتی تنظیم کنید اگر واقعاً به دو نمونهٔ در حال اجرا نیاز دارید."
+        },
+        {
+          "question": "چرا Ollama می‌گوید یک مدل پیدا نشده وقتی از قبل آن را کشیده‌ام؟",
+          "answer": "تقریباً همیشه یک ناهماهنگی برچسب است. نام‌های مدل Ollama یک برچسب پس از دونقطه شامل می‌شوند که اندازه یا کوانتیزاسیون را مشخص می‌کند، مانند llama3.2:3b در برابر llama3.2:1b، و این‌ها به‌عنوان دانلودهای کاملاً جداگانه در نظر گرفته می‌شوند. ollama list را اجرا کنید تا دقیقاً ببینید کدام مدل‌ها و برچسب‌ها واقعاً حاضرند، و تأیید کنید کلاینت یا دستورتان دقیقاً به همان نام و برچسب ارجاع می‌دهد."
+        },
+        {
+          "question": "چرا Ollama حافظه‌اش تمام می‌شود درحالی‌که GPU‌ام باید به‌اندازهٔ کافی بزرگ باشد؟",
+          "answer": "زمینه علاوه بر ردپای خود مد��، VRAM مصرف می‌کند، پس مدلی که برای یک طول پرامپت کوتاه به‌راحتی جا می‌شود می‌تواند همین‌که مکالمه رشد می‌کند حافظه‌اش تمام شود. برنامه‌های دیگری که هم‌زمان از حافظهٔ GPU استفاده می‌کنند نیز می‌توانند در همان استخر بخورند. اجرای ollama ps نشان می‌دهد کدام لایه‌ها واقعاً روی GPU هستند، و کاهش طول زمینه یا تغییر به یک مدل کوچک‌تر یا کوانتیزه‌تر هر دو فشار حافظه را کاهش می‌دهند."
+        },
+        {
+          "question": "چگونه بفهمم Ollama واقعاً از GPU‌ام استفاده می‌کند یا بی‌صدا روی CPU در حال اجراست؟",
+          "answer": "یک پرامپت اجرا کنید و هم‌زمان nvidia-smi (یا مانیتور معادل فروشندهٔ GPU‌تان) را در یک ترمینال جداگانه تماشا کنید. اگر بهره‌برداری GPU درحالی‌که پاسخی تولید می‌شود نزدیک صفر باقی بماند، مدل روی CPU در حال اجراست. این حالت شکست هیچ پیام خطایی تولید نمی‌کند، فقط یک پاسخ به‌طرز غیرمعمولی کند، به همین دلیل اغلب مدت طولانی نادیده گرفته می‌شود."
+        },
+        {
+          "question": "چرا کانتینر Docker یا وب‌یوآی من نمی‌تواند به Ollama متصل شود؟",
+          "answer": "Ollama به‌طور پیش‌فرض به دلایل امنیتی روی 127.0.0.1 گوش می‌دهد، و درون یک کانتینر Docker، localhost به خود کانتینر اشاره می‌کند نه ماشین میزبانی که Ollama روی آن اجرا می‌شود. ابزارهای کانتینری به http://host.docker.internal:11434 نیاز دارند. برای دسترسی راه دور واقعی از دستگاه دیگری، Ollama باید صریحاً به 0.0.0.0 با متغیر محیطی OLLAMA_HOST متصل شود، که با پیامدهای امنیتی واقعی همراه است چون API Ollama هیچ احراز هویت داخلی‌ای ندارد."
+        },
+        {
+          "question": "چرا یک نشست عاملی طولانی که از Ollama استفاده می‌کند ناگهان درست پاسخ‌دادن را متوقف می‌کند؟",
+          "answer": "این معمولاً یک سرریز بی‌صدای طول زمینه است نه یک کرش. پنجرهٔ زمینهٔ پیش‌فرض Ollama می‌تواند از آن‌چه یک وظیفهٔ عاملی چندمرحله‌ای طولانی واقعاً نیاز دارد کوچک‌تر باشد، چون آن وظایف تاریخچهٔ انباشته‌شده را با هر گام دوباره می‌فرستند. تنظیم OLLAMA_CONTEXT_LENGTH به مقدار بزرگ‌تر پیش از شروع سرور آن سقف را بالا می‌برد، به قیمت مصرف حافظهٔ اضافی به‌ازای هر مدل بارگذاری‌شده."
+        },
+        {
+          "question": "یک مدل خاص عجیب رفتار می‌کند یا خروجی نامفهوم تولید می‌کند، اما دیگران خوب کار می‌کنند. مشکل چیست؟",
+          "answer": "این مکرراً یک دانلود خراب یا ناقص از یک کشیدن قطع‌شده است، که Ollama همیشه به‌طور خودکار تشخیص نمی‌دهد. مدل تحت‌تأثیر را با ollama rm <model-name> حذف کنید و با ollama pull <model-name> دوباره تازه بکشید، که اکثریت بزرگ این موارد را بدون نیاز به هیچ بررسی عمیق‌تری حل می‌کند."
+        },
+        {
+          "question": "چرا Ollama می‌گوید معماری یک مدل را درست پس از کشیدنش نمی‌شناسد؟",
+          "answer": "این وقتی اتفاق می‌افتد که یک معماری مدل واقعاً جدید سریع‌تر از آن‌که موتور استنتاج نسخهٔ نصب‌شدهٔ Ollama شما برای شناختنش ساخته شده عرضه می‌شود. راه‌حل تقریباً همیشه به‌روزرسانی به آخرین انتشار Ollama برای پلتفرم شماست، نه چیزی نادرست در خود فایل مدل. بررسی یادداشت‌های انتشار یک مدل جدید برای حداقل نسخهٔ موردنیاز Ollama پیش از کشیدن آن، این را کاملاً اجتناب می‌کند."
+        }
+      ],
+      "seo": {
+        "title": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم | راهنمای ۲۰۲۶",
+        "metaDescription": "از تعارض‌های پورت ۱۱۴۳۴ تا بازگشت بی‌صدای GPU به CPU و سرریز طول زمینه، این‌جا نحوهٔ تشخیص و رفع رایج‌ترین خطاهای Ollama، و دلیل واقعی رخ‌دادن هرکدام را می‌بینید.",
+        "canonical": "https://sinisteroid.ir/fa/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen",
+        "openGraph": {
+          "title": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)",
+          "description": "نه علت ریشه‌ای، تقریباً هر خطای Ollama گزارش‌شده در گیت‌هاب را توضیح می‌دهد. این‌جا نحوهٔ تشخیص و رفع هرکدام را در کمتر از یک دقیقه می‌بینید.",
+          "image": "/api/uploads/1788360001-how-to-fix-ollama-common-errors-cover.webp"
+        },
+        "twitter": {
+          "title": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)",
+          "description": "تعارض پورت، بازگشت GPU به CPU، خطاهای اتمام حافظه، سرریز زمینه — این‌جا راه‌حل هر خطای Ollama، توضیح‌داده‌شده را می‌بینید.",
+          "image": "/api/uploads/1788360001-how-to-fix-ollama-common-errors-cover.webp"
+        },
+        "keywords": "خطاهای Ollama, رفع مشکل Ollama, آدرس از قبل در حال استفاده Ollama, مدل پیدا نشد Ollama, اتمام حافظهٔ Ollama, GPU شناسایی نشد Ollama, اتصال رد شد Ollama, عیب‌یابی Ollama, طول زمینهٔ Ollama, خطاهای LLM محلی",
+        "focusKeyword": "رفع خطاهای Ollama"
+      }
+    }
+  }
+}

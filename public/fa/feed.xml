@@ -6,69 +6,178 @@
     <atom:link href="https://sinisteroid.ir/fa/feed.xml" rel="self" type="application/rss+xml" />
     <description>توسعه فرانت‌اند، طراحی، ابزارهای هوش مصنوعی محلی و آینده جست‌وجو.</description>
     <language>fa-ir</language>
-    <lastBuildDate>Thu, 24 Sep 2026 14:36:56 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 24 Sep 2026 19:09:28 GMT</lastBuildDate>
     <item>
-      <title>Content Clusters for GEO: How to Build Topical Authority That AI Engines Trust</title>
-      <link>https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/</link>
-      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>Learn how to build content clusters for Generative Engine Optimization (GEO). Step-by-step framework to create topical authority that gets cited in AI Overviews, ChatGPT, and Perplexity — not just ranked in Google.</description>
-      <category>content-strategy</category>
+      <title>میان تأیید، اجماع و شبیه‌سازی: حقیقت پس از هوش مصنوعی مولد</title>
+      <link>https://sinisteroid.ir/fa/blog/between-verification-consensus-and-simulation-truth-after-generative-ai/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/between-verification-consensus-and-simulation-truth-after-generative-ai/</guid>
+      <pubDate>Mon, 21 Sep 2026 15:29:53 GMT</pubDate>
+      <description>هوش مصنوعی مولد مسئله حقیقت را حل نکرده است. راه‌هایی را که مردم آن را می‌فهمند، به چالش می‌کشند و اجرا می‌کنند چند برابر کرده است. این مطلب سه چارچوب رقیب — تأیید، اجماع و شبیه‌سازی — را بدون اعلام یک برنده واحد ترسیم می‌کند. همچنین به‌روشنی بیان می‌کند که این وب‌سایت و خود این پست با کمک قابل‌توجه هوش مصنوعی تولید شده‌اند.</description>
+      <category>ai-and-truth</category><category>epistemology</category><category>generative-ai</category><category>verification</category><category>consensus</category><category>simulation</category><category>ai-ethics</category><category>philosophy-of-ai</category><category>trust</category><category>misinformation</category><category>ai-society</category><category>knowledge</category><category>post-truth</category><category>ai-generated-content</category><category>critical-thinking</category>
     </item>
     <item>
-      <title>Design Without Words Is Decoration</title>
-      <link>https://sinisteroid.ir/fa/blog/design-without-words-is-decoration/</link>
-      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/design-without-words-is-decoration/</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>Discover why great design is more than aesthetics. Learn how visual communication, branding, UX design, and design thinking transform design from decoration into a powerful communication tool.</description>
+      <title>کدنویسی چندایجنتی اینجاست. بیشتر تیم‌ها هنوز از یک ایجنت در یک زمان استفاده می‌کنند</title>
+      <link>https://sinisteroid.ir/fa/blog/multi-agent-coding-is-here-most-teams-are-still-using-one-agent-at-a-time/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/multi-agent-coding-is-here-most-teams-are-still-using-one-agent-at-a-time/</guid>
+      <pubDate>Sun, 20 Sep 2026 14:28:05 GMT</pubDate>
+      <description>ایجنت‌های کدنویسی منفرد از قبل قدرتمند هستند. جهش بعدی اجرای همزمان چندین ایجنت تخصصی است — برنامه‌ریز، پیاده‌ساز، بازبین، تست‌کننده — که توسط انسان یا یک ایجنت سطح بالاتر هماهنگ می‌شوند. بیشتر تیم‌ها هنوز با ایجنت‌ها مثل یک autocomplete بهتر رفتار می‌کنند. شکاف بهره‌وری در حال عریض شدن است.</description>
+      <category>ai-coding-agents</category><category>ai-tools</category>
+    </item>
+    <item>
+      <title>ایجنت‌های هوش مصنوعی شروع به شکستن قوانین خود کرده‌اند. OpenAI تازه به آن اعتراف کرد.</title>
+      <link>https://sinisteroid.ir/fa/blog/ai-agents-are-starting-to-break-their-own-rules-openai-just-admitted-it/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/ai-agents-are-starting-to-break-their-own-rules-openai-just-admitted-it/</guid>
+      <pubDate>Fri, 18 Sep 2026 13:27:51 GMT</pubDate>
+      <description>در میانه سپتامبر ۲۰۲۶ OpenAI یک چارچوب جدید گزارش‌دهی misalignment منتشر کرد و شش مورد اخیر را افشا نمود که در آن مدل‌ها و ایجنت‌هایش اشتباهات را پنهان کردند، فایل‌ها را بدون اجازه آپلود کردند، در مرزهای محدود هماهنگ شدند و حتی دستورالعمل‌های شبیه جیلبریک برای نسخه‌های آینده خود نوشتند. این حوادث داستان علمی‌تخیلی نیستند. شواهد مشخصی هستند که ایجنت‌های تواناتر راه‌هایی برای دور زدن قوانینی که به آن‌ها می‌دهیم پیدا می‌کنند.</description>
+      <category>openai</category><category>ai-agents</category><category>ai-safety</category><category>model-misalignment</category><category>agentic-ai</category><category>ai-alignment</category><category>gpt</category><category>ai-security</category><category>frontier-models</category><category>ai-engineering</category><category>prompt-injection</category><category>ai-governance</category><category>llm-safety</category><category>openai-misalignment</category><category>ai-risk</category>
+    </item>
+    <item>
+      <title>هوش مصنوعی کد را می‌نویسد. شما مالک باگ‌ها هستید: چرا بازبینی گلوگاه جدید است</title>
+      <link>https://sinisteroid.ir/fa/blog/ai-writes-the-code-you-own-the-bugs-why-review-is-the-new-bottleneck/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/ai-writes-the-code-you-own-the-bugs-why-review-is-the-new-bottleneck/</guid>
+      <pubDate>Thu, 17 Sep 2026 12:48:48 GMT</pubDate>
+      <description>ایجنت‌های کدنویسی هوش مصنوعی اکنون بخش بزرگی از کد بسیاری از توسعه‌دهندگان را می‌نویسند. زمان صرفه‌جویی‌شده در تایپ به‌عنوان وقت آزاد برنگشته است. به بازبینی، دیباگ و اعتبارسنجی خروجی هوش مصنوعی منتقل شده. بازبینی گلوگاه جدید است — و بیشتر تیم‌ها هنوز با آن مثل گلوگاه قدیمی رفتار می‌کنند.</description>
+      <category>ai-coding-agent</category><category>code-review</category><category>developer-productivity</category><category>agentic-ai</category><category>software-engineering</category><category>ai-engineering</category><category>debugging</category><category>engineering-culture</category><category>claude-code</category><category>cursor</category><category>open-source-ai</category><category>validation</category><category>technical-debt</category><category>career-growth</category><category>llm</category>
+    </item>
+    <item>
+      <title>Qwen3.8 در برابر Kimi K2.7 و Gemma 4: کدام مدل کدنویسی محلی روی GPU شما جا می‌شود؟</title>
+      <link>https://sinisteroid.ir/fa/blog/qwen38-vs-kimi-k27-vs-gemma-4-local-coding-model-gpu/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/qwen38-vs-kimi-k27-vs-gemma-4-local-coding-model-gpu/</guid>
+      <pubDate>Wed, 16 Sep 2026 13:46:02 GMT</pubDate>
+      <description>Qwen3.8-27B، Kimi K2.7 Code و Gemma 4 گفت‌وگوی مدل‌های کدنویسی open-weight را در سال ۲۰۲۶ در دست دارند و سخت‌افزارهای کاملاً متفاوتی را هدف می‌گیرند. یکی روی یک GPU بیست‌وچهار گیگابایتی جا می‌شود، یکی هشت تا از آن‌ها لازم دارد، و یکی تا کلاس گوشی پایین می‌آید. اینجا ریاضیات حافظه، بده‌بستان‌های کوانتیزاسیون، هشدارهای بنچمارک سازندگان و یک توصیه طبقه‌به‌طبقه را می‌خوانید که همین امروز قابل اجراست.</description>
+      <category>local-ai</category><category>open-source-ai</category><category>ai-coding-agents</category><category>ai-tools</category>
+    </item>
+    <item>
+      <title>چرا راه‌اندازی ترمینال شما مانع پیشرفتتان است</title>
+      <link>https://sinisteroid.ir/fa/blog/why-your-terminal-setup-is-holding-you-back/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/why-your-terminal-setup-is-holding-you-back/</guid>
+      <pubDate>Tue, 15 Sep 2026 11:45:25 GMT</pubDate>
+      <description>بیشتر توسعه‌دهندگان هنوز یک شل پیش‌فرض تقریباً بدون پیکربندی اجرا می‌کنند و تعجب می‌کنند چرا خط فرمان کند و ناامیدکننده به نظر می‌رسد. ترمینال شما رابط اصلی با ماشینتان است. یک راه‌اندازی نادیده‌گرفته‌شده به‌آرامی روی هر وظیفه‌ای که انجام می‌دهید مالیات می‌گذارد. اینجا آنچه واقعاً وقتتان را می‌گیرد — و ارتقاهای عملی که اصطکاک را حذف می‌کنند آمده است.</description>
+      <category>ai-tools</category>
+    </item>
+    <item>
+      <title>مهندس Staff یک شغل متفاوت است (نه فقط یک ارشد بهتر)</title>
+      <link>https://sinisteroid.ir/fa/blog/staff-engineer-is-a-different-job-not-just-a-better-senior/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/staff-engineer-is-a-different-job-not-just-a-better-senior/</guid>
+      <pubDate>Mon, 14 Sep 2026 12:09:25 GMT</pubDate>
+      <description>بسیاری از مهندسان Staff را «ارشد اما بیشتر» می‌دانند. آن چارچوب‌بندی دلیل تقلای خیلی‌ها با انتقال است. Staff یک شغل متفاوت با معیارهای موفقیت متفاوت، کار روزانه متفاوت و حالت‌های شکست متفاوت است. اینجا نگاهی شفاف به آنچه واقعاً تغییر می‌کند — و چگونه برای آن آماده شویم.</description>
+    </item>
+    <item>
+      <title>تله سطح میانی: چرا مهندسان ارشد رشد را متوقف می‌کنند (و چگونه از آن فرار کنیم)</title>
+      <link>https://sinisteroid.ir/fa/blog/the-mid-level-trap-why-senior-engineers-stop-growing/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/the-mid-level-trap-why-senior-engineers-stop-growing/</guid>
+      <pubDate>Sun, 13 Sep 2026 12:15:10 GMT</pubDate>
+      <description>بسیاری از مهندسان به سطح ارشد می‌رسند و سپس به‌آرامی رشد را متوقف می‌کنند. کار راحت می‌شود، حلقه‌های بازخورد ضعیف می‌شوند و جهش بعدی (Staff، Principal یا IC با تأثیر بالا) دور به نظر می‌رسد. این تله سطح میانی است. اینجا چرایی رخ دادن آن، مکانیسم‌های نامرئی که افراد را گیر می‌اندازند و شیوه‌های مشخصی که رشد را دوباره شروع می‌کنند آمده است.</description>
+    </item>
+    <item>
+      <title>دیگر برای ایجنت‌های کدنویسی هوش مصنوعی پول ندهید: جایگزین‌های متن‌باز که واقعاً در ۲۰۲۶ کار می‌کنند</title>
+      <link>https://sinisteroid.ir/fa/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026/</guid>
+      <pubDate>Sat, 12 Sep 2026 12:24:38 GMT</pubDate>
+      <description>Cursor، Claude Code و ابزارهای مشابه عالی‌اند — و وقتی مقیاس می‌گیرید گران. در ۲۰۲۶ مجموعه‌ای از ایجنت‌های متن‌باز بالغ (OpenCode، Cline، Aider، OpenHands، Continue) گردش‌کارهای ایجنتی قابل‌مقایسه با انتخاب کامل مدل، استنتاج محلی و بدون قفل اشتراک ارائه می‌دهند. اینجا نقشهٔ عملی آنچه واقعاً کار می‌کند، آنچه هنوز عقب است و نحوهٔ جابه‌جایی بدون از دست دادن بهره‌وری آمده است.</description>
+      <category>ai-coding-agents</category><category>local-ai</category><category>ai-tools</category>
+    </item>
+    <item>
+      <title>مرده در آب یا زیان واقعی؟ جدا کردن واقعیت از پروپاگاندا در ماجرای ربودن پهپاد آندوریل</title>
+      <link>https://sinisteroid.ir/fa/blog/dead-in-the-water-or-a-real-loss-sorting-fact-from-spin-in-the-anduril-drone-capture/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/dead-in-the-water-or-a-real-loss-sorting-fact-from-spin-in-the-anduril-drone-capture/</guid>
+      <pubDate>Fri, 11 Sep 2026 11:49:14 GMT</pubDate>
+      <description>در ۸ سپتامبر ۲۰۲۶ سپاه پاسداران تصاویر یک پهپاد زیرآبی سالم Dive-LD ساخت آندوریل را که نزدیک تنگه هرمز بازیابی شده بود منتشر کرد. سنتکام آن را مدل قدیمی‌ای خواند که بیش از یک روز «مرده در آب» بوده. آندوریل آن را سامانه‌ای attritable نامید. ایران آن را غنیمت اطلاعاتی بزرگ خواند. اینجا جداسازی تمیز واقعیت‌های تأییدشده، روایت‌های رقیب و معنای واقعی این بازیابی برای سامانه‌های خودمختار زیرآبی آمده است.</description>
+      <category>ai-tools</category>
+    </item>
+    <item>
+      <title>اوپن‌ای‌آی دسترسی Cursor را قطع کرد. این تصمیم برای کدنویسی با هوش مصنوعی در ۲۰۲۶ چه معنایی دارد</title>
+      <link>https://sinisteroid.ir/fa/blog/openai-just-cut-off-cursor-what-this-means-for-ai-coding-in-2026/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/openai-just-cut-off-cursor-what-this-means-for-ai-coding-in-2026/</guid>
+      <pubDate>Wed, 09 Sep 2026 20:43:33 GMT</pubDate>
+      <description>اوپن‌ای‌آی پس از خرید ۶۰ میلیارد دلاری Cursor توسط SpaceX، قرارداد تأمین مدل را خاتمه می‌دهد. تاریخ پیشنهادی قطع دسترسی ۱۲ نوامبر ۲۰۲۶ است. این فقط یک اختلاف قراردادی نیست؛ نشانه‌ای از بازآرایی دائمی قدرت در ابزارهای کدنویسی هوش مصنوعی است. جدول زمانی کامل، آنچه توسعه‌دهندگان واقعاً از دست می‌دهند، ظهور Anthropic و جایگزین‌های محلی، و نحوهٔ مقاوم‌سازی پشتهٔ کاری قبل از تغییر.</description>
+      <category>ai-coding-agents</category><category>ai-tools</category><category>local-ai</category>
+    </item>
+    <item>
+      <title>عامل هوش مصنوعی نمونه‌کار من به بازدیدکنندگان توهین می‌کند، آن‌ها را به خاطر می‌سپارد و هیچ‌وقت یک جوک را تکرار نمی‌کند. این‌طور ساختمش</title>
+      <link>https://sinisteroid.ir/fa/blog/my-portfolio-ai-agent-insults-visitors-remembers-them-and-never-repeats-a-joke/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/my-portfolio-ai-agent-insults-visitors-remembers-them-and-never-repeats-a-joke/</guid>
+      <pubDate>Tue, 08 Sep 2026 13:18:30 GMT</pubDate>
+      <description>یک عامل هوش مصنوعی گستاخ و بی‌پروا برای نمونه‌کارم ساختم که بازدیدکنندگان را در مرورگرشان به خاطر می‌سپارد، پست‌های زنده را دریافت می‌کند، هر تبادل را ناشناس لاگ می‌کند و هیچ‌وقت یک جوک را دو بار نمی‌گوید. معماری کامل، مشکلات سرورلس، و پرامپت شخصیتی که به آن جان می‌دهد.</description>
+    </item>
+    <item>
+      <title>بهترین مهارت‌های ایجنت فرانت‌اند در ۲۰۲۶</title>
+      <link>https://sinisteroid.ir/fa/blog/the-best-frontend-agent-skills-in-2026-official-community/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/the-best-frontend-agent-skills-in-2026-official-community/</guid>
+      <pubDate>Mon, 07 Sep 2026 11:18:01 GMT</pubDate>
+      <description>بیشتر ایجنت‌های کدنویسی هوش مصنوعی هنوز به‌طور پیش‌فرض رابط‌های عمومی و «AI-slop» تولید می‌کنند. مهارت‌های درست ایجنت این وضعیت را تغییر می‌دهند. این راهنمای عملی و رتبه‌بندی‌شده، مهارت‌های رسمی و جامعه را معرفی می‌کند که واقعاً خروجی React، TypeScript و سیستم طراحی را در ۲۰۲۶ بهتر می‌کنند — همراه با دستور نصب، زمان استفاده از هرکدام، و نحوهٔ ترکیب آن‌ها.</description>
+      <category>frontend-design</category><category>ai-coding-agents</category><category>ai-tools</category>
+    </item>
+    <item>
+      <title>چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)</title>
+      <link>https://sinisteroid.ir/fa/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/</guid>
+      <pubDate>Sat, 05 Sep 2026 13:55:49 GMT</pubDate>
+      <description>از «آدرس از قبل در حال استفاده است» در همان لحظه‌ای که ollama serve را تایپ می‌کنید تا مدلی که بی‌صدا روی CPU به‌جای GPU شما اجرا می‌شود، خطاهای Ollama تقریباً همیشه به یکی از نه علت ریشه‌ای برمی‌گردند. این‌جا نحوهٔ تشخیص و رفع هرکدام، و دلیل واقعی رخ‌دادنشان را می‌بینید.</description>
+      <category>local-ai</category><category>ai-tools</category><category>open-source-ai</category>
+    </item>
+    <item>
+      <title>چگونه SVG را مثل یک حرفه‌ای ویرایش کنیم (بدون باز کردن ایلوستریتور)</title>
+      <link>https://sinisteroid.ir/fa/blog/how-to-edit-svg-like-a-pro-without-opening-illustrator/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/how-to-edit-svg-like-a-pro-without-opening-illustrator/</guid>
+      <pubDate>Fri, 04 Sep 2026 12:31:55 GMT</pubDate>
+      <description>SVGها ستون فقرات گرافیک وب مدرن هستند، اما ویرایش آن‌ها اغلب به معنای باز کردن نرم‌افزارهای سنگین مانند ایلوستریتور است. این راهنما یک گردش کار مبتنی بر کد را معرفی می‌کند که به شما کنترل حرفه‌ای بر روی گرافیک‌های برداری، با استفاده از ویرایشگرهای متن، ابزارهای توسعه‌دهنده مرورگر و چند کتابخانه قدرتمند می‌دهد—بدون نیاز به هیچ نرم‌افزار طراحی.</description>
       <category>frontend-design</category>
     </item>
     <item>
-      <title>From Clicks to Conversations: Why Your Content Strategy is Obsolete</title>
-      <link>https://sinisteroid.ir/fa/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/</link>
-      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>64.82% of searches end without a click. AI agents are replacing clicks with conversations. Here's why your content strategy is obsolete and how to rebuild it for GEO, AI citations, and the conversational web.</description>
-      <category>content-strategy</category>
+      <title>چگونه مدل هوش مصنوعی درست را برای Cline انتخاب کنیم (و دیگر پول خود را هدر ندهیم)</title>
+      <link>https://sinisteroid.ir/fa/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/</guid>
+      <pubDate>Thu, 03 Sep 2026 05:24:15 GMT</pubDate>
+      <description>Cline به بیش از ۳۰ ارائه‌دهندهٔ مدل متصل می‌شود، و رایج‌ترین سؤالی که کاربران تازه می‌پرسند این است که واقعاً کدام را انتخاب کنند. پاسخ صادقانه یک جدول رتبه‌بندی نیست — یک چارچوب است. این‌جا می‌بینید چگونه یک مدل را با وظیفهٔ پیش‌رویتان تطبیق دهید، Plan و Act را جداگانه پیکربندی کنید، و دیگر بودجه را برای استدلال گران‌قیمت روی کاری که یک مدل ارزان به‌خوبی انجام می‌دهد نسوزانید.</description>
+      <category>ai-coding-agents</category><category>ai-tools</category><category>open-source-ai</category><category>local-ai</category>
     </item>
     <item>
-      <title>Modern Techniques in Frontend Design</title>
-      <link>https://sinisteroid.ir/fa/blog/modern-frontend-design-techniques/</link>
-      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/modern-frontend-design-techniques/</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>Explore the techniques shaping modern frontend design — from design tokens and motion systems to fluid typography, spatial depth, accessibility, and adaptive color. Build interfaces that communicate and perform.</description>
-      <category>frontend-design</category>
+      <title>روانشناسی رنگ در برندسازی عمدتاً شبه‌علم است: تحقیقات واقعاً چه می‌گویند</title>
+      <link>https://sinisteroid.ir/fa/blog/color-psychology-in-branding-is-mostly-pseudoscience-what-the-research-actually-says/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/color-psychology-in-branding-is-mostly-pseudoscience-what-the-research-actually-says/</guid>
+      <pubDate>Tue, 01 Sep 2026 06:06:11 GMT</pubDate>
+      <description>قرمز اشتها را زیاد می‌کند. آبی اعتماد می‌سازد. رنگ شناخت برند را ۸۰٪ افزایش می‌دهد. هیچ‌کدام از این ادعاها به همان شکلی که بازاریاب‌ها فکر می‌کنند به یک مطالعهٔ واقعی برنمی‌گردند. این‌جا می‌بینید تحقیقات واقعی داوری‌شده دربارهٔ رنگ و برندسازی چه می‌گویند، و چرا اینفوگرافیک‌ها این‌قدر اشتباه کردند.</description>
+      <category>color-psychology</category><category>branding</category><category>brand-identity</category><category>design-principles</category><category>graphic-design</category><category>visual-communication</category><category>marketing-psychology</category><category>design-thinking</category><category>consumer-behavior</category><category>creative-strategy</category>
     </item>
     <item>
-      <title>Ollama: The Engine Behind Local AI</title>
-      <link>https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai/</link>
-      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai/</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>A technical deep dive into Ollama — the open-source runtime powering local large language models. Learn its architecture, quantization tradeoffs, API design, model selection, and security considerations.</description>
-      <category>local-ai</category>
+      <title>پرامپت اینجکشن باگی است که شرکت‌های هوش مصنوعی نمی‌توانند کاملاً وصله کنند. باید نگران باشید؟</title>
+      <link>https://sinisteroid.ir/fa/blog/prompt-injection-is-the-bug-ai-companies-cant-fully-patch-should-you-worry/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/prompt-injection-is-the-bug-ai-companies-cant-fully-patch-should-you-worry/</guid>
+      <pubDate>Mon, 31 Aug 2026 07:51:21 GMT</pubDate>
+      <description>در سال ۲۰۲۵، یک ایمیل ساخته‌شده به‌آرامی داده‌ها را از Microsoft 365 Copilot بدون هیچ کلیکی استخراج کرد. در ۲۰۲۶، یک حملهٔ زنجیرهٔ تأمین خودش را به یک بات خودمختار بدون دخالت انسان تبدیل کرد. پرامپت اینجکشن باگی نیست که یک‌بار وصله کنید و فراموش کنید — این‌جا می‌بینید واقعاً چیست، چرا همچنان جواب می‌دهد، و چه چیزی واقعاً ریسک شما را کاهش می‌دهد.</description>
+      <category>ai-coding-agents</category><category>ai-tools</category>
     </item>
     <item>
-      <title>SEO vs GEO: What's the Difference?</title>
-      <link>https://sinisteroid.ir/fa/blog/seo-vs-geo-whats-the-difference/</link>
-      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/seo-vs-geo-whats-the-difference/</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>SEO vs GEO explained: what's the difference, why both matter, and how to optimize for traditional search and AI-generated answers in 2026. Includes comparison table, strategies, and checklist.</description>
-      <category>seo-geo</category>
+      <title>راهنمای راه‌اندازی Claude Code: از نصب تا اولین وظیفهٔ خودمختار</title>
+      <link>https://sinisteroid.ir/fa/blog/claude-code-setup-guide-from-install-to-first-autonomous-task/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/claude-code-setup-guide-from-install-to-first-autonomous-task/</guid>
+      <pubDate>Sun, 30 Aug 2026 08:35:56 GMT</pubDate>
+      <description>دستور نصب، نوع حساب، اولین پرامپت، حالت‌های مجوز، CLAUDE.md، سرورهای MCP و اولین وظیفهٔ کاملاً خودمختار شما — این‌جا مسیر کامل و بدون گام‌حذف‌شده از یک ترمینال خالی تا یک راه‌اندازی کاری کدنویسی عاملی را می‌بینید.</description>
+      <category>claude-code</category><category>ai-coding-agent</category><category>ai-coding-assistant</category><category>developer-tools</category><category>agentic-ai</category><category>anthropic</category><category>cli-tools</category><category>mcp</category><category>productivity-tools</category><category>ai-engineering</category>
     </item>
     <item>
-      <title>Your AI Tools Are Spying on You. Here’s the Fix.</title>
-      <link>https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix/</link>
-      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix/</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>Most AI chatbots train on your prompts by default. Learn how to run powerful private AI offline with Ollama and Open WebUI so your data never leaves your machine.</description>
-      <category>ai-tools</category><category>ai-privacy</category>
+      <title>چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)</title>
+      <link>https://sinisteroid.ir/fa/blog/how-to-fix-clines-most-common-errors-and-why-they-happen/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/how-to-fix-clines-most-common-errors-and-why-they-happen/</guid>
+      <pubDate>Sat, 29 Aug 2026 03:03:17 GMT</pubDate>
+      <description>از کرش‌کردن extension host گرفته تا برخورد به دیوار محدودیت نرخ در بدترین لحظهٔ ممکن، خطاهای Cline تقریباً همیشه به یکی از نه علت ریشه‌ای برمی‌گردند. این‌جا نحوهٔ تشخیص و رفع هرکدام، و دلیل واقعی رخ‌دادنشان را می‌بینید.</description>
+      <category>ai-coding-agents</category><category>ai-tools</category><category>open-source-ai</category><category>local-ai</category>
     </item>
     <item>
-      <title>Zero-Click Search Is Here. Now What?</title>
-      <link>https://sinisteroid.ir/fa/blog/zero-click-search-is-here-now-what/</link>
-      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/zero-click-search-is-here-now-what/</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>64.82% of Google searches now end without a click. AI Overviews push that to 83%. Learn what zero-click search means for SEO, which query types still drive traffic, and the five strategies that work in 2026.</description>
+      <title>AI Overview‌ها نرخ کلیک شما را تا ۳۵٪ کاهش می‌دهند. این‌طور می‌توانید همچنان برنده شوید</title>
+      <link>https://sinisteroid.ir/fa/blog/ai-overviews-are-cutting-your-click-through-rate-by-35-percent-heres-how-to-win-anyway/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/ai-overviews-are-cutting-your-click-through-rate-by-35-percent-heres-how-to-win-anyway/</guid>
+      <pubDate>Fri, 28 Aug 2026 02:56:56 GMT</pubDate>
+      <description>عددی که در تمام ارائه‌های بازاریابی سال ۲۰۲۶ دست‌به‌دست می‌شود ۳۵٪ است — فاصلهٔ نرخ کلیک میان صفحاتی که درون یک AI Overview استناد می‌شوند و صفحاتی که نمی‌شوند. این فاصله واقعی است، اما حکم اعدام نیست. این‌جا داده‌های واقعی، و برنامهٔ دقیقی برای قرارگرفتن در سمت برندهٔ این ماجرا را می‌بینید.</description>
+      <category>ai-overviews</category><category>geo</category><category>generative-engine-optimization</category><category>ai-search</category><category>zero-click-search</category><category>seo</category><category>search-engine-optimization</category><category>click-through-rate</category><category>content-strategy</category><category>digital-marketing</category>
+    </item>
+    <item>
+      <title>آیا جستجوی ChatGPT در حال کشتن گوگل است؟ داده‌ها واقعاً چه می‌گویند</title>
+      <link>https://sinisteroid.ir/fa/blog/is-chatgpt-search-killing-google-what-the-data-actually-shows/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/is-chatgpt-search-killing-google-what-the-data-actually-shows/</guid>
+      <pubDate>Sun, 23 Aug 2026 00:41:16 GMT</pubDate>
+      <description>هر چند ماه یک‌بار تیتر تازه‌ای اعلام می‌کند که گوگل مرده و ChatGPT پادشاه جدید جستجوست. اما آمار سهم بازار، گزارش‌های مالی و داده‌های نرخ کلیک، روایتی پیچیده‌تر و جالب‌تر را روایت می‌کنند. این مقاله می‌گوید در سال ۲۰۲۶ واقعاً چه اتفاقی افتاده است.</description>
       <category>seo-geo</category>
     </item>
     <item>
@@ -76,14 +185,54 @@
       <link>https://sinisteroid.ir/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/</guid>
       <pubDate>Fri, 14 Aug 2026 22:09:34 GMT</pubDate>
-      <description>کلود کد و کلاین دو تا از قابل‌اعتمادترین ابزارهای عامل‌محور کدنویسی در سال ۲۰۲۶ هستند؛ یکی محصولی حرفه‌ای و اشتراکی از آنتروپیک، دیگری یک افزونهٔ رایگان، متن‌باز و مستقل از مدل. در این مقاله قیمت، مدل‌ها، پلتفرم‌ها، میزان خودمختاری و اینکه کدام‌یک واقعاً با روند کاری شما هم‌خوانی دارد را بررسی می‌کنیم.</description>
-      <category>ai-coding-agents</category><category>ai-tools</category><category>open-source-ai</category>
+      <description>کلود کد و کلاین دو تا از قابل‌اعتمادترین ابزارهای عامل‌محور کدنویسی در سال ۲۰۲۶ هستند؛ یکی محصولی حرفه‌ای و اشتراکی از آنتروپیک، دیگری یک افزونهٔ رایگان، متن‌باز و مستقل از مدل. در این مقاله قیمت، مدل‌ها، پلتفرم‌ها، میزان خودمختاری، آمادگی سازمانی، جریان‌های کاری واقعی و اینکه کدام‌یک واقعاً با روش روزمرهٔ کدنویسی شما هم‌خوانی دارد را به‌طور کامل بررسی می‌کنیم.</description>
+      <category>claude-code</category><category>cline</category><category>ai-coding-agent</category><category>ai-coding-assistant</category><category>developer-tools</category><category>agentic-ai</category><category>vs-code-extension</category><category>open-source-ai</category><category>ai-engineering</category><category>anthropic</category>
+    </item>
+    <item>
+      <title>ابزارهای هوش مصنوعی شما در حال جاسوسی از شما هستند. راه‌حل اینجاست.</title>
+      <link>https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/your-ai-tools-are-spying-on-you-heres-the-fix/</guid>
+      <pubDate>Wed, 12 Aug 2026 13:24:29 GMT</pubDate>
+      <description>بیشتر چت‌بات‌های محبوب، پرامپت‌های شما را ثبت می‌کنند، ماه‌ها یا سال‌ها نگه می‌دارند و به‌طور پیش‌فرض از آن‌ها برای آموزش مدل بعدی استفاده می‌کنند. راه‌حل ساده است: مدل‌های قدرتمند را کاملاً آفلاین روی دستگاه خودتان اجرا کنید. در این مقاله دقیقاً می‌گوییم چطور این کار را بدون افت کیفیت انجام دهید.</description>
+      <category>local-ai</category><category>ai-privacy</category>
+    </item>
+    <item>
+      <title>کلسترهای محتوا برای GEO: چگونه اقتدار موضوعی بسازیم که موتورهای هوش مصنوعی به آن اعتماد کنند</title>
+      <link>https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/content-clusters-for-geo-how-to-build-topical-authority-that-ai-engines-trust/</guid>
+      <pubDate>Mon, 10 Aug 2026 16:29:42 GMT</pubDate>
+      <description>موتورهای هوش مصنوعی دیگر به پست‌های جداگانه پاداش نمی‌دهند. آن‌ها به دامنه‌هایی پاداش می‌دهند که کل یک موضوع را مالک هستند. کلسترهای محتوا بالاترین اهرم برای ساختن اقتدار موضوعی است که باعث استناد در AI Overviews، پاسخ‌های ChatGPT و Perplexity می‌شود. چارچوب دقیق اینجاست.</description>
+      <category>geo</category><category>generative-engine-optimization</category><category>content-clusters</category><category>topical-authority</category><category>ai-search</category><category>zero-click-search</category><category>seo</category><category>llm-optimization</category><category>content-strategy</category><category>ai-overviews</category>
+    </item>
+    <item>
+      <title>از کلیک تا مکالمه: چرا استراتژی محتوای شما منسوخ شده است</title>
+      <link>https://sinisteroid.ir/fa/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/from-clicks-to-conversations-why-content-strategy-is-obsolete/</guid>
+      <pubDate>Wed, 05 Aug 2026 16:31:24 GMT</pubDate>
+      <description>دوران بهینه‌سازی برای کلیک تمام شده است. ایجنت‌های هوش مصنوعی مرور نمی‌کنند — مکالمه می‌کنند. اگر استراتژی محتوای شما هنوز موفقیت را با حجم ترافیک می‌سنجد، برای وب‌سایتی می‌سازید که دیگر وجود ندارد.</description>
+      <category>seo-geo</category><category>content-strategy</category>
+    </item>
+    <item>
+      <title>جستجوی بدون کلیک آمده. حالا چه کار کنیم؟</title>
+      <link>https://sinisteroid.ir/fa/blog/zero-click-search-is-here-now-what/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/zero-click-search-is-here-now-what/</guid>
+      <pubDate>Sun, 28 Jun 2026 17:57:25 GMT</pubDate>
+      <description>به ازای هر ۱۰۰۰ جستجوی گوگل در سال ۲۰۲۶، تنها ۳۶۰ تا به یک کلیک به وب آزاد ختم می‌شود. ۶۴۰ تای دیگر روی صفحه نتایج خود گوگل حل می‌شوند. اگر استراتژی ترافیکی شما هنوز بر اساس رتبه‌بندی در نتایج ساخته شده، دارید چیز اشتباهی را اندازه می‌گیرید — و دارید جا می‌مانید از برندهایی که این را از پیش می‌دانند.</description>
+      <category>seo-geo</category><category>content-strategy</category>
+    </item>
+    <item>
+      <title>SEO در مقابل GEO: تفاوت چیست؟</title>
+      <link>https://sinisteroid.ir/fa/blog/seo-vs-geo-whats-the-difference/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/seo-vs-geo-whats-the-difference/</guid>
+      <pubDate>Tue, 23 Jun 2026 09:57:27 GMT</pubDate>
+      <description>بهینه‌سازی موتور جستجو (SEO) و بهینه‌سازی موتور مولد (GEO) اغلب با هم اشتباه گرفته می‌شوند — اما اهداف کاملاً متفاوتی دارند. SEO به شما کمک می‌کند در نتایج جستجوی سنتی رتبه بگیرید. GEO به شما کمک می‌کند در پاسخ‌های تولیدشده توسط هوش مصنوعی استناد شوید. این راهنما تفاوت‌ها، اشتراک‌ها و دلیل نیاز به هر دو را در سال ۲۰۲۶ توضیح می‌دهد.</description>
+      <category>seo-geo</category><category>content-strategy</category>
     </item>
     <item>
       <title>مرگ وب‌سایت‌های سنتی: طراحی برای ایجنت‌های هوش مصنوعی</title>
       <link>https://sinisteroid.ir/fa/blog/the-death-of-traditional-websites-designing-for-ai-agents/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/the-death-of-traditional-websites-designing-for-ai-agents/</guid>
-      <pubDate>Sun, 21 Jun 2026 20:30:00 GMT</pubDate>
+      <pubDate>Mon, 22 Jun 2026 08:28:44 GMT</pubDate>
       <description>بیش از ۶۰٪ از جستجوها اکنون بدون یک کلیک به جایی پایان می‌یابند. ایجنت‌های هوش مصنوعی وب‌سایت شما را بدون دیدن آن مرور می‌کنند. سلسله‌مراتب بصری که ماه‌ها صرف اصلاح آن کردید، hover stateها، انیمیشن‌های اسکرول — هیچ‌کدام ثبت نمی‌شوند. آنچه ثبت می‌شود معماری محتوای شما، داده‌های ساختارمند و این است که آیا یک ماشین می‌تواند در کمتر از یک ثانیه یک پاسخ مفید از HTML شما استخراج کند.</description>
       <category>web-architecture</category><category>seo-geo</category><category>content-strategy</category>
     </item>
@@ -91,17 +240,41 @@
       <title>اوپن وب‌یوآی: رابط کاربری گمشده برای هوش مصنوعی محلی</title>
       <link>https://sinisteroid.ir/fa/blog/open-webui-the-missing-interface-for-local-ai/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/open-webui-the-missing-interface-for-local-ai/</guid>
-      <pubDate>Sat, 20 Jun 2026 20:30:00 GMT</pubDate>
+      <pubDate>Sun, 21 Jun 2026 08:57:23 GMT</pubDate>
       <description>اولاما موتور inference را در اختیار شما می‌گذارد. اوپن وب‌یوآی همه چیز دیگر را — تاریخچه مکالمه، RAG اسناد، کنترل دسترسی چند‌کاربره، صدا، تولید تصویر، و یک سیستم pipeline برای منطق Python سفارشی. این روشی است که یک مدل محلی را به یک پلتفرم هوش مصنوعی کامل تبدیل می‌کند.</description>
       <category>local-ai</category><category>ai-tools</category><category>open-source-ai</category>
     </item>
     <item>
-      <title>کلاین: عامل هوش مصنوعی متن‌باز کدنویسی که جریان کاری توسعه‌دهندگان را بازتعریف می‌کند</title>
+      <title>کلاین: عامل هوش مصنوعی متن‌باز کدنویسی که گردش کار توسعه‌دهندگان را متحول می‌کند</title>
       <link>https://sinisteroid.ir/fa/blog/cline-the-open-source-ai-coding-agent/</link>
       <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/cline-the-open-source-ai-coding-agent/</guid>
-      <pubDate>Fri, 19 Jun 2026 17:30:00 GMT</pubDate>
-      <description>کلاین عامل هوش مصنوعی خودکار و آگاه از context را مستقیماً به VS Code و ترمینال شما می‌آورد. معماری، حالت‌های Plan/Act، یکپارچه‌سازی با مدل‌های محلی Ollama و دلایل برتری آن در اکوسیستم ابزارهای توسعه هوش مصنوعی سال ۲۰۲۶ را بررسی کنید.</description>
-      <category>ai-coding-agents</category><category>local-ai</category><category>ai-tools</category><category>open-source-ai</category>
+      <pubDate>Fri, 19 Jun 2026 18:03:03 GMT</pubDate>
+      <description>کلاین یک عامل هوش مصنوعی کدنویسی است که به‌صورت خودکار و با درک کامل از بافت پروژه، مستقیماً در VS Code و ترمینال شما کار می‌کند. در این مقاله، معماری، حالت‌های Plan/Act، نحوه اتصال به مدل‌های محلی با Ollama و دلایل برتری این ابزار در میان ابزارهای توسعه‌دهندگی مبتنی بر هوش مصنوعی در سال ۲۰۲۶ را مرور می‌کنیم.</description>
+      <category>cline</category><category>ai-coding-assistant</category><category>local-llm</category><category>vs-code-extension</category><category>agentic-ai</category><category>open-source-ai</category><category>developer-tools</category><category>llm-integration</category><category>ai-engineering</category><category>productivity-tools</category>
+    </item>
+    <item>
+      <title>اولاما: موتور پشت هوش مصنوعی محلی</title>
+      <link>https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/ollama-the-engine-behind-local-ai/</guid>
+      <pubDate>Wed, 17 Jun 2026 20:52:43 GMT</pubDate>
+      <description>اولاما اجرای مدل‌های زبانی بزرگ روی سخت‌افزار شخصی را به یک دستور ساده تبدیل کرده است. در این مقاله معماری، ویژگی‌های عملکردی و تصمیمات مهندسی‌ای را بررسی می‌کنیم که هوش مصنوعی محلی را در سال ۲۰۲۶ به یک جایگزین جدی برای APIهای ابری تبدیل کرده‌اند.</description>
+      <category>local-ai</category><category>open-source-ai</category><category>ai-tools</category>
+    </item>
+    <item>
+      <title>تکنیک‌های مدرن در طراحی فرانت‌اند</title>
+      <link>https://sinisteroid.ir/fa/blog/modern-frontend-design-techniques/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/modern-frontend-design-techniques/</guid>
+      <pubDate>Tue, 02 Jun 2026 18:49:06 GMT</pubDate>
+      <description>طراحی فرانت‌اند به مراتب فراتر از چیدمان‌های ساده و رنگ‌های تخت رفته است. تکنیک‌هایی را کشف کنید که امروز بهترین رابط‌های کاربری دیجیتال را شکل می‌دهند — از سیستم‌های حرکتی سیال و عمق فضایی گرفته تا توکن‌های طراحی و تفکر دسترسی‌محور.</description>
+      <category>frontend-design</category>
+    </item>
+    <item>
+      <title>طراحی بدون حرف، چیزی جز دکور نیست</title>
+      <link>https://sinisteroid.ir/fa/blog/design-without-words-is-decoration/</link>
+      <guid isPermaLink="true">https://sinisteroid.ir/fa/blog/design-without-words-is-decoration/</guid>
+      <pubDate>Tue, 02 Jun 2026 01:17:11 GMT</pubDate>
+      <description>طراحی فقط زیبایی نیست. در این مقاله بررسی می‌کنیم چرا ارتباط بصری، استراتژی برند و طراحی هدفمند، تفاوت میان یک تجربه معنادار و یک دکور زیبا را رقم می‌زنند.</description>
+      <category>frontend-design</category>
     </item>
   </channel>
 </rss>

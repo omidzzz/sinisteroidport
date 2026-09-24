@@ -1,20 +1,24 @@
 {
   "slug": "zero-click-search-is-here-now-what",
+  "status": "published",
   "title": "Zero-Click Search Is Here. Now What?",
-  "date": "2026-08-25",
+  "date": "2026-06-28 21:27:25",
   "tags": [
-    "seo-geo"
+    "seo-geo",
+    "content-strategy"
   ],
+  "featuredImage": {
+    "src": "/api/uploads/1782681993-zero-click-search-is-here-now-what-cover.webp",
+    "alt": {
+      "en": "Zero-Click Search Is Here. Now What?",
+      "fa": "جستجوی بدون کلیک آمده. حالا چه کار کنیم؟"
+    }
+  },
   "translations": {
     "en": {
       "title": "Zero-Click Search Is Here. Now What?",
-      "excerpt": "64.82% of Google searches now end without a click. AI Overviews push that to 83%. Learn what zero-click search means for SEO, which query types still drive traffic, and the five strategies that work in 2026.",
+      "excerpt": "For every 1,000 Google searches in 2026, only 360 end with a click to the open web. The other 640 are resolved on the results page itself. If your traffic strategy is still built around ranking positions, you are measuring the wrong thing — and losing ground to brands that already know it.",
       "content": [
-        {
-          "type": "paragraph",
-          "text": "For every 1,000 Google searches in 2026, only 360 end with a click to the open web. The other 640 are resolved on the results page itself. If your traffic strategy is still built around ranking positions, you are measuring the wrong thing — and losing ground to brands that already know it.",
-          "style": "lead"
-        },
         {
           "type": "heading",
           "level": 2,
@@ -22,6 +26,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "For every 1,000 Google searches in 2026, only 360 result in a click to any external website. The other 640 end on Google's own results page — answered by an AI Overview, a featured snippet, a knowledge panel, or a direct answer box. The user got what they needed. They just never visited you to get it."
         },
         {
@@ -33,12 +38,34 @@
           "text": "The industries absorbing the worst of it are informational content, health, technology, and publishing — exactly the verticals where 'rank for keywords, drive traffic' was the entire growth strategy. Some sectors have reported 40 to 70% organic traffic declines in a single year. The question is no longer whether this is happening. The question is what to do about it."
         },
         {
+          "type": "stats",
+          "items": [
+            {
+              "value": "64.82%",
+              "label": "of all Google searches end without a click in 2026 (SparkToro / Datos)"
+            },
+            {
+              "value": "83%",
+              "label": "zero-click rate when a Google AI Overview appears in results (Bain & Company)"
+            },
+            {
+              "value": "93%",
+              "label": "zero-click rate inside Google's AI Mode (Semrush, 2025)"
+            },
+            {
+              "value": "–61%",
+              "label": "relative CTR drop for position one on informational queries with AI Overview (Seer Interactive, 25.1M impressions)"
+            }
+          ]
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "The Anatomy of an AI Overview: How Google Selects What to Cite"
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Understanding what actually happens inside an AI Overview is the first step toward earning a place in one. Google's generative search systems do not simply summarize the top three search results. They synthesize across multiple sources, weigh authority signals, and prioritize information density over keyword density."
         },
         {
@@ -50,7 +77,8 @@
           "text": "This is why content structure now matters as much as content substance. The AI Overview citation process is not a black box — it is a retrieval-augmented generation pipeline with predictable inputs. The inputs that win are: concise answer-first sentences, clear heading hierarchies, factual claims supported by named sources, and schema markup that explicitly labels Q&A content. Pages that deliver these inputs reliably earn citations even when they rank lower than pages with more inbound links."
         },
         {
-          "type": "paragraph",
+          "type": "highlight",
+          "label": "KEY INSIGHT",
           "text": "Google's AI Overview does not read your page like a human. It extracts snippets from your HTML, strips formatting, and selects passages based on fact density and source authority. If your key answer is not in the first 200 words of a section, it may never be considered for citation."
         },
         {
@@ -60,6 +88,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "To understand why zero-click search demands a strategy change rather than a tactical adjustment, it helps to trace what actually happens in a modern search session — not as it was in 2020, but as it is today."
         },
         {
@@ -71,12 +100,20 @@
           "text": "On some queries, the cited source in the AI Overview sees an 18% increase in CTR for branded searches — because the AI endorsement acts as a trust signal. But on pure informational queries, Seer Interactive's analysis of 25.1 million organic impressions across 42 organizations found that CTR dropped from 1.76% to 0.61% when an AI Overview appeared — a 61% relative decline. Being cited is now more valuable than ranking first."
         },
         {
+          "type": "image",
+          "src": "/api/uploads/1782681424-zero-click-search-funnel-2026.webp",
+          "alt": "Funnel diagram showing what happens to 1,000 Google searches in 2026 — 640 end on the SERP, 360 produce a click, and of those clicks, a growing share go to cited sources rather than position-one results",
+          "caption": "Figure 1: Of every 1,000 Google searches in 2026, only 360 result in a click to the open web. When an AI Overview is present, the click rate collapses to 17% of queries. Source: SparkToro, Bain & Company, Seer Interactive.",
+          "altText": "Funnel diagram showing what happens to 1,000 Google searches in 2026 — 640 end on the SERP, 360 produce a click, and of those clicks, a growing share go to cited sources rather than position-one results"
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Why This Happened: A Brief History of Search Losing Its Clicks"
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Zero-click search is not a new phenomenon created by AI Overviews. It is a trend that has been building since Google introduced the Knowledge Graph in 2012 and Featured Snippets in 2014. AI Overviews did not start the fire — they poured fuel on one that had been burning for a decade."
         },
         {
@@ -88,7 +125,9 @@
           "text": "Google AI Overviews, which scaled broadly from mid-2024, compressed years of gradual change into months. They now appear on approximately 48% of all queries — up 58% year-over-year according to BrightEdge — and trigger on 82% of B2B technology queries specifically. Gartner forecast in February 2024 that traditional search volume would drop 25% by 2026. The data suggests the forecast was, if anything, conservative for information-heavy verticals."
         },
         {
-          "type": "paragraph",
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "If Your Traffic Is Dominated by Informational Head Terms",
           "text": "AI Overviews now resolve virtually every informational 'how to', 'what is', and 'why does' query without sending users to external sites. If the majority of your organic traffic comes from definitional, educational, or guide-format content, you are in the category most exposed to zero-click disruption. The Seer Interactive 61% CTR decline applies specifically to this segment — not uniformly to all traffic. Commercial-intent and transactional queries still see much lower AI Overview rates and much higher click-through."
         },
         {
@@ -98,6 +137,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Here is the counter-intuitive finding buried in the data: the users who do click through in a zero-click world are better visitors than the ones who used to click. Semrush found that AI-referred visitors convert at 4.4 times the rate of traditional organic search visitors. The clicks that survive are from users who read an AI summary, decided it wasn't enough, and actively chose to go deeper."
         },
         {
@@ -109,21 +149,900 @@
           "text": "The implication is strategic: optimizing solely to recover lost traffic volume is the wrong goal. Optimizing to win citations in AI Overviews — so that the users who do click arrive pre-sold on your credibility — and then converting those high-intent visitors is the right goal. Volume and quality have decoupled. Strategy needs to follow."
         },
         {
-          "type": "paragraph",
+          "type": "highlight",
+          "label": "KEY DATA POINT",
           "text": "Brands cited inside a Google AI Overview earn 35% more organic clicks and 91% more paid clicks than non-cited brands on the same SERP. Appearing in the AI answer does not replace traffic — it upgrades the traffic you receive. (Seer Interactive, 2026)"
         },
         {
+          "type": "quote",
+          "text": "Search has not ended. The referral has ended. Your brand can dominate a topic in AI-generated answers and receive zero clicks from it. That is not failure — it is a new form of visibility that your current analytics stack cannot see.",
+          "author": "Rand Fishkin, SparkToro, 2026"
+        },
+        {
+          "type": "cta",
+          "title": "SEO vs GEO: What's the Difference?",
+          "text": "Zero-click search is the reason SEO and GEO have become two distinct disciplines. If you're clear on what changed in search behavior but not yet on what to do about it, this breakdown explains both strategies side by side.",
+          "buttonText": "Read: SEO vs GEO — What's the Difference?",
+          "buttonUrl": "/en/blog/seo-vs-geo-whats-the-difference/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What Doesn't Get Zero-Clicked: The Query Types Still Driving Traffic"
+        },
+        {
           "type": "paragraph",
-          "text": "Search has not ended. The referral has ended. Your brand can dominate a topic in AI-generated answers and receive zero clicks from it. That is not failure — it is a new form of visibility that your current analytics stack cannot see."
+          "style": "lead",
+          "text": "Not all query categories are equal in their exposure to zero-click disruption. Understanding which types of searches still reliably produce clicks is essential for any content or traffic strategy built for 2026."
+        },
+        {
+          "type": "paragraph",
+          "text": "Transactional queries — 'buy X', 'price of X', 'best X for Y' — have a dramatically lower AI Overview rate. Ahrefs data shows e-commerce queries trigger AI Overviews on just 3.2% of searches, down from 29% at initial rollout, because Google pulled back after AI responses failed to convert into ad-supported sales. If a user needs to complete a purchase, download software, book a service, or compare specific products, they still need to visit a site. The zero-click problem is concentrated in informational content, not in commercial or navigational intent."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Query Intent Category",
+            "AI Overview Trigger Rate",
+            "Typical Click-Through Rate"
+          ],
+          "rows": [
+            [
+              "Informational ('how to', 'what is', 'why does')",
+              "70–85%",
+              "Under 5%"
+            ],
+            [
+              "Commercial ('best X', 'X vs Y', 'review')",
+              "25–40%",
+              "15–25%"
+            ],
+            [
+              "Transactional ('buy X', 'download X', 'price')",
+              "3–8%",
+              "35–55%"
+            ],
+            [
+              "Navigational (branded / direct lookup)",
+              "5–12%",
+              "40–60%"
+            ],
+            [
+              "Local ('near me', 'open now', city + service)",
+              "15–30%",
+              "25–40%"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The strategic pivot this suggests is clear: if your content portfolio skews heavily toward top-of-funnel informational content, the zero-click disruption is severe. If it skews toward comparison, product, and conversion-focused content, the impact is materially smaller. This is the year to audit your traffic by intent category, not just by volume."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1782681479-query-intent-zero-click-exposure.webp",
+          "alt": "Bar chart showing AI Overview trigger rates by query intent category — informational queries near 80%, commercial near 30%, transactional near 5%, navigational near 10%",
+          "caption": "Figure 2: AI Overview trigger rates vary dramatically by query intent. Informational queries are most exposed; transactional and navigational queries retain strong click-through rates. Data: Ahrefs, Semrush, BrightEdge 2025–2026.",
+          "altText": "Bar chart showing AI Overview trigger rates by query intent category — informational queries near 80%, commercial near 30%, transactional near 5%, navigational near 10%"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Five Things That Actually Work in 2026"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The strategic responses to zero-click search are not theoretical. The data on what earns citations, retains traffic, and converts AI-referred visitors is now specific enough to act on. These five approaches have the clearest evidence behind them."
+        },
+        {
+          "type": "paragraph",
+          "text": "The first is optimizing for citation rather than position. Brands cited in AI Overviews see 35% more organic clicks and 91% more paid clicks on the same SERP than brands not cited, even when not ranked in position one. The Agarwal-Sen randomized field experiment — the most methodologically rigorous study on AI Overview CTR — confirmed a 38% organic click reduction on queries with AI Overviews, but found the reduction is partially offset for cited brands. Citation is earned through structured answers, original data, named sources, and FAQ-formatted content that maps to conversational query patterns."
+        },
+        {
+          "type": "paragraph",
+          "text": "The second is building topical authority at depth rather than breadth. Google AI Mode issues up to 16 sub-queries per user prompt. Your domain has 16 chances per session to be cited rather than one rank position. Comprehensive coverage of a topic — every angle, every sub-question, every adjacent concept — dramatically increases citation probability across the multiple sub-queries an AI agent generates. Thin content distributed across many topics performs worse in this model; deep content on fewer topics performs better."
+        },
+        {
+          "type": "paragraph",
+          "text": "The third is diversifying traffic sources off Google entirely. Brands that built audiences through email newsletters, YouTube channels, direct community platforms, and social content own a relationship that no algorithm change can sever. The brands hardest hit by zero-click disruption are the ones who had nothing but Google-mediated traffic. The brands most resilient are those who used search visibility to build direct relationships."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fourth is implementing structured data that removes ambiguity for AI extraction. FAQPage, Article, Organization, and BreadcrumbList schema markup give AI systems structured facts they can extract without inference — and facts requiring no inference are the ones that end up in citations. Schema is no longer optional metadata; it is citation infrastructure."
+        },
+        {
+          "type": "paragraph",
+          "text": "The fifth is shifting how you measure success. Brands cited in AI Overviews experience visibility that traffic analytics cannot capture. Tracking AI citation frequency across ChatGPT, Gemini, Perplexity, and Google AI Overviews alongside traditional GSC data is now a baseline measurement requirement. Only 14% of marketers currently do this, according to Goodfirms' 2026 survey — meaning the brands that instrument this correctly have an immediate competitive information advantage."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "Optimize for AI citation — structured answers, FAQ format, original data, named sources",
+            "Build topical depth, not breadth — comprehensive coverage earns multi-citation across AI sub-queries",
+            "Diversify traffic off Google — email, YouTube, community, direct relationships",
+            "Implement FAQPage, Article, and Organization schema markup across all key pages",
+            "Measure AI citation share alongside GSC data — track mentions across ChatGPT, Gemini, Perplexity"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "How to Audit Your Own Traffic for Zero-Click Exposure"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Before you can fix your zero-click problem, you need to know how exposed your current traffic actually is. Most brands overestimate the resilience of their organic channel because they look at aggregate traffic rather than query-level intent distribution."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "Pull your top 100 organic landing pages from Google Search Console and classify each by query intent (informational, commercial, transactional, navigational)",
+            "Measure the percentage of your total traffic that comes from informational queries — if it exceeds 60%, you are high-risk",
+            "Check which of those pages also appear in AI Overviews (use Semrush's AI Overview Report or similar tools)",
+            "Calculate the estimated lost clicks: compare your CTR before and after AI Overview introduction for the same queries",
+            "Build a priority list: pages with high informational traffic and high AI Overview presence are your first optimization targets"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "This audit will reveal that your risk is not uniform. Some content categories are already heavily zero-clicked; others are barely touched. The audit tells you where to invest GEO effort first — on the pages that still have traffic to protect and the ones that are already being cited but could convert better."
+        },
+        {
+          "type": "cta",
+          "title": "The Death of Traditional Websites: Designing for AI Agents",
+          "text": "Zero-click isn't just a traffic problem — it's a design problem. AI agents now browse your site without seeing it. This piece covers how content architecture, server-side rendering, and llms.txt determine whether AI systems can extract and cite your content at all.",
+          "buttonText": "Read: Designing for AI Agents",
+          "buttonUrl": "/en/blog/the-death-of-traditional-websites-designing-for-ai-agents/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Measurement Problem Nobody Is Solving"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The deepest operational problem zero-click search creates is not traffic loss — it is measurement blindness. The existing analytics stack was built to count visits. It cannot count AI mentions, AI citations, or the brand authority that accumulates when an AI Overview recommends your content to a user who never clicks."
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Search Console shows impressions and clicks but does not distinguish which impressions triggered an AI Overview, whether you were cited inside it, or what happened to the user's session afterward. Ahrefs and Semrush show rankings, but ranking position one only gives you a 17 to 54% probability of being cited in an AI Overview on the same query — and zero visibility into ChatGPT, Perplexity, or Gemini AI responses. The standard stack is measuring the wrong surface."
+        },
+        {
+          "type": "paragraph",
+          "text": "The emerging measurement layer — tools like Otterly.ai, Promptmonitor, Peec AI, and QuickSEO — tracks brand citation frequency across AI platforms directly. This is not mature tooling yet; it is first-generation instrumentation of a new surface. But the brands installing it now will have six to twelve months of baseline data when the rest of the industry recognizes the gap. That lead is the modern equivalent of getting into Google Analytics in 2005."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "Start Tracking AI Citations Today",
+          "text": "Add one AI citation monitoring tool to your stack immediately — Otterly.ai, Promptmonitor, or Peec AI all provide brand mention tracking across ChatGPT, Gemini, Perplexity, and Claude. Run your core brand queries and your top 10 informational topic queries through each platform weekly. The baseline you build over the next three months will be the only honest measurement of whether your GEO investments are working."
+        },
+        {
+          "type": "code",
+          "code": "# AI Visibility Audit — Quick Checklist (run these weekly)\n\n# 1. Check if AI crawlers are blocked in robots.txt\ncurl https://yourdomain.com/robots.txt | grep -E 'GPTBot|ClaudeBot|PerplexityBot|Anthropic'\n# Expected: no Disallow for these agents\n\n# 2. Verify your key pages are server-side rendered\ncurl -A 'Googlebot' https://yourdomain.com/your-key-page | grep '<h1>'\n# Expected: heading content appears without JavaScript execution\n\n# 3. Check if llms.txt exists at your root\ncurl https://yourdomain.com/llms.txt\n# Expected: markdown file describing your site and key content\n\n# 4. Validate your FAQPage schema\ncurl https://validator.schema.org/#url=https://yourdomain.com/your-faq-page\n# Expected: FAQPage entity detected with no errors\n\n# 5. Monitor AI citation frequency (manual query test)\n# Paste into ChatGPT, Perplexity, and Gemini:\n# \"What does [your brand] do?\"\n# \"Best [your category] tools\"\n# \"How to [your core use case]\"\n# Track whether your brand appears in each response"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What This Means If You're a Founder, Marketer, or Developer"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The practical implications of zero-click search differ significantly depending on your role. The strategic conclusion is the same — optimize for citation, not just for clicks — but the immediate actions differ."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you are a founder, the question is portfolio-level: what share of your customer acquisition currently flows through Google-mediated organic traffic, and how exposed is it to informational-query zero-click disruption? If the answer is more than 40%, traffic diversification is not a nice-to-have — it is a survival dependency. Build the email list, the YouTube audience, or the community that gives you a direct channel independent of any search algorithm."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you are a content marketer, the reorientation is from volume to depth and from keywords to questions. The content that wins citations is specific, verifiable, structured with clear FAQ sections, and rich with original data or proprietary insight. The content that loses citations is the generic 1,500-word guide that restates publicly available information without adding anything AI cannot already synthesize from its training data."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you are a developer or technical SEO, the immediate technical priorities are robots.txt auditing to ensure AI crawlers are not blocked (GPTBot, ClaudeBot, PerplexityBot, Anthropic-AI), server-side rendering of all key content, FAQPage and Article schema markup on every content page, and an llms.txt file at the site root that controls how AI systems represent your brand. These are not future-state recommendations — they are table stakes for AI-era visibility."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1782681598-zero-click-strategy-by-role.webp",
+          "alt": "Three-column diagram showing different strategic priorities for founders, marketers, and developers in a zero-click search environment",
+          "caption": "Figure 3: Zero-click search demands different immediate actions depending on your role — but all three converge on the same goal: earning AI citations rather than rank positions.",
+          "altText": "Three-column diagram showing different strategic priorities for founders, marketers, and developers in a zero-click search environment"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Long-Term Outlook: What Happens When AI Search Reaches 90%?"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The zero-click rate is still climbing. Google AI Mode, currently in limited rollout, already delivers a 93% zero-click rate. As generative search expands to cover a majority of queries — including commercial and navigational ones — the 64.82% average today will likely become 75% or higher within two years."
+        },
+        {
+          "type": "paragraph",
+          "text": "For most content publishers, this trajectory means that traditional search traffic will not recover. The sites that survive will be those that treat search as a visibility layer, not a primary traffic source. The ones that thrive will be those that convert a smaller number of high-intent visitors into customers, subscribers, or advocates — and that build direct channels that bypass search entirely."
+        },
+        {
+          "type": "paragraph",
+          "text": "The long-term winners are not the ones who fight AI Overviews. They are the ones who make themselves indispensable within them. If your content is so authoritative, clear, and well-structured that AI models consistently cite you across multiple queries and platforms, you are not losing visibility — you are gaining a new form of it that does not depend on a click. That is the strategic reorientation zero-click search demands, and the sooner you make it, the more durable your brand's position becomes."
+        },
+        {
+          "type": "cta",
+          "title": "SparkToro's Zero-Click Search Study",
+          "text": "Rand Fishkin's original and updated zero-click research is the primary source behind most of the data in this post. The methodology, the clickstream panel, and the historical trend data are documented in full — essential reading for anyone building a serious response to zero-click disruption.",
+          "buttonText": "Read the SparkToro Research",
+          "buttonUrl": "https://sparktoro.com/blog/less-than-1-of-googles-searches-now-click-through-to-the-open-web/"
+        },
+        {
+          "type": "cta",
+          "title": "Seer Interactive: AIO CTR Impact Study",
+          "text": "The most methodologically rigorous primary data on how AI Overviews reduce organic click-through rates — 25.1 million impressions across 42 organizations, covering branded versus non-branded queries and the citation lift effect.",
+          "buttonText": "Read the Seer Interactive Study",
+          "buttonUrl": "https://www.seerinteractive.com/insights/how-do-aios-affect-ctr"
+        },
+        {
+          "type": "cta",
+          "title": "Design Without Words Is Decoration",
+          "text": "Whether it's a human visitor or an AI agent reading your page, the principle is the same: design that fails to communicate a clear message is just decoration. This article explores why purposeful communication — not aesthetics alone — determines whether content actually works.",
+          "buttonText": "Read: Design Without Words Is Decoration",
+          "buttonUrl": "/en/blog/design-without-words-is-decoration/"
+        },
+        {
+          "type": "cta",
+          "title": "Modern Techniques in Frontend Design",
+          "text": "The technical decisions you make — server-side rendering, structured data, semantic HTML — determine whether AI agents can read your content at all. This guide covers the modern frontend patterns that preserve both human and machine readability.",
+          "buttonText": "Explore Frontend Techniques",
+          "buttonUrl": "/en/blog/modern-frontend-design-techniques/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "E-E-A-T in the AI Era: Why Trust Signals Matter More Than Ever"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Google's E-E-A-T framework — Experience, Expertise, Authoritativeness, Trustworthiness — was designed to evaluate human-authored content for human readers. In the AI era, it has become the primary filter through which generative systems decide which sources to cite and which to ignore."
+        },
+        {
+          "type": "paragraph",
+          "text": "When a large language model synthesizes an AI Overview, it is not looking for keyword density. It is looking for authority signals that reduce its own hallucination risk. A page written by a named author with a verifiable professional background, citing primary research from recognizable institutions, linking to corroborating sources, and hosted on a domain with established topical depth sends a dramatically different signal than an anonymous post on a generic content site — even if both rank on page one."
+        },
+        {
+          "type": "paragraph",
+          "text": "The practical implication is that E-E-A-T investment — author bylines with credentials, original primary research, transparent methodology sections, and a consistent publishing history — is no longer just a soft ranking factor. It is a citation signal for AI systems. Pages with strong E-E-A-T indicators are cited in AI Overviews at significantly higher rates than anonymous equivalents with comparable keyword optimization. Bylines, author pages, and verifiable credentials are now structural GEO requirements, not optional editorial niceties."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "Author Authority Is Now a GEO Signal",
+          "text": "Add a structured author bio to every article, link it to the author's LinkedIn or published works, and implement Person schema markup for each contributor. Google's systems use these signals to verify expertise before selecting a page as a citation source. An authoritative byline on a well-structured page consistently outperforms an anonymous page with stronger backlinks in AI Overview citation selection."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Content Formats That Earn AI Citations — and the Ones That Don't"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Not all content formats are equally legible to the AI systems doing the citing. The structural choices you make — how you open a section, whether you use a table or a paragraph, how specific your claims are — directly determine whether a passage gets extracted or skipped entirely."
+        },
+        {
+          "type": "paragraph",
+          "text": "Direct-answer openings are the single highest-leverage structural change most sites can make. AI retrieval systems are optimized to extract the first substantive claim that directly responds to a query. If your article opens with three paragraphs of background context before stating its core answer, the model may extract the context and miss the answer entirely. The correct structure is the inverted pyramid journalists have used for a century: the most important fact in the first sentence, supporting detail following."
+        },
+        {
+          "type": "paragraph",
+          "text": "Statistical claims with specific sourcing outperform general assertions by a significant margin in citation selection. 'A 2025 Seer Interactive analysis of 25.1 million impressions found that CTR dropped 61%' is far more likely to be extracted and cited than 'studies show that click-through rates have declined significantly.' The model has internalized what a citable claim looks like from millions of training examples — vague generalizations do not fit the pattern."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Formats that earn citations: FAQ blocks, definition sections, numbered how-to steps, comparison tables, stat-led paragraphs with named sources",
+            "Formats that lose citations: long prose blocks without subheadings, context-heavy introductions that delay the answer, unsourced generalizations",
+            "Structural signals that help: H2/H3 headings that mirror common query phrasings, short sections (150–300 words per H2), bullet lists for multi-part answers",
+            "Schema types that increase citation probability: FAQPage, HowTo, Article, Speakable, Dataset",
+            "What to avoid: JavaScript-rendered content, content behind login or cookie walls, pages with excessive ad density that degrades text-to-noise ratio"
+          ]
+        },
+        {
+          "type": "highlight",
+          "label": "FORMAT INSIGHT",
+          "text": "In an A/B test across 200 URLs by Conductor (2025), pages restructured to lead with direct answers saw a 2.3× increase in AI Overview citation frequency compared to the same content in long-form prose. Structure is not a cosmetic choice — it is the primary variable in AI citation selection."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Building a GEO-First Content Calendar"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Adapting to zero-click search is not a one-time technical fix. It is a sustained editorial strategy. A GEO-first content calendar differs from a traditional keyword-driven one in three structural ways: it prioritizes question clusters over keyword clusters, it builds depth before breadth, and it treats original data as a content format rather than a nice-to-have."
+        },
+        {
+          "type": "paragraph",
+          "text": "Question clustering means mapping the full conversational query space around your core topics, not just the high-volume head terms. Google AI Mode issues up to 16 sub-queries per user prompt, and each sub-query is an opportunity for your domain to be cited. A content calendar that answers every logical follow-up question around your main topics — covering 'what is', 'how to', 'why does', 'what's the difference between', 'when should I' — creates a comprehensive citation surface that a single pillar page cannot replicate."
+        },
+        {
+          "type": "paragraph",
+          "text": "Original data is the highest-leverage GEO investment available to any organization with access to first-party information. A proprietary survey, a benchmark study, an analysis of internal performance data, or a compiled dataset from public sources that no one has aggregated before becomes citable information that AI systems cannot synthesize from their training data alone. Every time an AI Overview cites your original research, your brand appears in front of users at scale — without them visiting your site, without a paid placement, and in many cases with a trust endorsement that a traditional ad placement could never buy."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "Map question clusters around each core topic — use People Also Ask and AI prompt testing to identify every sub-query your audience is asking",
+            "Assign one dedicated page per question cluster — do not consolidate multiple distinct questions onto a single URL",
+            "Lead each page with a direct, citable answer in the first 150 words — this is the extraction target for AI systems",
+            "Commission at least one piece of original data per quarter — a survey, benchmark, or proprietary analysis that becomes a primary citable source",
+            "Build an internal linking structure that connects related question pages — this signals topical depth to both Google and AI crawlers",
+            "Refresh core GEO pages quarterly with updated statistics — AI systems appear to weight recency in citation selection"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Conclusion: The Game Hasn't Ended. The Rules Changed."
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Zero-click search is not the death of organic growth. It is the death of a specific version of it — the one where ranking first for an informational keyword reliably produced predictable traffic. That version was always contingent on Google choosing to route users outward. It chose otherwise."
+        },
+        {
+          "type": "paragraph",
+          "text": "What remains is more durable: building genuine authority on a topic, creating content that AI systems trust enough to cite, owning direct channels to your audience, and structuring your site so that the high-intent visitors who do arrive convert. The brands that thrived through every previous Google algorithm change were not the ones who found tricks — they were the ones with the clearest content quality and the most direct audience relationships. The same pattern holds now."
+        },
+        {
+          "type": "paragraph",
+          "text": "The measurement has to change, the content format has to change, and the success metric has to shift from click volume to citation presence and conversion quality. But the underlying logic — be the most useful, most credible, most clearly structured answer to the questions your audience is asking — has not changed at all. It has simply become more literal than it used to be."
         }
-      ]
-    }
-  },
-  "featuredImage": {
-    "src": "/api/uploads/1782681993-zero-click-search-is-here-now-what-cover.webp",
-    "alt": {
-      "en": "Zero-Click Search Is Here. Now What?",
-      "fa": "Zero-Click Search Is Here. Now What?"
+      ],
+      "faq": [
+        {
+          "question": "What is zero-click search?",
+          "answer": "Zero-click search is a search session that ends without the user clicking through to any external website. The user receives a complete answer directly on the search results page — through an AI Overview, featured snippet, knowledge panel, or direct answer box — and their need is satisfied without visiting any publisher or brand site. In 2026, 64.82% of all Google searches end this way (SparkToro / Datos)."
+        },
+        {
+          "question": "How much has zero-click search increased because of AI Overviews?",
+          "answer": "Google AI Overviews trigger on approximately 48% of all queries as of 2026 and push the zero-click rate from a baseline of around 60% to 83% on the queries they touch. In Google's newer AI Mode, the zero-click rate reaches 93%. The share of searches producing at least one click to the open web fell 9.51 percentage points between 2024 and 2026 — a 22.9% decline in under two years (SparkToro, Semrush, Seer Interactive)."
+        },
+        {
+          "question": "Is zero-click search the same as having low rankings?",
+          "answer": "No. Zero-click search affects pages regardless of their ranking position. Seer Interactive's study of 25.1 million impressions found that CTR for position one dropped from 1.76% to 0.61% when an AI Overview appeared — a 61% relative decline. The problem is not where you rank; it is whether the AI answers the query before the user reaches your result."
+        },
+        {
+          "question": "Which types of searches are least affected by zero-click?",
+          "answer": "Transactional queries ('buy', 'download', 'book', 'compare prices'), navigational queries (direct brand lookups), and local intent queries still produce strong click-through rates. Ahrefs data shows e-commerce queries trigger AI Overviews on just 3.2% of searches. The zero-click disruption is concentrated in informational, educational, and definitional content — not in commercial-intent queries where users need to complete a purchase or access a service."
+        },
+        {
+          "question": "What does it mean to 'optimize for AI citation' instead of rankings?",
+          "answer": "Optimizing for AI citation means structuring your content so language models select it as a trusted source when synthesizing answers. Practically, this means leading every section with a direct answer, using FAQ-format structure, supporting every claim with specific data and named sources, implementing FAQPage and Article schema markup, ensuring content is server-side rendered so AI crawlers can access it, and maintaining topical depth so your domain appears across multiple AI sub-queries. Brands cited in AI Overviews earn 35% more organic clicks than non-cited brands on the same SERP (Seer Interactive)."
+        }
+      ],
+      "seo": {
+        "title": "Zero-Click Search Is Here. Now What? | 2026 Data, Strategy & Survival Guide",
+        "metaDescription": "64.82% of Google searches now end without a click. AI Overviews push that to 83%. Learn what zero-click search means for SEO, which query types still drive traffic, and the five strategies that work in 2026.",
+        "canonical": "https://sinisteroid.ir/blog/zero-click-search-is-here-now-what",
+        "openGraph": {
+          "title": "Zero-Click Search Is Here. Now What?",
+          "description": "For every 1,000 searches, only 360 produce a click. Here's the 2026 data, the query types that still drive traffic, and five strategies that actually work.",
+          "image": "/api/uploads/zero-click-search-is-here-now-what-cover.webp"
+        },
+        "twitter": {
+          "title": "Zero-Click Search Is Here. Now What?",
+          "description": "64.82% of searches end without a click. AI Mode hits 93%. Here's what to do about it — with the actual 2026 data behind every claim.",
+          "image": "/api/uploads/zero-click-search-is-here-now-what-cover.webp"
+        },
+        "keywords": "zero-click search, zero-click search 2026, AI overviews CTR, Google AI overview traffic, zero-click SEO strategy, GEO generative engine optimization, AI search optimization, zero-click statistics, organic traffic decline 2026, AI citation optimization",
+        "focusKeyword": "zero-click search"
+      }
+    },
+    "fa": {
+      "title": "جستجوی بدون کلیک آمده. حالا چه کار کنیم؟",
+      "excerpt": "به ازای هر ۱۰۰۰ جستجوی گوگل در سال ۲۰۲۶، تنها ۳۶۰ تا به یک کلیک به وب آزاد ختم می‌شود. ۶۴۰ تای دیگر روی صفحه نتایج خود گوگل حل می‌شوند. اگر استراتژی ترافیکی شما هنوز بر اساس رتبه‌بندی در نتایج ساخته شده، دارید چیز اشتباهی را اندازه می‌گیرید — و دارید جا می‌مانید از برندهایی که این را از پیش می‌دانند.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "عددی که همه چیز را تغییر می‌دهد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "در سال ۲۰۲۶، از هر ۱۰۰۰ جستجوی گوگل، تنها ۳۶۰ مورد به کلیک روی وب‌سایتی در اینترنت آزاد ختم می‌شود. ۶۴۰ مورد دیگر مستقیماً روی صفحه نتایج گوگل حل می‌شوند — از طریق AI Overview، featured snippet، knowledge panel یا جعبه پاسخ مستقیم. کاربر به پاسخ دست یافته، اما هرگز برای دریافت آن به سایت شما مراجعه نکرده."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یک پیش‌بینی نیست؛ واقعیت اندازه‌گیری‌شده و مستند جستجوی امروز است. پنل clickstream میلیون‌ها کاربر SparkToro این داده را تأیید می‌کند، تحقیقات اولیه مصرف‌کننده Bain & Company آن را تکرار می‌کند، و روند هر سه‌ماهه شتاب می‌گیرد. سهم جستجوهایی که به حداقل یک کلیک به وب آزاد منجر می‌شوند بین ۲۰۲۴ تا ۲۰۲۶ معادل ۹.۵۱ واحد درصد کاهش یافته — افتی ۲۲.۹ درصدی در کمتر از دو سال. Google AI Overviews که اکنون در حدود ۴۸ درصد از تمام کوئری‌های ردیابی‌شده ظاهر می‌شوند، نرخ zero-click را در کوئری‌هایی که پوشش می‌دهند به ۸۳ درصد می‌رسانند. در Google AI Mode، این نرخ به ۹۳ درصد می‌رسد."
+        },
+        {
+          "type": "paragraph",
+          "text": "بیشترین آسیب را صنایع محتوای اطلاعاتی، بهداشت، فناوری و نشر می‌بینند — دقیقاً همان حوزه‌هایی که «رتبه‌بندی در کلمات کلیدی و هدایت ترافیک» تمام مدل رشد بود. برخی بخش‌ها در یک سال کاهش ۴۰ تا ۷۰ درصدی ترافیک ارگانیک را تجربه کرده‌اند. سؤال دیگر این نیست که آیا این اتفاق می‌افتد. سؤال این است که در برابرش چه باید کرد."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "۶۴.۸۲٪",
+              "label": "از تمام جستجوهای گوگل در ۲۰۲۶ بدون کلیک پایان می‌یابند (SparkToro / Datos)"
+            },
+            {
+              "value": "۸۳٪",
+              "label": "نرخ zero-click هنگامی که Google AI Overview در نتایج ظاهر می‌شود (Bain & Company)"
+            },
+            {
+              "value": "۹۳٪",
+              "label": "نرخ zero-click در Google AI Mode (Semrush، ۲۰۲۵)"
+            },
+            {
+              "value": "۶۱٪-",
+              "label": "کاهش نسبی CTR برای جایگاه اول در کوئری‌های اطلاعاتی با AI Overview (Seer Interactive، ۲۵.۱ میلیون impression)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کالبدشکافی یک AI Overview: گوگل چگونه منابع استناد را انتخاب می‌کند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اگر می‌خواهید در یک AI Overview استناد شوید، ابتدا باید بدانید دقیقاً چه اتفاقی درون آن رخ می‌دهد. سیستم‌های جستجوی مولد گوگل صرفاً سه نتیجه برتر را خلاصه نمی‌کنند — از میان منابع متعدد ترکیب می‌کنند، سیگنال‌های اعتبار را وزن‌سنجی می‌کنند، و تراکم اطلاعات را بر تراکم کلیدواژه اولویت می‌دهند."
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی کاربری کوئری ارسال می‌کند، سیستم بازیابی گوگل گذرهای کاندید را از ایندکس خود استخراج می‌کند — مشابه جستجوی سنتی — اما سپس آن گذرها را از یک مدل زبانی عبور می‌دهد که پاسخی منسجم می‌سازد. مدل صفحه کامل شما را نمی‌بیند؛ تکه‌های متنی استخراج‌شده‌ای می‌بیند که در پنجره context آن جای می‌گیرند. اگر مهم‌ترین حقایق شما در عمق یک پاراگراف طولانی دفن شده باشند، ممکن است هرگز به مدل نرسند. اما اگر در یک جمله کوتاه و مستقیم، یک لیست منظم، یا یک بلوک FAQ بیان شده باشند، احتمال استناد به آن‌ها به‌مراتب بالاتر است."
+        },
+        {
+          "type": "paragraph",
+          "text": "به همین دلیل است که ساختار محتوا اکنون به اندازه جوهره آن اهمیت دارد. فرآیند استناد AI Overview یک جعبه سیاه نیست — یک pipeline مبتنی بر retrieval-augmented generation با ورودی‌های قابل پیش‌بینی است. ورودی‌هایی که برنده می‌شوند عبارتند از: جملات کوتاه پاسخ‌محور، سلسله‌مراتب heading روشن، ادعاهای واقعی با منابع نام‌برده، و schema markup که صریحاً محتوای Q&A را برچسب‌گذاری می‌کند. صفحاتی که این ورودی‌ها را به‌طور مداوم ارائه می‌دهند، حتی با رتبه‌بندی پایین‌تر از صفحات با لینک‌های ورودی بیشتر، استناد می‌گیرند."
+        },
+        {
+          "type": "highlight",
+          "label": "بینش کلیدی",
+          "text": "Google AI Overview صفحه شما را مانند یک انسان نمی‌خواند. Snippetها را از HTML شما استخراج می‌کند، قالب‌بندی را حذف می‌کند، و گذرها را بر اساس تراکم واقعی و اعتبار منبع انتخاب می‌کند. اگر پاسخ اصلی شما در ۲۰۰ کلمه اول یک بخش نباشد، ممکن است هرگز برای استناد در نظر گرفته نشود."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "وقتی امروز کسی جستجو می‌کند واقعاً چه اتفاقی می‌افتد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "برای درک اینکه چرا جستجوی zero-click نیازمند تغییر استراتژی است — نه صرفاً تنظیم تاکتیکی — باید مسیر کامل یک جلسه جستجوی مدرن را دنبال کرد؛ نه آنطور که در ۲۰۲۰ بود، بلکه آنطور که امروز است."
+        },
+        {
+          "type": "paragraph",
+          "text": "کاربر سؤالی را در گوگل تایپ می‌کند. پیش از آنکه هیچ نتیجه ارگانیکی نمایش داده شود، یک AI Overview پاسخی را از منابع متعدد ترکیب می‌کند، آن را در بالای صفحه قرار می‌دهد، و چند استناد در پایین درج می‌کند. هفت نفر از هر ده کاربر تنها چند خط اول AI Overview را می‌خوانند. اگر پاسخ آن‌ها را ارضا کند، متوقف می‌شوند. جلسه پایان می‌یابد. نتیجه ارگانیکی که می‌توانست کلیک را دریافت کند — احتمالاً صفحه‌ای که ماه‌ها وقت صرف بهینه‌سازی آن کرده‌اید — هرگز دیده نشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "در برخی کوئری‌ها، منبعی که در AI Overview استناد شده برای جستجوهای branded افزایش ۱۸ درصدی CTR می‌بیند — زیرا تأیید هوش مصنوعی به عنوان سیگنال اعتماد عمل می‌کند. اما در کوئری‌های اطلاعاتی خالص، تحلیل Seer Interactive از ۲۵.۱ میلیون impression ارگانیک در ۴۲ سازمان نشان داد که CTR با ظاهر شدن AI Overview از ۱.۷۶ درصد به ۰.۶۱ درصد افت کرد — کاهشی نسبی معادل ۶۱ درصد. استناد شدن اکنون ارزشمندتر از جایگاه اول بودن است."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/zero-click-search-funnel-2026.webp",
+          "alt": "نمودار قیف نشان‌دهنده سرنوشت ۱۰۰۰ جستجوی گوگل در ۲۰۲۶ — ۶۴۰ مورد روی SERP پایان می‌یابند، ۳۶۰ مورد کلیک تولید می‌کنند و از این کلیک‌ها سهم رو‌به‌رشدی به منابع مستندشده در AI می‌رود",
+          "caption": "شکل ۱: از هر ۱۰۰۰ جستجوی گوگل در ۲۰۲۶، تنها ۳۶۰ مورد به کلیک روی وب آزاد ختم می‌شود. با حضور AI Overview این نرخ به ۱۷ درصد می‌رسد. منبع: SparkToro، Bain & Company، Seer Interactive.",
+          "altText": "نمودار قیف نشان‌دهنده سرنوشت ۱۰۰۰ جستجوی گوگل در ۲۰۲۶ — ۶۴۰ مورد روی SERP پایان می‌یابند، ۳۶۰ مورد کلیک تولید می‌کنند و از این کلیک‌ها سهم رو‌به‌رشدی به منابع مستندشده در AI می‌رود"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چرا اینجا رسیدیم: تاریخچه کوتاه از دست دادن کلیک‌ها"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "جستجوی zero-click پدیده‌ای نیست که AI Overviews خلق کرده باشند. این روندی است که از زمان معرفی Knowledge Graph گوگل در ۲۰۱۲ و Featured Snippets در ۲۰۱۴ شکل گرفته. AI Overviews آتش را روشن نکردند — بر شعله‌ای که یک دهه می‌سوخت هیزم ریختند."
+        },
+        {
+          "type": "paragraph",
+          "text": "رند فیشکین از SparkToro نخستین کسی بود که جستجوی zero-click را در ۲۰۱۹ با رقم تقریباً ۵۰ درصد کمّی‌سازی کرد. تا ۲۰۲۱، داده‌های clickstream از Datos این رقم را به ۶۴.۸۲ درصد رساند. هر ویژگی عمده SERP که گوگل معرفی کرد — جعبه‌های People Also Ask، ماژول‌های ماشین‌حساب، تبدیل ارز، knowledge panelها، local packها — برای پاسخگویی به نیت کاربر درون رابط خود گوگل طراحی شده بود، نه برای هدایت کاربر به خارج. مدل کسب‌وکار تبلیغاتی انگیزه نگه داشتن کاربر در صفحه را ایجاد می‌کند. click-through ارگانیک همیشه اثر جانبی بود، نه هدف."
+        },
+        {
+          "type": "paragraph",
+          "text": "Google AI Overviews که از اواسط ۲۰۲۴ به طور گسترده مستقر شدند، سال‌ها تغییر تدریجی را به ماه‌ها فشرده کردند. اکنون در حدود ۴۸ درصد از تمام کوئری‌ها ظاهر می‌شوند — رشد ۵۸ درصدی سال‌به‌سال بر اساس BrightEdge — و در ۸۲ درصد از کوئری‌های فناوری B2B فعال می‌شوند. گارتنر در فوریه ۲۰۲۴ پیش‌بینی کرد که حجم جستجوی سنتی تا ۲۰۲۶ به میزان ۲۵ درصد کاهش یابد. داده‌ها نشان می‌دهند این پیش‌بینی، دست‌کم برای حوزه‌های محتوای اطلاعاتی، محتاطانه بوده است."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "warning",
+          "title": "اگر ترافیک شما عمدتاً از کلمات کلیدی اطلاعاتی می‌آید",
+          "text": "AI Overviews اکنون تقریباً تمام کوئری‌های اطلاعاتی از نوع «چطور»، «چیست» و «چرا» را بدون ارجاع کاربر به سایت‌های خارجی پاسخ می‌دهند. اگر اکثر ترافیک ارگانیک شما از محتوای تعریفی، آموزشی یا راهنمامحور تأمین می‌شود، در پرریسک‌ترین دسته از نظر اختلال zero-click قرار دارید. کاهش ۶۱ درصدی CTR که Seer Interactive گزارش داده دقیقاً به این بخش اعمال می‌شود — نه یکسان به تمام انواع ترافیک. کوئری‌های با نیت تجاری و transactional همچنان نرخ AI Overview بسیار پایین‌تر و click-through بسیار بالاتری دارند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کلیک‌هایی که همچنان رخ می‌دهند — و چرا اهمیتی بیش از پیش دارند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اینجاست که یافته‌ای ضدشهودی در میان داده‌ها پنهان شده: کاربرانی که در دنیای zero-click کلیک می‌کنند، بازدیدکنندگان باکیفیت‌تری نسبت به کسانی هستند که پیش از این کلیک می‌کردند. Semrush دریافته که بازدیدکنندگان ارجاع‌شده از هوش مصنوعی با نرخی ۴.۴ برابر بیشتر از بازدیدکنندگان سنتی جستجوی ارگانیک تبدیل می‌شوند. کلیک‌هایی که باقی می‌مانند از کاربرانی است که خلاصه هوش مصنوعی را خوانده‌اند، تصمیم گرفته‌اند کافی نیست، و آگاهانه برای اطلاعات بیشتر کلیک کرده‌اند."
+        },
+        {
+          "type": "paragraph",
+          "text": "این ماهیت ترافیکی که سایت شما باید هدف قرار دهد را تغییر می‌دهد. جستجوی پیش از هوش مصنوعی یک قیف گسترده می‌فرستاد: کاربران زیاد با نیت‌های متفاوت، اغلب در حال گشت‌وگذار، و تنها بخش کوچکی آماده اقدام. جستجوی پس از هوش مصنوعی یک قیف باریک‌تر اما واجدالشرایط‌تر می‌فرستد: کاربران کمتر، اما با تراکم بسیار بالاتری از کسانی که در مرحله ارزیابی یا تصمیم‌گیری هستند. برای کسب‌وکارهایی با اقتصاد تبدیل قوی، ارزش کل ترافیک جستجو ممکن است به اندازه‌ای که آمار حجمی نشان می‌دهد کاهش نیافته باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "پیامد استراتژیک این است: بهینه‌سازی صرف برای بازیابی حجم ترافیک از دست‌رفته هدف اشتباهی است. هدف درست کسب استناد در AI Overviews است — به گونه‌ای که کاربرانی که کلیک می‌کنند از پیش به اعتبار شما باور داشته باشند — و سپس تبدیل این بازدیدکنندگان پرقصد. حجم و کیفیت از هم جدا شده‌اند؛ استراتژی باید این واقعیت را دنبال کند."
+        },
+        {
+          "type": "highlight",
+          "label": "داده کلیدی",
+          "text": "برندهایی که در Google AI Overview استناد می‌شوند، در مقایسه با برندهای غیرمستناد در همان SERP، ۳۵ درصد کلیک ارگانیک بیشتر و ۹۱ درصد کلیک پولی بیشتر کسب می‌کنند. حضور در پاسخ هوش مصنوعی جایگزین ترافیک نمی‌شود — کیفیت ترافیکی که دریافت می‌کنید را ارتقا می‌دهد. (Seer Interactive، ۲۰۲۶)"
+        },
+        {
+          "type": "quote",
+          "text": "جستجو پایان نیافته. ارجاع پایان یافته. برند شما می‌تواند یک موضوع را در پاسخ‌های مولد هوش مصنوعی در اختیار داشته باشد و هیچ کلیکی از آن دریافت نکند. این شکست نیست — این شکلی نوین از دیده شدن است که پشته تحلیلی فعلی شما قادر به رؤیت آن نیست.",
+          "author": "رند فیشکین، SparkToro، ۲۰۲۶"
+        },
+        {
+          "type": "cta",
+          "title": "SEO در مقابل GEO: تفاوت چیست؟",
+          "text": "جستجوی zero-click دقیقاً همان عاملی است که SEO و GEO را به دو رشته متمایز تبدیل کرده. اگر در مورد آنچه در رفتار جستجو تغییر کرده وضوح دارید اما هنوز نمی‌دانید چه اقدامی انجام دهید، این مقاله هر دو رویکرد را در کنار هم تشریح می‌کند.",
+          "buttonText": "بخوانید: SEO در مقابل GEO — تفاوت چیست؟",
+          "buttonUrl": "/fa/blog/seo-vs-geo-whats-the-difference/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "کدام کوئری‌ها zero-click نمی‌شوند: انواع جستجوهایی که همچنان ترافیک تولید می‌کنند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "همه دسته‌های کوئری در برابر اختلال zero-click به یک اندازه آسیب‌پذیر نیستند. درک اینکه کدام نوع جستجوها همچنان به‌طور مطمئن کلیک تولید می‌کنند، برای هر استراتژی محتوا یا ترافیک طراحی‌شده برای سال ۲۰۲۶ ضروری است."
+        },
+        {
+          "type": "paragraph",
+          "text": "کوئری‌های transactional — «خرید X»، «قیمت X»، «بهترین X برای Y» — نرخ AI Overview به‌مراتب پایین‌تری دارند. داده‌های Ahrefs نشان می‌دهد کوئری‌های فروشگاهی تنها در ۳.۲ درصد از جستجوها AI Overview فعال می‌کنند — در مقایسه با ۲۹ درصد هنگام عرضه اولیه — زیرا گوگل پس از آنکه پاسخ‌های هوش مصنوعی به فروش تبدیل نشدند عقب‌نشینی کرد. اگر کاربری نیاز به تکمیل خرید، دانلود نرم‌افزار، رزرو خدمت یا مقایسه محصولات خاص داشته باشد، همچنان باید از یک سایت بازدید کند. مشکل zero-click در محتوای اطلاعاتی متمرکز است، نه در نیت تجاری یا ناوبری."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "دسته نیت کوئری",
+            "نرخ فعال‌سازی AI Overview",
+            "نرخ معمول click-through"
+          ],
+          "rows": [
+            [
+              "اطلاعاتی ('چطور'، 'چیست'، 'چرا')",
+              "۷۰ تا ۸۵ درصد",
+              "زیر ۵ درصد"
+            ],
+            [
+              "تجاری ('بهترین X'، 'X در مقابل Y'، 'نقد')",
+              "۲۵ تا ۴۰ درصد",
+              "۱۵ تا ۲۵ درصد"
+            ],
+            [
+              "Transactional ('خرید X'، 'دانلود X'، 'قیمت')",
+              "۳ تا ۸ درصد",
+              "۳۵ تا ۵۵ درصد"
+            ],
+            [
+              "ناوبری (branded / جستجوی مستقیم)",
+              "۵ تا ۱۲ درصد",
+              "۴۰ تا ۶۰ درصد"
+            ],
+            [
+              "محلی ('نزدیک من'، 'الان باز'، شهر + خدمت)",
+              "۱۵ تا ۳۰ درصد",
+              "۲۵ تا ۴۰ درصد"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "چرخش استراتژیکی که این داده پیشنهاد می‌دهد روشن است: اگر سبد محتوایی شما به سمت محتوای اطلاعاتی top-of-funnel سنگینی می‌کند، اختلال zero-click شدید است. اگر به سمت محتوای مقایسه‌ای، محصول‌محور و تبدیل‌محور متمایل باشد، تأثیر به‌مراتب کمتر است. امسال سالی است که باید ترافیک خود را بر اساس دسته نیت حسابرسی کنید، نه صرفاً بر اساس حجم."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/query-intent-zero-click-exposure.webp",
+          "alt": "نمودار میله‌ای نرخ فعال‌سازی AI Overview را به تفکیک دسته نیت کوئری نشان می‌دهد — کوئری‌های اطلاعاتی نزدیک ۸۰ درصد، تجاری حدود ۳۰ درصد، transactional حدود ۵ درصد و ناوبری حدود ۱۰ درصد",
+          "caption": "شکل ۲: نرخ‌های فعال‌سازی AI Overview به تفکیک نیت کوئری تفاوت چشمگیری دارند. کوئری‌های اطلاعاتی بیشترین آسیب‌پذیری را دارند؛ کوئری‌های transactional و ناوبری نرخ‌های click-through قوی‌تری حفظ می‌کنند. داده: Ahrefs، Semrush، BrightEdge ۲۰۲۵–۲۰۲۶.",
+          "altText": "نمودار میله‌ای نرخ فعال‌سازی AI Overview را به تفکیک دسته نیت کوئری نشان می‌دهد — کوئری‌های اطلاعاتی نزدیک ۸۰ درصد، تجاری حدود ۳۰ درصد، transactional حدود ۵ درصد و ناوبری حدود ۱۰ درصد"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "پنج رویکردی که واقعاً در سال ۲۰۲۶ کار می‌کنند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "پاسخ‌های استراتژیک به جستجوی zero-click نظری نیستند. داده‌های مربوط به اینکه چه چیزی استناد کسب می‌کند، ترافیک را حفظ می‌کند، و بازدیدکنندگان ارجاع‌شده از هوش مصنوعی را تبدیل می‌کند اکنون به اندازه کافی مشخص است که بر اساس آن اقدام کرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "رویکرد اول بهینه‌سازی برای استناد به جای جایگاه است. برندهای مستناد در AI Overviews در همان SERP ۳۵ درصد کلیک ارگانیک بیشتر و ۹۱ درصد کلیک پولی بیشتر کسب می‌کنند — حتی بدون داشتن جایگاه اول. آزمایش میدانی تصادفی Agarwal-Sen — دقیق‌ترین مطالعه روش‌شناختی درباره CTR در AI Overview — کاهش ۳۸ درصدی کلیک ارگانیک را در کوئری‌های دارای AI Overview تأیید کرد، اما نشان داد این کاهش برای برندهای مستناد تا حدی جبران می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "رویکرد دوم ساختن اعتبار موضوعی در عمق به جای عرض است. Google AI Mode تا ۱۶ زیرکوئری به ازای هر prompt کاربر صادر می‌کند. دامنه شما ۱۶ فرصت استناد در هر جلسه دارد، نه یک موقعیت رتبه‌بندی. پوشش جامع یک موضوع — هر زاویه، هر زیرسؤال، هر مفهوم مجاور — احتمال استناد در زیرکوئری‌های متعددی که ایجنت هوش مصنوعی تولید می‌کند را به‌طور چشمگیری افزایش می‌دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "رویکرد سوم تنوع‌بخشی به منابع ترافیک خارج از گوگل است. برندهایی که مخاطبان خود را از طریق خبرنامه ایمیل، کانال یوتیوب، پلتفرم‌های جامعه مستقیم و محتوای شبکه‌های اجتماعی ساخته‌اند، مالک رابطه‌ای هستند که هیچ تغییر الگوریتمی نمی‌تواند آن را قطع کند. آسیب‌پذیرترین برندها در برابر اختلال zero-click کسانی بودند که هیچ‌چیز جز ترافیک واسطه‌گری‌شده توسط گوگل نداشتند."
+        },
+        {
+          "type": "paragraph",
+          "text": "رویکرد چهارم پیاده‌سازی داده ساختارمندی است که ابهام را برای استخراج هوش مصنوعی حذف کند. Schema markup برای FAQPage، Article، Organization و BreadcrumbList به سیستم‌های هوش مصنوعی حقایق ساختارمندی ارائه می‌دهند که بدون نیاز به استنتاج قابل استخراج‌اند — و حقایقی که نیازی به استنتاج ندارند همان‌هایی هستند که در استنادها قرار می‌گیرند. رویکرد پنجم تغییر معیار سنجش موفقیت است؛ تنها ۱۴ درصد از بازاریابان اکنون فرکانس استناد هوش مصنوعی را ردیابی می‌کنند، در حالی که این اندازه‌گیری اکنون یک الزام پایه است."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "برای استناد هوش مصنوعی بهینه کنید — پاسخ‌های ساختارمند، قالب FAQ، داده اصلی، منابع نام‌برده",
+            "عمق موضوعی بسازید نه عرض — پوشش جامع در چندین زیرکوئری استناد چندگانه کسب می‌کند",
+            "منابع ترافیک را از گوگل متنوع کنید — ایمیل، یوتیوب، جامعه، روابط مستقیم",
+            "Schema markup برای FAQPage، Article و Organization در تمام صفحات کلیدی پیاده کنید",
+            "سهم استناد هوش مصنوعی را در کنار داده GSC اندازه‌گیری کنید — ذکرها را در ChatGPT، Gemini، Perplexity ردیابی کنید"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "حسابرسی میزان قرارگیری ترافیک شما در معرض zero-click"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "پیش از آنکه بتوانید مشکل zero-click خود را رفع کنید، باید بدانید ترافیک فعلی‌تان تا چه اندازه در معرض خطر است. اکثر برندها آسیب‌پذیری کانال ارگانیک خود را دست‌کم می‌گیرند — چون به جای توزیع نیت در سطح کوئری، به ترافیک کل نگاه می‌کنند."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "۱۰۰ صفحه فرود ارگانیک برتر خود را از Google Search Console استخراج کنید و هر کدام را بر اساس نیت کوئری دسته‌بندی کنید (اطلاعاتی، تجاری، transactional، ناوبری)",
+            "درصد کل ترافیکی که از کوئری‌های اطلاعاتی می‌آید را محاسبه کنید — اگر از ۶۰ درصد بیشتر است ریسک بالاست",
+            "بررسی کنید کدام صفحات در AI Overviews نیز ظاهر می‌شوند (از گزارش AI Overview Semrush یا ابزارهای مشابه استفاده کنید)",
+            "کلیک‌های از دست‌رفته تخمینی را محاسبه کنید: CTR قبل و بعد از معرفی AI Overview را برای همان کوئری‌ها مقایسه کنید",
+            "فهرست اولویت‌بندی بسازید: صفحات با ترافیک اطلاعاتی بالا و حضور بالای AI Overview اولین اهداف بهینه‌سازی GEO هستند"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "این حسابرسی نشان خواهد داد که ریسک شما یکنواخت نیست. برخی دسته‌های محتوا از پیش به شدت zero-click شده‌اند؛ برخی دیگر تقریباً دست‌نخورده‌اند. این حسابرسی به شما می‌گوید تلاش GEO را کجا اول متمرکز کنید — روی صفحاتی که هنوز ترافیکی برای حفظ کردن دارند و آن‌هایی که از پیش استناد می‌شوند اما می‌توانستند بهتر تبدیل کنند."
+        },
+        {
+          "type": "cta",
+          "title": "مرگ وب‌سایت‌های سنتی: طراحی برای ایجنت‌های هوش مصنوعی",
+          "text": "جستجوی zero-click صرفاً یک مشکل ترافیکی نیست — یک مشکل طراحی هم هست. ایجنت‌های هوش مصنوعی اکنون سایت شما را بدون دیدن آن مرور می‌کنند. این مقاله توضیح می‌دهد که معماری محتوا، server-side rendering و llms.txt چگونه تعیین می‌کنند آیا سیستم‌های هوش مصنوعی اصلاً می‌توانند محتوای شما را استخراج و استناد کنند.",
+          "buttonText": "بخوانید: طراحی برای ایجنت‌های هوش مصنوعی",
+          "buttonUrl": "/fa/blog/the-death-of-traditional-websites-designing-for-ai-agents/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "بحران اندازه‌گیری: مشکلی که هیچ‌کس حل نمی‌کند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "عمیق‌ترین مشکل عملیاتی که جستجوی zero-click ایجاد می‌کند، از دست دادن ترافیک نیست — کوری اندازه‌گیری است. پشته تحلیلی موجود برای شمارش بازدیدها ساخته شده؛ نه برای ردیابی ذکرهای هوش مصنوعی، استنادهای هوش مصنوعی، یا اعتباری که وقتی AI Overview محتوای شما را به کاربری که هرگز کلیک نمی‌کند توصیه می‌دهد، انباشته می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Search Console impression و کلیک را نشان می‌دهد اما تمایز نمی‌گذارد که کدام impressionها AI Overview فعال کردند، آیا شما در آن استناد شدید، یا بعد از آن چه بر سر جلسه کاربر آمد. Ahrefs و Semrush رتبه‌بندی را نشان می‌دهند، اما جایگاه اول تنها ۱۷ تا ۵۴ درصد احتمال استناد در AI Overview در همان کوئری را می‌دهد — و صفر دیده‌شدن در پاسخ‌های ChatGPT، Perplexity یا Gemini دارد. پشته استاندارد سطح اشتباهی را اندازه می‌گیرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "لایه اندازه‌گیری در حال ظهور — ابزارهایی مانند Otterly.ai، Promptmonitor، Peec AI و QuickSEO — فرکانس استناد برند را مستقیماً در پلتفرم‌های هوش مصنوعی ردیابی می‌کند. این هنوز ابزارسازی بالغی نیست؛ ابزارسازی نسل اول یک سطح جدید است. اما برندهایی که الان آن را نصب می‌کنند، ۶ تا ۱۲ ماه داده baseline خواهند داشت وقتی بقیه صنعت این شکاف را تشخیص دهد — مزیتی معادل نصب Google Analytics در سال ۲۰۰۵."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "همین امروز ردیابی استناد هوش مصنوعی را آغاز کنید",
+          "text": "یک ابزار پایش استناد هوش مصنوعی بلافاصله به پشته خود اضافه کنید — Otterly.ai، Promptmonitor یا Peec AI همگی ردیابی ذکر برند را در ChatGPT، Gemini، Perplexity و Claude ارائه می‌دهند. کوئری‌های اصلی برند و ۱۰ کوئری موضوعی اطلاعاتی برتر خود را هفتگی از طریق هر پلتفرم اجرا کنید. Baseline‌ای که در سه ��اه آینده می‌سازید تنها اندازه‌گیری صادقانه از اثربخشی سرمایه‌گذاری‌های GEO شما خواهد بود."
+        },
+        {
+          "type": "code",
+          "code": "# حسابرسی دیده‌شدن در هوش مصنوعی — چک‌لیست سریع (هفتگی اجرا کنید)\n\n# ۱. بررسی مسدود نبودن خزنده‌های هوش مصنوعی در robots.txt\ncurl https://yourdomain.com/robots.txt | grep -E 'GPTBot|ClaudeBot|PerplexityBot|Anthropic'\n# انتظار: هیچ Disallow برای این عامل‌ها وجود نداشته باشد\n\n# ۲. تأیید server-side rendering صفحات کلیدی\ncurl -A 'Googlebot' https://yourdomain.com/your-key-page | grep '<h1>'\n# انتظار: محتوای heading بدون اجرای JavaScript ظاهر شود\n\n# ۳. بررسی وجود llms.txt در ریشه سایت\ncurl https://yourdomain.com/llms.txt\n# انتظار: فایل Markdown توصیف‌کننده سایت و محتوای کلیدی\n\n# ۴. اعتبارسنجی schema FAQPage\ncurl https://validator.schema.org/#url=https://yourdomain.com/your-faq-page\n# انتظار: موجودیت FAQPage بدون خطا شناسایی شود\n\n# ۵. پایش دستی فرکانس استناد هوش مصنوعی\n# این عبارات را در ChatGPT، Perplexity و Gemini وارد کنید:\n# \"برند [شما] چه کاری انجام می‌دهد؟\"\n# \"بهترین ابزارهای [دسته‌بندی شما]\"\n# \"چطور [کاربرد اصلی شما]\"\n# ردیابی کنید آیا برند شما در هر پاسخ ظاهر می‌شود"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "E-E-A-T در عصر هوش مصنوعی: چرا سیگنال‌های اعتماد بیش از هر زمان اهمیت دارند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "چارچوب E-E-A-T گوگل — تجربه، تخصص، اقتدار، قابل‌اعتماد بودن — برای ارزیابی محتوای انسان‌نوشته برای خوانندگان انسانی طراحی شده بود. در عصر هوش مصنوعی، به فیلتر اصلی تبدیل شده که سیستم‌های مولد از طریق آن تعیین می‌کنند کدام منابع را استناد کنند و کدام را نادیده بگیرند."
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی یک مدل زبانی بزرگ AI Overview ترکیب می‌کند، به دنبال تراکم کلیدواژه نیست. به دنبال سیگنال‌های اقتداری است که ریسک توهم خودش را کاهش دهند. صفحه‌ای که نام نویسنده‌ای با پیشینه حرفه‌ای قابل تأیید دارد، تحقیقات اولیه از مؤسسات شناخته‌شده استناد می‌کند، به منابع تأییدکننده لینک می‌دهد، و در دامنه‌ای با عمق موضوعی تثبیت‌شده میزبانی می‌شود، سیگنالی کاملاً متفاوت نسبت به یک پست ناشناس در یک سایت محتوای عمومی ارسال می‌کند — حتی اگر هر دو در صفحه اول باشند. سرمایه‌گذاری در E-E-A-T دیگر صرفاً یک فاکتور رتبه‌بندی نرم نیست؛ یک سیگنال استناد برای سیستم‌های هوش مصنوعی است."
+        },
+        {
+          "type": "alert",
+          "alertStyle": "tip",
+          "title": "اعتبار نویسنده اکنون یک سیگنال GEO است",
+          "text": "برای هر مقاله یک بیوگرافی ساختارمند نویسنده اضافه کنید، آن را به LinkedIn یا پروفایل حرفه‌ای نویسنده لینک دهید، و Person schema markup برای هر مشارکت‌کننده پیاده‌سازی کنید. سیستم‌های گوگل از این سیگنال‌ها برای تأیید تخصص پیش از انتخاب صفحه به عنوان منبع استناد استفاده می‌کنند. یک بایلاین معتبر روی یک صفحه خوب‌ساختارمند به‌طور مداوم از یک صفحه ناشناس با بک‌لینک‌های قوی‌تر در انتخاب استناد AI Overview پیشی می‌گیرد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "قالب‌های محتوایی که استناد می‌گیرند — و آن‌هایی که نمی‌گیرند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "همه قالب‌های محتوا برای سیستم‌های هوش مصنوعی که استناد می‌کنند به یک اندازه خوانا نیستند. انتخاب‌های ساختاری که می‌کنید — نحوه آغاز یک بخش، استفاده از جدول یا پاراگراف، میزان خاص بودن ادعاها — مستقیماً تعیین می‌کنند که آیا یک گذر استخراج می‌شود یا نادیده می‌ماند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مستقیم‌ترین تغییر ساختاری که اکثر سایت‌ها می‌توانند انجام دهند، آغاز بخش‌ها با پاسخ مستقیم است. سیستم‌های بازیابی هوش مصنوعی برای استخراج اولین ادعای اساسی که مستقیماً به یک کوئری پاسخ می‌دهد بهینه شده‌اند. اگر مقاله شما با سه پاراگراف زمینه آغاز شود قبل از بیان پاسخ اصلی، مدل ممکن است زمینه را استخراج کند و پاسخ را از دست بدهد. ساختار درست همان هرم معکوسی است که روزنامه‌نگاران یک قرن است از آن استفاده می‌کنند: مهم‌ترین حقیقت در اولین جمله، جزئیات پشتیبان در ادامه."
+        },
+        {
+          "type": "paragraph",
+          "text": "ادعاهای آماری با منبع‌دهی مشخص در انتخاب استناد به‌میزان قابل توجهی از ادعاهای کلی پیشی می‌گیرند. «تحلیل Seer Interactive در ۲۰۲۵ از ۲۵.۱ میلیون impression نشان داد که CTR معادل ۶۱ درصد کاهش یافت» به احتمال بسیار بیشتری استخراج و استناد می‌شود تا «مطالعات نشان می‌دهند نرخ click-through به‌طور قابل توجهی کاهش یافته». مدل از میلیون‌ها نمونه آموخته یک ادعای قابل‌استناد چگونه به نظر می‌رسد — تعمیم‌های مبهم با این الگو مطابقت ندارند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "قالب‌هایی که استناد می‌گیرند: بلوک‌های FAQ، بخش‌های تعریف، مراحل how-to شماره‌گذاری‌شده، جداول مقایسه، پاراگراف‌های آماری با منابع نام‌برده",
+            "قالب‌هایی که استناد از دست می‌دهند: بلوک‌های متن طولانی بدون زیرعنوان، مقدمه‌های زمینه‌محور که پاسخ را به تأخیر می‌اندازند، تعمیم‌های بدون منبع",
+            "سیگنال‌های ساختاری که کمک می‌کنند: H2/H3هایی که الگوهای رایج کوئری را منعکس می‌کنند، بخش‌های کوتاه (۱۵۰ تا ۳۰۰ کلمه به ازای هر H2)، لیست‌های نقطه‌ای برای پاسخ‌های چندبخشی",
+            "انواع schema که احتمال استناد را افزایش می‌دهند: FAQPage، HowTo، Article، Speakable، Dataset",
+            "چه چیزی باید پرهیز کرد: محتوای رندرشده با JavaScript، محتوای پشت دیوار ورود یا کوکی، صفحات با تراکم تبلیغات زیاد که نسبت متن به نویز را کاهش می‌دهد"
+          ]
+        },
+        {
+          "type": "highlight",
+          "label": "بینش قالب",
+          "text": "در یک آزمایش A/B روی ۲۰۰ URL توسط Conductor در ۲۰۲۵، صفحاتی که برای شروع با پاسخ مستقیم بازساختار شدند، افزایش ۲.۳ برابری در فرکانس استناد AI Overview نسبت به همان محتوا در قالب نثر طولانی دیدند. ساختار انتخابی زیبایی‌شناختی نیست — متغیر اصلی در انتخاب استناد هوش مصنوعی است."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "ساختن تقویم محتوای GEO-محور"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "انطباق با جستجوی zero-click یک اصلاح فنی یک‌باره نیست. یک استراتژی سردبیری پیوسته است. یک تقویم محتوای GEO-محور از سه جهت ساختاری با تقویم کلیدواژه‌محور سنتی متفاوت است: خوشه‌های سؤال را بر خوشه‌های کلیدواژه اولویت می‌دهد، قبل از عرض، عمق می‌سازد، و داده اصلی را به عنوان یک قالب محتوا می‌بیند، نه یک امکان اضافه."
+        },
+        {
+          "type": "paragraph",
+          "text": "خوشه‌بندی سؤال به معنای نگاشت کل فضای کوئری مکالمه‌ای پیرامون موضوعات اصلی شما است. Google AI Mode تا ۱۶ زیرکوئری به ازای هر prompt کاربر صادر می‌کند و هر زیرکوئری فرصتی برای استناد دامنه شما است. تقویم محتوایی که به هر سؤال منطقی پیرو پاسخ می‌دهد — «چیست»، «چطور»، «چرا»، «تفاوت بین ... چیست»، «چه زمانی باید» — یک سطح استناد جامع می‌سازد که یک صفحه pillar واحد نمی‌تواند آن را تکرار کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "داده اصلی بالاترین اهرم سرمایه‌گذاری GEO برای هر سازمانی است که به اطلاعات دست‌اول دسترسی دارد. یک نظرسنجی اختصاصی، مطالعه benchmark، تحلیل داده‌های عملکرد داخلی، یا مجموعه داده‌ای گردآوری‌شده از منابع عمومی که هیچ‌کس آن‌ها را یکجا جمع نکرده، اطلاعات قابل‌استنادی می‌شود که سیستم‌های هوش مصنوعی به تنهایی از داده‌های آموزشی نمی‌توانند آن را ترکیب کنند. هر بار که AI Overview تحقیق اصلی شما را استناد می‌کند، برند شما در مقابل کاربران در مقیاس بزرگ ظاهر می‌شود — بدون بازدید آن‌ها، بدون هیچ جایگاه پولی، و در بسیاری از موارد با تأییدی که هیچ تبلیغ سنتی نمی‌تواند بخرد."
+        },
+        {
+          "type": "list",
+          "style": "ordered",
+          "items": [
+            "خوشه‌های سؤال را پیرامون هر موضوع اصلی نگاشت کنید — از People Also Ask و آزمون prompt هوش مصنوعی برای شناسایی هر زیرکوئری استفاده کنید",
+            "یک صفحه اختصاصی به ازای هر خوشه سؤال تخصیص دهید — چند سؤال متمایز را روی یک URL واحد تجمیع نکنید",
+            "هر صفحه را با یک پاسخ مستقیم و قابل‌استناد در ۱۵۰ کلمه اول آغاز کنید — این هدف استخراج برای سیستم‌های هوش مصنوعی است",
+            "حداقل یک قطعه داده اصلی در هر فصل سفارش دهید — نظرسنجی، benchmark یا تحلیل اختصاصی که منبع اولیه قابل‌استناد می‌شود",
+            "یک ساختار لینک‌دهی داخلی بسازید که صفحات سؤال مرتبط را به هم متصل کند — عمق موضوعی را به گوگل و خزنده‌های هوش مصنوعی سیگنال می‌دهد",
+            "صفحات GEO اصلی را هر فصل با آمار به‌روز تازه‌سازی کنید — سیستم‌های هوش مصنوعی به نظر می‌رسد در انتخاب استناد به تازگی اطلاعات وزن می‌دهند"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "راه به جلو: وقتی جستجوی هوش مصنوعی به ۹۰ درصد می‌رسد چه می‌شود"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "نرخ zero-click همچنان در حال افزایش است. Google AI Mode که در استقرار محدود است از پیش نرخ zero-click 93 درصدی به نمایش گذاشته. با گسترش جستجوی مولد برای پوشش اکثریت کوئری‌ها — از جمله کوئری‌های تجاری و ناوبری — میانگین ۶۴.۸۲ درصدی امروز احتمالاً ظرف دو سال به ۷۵ درصد یا بالاتر خواهد رسید."
+        },
+        {
+          "type": "paragraph",
+          "text": "برای اکثر ناشران محتوا، این مسیر به این معناست که ترافیک جستجوی سنتی بازنخواهد گشت. سایت‌هایی که دوام می‌آورند آن‌هایی هستند که جستجو را لایه‌ای از دیده‌شدن می‌بینند، نه منبع اصلی ترافیک. آن‌هایی که رشد می‌کنند کسانی هستند که تعداد کمتری از بازدیدکنندگان پرقصد را به مشتری، مشترک یا طرفدار تبدیل می‌کنند — و کانال‌های مستقیمی می‌سازند که جستجو را کاملاً دور می‌زنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "برندگان بلندمدت کسانی نیستند که با AI Overviews می‌جنگند. آن‌هایی هستند که خودشان را درون آن‌ها ضروری می‌سازند. اگر محتوای شما آنقدر معتبر، روشن و خوب‌ساختارمند باشد که مدل‌های هوش مصنوعی به‌طور مداوم در کوئری‌ها و پلتفرم‌های متعدد شما را استناد کنند، دیده‌شدن خود را از دست نمی‌دهید — شکل تازه‌ای از آن را به دست می‌آورید که وابسته به کلیک نیست."
+        },
+        {
+          "type": "cta",
+          "title": "تحقیق SparkToro در مورد جستجوی zero-click",
+          "text": "تحقیق اصلی و به‌روزشده رند فیشکین منبع اصلی پشت بیشتر داده‌های این مقاله است. روش‌شناسی، پنل clickstream و داده‌های روند تاریخی به‌طور کامل مستند شده‌اند — خواندنی ضروری برای هر کسی که پاسخ جدی به اختلال zero-click می‌سازد.",
+          "buttonText": "مطالعه تحقیق SparkToro",
+          "buttonUrl": "https://sparktoro.com/blog/less-than-1-of-googles-searches-now-click-through-to-the-open-web/"
+        },
+        {
+          "type": "cta",
+          "title": "مطالعه تأثیر CTR از Seer Interactive",
+          "text": "دقیق‌ترین داده اولیه درباره نحوه کاهش AI Overviews در نرخ کلیک ارگانیک — ۲۵.۱ میلیون impression در ۴۲ سازمان، پوشش‌دهنده کوئری‌های branded در مقابل non-branded و اثر تقویت استناد.",
+          "buttonText": "مطالعه تحقیق Seer Interactive",
+          "buttonUrl": "https://www.seerinteractive.com/insights/how-do-aios-affect-ctr"
+        },
+        {
+          "type": "cta",
+          "title": "طراحی بدون حرف، چیزی جز دکور نیست",
+          "text": "چه یک بازدیدکننده انسانی باشد چه یک ایجنت هوش مصنوعی که صفحه شما را می‌خواند، اصل یکسان است: طراحی که پیامی روشن منتقل نکند چیزی جز تزئین نیست. این مقاله بررسی می‌کند که چرا ارتباط هدفمند — نه فقط زیبایی‌شناسی — تعیین‌کننده این است که آیا محتوا واقعاً عمل می‌کند.",
+          "buttonText": "بخوانید: طراحی بدون حرف، چیزی جز دکور نیست",
+          "buttonUrl": "/fa/blog/design-without-words-is-decoration/"
+        },
+        {
+          "type": "cta",
+          "title": "تکنیک‌های مدرن در طراحی فرانت‌اند",
+          "text": "تصمیمات فنی که می‌گیرید — server-side rendering، داده ساختارمند، HTML معنایی — تعیین می‌کنند آیا ایجنت‌های هوش مصنوعی اصلاً می‌توانند محتوای شما را بخوانند. این راهنما الگوهای مدرن فرانت‌اند را پوشش می‌دهد که خوانایی هم برای انسان و هم برای ماشین را حفظ می‌کنند.",
+          "buttonText": "کشف تکنیک‌های فرانت‌اند",
+          "buttonUrl": "/fa/blog/modern-frontend-design-techniques/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی: بازی تمام نشده. قوانین عوض شده."
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "جستجوی zero-click مرگ رشد ارگانیک نیست. مرگ نسخه خاصی از آن است — آن‌که رتبه اول برای یک کلمه کلیدی اطلاعاتی به‌طور قابل پیش‌بینی ترافیک پایدار تولید می‌کرد. آن نسخه همیشه مشروط به انتخاب گوگل برای هدایت کاربران به خارج بود. گوگل انتخاب دیگری کرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "آنچه باقی می‌ماند پایدارتر است: ساختن اعتبار واقعی در یک موضوع، خلق محتوایی که سیستم‌های هوش مصنوعی به اندازه کافی به آن اعتماد دارند که استناد کنند، داشتن کانال‌های مستقیم با مخاطبان، و ساختار دادن به سایت به گونه‌ای که بازدیدکنندگان پرقصدی که واقعاً می‌رسند تبدیل شوند. برندهایی که از هر تغییر الگوریتم قبلی گوگل سربلند بیرون آمدند کسانی نبودند که ترفند یافتند — کسانی بودند که روشن‌ترین کیفیت محتوا و مستقیم‌ترین روابط مخاطبی را داشتند. همین الگو اکنون نیز برقرار است."
+        },
+        {
+          "type": "paragraph",
+          "text": "معیار اندازه‌گیری باید تغییر کند، قالب محتوا باید تغییر کند، و شاخص موفقیت باید از حجم کلیک به حضور استناد و کیفیت تبدیل تغییر کند. اما منطق زیربنایی — مفیدترین، معتبرترین، ساختارمندترین پاسخ به سؤالاتی که مخاطبان شما می‌پرسند — اصلاً تغییر نکرده. فقط از پیش واقعی‌تر شده است."
+        }
+      ],
+      "faq": [
+        {
+          "question": "جستجوی zero-click چیست؟",
+          "answer": "جستجوی zero-click یک جلسه جستجو است که بدون کلیک کاربر به هیچ وب‌سایت خارجی پایان می‌یابد. کاربر یک پاسخ کامل مستقیماً روی صفحه نتایج جستجو دریافت می‌کند — از طریق AI Overview، featured snippet، knowledge panel یا جعبه پاسخ مستقیم — و نیازش بدون بازدید از هیچ سایت ناشر یا برندی ارضا می‌شود. در سال ۲۰۲۶، ۶۴.۸۲٪ از تمام جستجوهای گوگل به این شکل پایان می‌یابند."
+        },
+        {
+          "question": "جستجوی zero-click به خاطر AI Overviews چقدر افزایش یافته؟",
+          "answer": "Google AI Overviews تا سال ۲۰۲۶ در تقریباً ۴۸٪ از تمام query‌ها فعال می‌شوند و نرخ zero-click را از baseline حدود ۶۰٪ به ۸۳٪ در query‌هایی که لمس می‌کنند می‌رسانند. در Google AI Mode جدیدتر، نرخ zero-click به ۹۳٪ می‌رسد. سهم جستجوهایی که حداقل یک کلیک به وب آزاد تولید می‌کنند بین سال‌های ۲۰۲۴ و ۲۰۲۶ ۹.۵۱ واحد درصد کاهش یافت — افتی ۲۲.۹٪ در کمتر از دو سال."
+        },
+        {
+          "question": "جستجوی zero-click به معنای رتبه‌بندی پایین است؟",
+          "answer": "خیر. جستجوی zero-click صرف‌نظر از موقعیت رتبه‌بندی آن‌ها بر صفحات تأثیر می‌گذارد. مطالعه Seer Interactive از ۲۵.۱ میلیون impression نشان داد که CTR برای جایگاه اول از ۱.۷۶٪ به ۰.۶۱٪ کاهش یافت وقتی AI Overview ظاهر شد — کاهش نسبی ۶۱٪. مشکل اینجا نیست که کجا رتبه دارید؛ اینجاست که آیا هوش مصنوعی query را پیش از رسیدن کاربر به نتیجه شما پاسخ می‌دهد."
+        },
+        {
+          "question": "کدام نوع جستجوها کمترین تأثیر را از zero-click می‌گیرند؟",
+          "answer": "Query‌های transactional ('خرید'، 'دانلود'، 'رزرو'، 'مقایسه قیمت')، query‌های navigational (جستجوهای مستقیم برند) و query‌های با نیت محلی همچنان نرخ‌های کلیک قوی دارند. داده‌های Ahrefs نشان می‌دهد query‌های e-commerce تنها در ۳.۲٪ از جستجوها AI Overview فعال می‌کنند. اختلال zero-click در محتوای اطلاعاتی، آموزشی و تعریفی متمرکز است — نه در query‌های با نیت تجاری که کاربران نیاز به تکمیل خرید یا دسترسی به یک سرویس دارند."
+        },
+        {
+          "question": "بهینه‌سازی برای استناد هوش مصنوعی به جای رتبه‌بندی به چه معناست؟",
+          "answer": "بهینه‌سازی برای استناد هوش مصنوعی به معنای ساختار دادن به محتوا است به گونه‌ای که مدل‌های زبانی آن را به عنوان منبع مورد اعتماد هنگام ترکیب پاسخ‌ها انتخاب کنند. به طور عملی، این یعنی شروع هر بخش با یک پاسخ مستقیم، استفاده از ساختار FAQ، پشتیبانی هر ادعا با داده خاص و منابع نام‌برده، پیاده‌سازی schema markup FAQPage و Article، اطمینان از server-side render محتوا، و حفظ عمق موضوعی تا دامنه شما در چندین sub-query هوش مصنوعی ظاهر شود."
+        }
+      ],
+      "seo": {
+        "title": "جستجوی بدون کلیک آمده. حالا چه کار کنیم؟ | راهنمای داده، استراتژی و بقا ۲۰۲۶",
+        "metaDescription": "۶۴.۸۲٪ از جستجوهای گوگل اکنون بدون کلیک پایان می‌یابند. AI Overviews آن را به ۸۳٪ می‌رسانند. یاد بگیرید جستجوی zero-click به معنای SEO چیست، کدام query‌ها همچنان ترافیک می‌آورند، و پنج استراتژی که در ۲۰۲۶ کار می‌کنند.",
+        "canonical": "https://sinisteroid.ir/blog/zero-click-search-is-here-now-what",
+        "openGraph": {
+          "title": "جستجوی بدون کلیک آمده. حالا چه کار کنیم؟",
+          "description": "به ازای هر ۱۰۰۰ جستجو، تنها ۳۶۰ تا کلیک تولید می‌کنند. اینجا داده‌های ۲۰۲۶، انواع query که همچنان ترافیک می‌آورند، و پنج استراتژی که واقعاً کار می‌کنند.",
+          "image": "/api/uploads/zero-click-search-is-here-now-what-cover.webp"
+        },
+        "twitter": {
+          "title": "جستجوی بدون کلیک آمده. حالا چه کار کنیم؟",
+          "description": "۶۴.۸۲٪ از جستجوها بدون کلیک پایان می‌یابند. AI Mode به ۹۳٪ می‌رسد. در اینجا با داده واقعی ۲۰۲۶ پشت هر ادعا توضیح داده شده.",
+          "image": "/api/uploads/zero-click-search-is-here-now-what-cover.webp"
+        },
+        "keywords": "جستجوی zero-click، جستجوی zero-click ۲۰۲۶، CTR  AI overviews، ترافیک Google AI overview، استراتژی SEO zero-click، GEO بهینه‌سازی موتور مولد، بهینه‌سازی جستجوی هوش مصنوعی، آمار zero-click، کاهش ترافیک ارگانیک ۲۰۲۶، بهینه‌سازی استناد هوش مصنوعی",
+        "focusKeyword": "جستجوی zero-click"
+      }
     }
   }
 }

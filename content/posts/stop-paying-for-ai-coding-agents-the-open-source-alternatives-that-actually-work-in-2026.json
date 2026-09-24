@@ -1,0 +1,736 @@
+{
+  "slug": "stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026",
+  "status": "published",
+  "title": "Stop Paying for AI Coding Agents: The Open-Source Alternatives That Actually Work in 2026",
+  "date": "2026-09-12 15:54:38",
+  "tags": [
+    "ai-coding-agents",
+    "local-ai",
+    "ai-tools"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/20260912-155300-b285d73d7af8d049.webp",
+    "alt": {
+      "en": "Terminal and VS Code side-by-side showing open-source AI coding agents (OpenCode, Cline, Aider) replacing paid subscriptions in 2026",
+      "fa": "ترمینال و VS Code کنار هم نمایش‌دهنده ایجنت‌های کدنویسی متن‌باز (OpenCode، Cline، Aider) جایگزین اشتراک‌های پولی در ۲۰۲۶"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "Stop Paying for AI Coding Agents: The Open-Source Alternatives That Actually Work in 2026",
+      "excerpt": "Cursor, Claude Code, and similar tools are excellent — and expensive once you scale. In 2026 a set of mature open-source agents (OpenCode, Cline, Aider, OpenHands, Continue) deliver comparable agentic workflows with full model choice, local inference, and zero subscription lock-in. Here is the practical map of what actually works, what still lags, and how to switch without losing productivity.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "Stop Paying for AI Coding Agents: The Open-Source Alternatives That Actually Work in 2026"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Paid AI coding agents solved a real problem. Cursor, Claude Code, Windsurf and the rest turned multi-file refactors, test generation and ticket-to-PR flows into something a single developer could drive. The bill, however, compounds quickly: $20–200 per seat per month, usage overages, and the quiet knowledge that your codebase is flowing through someone else’s servers. In 2026 the open-source alternatives are no longer science projects. Several of them are production-grade, provider-agnostic, and deliberately designed so you can point them at Claude, GPT, Gemini, Grok, or a local Ollama model without rewriting your workflow."
+        },
+        {
+          "type": "paragraph",
+          "text": "This post is a field guide, not a manifesto. It covers the agents that currently ship real value, the trade-offs you will actually feel, how to combine them with local models for cost and privacy, and a concrete migration path if you are leaving a paid subscription. All recommendations are based on public GitHub activity, documented licenses, and hands-on reports current as of mid-September 2026."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "~207k",
+              "label": "GitHub stars for OpenCode (anomalyco/opencode), the leading open-source terminal coding agent"
+            },
+            {
+              "value": "Apache 2.0 / MIT",
+              "label": "Licenses of the most-used open agents (Cline, Aider, OpenHands, OpenCode)"
+            },
+            {
+              "value": "$0",
+              "label": "Subscription cost of the agents themselves — you pay only for the model tokens you choose"
+            },
+            {
+              "value": "75+",
+              "label": "LLM providers supported by the most flexible open agents"
+            },
+            {
+              "value": "Local + cloud",
+              "label": "Every major open agent can target Ollama, LM Studio, or any OpenAI-compatible endpoint"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260912-155306-98b721b7845743a8.webp",
+          "alt": "2026 landscape diagram of open-source AI coding agents: terminal (OpenCode, Aider), IDE (Cline, Continue), and autonomous platforms (OpenHands)",
+          "caption": "Figure 1: The 2026 open-source coding-agent landscape — choose by interface and autonomy level, not by marketing claims.",
+          "altText": "2026 landscape diagram of open-source AI coding agents: terminal (OpenCode, Aider), IDE (Cline, Continue), and autonomous platforms (OpenHands)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "1. Why the Math Changed in 2026"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Three shifts made the “just pay for Cursor” default weaker. First, frontier models became available through standard APIs at transparent token prices; the proprietary agent no longer owned unique model access. Second, open agents matured their tool-calling, approval gates, and multi-file edit loops to the point where the UX gap narrowed for most daily work. Third, local and open-weight models improved enough that a well-tuned 32B–70B class model running on a single high-end GPU can handle a large fraction of routine agent tasks without any cloud spend."
+        },
+        {
+          "type": "paragraph",
+          "text": "The remaining advantages of the best paid tools are polish, integrated indexing, and sometimes higher autonomy ceilings. Those advantages still matter for some teams. They no longer matter enough to justify a permanent subscription for every developer who simply needs an agent that can edit, test, and commit."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "2. The Agents That Actually Work Right Now"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Not every starred repository is production-ready. The following five consistently appear at the top of independent rankings and practitioner reports in 2026."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "OpenCode — the default open terminal agent"
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenCode (anomalyco/opencode) has become the most-starred open-source coding agent, with well over 200 k GitHub stars. It is MIT-licensed, provider-agnostic (75+ providers including local models), and ships a polished TUI. It supports parallel sessions, LSP-aware context, and can even authenticate with existing GitHub Copilot or ChatGPT subscriptions in some configurations. For developers who live in the terminal and want maximum model freedom, it is currently the strongest pure open-source default."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Cline — the VS Code agent with approval gates"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline remains the most-installed open-source agent inside VS Code. Apache-2.0 licensed, it emphasizes human-in-the-loop control: the agent plans, proposes edits and terminal commands, and waits for explicit approval. It supports a wide range of providers, strong MCP integration, and can run fully air-gapped when pointed at local models. If your requirement is “Cursor-like agency without leaving VS Code and without a subscription,” Cline is the practical answer for most teams."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Aider — git-native pair programming"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aider is the veteran. It lives in the terminal, treats every change as a clean git commit, and is ruthlessly token-efficient. Apache-2.0, works with any OpenAI-compatible endpoint or Ollama, and produces the cleanest history of any open agent. It is less “autonomous multi-hour agent” and more “surgical pair programmer that never leaves a mess.” For staff engineers who value reviewable diffs over flashy autonomy, Aider remains unmatched."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "OpenHands — autonomous, self-hostable platform"
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenHands (formerly OpenDevin) is the most ambitious open platform. MIT-licensed, it runs agents in sandboxed environments with browser, terminal and editor tools. It is designed for longer autonomous runs and can be self-hosted, including air-gapped patterns. Teams that want ticket-to-PR style delegation without sending code to a third-party cloud increasingly evaluate OpenHands as the open alternative to fully managed agents."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Continue — IDE chat + autocomplete without lock-in"
+        },
+        {
+          "type": "paragraph",
+          "text": "Continue.dev occupies the “open Copilot” niche. VS Code and JetBrains extensions, full BYOK, excellent local-model support via Ollama, and configurable context providers. It is less of a full autonomous agent and more of a high-quality, fully controllable assistant layer. Many developers run Continue for daily completions and chat while using Cline or OpenCode for heavier agentic tasks."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260912-155315-d39d364cf0eeceed.webp",
+          "alt": "Comparison matrix of OpenCode, Cline, Aider, OpenHands and Continue across interface, autonomy, license and local-model support",
+          "caption": "Figure 2: Quick decision matrix — pick by where you work (terminal vs IDE) and how much autonomy you actually want to grant.",
+          "altText": "Comparison matrix of OpenCode, Cline, Aider, OpenHands and Continue across interface, autonomy, license and local-model support"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "3. What You Still Give Up"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Honesty matters. The best open agents are excellent; they are not perfect substitutes for every paid workflow."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**Integrated codebase indexing and “@codebase” magic** — paid tools still tend to feel smoother on very large repositories out of the box.",
+            "**Highest-autonomy multi-hour runs** — OpenHands is closing the gap, but managed agents with heavy infrastructure still lead on the longest unattended tasks.",
+            "**Polish and onboarding** — Cursor’s first-hour experience remains hard to beat for non-technical stakeholders or very junior developers.",
+            "**Official enterprise SLAs and support** — open projects offer community and commercial support options, but the contractual surface is different."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "For the majority of individual developers and small-to-medium teams doing daily feature work, refactors, and test generation, the open stack is now sufficient. The residual gaps are real but no longer decisive for most budgets."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "4. The Local-Model Multiplier"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The real cost killer is combining an open agent with local or open-weight models. Ollama, LM Studio, and similar runtimes let you point Cline, OpenCode, Aider or Continue at a strong 32B–70B model running on your own hardware. For many routine tasks the quality is “good enough,” latency is lower, and the marginal cost is electricity instead of API tokens."
+        },
+        {
+          "type": "paragraph",
+          "text": "A practical pattern that has emerged in 2026: use a frontier cloud model (Claude, GPT, Gemini) for the hard architectural or ambiguous tasks, and route the bulk of autocomplete, simple edits, and test writing to a local model. Open agents make that routing trivial because the model is just a configuration value."
+        },
+        {
+          "type": "cta",
+          "title": "How to Fix Ollama’s Most Common Errors (And Why They Happen)",
+          "text": "Local models only save money if they stay running. This guide covers the nine most common Ollama failure modes and the exact fixes so your open agent always has a reliable backend.",
+          "buttonText": "Read the Ollama Troubleshooting Guide",
+          "buttonUrl": "/en/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "5. Practical Migration Paths"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "You do not have to rip everything out on day one. Three low-risk paths work well."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**VS Code users**: Install Cline (or Continue for lighter assistance). Keep your existing paid tool for a week while you mirror the same tasks. Most people discover they reach for the open agent first within a few days.",
+            "**Terminal-native developers**: Start with OpenCode or Aider. Point them at the same API keys you already pay for. The git-native workflow of Aider in particular produces cleaner history than most paid agents.",
+            "**Team / autonomous workloads**: Evaluate OpenHands self-hosted. Run it against a mixture of cloud and local models and measure ticket-to-PR success rate against your current paid agent."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "In all cases keep the paid subscription active until the open stack has covered your real daily distribution of tasks for at least two full weeks. The goal is measured replacement, not ideology."
+        },
+        {
+          "type": "cta",
+          "title": "How to Choose the Right AI Model for Cline (And Stop Wasting Money on the Wrong One)",
+          "text": "Once you move to an open agent the model becomes the main cost lever. This guide maps model choice to task type so you stop overpaying for frontier tokens on work a smaller model handles well.",
+          "buttonText": "Read the Cline Model Selection Guide",
+          "buttonUrl": "/en/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "6. External Resources Worth Bookmarking"
+        },
+        {
+          "type": "paragraph",
+          "text": "The following official and community resources are the fastest way to go from this article to a working setup."
+        },
+        {
+          "type": "cta",
+          "title": "OpenCode on GitHub",
+          "text": "The leading open-source terminal coding agent. MIT license, 75+ providers, polished TUI, active development.",
+          "buttonText": "Visit OpenCode Repository",
+          "buttonUrl": "https://github.com/anomalyco/opencode"
+        },
+        {
+          "type": "cta",
+          "title": "Cline — VS Code Agent",
+          "text": "Apache-2.0 VS Code extension with strong approval gates, MCP support, and full local-model compatibility.",
+          "buttonText": "Cline on GitHub / Marketplace",
+          "buttonUrl": "https://github.com/cline/cline"
+        },
+        {
+          "type": "cta",
+          "title": "Aider — Git-Native Pair Programming",
+          "text": "The classic terminal agent that turns every AI edit into a clean, reviewable git commit.",
+          "buttonText": "Aider Documentation & Repo",
+          "buttonUrl": "https://aider.chat"
+        },
+        {
+          "type": "cta",
+          "title": "OpenHands — Autonomous Open Platform",
+          "text": "Self-hostable agent platform for longer autonomous runs and sandboxed execution.",
+          "buttonText": "OpenHands Project",
+          "buttonUrl": "https://github.com/All-Hands-AI/OpenHands"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "7. When You Should Still Pay"
+        },
+        {
+          "type": "paragraph",
+          "text": "There are legitimate reasons to keep a paid agent. Large enterprises that need contractual SLAs, teams whose primary value is the absolute highest autonomy on ambiguous multi-hour tasks, and organizations that simply value the polished all-in-one experience more than the marginal cost are all rational customers. The point of this post is not that paid tools are bad. It is that the open alternatives have crossed the threshold where “we have to pay because nothing else works” is no longer true for the majority of developers."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "8. A Realistic 2026 Stack"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Many productive developers now run a hybrid:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Cline or Continue inside VS Code for daily agentic and chat work",
+            "OpenCode or Aider in the terminal for git-native or headless tasks",
+            "A strong local model (via Ollama) for the majority of routine edits and completions",
+            "A frontier API key used sparingly for the hard 10–20 % of tasks that actually need it"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "That combination usually costs far less than a full paid-agent seat while preserving (and often increasing) control over models, data, and workflow. It is also resilient to any single vendor changing pricing, terms, or model access — a lesson reinforced by recent industry events."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260912-155326-f1ca6fee86929939.webp",
+          "alt": "Recommended 2026 hybrid stack: open agents + local models for bulk work + selective frontier API usage",
+          "caption": "Figure 3: A practical hybrid that keeps costs low and optionality high.",
+          "altText": "Recommended 2026 hybrid stack: open agents + local models for bulk work + selective frontier API usage"
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+          "text": "If you are still deciding between a tightly integrated paid agent and the leading open VS Code option, this detailed comparison walks through real workflows, cost, and lock-in risk.",
+          "buttonText": "Read the Claude Code vs Cline Comparison",
+          "buttonUrl": "/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "9. Bottom Line"
+        },
+        {
+          "type": "paragraph",
+          "text": "In 2026 you no longer need to pay a monthly subscription to have a capable AI coding agent. OpenCode, Cline, Aider, OpenHands and Continue cover the major interfaces and autonomy levels with permissive licenses, full model choice, and solid local-model support. The remaining gaps are real but narrow. Measure them against your actual workload, keep a paid tool as a temporary bridge if needed, and move the bulk of your daily agent traffic onto software you can inspect, modify, and run wherever you want."
+        },
+        {
+          "type": "paragraph",
+          "text": "The era of “the only agents that work are the ones that bill you every month” is over. The tools that replaced it are already in your terminal and your extension marketplace."
+        },
+        {
+          "type": "cta",
+          "title": "Awesome Coding Agents (Live Ranking)",
+          "text": "Community-maintained, daily-updated ranking of AI coding agents by GitHub stars — useful for spotting new movers.",
+          "buttonText": "View Live Ranking",
+          "buttonUrl": "https://github.com/tiennm99/awesome-coding-agents"
+        }
+      ],
+      "faq": [
+        {
+          "question": "What is the strongest open-source alternative to Cursor in 2026?",
+          "answer": "For VS Code users, Cline is the closest experience (approval-gated agent, multi-file edits, MCP). For terminal-first developers, OpenCode currently leads in stars, polish and provider flexibility. Neither is a perfect 1:1 clone, but both cover the majority of daily agentic work without a subscription."
+        },
+        {
+          "question": "Do these open agents support local models like Ollama?",
+          "answer": "Yes. OpenCode, Cline, Aider, OpenHands and Continue all support Ollama, LM Studio, or any OpenAI-compatible endpoint. This is one of their biggest advantages over many paid tools."
+        },
+        {
+          "question": "Is Aider still worth using?",
+          "answer": "Yes, especially if you value clean git history. Aider remains the most surgical, token-efficient, git-native open agent. It is less autonomous than Cline or OpenHands but produces the most reviewable diffs."
+        },
+        {
+          "question": "Can I completely replace Claude Code or Cursor with open tools?",
+          "answer": "For many developers and teams, yes for daily work. The highest-autonomy, longest-running, or most polished enterprise workflows may still favor paid options. The practical approach is to measure your real task distribution for two weeks rather than assuming a total replacement is required."
+        },
+        {
+          "question": "What license do the main open agents use?",
+          "answer": "OpenCode and OpenHands are MIT. Cline, Aider and Continue are Apache 2.0. All are permissive and suitable for both individual and commercial use."
+        },
+        {
+          "question": "How much can I actually save?",
+          "answer": "You eliminate the agent subscription ($20–200+/seat/month). You still pay for model tokens if you use cloud APIs, but you can route a large fraction of work to local models and reserve frontier APIs for the hard subset of tasks. Many developers report 50–80 % reductions in total AI coding spend after the switch."
+        },
+        {
+          "question": "Is OpenHands ready for production self-hosting?",
+          "answer": "It is one of the most mature open autonomous platforms and is used in self-hosted and air-gapped settings. As with any complex system, you should evaluate security, resource requirements and success rate on your own ticket types before full commitment."
+        },
+        {
+          "question": "Where should I start if I only have an hour?",
+          "answer": "Install Cline in VS Code (or OpenCode in the terminal), point it at an API key you already have or at a local Ollama model, and run the same three tasks you would normally give your paid agent. The difference in control and cost will be obvious within that session."
+        }
+      ],
+      "seo": {
+        "title": "Stop Paying for AI Coding Agents: Open-Source Alternatives That Work in 2026",
+        "metaDescription": "OpenCode, Cline, Aider, OpenHands and Continue now deliver production-grade agentic coding without subscriptions. Full comparison, local-model strategy, migration paths and external resources for 2026.",
+        "canonical": "https://sinisteroid.ir/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026",
+        "openGraph": {
+          "title": "Stop Paying for AI Coding Agents: The Open-Source Alternatives That Actually Work in 2026",
+          "description": "Practical guide to the open-source coding agents that replaced paid subscriptions for many developers in 2026 — with real trade-offs and migration steps.",
+          "image": "/api/uploads/20260912-open-source-ai-coding-agents-og.webp"
+        },
+        "twitter": {
+          "title": "Stop Paying for AI Coding Agents — 2026 Open-Source Guide",
+          "description": "OpenCode, Cline, Aider, OpenHands, Continue. Zero subscription, full model choice, local inference. What actually works and how to switch.",
+          "image": "/api/uploads/20260912-open-source-ai-coding-agents-twitter.webp"
+        },
+        "keywords": "open source AI coding agent, Cursor alternative 2026, Cline, OpenCode, Aider, OpenHands, Continue.dev, free AI coding agent, local LLM coding, Ollama agent, stop paying Cursor",
+        "focusKeyword": "open source AI coding agents 2026"
+      }
+    },
+    "fa": {
+      "title": "دیگر برای ایجنت‌های کدنویسی هوش مصنوعی پول ندهید: جایگزین‌های متن‌باز که واقعاً در ۲۰۲۶ کار می‌کنند",
+      "excerpt": "Cursor، Claude Code و ابزارهای مشابه عالی‌اند — و وقتی مقیاس می‌گیرید گران. در ۲۰۲۶ مجموعه‌ای از ایجنت‌های متن‌باز بالغ (OpenCode، Cline، Aider، OpenHands، Continue) گردش‌کارهای ایجنتی قابل‌مقایسه با انتخاب کامل مدل، استنتاج محلی و بدون قفل اشتراک ارائه می‌دهند. اینجا نقشهٔ عملی آنچه واقعاً کار می‌کند، آنچه هنوز عقب است و نحوهٔ جابه‌جایی بدون از دست دادن بهره‌وری آمده است.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "دیگر برای ایجنت‌های کدنویسی هوش مصنوعی پول ندهید: جایگزین‌های متن‌باز که واقعاً در ۲۰۲۶ کار می‌کنند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "ایجنت‌های پولی کدنویسی هوش مصنوعی یک مشکل واقعی را حل کردند. Cursor، Claude Code، Windsurf و بقیه بازآرایی چندفایلی، تولید تست و جریان تیکت-تا-PR را به چیزی تبدیل کردند که یک توسعه‌دهنده می‌تواند هدایت کند. با این حال صورتحساب سریع انباشته می‌شود: ۲۰ تا ۲۰۰ دلار به ازای هر صندلی در ماه، اضافه مصرف و آگاهی آرام از این‌که کدبیس شما از سرورهای شخص دیگری عبور می‌کند. در ۲۰۲۶ جایگزین‌های متن‌باز دیگر پروژه‌های علمی نیستند. چندین مورد از آن‌ها در سطح تولید هستند، ارائه‌دهنده-آگاه و عمداً طوری طراحی شده‌اند که بتوانید بدون بازنویسی گردش‌کار آن‌ها را به Claude، GPT، Gemini، Grok یا مدل محلی Ollama اشاره دهید."
+        },
+        {
+          "type": "paragraph",
+          "text": "این مطلب یک راهنمای میدانی است، نه مانیفست. ایجنت‌هایی که در حال حاضر ارزش واقعی تحویل می‌دهند، مبادله‌هایی که واقعاً احساس می‌کنید، نحوهٔ ترکیب آن‌ها با مدل‌های محلی برای هزینه و حریم خصوصی، و یک مسیر مهاجرت مشخص اگر در حال ترک اشتراک پولی هستید را پوشش می‌دهد. همهٔ توصیه‌ها بر اساس فعالیت عمومی GitHub، مجوزهای مستند و گزارش‌های عملی تا اواسط سپتامبر ۲۰۲۶ است."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "حدود ۲۰۷ هزار",
+              "label": "ستاره‌های GitHub برای OpenCode (anomalyco/opencode)، پیشروترین ایجنت کدنویسی متن‌باز ترمینال"
+            },
+            {
+              "value": "Apache 2.0 / MIT",
+              "label": "مجوزهای پراستفاده‌ترین ایجنت‌های باز (Cline، Aider، OpenHands، OpenCode)"
+            },
+            {
+              "value": "۰ دلار",
+              "label": "هزینهٔ اشتراک خود ایجنت‌ها — فقط برای توکن‌های مدلی که انتخاب می‌کنید پول می‌دهید"
+            },
+            {
+              "value": "۷۵+",
+              "label": "ارائه‌دهندگان LLM پشتیبانی‌شده توسط انعطاف‌پذیرترین ایجنت‌های باز"
+            },
+            {
+              "value": "محلی + ابر",
+              "label": "هر ایجنت باز عمده می‌تواند Ollama، LM Studio یا هر نقطهٔ پایانی سازگار با OpenAI را هدف قرار دهد"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260912-155336-cdcc05a6a08a6313.webp",
+          "alt": "نمودار چشم‌انداز ۲۰۲۶ ایجنت‌های کدنویسی متن‌باز: ترمینال (OpenCode، Aider)، IDE (Cline، Continue) و پلتفرم‌های خودمختار (OpenHands)",
+          "caption": "شکل ۱: چشم‌انداز ایجنت کدنویسی متن‌باز ۲۰۲۶ — بر اساس رابط و سطح خودمختاری انتخاب کنید، نه ادعاهای بازاریابی.",
+          "altText": "نمودار چشم‌انداز ۲۰۲۶ ایجنت‌های کدنویسی متن‌باز: ترمینال (OpenCode، Aider)، IDE (Cline، Continue) و پلتفرم‌های خودمختار (OpenHands)"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱. چرا ریاضیات در ۲۰۲۶ تغییر کرد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "سه تغییر پیش‌فرض «فقط برای Cursor پول بده» را ضعیف‌تر کرد. اول، مدل‌های مرزی از طریق APIهای استاندارد با قیمت توکن شفاف در دسترس شدند؛ ایجنت اختصاصی دیگر دسترسی منحصر به مدل را مالک نبود. دوم، ایجنت‌های باز حلقه‌های فراخوانی ابزار، دروازه‌های تأیید و ویرایش چندفایلی خود را تا جایی بالغ کردند که شکاف UX برای بیشتر کارهای روزانه باریک شد. سوم، مدل‌های محلی و وزن‌باز به اندازهٔ کافی بهبود یافتند که یک مدل کلاس ۳۲B–۷۰B خوب تنظیم‌شده روی یک GPU سطح بالا بتواند بخش بزرگی از وظایف روتین ایجنت را بدون هیچ هزینهٔ ابری انجام دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "مزایای باقی‌مانده بهترین ابزارهای پولی صیقل، ایندکس‌گذاری یکپارچه و گاهی سقف خودمختاری بالاتر است. آن مزایا هنوز برای برخی تیم‌ها مهم است. دیگر به اندازهٔ کافی مهم نیستند که اشتراک دائمی برای هر توسعه‌دهنده‌ای که فقط به ایجنتی نیاز دارد که بتواند ویرایش، تست و commit کند توجیه کند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۲. ایجنت‌هایی که واقعاً همین حالا کار می‌کنند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هر مخزن ستاره‌دار آمادهٔ تولید نیست. پنج مورد زیر به‌طور مداوم در رتبه‌بندی‌های مستقل و گزارش‌های عملی ۲۰۲۶ در بالا ظاهر می‌شوند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "OpenCode — ایجنت ترمینال باز پیش‌فرض"
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenCode (anomalyco/opencode) به ستاره‌دارترین ایجنت کدنویسی متن‌باز تبدیل شده با بیش از ۲۰۰ هزار ستاره GitHub. مجوز MIT، ارائه‌دهنده-آگاه (۷۵+ ارائه‌دهنده از جمله مدل‌های محلی) و یک TUI صیقل‌خورده دارد. از نشست‌های موازی، زمینهٔ آگاه از LSP پشتیبانی می‌کند و در برخی پیکربندی‌ها حتی می‌تواند با اشتراک‌های موجود GitHub Copilot یا ChatGPT احراز هویت کند. برای توسعه‌دهندگانی که در ترمینال زندگی می‌کنند و حداکثر آزادی مدل می‌خواهند، در حال حاضر قوی‌ترین پیش‌فرض خالص متن‌باز است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Cline — ایجنت VS Code با دروازه‌های تأیید"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline همچنان نصب‌شده‌ترین ایجنت متن‌باز داخل VS Code است. مجوز Apache-2.0، بر کنترل انسان-در-حلقه تأکید می‌کند: ایجنت برنامه‌ریزی می‌کند، ویرایش‌ها و دستورات ترمینال را پیشنهاد می‌دهد و منتظر تأیید صریح می‌ماند. از طیف وسیعی از ارائه‌دهندگان، یکپارچه‌سازی قوی MCP پشتیبانی می‌کند و وقتی به مدل‌های محلی اشاره شود می‌تواند کاملاً هوا-گسسته اجرا شود. اگر نیاز شما «عاملیت شبیه Cursor بدون ترک VS Code و بدون اشتراک» است، Cline پاسخ عملی برای بیشتر تیم‌هاست."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Aider — برنامه‌نویسی جفتی بومی git"
+        },
+        {
+          "type": "paragraph",
+          "text": "Aider کهنه‌کار است. در ترمینال زندگی می‌کند، هر تغییر را به عنوان یک commit تمیز git در نظر می‌گیرد و بی‌رحمانه از نظر توکن کارآمد است. Apache-2.0، با هر نقطهٔ پایانی سازگار با OpenAI یا Ollama کار می‌کند و تمیزترین تاریخچه را در میان هر ایجنت باز تولید می‌کند. کمتر «ایجنت خودمختار چندساعته» و بیشتر «برنامه‌نویس جفتی جراحی که هرگز آشفتگی به جا نمی‌گذارد» است. برای مهندسان ارشدی که diffهای قابل‌بررسی را بر خودمختاری پر زرق‌وبرق ترجیح می‌دهند، Aider همچنان بی‌رقیب است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "OpenHands — پلتفرم خودمختار و خودمیزبان"
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenHands (قبلاً OpenDevin) بلندپروازانه‌ترین پلتفرم باز است. مجوز MIT، ایجنت‌ها را در محیط‌های ایزوله‌شده با ابزارهای مرورگر، ترمینال و ادیتور اجرا می‌کند. برای اجراهای خودمختار طولانی‌تر طراحی شده و می‌تواند خودمیزبان شود، از جمله الگوهای هوا-گسسته. تیم‌هایی که می‌خواهند تفویض سبک تیکت-تا-PR بدون ارسال کد به ابر شخص ثالث داشته باشند به‌طور فزاینده OpenHands را به عنوان جایگزین باز برای ایجنت‌های کاملاً مدیریت‌شده ارزیابی می‌کنند."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Continue — چت و تکمیل خودکار IDE بدون قفل"
+        },
+        {
+          "type": "paragraph",
+          "text": "Continue.dev جایگاه «Copilot باز» را اشغال می‌کند. افزونه‌های VS Code و JetBrains، BYOK کامل، پشتیبانی عالی از مدل محلی از طریق Ollama و ارائه‌دهندگان زمینهٔ قابل‌پیکربندی. کمتر یک ایجنت کاملاً خودمختار و بیشتر یک لایهٔ دستیار باکیفیت و کاملاً قابل‌کنترل است. بسیاری از توسعه‌دهندگان Continue را برای تکمیل و چت روزانه اجرا می‌کنند در حالی که از Cline یا OpenCode برای وظایف ایجنتی سنگین‌تر استفاده می‌کنند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260912-155413-f6365251b9d0e23f.webp",
+          "alt": "ماتریس مقایسه OpenCode، Cline، Aider، OpenHands و Continue در رابط، خودمختاری، مجوز و پشتیبانی مدل محلی",
+          "caption": "شکل ۲: ماتریس تصمیم سریع — بر اساس جایی که کار می‌کنید (ترمینال در برابر IDE) و چقدر خودمختاری واقعاً می‌خواهید اعطا کنید انتخاب کنید.",
+          "altText": "ماتریس مقایسه OpenCode، Cline، Aider، OpenHands و Continue در رابط، خودمختاری، مجوز و پشتیبانی مدل محلی"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۳. آنچه هنوز از دست می‌دهید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "صداقت مهم است. بهترین ایجنت‌های باز عالی هستند؛ جایگزین کامل برای هر گردش‌کار پولی نیستند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**ایندکس‌گذاری یکپارچه کدبیس و جادوی «@codebase»** — ابزارهای پولی هنوز روی مخازن بسیار بزرگ احساس نرم‌تری دارند.",
+            "**بالاترین خودمختاری اجراهای چندساعته** — OpenHands شکاف را می‌بندد، اما ایجنت‌های مدیریت‌شده با زیرساخت سنگین هنوز در طولانی‌ترین وظایف بدون نظارت پیشتازند.",
+            "**صیقل و آنبوردینگ** — تجربهٔ ساعت اول Cursor برای ذی‌نفعان غیرفنی یا توسعه‌دهندگان بسیار تازه‌کار همچنان سخت شکست‌نی است.",
+            "**SLA و پشتیبانی رسمی سازمانی** — پروژه‌های باز گزینه‌های پشتیبانی جامعه و تجاری ارائه می‌دهند، اما سطح قراردادی متفاوت است."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "برای اکثریت توسعه‌دهندگان فردی و تیم‌های کوچک تا متوسط که کار ویژگی روزانه، بازآرایی و تولید تست انجام می‌دهند، پشتهٔ باز اکنون کافی است. شکاف‌های باقی‌مانده واقعی اما دیگر برای بیشتر بودجه‌ها تعیین‌کننده نیستند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۴. ضریب مدل محلی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "قاتل واقعی هزینه ترکیب یک ایجنت باز با مدل‌های محلی یا وزن‌باز است. Ollama، LM Studio و زمان‌اجراهای مشابه به شما اجازه می‌دهند Cline، OpenCode، Aider یا Continue را به یک مدل قوی ۳۲B–۷۰B که روی سخت‌افزار خودتان اجرا می‌شود اشاره دهید. برای بسیاری از وظایف روتین کیفیت «به اندازهٔ کافی خوب» است، تأخیر کمتر است و هزینهٔ حاشیه‌ای برق است به جای توکن API."
+        },
+        {
+          "type": "paragraph",
+          "text": "یک الگوی عملی که در ۲۰۲۶ ظهور کرده: از یک مدل ابری مرزی (Claude، GPT، Gemini) برای وظایف سخت معماری یا مبهم استفاده کنید و بخش عمدهٔ تکمیل خودکار، ویرایش‌های ساده و نوشتن تست را به یک مدل محلی هدایت کنید. ایجنت‌های باز این مسیریابی را بی‌اهمیت می‌کنند چون مدل فقط یک مقدار پیکربندی است."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)",
+          "text": "مدل‌های محلی فقط اگر در حال اجرا بمانند پول پس‌انداز می‌کنند. این راهنما نه حالت شکست رایج Ollama و رفع دقیق آن‌ها را پوشش می‌دهد تا ایجنت باز شما همیشه یک بک‌اند قابل‌اطمینان داشته باشد.",
+          "buttonText": "مطالعهٔ راهنمای عیب‌یابی اولاما",
+          "buttonUrl": "/fa/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۵. مسیرهای عملی مهاجرت"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "نیازی نیست همه چیز را در روز اول پاره کنید. سه مسیر کم‌ریسک خوب کار می‌کنند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**کاربران VS Code**: Cline (یا Continue برای کمک سبک‌تر) را نصب کنید. ابزار پولی موجود را برای یک هفته نگه دارید در حالی که همان وظایف را آینه می‌کنید. بیشتر افراد ظرف چند روز اول به ایجنت باز می‌رسند.",
+            "**توسعه‌دهندگان بومی ترمینال**: با OpenCode یا Aider شروع کنید. آن‌ها را به همان کلیدهای API که از قبل می‌پردازید اشاره دهید. گردش‌کار بومی git آیدر به‌ویژه تاریخچهٔ تمیزتری نسبت به بیشتر ایجنت‌های پولی تولید می‌کند.",
+            "**بارهای کاری تیمی / خودمختار**: OpenHands خودمیزبان را ارزیابی کنید. آن را در برابر مخلوطی از مدل‌های ابری و محلی اجرا کنید و نرخ موفقیت تیکت-تا-PR را در برابر ایجنت پولی فعلی اندازه‌گیری کنید."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "در همهٔ موارد اشتراک پولی را فعال نگه دارید تا پشتهٔ باز توزیع واقعی وظایف روزانه شما را برای حداقل دو هفته کامل پوشش دهد. هدف جایگزینی اندازه‌گیری‌شده است، نه ایدئولوژی."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه مدل هوش مصنوعی درست را برای Cline انتخاب کنیم (و دیگر پول خود را هدر ندهیم)",
+          "text": "وقتی به یک ایجنت باز منتقل می‌شوید مدل به اهرم اصلی هزینه تبدیل می‌شود. این راهنما انتخاب مدل را به نوع وظیفه نگاشت می‌کند تا دیگر برای توکن‌های مرزی روی کاری که مدل کوچک‌تر خوب انجام می‌دهد زیاد نپردازید.",
+          "buttonText": "مطالعهٔ راهنمای انتخاب مدل Cline",
+          "buttonUrl": "/fa/blog/how-to-choose-the-right-ai-model-for-cline-and-stop-wasting-money/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۶. منابع خارجی که ارزش نشانه‌گذاری دارند"
+        },
+        {
+          "type": "paragraph",
+          "text": "منابع رسمی و جامعهٔ زیر سریع‌ترین راه از این مقاله به یک راه‌اندازی کاری هستند."
+        },
+        {
+          "type": "cta",
+          "title": "OpenCode در GitHub",
+          "text": "پیشروترین ایجنت کدنویسی ترمینال متن‌باز. مجوز MIT، ۷۵+ ارائه‌دهنده، TUI صیقل‌خورده، توسعهٔ فعال.",
+          "buttonText": "مشاهدهٔ مخزن OpenCode",
+          "buttonUrl": "https://github.com/anomalyco/opencode"
+        },
+        {
+          "type": "cta",
+          "title": "Cline — ایجنت VS Code",
+          "text": "افزونهٔ VS Code با مجوز Apache-2.0، دروازه‌های تأیید قوی، پشتیبانی MCP و سازگاری کامل با مدل محلی.",
+          "buttonText": "Cline در GitHub / Marketplace",
+          "buttonUrl": "https://github.com/cline/cline"
+        },
+        {
+          "type": "cta",
+          "title": "Aider — برنامه‌نویسی جفتی بومی Git",
+          "text": "ایجنت کلاسیک ترمینال که هر ویرایش هوش مصنوعی را به یک commit تمیز و قابل‌بررسی git تبدیل می‌کند.",
+          "buttonText": "مستندات و مخزن Aider",
+          "buttonUrl": "https://aider.chat"
+        },
+        {
+          "type": "cta",
+          "title": "OpenHands — پلتفرم باز خودمختار",
+          "text": "پلتفرم ایجنت خودمیزبان برای اجراهای خودمختار طولانی‌تر و اجرای ایزوله‌شده.",
+          "buttonText": "پروژه OpenHands",
+          "buttonUrl": "https://github.com/All-Hands-AI/OpenHands"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۷. چه زمانی هنوز باید پول بدهید"
+        },
+        {
+          "type": "paragraph",
+          "text": "دلایل مشروع برای نگه داشتن یک ایجنت پولی وجود دارد. شرکت‌های بزرگی که به SLA قراردادی نیاز دارند، تیم‌هایی که ارزش اصلی‌شان بالاترین خودمختاری روی وظایف مبهم چندساعته است، و سازمان‌هایی که صرفاً تجربهٔ یکپارچهٔ صیقل‌خورده را بیش از هزینهٔ حاشیه‌ای ارزش می‌گذارند همگی مشتریان منطقی هستند. نقطهٔ این مطلب این نیست که ابزارهای پولی بد هستند. این است که جایگزین‌های باز از آستانه‌ای عبور کرده‌اند که «باید پول بدهیم چون هیچ چیز دیگری کار نمی‌کند» دیگر برای اکثریت توسعه‌دهندگان درست نیست."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۸. یک پشتهٔ واقعی ۲۰۲۶"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "بسیاری از توسعه‌دهندگان مولد اکنون یک هیبرید اجرا می‌کنند:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Cline یا Continue داخل VS Code برای کار ایجنتی و چت روزانه",
+            "OpenCode یا Aider در ترمینال برای وظایف بومی git یا بدون‌سر",
+            "یک مدل محلی قوی (از طریق Ollama) برای اکثریت ویرایش‌ها و تکمیل‌های روتین",
+            "یک کلید API مرزی که به sparingly برای ۱۰–۲۰٪ سخت وظایف که واقعاً به آن نیاز دارند استفاده می‌شود"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "آن ترکیب معمولاً بسیار کمتر از یک صندلی کامل ایجنت پولی هزینه دارد در حالی که کنترل روی مدل‌ها، داده و گردش‌کار را حفظ (و اغلب افزایش) می‌دهد. همچنین در برابر تغییر قیمت، شرایط یا دسترسی مدل توسط هر فروشندهٔ واحد تاب‌آور است — درسی که رویدادهای اخیر صنعت تقویت کرده‌اند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260912-155424-e6a8e5f4a3045816.webp",
+          "alt": "پشتهٔ هیبرید توصیه‌شده ۲۰۲۶: ایجنت‌های باز + مدل‌های محلی برای کار عمده + استفادهٔ انتخابی از API مرزی",
+          "caption": "شکل ۳: یک هیبرید عملی که هزینه‌ها را پایین و اختیار را بالا نگه می‌دارد.",
+          "altText": "پشتهٔ هیبرید توصیه‌شده ۲۰۲۶: ایجنت‌های باز + مدل‌های محلی برای کار عمده + استفادهٔ انتخابی از API مرزی"
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code در برابر Cline: کدام ایجنت کدنویسی هوش مصنوعی را در ۲۰۲۶ انتخاب کنیم؟",
+          "text": "اگر هنوز بین یک ایجنت پولی یکپارچه و گزینهٔ پیشرو باز VS Code تصمیم می‌گیرید، این مقایسهٔ دقیق گردش‌کارهای واقعی، هزینه و ریسک قفل‌شدگی را بررسی می‌کند.",
+          "buttonText": "مطالعهٔ مقایسه Claude Code و Cline",
+          "buttonUrl": "/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۹. نتیجه"
+        },
+        {
+          "type": "paragraph",
+          "text": "در ۲۰۲۶ دیگر نیازی به پرداخت اشتراک ماهانه برای داشتن یک ایجنت کدنویسی هوش مصنوعی توانا ندارید. OpenCode، Cline، Aider، OpenHands و Continue رابط‌ها و سطوح خودمختاری عمده را با مجوزهای مجاز، انتخاب کامل مدل و پشتیبانی محکم از مدل محلی پوشش می‌دهند. شکاف‌های باقی‌مانده واقعی اما باریک هستند. آن‌ها را در برابر بار کاری واقعی خود اندازه‌گیری کنید، در صورت نیاز یک ابزار پولی را به عنوان پل موقت نگه دارید، و بخش عمدهٔ ترافیک روزانهٔ ایجنت خود را به نرم‌افزاری منتقل کنید که می‌توانید بازرسی، اصلاح و هرجا که می‌خواهید اجرا کنید."
+        },
+        {
+          "type": "paragraph",
+          "text": "دوران «تنها ایجنت‌هایی که کار می‌کنند آن‌هایی هستند که هر ماه از شما صورتحساب می‌گیرند» به پایان رسیده است. ابزارهایی که جایگزین آن شدند از قبل در ترمینال و بازار افزونه‌های شما هستند."
+        },
+        {
+          "type": "cta",
+          "title": "Awesome Coding Agents (رتبه‌بندی زنده)",
+          "text": "رتبه‌بندی نگهداری‌شده توسط جامعه و به‌روز روزانه ایجنت‌های کدنویسی هوش مصنوعی بر اساس ستاره‌های GitHub — برای شناسایی حرکت‌های جدید مفید است.",
+          "buttonText": "مشاهدهٔ رتبه‌بندی زنده",
+          "buttonUrl": "https://github.com/tiennm99/awesome-coding-agents"
+        }
+      ],
+      "faq": [
+        {
+          "question": "قوی‌ترین جایگزین متن‌باز Cursor در ۲۰۲۶ چیست؟",
+          "answer": "برای کاربران VS Code، Cline نزدیک‌ترین تجربه است (ایجنت با دروازهٔ تأیید، ویرایش چندفایلی، MCP). برای توسعه‌دهندگان ترمینال‌اول، OpenCode در حال حاضر در ستاره، صیقل و انعطاف ارائه‌دهنده پیشتاز است. هیچ‌کدام کلون ۱:۱ کامل نیستند، اما هر دو اکثریت کار ایجنتی روزانه را بدون اشتراک پوشش می‌دهند."
+        },
+        {
+          "question": "آیا این ایجنت‌های باز از مدل‌های محلی مثل Ollama پشتیبانی می‌کنند؟",
+          "answer": "بله. OpenCode، Cline، Aider، OpenHands و Continue همه از Ollama، LM Studio یا هر نقطهٔ پایانی سازگار با OpenAI پشتیبانی می‌کنند. این یکی از بزرگ‌ترین مزایای آن‌ها نسبت به بسیاری از ابزارهای پولی است."
+        },
+        {
+          "question": "آیا Aider هنوز ارزش استفاده دارد؟",
+          "answer": "بله، به‌ویژه اگر تاریخچهٔ تمیز git را ارزش می‌گذارید. Aider همچنان جراحی‌ترین، کارآمدترین از نظر توکن و بومی git‌ترین ایجنت باز است. کمتر از Cline یا OpenHands خودمختار است اما قابل‌بررسی‌ترین diffها را تولید می‌کند."
+        },
+        {
+          "question": "آیا می‌توانم کاملاً Claude Code یا Cursor را با ابزارهای باز جایگزین کنم؟",
+          "answer": "برای بسیاری از توسعه‌دهندگان و تیم‌ها، بله برای کار روزانه. گردش‌کارهای با بالاترین خودمختاری، طولانی‌ترین اجرا یا صیقل‌خورده‌ترین سازمانی ممکن است هنوز گزینه‌های پولی را ترجیح دهند. رویکرد عملی اندازه‌گیری توزیع واقعی وظایف برای دو هفته است نه فرض نیاز به جایگزینی کامل."
+        },
+        {
+          "question": "مجوز اصلی ایجنت‌های باز چیست؟",
+          "answer": "OpenCode و OpenHands مجوز MIT دارند. Cline، Aider و Continue Apache 2.0 هستند. همه مجاز و مناسب برای استفادهٔ فردی و تجاری هستند."
+        },
+        {
+          "question": "چقدر واقعاً می‌توانم پس‌انداز کنم؟",
+          "answer": "اشتراک ایجنت (۲۰–۲۰۰+ دلار/صندلی/ماه) را حذف می‌کنید. اگر از APIهای ابری استفاده کنید همچنان برای توکن‌های مدل پول می‌دهید، اما می‌توانید بخش بزرگی از کار را به مدل‌های محلی هدایت کنید و APIهای مرزی را برای زیرمجموعهٔ سخت وظایف نگه دارید. بسیاری از توسعه‌دهندگان پس از جابه‌جایی کاهش ۵۰–۸۰٪ در کل هزینهٔ کدنویسی هوش مصنوعی گزارش می‌دهند."
+        },
+        {
+          "question": "آیا OpenHands برای خودمیزبانی تولید آماده است؟",
+          "answer": "یکی از بالغ‌ترین پلتفرم‌های خودمختار باز است و در تنظیمات خودمیزبان و هوا-گسسته استفاده می‌شود. مانند هر سیستم پیچیده، باید امنیت، نیازهای منابع و نرخ موفقیت روی انواع تیکت خود را قبل از تعهد کامل ارزیابی کنید."
+        },
+        {
+          "question": "اگر فقط یک ساعت وقت دارم از کجا شروع کنم؟",
+          "answer": "Cline را در VS Code (یا OpenCode در ترمینال) نصب کنید، آن را به یک کلید API که از قبل دارید یا به یک مدل محلی Ollama اشاره دهید، و همان سه وظیفه‌ای را که معمولاً به ایجنت پولی می‌دهید اجرا کنید. تفاوت در کنترل و هزینه در همان نشست آشکار خواهد شد."
+        }
+      ],
+      "seo": {
+        "title": "دیگر برای ایجنت‌های کدنویسی هوش مصنوعی پول ندهید: جایگزین‌های متن‌باز ۲۰۲۶",
+        "metaDescription": "OpenCode، Cline، Aider، OpenHands و Continue اکنون کدنویسی ایجنتی در سطح تولید بدون اشتراک ارائه می‌دهند. مقایسه کامل، استراتژی مدل محلی، مسیرهای مهاجرت و منابع خارجی برای ۲۰۲۶.",
+        "canonical": "https://sinisteroid.ir/fa/blog/stop-paying-for-ai-coding-agents-the-open-source-alternatives-that-actually-work-in-2026",
+        "openGraph": {
+          "title": "دیگر برای ایجنت‌های کدنویسی هوش مصنوعی پول ندهید: جایگزین‌های متن‌باز که واقعاً در ۲۰۲۶ کار می‌کنند",
+          "description": "راهنمای عملی ایجنت‌های کدنویسی متن‌باز که در ۲۰۲۶ جایگزین اشتراک‌های پولی برای بسیاری از توسعه‌دهندگان شدند — با مبادله‌های واقعی و گام‌های مهاجرت.",
+          "image": "/api/uploads/20260912-open-source-ai-coding-agents-og-fa.webp"
+        },
+        "twitter": {
+          "title": "دیگر برای ایجنت‌های کدنویسی پول ندهید — راهنمای متن‌باز ۲۰۲۶",
+          "description": "OpenCode، Cline، Aider، OpenHands، Continue. اشتراک صفر، انتخاب کامل مدل، استنتاج محلی. آنچه واقعاً کار می‌کند و نحوهٔ جابه‌جایی.",
+          "image": "/api/uploads/20260912-open-source-ai-coding-agents-twitter-fa.webp"
+        },
+        "keywords": "ایجنت کدنویسی متن‌باز, جایگزین Cursor ۲۰۲۶, Cline, OpenCode, Aider, OpenHands, Continue.dev, ایجنت کدنویسی رایگان, کدنویسی LLM محلی, ایجنت Ollama, توقف پرداخت Cursor",
+        "focusKeyword": "ایجنت‌های کدنویسی متن‌باز ۲۰۲۶"
+      }
+    }
+  }
+}

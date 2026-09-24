@@ -1,7 +1,8 @@
 {
   "slug": "the-death-of-traditional-websites-designing-for-ai-agents",
+  "status": "published",
   "title": "The Death of Traditional Websites: Designing for AI Agents",
-  "date": "2026-06-22 00:00:00",
+  "date": "2026-06-22 11:58:44",
   "tags": [
     "web-architecture",
     "seo-geo",
@@ -211,9 +212,10 @@
         },
         {
           "type": "image",
-          "src": "/api/uploads/ai-agent-content-extraction-diagram.webp",
+          "src": "/api/uploads/1782129483-ai-agent-content-extraction-diagram.webp",
           "alt": "Diagram comparing how a human user and an AI agent interact with the same web page — the human navigates visually while the agent extracts structured text from server-rendered HTML",
-          "caption": "Figure 1: An AI agent extracts structured text from server-rendered HTML, ignoring visual hierarchy, animations, and any content requiring JavaScript execution or user interaction to appear."
+          "caption": "Figure 1: An AI agent extracts structured text from server-rendered HTML, ignoring visual hierarchy, animations, and any content requiring JavaScript execution or user interaction to appear.",
+          "altText": "Diagram comparing how a human user and an AI agent interact with the same web page — the human navigates visually while the agent extracts structured text from server-rendered HTML"
         },
         {
           "type": "heading",
@@ -409,7 +411,7 @@
           "title": "اولاما: موتور پشت هوش مصنوعی محلی",
           "text": "درک زیرساختی که ایجنت‌های هوش مصنوعی را راه‌اندازی می‌کند ضروری است. مقاله ما در مورد اولاما، موتور استنتاج پشت بسیاری از سیستم‌های هوش مصنوعی محلی را پوشش می‌دهد.",
           "buttonText": "خواندن درباره اولاما",
-          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
+          "buttonUrl": "/fa/blog/ollama-the-engine-behind-local-ai/"
         },
         {
           "type": "cta",
@@ -472,7 +474,7 @@
             "هر بخش را با یک پاسخ مستقیم شروع کنید — context دنبال می‌شود، پیشی نمی‌گیرد",
             "از سلسله‌مراتب H1/H2/H3 با یک موضوع به ازای هر heading استفاده کنید",
             "به شکل‌های قابل اسکن بنویسید: گلوله‌ها، لیست‌های شماره‌دار، پاراگراف‌های کوتاه",
-            "هر ادعا را با یک آماره، تاریخ یا منبع نام‌برده پشتیبانی کنید",
+            "��ر ادعا را با یک آماره، تاریخ یا منبع نام‌برده پشتیبانی کنید",
             "اطمینان حاصل کنید که تمام محتوای کلیدی server-side رندر می‌شود",
             "تأیید کنید که خزنده‌های هوش مصنوعی در robots.txt یا تنظیمات Cloudflare مسدود نشده‌اند",
             "بخش‌های FAQ بسازید — این‌ها مستقیماً به نحوه پردازش query‌های مکالمه‌ای توسط مدل‌های زبانی نگاشت می‌شوند"
@@ -539,9 +541,10 @@
         },
         {
           "type": "image",
-          "src": "/api/uploads/ai-agent-content-extraction-diagram.webp",
+          "src": "/api/uploads/1782129514-ai-agent-content-extraction-diagram.webp",
           "alt": "نمودار مقایسه نحوه تعامل یک کاربر انسانی و یک ایجنت هوش مصنوعی با همان صفحه وب — انسان به‌صورت بصری ناوبری می‌کند در حالی که ایجنت متن ساختاریافته را از HTML رندرشده سرور استخراج می‌کند",
-          "caption": "شکل ۱: یک ایجنت هوش مصنوعی متن ساختاریافته را از HTML رندرشده سرور استخراج می‌کند و سلسله‌مراتب بصری، انیمیشن‌ها و هر محتوایی که نیاز به اجرای JavaScript یا تعامل کاربر برای ظاهر شدن دارد را نادیده می‌گیرد."
+          "caption": "شکل ۱: یک ایجنت هوش مصنوعی متن ساختاریافته را از HTML رندرشده سرور استخراج می‌کند و سلسله‌مراتب بصری، انیمیشن‌ها و هر محتوایی که نیاز به اجرای JavaScript یا تعامل کاربر برای ظاهر شدن دارد را نادیده می‌گیرد.",
+          "altText": "نمودار مقایسه نحوه تعامل یک کاربر انسانی و یک ایجنت هوش مصنوعی با همان صفحه وب — انسان به‌صورت بصری ناوبری می‌کند در حالی که ایجنت متن ساختاریافته را از HTML رندرشده سرور استخراج می‌کند"
         },
         {
           "type": "heading",
@@ -566,14 +569,14 @@
           "title": "طراحی بدون حرف، چیزی جز دکور نیست",
           "text": "اگر به جنبه فلسفی تصمیمات طراحی علاقه‌مندید، این مقاله بررسی می‌کند که چرا ارتباط بصری باید فراتر از زیبایی‌شناسی هدفی داشته باشد.",
           "buttonText": "خواندن درباره طراحی",
-          "buttonUrl": "/en/blog/design-without-words-is-decoration/"
+          "buttonUrl": "/fa/blog/design-without-words-is-decoration/"
         },
         {
           "type": "cta",
           "title": "تکنیک‌های مدرن در طراحی فرانت‌اند",
           "text": "الگوهای فنی که محتوا را هم برای انسان‌ها قابل خواندن و هم برای ماشین‌ها قابل دسترس می‌کنند را در این مقاله بیاموزید.",
           "buttonText": "کشف تکنیک‌های فرانت‌اند",
-          "buttonUrl": "/en/blog/modern-frontend-design-techniques/"
+          "buttonUrl": "/fa/blog/modern-frontend-design-techniques/"
         },
         {
           "type": "alert",
@@ -622,7 +625,7 @@
         },
         {
           "type": "cta",
-          "title": "Firecrawl — تبدیل وب‌سایت‌ها به Markdown تمیز",
+          "title": "Firecrawl — تبدیل وب‌��ایت‌ها به Markdown تمیز",
           "text": "Firecrawl ابزاری است که هر وب‌سایتی را به Markdown تمیز و توکن‌کارآمد تبدیل می‌کند. این پیاده‌سازی عملی اصول استخراج که در این مقاله بحث شد — ۵ تا ۱۰ بار کارآمدتر از HTML خام برای مصرف هوش مصنوعی.",
           "buttonText": "امتحان Firecrawl",
           "buttonUrl": "https://firecrawl.dev/"

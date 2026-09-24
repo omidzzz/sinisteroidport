@@ -1,0 +1,737 @@
+{
+  "slug": "how-to-fix-clines-most-common-errors-and-why-they-happen",
+  "status": "published",
+  "title": "How to Fix Cline's Most Common Errors (And Why They Happen)",
+  "date": "2026-08-29 06:33:17",
+  "tags": [
+    "ai-coding-agents",
+    "ai-tools",
+    "open-source-ai",
+    "local-ai"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/1787985188-1787980001-how-to-fix-cline-common-errors-cover.webp",
+    "alt": {
+      "en": "How to Fix Cline's Most Common Errors (And Why They Happen)",
+      "fa": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "How to Fix Cline's Most Common Errors (And Why They Happen)",
+      "excerpt": "From a crashing extension host to a rate-limit wall at the worst possible moment, Cline's errors almost always trace back to one of nine root causes. Here's how to diagnose and fix every one of them, and why they happen in the first place.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "How to Fix Cline's Most Common Errors (And Why They Happen)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline has grown into one of the most-installed AI coding agents for VS Code, with more than 5 million installs and over 61,000 GitHub stars behind an open-source, Apache-2.0-licensed extension that reads your codebase, edits files, runs terminal commands, and drives a real browser through Puppeteer. That level of autonomy is exactly why its errors feel more disruptive than a typical extension bug — when Cline breaks mid-task, you're not just missing an autocomplete suggestion, you're staring at a half-finished refactor with no clear next step."
+        },
+        {
+          "type": "paragraph",
+          "text": "The good news is that almost every Cline error developers report — on GitHub, in Discord, in Reddit threads — collapses into a small number of root causes: an extension activation failure, a misconfigured or missing API key, a provider-side rate limit, a context-window overflow, a failed diff edit on a large file, a stalled approval dialog, a blocked terminal command, a read-only file path, or a broken MCP server connection. This guide walks through each one, explains why it happens under the hood, and gives you the exact fix, so the next time Cline throws an error you recognize it in seconds instead of re-reading GitHub issues at 1 a.m."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "5M+",
+              "label": "installs of the Cline VS Code extension as of 2026, spanning VS Code, JetBrains, Cursor, Windsurf, Zed, and Neovim"
+            },
+            {
+              "value": "61.2K",
+              "label": "GitHub stars on the open-source cline/cline repository"
+            },
+            {
+              "value": "300KB",
+              "label": "the hard file-size limit Cline enforces before blocking a file read outright, regardless of the model's actual context window"
+            },
+            {
+              "value": "30+",
+              "label": "LLM providers Cline supports, which is also why provider-specific errors are the single largest category of reported issues"
+            },
+            {
+              "value": "429",
+              "label": "the HTTP status code behind the most common single error report across Cline's GitHub issue tracker: rate limiting"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787984809-1787980010-cline-error-categories-breakdown.webp",
+          "alt": "Diagram categorizing the nine most common Cline error types by root cause: activation failures, API key issues, rate limits, context window overflow, diff edit failures, approval dialog stalls, blocked terminal commands, read-only file paths, and MCP connection failures",
+          "caption": "Figure 1: Nearly every Cline error reported on GitHub falls into one of nine root-cause categories — and most have a fix that takes under five minutes.",
+          "altText": "Diagram categorizing the nine most common Cline error types by root cause: activation failures, API key issues, rate limits, context window overflow, diff edit failures, approval dialog stalls, blocked terminal commands, read-only file paths, and MCP connection failures"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Why Cline Errors Feel Worse Than a Typical Extension Bug"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline isn't a passive extension sitting in a sidebar waiting for you to click a suggestion. It's an agent that plans, executes, and iterates — which means a single failure can cascade through several dependent steps before you notice."
+        },
+        {
+          "type": "paragraph",
+          "text": "Unlike GitHub Copilot's inline suggestions or a simple chat panel, Cline's tool-calling loop reads files, writes files, executes shell commands, and inspects a running browser, all chained together in a single task. When one of those tool calls fails silently, or the model misreports how much context it has left, the failure doesn't just stop the current step — it can corrupt the conversation state Cline is relying on to plan the next one. That's the pattern behind most of the errors in this guide: a small, specific failure at one layer (a token miscount, a blocked shell command, a locked file) surfaces as a much more confusing symptom several steps later, which is why so many bug reports read like \"Cline just stopped working\" rather than a precise error description."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 1: The Extension Host Keeps Crashing, or Cline Won't Activate"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "If VS Code's extension host repeatedly crashes and restarts within seconds of opening a workspace, and disabling Cline immediately stops the loop, you're looking at an activation-level failure rather than anything related to your API key or your code."
+        },
+        {
+          "type": "paragraph",
+          "text": "This shows up most often as a PendingMigrationError referencing navigator being a global in Node.js, and it's tied to how VS Code's newer extension host handles certain bundled dependencies inside Cline's dist/extension.js. A closely related failure happens specifically over Remote SSH: the extension fails to activate at all, and the output logs show a ReferenceError for ReadableStream not being defined, because the remote Node.js runtime doesn't expose the same web APIs the local environment does. Both are packaging and runtime-compatibility issues rather than something wrong with your project."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Update Cline to the latest published version first — both of these failure modes have been actively patched across recent releases, and a version bump resolves the majority of reports",
+            "If you're on Remote SSH, update VS Code Server on the remote host, not just your local VS Code — a stale remote Node.js runtime is the usual culprit",
+            "Delete the extension's workspace storage cache (VS Code command palette → 'Developer: Reload Window' first, then clear cached extension state if the crash persists) to rule out a corrupted local state file",
+            "As a last resort, uninstall and reinstall Cline entirely rather than just disabling and re-enabling it, since a partial update can leave mismatched bundle files behind"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 2: \"Invalid API Key\" or Cline Ignoring Your Claude Subscription"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "This is the single most common source of first-day confusion: Cline requires its own API key from a model provider, and it does not use your Claude.ai or ChatGPT Plus subscription, even though the extension was originally named 'Claude Dev.'"
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline talks to models through provider APIs — Anthropic, OpenAI, OpenRouter, Google, or a self-hosted endpoint like Ollama — and each of those is billed and authenticated separately from a consumer chat subscription. If you paste a Claude.ai session token, or leave the field blank expecting Cline to piggyback on a browser login, you'll get an authentication failure that looks identical to a genuinely invalid key. The fix is almost always the same: generate a real API key from the provider's developer console (console.anthropic.com for Anthropic, platform.openai.com for OpenAI, openrouter.ai/keys for OpenRouter), paste it into Cline's API Configuration panel under the gear icon, and confirm the selected model matches a model that key actually has access to."
+        },
+        {
+          "type": "cta",
+          "title": "Cline: The Open-Source AI Coding Agent Redefining Developer Workflows",
+          "text": "If you're still deciding on a provider or want the full picture of how Cline's architecture works before troubleshooting it, this is the place to start.",
+          "buttonText": "Read the Full Cline Overview",
+          "buttonUrl": "/en/blog/cline-the-open-source-ai-coding-agent/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 3: 429 Rate Limit Exceeded"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "A 429 response with a message about exceeding an organization's rate limit is a provider-side throttle, not a Cline bug, and it hits new Anthropic API accounts especially hard because default tier limits are conservative until you've built up usage history."
+        },
+        {
+          "type": "paragraph",
+          "text": "A typical version of this error reports a limit like 80,000 input tokens per minute — which sounds generous until you remember that Cline routinely sends your entire open-file context, prior conversation history, and tool-call results with every single request. A large task with several files open can burn through that ceiling in two or three tool calls, especially early in a session before Cline has trimmed older context. Confusingly, some users report the same 'rate limit' message even when their account shows no usage-based limit elsewhere, which usually traces back to routing through VS Code's built-in Language Model API (the GitHub Copilot provider) rather than a direct provider key — that pathway carries its own separate rate ceiling independent of your actual subscription tier."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Add a payment method to your Anthropic or OpenAI console account if you haven't — usage tiers scale up automatically with billing history, and the default free or trial tier is the one most likely to hit 429s",
+            "Switch to OpenRouter as your provider if you're bouncing between models — it pools capacity across multiple upstream keys and tends to absorb short bursts better than a single direct provider key",
+            "Reduce parallel context by closing unrelated tabs and files before starting a task, since Cline includes visible open files in what it sends to the model",
+            "If you're specifically hitting limits through VS Code's Language Model API (Copilot) provider, switch to a direct Anthropic or OpenAI API key instead — that path has separate throttling independent of your Copilot plan",
+            "Space out large tasks rather than firing several heavy requests back to back; Cline has no built-in backoff queue, so hitting a provider's per-minute ceiling twice in a row usually means waiting out the full window"
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787984898-1787980022-cline-rate-limit-context-window-diagram.webp",
+          "alt": "Diagram showing how Cline's token usage compounds across open files, conversation history, and tool-call results, leading to rate limit and context window errors",
+          "caption": "Figure 2: A single Cline task compounds token usage across open files, conversation history, and every tool result — which is why rate limits and context overflows tend to hit together.",
+          "altText": "Diagram showing how Cline's token usage compounds across open files, conversation history, and tool-call results, leading to rate limit and context window errors"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 4: Context Window Exceeded or \"Prompt Too Long\""
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline enforces a hard 300KB limit on any single file read, regardless of how large the selected model's actual context window is, and this single hardcoded ceiling is behind a large share of 'prompt too long' and unrecoverable context errors reported on GitHub."
+        },
+        {
+          "type": "paragraph",
+          "text": "The problem compounds when Cline's own token accounting doesn't match what the provider is actually billing. Developers running Claude models through VS Code's Language Model API provider have reported the UI showing plenty of headroom left in the context window while the underlying request silently exceeds 200,000 tokens, because the tokenizer VS Code's Language Model API exposes doesn't match Claude's real tokenizer — Cline believes it has room when it doesn't. The practical result is the same either way: a request fails outright with a message about exceeding the maximum context length, sometimes suggesting a 'middle-out' compression transform that Cline itself doesn't automatically apply."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Break large files into smaller, targeted reads instead of asking Cline to read an entire file over 300KB — point it at the specific function or section that matters",
+            "Start a new task once a long session's context usage climbs past roughly 70-80%, rather than pushing through to the hard limit — Cline can lose earlier instructions well before it actually errors out",
+            "Prefer a direct Anthropic or OpenAI API key over the VS Code Language Model API provider for long sessions, since the token accounting is accurate rather than estimated",
+            "For genuinely large codebases, use a model with a larger real context window (several current frontier models support 200K-1M tokens) and confirm Cline's configured 'Model Context Window' setting actually matches the provider's real limit rather than a default placeholder value"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Ollama: The Engine Behind Local AI",
+          "text": "Running Cline against a local model sidesteps provider rate limits and per-token billing entirely — here's how to set one up as an alternative or fallback provider.",
+          "buttonText": "Read the Ollama Guide",
+          "buttonUrl": "/en/blog/ollama-the-engine-behind-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 5: Diff Edits Fail Repeatedly on Large Files"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "If replace_in_file or write_to_file starts timing out or silently failing partway through a long editing session, especially on one large file you've been iterating on for a while, the cause is almost always accumulated context pressure rather than a bug in the file itself."
+        },
+        {
+          "type": "paragraph",
+          "text": "Long sessions that repeatedly edit the same large document tend to push context usage above 100% at various points before Cline trims it back down, and diff-based edit tools are particularly sensitive to that kind of mid-session truncation because they depend on an exact, unambiguous match between the diff Cline generates and the current file content. If older context gets silently dropped between when Cline last read the file and when it tries to apply an edit, the diff no longer matches and the tool call fails, sometimes repeatedly, without a clear error explaining why."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Ask Cline to re-read the file immediately before a large or late-session edit, rather than trusting its memory of a file state from many turns earlier",
+            "Split one very long editing session into several shorter tasks with clear checkpoints, committing progress between them",
+            "For a single stubborn large-file edit, fall back to write_to_file with the complete intended content rather than relying on a diff-based replace when the file has been touched many times already",
+            "Keep an eye on the context usage indicator in Cline's status bar during long sessions and proactively start fresh once it climbs into the danger zone, instead of waiting for a failure"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 6: Cline Looks Stuck, But It's Actually Waiting for You"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "This is less a bug than the single most common false alarm in Cline's issue tracker: the task appears frozen, but Cline is quietly waiting for an approval you haven't noticed."
+        },
+        {
+          "type": "paragraph",
+          "text": "By default, Cline pauses before every file write, terminal command, and browser action to ask for your explicit approval, and that prompt can scroll out of view if you've been reading a long tool output or switched tabs. The fix is simply to scroll back up in the Cline panel and look for the Approve/Deny buttons. If this happens often enough to be annoying rather than reassuring, Cline's settings include granular auto-approve toggles — for example, enabling auto-approval specifically for read operations (which carry essentially no risk) while leaving writes and command execution on manual approval keeps the workflow fast without giving up the safety net that makes Cline's human-in-the-loop design worth using in the first place."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 7: Terminal Commands Blocked on Windows"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "On Windows, execute_command frequently fails not because of anything Cline did wrong, but because PowerShell's default execution policy blocks script execution entirely for the current user."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is a Windows security default, not a Cline-specific restriction, but it surfaces through Cline because the extension routes terminal commands through your default shell, and a blocked script triggers a permissions error that has nothing to do with the command Cline actually generated. Running Set-ExecutionPolicy RemoteSigned -Scope CurrentUser in an elevated PowerShell window resolves it for most setups by allowing locally created and signed scripts to run while still blocking unsigned scripts downloaded from the internet, which is a reasonable middle ground rather than disabling execution policy entirely."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787985072-1787980035-cline-windows-terminal-permission-fix.webp",
+          "alt": "Screenshot-style illustration showing the PowerShell command to fix execution policy errors that block Cline's terminal commands on Windows",
+          "caption": "Figure 3: Most Windows-specific Cline terminal failures trace back to PowerShell's default execution policy, not to anything in the command Cline generated.",
+          "altText": "Screenshot-style illustration showing the PowerShell command to fix execution policy errors that block Cline's terminal commands on Windows"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 8: File Write Fails on Read-Only Paths"
+        },
+        {
+          "type": "paragraph",
+          "text": "If Cline reports a permissions error while trying to write a file, check the folder before assuming it's a Cline bug — writes to protected system directories such as Program Files on Windows, or any path outside your user permissions on macOS and Linux, will fail regardless of what tool is attempting the write. This is most common when a workspace has been opened from an install directory or a system-managed folder rather than a normal project folder in your home directory. Moving the project to a standard user-writable location, or adjusting folder permissions if that's not possible, resolves it every time — there's no Cline-side setting that overrides operating-system file permissions, nor should there be."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Error 9: MCP Server Won't Connect"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline's Model Context Protocol integration lets it talk to databases, internal tools, and external services through stdio or SSE-based MCP servers, and connection failures here almost always come down to a mismatch between how the server expects to be launched and how it's configured inside Cline."
+        },
+        {
+          "type": "paragraph",
+          "text": "For stdio-based servers, the most common mistake is a missing or incorrect command path — Cline needs the exact executable path, not just a command name that happens to work in your regular terminal, since the extension host doesn't always inherit the same PATH environment your shell does. For SSE-based servers, connection failures more often trace back to the server not actually running, a firewall or local network policy blocking the port, or a URL typo in the MCP configuration. Checking the MCP Marketplace panel's connection status indicator first, and testing the server independently outside of Cline before assuming the integration itself is broken, saves the most debugging time here."
+        },
+        {
+          "type": "cta",
+          "title": "Cline GitHub Issue Tracker",
+          "text": "For errors not covered here, or to check whether a specific bug has already been reported and patched, the project's own issue tracker is the most current source.",
+          "buttonText": "Browse Open Issues",
+          "buttonUrl": "https://github.com/cline/cline/issues"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "A Quick Diagnostic Checklist Before You File a Bug Report"
+        },
+        {
+          "type": "paragraph",
+          "text": "Most Cline errors can be triaged in under two minutes if you work through the same short checklist experienced users default to instead of immediately assuming the extension is broken."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Check the Cline version against the latest release — a meaningful share of reported bugs are already patched in a newer build",
+            "Scroll up in the chat panel before assuming a stall — it's very likely an unnoticed approval prompt",
+            "Check which provider path is active — a direct API key, OpenRouter, or the VS Code Language Model API all behave differently under load and report errors differently",
+            "Look at the context usage percentage in the status bar before troubleshooting anything else — a huge share of edit failures, timeouts, and 'random' errors trace back to context pressure",
+            "Confirm the file path involved isn't a protected system directory before assuming a permissions bug is Cline-specific",
+            "Test the exact same terminal command manually outside Cline to isolate whether the failure is Cline's or the shell's"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+          "text": "If Cline's error patterns have you weighing whether a different agent fits your workflow better, this side-by-side comparison covers the trade-offs in detail.",
+          "buttonText": "Read the Full Comparison",
+          "buttonUrl": "/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "paragraph",
+          "text": "It's also worth knowing what these nine categories don't cover: genuine model-quality issues, like a model ignoring your .clinerules file or making a questionable architectural choice, aren't really 'errors' in the sense this guide addresses — they're a different problem best solved with tighter prompts, more explicit rules files, and Plan mode before Act mode, not a configuration fix. Keeping that distinction clear saves time, since chasing a settings fix for what's actually a prompting problem (or vice versa) is one of the most common ways developers burn an afternoon on something that was never going to be resolved by a config change."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "The Pattern Behind Almost Every Cline Error"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Strip away the specific error messages, and nearly all of Cline's common failures come from one of three underlying pressures: token accounting that doesn't match what the provider is actually billing, a permissions boundary that has nothing to do with Cline itself, or a UI state — an unnoticed approval prompt, a stale extension bundle — that looks like a hang but isn't one."
+        },
+        {
+          "type": "paragraph",
+          "text": "None of that makes the errors less frustrating in the moment, especially mid-task with unsaved changes on the line. But it does mean the fix is rarely a Cline-specific mystery. Update the extension, check your provider and API key setup, watch the context meter, respect your operating system's permission boundaries, and scroll up before assuming something's broken. Combined with the auto-approve settings for low-risk read operations, that short list resolves the overwhelming majority of what shows up in Cline's issue tracker — and it's the same checklist worth running through before filing a new bug report, since there's a good chance the fix is already sitting in this guide."
+        }
+      ],
+      "faq": [
+        {
+          "question": "Why does Cline say my API key is invalid when I'm already paying for Claude?",
+          "answer": "Cline requires its own API key from a model provider's developer console — it does not use a Claude.ai, ChatGPT Plus, or Copilot subscription, even though the extension was originally named 'Claude Dev.' Generate a key from console.anthropic.com (or your chosen provider's developer portal) and paste it into Cline's API Configuration panel."
+        },
+        {
+          "question": "Why do I keep hitting a 429 rate limit error even though I haven't used Cline much?",
+          "answer": "New API accounts on providers like Anthropic and OpenAI start on conservative default usage tiers, sometimes as low as 80,000 input tokens per minute, and Cline sends substantial context — open files, conversation history, and tool results — with every request, which can burn through that ceiling in just a few tool calls. Adding a payment method to raise your tier, or routing through OpenRouter, usually resolves it."
+        },
+        {
+          "question": "Why does Cline say the context window is exceeded when the UI shows plenty of room left?",
+          "answer": "This is a known mismatch that occurs mainly when running Claude models through VS Code's built-in Language Model API (the GitHub Copilot provider), whose exposed tokenizer doesn't match Claude's real tokenizer. Cline's context display underestimates actual usage in that configuration. Switching to a direct Anthropic API key gives accurate token accounting."
+        },
+        {
+          "question": "Why does Cline refuse to read a large file even though my model supports a huge context window?",
+          "answer": "Cline enforces a hardcoded 300KB limit on any single file read regardless of the selected model's actual context window size. This is a Cline-side safeguard, not a model limitation. Point Cline at a specific function or section of the file instead of asking it to read the whole thing at once."
+        },
+        {
+          "question": "Cline looks frozen and hasn't responded in minutes. What's wrong?",
+          "answer": "In the large majority of cases, nothing is wrong — Cline is waiting for you to approve a file write, terminal command, or browser action, and the approval prompt has scrolled out of view. Scroll up in the chat panel to check before assuming it's hung, or enable auto-approval for low-risk read operations in Cline's settings to reduce how often this happens."
+        },
+        {
+          "question": "Why do terminal commands fail on Windows but work fine on macOS or Linux?",
+          "answer": "This is almost always PowerShell's default execution policy blocking script execution for the current user, which is a Windows security default rather than anything Cline does wrong. Running Set-ExecutionPolicy RemoteSigned -Scope CurrentUser in an elevated PowerShell window resolves it for most setups."
+        },
+        {
+          "question": "Why do my file edits keep failing partway through a long session?",
+          "answer": "Long sessions editing the same large file repeatedly can push context usage past 100% before Cline trims it back, and diff-based edit tools depend on an exact match between the generated diff and the file's current content. If context gets silently truncated between reads, the diff no longer matches. Asking Cline to re-read the file before a late-session edit, or splitting the session into shorter tasks, fixes it."
+        },
+        {
+          "question": "My MCP server shows as disconnected in Cline. How do I debug it?",
+          "answer": "For stdio-based servers, check that Cline's configuration uses the exact executable path rather than a bare command name, since the extension host doesn't always inherit your shell's PATH. For SSE-based servers, confirm the server is actually running, check for a firewall or network policy blocking the port, and double-check the configured URL for typos before assuming the MCP integration itself is broken."
+        }
+      ],
+      "seo": {
+        "title": "How to Fix Cline's Most Common Errors (And Why They Happen) | 2026 Guide",
+        "metaDescription": "From 429 rate limits to context window overflows and blocked terminal commands, here's how to diagnose and fix Cline's most common errors, and why each one actually happens.",
+        "canonical": "https://sinisteroid.ir/en/blog/how-to-fix-clines-most-common-errors-and-why-they-happen",
+        "openGraph": {
+          "title": "How to Fix Cline's Most Common Errors (And Why They Happen)",
+          "description": "Nine root causes explain almost every Cline error reported on GitHub. Here's how to diagnose each one and fix it in minutes, not hours.",
+          "image": "/api/uploads/1787980001-how-to-fix-cline-common-errors-cover.webp"
+        },
+        "twitter": {
+          "title": "How to Fix Cline's Most Common Errors (And Why They Happen)",
+          "description": "Rate limits, context window overflows, blocked terminal commands, frozen approval prompts — here's the fix for each Cline error, explained.",
+          "image": "/api/uploads/1787980001-how-to-fix-cline-common-errors-cover.webp"
+        },
+        "keywords": "Cline errors, fix Cline VS Code extension, Cline rate limit, Cline context window exceeded, Cline API key invalid, Cline not working, Cline troubleshooting, Cline diff edit failed, Cline MCP server, AI coding agent errors",
+        "focusKeyword": "fix Cline errors"
+      }
+    },
+    "fa": {
+      "title": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)",
+      "excerpt": "از کرش‌کردن extension host گرفته تا برخورد به دیوار محدودیت نرخ در بدترین لحظهٔ ممکن، خطاهای Cline تقریباً همیشه به یکی از نه علت ریشه‌ای برمی‌گردند. این‌جا نحوهٔ تشخیص و رفع هرکدام، و دلیل واقعی رخ‌دادنشان را می‌بینید.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline به یکی از پرنصب‌ترین عامل‌های کدنویسی هوش مصنوعی برای VS Code تبدیل شده، با بیش از ۵ میلیون نصب و بیش از ۶۱ هزار ستارهٔ گیت‌هاب پشت یک اکستنشن متن‌باز با مجوز Apache-2.0 که کدبیس شما را می‌خواند، فایل‌ها را ویرایش می‌کند، دستورهای ترمینال را اجرا می‌کند و یک مرورگر واقعی را از طریق Puppeteer هدایت می‌کند. دقیقاً همین سطح از خودمختاری است که خطاهای آن را مخرب‌تر از یک باگ معمولی اکستنشن می‌کند — وقتی Cline در میانهٔ یک وظیفه می‌شکند، فقط یک پیشنهاد تکمیل خودکار را از دست نمی‌دهید، بلکه با یک بازآرایی نیمه‌تمام و بدون گام بعدی روشن روبه‌رو می‌شوید."
+        },
+        {
+          "type": "paragraph",
+          "text": "خبر خوب این است که تقریباً هر خطای Cline که توسعه‌دهندگان گزارش می‌کنند — در گیت‌هاب، دیسکورد، تاپیک‌های ردیت — به تعداد کمی علت ریشه‌ای فروکاسته می‌شود: شکست در فعال‌سازی اکستنشن، کلید API نادرست یا از قلم‌افتاده، محدودیت نرخ سمت ارائه‌دهنده، سرریز پنجرهٔ زمینه، شکست ویرایش دیف روی فایل‌های بزرگ، پنجرهٔ تأیید متوقف‌شده، دستور ترمینال مسدود، مسیر فایل فقط‌خواندنی، یا اتصال شکستهٔ سرور MCP. این راهنما هرکدام را مرور می‌کند، دلیل واقعی رخ‌دادنش را در پس‌زمینه توضیح می‌دهد، و راه‌حل دقیق را می‌دهد تا دفعهٔ بعد که Cline خطایی نشان داد، در چند ثانیه آن را بشناسید، نه این‌که ساعت ۱ بامداد ایشوهای گیت‌هاب را دوباره بخوانید."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "بیش از ۵ میلیون",
+              "label": "نصب اکستنشن Cline در VS Code تا سال ۲۰۲۶، در VS Code، JetBrains، Cursor، Windsurf، Zed و Neovim"
+            },
+            {
+              "value": "۶۱.۲ هزار",
+              "label": "ستارهٔ گیت‌هاب روی مخزن متن‌باز cline/cline"
+            },
+            {
+              "value": "۳۰۰ کیلوبایت",
+              "label": "سقف سخت‌گیرانهٔ اندازهٔ فایلی که Cline پیش از مسدودکردن کامل خواندن آن اعمال می‌کند، فارغ از پنجرهٔ زمینهٔ واقعی مدل"
+            },
+            {
+              "value": "بیش از ۳۰",
+              "label": "ارائه‌دهندهٔ LLM که Cline از آن پشتیبانی می‌کند، و دقیقاً به همین دلیل خطاهای خاص ارائه‌دهنده بزرگ‌ترین دستهٔ مسائل گزارش‌شده هستند"
+            },
+            {
+              "value": "۴۲۹",
+              "label": "کد وضعیت HTTP پشت رایج‌ترین گزارش خطای منفرد در ردیاب ایشوهای گیت‌هاب Cline: محدودیت نرخ"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787985093-1787980010-cline-error-categories-breakdown.webp",
+          "alt": "نمودار دسته‌بندی نه نوع رایج خطای Cline بر اساس علت ریشه‌ای: شکست فعال‌سازی، مشکلات کلید API، محدودیت نرخ، سرریز پنجرهٔ زمینه، شکست ویرایش دیف، توقف پنجرهٔ تأیید، دستورهای ترمینال مسدود، مسیرهای فایل فقط‌خواندنی، و شکست اتصال MCP",
+          "caption": "شکل ۱: تقریباً هر خطای Cline گزارش‌شده در گیت‌هاب در یکی از نه دستهٔ علت ریشه‌ای قرار می‌گیرد — و بیشترشان راه‌حلی کمتر از پنج دقیقه دارند.",
+          "altText": "نمودار دسته‌بندی نه نوع رایج خطای Cline بر اساس علت ریشه‌ای: شکست فعال‌سازی، مشکلات کلید API، محدودیت نرخ، سرریز پنجرهٔ زمینه، شکست ویرایش دیف، توقف پنجرهٔ تأیید، دستورهای ترمینال مسدود، مسیرهای فایل فقط‌خواندنی، و شکست اتصال MCP"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چرا خطاهای Cline بدتر از یک باگ معمولی اکستنشن به نظر می‌رسند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline یک اکستنشن منفعل نیست که در نوار کناری منتظر کلیک شما روی یک پیشنهاد بنشیند. یک عامل است که برنامه‌ریزی، اجرا و تکرار می‌کند — یعنی یک شکست منفرد می‌تواند پیش از آن‌که متوجه شوید در چند گام وابسته آبشاری شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "برخلاف پیشنهادهای درون‌خطی GitHub Copilot یا یک پنل چت ساده، حلقهٔ فراخوانی ابزار Cline فایل‌ها را می‌خواند، فایل‌ها را می‌نویسد، دستورهای شل را اجرا می‌کند و یک مرورگر در حال اجرا را بررسی می‌کند، همه در یک وظیفهٔ واحد به هم زنجیر شده‌اند. وقتی یکی از این فراخوانی‌های ابزار به‌آرامی شکست می‌خورد، یا مدل به‌اشتباه گزارش می‌دهد چقدر زمینه برایش باقی مانده، شکست فقط گام فعلی را متوقف نمی‌کند — می‌تواند وضعیت مکالمه‌ای را که Cline برای برنامه‌ریزی گام بعدی به آن تکیه می‌کند خراب کند. این همان الگوی پشت بیشتر خطاهای این راهنماست: یک شکست کوچک و مشخص در یک لایه (شمارش نادرست توکن، دستور شل مسدودشده، فایل قفل‌شده) چند گام بعد به‌عنوان علامتی بسیار گیج‌کننده‌تر ظاهر می‌شود، و به همین دلیل بیشتر گزارش‌های باگ به‌جای توصیف دقیق خطا، شبیه «Cline فقط از کار افتاد» به نظر می‌رسند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۱: Extension Host مدام کرش می‌کند، یا Cline فعال نمی‌شود"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اگر extension host در VS Code به‌طور مکرر ظرف چند ثانیه پس از باز کردن یک workspace کرش می‌کند و ری‌استارت می‌شود، و غیرفعال‌کردن Cline بلافاصله این حلقه را متوقف می‌کند، با یک شکست در سطح فعال‌سازی روبه‌رو هستید نه چیزی مرتبط با کلید API یا کدتان."
+        },
+        {
+          "type": "paragraph",
+          "text": "این معمولاً به‌شکل یک PendingMigrationError با اشاره به این‌که navigator اکنون یک متغیر سراسری در Node.js است ظاهر می‌شود، و به نحوهٔ برخورد extension host جدیدتر VS Code با برخی وابستگی‌های باندل‌شده درون dist/extension.js مربوط اکستنشن Cline مرتبط است. یک شکست نزدیک به آن مشخصاً روی Remote SSH رخ می‌دهد: اکستنشن اصلاً فعال نمی‌شود، و لاگ‌های خروجی یک ReferenceError برای تعریف‌نشدن ReadableStream نشان می‌دهند، چون رانتایم Node.js راه دور همان API‌های وب محیط محلی را ارائه نمی‌دهد. هر دو مسئلهٔ بسته‌بندی و سازگاری رانتایم هستند، نه چیزی نادرست در پروژهٔ شما."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "اول Cline را به آخرین نسخهٔ منتشرشده به‌روزرسانی کنید — هر دوی این حالت‌های شکست به‌طور فعال در نسخه‌های اخیر پچ شده‌اند، و ارتقای نسخه بیشتر گزارش‌ها را برطرف می‌کند",
+            "اگر روی Remote SSH هستید، VS Code Server را روی هاست راه دور به‌روز کنید، نه فقط VS Code محلی‌تان — رانتایم Node.js راه دورِ قدیمی معمولاً مقصر است",
+            "کش workspace storage اکستنشن را پاک کنید (ابتدا از پالت دستورات VS Code «Developer: Reload Window» را اجرا کنید، سپس اگر کرش ادامه داشت، وضعیت کش‌شدهٔ اکستنشن را پاک کنید) تا یک فایل وضعیت محلی خراب را رد کنید",
+            "به‌عنوان آخرین راه‌حل، به‌جای صرفاً غیرفعال و دوباره فعال‌کردن، Cline را کاملاً حذف و دوباره نصب کنید، چون یک به‌روزرسانی ناقص می‌تواند فایل‌های باندل ناهماهنگ برجای بگذارد"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۲: «کلید API نامعتبر» یا نادیده‌گرفتن اشتراک کلود توسط Cline"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "این رایج‌ترین منبع سردرگمی روز اول است: Cline به کلید API خودش از یک ارائه‌دهندهٔ مدل نیاز دارد، و از اشتراک Claude.ai یا ChatGPT Plus شما استفاده نمی‌کند، حتی با این‌که این اکستنشن در ابتدا «Claude Dev» نام داشت."
+        },
+        {
+          "type": "paragraph",
+          "text": "Cline از طریق API‌های ارائه‌دهنده با مدل‌ها صحبت می‌کند — Anthropic، OpenAI، OpenRouter، گوگل، یا یک اندپوینت خودمیزبان مانند Ollama — و هرکدام از این‌ها جداگانه از یک اشتراک چت مصرف‌کننده صورت‌حساب و احراز هویت می‌شوند. اگر یک توکن نشست Claude.ai را جای‌گذاری کنید، یا فیلد را خالی بگذارید به این امید که Cline از یک ورود مرورگری استفاده کند، خطای احراز هویتی می‌گیرید که دقیقاً شبیه یک کلید واقعاً نامعتبر به نظر می‌رسد. راه‌حل تقریباً همیشه یکسان است: یک کلید API واقعی از کنسول توسعه‌دهندهٔ ارائه‌دهنده بسازید (console.anthropic.com برای Anthropic، platform.openai.com برای OpenAI، openrouter.ai/keys برای OpenRouter)، آن را در پنل API Configuration زیر آیکون چرخ‌دنده در Cline جای‌گذاری کنید، و مطمئن شوید مدل انتخاب‌شده با مدلی که آن کلید واقعاً به آن دسترسی دارد مطابقت دارد."
+        },
+        {
+          "type": "cta",
+          "title": "کلاین: عامل هوش مصنوعی متن‌باز کدنویسی در عمل",
+          "text": "اگر هنوز روی انتخاب ارائه‌دهنده تصمیم نگرفته‌اید یا می‌خواهید پیش از عیب‌یابی، تصویر کامل معماری Cline را ببینید، این‌جا نقطهٔ شروع خوبی است.",
+          "buttonText": "مطالعهٔ معرفی کامل Cline",
+          "buttonUrl": "/fa/blog/cline-the-open-source-ai-coding-agent/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۳: محدودیت نرخ ۴۲۹"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "پاسخ ۴۲۹ با پیامی دربارهٔ عبور از محدودیت نرخ یک سازمان، یک تنگ‌کنندهٔ سمت ارائه‌دهنده است نه باگی از Cline، و به‌خصوص حساب‌های تازهٔ API آنتروپیک را سخت می‌زند، چون محدودیت‌های سطح پیش‌فرض تا زمانی که سابقهٔ استفاده بسازید محافظه‌کارانه هستند."
+        },
+        {
+          "type": "paragraph",
+          "text": "نسخهٔ معمول این خطا محدودیتی مانند ۸۰,۰۰۰ توکن ورودی در دقیقه را گزارش می‌دهد — که سخاوتمندانه به نظر می‌رسد تا زمانی که به یاد بیاورید Cline به‌طور معمول کل زمینهٔ فایل‌های باز، تاریخچهٔ مکالمهٔ قبلی و نتایج فراخوانی ابزار را با هر درخواست منفرد ارسال می‌کند. یک وظیفهٔ بزرگ با چند فایل باز می‌تواند این سقف را در دو یا سه فراخوانی ابزار بسوزاند، به‌خصوص در اوایل یک نشست پیش از آن‌که Cline زمینهٔ قدیمی‌تر را کوتاه کرده باشد. به‌طور گیج‌کننده‌ای، برخی کاربران همین پیام «محدودیت نرخ» را حتی وقتی حساب‌شان جایی دیگر هیچ محدودیت مبتنی بر مصرفی نشان نمی‌دهد گزارش می‌کنند، که معمولاً به مسیریابی از طریق API مدل زبانی داخلی VS Code (ارائه‌دهندهٔ GitHub Copilot) به‌جای یک کلید مستقیم ارائه‌دهنده برمی‌گردد — آن مسیر سقف محدودیت نرخ جداگانهٔ خودش را دارد که مستقل از سطح اشتراک واقعی شماست."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "اگر هنوز اضافه نکرده‌اید، یک روش پرداخت به حساب کنسول Anthropic یا OpenAI خود اضافه کنید — سطوح مصرف به‌طور خودکار با سابقهٔ صورت‌حساب افزایش می‌یابند، و سطح رایگان یا آزمایشی پیش‌فرض بیشترین احتمال برخورد با ۴۲۹ را دارد",
+            "اگر بین مدل‌ها جابه‌جا می‌شوید، به OpenRouter به‌عنوان ارائه‌دهنده تغییر دهید — این ظرفیت را در چند کلید بالادستی ��مع می‌کند و معمولاً هجوم‌های کوتاه را بهتر از یک کلید ارائه‌دهندهٔ مستقیم منفرد جذب می‌کند",
+            "پیش از شروع یک وظیفه، با بستن تب‌ها و فایل‌های نامرتبط، زمینهٔ موازی را کاهش دهید، چون Cline فایل‌های باز قابل‌مشاهده را در آن‌چه به مدل می‌فرستد لحاظ می‌کند",
+            "اگر مشخصاً از طریق ارائه‌دهندهٔ API مدل زبانی VS Code (Copilot) به محدودیت برخورد می‌کنید، به‌جای آن به یک کلید مستقیم API آنتروپیک یا OpenAI تغییر دهید — آن مسیر تنگ‌کنندگی جداگانه‌ای مستقل از پلن Copilot شما دارد",
+            "وظایف بزرگ را به‌جای شلیک چند درخواست سنگین پشت‌سرهم، فاصله‌دار کنید؛ Cline صف backoff داخلی ندارد، پس برخورد دوباره به سقف دقیقه‌ای یک ارائه‌دهنده معمولاً به‌معنای صبرکردن برای تمام‌شدن کل پنجره است"
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787985105-1787980022-cline-rate-limit-context-window-diagram.webp",
+          "alt": "نمودار نشان‌دهندهٔ چگونگی انباشت مصرف توکن Cline در فایل‌های باز، تاریخچهٔ مکالمه و نتایج فراخوانی ابزار، که منجر به خطاهای محدودیت نرخ و سرریز پنجرهٔ زمینه می‌شود",
+          "caption": "شکل ۲: یک وظیفهٔ منفرد Cline مصرف توکن را در فایل‌های باز، تاریخچهٔ مکالمه و هر نتیجهٔ ابزار انباشته می‌کند — به همین دلیل محدودیت نرخ و سرریز زمینه معمولاً هم‌زمان رخ می‌دهند.",
+          "altText": "نمودار نشان‌دهندهٔ چگونگی انباشت مصرف توکن Cline در فایل‌های باز، تاریخچهٔ مکالمه و نتایج فراخوانی ابزار، که منجر به خطاهای محدودیت نرخ و سرریز پنجرهٔ زمینه می‌شود"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۴: سرریز پنجرهٔ زمینه یا «پرامپت خیلی طولانی است»"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Cline سقف سخت‌گیرانهٔ ۳۰۰ کیلوبایت را روی خواندن هر فایل منفرد اعمال می‌کند، فارغ از این‌که پنجرهٔ زمینهٔ واقعی مدل انتخاب‌شده چقدر بزرگ است، و همین سقف تک‌کدنویسی‌شده پشت بخش بزرگی از خطاهای «پرامپت خیلی طولانی» و خطاهای غیرقابل‌بازیابی زمینه در گیت‌هاب است."
+        },
+        {
+          "type": "paragraph",
+          "text": "مشکل وقتی حسابداری توکن خود Cline با آن‌چه ارائه‌دهنده واقعاً صورت‌حساب می‌کند مطابقت ندارد، انباشته می‌شود. توسعه‌دهندگانی که مدل‌های Claude را از طریق ارائه‌دهندهٔ API مدل زبانی VS Code اجرا می‌کنند گزارش داده‌اند که رابط کاربری فضای زیادی در پنجرهٔ زمینه نشان می‌دهد درحالی‌که درخواست زیربنایی به‌آرامی از ۲۰۰,۰۰۰ توکن عبور می‌کند، چون توکنایزری که API مدل زبانی VS Code ارائه می‌دهد با توکنایزر واقعی Claude مطابقت ندارد — Cline فکر می‌کند فضا دارد درحالی‌که ندارد. نتیجهٔ عملی در هر دو حالت یکسان است: یک درخواست کاملاً شکست می‌خورد با پیامی دربارهٔ عبور از حداکثر طول زمینه، گاهی با پیشنهاد یک تبدیل فشرده‌سازی «middle-out» که خود Cline به‌طور خودکار اعمال نمی‌کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "به‌جای درخواست از Cline برای خواندن کل یک فایل بالای ۳۰۰ کیلوبایت، فایل‌های بزرگ را به خواندن‌های کوچک‌تر و هدفمند تقسیم کنید — آن را به تابع یا بخش خاصی که اهمیت دارد اشاره دهید",
+            "به‌محض این‌که مصرف زمینهٔ یک نشست طولانی به حدود ۷۰ تا ۸۰٪ می‌رسد، به‌جای فشاردادن تا سقف سخت، وظیفهٔ جدیدی شروع کنید — Cline می‌تواند دستورالعمل‌های قبلی را خیلی پیش از خطای واقعی از دست بدهد",
+            "برای نشست‌های طولانی، یک کلید مستقیم API آنتروپیک یا OpenAI را به ارائه‌دهندهٔ API مدل زبانی VS Code ترجیح دهید، چون حسابداری توکن دقیق است نه تخمینی",
+            "برای کدبیس‌های واقعاً بزرگ، از مدلی با پنجرهٔ زمینهٔ واقعی بزرگ‌تر استفاده کنید (چند مدل پیشرفتهٔ فعلی از ۲۰۰ هزار تا ۱ میلیون توکن پشتیبانی می‌کنند) و مطمئن شوید تنظیم «Model Context Window» پیکربندی‌شدهٔ Cline واقعاً با محدودیت واقعی ارائه‌دهنده مطابقت دارد، نه یک مقدار پیش‌فرض جایگزین"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "اولاما: موتور پشت هوش مصنوعی محلی",
+          "text": "اجرای Cline روی یک مدل محلی، محدودیت نرخ ارائه‌دهنده و صورت‌حساب توکن به توکن را کاملاً کنار می‌زند — این‌جا نحوهٔ راه‌اندازی یکی به‌عنوان ارائه‌دهندهٔ جایگزین یا پشتیبان را می‌بینید.",
+          "buttonText": "مطالعهٔ راهنمای اولاما",
+          "buttonUrl": "/fa/blog/ollama-the-engine-behind-local-ai/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۵: ویرایش‌های دیف مکرراً روی فایل‌های بزرگ شکست می‌خورند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اگر replace_in_file یا write_to_file در نیمهٔ راه یک نشست ویرایش طولانی timeout بدهند یا به‌آرامی شکست بخورند، به‌خصوص روی یک فایل بزرگ که مدتی روی آن تکرار کرده‌اید، علت تقریباً همیشه فشار انباشتهٔ زمینه است، نه باگی در خود فایل."
+        },
+        {
+          "type": "paragraph",
+          "text": "نشست‌های طولانی که مکرراً همان سند بزرگ را ویرایش می‌کنند، در نقاط مختلف مصرف زمینه را پیش از آن‌که Cline آن را کوتاه کند به بالای ۱۰۰٪ می‌رسانند، و ابزارهای ویرایش مبتنی بر دیف به‌خصوص به این نوع کوتاه‌شدن میانی نشست حساس‌اند، چون به تطابق دقیق و بدون ابهام میان دیفی که Cline تولید می‌کند و محتوای فعلی فایل وابسته‌اند. اگر زمینهٔ قدیمی‌تر بین زمانی که Cline آخرین‌بار فایل را خواند و زمانی که سعی می‌کند یک ویرایش را اعمال کند به‌آرامی حذف شود، دیف دیگر تطابق ندارد و فراخوانی ابزار، گاهی مکرراً، بدون خطای روشنی دربارهٔ دلیل آن شکست می‌خورد."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "پیش از یک ویرایش بزرگ یا دیرهنگام در نشست، از Cline بخواهید بلافاصله فایل را دوباره بخواند، به‌جای اعتماد به حافظه‌اش از وضعیت فایل چند نوبت قبل",
+            "یک نشست ویرایش خیلی طولانی را به چند وظیفهٔ کوتاه‌تر با نقاط بازبینی روشن تقسیم کنید و پیشرفت را بین آن‌ها کامیت کنید",
+            "برای یک ویرایش فایل بزرگ سرسخت منفرد، به‌جای تکیه بر جایگزینی مبتنی بر دیف وقتی فایل بارها لمس شده، به write_to_file با کل محتوای موردنظر بازگردید",
+            "شاخص مصرف زمینه را در نوار وضعیت Cline در طول نشست‌های طولانی زیر نظر داشته باشید و به‌جای منتظرماندن برای شکست، به‌محض ورود به منطقهٔ خطر فعالانه یک نشست تازه شروع کنید"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۶: Cline قفل‌شده به نظر می‌رسد، اما در واقع منتظر شماست"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "این کمتر یک باگ است تا رایج‌ترین هشدار کاذب در ردیاب ایشوهای Cline: وظیفه یخ‌زده به نظر می‌رسد، اما Cline به‌آرامی منتظر تأییدی است که متوجه نشده‌اید."
+        },
+        {
+          "type": "paragraph",
+          "text": "به‌طور پیش‌فرض، Cline پیش از هر نوشتن فایل، دستور ترمینال و اقدام مرورگری مکث می‌کند تا تأیید صریح شما را بخواهد، و آن پیام می‌تواند وقتی خروجی ابزار طولانی می‌خوانید یا تب عوض کرده‌اید از دید خارج شود. راه‌حل صرفاً اسکرول به بالا در پنل Cline و جست‌وجوی دکمه‌های Approve/Deny است. اگر این آن‌قدر تکرار می‌شود که آزاردهنده باشد به‌جای اطمینان‌بخش، تنظیمات Cline کلیدهای تأیید خودکار دقیق دارد — برای مثال، فعال‌کردن تأیید خودکار مشخصاً برای عملیات خواندن (که اساساً هیچ ریسکی ندارند) درحالی‌که نوشتن و اجرای دستور روی تأیید دستی باقی می‌مانند، جریان کار را سریع نگه می‌دارد بدون این‌که تور ایمنی‌ای را که طراحی انسان-در-حلقهٔ Cline را ارزشمند می‌کند از دست بدهید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۷: دستورهای ترمینال روی ویندوز مسدود می‌شوند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "روی ویندوز، execute_command اغلب نه به‌خاطر کاری که Cline اشتباه انجام داده، بلکه چون خط‌مشی اجرای پیش‌فرض پاورشل اجرای اسکریپت را برای کاربر فعلی کاملاً مسدود می‌کند، شکست می‌خورد."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یک پیش‌فرض امنیتی ویندوز است، نه محدودیتی خاص Cline، اما چون اکستنشن دستورهای ترمینال را از طریق شل پیش‌فرض شما مسیریابی می‌کند، از طریق Cline ظاهر می‌شود، و یک اسکریپت مسدودشده خطای مجوزی ایجاد می‌کند که ربطی به دستوری که Cline واقعاً تولید کرده ندارد. اجرای Set-ExecutionPolicy RemoteSigned -Scope CurrentUser در یک پنجرهٔ پاورشل با دسترسی بالا، آن را برای بیشتر پیکربندی‌ها حل می‌کند، با این‌که اجازه می‌دهد اسکریپت‌های محلی ساخته‌شده و امضاشده اجرا شوند درحالی‌که اسکریپت‌های امضانشده دانلودشده از اینترنت همچنان مسدود می‌مانند، که راه‌حل میانهٔ معقولی است به‌جای غیرفعال‌کردن کامل خط‌مشی اجرا."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/1787985118-1787980035-cline-windows-terminal-permission-fix.webp",
+          "alt": "تصویر نمایشی دستور پاورشل برای رفع خطاهای خط‌مشی اجرا که دستورهای ترمینال Cline را روی ویندوز مسدود می‌کنند",
+          "caption": "شکل ۳: بیشتر شکست‌های ترمینال خاص ویندوز Cline به خط‌مشی اجرای پیش‌فرض پاورشل برمی‌گردد، نه چیزی در دستوری که Cline تولید کرده.",
+          "altText": "تصویر نمایشی دستور پاورشل برای رفع خطاهای خط‌مشی اجرا که دستورهای ترمینال Cline را روی ویندوز مسدود می‌کنند"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۸: نوشتن فایل روی مسیرهای فقط‌خواندنی شکست می‌خورد"
+        },
+        {
+          "type": "paragraph",
+          "text": "اگر Cline هنگام تلاش برای نوشتن یک فایل خطای مجوز گزارش می‌دهد، پیش از فرض‌کردن این‌که باگی از Cline است، پوشه را بررسی کنید — نوشتن در دایرکتوری‌های محافظت‌شدهٔ سیستمی مانند Program Files روی ویندوز، یا هر مسیر خارج از مجوزهای کاربری شما روی macOS و لینوکس، فارغ از این‌که کدام ابزار در حال تلاش برای نوشتن است، شکست می‌خورد. این بیشتر وقتی رخ می‌دهد که یک workspace از یک دایرکتوری نصب یا یک پوشهٔ مدیریت‌شده توسط سیستم باز شده باشد، نه یک پوشهٔ پروژهٔ معمولی در دایرکتوری خانگی شما. انتقال پروژه به یک مکان استاندارد قابل‌نوشتن توسط کاربر، یا تنظیم مجوزهای پوشه اگر ممکن نیست، همیشه آن را حل می‌کند — هیچ تنظیمی در سمت Cline وجود ندارد که مجوزهای فایل سیستم‌عامل را نادیده بگیرد، و نباید هم باشد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "خطای ۹: سرور MCP وصل نمی‌شود"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "یکپارچگی پروتکل زمینهٔ مدل Cline به آن اجازه می‌دهد از طریق سرورهای MCP مبتنی بر stdio یا SSE با پایگاه‌داده‌ها، ابزارهای داخلی و سرویس‌های خارجی صحبت کند، و شکست‌های اتصال این‌جا تقریباً همیشه به ناهماهنگی میان نحوهٔ انتظار راه‌اندازی سرور و نحوهٔ پیکربندی آن درون Cline برمی‌گردد."
+        },
+        {
+          "type": "paragraph",
+          "text": "برای سرورهای مبتنی بر stdio، رایج‌ترین اشتباه مسیر دستور از قلم‌افتاده یا نادرست است — Cline به مسیر دقیق فایل اجرایی نیاز دارد، نه فقط یک نام دستور که در ترمینال معمولی شما کار می‌کند، چون extension host همیشه همان محیط PATH شل شما را به ارث نمی‌برد. برای سرورهای مبتنی بر SSE، شکست‌های اتصال بیشتر به این برمی‌گردد که سرور واقعاً در حال اجرا نیست، یک فایروال یا خط‌مشی شبکهٔ محلی پورت را مسدود می‌کند، یا یک اشتباه تایپی در URL پیکربندی MCP وجود دارد. بررسی نشانگر وضعیت اتصال پنل MCP Marketplace ابتدا، و تست سرور به‌طور مستقل خارج از Cline پیش از فرض‌کردن این‌که خود یکپارچگی خراب است، بیشترین زمان عیب‌یابی را این‌جا صرفه‌جویی می‌کند."
+        },
+        {
+          "type": "cta",
+          "title": "ردیاب ایشوهای گیت‌هاب Cline",
+          "text": "برای خطاهایی که این‌جا پوشش داده نشده‌اند، یا برای بررسی این‌که آیا یک باگ خاص از قبل گزارش و پچ شده، ردیاب ایشوی خود پروژه به‌روزترین منبع است.",
+          "buttonText": "مرور ایشوهای باز",
+          "buttonUrl": "https://github.com/cline/cline/issues"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "چک‌لیست تشخیصی سریع پیش از ثبت گزارش باگ"
+        },
+        {
+          "type": "paragraph",
+          "text": "بیشتر خطاهای Cline را می‌توان در کمتر از دو دقیقه با گذراندن همان چک‌لیست کوتاهی که کاربران باتجربه به‌طور پیش‌فرض انجام می‌دهند، به‌جای فرض فوری خرابی اکستنشن، تریاژ کرد."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "نسخهٔ Cline را با آخرین انتشار مقایسه کنید — سهم قابل‌توجهی از باگ‌های گزارش‌شده از قبل در یک بیلد جدیدتر پچ شده‌اند",
+            "پیش از فرض توقف، در پنل چت به بالا اسکرول کنید — به احتمال زیاد یک پیام تأیید متوجه‌نشده است",
+            "بررسی کنید کدام مسیر ارائه‌دهنده فعال است — یک کلید API مستقیم، OpenRouter، یا API مدل زبانی VS Code هرکدام زیر بار متفاوت رفتار می‌کنند و خطاها را متفاوت گزارش می‌دهند",
+            "پیش از عیب‌یابی هر چیز دیگر، درصد مصرف زمینه را در نوار وضعیت نگاه کنید — سهم بزرگی از شکست‌های ویرایش، timeoutها و خطاهای «تصادفی» به فشار زمینه برمی‌گردد",
+            "پیش از فرض این‌که یک باگ مجوز خاص Cline است، مطمئن شوید مسیر فایل درگیر یک دایرکتوری محافظت‌شدهٔ سیستمی نیست",
+            "دقیقاً همان دستور ترمینال را ب��‌طور دستی خارج از Cline تست کنید تا مشخص شود شکست از Cline است یا از شل"
+          ]
+        },
+        {
+          "type": "cta",
+          "title": "کلود کد در برابر کلاین: کدام عامل کدنویسی هوش مصنوعی را در ۲۰۲۶ انتخاب کنیم؟",
+          "text": "اگر الگوهای خطای Cline شما را به فکر انداخته که آیا یک عامل دیگر با جریان کارتان بهتر جفت می‌شود، این مقایسهٔ کنارهم، مصالحه‌ها را با جزئیات پوشش می‌دهد.",
+          "buttonText": "مطالعهٔ مقایسهٔ کامل",
+          "buttonUrl": "/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "الگوی پشت تقریباً هر خطای Cline"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "پیام‌های خطای خاص را کنار بگذارید، تقریباً همهٔ شکست‌های رایج Cline از یکی از سه فشار زیربنایی می‌آیند: حسابداری توکنی که با آن‌چه ارائه‌دهنده واقعاً صورت‌حساب می‌کند مطابقت ندارد، یک مرز مجوزی که هیچ ربطی به خود Cline ندارد، یا یک وضعیت رابط کاربری — یک پیام تأیید متوجه‌نشده، یک باندل قدیمی اکستنشن — که یخ‌زده به نظر می‌رسد اما نیست."
+        },
+        {
+          "type": "paragraph",
+          "text": "هیچ‌کدام از این‌ها در همان لحظه خطاها را کمتر آزاردهنده نمی‌کند، به‌خصوص در میانهٔ یک وظیفه با تغییرات ذخیره‌نشده در خطر. اما به این معناست که راه‌حل به‌ندرت یک معمای خاص Cline است. اکستنشن را به‌روزرسانی کنید، تنظیمات ارائه‌دهنده و کلید API خود را بررسی کنید، شمارندهٔ زمینه را زیر نظر داشته باشید، مرزهای مجوز سیستم‌عاملتان را رعایت کنید، و پیش از فرض این‌که چیزی خراب است، به بالا اسکرول کنید. در ترکیب با تنظیمات تأیید خودکار برای عملیات خواندن کم‌ریسک، این فهرست کوتاه اکثریت قریب‌به‌اتفاق آن‌چه در ردیاب ایشوی Cline ظاهر می‌شود را حل می‌کند — و همان چک‌لیستی است که پیش از ثبت یک گزارش باگ جدید ارزش اجرا کردن دارد، چون احتمال زیادی وجود دارد راه‌حل از قبل در همین راهنما نشسته باشد."
+        }
+      ],
+      "faq": [
+        {
+          "question": "چرا Cline می‌گوید کلید API‌ام نامعتبر است درحالی‌که از قبل برای Claude پول می‌دهم؟",
+          "answer": "Cline به کلید API خودش از کنسول توسعه‌دهندهٔ یک ارائه‌دهندهٔ مدل نیاز دارد — از اشتراک Claude.ai، ChatGPT Plus یا Copilot استفاده نمی‌کند، حتی با این‌که این اکستنشن در ابتدا «Claude Dev» نام داشت. از console.anthropic.com (یا پورتال توسعه‌دهندهٔ ارائه‌دهندهٔ انتخابی‌تان) یک کلید بسازید و آن را در پنل API Configuration در Cline جای‌گذاری کنید."
+        },
+        {
+          "question": "چرا مدام با خطای محدودیت نرخ ۴۲۹ روبه‌رو می‌شوم درحالی‌که خیلی از Cline استفاده نکرده‌ام؟",
+          "answer": "حساب‌های تازهٔ API روی ارائه‌دهندگانی مانند Anthropic و OpenAI با سطوح مصرف پیش‌فرض محافظه‌کارانه شروع می‌شوند، گاهی تا ۸۰,۰۰۰ توکن ورودی در دقیقه، و Cline زمینهٔ قابل‌توجهی — فایل‌های باز، تاریخچهٔ مکالمه و نتایج ابزار — را با هر درخواست می‌فرستد، که می‌تواند آن سقف را فقط در چند فراخوانی ابزار بسوزاند. اضافه‌کردن یک روش پرداخت برای بالابردن سطح، یا مسیریابی از طریق OpenRouter، معمولاً آن را حل می‌کند."
+        },
+        {
+          "question": "چرا Cline می‌گوید پنجرهٔ زمینه پر شده درحالی‌که رابط کاربری فضای زیادی نشان می‌دهد؟",
+          "answer": "این ناهماهنگی شناخته‌شده‌ای است که عمدتاً هنگام اجرای مدل‌های Claude از طریق API مدل زبانی داخلی VS Code (ارائه‌دهندهٔ GitHub Copilot) رخ می‌دهد، که توکنایزر ارائه‌شده‌اش با توکنایزر واقعی Claude مطابقت ندارد. نمایش زمینهٔ Cline در آن پیکربندی مصرف واقعی را دست‌کم می‌گیرد. تغییر به یک کلید مستقیم API آنتروپیک حسابداری دقیق توکن می‌دهد."
+        },
+        {
+          "question": "چرا Cline از خواندن یک فایل بزرگ خودداری می‌کند درحالی‌که مدلم از پنجرهٔ زمینهٔ عظیمی پشتیبانی می‌کند؟",
+          "answer": "Cline سقف تک‌کدنویسی‌شدهٔ ۳۰۰ کیلوبایت را روی هر خواندن فایل منفرد اعمال می‌کند، فارغ از اندازهٔ واقعی پنجرهٔ زمینهٔ مدل انتخاب‌شده. این یک تدبیر ایمنی سمت Cline است، نه محدودیت مدل. به‌جای خواستن خواندن کل فایل یک‌جا، Cline را به تابع یا بخش خاصی از فایل اشاره دهید."
+        },
+        {
+          "question": "Cline یخ‌زده به نظر می‌رسد و چند دقیقه است پاسخ نداده. مشکل چیست؟",
+          "answer": "در اکثریت قریب‌به‌اتفاق موارد، مشکلی وجود ندارد — Cline منتظر است شما یک نوشتن فایل، دستور ترمینال یا اقدام مرورگری را تأیید کنید، و پیام تأیید از دید خارج شده. پیش از فرض یخ‌زدگی، در پنل چت به بالا اسکرول کنید، یا برای کاهش تکرار این اتفاق، تأیید خودکار عملیات خواندن کم‌ریسک را در تنظیمات Cline فعال کنید."
+        },
+        {
+          "question": "چرا دستورهای ترمینال روی ویندوز شکست می‌خورند اما روی macOS یا لینوکس خوب کار می‌کنند؟",
+          "answer": "این تقریباً همیشه خط‌مشی اجرای پیش‌فرض پاورشل است که اجرای اسکریپت را برای کاربر فعلی مسدود می‌کند، که یک پیش‌فرض امنیتی ویندوز است نه چیزی که Cline اشتباه انجام دهد. اجرای Set-ExecutionPolicy RemoteSigned -Scope CurrentUser در یک پنجرهٔ پاورشل با دسترسی بالا آن را برای بیشتر پیکربندی‌ها حل می‌کند."
+        },
+        {
+          "question": "چرا ویرایش‌های فایلم در میانهٔ یک نشست طولانی مدام شکست می‌خورند؟",
+          "answer": "نشست‌های طولانی که مکرراً همان فایل بزرگ را ویرایش می‌کنند می‌توانند مصرف زمینه را پیش از آن‌که Cline آن را کوتاه کند به بالای ۱۰۰٪ برسانند، و ابزارهای ویرایش مبتنی بر دیف به تطابق دقیق میان دیف تولیدشده و محتوای فعلی فایل وابسته‌اند. اگر زمینه به‌آرامی کوتاه شود، دیف دیگر تطابق ندارد. درخواست از Cline برای دوباره‌خواندن فایل پیش از یک ویرایش دیرهنگام، یا تقسیم نشست به وظایف کوتاه‌تر، آن را حل می‌کند."
+        },
+        {
+          "question": "سرور MCP‌ام در Cline قطع نشان داده می‌شود. چگونه آن را عیب‌یابی کنم؟",
+          "answer": "برای سرورهای مبتنی بر stdio، بررسی کنید پیکربندی Cline از مسیر دقیق فایل اجرایی استفاده می‌کند نه یک نام دستور ساده، چون extension host همیشه PATH شل شما را به ارث نمی‌برد. برای سرورهای مبتنی بر SSE، مطمئن شوید سرور واقعاً در حال اجراست، فایروال یا خط‌مشی شبکه پورت را مسدود نمی‌کند، و URL پیکربندی‌شده را از نظر اشتباه تایپی بررسی کنید پیش از فرض این‌که خود یکپارچگی MCP خراب است."
+        }
+      ],
+      "seo": {
+        "title": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم | راهنمای ۲۰۲۶",
+        "metaDescription": "از محدودیت نرخ ۴۲۹ تا سرریز پنجرهٔ زمینه و دستورهای ترمینال مسدود، این‌جا نحوهٔ تشخیص و رفع رایج‌ترین خطاهای Cline، و دلیل واقعی رخ‌دادن هرکدام را می‌بینید.",
+        "canonical": "https://sinisteroid.ir/fa/blog/how-to-fix-clines-most-common-errors-and-why-they-happen",
+        "openGraph": {
+          "title": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)",
+          "description": "نه علت ریشه‌ای، تقریباً هر خطای Cline گزارش‌شده در گیت‌هاب را توضیح می‌دهد. این‌جا نحوهٔ تشخیص و رفع هرکدام را در چند دقیقه، نه چند ساعت، می‌بینید.",
+          "image": "/api/uploads/1787980001-how-to-fix-cline-common-errors-cover.webp"
+        },
+        "twitter": {
+          "title": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)",
+          "description": "محدودیت نرخ، سرریز پنجرهٔ زمینه، دستورهای ترمینال مسدود، پیام‌های تأیید یخ‌زده — این‌جا راه‌حل هر خطای Cline، توضیح‌داده‌شده را می‌بینید.",
+          "image": "/api/uploads/1787980001-how-to-fix-cline-common-errors-cover.webp"
+        },
+        "keywords": "خطاهای Cline, رفع مشکل اکستنشن Cline در VS Code, محدودیت نرخ Cline, سرریز پنجرهٔ زمینه Cline, کلید API نامعتبر Cline, Cline کار نمی‌کند, عیب‌یابی Cline, شکست ویرایش دیف Cline, سرور MCP Cline, خطاهای عامل کدنویسی هوش مصنوعی",
+        "focusKeyword": "رفع خطاهای Cline"
+      }
+    }
+  }
+}

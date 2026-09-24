@@ -1,0 +1,735 @@
+{
+  "slug": "claude-code-setup-guide-from-install-to-first-autonomous-task",
+  "status": "published",
+  "title": "Claude Code Setup Guide: From Install to First Autonomous Task",
+  "date": "2026-08-30 12:05:56",
+  "tags": [
+    "claude-code",
+    "ai-coding-agent",
+    "ai-coding-assistant",
+    "developer-tools",
+    "agentic-ai",
+    "anthropic",
+    "cli-tools",
+    "mcp",
+    "productivity-tools",
+    "ai-engineering"
+  ],
+  "featuredImage": {
+    "src": "/api/uploads/20260830-121957-b073216a16cb016f.webp",
+    "alt": {
+      "en": "Claude Code Setup Guide: From Install to First Autonomous Task",
+      "fa": "راهنمای راه‌اندازی Claude Code: از نصب تا اولین وظیفهٔ خودمختار"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "Claude Code Setup Guide: From Install to First Autonomous Task",
+      "excerpt": "Install command, account type, first prompt, permission modes, CLAUDE.md, MCP servers, and your first fully autonomous task — this is the complete, no-skipped-steps path from an empty terminal to a working agentic coding setup.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "Claude Code Setup Guide: From Install to First Autonomous Task"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Claude Code is Anthropic's agentic coding tool that lives in your terminal, reads your codebase, edits files, runs commands, and handles git workflows through plain-English requests instead of copy-pasting between a chat window and your editor. Getting from a fresh install to genuinely autonomous work — the kind where you describe a feature and walk away while Claude plans, writes, tests, and commits it — takes about fifteen minutes if you follow the steps in order and skip none of the configuration that actually matters."
+        },
+        {
+          "type": "paragraph",
+          "text": "Most setup guides stop at 'run claude and start typing.' That gets you a working chat session, not an autonomous one. This guide covers the full path: installing correctly for your platform, verifying the install actually worked, understanding which account type you need, the permission-mode system that determines how much Claude can do without asking, the CLAUDE.md file that turns Claude from a generic assistant into one that understands your specific codebase, connecting external tools through MCP, and finally, running a task genuinely hands-off from start to finish."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "143K+",
+              "label": "GitHub stars on the public anthropics/claude-code repository"
+            },
+            {
+              "value": "Node.js 22+",
+              "label": "required for the npm install method as of Claude Code v2.1.198; native installers don't need Node.js at all"
+            },
+            {
+              "value": "4GB+",
+              "label": "minimum RAM Claude Code requires, running on macOS 13+, Windows 10 1809+, or Ubuntu 20.04+"
+            },
+            {
+              "value": "3",
+              "label": "official install methods for macOS/Linux/WSL alone: a native curl script, Homebrew, and Linux package managers (apt, dnf, apk)"
+            },
+            {
+              "value": "Auto mode",
+              "label": "the default starting permission mode for interactive terminal sessions on Pro, Max, and Team plans as of the current release"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260830-122009-8bd4724627588ac1.webp",
+          "alt": "Flow diagram showing the nine setup stages for Claude Code: install, verify, authenticate, first session, permission modes, CLAUDE.md, MCP servers, and running an autonomous task",
+          "caption": "Figure 1: The full setup path from an empty terminal to a genuinely autonomous Claude Code session — most guides skip straight from install to chat and miss the steps that make autonomy actually work.",
+          "altText": "Flow diagram showing the nine setup stages for Claude Code: install, verify, authenticate, first session, permission modes, CLAUDE.md, MCP servers, and running an autonomous task"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "What Claude Code Actually Is, Before You Install It"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Claude Code isn't a chat window bolted onto your editor, and it isn't an autocomplete engine. It's an agentic loop: Claude reads relevant files, decides what tools to call, executes them, reads the results, and repeats until the task is done or it needs your input."
+        },
+        {
+          "type": "paragraph",
+          "text": "That loop is what makes 'autonomous' a meaningful word here rather than marketing language. A single request like 'add input validation to the registration form' triggers Claude to locate the relevant file, read the surrounding code for context, write the validation logic, and, depending on your permission settings, run the test suite to confirm nothing broke — all without you switching windows to paste code back and forth. Claude Code runs primarily in your terminal, but the same underlying agent is also available in a desktop app, a VS Code extension, JetBrains IDEs, Slack, and headless in CI/CD pipelines through GitHub Actions and GitLab. This guide focuses on the terminal CLI, since it's the foundation every other surface builds on."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 1: Confirm Your System Meets the Requirements"
+        },
+        {
+          "type": "paragraph",
+          "text": "Before installing anything, check that your machine actually qualifies. Claude Code runs on macOS 13.0 or later, Windows 10 build 1809+ (or Windows Server 2019+), Ubuntu 20.04+, Debian 10+, and Alpine Linux 3.19+, and needs at least 4GB of RAM on an x64 or ARM64 processor plus a working internet connection. Your shell needs to be Bash, Zsh, PowerShell, or CMD — all common defaults, so this rarely trips anyone up. The one requirement worth double-checking in advance is availability: Claude Code is only available in Anthropic's supported countries, so if you're setting this up somewhere with regional restrictions, confirm access before spending time on the rest of this guide."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "macOS: version 13.0 or later, any Apple Silicon or Intel Mac",
+            "Windows: 10 build 1809+ or Windows Server 2019+, running natively or inside WSL",
+            "Linux: Ubuntu 20.04+, Debian 10+, or Alpine Linux 3.19+ (Alpine needs a few extra packages, covered below)",
+            "Hardware: 4GB+ RAM, x64 or ARM64 processor, and an active internet connection",
+            "If you plan to install via npm specifically: Node.js 22 or later as of the current release — the native installers below don't need Node.js at all"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 2: Install Claude Code for Your Platform"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Anthropic ships several install paths, and which one you pick affects how updates behave later, so it's worth choosing deliberately rather than grabbing whichever command shows up first in a search result."
+        },
+        {
+          "type": "paragraph",
+          "text": "The native installer is the recommended default because it auto-updates in the background, keeping you on the latest version without any manual steps. On macOS, Linux, or WSL, run curl -fsSL https://claude.ai/install.sh | bash in your terminal. On native Windows using PowerShell, run irm https://claude.ai/install.ps1 | iex. On native Windows using CMD, run curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd. If you get an error about '&&' not being a valid statement separator, you're actually in PowerShell and need the PowerShell command instead; if you see 'irm is not recognized,' you're in CMD and need the CMD command. Your prompt tells you which one you're in: PowerShell shows PS C:\\ and CMD shows just C:\\ without the PS prefix."
+        },
+        {
+          "type": "paragraph",
+          "text": "Beyond the native installer, Homebrew users can run brew install --cask claude-code, which offers two casks: the plain claude-code cask tracks a stable release channel about a week behind the newest build, while claude-code@latest tracks new releases immediately. Windows users comfortable with WinGet can run winget install Anthropic.ClaudeCode. Debian, Fedora, RHEL, and Alpine users can install through their native package managers (apt, dnf, or apk) using Anthropic's signed repositories, though this requires a few extra setup steps to register the repository and verify the signing key first. Whichever method you choose except the native installer, note that updates won't happen automatically — you'll need to run the upgrade command for your specific package manager periodically."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Native installer (recommended): auto-updates in the background, no manual maintenance required",
+            "Homebrew: brew install --cask claude-code, requires brew upgrade claude-code manually to update",
+            "WinGet: winget install Anthropic.ClaudeCode, requires winget upgrade manually to update",
+            "npm: npm install -g @anthropic-ai/claude-code, requires Node.js 22+ and npm install -g @anthropic-ai/claude-code@latest to update (avoid npm update -g, which won't reliably grab the newest release)",
+            "apt/dnf/apk: available for Debian, Fedora, RHEL, and Alpine through Anthropic's signed package repositories, useful for server and CI environments already standardized on a Linux package manager"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "On native Windows specifically, installing Git for Windows first is recommended but optional — it gives Claude Code access to Git Bash so it can use the same Bash tool available on macOS and Linux. Without Git for Windows, Claude Code falls back to a PowerShell-based tool instead, which works fine for most tasks but behaves slightly differently for certain shell operations. WSL setups don't need Git for Windows at all, since they already run a real Linux shell."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260830-122026-7cd252ed9f7c09f3.webp",
+          "alt": "Comparison table of Claude Code install methods across native installer, Homebrew, WinGet, npm, and Linux package managers, showing which ones auto-update",
+          "caption": "Figure 2: Five install paths, one meaningful difference — only the native installer keeps itself current automatically. Everything else needs a manual upgrade command on a schedule you set.",
+          "altText": "Comparison table of Claude Code install methods across native installer, Homebrew, WinGet, npm, and Linux package managers, showing which ones auto-update"
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code vs Cline: Which AI Coding Agent Should Developers Use in 2026?",
+          "text": "If you're still weighing Claude Code against other agentic coding tools before committing to a setup, this comparison covers the trade-offs in detail.",
+          "buttonText": "Read the Full Comparison",
+          "buttonUrl": "/en/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 3: Verify the Install Actually Worked"
+        },
+        {
+          "type": "paragraph",
+          "text": "Don't skip this step just because the install command finished without visible errors. Run claude --version in your terminal — a working installation prints a version number followed by (Claude Code), something like 2.1.211 (Claude Code). If you instead get command not found or a similar error, the binary either didn't land on your PATH or the install genuinely failed partway through, and troubleshooting that now is far less frustrating than discovering it mid-task later. For a deeper check beyond the version number, run claude doctor, which prints read-only diagnostics covering install health, any settings-file validation errors, and specific suggested fixes for anything it finds — without starting an actual session."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 4: Log In With the Right Account Type"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Claude Code requires a Pro, Max, Team, Enterprise, or Console account — the free Claude.ai plan does not include Claude Code access, which trips up more first-time users than any technical setup step in this guide."
+        },
+        {
+          "type": "paragraph",
+          "text": "Start an interactive session by running claude in your project directory, and on first use you'll be prompted to log in through your browser. A Claude Pro, Max, Team, or Enterprise subscription is the recommended option for most individual developers and small teams. A Claude Console account works too, and is billed through pre-paid API credits rather than a flat subscription; on first login with a Console account, Claude Code automatically creates a dedicated 'Claude Code' workspace for centralized cost tracking. Larger organizations can also authenticate through Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry if that's already how they manage cloud AI spend, or through a self-hosted gateway if their organization runs one. If you've already set the ANTHROPIC_API_KEY environment variable before running claude, it skips the browser login entirely and just asks you to approve the key instead. Once you've logged in the first time, your credentials are stored locally and you won't need to repeat this step; to switch accounts or re-authenticate later, type /login inside a running session."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 5: Start Your First Session and Ask Real Questions"
+        },
+        {
+          "type": "paragraph",
+          "text": "Navigate to an actual project directory before starting Claude Code — cd /path/to/your/project, then run claude. You'll see the prompt with the current version, active model, and working directory displayed above it. Resist the urge to immediately ask for a code change; start by asking Claude to explain what it's looking at instead. Try what does this project do?, what technologies does this project use?, or where is the main entry point?. Claude Code reads your project files as needed to answer these, so you don't need to manually paste in any context — that's the entire point of running inside your actual codebase instead of a generic chat window. You can also ask Claude directly about its own capabilities, which is a genuinely useful habit early on: questions like what can Claude Code do? or can Claude Code work with Docker? get you accurate, current answers instead of guessing from outdated blog posts."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 6: Make Your First Change and Understand Permission Modes"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Try something small and low-stakes for your first real edit, like add a hello world function to the main file. What happens next depends entirely on which permission mode your session is running in, and understanding that system now saves real confusion later."
+        },
+        {
+          "type": "paragraph",
+          "text": "In your very first session after installing, Claude Code asks before every change regardless of plan, so you'll see an approval prompt — select Yes to let it proceed. After that first session, the built-in starting permission mode differs by plan: on Pro, Max, and Team plans, interactive terminal sessions default to auto mode, where a classifier reviews Claude's actions in place of you asking for each one manually, and Claude edits most files and runs most commands without an explicit prompt. On other plans, the default is a manual mode where you approve each action individually. Either way, you're never locked into the starting mode — press Shift+Tab at any point during a session to cycle through permission modes on the fly, tightening control before a risky operation or loosening it once you trust what Claude's doing on a given task."
+        },
+        {
+          "type": "cta",
+          "title": "Claude Code Quickstart — Official Documentation",
+          "text": "For the complete, always-current reference on permission modes, essential commands, and troubleshooting, Anthropic's own quickstart is the authoritative source.",
+          "buttonText": "Read the Official Quickstart",
+          "buttonUrl": "https://code.claude.com/docs/en/quickstart"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 7: Write a CLAUDE.md File So Claude Understands Your Project"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "A CLAUDE.md file at your project root is the single highest-leverage setup step most developers skip, and it's the difference between Claude re-guessing your conventions every session and Claude simply knowing them."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is a plain Markdown file Claude Code automatically loads at the start of a session, and it's where you put anything you'd otherwise have to repeat in every conversation: which package manager the project uses, testing conventions, code style rules, which directories are safe to modify versus which are generated and off-limits, and any project-specific terminology or architecture decisions that aren't obvious from the code alone. You can create one manually, or ask Claude Code to generate a starting draft by exploring your codebase first, which tends to catch conventions you'd forget to write down yourself. For larger codebases, you can layer multiple CLAUDE.md files at different directory levels rather than maintaining one enormous file, and teams can deploy a shared CLAUDE.md across an entire organization so every developer's Claude Code session starts from the same baseline understanding of house style and constraints."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260830-122038-865c5e18456488eb.webp",
+          "alt": "Diagram showing how CLAUDE.md files layer across a project root and nested directories, alongside MCP server connections and permission settings",
+          "caption": "Figure 3: A well-configured Claude Code setup layers project instructions, permission rules, and connected tools — most of the difference between a generic assistant and one that knows your codebase lives in this layer.",
+          "altText": "Diagram showing how CLAUDE.md files layer across a project root and nested directories, alongside MCP server connections and permission settings"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 8: Connect External Tools Through MCP (Optional But Worth Doing Early)"
+        },
+        {
+          "type": "paragraph",
+          "text": "The Model Context Protocol lets Claude Code reach beyond your local filesystem to read your team's Jira tickets, query a database directly, pull design files from Figma, or update documents in Google Drive, all through the same conversational interface you're already using for code. Adding a server is usually a single command — running claude with the appropriate mcp add flag and a server's connection details registers it, and Claude Code verifies the connection before you start relying on it. Servers can be scoped locally to just your current project, shared with your whole team through a checked-in configuration file, or set at the user level so they're available across every project you work in. This step is genuinely optional for a first session, but if your workflow regularly involves checking a ticket tracker or querying a database alongside writing code, setting up the relevant MCP server now saves you from manually copy-pasting that context into every future session."
+        },
+        {
+          "type": "cta",
+          "title": "Cline: The Open-Source AI Coding Agent Redefining Developer Workflows",
+          "text": "If you're comparing how different agentic coding tools handle MCP integrations and local-model support before settling on a setup, this overview is a useful reference point.",
+          "buttonText": "Read the Cline Overview",
+          "buttonUrl": "/en/blog/cline-the-open-source-ai-coding-agent/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Step 9: Run Your First Genuinely Autonomous Task"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Everything up to this point has been interactive — you're in the loop for every step. A genuinely autonomous task is different: you hand off a well-scoped piece of work and Claude plans, executes, verifies, and reports back with minimal or zero interruption."
+        },
+        {
+          "type": "paragraph",
+          "text": "The simplest version of this is a one-off, non-interactive query: run claude -p \"query\" from your terminal, and Claude executes the request and exits, which is exactly the pattern you'd use inside a script or a CI pipeline rather than an interactive session. For a task with more steps, describe the full scope up front rather than issuing instructions one at a time — something like fix the bug where users can submit empty registration forms: add validation, write a test for it, and commit the change with a descriptive message gives Claude enough scope to plan the whole sequence, implement it, verify it against your test suite, and hand you a finished commit rather than a half-done edit waiting on your next instruction. This works best in auto mode, where Claude isn't stopping to ask permission for every intermediate step, and it's worth deliberately practicing on a low-stakes task first — a documentation update or a small refactor — before trusting a genuinely autonomous run on something touching production code."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "Scope the task fully in your first message rather than issuing it step by step — autonomy works best when Claude has the complete picture upfront, not a drip-fed sequence of instructions",
+            "Ask for verification as part of the task itself — 'and run the tests to confirm' turns a blind autonomous edit into one that checks its own work before finishing",
+            "Start with something reversible — a new branch, a docs update, a test file — before letting an autonomous run touch anything you'd hate to redo by hand",
+            "Use claude -c to continue your most recent conversation in the current directory, or claude -r to resume a specific previous conversation, so a multi-step autonomous task can pick back up exactly where it left off",
+            "Watch the first full run closely even in auto mode — you're building intuition for what Claude does unprompted, which makes every subsequent autonomous task easier to scope well"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Common First-Week Mistakes Worth Avoiding"
+        },
+        {
+          "type": "paragraph",
+          "text": "The most common early mistake is treating Claude Code like a search-and-paste chatbot — describing a problem in a single vague sentence instead of giving it the specific context a colleague would need. 'Fix the login bug' produces a much weaker result than 'fix the login bug where users see a blank screen after entering wrong credentials,' because the second version tells Claude exactly what to look for instead of making it guess. The second common mistake is skipping CLAUDE.md entirely and re-explaining project conventions in every session, which wastes both your time and context budget that could otherwise go toward the actual task. The third is jumping straight to a large, vague autonomous task before running a handful of small interactive ones first — you'll get much better autonomous results once you've seen how Claude approaches your specific codebase on lower-stakes work."
+        },
+        {
+          "type": "cta",
+          "title": "How to Fix Cline's Most Common Errors (And Why They Happen)",
+          "text": "Agentic coding tools across the board share similar failure patterns — context limits, permission confusion, provider setup issues. This breakdown of Cline's most common errors is a useful parallel reference even if you're running Claude Code.",
+          "buttonText": "Read the Troubleshooting Guide",
+          "buttonUrl": "/en/blog/how-to-fix-clines-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Quick Reference: Commands Worth Memorizing"
+        },
+        {
+          "type": "paragraph",
+          "text": "A handful of commands cover the overwhelming majority of daily use, and memorizing them now is faster than looking each one up the first time you need it mid-task."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "claude — start an interactive session in the current directory",
+            "claude \"task\" — start an interactive session with an initial prompt already queued",
+            "claude -p \"query\" — run a single one-off query non-interactively, then exit; the pattern for scripts and CI",
+            "claude -c — continue your most recent conversation in the current directory",
+            "claude -r — resume a specific previous conversation from a picker",
+            "/clear — clear conversation history inside a running session without exiting",
+            "/help — list available commands inside a running session",
+            "/login — switch accounts or re-authenticate inside a running session",
+            "claude doctor — print read-only installation and configuration diagnostics without starting a session",
+            "claude --version — confirm your installed version"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "You're Set Up. Now Build the Habit"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Everything above gets you from an empty terminal to a working, genuinely autonomous Claude Code setup, but the setup itself isn't where the real gains show up."
+        },
+        {
+          "type": "paragraph",
+          "text": "The developers who get the most out of Claude Code aren't the ones with the most exotic MCP integrations or the longest CLAUDE.md file — they're the ones who treat it like a capable but literal-minded colleague: specific requests over vague ones, real project context over assumed context, small trusted tasks before large autonomous ones, and a habit of asking Claude to verify its own work rather than assuming success. Install correctly, write a CLAUDE.md that actually reflects how your team works, understand what permission mode you're running in before you need to care, and the jump from 'chat window that edits files' to 'agent I can hand a real task to and walk away from' happens faster than most new setup guides suggest."
+        }
+      ],
+      "faq": [
+        {
+          "question": "Do I need to know Node.js to install Claude Code?",
+          "answer": "No. The recommended native installer (curl -fsSL https://claude.ai/install.sh | bash on macOS/Linux/WSL, or the PowerShell/CMD equivalents on Windows) downloads a standalone binary and doesn't require Node.js at all. Node.js 22 or later is only needed if you specifically choose the npm install method (npm install -g @anthropic-ai/claude-code)."
+        },
+        {
+          "question": "Why does Claude Code say I need to log in even though I have a Claude.ai account?",
+          "answer": "The free Claude.ai plan does not include Claude Code access. You need a Claude Pro, Max, Team, Enterprise, or Console account, or access through a supported cloud provider like Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry. Running claude for the first time prompts you to log in through your browser with whichever account type you have."
+        },
+        {
+          "question": "What's the difference between auto mode and the default manual approval mode?",
+          "answer": "In auto mode, a classifier reviews Claude's actions and Claude edits most files and runs most commands without stopping to ask you first — this is the default starting mode for interactive terminal sessions on Pro, Max, and Team plans. In manual mode, Claude asks for explicit approval before each individual action. You can switch between permission modes at any time during a session by pressing Shift+Tab."
+        },
+        {
+          "question": "Is CLAUDE.md required to use Claude Code?",
+          "answer": "No, Claude Code works without one, but a CLAUDE.md file at your project root is the single most effective way to stop re-explaining your project's conventions, testing setup, and code style in every new session. It's a plain Markdown file Claude Code automatically loads at the start of a session, and you can ask Claude Code itself to draft one by exploring your codebase first."
+        },
+        {
+          "question": "How do I run Claude Code non-interactively, like in a CI pipeline?",
+          "answer": "Use the -p flag with a query: claude -p \"your task here\" runs the request once and exits without opening an interactive session, which is the pattern used in scripts, build pipelines, and headless automation. For actual CI/CD integration, Claude Code also has dedicated support for GitHub Actions and GitLab CI/CD."
+        },
+        {
+          "question": "What's the actual difference between the install methods?",
+          "answer": "The main practical difference is updates. The native installer auto-updates in the background with no manual steps. Homebrew, WinGet, npm, and Linux package manager (apt/dnf/apk) installations all require you to run an upgrade command yourself periodically — Claude Code won't update itself in the background through those paths."
+        },
+        {
+          "question": "My install command failed with an error. What should I check first?",
+          "answer": "Run claude --version first to confirm whether the install actually completed. If that fails, claude doctor gives read-only diagnostics on install health and settings-file issues without starting a session. Common causes include running the wrong install command for your shell (PowerShell vs. CMD errors look similar but need different commands) and PATH issues where the binary installed but isn't discoverable."
+        },
+        {
+          "question": "Can Claude Code work entirely without connecting any MCP servers?",
+          "answer": "Yes. MCP servers extend Claude Code to reach external tools like Jira, databases, Figma, or Google Drive, but they're entirely optional. A first session with no MCP servers connected still gives you full file editing, terminal command execution, and git workflow support, since those are built-in capabilities rather than something MCP provides."
+        }
+      ],
+      "seo": {
+        "title": "Claude Code Setup Guide: From Install to First Autonomous Task | 2026",
+        "metaDescription": "The complete Claude Code setup guide: install for your platform, verify it worked, log in correctly, configure CLAUDE.md and permission modes, and run your first autonomous task.",
+        "canonical": "https://sinisteroid.ir/blog/claude-code-setup-guide-from-install-to-first-autonomous-task",
+        "openGraph": {
+          "title": "Claude Code Setup Guide: From Install to First Autonomous Task",
+          "description": "Every step from an empty terminal to a genuinely autonomous Claude Code session, including the setup steps most guides skip entirely.",
+          "image": "/api/uploads/1788050001-claude-code-setup-guide-cover.webp"
+        },
+        "twitter": {
+          "title": "Claude Code Setup Guide: From Install to First Autonomous Task",
+          "description": "Install, verify, log in, configure CLAUDE.md, connect MCP, and run your first fully autonomous Claude Code task. The complete path, no steps skipped.",
+          "image": "/api/uploads/1788050001-claude-code-setup-guide-cover.webp"
+        },
+        "keywords": "Claude Code setup, install Claude Code, Claude Code tutorial, Claude Code CLAUDE.md, Claude Code permission modes, Claude Code auto mode, Claude Code MCP setup, Claude Code autonomous task, how to use Claude Code, agentic coding tool setup",
+        "focusKeyword": "Claude Code setup guide"
+      }
+    },
+    "fa": {
+      "title": "راهنمای راه‌اندازی Claude Code: از نصب تا اولین وظیفهٔ خودمختار",
+      "excerpt": "دستور نصب، نوع حساب، اولین پرامپت، حالت‌های مجوز، CLAUDE.md، سرورهای MCP و اولین وظیفهٔ کاملاً خودمختار شما — این‌جا مسیر کامل و بدون گام‌حذف‌شده از یک ترمینال خالی تا یک راه‌اندازی کاری کدنویسی عاملی را می‌بینید.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "راهنمای راه‌اندازی Claude Code: از نصب تا اولین وظیفهٔ خودمختار"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Claude Code ابزار کدنویسی عاملی آنتروپیک است که در ترمینال شما زندگی می‌کند، کدبیس‌تان را می‌خواند، فایل‌ها را ویرایش می‌کند، دستورها را اجرا می‌کند و جریان‌های کاری گیت را از طریق درخواست‌های زبان ساده انجام می‌دهد، به‌جای کپی-پیست کردن بین یک پنجرهٔ چت و ویرایشگرتان. رسیدن از یک نصب تازه به کار واقعاً خودمختار — نوعی که در آن یک ویژگی را توصیف می‌کنید و کنار می‌روید درحالی‌که Claude برنامه‌ریزی، نوشتن، تست و کامیت آن را انجام می‌دهد — اگر گام‌ها را به ترتیب دنبال کنید و هیچ‌کدام از پیکربندی‌هایی که واقعاً اهمیت دارند را از قلم نیندازید، حدود پانزده دقیقه طول می‌کشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "بیشتر راهنماهای راه‌اندازی در «claude را اجرا کن و شروع به تایپ کن» متوقف می‌شوند. این یک نشست چت کاری به شما می‌دهد، نه یک نشست خودمختار. این راهنما مسیر کامل را پوشش می‌دهد: نصب درست برای پلتفرم شما، تأیید این‌که نصب واقعاً کار کرده، فهم این‌که به کدام نوع حساب نیاز دارید، سیستم حالت‌های مجوز که تعیین می‌کند Claude چقدر می‌تواند بدون پرسیدن انجام دهد، فایل CLAUDE.md که Claude را از یک دستیار عمومی به یکی که کدبیس خاص شما را می‌فهمد تبدیل می‌کند، اتصال ابزارهای خارجی از طریق MCP، و در نهایت، اجرای واقعی یک وظیفه از ابتدا تا انتها بدون دخالت شما."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "بیش از ۱۴۳ هزار",
+              "label": "ستارهٔ گیت‌هاب روی مخزن عمومی anthropics/claude-code"
+            },
+            {
+              "value": "Node.js 22+",
+              "label": "برای روش نصب npm از نسخهٔ Claude Code v2.1.198 به بعد لازم است؛ نصب‌کننده‌های بومی اصلاً به Node.js نیاز ندارند"
+            },
+            {
+              "value": "۴ گیگابایت+",
+              "label": "حداقل RAM موردنیاز Claude Code، که روی macOS 13+، Windows 10 1809+ یا Ubuntu 20.04+ اجرا می‌شود"
+            },
+            {
+              "value": "۳",
+              "label": "روش نصب رسمی فقط برای macOS/Linux/WSL: یک اسکریپت بومی curl، Homebrew و مدیران بستهٔ لینوکس (apt، dnf، apk)"
+            },
+            {
+              "value": "حالت خودکار",
+              "label": "حالت مجوز شروع پیش‌فرض برای نشست‌های تعاملی ترمینال در پلن‌های Pro، Max و Team در نسخهٔ فعلی"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260830-122055-70a49c2abb7cc650.webp",
+          "alt": "نمودار جریانی نشان‌دهندهٔ نه مرحلهٔ راه‌اندازی Claude Code: نصب، تأیید، احراز هویت، اولین نشست، حالت‌های مجوز، CLAUDE.md، سرورهای MCP و اجرای یک وظیفهٔ خودمختار",
+          "caption": "شکل ۱: مسیر کامل راه‌اندازی از یک ترمینال خالی تا یک نشست واقعاً خودمختار Claude Code — بیشتر راهنماها مستقیم از نصب به چت می‌پرند و گام‌هایی را که واقعاً خودمختاری را کارآمد می‌کنند از قلم می‌اندازند.",
+          "altText": "نمودار جریانی نشان‌دهندهٔ نه مرحلهٔ راه‌اندازی Claude Code: نصب، تأیید، احراز هویت، اولین نشست، حالت‌های مجوز، CLAUDE.md، سرورهای MCP و اجرای یک وظیفهٔ خودمختار"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Claude Code واقعاً چیست، پیش از نصب آن"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Claude Code یک پنجرهٔ چت پیچ‌شده به ویرایشگر شما نیست، و یک موتور تکمیل خودکار هم نیست. یک حلقهٔ عاملی است: Claude فایل‌های مرتبط را می‌خواند، تصمیم می‌گیرد کدام ابزارها را فراخوانی کند، آن‌ها را اجرا می‌کند، نتایج را می‌خواند، و تکرار می‌کند تا وظیفه تمام شود یا به ورودی شما نیاز داشته باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "همین حلقه است که «خودمختار» را این‌جا کلمه‌ای معنادار می‌کند، نه زبان بازاریابی. یک درخواست منفرد مانند «اعتبارسنجی ورودی را به فرم ثبت‌نام اضافه کن» باعث می‌شود Claude فایل مرتبط را پیدا کند، کد اطراف را برای زمینه بخواند، منطق اعتبارسنجی را بنویسد، و بسته به تنظیمات مجوز شما، مجموعهٔ تست را برای تأیید سالم‌ماندن همه‌چیز اجرا کند — همه بدون این‌که شما بین پنجره‌ها جابه‌جا شوید تا کد را پس‌وپیش کپی-پیست کنید. Claude Code عمدتاً در ترمینال شما اجرا می‌شود، اما همان عامل زیربنایی در یک اپ دسکتاپ، اکستنشن VS Code، آی‌دی‌های JetBrains، اسلک، و به‌شکل headless در خط‌لوله‌های CI/CD از طریق GitHub Actions و GitLab هم در دسترس است. این راهنما روی CLI ترمینال تمرکز دارد، چون پایه‌ای است که هر س��ح دیگر روی آن ساخته می‌شود."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۱: مطمئن شوید سیستم‌تان الزامات را دارد"
+        },
+        {
+          "type": "paragraph",
+          "text": "پیش از نصب هر چیزی، بررسی کنید ماشین شما واقعاً واجد شرایط است. Claude Code روی macOS نسخهٔ ۱۳.۰ یا جدیدتر، Windows 10 بیلد 1809+ (یا Windows Server 2019+)، Ubuntu 20.04+، Debian 10+، و Alpine Linux 3.19+ اجرا می‌شود، و به حداقل ۴ گیگابایت RAM روی یک پردازندهٔ x64 یا ARM64 به‌همراه یک اتصال اینترنت کارآمد نیاز دارد. شل شما باید Bash، Zsh، PowerShell یا CMD باشد — همگی پیش‌فرض‌های رایج، پس این به‌ندرت مشکل‌ساز می‌شود. الزامی که ارزش بررسی از قبل را دارد، دسترس‌پذیری است: Claude Code فقط در کشورهای پشتیبانی‌شدهٔ آنتروپیک در دسترس است، پس اگر جایی با محدودیت‌های منطقه‌ای در حال راه‌اندازی هستید، پیش از صرف زمان برای بقیهٔ این راهنما، دسترسی را تأیید کنید."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "macOS: نسخهٔ ۱۳.۰ یا جدیدتر، هر مک اپل سیلیکون یا اینتل",
+            "ویندوز: بیلد 1809+ نسخهٔ ۱۰ یا Windows Server 2019+، به‌صورت بومی یا درون WSL",
+            "لینوکس: Ubuntu 20.04+، Debian 10+، یا Alpine Linux 3.19+ (Alpine به چند بستهٔ اضافی نیاز دارد، که در ادامه پوشش داده می‌شود)",
+            "سخت‌افزار: ۴ گیگابایت+ RAM، پردازندهٔ x64 یا ARM64، و یک اتصال اینترنت فعال",
+            "اگر قصد نصب مشخصاً از طریق npm دارید: Node.js نسخهٔ ۲۲ یا جدیدتر در نسخهٔ فعلی — نصب‌کننده‌های بومی زیر اصلاً به Node.js نیاز ندارند"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۲: Claude Code را برای پلتفرم خود نصب کنید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "آنتروپیک چند مسیر نصب ارائه می‌دهد، و این‌که کدام را انتخاب کنید بر نحوهٔ رفتار به‌روزرسانی‌ها بعداً تأثیر می‌گذارد، پس ارزش انتخاب آگاهانه را دارد، نه گرفتن هر دستوری که اول در نتایج جستجو ظاهر می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "نصب‌کنندهٔ بومی پیش‌فرض توصیه‌شده است چون در پس‌زمینه به‌طور خودکار به‌روزرسانی می‌شود و شما را بدون هیچ گام دستی روی آخرین نسخه نگه می‌دارد. روی macOS، لینوکس یا WSL، در ترمینال خود curl -fsSL https://claude.ai/install.sh | bash را اجرا کنید. روی ویندوز بومی با استفاده از PowerShell، irm https://claude.ai/install.ps1 | iex را اجرا کنید. روی ویندوز بومی با استفاده از CMD، curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd را اجرا کنید. اگر خطایی دربارهٔ نامعتبربودن «&&» به‌عنوان جداکنندهٔ دستور دریافت کردید، در واقع در PowerShell هستید و به دستور PowerShell نیاز دارید؛ اگر «irm شناخته نشد» دیدید، در CMD هستید و به دستور CMD نیاز دارید. پرامپت شما نشان می‌دهد در کدام هستید: PowerShell نمایش PS C:\\ را نشان می‌دهد و CMD فقط C:\\ بدون پیشوند PS."
+        },
+        {
+          "type": "paragraph",
+          "text": "فراتر از نصب‌کنندهٔ بومی، کاربران Homebrew می‌توانند brew install --cask claude-code را اجرا کنند، که دو کسک ارائه می‌دهد: کسک ساده claude-code یک کانال انتشار پایدار حدود یک هفته عقب‌تر از جدیدترین نسخه را دنبال می‌کند، درحالی‌که claude-code@latest نسخه‌های جدید را بلافاصله دنبال می‌کند. کاربران ویندوز که با WinGet راحت هستند می‌توانند winget install Anthropic.ClaudeCode را اجرا کنند. کاربران Debian، Fedora، RHEL و Alpine می‌توانند از طریق مدیران بستهٔ بومی خود (apt، dnf یا apk) با استفاده از مخازن امضاشدهٔ آنتروپیک نصب کنند، هرچند این چند گام راه‌اندازی اضافی برای ثبت مخزن و تأیید کلید امضا لازم دارد. هر روشی را که به‌جز نصب‌کنندهٔ بومی انتخاب کنید، توجه داشته باشید که به‌روزرسانی‌ها به‌طور خودکار انجام نمی‌شوند — باید دوره‌ای دستور ارتقا را برای مدیر بستهٔ خاص خود اجرا کنید."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "نصب‌کنندهٔ بومی (توصیه‌شده): در پس‌زمینه به‌طور خودکار به‌روزرسانی می‌شود، بدون نگهداری دستی",
+            "Homebrew: brew install --cask claude-code، نیاز به brew upgrade claude-code دستی برای به‌روزرسانی",
+            "WinGet: winget install Anthropic.ClaudeCode، نیاز به winget upgrade دستی برای به‌روزرسانی",
+            "npm: npm install -g @anthropic-ai/claude-code، نیاز به Node.js 22+ و npm install -g @anthropic-ai/claude-code@latest برای به‌روزرسانی (از npm update -g پرهیز کنید، چون به‌طور قابل‌اعتماد جدیدترین نسخه را نمی‌گیرد)",
+            "apt/dnf/apk: برای Debian، Fedora، RHEL و Alpine از طریق مخازن بستهٔ امضاشدهٔ آنتروپیک در دسترس است، مفید برای محیط‌های سرور و CI که از قبل روی یک مدیر بستهٔ لینوکس استاندارد شده‌اند"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "روی ویندوز بومی مشخصاً، نصب اول Git for Windows توصیه می‌شود اما اختیاری است — به Claude Code دسترسی به Git Bash می‌دهد تا بتواند از همان ابزار Bash موجود روی macOS و لینوکس استفاده کند. بدون Git for Windows، Claude Code به یک ابزار مبتنی بر PowerShell بازمی‌گردد، که برای بیشتر وظایف خوب کار می‌کند اما برای برخی عملیات شل کمی متفاوت رفتار می‌کند. راه‌اندازی‌های WSL اصلاً به Git for Windows نیاز ندارند، چون از قبل یک شل واقعی لینوکس اجرا می‌کنند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260830-122104-74c1fea00c98fc29.webp",
+          "alt": "جدول مقایسه‌ای روش‌های نصب Claude Code شامل نصب‌کنندهٔ بومی، Homebrew، WinGet، npm و مدیران بستهٔ لینوکس، نشان‌دهندهٔ این‌که کدام‌ها به‌طور خودکار به‌روزرسانی می‌شوند",
+          "caption": "شکل ۲: پنج مسیر نصب، یک تفاوت معنادار — فقط نصب‌کنندهٔ بومی خودش را به‌طور خودکار به‌روز نگه می‌دارد. بقیه به یک دستور ارتقای دستی با زمان‌بندی خودتان نیاز دارند.",
+          "altText": "جدول مقایسه‌ای روش‌های نصب Claude Code شامل نصب‌کنندهٔ بومی، Homebrew، WinGet، npm و مدیران بستهٔ لینوکس، نشان‌دهندهٔ این‌که کدام‌ها به‌طور خودکار به‌روزرسانی می‌شوند"
+        },
+        {
+          "type": "cta",
+          "title": "کلود کد در برابر کلاین: کدام عامل کدنویسی هوش مصنوعی را در ۲۰۲۶ انتخاب کنیم؟",
+          "text": "اگر هنوز Claude Code را در برابر دیگر ابزارهای کدنویسی عاملی می‌سنجید پیش از تعهد به یک راه‌اندازی، این مقایسه مصالحه‌ها را با جزئیات پوشش می‌دهد.",
+          "buttonText": "مطالعهٔ مقایسهٔ کامل",
+          "buttonUrl": "/fa/blog/claude-code-vs-cline-which-ai-coding-agent-should-developers-use-in-2026/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۳: تأیید کنید نصب واقعاً کار کرده"
+        },
+        {
+          "type": "paragraph",
+          "text": "این گام را صرفاً چون دستور نصب بدون خطای قابل‌مشاهده تمام شد، رد نکنید. claude --version را در ترمینال خود اجرا کنید — یک نصب کارآمد یک شمارهٔ نسخه به‌همراه (Claude Code) چاپ می‌کند، چیزی شبیه 2.1.211 (Claude Code). اگر در عوض command not found یا خطای مشابهی گرفتید، یا فایل اجرایی روی PATH شما ننشسته یا نصب واقعاً در میانه شکست خورده، و عیب‌یابی آن اکنون بسیار کمتر از کشف آن در میانهٔ یک وظیفه بعداً آزاردهنده است. برای بررسی عمیق‌تر فراتر از شمارهٔ نسخه، claude doctor را اجرا کنید، که تشخیص‌های فقط‌خواندنی شامل سلامت نصب، هر خطای اعتبارسنجی فایل تنظیمات، و راه‌حل‌های پیشنهادی خاص برای هرچه پیدا می‌کند را چاپ می‌کند — بدون شروع یک نشست واقعی."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۴: با نوع حساب درست وارد شوید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Claude Code به یک حساب Pro، Max، Team، Enterprise یا Console نیاز دارد — پلن رایگان Claude.ai دسترسی به Claude Code را شامل نمی‌شود، که بیشتر از هر گام فنی راه‌اندازی در این راهنما کاربران تازه‌کار را غافلگیر می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "با اجرای claude در دایرکتوری پروژهٔ خود یک نشست تعاملی شروع کنید، و در اولین استفاده از شما خواسته می‌شود از طریق مرورگرتان وارد شوید. اشتراک Claude Pro، Max، Team یا Enterprise گزینهٔ توصیه‌شده برای بیشتر توسعه‌دهندگان فردی و تیم‌های کوچک است. یک حساب Claude Console هم کار می‌کند، و از طریق اعتبار API پیش‌پرداخت‌شده صورت‌حساب می‌شود نه یک اشتراک ثابت؛ در اولین ورود با یک حساب Console، Claude Code به‌طور خودکار یک فضای کاری «Claude Code» اختصاصی برای ردیابی متمرکز هزینه ایجاد می‌کند. سازمان‌های بزرگ‌تر همچنین می‌توانند از طریق Amazon Bedrock، Google Cloud's Agent Platform یا Microsoft Foundry احراز هویت کنند اگر از قبل این‌طور هزینهٔ هوش مصنوعی ابری خود را مدیریت می‌کنند، یا از طریق یک gateway خودمیزبان اگر سازمان‌شان یکی اجرا می‌کند. اگر از قبل متغیر محیطی ANTHROPIC_API_KEY را پیش از اجرای claude تنظیم کرده‌اید، ورود مرورگری را کاملاً رد می‌کند و فقط از شما می‌خواهد کلید را تأیید کنید. پس از اولین ورود، اعتبارنامه‌های شما به‌صورت محلی ذخیره می‌شوند و نیازی به تکرار این گام نخواهید داشت؛ برای تغییر حساب یا احراز هویت مجدد بعداً، /login را درون یک نشست در حال اجرا تایپ کنید."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۵: اولین نشست خود را شروع کنید و سؤالات واقعی بپرسید"
+        },
+        {
+          "type": "paragraph",
+          "text": "پیش از شروع Claude Code به یک دایرکتوری پروژهٔ واقعی بروید — cd /path/to/your/project، سپس claude را اجرا کنید. پرامپت را با نسخهٔ فعلی، مدل فعال و دایرکتوری کاری نمایش‌داده‌شده بالای آن خواهید دید. در برابر وسوسهٔ درخواست فوری یک تغییر کد مقاومت کنید؛ در عوض با خواستن از Claude برای توضیح آن‌چه می‌بیند شروع کنید. what does this project do?، what technologies does this project use?، یا where is the main entry point? را امتحان کنید. Claude Code فایل‌های پروژهٔ شما را طبق نیاز برای پاسخ به این‌ها می‌خواند، پس نیازی به جای‌گذاری دستی هیچ زمینه‌ای ندارید — این کل نکتهٔ اجرا درون کدبیس واقعی‌تان به‌جای یک پنجرهٔ چت عمومی است. همچنین می‌توانید مستقیماً دربارهٔ قابلیت‌های خود Claude بپرسید، که یک عادت واقعاً مفید در اوایل کار است: سؤالاتی مانند what can Claude Code do? یا can Claude Code work with Docker? به شما پاسخ‌های دقیق و به‌روز می‌دهند به‌جای حدس‌زدن از پست‌های وبلاگ قدیمی."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۶: اولین تغییرتان را انجام دهید و حالت‌های مجوز را بفهمید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "چیزی کوچک و کم‌ریسک را برای اولین ویرایش واقعی خود امتحان کنید، مانند add a hello world function to the main file. آن‌چه بعد اتفاق می‌افتد کاملاً به این بستگی دارد که نشست شما در کدام حالت مجوز اجرا می‌شود، و فهمیدن آن سیستم اکنون سردرگمی واقعی بعداً را کاهش می‌دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "در همان اولین نشست پس از نصب، Claude Code فارغ از پلن پیش از هر تغییر می‌پرسد، پس یک پیام تأیید خواهید دید — Yes را انتخاب کنید تا اجازهٔ ادامه دهید. پس از آن اولین نشست، حالت مجوز شروع پیش‌فرض بر اساس پلن متفاوت است: در پلن‌های Pro، Max و Team، نشست‌های تعاملی ترمینال به‌طور پیش‌فرض به حالت خودکار می‌روند، جایی که یک طبقه‌بند اقدامات Claude را به‌جای پرسیدن دستی شما از هرکدام بررسی می‌کند، و Claude بیشتر فایل‌ها را ویرایش و بیشتر دستورها را بدون پیام صریح اجرا می‌کند. در پلن‌های دیگر، پیش‌فرض حالت دستی‌ای است که در آن هر اقدام را جداگانه تأیید می‌کنید. در هر صورت، هرگز در حالت شروع قفل نمی‌شوید — در هر لحظه از نشست Shift+Tab را فشار دهید تا بین حالت‌های مجوز به‌سرعت جابه‌جا شوید، کنترل را پیش از یک عملیات پرریسک سفت‌تر کنید یا وقتی به آن‌چه Claude روی یک وظیفهٔ خاص انجام می‌دهد اعتماد کردید، شل کنید."
+        },
+        {
+          "type": "cta",
+          "title": "راهنمای شروع سریع Claude Code — مستندات رسمی",
+          "text": "برای مرجع کامل و همیشه به‌روز دربارهٔ حالت‌های مجوز، دستورهای ضروری و عیب‌یابی، راهنمای شروع سریع خود آنتروپیک منبع معتبر است.",
+          "buttonText": "مطالعهٔ راهنمای رسمی",
+          "buttonUrl": "https://code.claude.com/docs/en/quickstart"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۷: یک فایل CLAUDE.md بنویسید تا Claude پروژه‌تان را بفهمد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "یک فایل CLAUDE.md در ریشهٔ پروژهٔ شما تنها گام راه‌اندازی با بیشترین اهرم است که بیشتر توسعه‌دهندگان از قلم می‌اندازند، و تفاوت میان Claude‌ای که هر نشست دوباره قراردادهای شما را حدس می‌زند و Claude‌ای که به‌سادگی آن‌ها را می‌داند همین است."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یک فایل ساده مارک‌داون است که Claude Code به‌طور خودکار در ابتدای یک نشست بار می‌کند، و جایی است که هر چیزی را که در غیر این صورت مجبور بودید در هر مکالمه تکرار کنید در آن قرار می‌دهید: کدام مدیر بسته پروژه استفاده می‌کند، قراردادهای تست، قوانین سبک کد، کدام دایرکتوری‌ها برای تغییر امن‌اند در برابر کدام‌ها تولیدشده و ممنوعه‌اند، و هر اصطلاح یا تصمیم معماری خاص پروژه که از خود کد آشکار نیست. می‌توانید یکی را دستی بسازید، یا از Claude Code بخواهید با کاوش اول کدبیس‌تان یک پیش‌نویس آغازین تولید کند، که تمایل دارد قراردادهایی را که خودتان فراموش می‌کردید بنویسید بگیرد. برای کدبیس‌های بزرگ‌تر، می‌توانید چند فایل CLAUDE.md را در سطوح مختلف دایرکتوری لایه‌بندی کنید به‌جای نگهداری یک فایل عظیم، و تیم‌ها می‌توانند یک CLAUDE.md مشترک را در سراسر یک سازمان مستقر کنند تا نشست Claude Code هر توسعه‌دهنده از همان درک پایه از سبک خانگی و محدودیت‌ها شروع شود."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260830-122117-0481e41c7d423ee3.webp",
+          "alt": "نمودار نشان‌دهندهٔ چگونگی لایه‌بندی فایل‌های CLAUDE.md در ریشهٔ پروژه و دایرکتوری‌های تودرتو، به‌همراه اتصالات سرور MCP و تنظیمات مجوز",
+          "caption": "شکل ۳: یک راه‌اندازی به‌خوبی پیکربندی‌شدهٔ Claude Code، دستورالعمل‌های پروژه، قوانین مجوز و ابزارهای متصل‌شده را لایه‌بندی می‌کند — بیشتر تفاوت میان یک دستیار عمومی و یکی که کدبیس شما را می‌شناسد در همین لایه زندگی می‌کند.",
+          "altText": "نمودار نشان‌دهندهٔ چگونگی لایه‌بندی فایل‌های CLAUDE.md در ریشهٔ پروژه و دایرکتوری‌های تودرتو، به‌همراه اتصالات سرور MCP و تنظیمات مجوز"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۸: ابزارهای خارجی را از طریق MCP وصل کنید (اختیاری اما ارزش انجام زودهنگام را دارد)"
+        },
+        {
+          "type": "paragraph",
+          "text": "پروتکل زمینهٔ مدل به Claude Code اجازه می‌دهد فراتر از فایل‌سیستم محلی شما دست پیدا کند تا تیکت‌های جیرای تیم شما را بخواند، مستقیماً یک پایگاه‌داده را پرس‌وجو کند، فایل‌های طراحی را از فیگما بکشد، یا اسناد را در گوگل درایو به‌روز کند، همه از طریق همان رابط مکالمه‌ای که از قبل برای کد استفاده می‌کنید. اضافه‌کردن یک سرور معمولاً یک دستور منفرد است — اجرای claude با فلگ مناسب mcp add و جزئیات اتصال یک سرور آن را ثبت می‌کند، و Claude Code پیش از این‌که شما شروع به اتکا به آن کنید اتصال را تأیید می‌کند. سرورها می‌توانند به‌صورت محلی فقط به پروژهٔ فعلی شما محدود شوند، از طریق یک فایل پیکربندی چک‌این‌شده با کل تیم‌تان به اشتراک گذاشته شوند، یا در سطح کاربر تنظیم شوند تا در هر پروژه‌ای که کار می‌کنید در دسترس باشند. این گام برای اولین نشست واقعاً اختیاری است، اما اگر جریان کارتان به‌طور منظم شامل بررسی یک ردیاب تیکت یا پرس‌وجوی یک پایگاه‌داده در کنار نوشتن کد باشد، راه‌اندازی سرور MCP مربوطه اکنون شما را از کپی-پیست دستی آن زمینه به هر نشست آینده نجات می‌دهد."
+        },
+        {
+          "type": "cta",
+          "title": "کلاین: عامل هوش مصنوعی متن‌باز کدنویسی در عمل",
+          "text": "اگر پیش از استقرار روی یک راه‌اندازی، در حال مقایسهٔ نحوهٔ برخورد ابزارهای مختلف کدنویسی عاملی با یکپارچگی‌های MCP و پشتیبانی از مدل‌های محلی هستید، این معرفی نقطهٔ مرجع مفیدی است.",
+          "buttonText": "مطالعهٔ معرفی Cline",
+          "buttonUrl": "/fa/blog/cline-the-open-source-ai-coding-agent/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "گام ۹: اولین وظیفهٔ واقعاً خودمختار خود را اجرا کنید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "همه‌چیز تا این نقطه تعاملی بوده — شما در حلقهٔ هر گام هستید. یک وظیفهٔ واقعاً خودمختار متفاوت است: شما تکه‌ای کار با محدودهٔ خوب‌تعریف‌شده را واگذار می‌کنید و Claude برنامه‌ریزی، اجرا، تأیید و گزارش می‌کند با حداقل یا صفر وقفه."
+        },
+        {
+          "type": "paragraph",
+          "text": "ساده‌ترین نسخهٔ این یک پرس‌وجوی یک‌باره و غیرتعاملی است: claude -p \"query\" را از ترمینال خود اجرا کنید، و Claude درخواست را اجرا می‌کند و خارج می‌شود، که دقیقاً همان الگویی است که در یک اسکریپت یا خط‌لولهٔ CI به‌جای یک نشست تعاملی استفاده می‌کنید. برای وظیفه‌ای با گام‌های بیشتر، کل محدوده را از قبل توصیف کنید به‌جای صادرکردن دستورالعمل‌ها یکی‌یکی — چیزی مانند fix the bug where users can submit empty registration forms: add validation, write a test for it, and commit the change with a descriptive message به Claude محدودهٔ کافی می‌دهد تا کل توالی را برنامه‌ریزی کند، آن را پیاده‌سازی کند، آن را در برابر مجموعهٔ تست شما تأیید کند، و یک کامیت تمام‌شده به شما تحویل دهد به‌جای یک ویرایش نیمه‌تمام که منتظر دستور بعدی شماست. این بهترین کار را در حالت خودکار انجام می‌دهد، جایی که Claude برای پرسیدن مجوز هر گام میانی متوقف نمی‌شود، و ارزش تمرین آگاهانه روی یک وظیفهٔ کم‌ریسک را دارد — یک به‌روزرسانی مستندات یا یک بازآرایی کوچک — پیش از اعتماد به یک اجرای واقعاً خودمختار روی چیزی که کد تولید را لمس می‌کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "محدودهٔ وظیفه را کاملاً در اولین پیام‌تان مشخص کنید به‌جای صادرکردن گام‌به‌گام آن — خودمختاری وقتی Claude تصویر کامل را از قبل دارد بهتر کار می‌کند، نه یک توالی قطره‌قطرهٔ دستورالعمل‌ها",
+            "درخواست تأیید را بخشی از خود وظیفه کنید — «و تست‌ها را برای تأیید اجرا کن» یک ویرایش خودمختار کور را به یکی که کار خودش را پیش از تمام‌شدن بررسی می‌کند تبدیل می‌کند",
+            "با چیزی برگشت‌پذیر شروع کنید — یک شاخهٔ جدید، یک به‌روزرسانی مستندات، یک فایل تست — پیش از اجازه‌دادن به یک اجرای خودمختار برای لمس‌کردن چیزی که دوست نداشتید دستی دوباره انجامش دهید",
+            "از claude -c برای ادامهٔ آخرین مکالمهٔ خود در دایرکتوری فعلی، یا claude -r برای از سرگیری یک مکالمهٔ قبلی خاص استفاده کنید، تا یک وظیفهٔ خودمختار چندمرحله‌ای بتواند دقیقاً از جایی که رها شده ادامه دهد",
+            "حتی در حالت خودکار، اولین اجرای کامل را از نزدیک تماشا کنید — شما در حال ساختن شهودی برای آن‌چه Claude بدون درخواست انجام می‌دهد هستید، که هر وظیفهٔ خودمختار بعدی را برای محدوده‌بندی خوب آسان‌تر می‌کند"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "اشتباهات رایج هفتهٔ اول که ارزش اجتناب دارند"
+        },
+        {
+          "type": "paragraph",
+          "text": "رایج‌ترین اشتباه اولیه، برخورد با Claude Code مانند یک چت‌بات جستجو-و-پیست است — توصیف یک مشکل در یک جملهٔ مبهم منفرد به‌جای دادن زمینهٔ خاصی که یک همکار نیاز داشت. «باگ ورود را رفع کن» نتیجهٔ بسیار ضعیف‌تری نسبت به «باگ ورود را رفع کن که در آن کاربران پس از واردکردن اعتبارنامهٔ نادرست صفحهٔ خالی می‌بینند» تولید می‌کند، چون نسخهٔ دوم دقیقاً به Claude می‌گوید دنبال چه بگردد به‌جای واداشتنش به حدس‌زدن. دومین اشتباه رایج، کامل نادیده‌گرفتن CLAUDE.md و توضیح‌مجدد قراردادهای پروژه در هر نشست است، که هم زمان شما و هم بودجهٔ زمینه‌ای را که می‌توانست صرف خود وظیفه شود هدر می‌دهد. سومین، پریدن مستقیم به یک وظیفهٔ خودمختار بزرگ و مبهم پیش از اجرای چند وظیفهٔ تعاملی کوچک ابتدا است — نتایج خودمختار بسیار بهتری خواهید گرفت وقتی دیده باشید Claude چگونه به کدبیس خاص شما روی کارهای کم‌ریسک‌تر نزدیک می‌شود."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)",
+          "text": "ابزارهای کدنویسی عاملی در سراسر صنعت الگوهای شکست مشابهی به اشتراک می‌گذارند — محدودیت زمینه، سردرگمی مجوز، مسائل راه‌اندازی ارائه‌دهنده. این تحلیل رایج‌ترین خطاهای Cline حتی اگر Claude Code را اجرا می‌کنید، مرجع موازی مفیدی است.",
+          "buttonText": "مطالعهٔ راهنمای عیب‌یابی",
+          "buttonUrl": "/fa/blog/how-to-fix-clines-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "مرجع سریع: دستورهایی که ارزش حفظ‌کردن دارند"
+        },
+        {
+          "type": "paragraph",
+          "text": "تعداد کمی دستور اکثریت قریب‌به‌اتفاق استفادهٔ روزانه را پوشش می‌دهد، و حفظ‌کردن آن‌ها اکنون سریع‌تر از جست‌وجوی هرکدام اولین‌باری که در میانهٔ یک وظیفه به آن نیاز دارید است."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "claude — شروع یک نشست تعاملی در دایرکتوری فعلی",
+            "claude \"task\" — شروع یک نشست تعاملی با یک پرامپت آغازین از قبل در صف",
+            "claude -p \"query\" — اجرای یک پرس‌وجوی یک‌بارهٔ غیرتعاملی، سپس خروج؛ الگوی اسکریپت‌ها و CI",
+            "claude -c — ادامهٔ آخرین مکالمهٔ شما در دایرکتوری فعلی",
+            "claude -r — از سرگیری یک مکالمهٔ قبلی خاص از یک گزینشگر",
+            "/clear — پاک‌کردن تاریخچهٔ مکالمه درون یک نشست در حال اجرا بدون خروج",
+            "/help — فهرست دستورهای در دسترس درون یک نشست در حال اجرا",
+            "/login — تغییر حساب یا احراز هویت مجدد درون یک نشست در حال اجرا",
+            "claude doctor — چاپ تشخیص‌های فقط‌خواندنی نصب و پیکربندی بدون شروع یک نشست",
+            "claude --version — تأیید نسخهٔ نصب‌شدهٔ شما"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "راه‌اندازی شدید. حالا عادت را بسازید"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "همهٔ موارد بالا شما را از یک ترمینال خالی به یک راه‌اندازی کاری و واقعاً خودمختار Claude Code می‌رساند، اما خود راه‌اندازی جایی نیست که سودهای واقعی نمایان می‌شوند."
+        },
+        {
+          "type": "paragraph",
+          "text": "توسعه‌دهندگانی که بیشترین بهره را از Claude Code می‌برند، آن‌هایی نیستند که عجیب‌ترین یکپارچگی‌های MCP یا طولانی‌ترین فایل CLAUDE.md را دارند — آن‌هایی هستند که با آن مانند یک همکار توانمند اما تحت‌اللفظی رفتار می‌کنند: درخواست‌های خاص به‌جای مبهم، زمینهٔ واقعی پروژه به‌جای زمینهٔ فرضی، وظایف کوچک قابل‌اعتماد پیش از خودمختارهای بزرگ، و عادت خواستن از Claude برای تأیید کار خودش به‌جای فرض موفقیت. درست نصب کنید، یک CLAUDE.md بنویسید که واقعاً منعکس‌کنندهٔ نحوهٔ کار تیم‌تان است، بفهمید در کدام حالت مجوز اجرا می‌کنید پیش از این‌که نیاز به اهمیت‌دادن داشته باشید، و پرش از «پنجرهٔ چتی که فایل‌ها را ویرایش می‌کند» به «عاملی که می‌توانم یک وظیفهٔ واقعی به آن بسپارم و کنار بروم» سریع‌تر از آن‌چه بیشتر راهنماهای راه‌اندازی جدید پیشنهاد می‌دهند رخ می‌دهد."
+        }
+      ],
+      "faq": [
+        {
+          "question": "برای نصب Claude Code باید Node.js بلد باشم؟",
+          "answer": "خیر. نصب‌کنندهٔ بومی توصیه‌شده (curl -fsSL https://claude.ai/install.sh | bash روی macOS/Linux/WSL، یا معادل‌های PowerShell/CMD روی ویندوز) یک باینری مستقل دانلود می‌کند و اصلاً به Node.js نیاز ندارد. Node.js نسخهٔ ۲۲ یا جدیدتر فقط اگر مشخصاً روش نصب npm را انتخاب کنید لازم است (npm install -g @anthropic-ai/claude-code)."
+        },
+        {
+          "question": "چرا Claude Code می‌گوید باید وارد شوم درحالی‌که یک حساب Claude.ai دارم؟",
+          "answer": "پلن رایگان Claude.ai دسترسی به Claude Code را شامل نمی‌شود. به یک حساب Claude Pro، Max، Team، Enterprise یا Console نیاز دارید، یا دسترسی از طریق یک ارائه‌دهندهٔ ابری پشتیبانی‌شده مانند Amazon Bedrock، Google Cloud's Agent Platform یا Microsoft Foundry. اجرای claude برای اولین بار از شما می‌خواهد از طریق مرورگرتان با هر نوع حسابی که دارید وارد شوید."
+        },
+        {
+          "question": "تفاوت بین حالت خودکار و حالت تأیید دستی پیش‌فرض چیست؟",
+          "answer": "در حالت خودکار، یک طبقه‌بند اقدامات Claude را بررسی می‌کند و Claude بیشتر فایل‌ها را ویرایش و بیشتر دستورها را بدون توقف برای پرسیدن از شما اول اجرا می‌کند — این حالت شروع پیش‌فرض برای نشست‌های تعاملی ترمینال در پلن‌های Pro، Max و Team است. در حالت دستی، Claude پیش از هر اقدام منفرد تأیید صریح می‌خواهد. می‌توانید در هر زمان طول یک نشست با فشاردادن Shift+Tab بین حالت‌های مجوز جابه‌جا شوید."
+        },
+        {
+          "question": "آیا CLAUDE.md برای استفاده از Claude Code لازم است؟",
+          "answer": "خیر، Claude Code بدون آن هم کار می‌کند، اما یک فایل CLAUDE.md در ریشهٔ پروژهٔ شما مؤثرترین راه برای توقف توضیح‌مجدد قراردادهای پروژه، راه‌اندازی تست و سبک کدتان در هر نشست جدید است. این یک فایل ساده مارک‌داون است که Claude Code به‌طور خودکار در ابتدای یک نشست بار می‌کند، و می‌توانید از خود Claude Code بخواهید با کاوش کدبیس‌تان ابتدا یکی پیش‌نویس کند."
+        },
+        {
+          "question": "چگونه Claude Code را به‌شکل غیرتعاملی اجرا کنم، مثلاً در یک خط‌لولهٔ CI؟",
+          "answer": "از فلگ -p با یک پرس‌وجو استفاده کنید: claude -p \"your task here\" درخواست را یک‌بار اجرا می‌کند و بدون بازکردن یک نشست تعاملی خارج می‌شود، که الگویی است که در اسکریپت‌ها، خط‌لوله‌های بیلد و اتوماسیون headless استفاده می‌شود. برای یکپارچگی واقعی CI/CD، Claude Code همچنین پشتیبانی اختصاصی برای GitHub Actions و GitLab CI/CD دارد."
+        },
+        {
+          "question": "تفاوت واقعی بین روش‌های نصب چیست؟",
+          "answer": "تفاوت عملی اصلی به‌روزرسانی‌هاست. نصب‌کنندهٔ بومی در پس‌زمینه بدون هیچ گام دستی به‌طور خودکار به‌روزرسانی می‌شود. نصب‌های Homebrew، WinGet، npm و مدیر بستهٔ لینوکس (apt/dnf/apk) همگی نیاز دارند دوره‌ای خودتان یک دستور ارتقا را اجرا کنید — Claude Code از طریق آن مسیرها خودش را در پس‌زمینه به‌روز نمی‌کند."
+        },
+        {
+          "question": "دستور نصب من با خطا شکست خورد. اول چه چیزی را باید بررسی کنم؟",
+          "answer": "اول claude --version را اجرا کنید تا تأیید کنید نصب واقعاً کامل شده. اگر آن شکست خورد، claude doctor تشخیص‌های فقط‌خواندنی دربارهٔ سلامت نصب و مسائل فایل تنظیمات بدون شروع یک نشست می‌دهد. علل رایج شامل اجرای دستور نصب اشتباه برای شل شما (خطاهای PowerShell در برابر CMD شبیه هم به نظر می‌رسند اما به دستورهای متفاوتی نیاز دارند) و مسائل PATH که در آن‌ها فایل اجرایی نصب شده اما قابل‌کشف نیست."
+        },
+        {
+          "question": "آیا Claude Code می‌تواند کاملاً بدون اتصال هیچ سرور MCP کار کند؟",
+          "answer": "بله. سرورهای MCP، Claude Code را برای دسترسی به ابزارهای خارجی مانند جیرا، پایگاه‌داده‌ها، فیگما یا گوگل درایو گسترش می‌دهند، اما کاملاً اختیاری‌اند. یک اولین نشست بدون هیچ سرور MCP متصلی همچنان ویرایش کامل فایل، اجرای دستور ترمینال و پشتیبانی جریان کار گیت را به شما می‌دهد، چون این‌ها قابلیت‌های داخلی هستند نه چیزی که MCP فراهم می‌کند."
+        }
+      ],
+      "seo": {
+        "title": "راهنمای راه‌اندازی Claude Code: از نصب تا اولین وظیفهٔ خودمختار | ۲۰۲۶",
+        "metaDescription": "راهنمای کامل راه‌اندازی Claude Code: نصب برای پلتفرم شما، تأیید کارکرد آن، ورود درست، پیکربندی CLAUDE.md و حالت‌های مجوز، و اجرای اولین وظیفهٔ خودمختار.",
+        "canonical": "https://sinisteroid.ir/fa/blog/claude-code-setup-guide-from-install-to-first-autonomous-task",
+        "openGraph": {
+          "title": "راهنمای راه‌اندازی Claude Code: از نصب تا اولین وظیفهٔ خودمختار",
+          "description": "هر گام از یک ترمینال خالی تا یک نشست واقعاً خودمختار Claude Code، شامل گام‌های راه‌اندازی‌ای که بیشتر راهنماها کاملاً از قلم می‌اندازند.",
+          "image": "/api/uploads/1788050001-claude-code-setup-guide-cover.webp"
+        },
+        "twitter": {
+          "title": "راهنمای راه‌اندازی Claude Code: از نصب تا اولین وظیفهٔ خودمختار",
+          "description": "نصب، تأیید، ورود، پیکربندی CLAUDE.md، اتصال MCP، و اجرای اولین وظیفهٔ کاملاً خودمختار Claude Code. مسیر کامل، بدون گام حذف‌شده.",
+          "image": "/api/uploads/1788050001-claude-code-setup-guide-cover.webp"
+        },
+        "keywords": "راه‌اندازی Claude Code, نصب Claude Code, آموزش Claude Code, CLAUDE.md Claude Code, حالت‌های مجوز Claude Code, حالت خودکار Claude Code, راه‌اندازی MCP Claude Code, وظیفهٔ خودمختار Claude Code, چگونه از Claude Code استفاده کنیم, راه‌اندازی ابزار کدنویسی عاملی",
+        "focusKeyword": "راه‌اندازی Claude Code"
+      }
+    }
+  }
+}

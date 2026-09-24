@@ -1,20 +1,25 @@
 {
   "slug": "ollama-the-engine-behind-local-ai",
+  "status": "published",
   "title": "Ollama: The Engine Behind Local AI",
-  "date": "2026-08-25",
+  "date": "2026-06-18 00:22:43",
   "tags": [
-    "local-ai"
+    "local-ai",
+    "open-source-ai",
+    "ai-tools"
   ],
+  "featuredImage": {
+    "src": "/api/uploads/1781729383-ollama-the-engine-behind-local-ai-cover.webp",
+    "alt": {
+      "en": "Ollama: The Engine Behind Local AI",
+      "fa": "اولاما: موتور پشت هوش مصنوعی محلی"
+    }
+  },
   "translations": {
     "en": {
       "title": "Ollama: The Engine Behind Local AI",
-      "excerpt": "A technical deep dive into Ollama — the open-source runtime powering local large language models. Learn its architecture, quantization tradeoffs, API design, model selection, and security considerations.",
+      "excerpt": "Ollama has turned running large language models on your own hardware into a single command. Explore the architecture, performance characteristics, and engineering tradeoffs that make local-first AI a serious alternative to cloud APIs in 2026.",
       "content": [
-        {
-          "type": "paragraph",
-          "text": "Ollama has turned running large language models on your own hardware into a single command. Explore the architecture, performance characteristics, and engineering tradeoffs that make local-first AI a serious alternative to cloud APIs in 2026.",
-          "style": "lead"
-        },
         {
           "type": "heading",
           "level": 2,
@@ -22,6 +27,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Ollama is an open-source runtime that downloads, manages, and serves large language models on local hardware. It is not a model. It is the infrastructure layer that sits between a quantized model file and a usable API, handling everything a developer would otherwise have to configure by hand: memory allocation, GPU offloading, context management, and request serving."
         },
         {
@@ -50,6 +56,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "The case for local inference is no longer purely ideological. It is economic, regulatory, and architectural. Cloud frontier models remain extraordinarily capable, but they come with a per-token bill, a data-residency question, and a dependency on network availability that not every workload can tolerate."
         },
         {
@@ -82,6 +89,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Ollama installs as a background daemon that listens on a local port, by default 127.0.0.1:11434. The daemon manages a model registry, handles quantized weight loading, and routes incoming requests to the appropriate inference backend. This daemon architecture is what allows multiple applications on the same machine to share one running model instance instead of each spinning up its own process."
         },
         {
@@ -114,6 +122,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Ollama's API design is one of the reasons it became the default local runtime rather than just one option among many. It exposes a native REST API for chat and generation, and it also implements an OpenAI-compatible endpoint at /v1/chat/completions, meaning existing tooling built against OpenAI's client libraries can often point at a local Ollama instance with nothing more than a base URL change."
         },
         {
@@ -146,6 +155,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Ollama's library now contains thousands of curated and community-contributed models, which makes model selection as important an engineering decision as the runtime configuration itself. The right choice depends on available hardware, the task's reasoning demands, and acceptable latency."
         },
         {
@@ -174,6 +184,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Running models locally removes one set of risks and introduces another. Teams adopting Ollama in production contexts need to treat it with the same operational discipline as any other service they self-host, rather than assuming local automatically means safe."
         },
         {
@@ -202,6 +213,7 @@
         },
         {
           "type": "paragraph",
+          "style": "lead",
           "text": "Ollama did not invent local inference, but it made it accessible to a far larger population of developers and organizations than the tools that came before it. By wrapping a capable inference engine in a Docker-like interface, it turned a multi-step systems problem into a single command."
         },
         {
@@ -211,20 +223,296 @@
         {
           "type": "paragraph",
           "text": "Understanding Ollama's architecture — the daemon model, the quantization tradeoffs, the API compatibility layer — is what separates a developer running a toy demo from one building a production-grade local AI system. The tool has matured to the point where that distinction is now mostly about engineering discipline, not the availability of capable open-weight models."
+        }
+      ],
+      "faq": [
+        {
+          "question": "Is Ollama itself an AI model?",
+          "answer": "No. Ollama is a runtime that downloads, manages, and serves open-weight language models on local hardware. The actual intelligence comes from models like Llama, Qwen, or Mistral, which Ollama runs efficiently through a quantized inference engine."
+        },
+        {
+          "question": "Do I need a GPU to run Ollama?",
+          "answer": "No, but a GPU significantly improves performance. Ollama can run smaller quantized models on CPU alone, and it automatically offloads as many transformer layers as fit into available VRAM when a GPU is present, splitting the rest onto system memory."
+        },
+        {
+          "question": "How does Ollama compare to using a cloud API like OpenAI or Anthropic?",
+          "answer": "Cloud APIs generally offer stronger reasoning on the hardest tasks and require no local hardware investment. Ollama trades some peak capability for zero per-token cost, full data privacy, and offline operation, making it well suited to high-volume, privacy-sensitive, or latency-critical workloads."
+        },
+        {
+          "question": "Can Ollama be used for retrieval-augmented generation (RAG)?",
+          "answer": "Yes. Ollama serves both chat models and embedding models through the same API, allowing a fully local RAG pipeline where documents are embedded, stored in a vector database, and retrieved to ground a local model's responses without any external API call."
+        },
+        {
+          "question": "Is it safe to expose Ollama's API to other devices on a network?",
+          "answer": "Only with proper safeguards. By default, Ollama binds to localhost and is not reachable externally. Exposing it to a wider network without authentication leaves the API, and any data sent to it, accessible to anyone on that network."
+        }
+      ],
+      "seo": {
+        "title": "Ollama: The Engine Behind Local AI | Architecture, Performance & Integration Guide",
+        "metaDescription": "A technical deep dive into Ollama — the open-source runtime powering local large language models. Learn its architecture, quantization tradeoffs, API design, model selection, and security considerations.",
+        "canonical": "https://sinisteroid.ir/ollama-the-engine-behind-local-ai",
+        "openGraph": {
+          "title": "Ollama: The Engine Behind Local AI",
+          "description": "Explore how Ollama serves quantized LLMs locally, its OpenAI-compatible API, GPU offloading architecture, and the engineering tradeoffs behind local-first AI.",
+          "image": "./ollama-the-engine-behind-local-ai-cover.webp"
+        },
+        "twitter": {
+          "title": "Ollama: The Engine Behind Local AI",
+          "description": "From quantized GGUF weights to OpenAI-compatible APIs — a technical look at the runtime that made local LLMs mainstream.",
+          "image": "./ollama-the-engine-behind-local-ai-cover.webp"
+        },
+        "focusKeyword": "Ollama local LLM",
+        "keywords": "Ollama, local LLM, run LLM locally"
+      }
+    },
+    "fa": {
+      "title": "اولاما: موتور پشت هوش مصنوعی محلی",
+      "excerpt": "اولاما اجرای مدل‌های زبانی بزرگ روی سخت‌افزار شخصی را به یک دستور ساده تبدیل کرده است. در این مقاله معماری، ویژگی‌های عملکردی و تصمیمات مهندسی‌ای را بررسی می‌کنیم که هوش مصنوعی محلی را در سال ۲۰۲۶ به یک جایگزین جدی برای APIهای ابری تبدیل کرده‌اند.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "اولاما واقعاً چیست؟"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اولاما یک runtime متن‌باز است که مدل‌های زبانی بزرگ را دانلود، مدیریت و روی سخت‌افزار محلی اجرا می‌کند. اولاما خودش یک مدل نیست؛ بلکه لایه زیرساختی است که میان یک فایل وزن کوانتیزه‌شده و یک API قابل استفاده قرار می‌گیرد و کارهایی را که توسعه‌دهنده باید به‌صورت دستی تنظیم کند مدیریت می‌کند: تخصیص حافظه، انتقال بار به GPU، مدیریت context و سرویس‌دهی درخواست‌ها."
+        },
+        {
+          "type": "paragraph",
+          "text": "مقایسه‌ای که توسعه‌دهندگان بیشتر از همه استفاده می‌کنند Docker است. همان‌طور که Docker پیچیدگی runtimeهای کانتینر را پشت یک جریان کاری ساده pull-and-run پنهان کرد، اولاما پیچیدگی موتورهای inference را پشت یک دستور واحد پنهان می‌کند. اجرای یک مدل با ۷۰ میلیارد پارامتر زمانی نیازمند کوانتیزاسیون دستی، فلگ‌های build سفارشی برای llama.cpp و تنظیم دقیق تعداد thread‌ها بود. با اولاما، فقط کافی است نام یک مدل تایپ شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "در پس‌زمینه، اولاما llama.cpp را برای inference دربر می‌گیرد و لایه‌ای از خود برای بسته‌بندی مدل، نسخه‌بندی و سازگاری API اضافه می‌کند. مدل‌ها به شکل blobهای آدرس‌دهی‌شده بر اساس محتوا توزیع می‌شوند، شبیه به نحوه ذخیره لایه‌های image در رجیستری‌های کانتینر. وقتی دو مدل یک لایه پایه مشترک دارند، دانلود مدل دوم به جای دانلود مجدد، از داده کش‌شده استفاده می‌کند؛ موضوعی که با انباشت چندین نسخه از یک معماری پایه اهمیت پیدا می‌کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "یک runtime محلی است، نه مدل — مدل‌های وزن‌باز را اجرا می‌کند",
+            "بر پایه llama.cpp با لایه‌ای اضافه برای بسته‌بندی و سرویس‌دهی",
+            "توزیع مدل‌ها به شکل blobهای لایه‌بندی‌شده و آدرس‌دهی‌شده بر اساس محتوا",
+            "ارائه یک REST API روی localhost و یک endpoint سازگار با OpenAI",
+            "در دسترس به‌صورت بومی روی macOS، Linux، Windows و Windows ARM64"
+          ]
         },
         {
           "type": "heading",
-          "level": 3,
-          "text": "Frequently Asked Questions"
+          "level": 2,
+          "text": "چرا inference محلی در سال ۲۰۲۶ اهمیت دارد"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "دلیل استفاده از inference محلی دیگر صرفاً ایدئولوژیک نیست. این موضوع اقتصادی، نظارتی و معماری است. مدل‌های فرونتیر ابری همچنان توانمندی فوق‌العاده‌ای دارند، اما با هزینه به ازای هر توکن، پرسش‌های مربوط به محل نگهداری داده و وابستگی به دسترسی شبکه همراه‌اند که همه بارهای کاری نمی‌توانند آن را تحمل کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "هزینه قابل‌مشاهده‌ترین محرک است. نمونه‌سازی پرتکرار، ابزارهای داخلی و کارهای پردازش دسته‌ای، وقتی هر فراخوانی به یک API اندازه‌گیری‌شده برخورد می‌کند، هزینه توکن را سریع انباشته می‌کنند. اجرای همان بار کاری روی یک مدل محلی روی سخت‌افزار متعلق به خود، هزینه نهایی را به برق کاهش می‌دهد. برای تیم‌هایی که صدها بار در روز روی طراحی prompt تکرار می‌کنند، این تفاوت سریع تجمیع می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "فشار نظارتی نیز به همان اندازه اهمیت یافته است. ارائه‌دهندگان خدمات سلامت نمی‌توانند پرونده‌های بیماران را تحت HIPAA به endpointهای inference شخص ثالث ارسال کنند. مؤسسات حقوقی که با مواد محرمانه کار می‌کنند با محدودیت‌های مشابهی مواجه‌اند. پیمانکاران بخش عمومی که تحت الزامات محل نگهداری داده فعالیت می‌کنند اغلب نمی‌توانند از هیچ APIی استفاده کنند که داده را خارج از یک حوزه قضایی مشخص مسیریابی کند. برای این سازمان‌ها، یک runtime محلی صرفاً یک امکان رفاهی نیست — اغلب تنها مسیر سازگار با مقررات برای استفاده از هوش مصنوعی مولد است."
+        },
+        {
+          "type": "paragraph",
+          "text": "محرک سوم، تاب‌آوری معماری است. محیط‌های ایزوله از شبکه، استقرارهای میدانی و اپلیکیشن‌های offline-first نمی‌توانند به موفقیت یک فراخوانی شبکه متکی باشند. مدلی که از طریق اولاما روی یک لپ‌تاپ اجرا می‌شود، در هواپیما، در یک اتاق سرور زیرزمینی، یا در زمینه واکنش به بحران که اتصال نخستین چیزی است که از کار می‌افتد، همچنان کار می‌کند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "هزینه نهایی صفر به ازای هر توکن پس از سرمایه‌گذاری اولیه سخت‌افزاری",
+            "هیچ داده‌ای از شبکه محلی خارج نمی‌شود؛ سازگار با الزامات HIPAA، GDPR و SOC 2",
+            "عملکرد کامل به‌صورت آفلاین بدون وابستگی به uptime یا اتصال",
+            "حذف ریسک نگهداری داده و شرایط خدمات شخص ثالث",
+            "عملکرد قابل پیش‌بینی بدون محدودیت نرخ تحمیل‌شده توسط یک تامین‌کننده خارجی"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "معماری: اولاما چگونه یک مدل را سرویس‌دهی می‌کند"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اولاما به‌صورت یک daemon پس‌زمینه نصب می‌شود که روی یک پورت محلی، به‌طور پیش‌فرض 127.0.0.1:11434، گوش می‌دهد. این daemon یک رجیستری مدل را مدیریت می‌کند، بارگذاری وزن‌های کوانتیزه‌شده را انجام می‌دهد و درخواست‌های ورودی را به backend مناسب inference هدایت می‌کند. همین معماری daemon است که اجازه می‌دهد چندین اپلیکیشن روی یک دستگاه، یک نمونه مدل در حال اجرا را به اشتراک بگذارند به جای آنکه هر کدام پروسه خود را راه‌اندازی کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "هنگام دانلود یک مدل، اولاما آن را در فرمت GGUF بازیابی می‌کند؛ فرمت وزن کوانتیزه‌شده‌ای که llama.cpp به‌صورت بومی مصرف می‌کند. کوانتیزاسیون وزن‌های مدل را از نمایش اصلی نقطه شناور ۱۶ یا ۳۲ بیتی به اعداد صحیح ۴ یا ۸ بیتی فشرده می‌کند و مقدار کمی از کیفیت خروجی را با کاهش بزرگی در حجم حافظه معامله می‌کند. کوانتیزاسیون ۴ بیتی در سطح Q4_K_M معمولاً بهترین تعادل را برای استفاده عمومی ارائه می‌دهد، در حالی که Q8_0 برای وظایف حساس به افت کیفیت ظریف، صحت بیشتری حفظ می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "شتاب‌دهی GPU از طریق انتقال لایه کار می‌کند. اولاما تعیین می‌کند چه تعداد لایه‌های ترنسفورمر در VRAM موجود جا می‌شوند و بقیه را روی حافظه CPU تقسیم می‌کند؛ تکنیکی که اجازه می‌دهد مدل‌هایی بزرگ‌تر از ظرفیت حافظه GPU همچنان اجرا شوند، اگرچه با throughput کاهش‌یافته. روی Apple Silicon، اولاما از شتاب‌دهی Metal از طریق یک موتور بهینه‌شده با MLX استفاده می‌کند، که دلیل محبوبیت سخت‌افزار مک با حافظه یکپارچه برای اجرای مدل‌های بزرگ‌تر بدون GPU مجزا است."
+        },
+        {
+          "type": "paragraph",
+          "text": "Modelfile سازوکار اولاما برای سفارشی‌سازی است. این یک پیکربندی اعلانی است، از نظر مفهومی مشابه Dockerfile، که به توسعه‌دهنده اجازه می‌دهد یک system prompt تعریف کند، پارامترهای نمونه‌برداری مثل temperature و top_p را تنظیم کند، و یک هویت سفارشی مدل را روی یک مجموعه وزن پایه موجود لایه‌بندی کند بدون آنکه چیزی بازآموزی شود. این همان روشی است که تیم‌ها نسخه‌های مدل اختصاصی داخلی می‌سازند — یک شخصیت بازبینی کد، یک دستیار پشتیبانی مشتری، یک خلاصه‌ساز سند — بدون دست زدن به وزن‌های زیربنایی."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "یک daemon پس‌زمینه مدل‌ها را از طریق یک REST API محلی سرویس‌دهی می‌کند",
+            "مدل‌ها در فرمت کوانتیزه‌شده GGUF ذخیره و بارگذاری می‌شوند",
+            "انتقال لایه به GPU اجازه می‌دهد مدل‌های بزرگ روی VRAM محدود اجرا شوند",
+            "Apple Silicon از یک موتور شتاب‌دهی‌شده مخصوص MLX بهره می‌برد",
+            "Modelfileها سفارشی‌سازی prompt و پارامتر را بدون بازآموزی ممکن می‌سازند"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "یکپارچه‌سازی: APIها، SDKها و فراخوانی ابزار"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "طراحی API اولاما یکی از دلایلی است که این ابزار به runtime محلی پیش‌فرض تبدیل شد، نه صرفاً یکی از گزینه‌های متعدد. اولاما یک REST API بومی برای چت و تولید متن ارائه می‌دهد و همچنین یک endpoint سازگار با OpenAI در آدرس /v1/chat/completions پیاده‌سازی می‌کند؛ به این معنا که ابزارهای موجودی که روی کتابخانه‌های کلاینت OpenAI ساخته شده‌اند، اغلب می‌توانند تنها با تغییر یک base URL به یک نمونه محلی اولاما اشاره کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "کتابخانه‌های رسمی Python و JavaScript، REST API را در کلاینت‌هایی idiomatic بسته‌بندی می‌کنند. یک یکپارچه‌سازی معمولی چند خط است: کتابخانه را import کنید، chat را با نام مدل و آرایه پیام‌ها فراخوانی کنید، و یا یک پاسخ کامل دریافت کنید یا توکن‌ها را به محض تولید استریم کنید. پاسخ‌های استریم اکنون از فراخوانی ابزار همزمان پشتیبانی می‌کنند؛ به این معنا که یک اپلیکیشن می‌تواند متن جزئی و داده ساختاریافته فراخوانی تابع را در یک استریم زمان واقعی واحد دریافت کند به جای انتظار برای پاسخ کامل پیش از واکنش به هر کدام."
+        },
+        {
+          "type": "paragraph",
+          "text": "خودِ فراخوانی ابزار نیز به طور قابل توجهی بالغ شده است. خانواده‌های جدیدتر مدل، رفتار تفکر قابل تنظیم را ارائه می‌دهند و به توسعه‌دهنده اجازه می‌دهند ردپای استدلال داخلی یک مدل را بر اساس اینکه آیا اپلیکیشن به آن trade-off تأخیر نیاز دارد یا نه، روشن یا خاموش کنند. این موضوع به‌ویژه برای جریان‌های کاری agentic مرتبط است، جایی که یک مدل محلی کوچک‌تر فراخوانی‌های ابزار معمول را مدیریت می‌کند در حالی که یک مدل بزرگ‌تر — محلی یا ابری — برای مراحل سخت‌تر استدلال رزرو می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل‌های embedding نیز از طریق همان سطح API سرویس‌دهی می‌شوند؛ به این معنا که یک pipeline retrieval-augmented generation می‌تواند کاملاً درون اولاما اجرا شود: یک مدل embedding محلی اسناد را در یک vector store ایندکس می‌کند، و یک مدل چت محلی به سوالات بر اساس آن context بازیابی‌شده پاسخ می‌دهد، بدون هیچ فراخوانی خارجی در هیچ نقطه از pipeline."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "REST API بومی به همراه endpoint سازگار با OpenAI در /v1/chat/completions",
+            "کتابخانه‌های رسمی Python و JavaScript برای یکپارچه‌سازی idiomatic",
+            "پاسخ‌های استریم با پشتیبانی همزمان از فراخوانی ابزار",
+            "رفتار 'تفکر' قابل تنظیم مدل برای موارد استفاده حساس به تأخیر",
+            "پشتیبانی توکار از مدل embedding برای pipelineهای RAG کاملاً محلی"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "انتخاب مدل مناسب برای کار"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "کتابخانه اولاما اکنون شامل هزاران مدل منتخب و مشارکتی از جامعه است؛ این موضوع انتخاب مدل را به یک تصمیم مهندسی به همان اندازه مهم پیکربندی runtime تبدیل می‌کند. انتخاب درست به سخت‌افزار موجود، نیازهای استدلالی وظیفه و تأخیر قابل‌قبول بستگی دارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل‌های با اندازه متوسط در بازه ۲۰ تا ۳۰ میلیارد پارامتر به نقطه شیرین عملی برای سخت‌افزار مصرفی و کسب‌وکارهای کوچک تبدیل شده‌اند؛ این مدل‌ها به راحتی روی یک GPU مصرفی high-end با کوانتیزاسیون ۴ بیتی جا می‌شوند در حالی که کیفیت استدلالی نزدیک به مدل‌های ابری بسیار بزرگ‌تر را در بسیاری از وظایف روزمره ارائه می‌دهند. مدل‌های کوچک‌تر در بازه ۷ تا ۸ میلیارد پارامتر همچنان انتخاب درست برای اپلیکیشن‌های حساس به تأخیر، agentهای سبک، یا سخت‌افزار با حافظه محدود هستند، در حالی که هنوز برای خلاصه‌سازی، طبقه‌بندی و بازبینی کد معمول به اندازه کافی توانمندند."
+        },
+        {
+          "type": "paragraph",
+          "text": "مدل‌های متمرکز بر کدنویسی که به‌طور خاص روی کد و جریان‌های کاری agentic آموزش دیده‌اند، اکنون به‌طور پیوسته از مدل‌های عمومی با اندازه مشابه در benchmarkهای مهندسی نرم‌افزار بهتر عمل می‌کنند؛ همین دلیل است که تیم‌های سازنده ابزارهای توسعه‌دهنده به‌طور فزاینده‌ای یک مدل تخصصی کدنویسی را به جای پیش‌فرض گرفتن یک مدل چت عمومی دانلود می‌کنند. مدل‌های context طولانی، که برخی از آن‌ها اکنون از پنجره‌های context در حد میلیون‌ها توکن پشتیبانی می‌کنند، موارد استفاده‌ای را نیز باز کرده‌اند — تحلیل کامل codebase، بازبینی اسناد حقوقی طولانی — که ��یش‌تر بدون استراتژی‌های chunking عملی نبودند."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "تعداد پارامتر را با VRAM موجود تطبیق دهید، نه با اعتبار benchmark",
+            "از کوانتیزاسیون Q4_K_M به عنوان تعادل پیش‌فرض سرعت و کیفیت استفاده کنید",
+            "برای وظایف مهندسی نرم‌افزار به سراغ مدل‌های تخصصی کدنویسی بروید",
+            "از مدل‌های context طولانی برای تحلیل کامل سند یا codebase استفاده کنید",
+            "روی وظایف نمایندگی خودتان benchmark بگیرید، نه روی leaderboardهای عمومی"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "ملاحظات عملیاتی و امنیتی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اجرای مدل‌ها به‌صورت محلی یک دسته ریسک را حذف می‌کند و دسته دیگری را معرفی می‌کند. تیم‌هایی که اولاما را در زمینه‌های production به کار می‌گیرند باید با همان نظم عملیاتی که برای هر سرویس self-hosted دیگری دارند با آن برخورد کنند، نه اینکه فرض کنند محلی بودن به‌طور خودکار به معنای امن بودن است."
+        },
+        {
+          "type": "paragraph",
+          "text": "رایج‌ترین پیکربندی نادرست، bind کردن daemon اولاما به همه interfaceهای شبکه به جای localhost است. به‌طور پیش‌فرض، اولاما تنها روی 127.0.0.1 گوش می‌دهد؛ به این معنا که از خارج دستگاه میزبان قابل دسترس نیست. تغییر این binding برای دسترس‌پذیر کردن API برای سایر دستگاه‌های یک شبکه — یک گام رایج هنگام سرویس‌دهی یک مدل به یک تیم — بدون افزودن یک لایه احراز هویت در مقابل آن، API و در نتیجه مدل و هر داده‌ای که به آن ارسال می‌شود را برای هر کسی در آن شبکه در معرض قرار می‌دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "برنامه‌ریزی منابع نیز در محیط‌های چند-مدلی نیاز به توجه دارد. بارگذاری همزمان چندین مدل بزرگ برای همان VRAM و حافظه سیستم رقابت می‌کند، و رفتار daemon تحت فشار حافظه باید پیش از تکیه بر آن در یک جریان کاری با بار همزمان غیرقابل پیش‌بینی آزمایش شود. متغیرهای محیطی بیشتر این تنظیمات را کنترل می‌کنند، از جمله اینکه یک مدل بی‌کار چه مدت قبل از حذف از حافظه بارگذاری‌شده باقی می‌ماند، که مستقیماً بر هم پاسخ‌گویی و هم مصرف منابع روی سخت‌افزار اشتراکی تأثیر می‌گذارد."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "daemon را روی localhost نگه دارید مگر اینکه احراز هویت در جا باشد",
+            "یک نمونه اولاما در معرض شبکه را به عنوان سرویسی که نیاز به بازبینی امنیتی خاص خود دارد در نظر بگیرید",
+            "بودجه VRAM و RAM را به‌طور صریح هنگام اجرای چند مدل برنامه‌ریزی کنید",
+            "رفتار حذف مدل بی‌کار را برای سخت‌افزار اشتراکی یا با منابع محدود تنظیم کنید",
+            "همان‌طور که هر سرویس inference دیگر self-hosted را مانیتور می‌کنید، آن را مانیتور کنید"
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "جمع‌بندی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "اولاما inference محلی را اختراع نکرد، اما آن را برای جمعیتی بسیار بزرگ‌تر از توسعه‌دهندگان و سازمان‌ها نسبت به ابزارهای پیش از خود قابل دسترس کرد. با بسته‌بندی یک موتور inference توانمند در یک رابط شبیه Docker، یک مسئله سیستمی چندمرحله‌ای را به یک دستور واحد تبدیل کرد."
+        },
+        {
+          "type": "paragraph",
+          "text": "تصمیم میان inference محلی و ابری به ندرت مطلق است. بسیاری از تیم‌ها اکنون یک معماری هیبریدی را اجرا می‌کنند، با استفاده از یک مدل محلی از طریق اولاما برای وظایف معمول، حساس به تأخیر، یا محدود از نظر حریم خصوصی، در حالی که مدل‌های فرونتیر ابری را برای سخت‌ترین مسائل استدلالی رزرو می‌کنند. این الگوی هیبریدی، بیش از هر امتیاز benchmark واحد، واضح‌ترین نشانه از میزان بالغ شدن اکوسیستم هوش مصنوعی محلی است."
+        },
+        {
+          "type": "paragraph",
+          "text": "درک معماری اولاما — مدل daemon، trade-offهای کوانتیزاسیون، لایه سازگاری API — همان چیزی است که یک توسعه‌دهنده‌ای که یک نمونه آزمایشی اجرا می‌کند را از کسی که یک سیستم هوش مصنوعی محلی در سطح production می‌سازد جدا می‌کند. این ابزار به نقطه‌ای بالغ شده که این تمایز اکنون بیشتر به نظم مهندسی مربوط است، نه به دسترس‌پذیری مدل‌های وزن‌باز توانمند."
         }
-      ]
-    }
-  },
-  "featuredImage": {
-    "src": "/api/uploads/1781729383-ollama-the-engine-behind-local-ai-cover.webp",
-    "alt": {
-      "en": "Ollama: The Engine Behind Local AI",
-      "fa": "Ollama: The Engine Behind Local AI"
+      ],
+      "faq": [
+        {
+          "question": "آیا خود اولاما یک مدل هوش مصنوعی است؟",
+          "answer": "نه. اولاما یک runtime است که مدل‌های زبانی وزن‌باز را دانلود، مدیریت و روی سخت‌افزار محلی سرویس‌دهی می‌کند. هوشمندی واقعی از مدل‌هایی مانند Llama، Qwen یا Mistral می‌آید که اولاما آن‌ها را از طریق یک موتور inference کوانتیزه‌شده به‌طور کارآمد اجرا می‌کند."
+        },
+        {
+          "question": "آیا برای اجرای اولاما به GPU نیاز دارم؟",
+          "answer": "نه، اما GPU عملکرد را به‌طور قابل توجهی بهبود می‌دهد. اولاما می‌تواند مدل‌های کوانتیزه‌شده کوچک‌تر را تنها روی CPU اجرا کند و وقتی GPU موجود است، به‌طور خودکار تا جایی که در VRAM موجود جا می‌شود لایه‌های ترنسفورمر را منتقل می‌کند و بقیه را روی حافظه سیستم تقسیم می‌کند."
+        },
+        {
+          "question": "اولاما چه تفاوتی با استفاده از یک API ابری مثل OpenAI یا Anthropic دارد؟",
+          "answer": "APIهای ابری به‌طور کلی استدلال قوی‌تری روی سخت‌ترین وظایف ارائه می‌دهند و نیازی به سرمایه‌گذاری سخت‌افزاری محلی ندارند. اولاما مقداری از توانمندی اوج را با هزینه صفر به ازای توکن، حریم خصوصی کامل داده و عملکرد آفلاین معامله می‌کند، که آن را برای بارهای کاری پرحجم، حساس به حریم خصوصی یا حساس به تأخیر مناسب می‌سازد."
+        },
+        {
+          "question": "آیا می‌توان از اولاما برای retrieval-augmented generation (RAG) استفاده کرد؟",
+          "answer": "بله. اولاما هم مدل‌های چت و هم مدل‌های embedding را از طریق همان API سرویس‌دهی می‌کند و امکان یک pipeline RAG کاملاً محلی را فراهم می‌کند که در آن اسناد embed می‌شوند، در یک پایگاه داده برداری ذخیره می‌شوند، و برای پاسخ‌های یک مدل محلی بدون هیچ فراخوانی API خارجی بازیابی می‌شوند."
+        },
+        {
+          "question": "آیا در معرض قرار دادن API اولاما به سایر دستگاه‌های یک شبکه امن است؟",
+          "answer": "تنها با تدابیر امنیتی مناسب. به‌طور پیش‌فرض، اولاما به localhost bind می‌شود و از خارج قابل دسترس نیست. در معرض قرار دادن آن به یک شبکه گسترده‌تر بدون احراز هویت، API و هر داده‌ای که به آن ارسال می‌شود را برای هر کسی در آن شبکه قابل دسترس می‌کند."
+        }
+      ],
+      "seo": {
+        "title": "اولاما: موتور پشت هوش مصنوعی محلی | معماری، عملکرد و راهنمای یکپارچه‌سازی",
+        "metaDescription": "نگاهی فنی و عمیق به اولاما — runtime متن‌باز پشت مدل‌های زبانی بزرگ محلی. معماری، trade-offهای کوانتیزاسیون، طراحی API، انتخاب مدل و ملاحظات امنیتی را بیاموزید.",
+        "canonical": "https://sinisteroid.ir/ollama-the-engine-behind-local-ai",
+        "openGraph": {
+          "title": "اولاما: موتور پشت هوش مصنوعی محلی",
+          "description": "بررسی نحوه سرویس‌دهی مدل‌های کوانتیزه‌شده توسط اولاما، API سازگار با OpenAI، معماری انتقال بار به GPU و trade-offهای مهندسی پشت هوش مصنوعی محلی-محور.",
+          "image": "./ollama-the-engine-behind-local-ai-cover.webp"
+        },
+        "twitter": {
+          "title": "اولاما: موتور پشت هوش مصنوعی محلی",
+          "description": "از وزن‌های کوانتیزه‌شده GGUF تا APIهای سازگار با OpenAI — نگاهی فنی به runtimeای که مدل‌های زبانی محلی را جریان اصلی کرد.",
+          "image": "./ollama-the-engine-behind-local-ai-cover.webp"
+        },
+        "focusKeyword": "اولاما هوش مصنوعی محلی",
+        "keywords": "اولاما, هوش مصنوعی محلی, اجرای مدل زبانی محلی"
+      }
     }
   }
 }

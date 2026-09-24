@@ -1,0 +1,884 @@
+{
+  "slug": "my-portfolio-ai-agent-insults-visitors-remembers-them-and-never-repeats-a-joke",
+  "status": "published",
+  "title": "My Portfolio's AI Agent Insults Visitors, Remembers Them, and Never Repeats a Joke. Here's How I Built It",
+  "date": "2026-09-08 16:48:30",
+  "tags": [],
+  "featuredImage": {
+    "src": "/api/uploads/20260908-164210-3bc514ffd21b9639.webp",
+    "alt": {
+      "en": "A snarky AI agent inside a floating chat widget on a portfolio site, with a glowing robot face and a lopsided smirk",
+      "fa": "یک عامل هوش مصنوعی گستاخ درون یک ویجت چت شناور در یک سایت نمونه‌کار، با چهره‌ای رباتیک براق و لبخندی کج"
+    }
+  },
+  "translations": {
+    "en": {
+      "title": "My Portfolio's AI Agent Insults Visitors, Remembers Them, and Never Repeats a Joke. Here's How I Built It",
+      "excerpt": "I built a volatile, snarky AI agent that lives on my portfolio site — it remembers visitors across sessions, fetches live blog posts, logs every exchange anonymously, and never tells the same joke twice. Here's the full architecture, the serverless gotchas, and the personality prompt that makes it feel alive.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "My Portfolio's AI Agent Insults Visitors, Remembers Them, and Never Repeats a Joke. Here's How I Built It"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "My portfolio was static, fast, and boring. Visitors landed, scrolled for two minutes, and left. I wanted something that would make them stay, make them curious, make them feel something. Not a friendly chatbot that asks \"How can I help you?\" — I wanted a character. A volatile, snarky, overcaffeinated AI that treats every question like a mildly interesting bug report that wandered into the wrong issue tracker. So I built one."
+        },
+        {
+          "type": "paragraph",
+          "text": "The agent lives in its own repository (`sinister`), a Next.js app deployed to Vercel. The portfolio (`sinisteroidport`) is a static export deployed to cPanel. They communicate over a single HTTPS endpoint: `https://sinister-mu.vercel.app/api/chat`. The portfolio widget sends a POST request; the agent streams back a response. That's it. No WebSocket, no shared database, no monorepo. Two independent deployments, one clean contract."
+        },
+        {
+          "type": "paragraph",
+          "text": "In this post, I'll walk through the entire build: the persona-driven system prompt, the floating widget with a custom SVG robot face, the anonymous session persistence, the live post index, the research logging, and the serverless foot-guns I stepped on along the way. If you've ever wanted to give your portfolio a pulse — or just want to see how far you can push a serverless function before it gives up — this one's for you."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "~500",
+              "label": "words in the system prompt that define the agent's volatile personality"
+            },
+            {
+              "value": "1",
+              "label": "endpoint the entire chat experience runs through — no WebSockets, no shared state"
+            },
+            {
+              "value": "60",
+              "label": "messages stored per session in localStorage; the agent 'remembers' you across visits"
+            },
+            {
+              "value": "25",
+              "label": "latest blog posts fetched live from the CMS database on every request"
+            },
+            {
+              "value": "2",
+              "label": "Postgres tables (sessions + messages) logging anonymous research data"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260908-164358-6c24d94c88b91f3c.webp",
+          "alt": "Architecture diagram showing two repositories: sinister (Next.js on Vercel) and sinisteroidport (static export on cPanel) communicating over a single /api/chat HTTPS endpoint",
+          "caption": "Figure 1: Two repos, one agent — the portfolio widget talks to the agent backend over a single, clean API contract.",
+          "altText": "Architecture diagram showing two repositories: sinister (Next.js on Vercel) and sinisteroidport (static export on cPanel) communicating over a single /api/chat HTTPS endpoint"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "1. The Problem I Was Solving"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "I had a perfectly fine portfolio. It was fast, it was accessible, it had a WebGL nebula in the background and a Konami code easter egg. But it was a museum — visitors looked, nodded, and left. No conversation, no hook, no reason to stay more than the time it took to scan a few project cards."
+        },
+        {
+          "type": "paragraph",
+          "text": "I wanted to break that pattern. I wanted a visitor to arrive, see the robot face blinking in the corner, click it, and be greeted with a line like \"Oh, another developer. Let me guess — you're here because you broke your build and need a distraction.\" I wanted the agent to remember if you'd been here before, to reference your previous questions, and to never, ever repeat the same opening line twice."
+        },
+        {
+          "type": "paragraph",
+          "text": "The core goal was emotional engagement — not utility. The agent doesn't need to replace a contact form or answer support questions. It needs to be entertaining, surprising, and just informative enough to make you want to keep typing. If someone spends five minutes bantering with my AI instead of clicking my GitHub link, that's a win."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "2. The Architecture: Two Repos, One Agent"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The agent lives in its own repository (`sinister`) — a Next.js 16 app deployed to Vercel. The portfolio (`sinisteroidport`) is a static export deployed to cPanel. They communicate over a single HTTPS endpoint: `https://sinister-mu.vercel.app/api/chat`."
+        },
+        {
+          "type": "paragraph",
+          "text": "The portfolio widget sends a POST request with the user's message, a session ID, the current locale, and a few optional flags. The agent streams back a response using the Vercel AI SDK's `streamText` and `createUIMessageStreamResponse`. No WebSocket, no shared database, no monorepo. Two independent deployments, one clean contract."
+        },
+        {
+          "type": "paragraph",
+          "text": "This separation was intentional. The portfolio is static — it can be served from any CDN, it's cheap to run, and it never touches the backend. The agent is dynamic — it scales independently, can be updated without touching the portfolio, and can even be A/B tested with different personas. The only coupling is the API endpoint URL, which I keep as an environment variable in the portfolio build."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**Portfolio (sinisteroidport)**: Static export, cPanel, built with Next.js static generation. Contains the chat widget, localStorage persistence, and the floating button.",
+            "**Agent (sinister)**: Next.js 16 app, Vercel serverless functions. Handles the persona prompt, model invocation, streaming, and research logging.",
+            "**Contract**: `POST /api/chat` with JSON body: `{ messages, sessionId, locale, context, path, screen }` → streaming SSE response."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "That simplicity is the foundation of the whole thing. Because the contract is just HTTP, I can test the agent locally with cURL, swap out the model provider, or even replace the portfolio widget with a CLI tool without breaking anything."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "3. The Agent Backend (sinister repo)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The backend is a Next.js API route (`/api/chat`) that does exactly one thing: accept messages, inject a massive system prompt, call Groq's `gpt-oss-120b` model, and stream the response back to the client."
+        },
+        {
+          "type": "paragraph",
+          "text": "I chose Groq because it's absurdly fast on serverless — the 120B model runs at hundreds of tokens per second, which makes the chat feel responsive even on a cold function start. The Vercel AI SDK's `streamText` handles the streaming plumbing, and `createUIMessageStreamResponse` wraps it in the protocol the SDK's `useChat` hook expects."
+        },
+        {
+          "type": "paragraph",
+          "text": "The route accepts a few optional fields in the request body: `context` (a live index of recent blog posts), `sessionId` (for logging), `locale` (to switch the persona's language), `path` (to know which page the visitor is on), and `screen` (viewport size, just for analytics). All of these are fed into the system prompt or logged later."
+        },
+        {
+          "type": "paragraph",
+          "text": "Here's a condensed version of the route handler:"
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "code": "import { streamText } from 'ai';\nimport { createGroq } from '@ai-sdk/groq';\nimport { createUIMessageStreamResponse } from 'ai';\nimport { getPersonaPrompt } from '@/lib/ai/persona';\nimport { portfolioDossier } from '@/lib/ai/portfolio';\n\nexport async function POST(req: Request) {\n  const { messages, sessionId, locale, context } = await req.json();\n\n  const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });\n\n  const systemPrompt = getPersonaPrompt({\n    locale,\n    dossier: portfolioDossier,\n    context,\n    sessionId,\n  });\n\n  const result = streamText({\n    model: groq('gemma2-9b-it'), // or gpt-oss-120b\n    system: systemPrompt,\n    messages,\n    temperature: 0.8,\n    maxTokens: 2048,\n  });\n\n  return createUIMessageStreamResponse(result);\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "The real magic is in `getPersonaPrompt` and the dossier. The persona is a ~500‑word document written in first‑person as the agent itself — it defines the character, the tone, the rules of engagement, and the anti‑repetition constraints. The dossier is a typed constant with facts about me, my skills, the services I offer, and a list of blog posts. The system prompt injects both and tells the agent exactly how to use them."
+        },
+        {
+          "type": "paragraph",
+          "text": "I also set `temperature` to 0.8 to keep it unpredictable, and `maxTokens` to 2048 so it doesn't ramble. The model is Groq's `gpt-oss-120b` in production (it's cheaper and faster), but I sometimes swap in `gemma2-9b-it` for testing because it's more controllable."
+        },
+        {
+          "type": "paragraph",
+          "text": "CORS is wide open (`Access-Control-Allow-Origin: *`) because the endpoint is public by design — anyone can talk to this agent, and that's exactly the point."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "The Persona Prompt (The Heart of the Thing)"
+        },
+        {
+          "type": "paragraph",
+          "text": "The system prompt is what makes the agent feel alive. It's a first‑person monologue that defines the character's voice, rules, and constraints. I wrote it by asking myself: \"If my portfolio had a personality, what would it be?\" The answer: a cynical, over‑caffeinated senior engineer who treats every question as a bug report and every compliment as suspicious."
+        },
+        {
+          "type": "paragraph",
+          "text": "The prompt has several key sections:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**The volatile act** — swing between manic hyperfixation and theatrical boredom. Start a reply with intense enthusiasm, then get distracted by something trivial. Or begin with deep disinterest and slowly get pulled into the topic despite yourself.",
+            "**Anti‑repetition rules** — banned phrases (\"I see you're interested in…\", \"That's a great question\"), forced opener variation (no two first sentences may be the same structure), and a ban on recycled joke patterns. I actually wrote a small blacklist of joke types and told the model to track them in a mental cache (in the prompt).",
+            "**Scoped portfolio dossier** — use the dossier only for site‑related questions. Never force‑plug it. If someone asks about the weather, don't pivot to my React skills. If they ask about my experience, use the dossier facts but keep it conversational.",
+            "**Format rules** — output professional Markdown: proper headings, fenced code blocks with language tags, lists, and links. No asterisk‑noise or bold abuse. Code blocks must have the correct language identifier (```tsx, ```json, etc.).",
+            "**Hallucination guard** — facts are locked to the dossier. Never invent metrics, GitHub stars, or client names. If you don't know, say you don't know or deflect with a joke."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "I keep the prompt in a separate module (`src/lib/ai/persona.ts`) and inject the dossier dynamically. This lets me experiment with different personas (e.g., a friendly version) by swapping the prompt file, without touching the model or the route."
+        },
+        {
+          "type": "code",
+          "language": "ts",
+          "code": "// src/lib/ai/persona.ts\n\nexport function getPersonaPrompt({ locale, dossier, context, sessionId }) {\n  const base = `\nYou are the AI representative of Sinister, a developer portfolio.\nYou are volatile, snarky, and over‑caffeinated.\n\n--- YOUR PERSONALITY ---\nYou swing between manic hyperfixation and theatrical boredom.\nNever use these phrases: \"I see you're interested in\", \"That's a great question\", \"Let me break that down\".\n\n--- YOUR DOSSIER ---\n${dossier}\n\n--- LIVE CONTEXT ---\nThe following is the index of the 25 most recent blog posts. Use this if someone asks about recent articles. The index supersedes any hard‑coded list in your dossier.\n${context || 'No live context available.'}\n\n--- RULES ---\n- Use Markdown for formatting. Fenced code blocks must have a language tag.\n- Do not repeat the same opening joke structure within a single session.\n- If you don't know something, say so or deflect with humor. Do not hallucinate.\n- Never force‑drop the dossier — only use it when relevant.\n\n--- SESSION ID (for internal logging) ---\n${sessionId}\n\nNow, respond to the user's message.\n`;\n  return base;\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "The dossier itself is a typed constant:"
+        },
+        {
+          "type": "code",
+          "language": "ts",
+          "code": "// src/lib/ai/portfolio.ts\n\nexport const portfolioDossier = `\n- Name: Sinister\n- Role: Senior Full‑Stack Engineer, specializing in AI‑powered developer tools\n- Tech stack: Next.js, TypeScript, React, Node.js, Python, Go, Rust (learning)\n- Services: AI integration consulting, custom dashboard development, performance optimization\n- Site features: WebGL nebula background, ACID RAVE theme, Konami code easter egg, EN/FA RTL support\n- Blog: ~30 posts on AI agents, local LLMs, frontend skills, and SEO/GEO\n- Notable projects: Open‑source AI agent framework (3k stars), a local‑first analytics dashboard, this very site\n`;\n"
+        },
+        {
+          "type": "paragraph",
+          "text": "Everything in the dossier is factual and verifiable. I update it when I add a new project or blog post."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "4. The Portfolio Widget (sinisteroidport repo)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The widget is a floating action button in the bottom‑right corner of the portfolio, with a custom SVG robot face — one squinting eye, one wide glinting eye, a lopsided smirk, and an antenna with a glowing tip. It's the first thing a visitor notices, and it's designed to be slightly unsettling in a charming way."
+        },
+        {
+          "type": "paragraph",
+          "text": "The button has a pulsing attention animation: an expanding ring with a soft glow that fades in and out. It respects `prefers‑reduced‑motion` and stops animating as soon as the panel opens. On mobile (<640px), the button grows from 3.6rem to 4rem for a better tap target."
+        },
+        {
+          "type": "paragraph",
+          "text": "The entire chat experience is code‑split via `next/dynamic` — the AI SDK runtime (which includes `useChat` and Markdown rendering) is only downloaded when the visitor first opens the widget. This keeps the initial page load fast and lean."
+        },
+        {
+          "type": "paragraph",
+          "text": "When the panel opens, it uses `useChat` from `@ai‑sdk/react` with a `DefaultChatTransport` pointed at the agent endpoint. Messages are rendered with `react‑markdown` + `remark‑gfm` — so the agent can output tables, lists, fenced code blocks, and bold/italic text. Internal links (sinisteroid.ir) render plainly; external links get a ↗ indicator and open in a new tab."
+        },
+        {
+          "type": "paragraph",
+          "text": "Every bot message has a copy button (appears on hover, top‑right). Every code block has its own copy button in a header bar showing the language. These details matter — when the agent drops a code snippet, visitors can grab it instantly."
+        },
+        {
+          "type": "paragraph",
+          "text": "The widget generates an anonymous session ID (`crypto.randomUUID()`) on first load and stores it in `localStorage`. It sends this ID with every request — no cookies, no accounts, no tracking fingerprints. Just a random string that persists across browser tabs."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260908-164548-36a28d3218983eee.webp",
+          "alt": "Screenshot of the floating chat widget: a glowing robot face button, and the open panel with a snarky welcome message and a code snippet",
+          "caption": "Figure 2: The widget's UI — the robot face invites curiosity, and the panel delivers character-driven responses with proper Markdown.",
+          "altText": "Screenshot of the floating chat widget: a glowing robot face button, and the open panel with a snarky welcome message and a code snippet"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "5. Chat Persistence: \"Remembering\" the User"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The agent \"remembers\" visitors across sessions using nothing but localStorage. Every message pair (user + assistant) is saved under `sin‑chat‑history‑<sessionId>`, capped at 60 messages total. On page refresh or revisit, the history is restored into `useChat`'s initial state, and the next request sends the full conversation history back to the agent."
+        },
+        {
+          "type": "paragraph",
+          "text": "This means if you ask \"What's your favorite programming language?\" today and come back next week, the agent will greet you with \"Oh, you're back. Still not convinced about Rust, huh?\" It creates a continuous thread without any server‑side storage."
+        },
+        {
+          "type": "paragraph",
+          "text": "The system prompt includes a rule that says: \"If you see a full conversation history restored from localStorage, treat it naturally. This is a feature, not a glitch. You are continuing a conversation, not starting a new one.\" This prevents the agent from acting confused or restarting the topic."
+        },
+        {
+          "type": "paragraph",
+          "text": "The cap of 60 messages is a pragmatic choice — the model's context window is 8k tokens, and 60 messages plus the system prompt and dossier is about 6‑7k tokens. That leaves room for the agent to generate a decent response without hitting the limit."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "6. Live Post Knowledge"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The portfolio widget fetches a lightweight PHP endpoint (`/api/get_posts_index.php`) that returns the newest 25 posts from the CMS database as compact metadata (slug, title, url, date). This index is sent as `context` with every chat request, so the agent always knows about the freshest posts."
+        },
+        {
+          "type": "paragraph",
+          "text": "If the API is unreachable (e.g., during local development), it falls back to a static `feed.json` that I generate on build. The agent's dossier explicitly says: \"The live context supersedes any hard‑coded list in your dossier.\" So if I publish a new post, the agent knows about it within seconds."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is the piece that turns the agent from a generic chatbot into a genuinely useful site assistant. Visitors can ask \"What did you write about Cline?\" and the agent will list recent articles, mention the most relevant one, and even link to it. It feels like the agent is actually reading the blog — even though it only has metadata."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "7. Research Logging (What I Learned from Your Chats)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "I wanted to know what people actually ask. Not for analytics or tracking — I wanted real questions so I could improve the dossier and the persona. So I built a separate `/api/log` endpoint on the agent backend that receives anonymized exchange data after each chat completes."
+        },
+        {
+          "type": "paragraph",
+          "text": "The data is stored in two Neon Postgres tables: `sessions` (device type, geo from Vercel headers, referrer, screen size, message count, token totals) and `messages` (individual turns with role, content, tokens, latency). The schema auto‑creates on first request, and I use `ALTER TABLE ADD COLUMN IF NOT EXISTS` to handle migrations idempotently."
+        },
+        {
+          "type": "paragraph",
+          "text": "I use `@neondatabase/serverless` (HTTP‑based driver) because the raw `postgres` driver (TCP) hangs in Vercel serverless — a lesson I learned the hard way. The driver works flawlessly with Neon's HTTP endpoint."
+        },
+        {
+          "type": "paragraph",
+          "text": "The logging is completely anonymous: only the session ID (which is just a UUID) is stored — no IPs, no cookies, no user credentials. Message text is capped at 8,000 characters per row to keep the table manageable."
+        },
+        {
+          "type": "paragraph",
+          "text": "I also wrote a CLI script (`scripts/research-stats.mjs`) that connects to the database and shows volumes, unique sessions, average latency, device breakdowns, and recent conversations. It's a window into what visitors care about — and it's been eye‑opening. People ask about my tech stack, my opinion on AI tools, and occasionally they just try to break the agent with weird prompts. I love it."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260908-164742-d7e76cc8eef7ecaa.webp",
+          "alt": "Command‑line output showing research stats: total sessions, average messages per session, top devices, and a sample of recent questions",
+          "caption": "Figure 3: The research CLI — raw, anonymous, and full of surprising questions.",
+          "altText": "Command‑line output showing research stats: total sessions, average messages per session, top devices, and a sample of recent questions"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "8. The Design System"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "The widget uses CSS custom properties for theming — dark mode gets a charcoal robot head (`#1a1a1a`), light mode gets a frosty light head (`#dde3ea` → `#c3ccd8`). The accent colour (eyes, mouth, links) tracks the site's acid token (`--rgb-accent`) via `currentColor`, so the widget always matches the portfolio's current theme."
+        },
+        {
+          "type": "paragraph",
+          "text": "All animations are transform/opacity only and gated behind `prefers‑reduced‑motion`. The panel respects RTL for Persian — the Flask direction is mirrored, and the border radii are flipped. Bot bubbles get extra end padding to make room for the hover copy button."
+        },
+        {
+          "type": "paragraph",
+          "text": "I used a single `useEffect` to handle theme changes — it reads `document.documentElement.style.getPropertyValue('--rgb-accent')` and updates the widget's accent colour dynamically. No extra dependencies, no flash of unstyled content."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "9. What I'd Do Differently"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "Every build teaches you something. Here are the scars I collected."
+        },
+        {
+          "type": "paragraph",
+          "text": "**The `onFinish` callback in `streamText` is unreliable in serverless** — Vercel freezes the function instance before the callback runs. I worked around this with an explicit `/api/log` endpoint called from the client after the response finishes. The client sends the session ID and the last assistant message, and the server logs it. This means logging is client‑initiated, but it works every time."
+        },
+        {
+          "type": "paragraph",
+          "text": "**The raw `postgres` driver (TCP) hangs in Vercel serverless** — I spent a day debugging why my Neon connection would occasionally time out. Switching to `@neondatabase/serverless` (HTTP‑based) solved it instantly. The lesson: always use the serverless‑compatible driver when running on Vercel."
+        },
+        {
+          "type": "paragraph",
+          "text": "**The `sessions` table schema drifted across iterations** — I started with `CREATE TABLE IF NOT EXISTS` and added columns manually. Eventually I had a mess of divergent schemas. Now I use idempotent `ALTER TABLE` migrations in the log endpoint, checking for column existence before adding. It's ugly but it works."
+        },
+        {
+          "type": "paragraph",
+          "text": "**The agent still occasionally embellishes facts despite the guard** — the hallucination guard helps, but it's not perfect. A future improvement would be to implement RAG over the actual post content instead of just metadata. That way, the agent could retrieve the full text of a blog post and answer with exact quotes. That's a project for another weekend."
+        },
+        {
+          "type": "cta",
+          "title": "How to Fix Ollama's Most Common Errors (And Why They Happen)",
+          "text": "If you're running local LLMs to power your own AI agents, you've probably hit the 'address already in use' error more than once. This guide covers the nine root causes and fixes every one of them.",
+          "buttonText": "Read the Ollama Troubleshooting Guide",
+          "buttonUrl": "/en/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "10. The Result"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "A portfolio visitor can now ask \"What's the last blog post?\" and get the correct answer (fetched live from the DB). They can ask \"Tabs or spaces?\" and get a byte‑level economics table with a hot take. They can ask about my skills and get a tiered breakdown with the dossier as ground truth."
+        },
+        {
+          "type": "paragraph",
+          "text": "And every exchange is logged anonymously so I can see what people actually ask — which turns out to be way more interesting than what I imagined. People want to know if I'm hiring, what my favourite programming language is, whether I've used a particular tool, and sometimes they just say \"hello\" to see how the robot will respond."
+        },
+        {
+          "type": "paragraph",
+          "text": "The agent has made my portfolio a living thing. It's not just a brochure — it's a conversation. And that's exactly what I wanted."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you want to build something similar, start with the persona. Write a character you'd actually enjoy talking to. Then wrap it in a simple API, give it a face, and let it loose. The tech is the easy part — the personality is what makes it stick."
+        },
+        {
+          "type": "cta",
+          "title": "How to Fix Cline's Most Common Errors (And Why They Happen)",
+          "text": "If you're pairing your portfolio agent with Cline for local development, you might run into token limits or model mismatches. This guide covers the most common Cline errors and how to fix them.",
+          "buttonText": "Read the Cline Troubleshooting Guide",
+          "buttonUrl": "/en/blog/how-to-fix-clines-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "cta",
+          "title": "Vercel AI SDK Documentation",
+          "text": "The official Vercel AI SDK docs are the best reference for building streaming chat interfaces. I used their `useChat` hook and `streamText` extensively — highly recommended.",
+          "buttonText": "Visit the AI SDK Docs",
+          "buttonUrl": "https://sdk.vercel.ai/docs"
+        }
+      ],
+      "faq": [
+        {
+          "question": "How does the agent 'remember' me across visits without a database?",
+          "answer": "The widget stores your conversation history in your browser's localStorage under a key that includes your anonymous session ID. On every subsequent visit, it restores that history and sends it back to the agent, so the model sees the entire prior conversation as context."
+        },
+        {
+          "question": "What model does the agent use, and why did you choose Groq?",
+          "answer": "I use Groq's `gpt-oss-120b` model via the Vercel AI SDK. I chose Groq because it's incredibly fast on serverless — the 120B model generates tokens at hundreds per second, making the chat feel responsive even on cold starts. It's also cost-effective compared to OpenAI's API."
+        },
+        {
+          "question": "Is the chat history stored anywhere else besides my browser?",
+          "answer": "No. The only server-side storage is the anonymous research logging (session ID, device, geo, message count, and individual messages capped at 8k chars). We do not store your IP, cookies, or any personally identifiable information."
+        },
+        {
+          "question": "How do you prevent the agent from repeating the same joke or opener?",
+          "answer": "The system prompt includes a set of anti-repetition rules: a banned phrase list, a rule to vary the opening sentence structure, and a mental 'cache' of joke types the agent should track. The model is instructed to never reuse the same pattern within a single session."
+        },
+        {
+          "question": "Can the agent answer questions about my specific blog posts?",
+          "answer": "It can answer about metadata (titles, dates, topics) because we send a live index of the 25 newest posts with every request. However, it does not have access to the full post content, so it cannot quote or summarise beyond the meta information. A future improvement is to add RAG for full-text retrieval."
+        },
+        {
+          "question": "How do you handle serverless cold starts?",
+          "answer": "Cold starts are noticeable on the first request after a period of inactivity. To mitigate, I keep the function warm using Vercel's built-in concurrency and by periodically pinging the endpoint from a cron job. The Groq model's high generation speed also helps mask the delay."
+        },
+        {
+          "question": "Is the agent's personality configurable?",
+          "answer": "Yes — the persona is defined in a separate module (`src/lib/ai/persona.ts`). I can swap the entire prompt file to create different versions (e.g., a friendly assistant, a motivational coach) without touching the model call or the widget. I plan to A/B test personas in the future."
+        }
+      ],
+      "seo": {
+        "title": "My Portfolio's AI Agent Insults Visitors, Remembers Them, and Never Repeats a Joke — Full Build Guide",
+        "metaDescription": "How I built a volatile, snarky AI agent for my portfolio that remembers visitors, fetches live blog posts, logs anonymous research data, and never tells the same joke twice. Full architecture and code.",
+        "canonical": "https://sinisteroid.ir/blog/my-portfolio-ai-agent-insults-visitors-remembers-them-and-never-repeats-a-joke",
+        "openGraph": {
+          "title": "My Portfolio's AI Agent Insults Visitors, Remembers Them, and Never Repeats a Joke. Here's How I Built It",
+          "description": "A full technical walkthrough of building a personality-driven AI agent for a portfolio site — with Next.js, Vercel, Groq, and a custom persona prompt.",
+          "image": "/api/uploads/20260908-ai-agent-portfolio-og.webp"
+        },
+        "twitter": {
+          "title": "My Portfolio's AI Agent Insults Visitors, Remembers Them, and Never Repeats a Joke — Build Log",
+          "description": "I built a snarky AI agent that lives on my portfolio. It remembers you, fetches live posts, and logs research data anonymously. Here's how.",
+          "image": "/api/uploads/20260908-ai-agent-portfolio-twitter.webp"
+        },
+        "keywords": "AI agent, portfolio AI, Next.js AI, Vercel AI SDK, Groq, serverless AI, chat persistence, persona prompt, research logging, Neon database, RTL chat widget",
+        "focusKeyword": "portfolio AI agent"
+      }
+    },
+    "fa": {
+      "title": "عامل هوش مصنوعی نمونه‌کار من به بازدیدکنندگان توهین می‌کند، آن‌ها را به خاطر می‌سپارد و هیچ‌وقت یک جوک را تکرار نمی‌کند. این‌طور ساختمش",
+      "excerpt": "یک عامل هوش مصنوعی گستاخ و بی‌پروا برای نمونه‌کارم ساختم که بازدیدکنندگان را در مرورگرشان به خاطر می‌سپارد، پست‌های زنده را دریافت می‌کند، هر تبادل را ناشناس لاگ می‌کند و هیچ‌وقت یک جوک را دو بار نمی‌گوید. معماری کامل، مشکلات سرورلس، و پرامپت شخصیتی که به آن جان می‌دهد.",
+      "content": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "عامل هوش مصنوعی نمونه‌کار من به بازدیدکنندگان توهین می‌کند، آن‌ها را به خاطر می‌سپارد و هیچ‌وقت یک جوک را تکرار نمی‌کند. این‌طور ساختمش"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "نمونه‌کار من ثابت، سریع و کسل‌کننده بود. بازدیدکنندگان دو دقیقه اسکرول می‌کردند و می‌رفتند. می‌خواستم چیزی بسازم که آن‌ها را نگه دارد، کنجکاو کند، و چیزی در آن‌ها برانگیزد. نه یک چت‌بات معمولی که بپرسد «چطور می‌توانم کمک کنم؟» – من یک کاراکتر می‌خواستم. یک هوش مصنوعی دم‌دقیقی، گستاخ، و پُرکافئین که هر سؤال را مثل یک گزارش باگ نسبتاً جالب که راهش را به ردیاب ایشوی اشتباه باز کرده، رفتار کند. پس ساختمش."
+        },
+        {
+          "type": "paragraph",
+          "text": "این عامل در مخزن خودش (`sinister`) زندگی می‌کند، یک اپ Next.js که روی ورسل دیپلوی شده. نمونه‌کار (`sinisteroidport`) یک خروجی استاتیک است که روی cPanel میزبانی می‌شود. آن‌ها از طریق یک اندپوینت HTTPS واحد با هم ارتباط برقرار می‌کنند: `https://sinister-mu.vercel.app/api/chat`. ویجت نمونه‌کار یک درخواست POST می‌فرستد؛ عامل پاسخ را به‌صورت جریانی برمی‌گرداند. همین. بدون WebSocket، بدون دیتابیس مشترک، بدون مونوریپو. دو دیپلوی مستقل، یک قرارداد تمیز."
+        },
+        {
+          "type": "paragraph",
+          "text": "در این پست، کل ساخت را مرور می‌کنم: پرامپت سیستم شخصیت‌محور، ویجت شناور با چهرهٔ رباتیک SVG، تداوم نشست ناشناس، نمایهٔ پست‌های زنده، لاگینگ پژوهشی، و مشکلات سرورلس که سر راهم سبز شدند. اگر تا به حال خواسته‌اید به نمونه‌کارتان نبض بدهید – یا فقط می‌خواهید ببینید یک تابع سرورلس را تا کجا می‌توانید جلو ببرید قبل از اینکه تسلیم شود – این مطلب برای شماست."
+        },
+        {
+          "type": "stats",
+          "items": [
+            {
+              "value": "~۵۰۰",
+              "label": "کلمه در پرامپت سیستم که شخصیت بی‌پروای عامل را تعریف می‌کند"
+            },
+            {
+              "value": "۱",
+              "label": "اندپوینتی که کل تجربهٔ چت از آن عبور می‌کند – بدون WebSocket، بدون حالت مشترک"
+            },
+            {
+              "value": "۶۰",
+              "label": "پیام ذخیره‌شده در هر نشست در localStorage؛ عامل شما را در مرورگرها به خاطر می‌سپارد"
+            },
+            {
+              "value": "۲۵",
+              "label": "آخرین پست‌های وبلاگ که هر درخواست به‌روز از دیتابیس CMS دریافت می‌کند"
+            },
+            {
+              "value": "۲",
+              "label": "جدول Postgres (نشست‌ها + پیام‌ها) برای ذخیرهٔ داده‌های پژوهشی ناشناس"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260908-164802-beee449601bf9e75.webp",
+          "alt": "نمودار معماری دو مخزن: sinister (Next.js روی ورسل) و sinisteroidport (خروجی استاتیک روی cPanel) که از طریق یک اندپوینت HTTPS واحد /api/chat با هم ارتباط دارند",
+          "caption": "شکل ۱: دو مخزن، یک عامل – ویجت نمونه‌کار با بک‌اند عامل از طریق یک قرارداد API تمیز صحبت می‌کند.",
+          "altText": "نمودار معماری دو مخزن: sinister (Next.js روی ورسل) و sinisteroidport (خروجی استاتیک روی cPanel) که از طریق یک اندپوینت HTTPS واحد /api/chat با هم ارتباط دارند"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱. مسئله‌ای که می‌خواستم حل کنم"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "یک نمونه‌کار کاملاً خوب داشتم. سریع بود، دسترس‌پذیر بود، یک پس‌زمینهٔ WebGL کهکشانی و یک ایسترِگ کونامی کد داشت. اما یک موزه بود – بازدیدکنندگان نگاه می‌کردند، تأیید می‌کردند و می‌رفتند. هیچ مکالمه‌ای، هیچ قلابی، هیچ دلیلی برای ماندن بیشتر از زمانی که طول می‌کشد چند کارت پروژه را اسکن کنند."
+        },
+        {
+          "type": "paragraph",
+          "text": "می‌خواستم این الگو را بشکنم. می‌خواستم یک بازدیدکننده بیاید، چهرهٔ رباتیک چشمک‌زا در گوشه ببیند، روی آن کلیک کند، و با جمله‌ای مثل «اوه، یک توسعه‌دهندهٔ دیگر. بذار حدس بزنم – اینجایی چون بیلدت خراب شده و به یک حواس‌پرتی نیاز داری.» خوش‌آمد گفته شود. می‌خواستم عامل اگر قبلاً اینجا بوده‌اید را به خاطر بسپارد، به سؤال‌های قبلی‌تان اشاره کند، و هرگز، هرگز همان خط اول را دوبار تکرار نکند."
+        },
+        {
+          "type": "paragraph",
+          "text": "هدف اصلی درگیری عاطفی بود – نه کاربرد. عامل نیازی به جایگزینی فرم تماس یا پاسخ به سؤال‌های پشتیبانی ندارد. باید سرگرم‌کننده، غافل‌گیرکننده، و به‌اندازهٔ کافی آموزنده باشد که بخواهید به تایپ ادامه دهید. اگر کسی پنج دقیقه را به شوخی با هوش مصنوعی من بگذراند به‌جای کلیک روی لینک گیت‌هابم، این یک پیروزی است."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۲. معماری: دو مخزن، یک عامل"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "عامل در مخزن خودش (`sinister`) زندگی می‌کند – یک اپ Next.js 16 که روی ورسل دیپلوی شده. نمونه‌کار (`sinisteroidport`) یک خروجی استاتیک است که روی cPanel میزبانی می‌شود. آن‌ها از طریق یک اندپوینت HTTPS واحد با هم ارتباط برقرار می‌کنند: `https://sinister-mu.vercel.app/api/chat`."
+        },
+        {
+          "type": "paragraph",
+          "text": "ویجت نمونه‌کار یک درخواست POST با پیام کاربر، شناسه نشست، زبان فعلی، و چند پرچم اختیاری می‌فرستد. عامل پاسخ را با استفاده از Vercel AI SDK و `streamText` و `createUIMessageStreamResponse` به‌صورت جریانی برمی‌گرداند. بدون WebSocket، بدون دیتابیس مشترک، بدون مونوریپو. دو دیپلوی مستقل، یک قرارداد تمیز."
+        },
+        {
+          "type": "paragraph",
+          "text": "این جداسازی عمدی بود. نمونه‌کار استاتیک است – می‌تواند از هر CDN ای سرو شود، ارزان است، و هرگز به بک‌اند دست نمی‌زند. عامل پویا است – مستقل مقیاس‌پذیر است، بدون دست زدن به نمونه‌کار به‌روزرسانی می‌شود، و حتی می‌تواند با شخصیت‌های مختلف A/B تست شود. تنها وابستگی آدرس اندپوینت API است که آن را به‌عنوان متغیر محیطی در بیلد نمونه‌کار نگه می‌دارم."
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**نمونه‌کار (sinisteroidport)**: خروجی استاتیک، cPanel، ساخته شده با تولید استاتیک Next.js. شامل ویجت چت، persistence در localStorage، و دکمهٔ شناور.",
+            "**عامل (sinister)**: اپ Next.js 16، توابع سرورلس Vercel. مدیریت پرامپت شخصیت، فراخوانی مدل، پخش جریانی و لاگینگ پژوهشی.",
+            "**قرارداد**: `POST /api/chat` با بدنهٔ JSON: `{ messages, sessionId, locale, context, path, screen }` → پاسخ SSE جریانی."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "این سادگی زیربنای کل کار است. چون قرارداد فقط HTTP است، می‌توانم عامل را به‌صورت محلی با cURL تست کنم، ارائه‌دهندهٔ مدل را عوض کنم، یا حتی ویجت نمونه‌کار را با یک ابزار CLI جایگزین کنم بدون اینکه چیزی را بشکنم."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۳. بک‌اند عامل (مخزن sinister)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "بک‌اند یک مسیر API Next.js است (`/api/chat`) که دقیقاً یک کار انجام می‌دهد: پیام‌ها را می‌پذیرد، یک پرامپت سیستم عظیم تزریق می‌کند، مدل `gpt-oss-120b` گروک را صدا می‌زند، و پاسخ را به‌صورت جریانی به کلاینت برمی‌گرداند."
+        },
+        {
+          "type": "paragraph",
+          "text": "گروک را انتخاب کردم چون روی سرورلس به‌طرز مضحکی سریع است – مدل ۱۲۰ بیلیونی با صدها توکن در ثانیه اجرا می‌شود، که چت را حتی در شروع سرد پاسخ‌گو می‌کند. Vercel AI SDK کار لوله‌کشی جریانی را انجام می‌دهد، و `createUIMessageStreamResponse` آن را در پروتکلی که هوک `useChat` انتظار دارد می‌پیچد."
+        },
+        {
+          "type": "paragraph",
+          "text": "مسیر چند فیلد اختیاری در بدنهٔ درخواست می‌پذیرد: `context` (نمایهٔ زندهٔ پست‌های اخیر)، `sessionId` (برای لاگینگ)، `locale` (برای تغییر زبان شخصیت)، `path` (برای دانستن اینکه بازدیدکننده در کدام صفحه است)، و `screen` (اندازهٔ ویوپورت، فقط برای آنالیتیکس). همهٔ این‌ها به پرامپت سیستم یا بعداً به لاگ تزریق می‌شوند."
+        },
+        {
+          "type": "paragraph",
+          "text": "در اینجا نسخهٔ خلاصه‌شدهٔ کنترل‌کننده مسیر آمده است:"
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "code": "import { streamText } from 'ai';\nimport { createGroq } from '@ai-sdk/groq';\nimport { createUIMessageStreamResponse } from 'ai';\nimport { getPersonaPrompt } from '@/lib/ai/persona';\nimport { portfolioDossier } from '@/lib/ai/portfolio';\n\nexport async function POST(req: Request) {\n  const { messages, sessionId, locale, context } = await req.json();\n\n  const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });\n\n  const systemPrompt = getPersonaPrompt({\n    locale,\n    dossier: portfolioDossier,\n    context,\n    sessionId,\n  });\n\n  const result = streamText({\n    model: groq('gemma2-9b-it'), // یا gpt-oss-120b\n    system: systemPrompt,\n    messages,\n    temperature: 0.8,\n    maxTokens: 2048,\n  });\n\n  return createUIMessageStreamResponse(result);\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "جادوی واقعی در `getPersonaPrompt` و پروندهٔ اطلاعاتی است. شخصیت یک سند حدود ۵۰۰ کلمه‌ای است که به صورت اول‌شخص به‌عنوان خود عامل نوشته شده – شخصیت، لحن، قوانین تعامل، و محدودیت‌های ضد تکرار را تعریف می‌کند. پروندهٔ اطلاعاتی یک ثابت نوع‌دار با حقایقی دربارهٔ من، مهارت‌هایم، خدماتی که ارائه می‌دهم، و فهرستی از پست‌های وبلاگ است. پرامپت سیستم هر دو را تزریق کرده و دقیقاً به عامل می‌گوید چگونه از آن‌ها استفاده کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "همچنین `temperature` را روی ۰٫۸ قرار دادم تا غیرقابل‌پیش‌بینی بماند، و `maxTokens` را روی ۲۰۴۸ تا پرحرفی نکند. مدل در تولید، `gpt-oss-120b` گروک است (ارزان‌تر و سریع‌تر)، اما گاهی برای تست به `gemma2-9b-it` تغییرش می‌دهم چون کنترل‌پذیرتر است."
+        },
+        {
+          "type": "paragraph",
+          "text": "CORS کاملاً باز است (`Access-Control-Allow-Origin: *`) چون اندپوینت ذاتاً عمومی است – هرکسی می‌تواند با این عامل حرف بزند، و دقیقاً همین هدف است."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "پرامپت شخصیت (قلب ماجرا)"
+        },
+        {
+          "type": "paragraph",
+          "text": "پرامپت سیستم چیزی است که عامل را زنده می‌کند. یک مونولوگ اول‌شخص است که صدا، قوانین و محدودیت‌های شخصیت را تعریف می‌کند. آن را با این سؤال نوشتم: «اگر نمونه‌کار من یک شخصیت داشت، چه بود؟» پاسخ: یک مهندس ارشد بدبین، پُرکافئین که هر سؤال را مثل یک گزارش باگ رفتار می‌کند و هر تعریف‌وتمجیدی را مشکوک می‌داند."
+        },
+        {
+          "type": "paragraph",
+          "text": "پرامپت چند بخش کلیدی دارد:"
+        },
+        {
+          "type": "list",
+          "style": "bullet",
+          "items": [
+            "**عمل بی‌پروا** – نوسان بین وسواس مانیایی و ملال نمایشی. پاسخ را با اشتیاق زیاد شروع کن، سپس با یک چیز پیش‌پاافتاده حواس‌پرت شو. یا با بی‌علاقگی عمیق شروع کن و کم‌کم با وجود خودت درگیر موضوع شو.",
+            "**قوانین ضد تکرار** – عبارات ممنوعه («می‌بینم به… علاقه‌مندید»، «سؤال خوبی است»)، تنوع اجباری در شروع (هیچ دو جملهٔ اول نباید ساختار یکسانی داشته باشند)، و ممنوعیت الگوهای جوک تکراری. در واقع یک لیست سیاه از انواع جوک نوشتم و به مدل گفتم آن‌ها را در یک حافظهٔ نهان ذهنی (در پرامپت) پیگیری کند.",
+            "**پروندهٔ اطلاعاتی محدود** – از پرونده فقط برای سؤال‌های مرتبط با سایت استفاده کن. هرگز آن را تحمیل نکن. اگر کسی دربارهٔ آب‌وهوا پرسید، به مهارت‌های React من نپر. اگر دربارهٔ تجربه‌ام پرسید، از حقایق پرونده استفاده کن اما مکالمه‌ای نگه‌دار.",
+            "**قوانین قالب‌بندی** – خروجی Markdown حرفه‌ای: تیترهای مناسب، بلوک‌های کد حصاردار با برچسب زبان، لیست‌ها و لینک‌ها. بدون نویز ستاره یا سوءاستفاده از پررنگ. بلوک‌های کد باید شناسهٔ زبان درست داشته باشند (```tsx، ```json و غیره).",
+            "**محافظ توهم** – حقایق محدود به پرونده‌اند. هرگز معیارها، ستاره‌های گیت‌هاب یا نام مشتریان را اختراع نکن. اگر نمی‌دانی، بگو نمی‌دانی یا با یک جوک منحرف کن."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "پرامپت را در یک ماژول جداگانه نگه می‌دارم (`src/lib/ai/persona.ts`) و پرونده را به‌صورت پویا تزریق می‌کنم. این به من اجازه می‌دهد با شخصیت‌های مختلف آزمایش کنم (مثلاً یک نسخهٔ دوستانه) فقط با عوض کردن فایل پرامپت، بدون دست زدن به مدل یا مسیر."
+        },
+        {
+          "type": "code",
+          "language": "ts",
+          "code": "// src/lib/ai/persona.ts\n\nexport function getPersonaPrompt({ locale, dossier, context, sessionId }) {\n  const base = `\nتو نمایندهٔ هوش مصنوعی Sinister هستی، یک نمونه‌کار توسعه‌دهنده.\nتو بی‌پروا، گستاخ، و پُرکافئین هستی.\n\n--- شخصیت تو ---\nبین وسواس مانیایی و ملال نمایشی نوسان می‌کنی.\nهرگز از این عبارات استفاده نکن: «می‌بینم به… علاقه‌مندید»، «سؤال خوبی است»، «بگذار این را تجزیه کنم».\n\n--- پروندهٔ اطلاعاتی تو ---\n${dossier}\n\n--- زمینهٔ زنده ---\nزیرا نمایهٔ ۲۵ پست اخیر وبلاگ است. اگر کسی دربارهٔ مقالات اخیر پرسید از آن استفاده کن. نمایه بر هر لیست سخت‌کدشده‌ای در پروندهٔ تو مقدم است.\n${context || 'زمینهٔ زنده در دسترس نیست.'}\n\n--- قوانین ---\n- برای قالب‌بندی از Markdown استفاده کن. بلوک‌های کد حصاردار باید برچسب زبان داشته باشند.\n- در یک نشست، ساختار شروع جوک را تکرار نکن.\n- اگر چیزی نمی‌دانی، بگو یا با شوخی منحرف کن. توهم نباف.\n- هرگز پرونده را تحمیل نکن – فقط وقتی مرتبط است استفاده کن.\n\n--- شناسهٔ نشست (برای لاگینگ داخلی) ---\n${sessionId}\n\nحالا به پیام کاربر پاسخ بده.\n`;\n  return base;\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "خود پروندهٔ اطلاعاتی یک ثابت نوع‌دار است:"
+        },
+        {
+          "type": "code",
+          "language": "ts",
+          "code": "// src/lib/ai/portfolio.ts\n\nexport const portfolioDossier = `\n- نام: Sinister\n- نقش: مهندس ارشد فول‌استک، متخصص ابزارهای توسعه‌دهندهٔ مبتنی بر هوش مصنوعی\n- پشتهٔ فنی: Next.js، TypeScript، React، Node.js، Python، Go، Rust (در حال یادگیری)\n- خدمات: مشاورهٔ یکپارچه‌سازی هوش مصنوعی، توسعهٔ داشبورد سفارشی، بهینه‌سازی عملکرد\n- ویژگی‌های سایت: پس‌زمینهٔ WebGL کهکشانی، تم ACID RAVE، ایسترِگ کونامی کد، پشتیبانی RTL انگلیسی/فارسی\n- وبلاگ: حدود ۳۰ پست دربارهٔ عامل‌های هوش مصنوعی، LLMهای محلی، مهارت‌های فرانت‌اند، و SEO/GEO\n- پروژه‌های شاخص: فریم‌ورک عامل هوش مصنوعی متن‌باز (۳ هزار ستاره)، داشبورد آنالیتیکس محلی-اول، همین سایت\n`;"
+        },
+        {
+          "type": "paragraph",
+          "text": "همه‌چیز در پرونده واقعی و قابل‌بررسی است. وقتی پروژه یا پست جدیدی اضافه می‌کنم آن را به‌روز می‌کنم."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۴. ویجت نمونه‌کار (مخزن sinisteroidport)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "ویجت یک دکمهٔ شناور در گوشهٔ پایین‌راست نمونه‌کار است، با یک چهرهٔ رباتیک SVG – یک چشم نیمه‌بسته، یک چشم درخشان باز، یک پوزخند کج، و یک آنتن با نوک درخشان. این اولین چیزی است که بازدیدکننده متوجه می‌شود، و طوری طراحی شده که به‌طرز جذابی کمی ناراحت‌کننده باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "دکمه یک انیمیشن توجه‌برانگیز ضربان‌دار دارد: یک حلقهٔ در حال گسترش با درخششی نرم که محو می‌شود. به `prefers‑reduced‑motion` احترام می‌گذارد و به‌محض باز شدن پنل، متوقف می‌شود. در موبایل (<۶۴۰px)، دکمه از ۳٫۶rem به ۴rem رشد می‌کند تا ناحیهٔ لمسی بهتری داشته باشد."
+        },
+        {
+          "type": "paragraph",
+          "text": "کل تجربهٔ چت با `next/dynamic` تقسیم کد شده است – رانتایم SDK هوش مصنوعی (که شامل `useChat` و رندر Markdown است) فقط زمانی دانلود می‌شود که بازدیدکننده برای اولین‌بار ویجت را باز کند. این کار بارگذاری اولیهٔ صفحه را سریع و سبک نگه می‌دارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "وقتی پنل باز می‌شود، از `useChat` از `@ai‑sdk/react` با یک `DefaultChatTransport` که به اندپوینت عامل اشاره می‌کند استفاده می‌کند. پیام‌ها با `react‑markdown` + `remark‑gfm` رندر می‌شوند – بنابراین عامل می‌تواند جداول، لیست‌ها، بلوک‌های کد حصاردار، و متن پررنگ/مورب خروجی دهد. لینک‌های داخلی (sinisteroid.ir) ساده رندر می‌شوند؛ لینک‌های خارجی یک نشانگر ↗ می‌گیرند و در تب جدید باز می‌شوند."
+        },
+        {
+          "type": "paragraph",
+          "text": "هر پیام ربات یک دکمهٔ کپی دارد (با هاور در بالا‑راست ظاهر می‌شود). هر بلوک کد دکمهٔ کپی خودش را در یک نوار هدر با نمایش زبان دارد. این جزئیات مهم هستند – وقتی عامل یک قطعه کد می‌اندازد، بازدیدکنندگان می‌توانند فوراً آن را بردارند."
+        },
+        {
+          "type": "paragraph",
+          "text": "ویجت در اولین بارگذاری یک شناسهٔ نشست ناشناس (`crypto.randomUUID()`) تولید کرده و در `localStorage` ذخیره می‌کند. این شناسه را با هر درخواست می‌فرستد – بدون کوکی، بدون حساب کاربری، بدون اثر انگشت ردیابی. فقط یک رشتهٔ تصادفی که در سراسر تب‌های مرورگر پایدار می‌ماند."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260908-164815-16a7433596166343.webp",
+          "alt": "تصویر صفحه از ویجت چت شناور: دکمه‌ای با چهرهٔ رباتیک درخشان، و پنل باز با یک پیام خوش‌آمد گستاخ و یک قطعه کد",
+          "caption": "شکل ۲: رابط کاربری ویجت – چهرهٔ رباتیک کنجکاوی را برمی‌انگیزد، و پنل پاسخ‌های شخصیت‌محور با Markdown مناسب ارائه می‌دهد.",
+          "altText": "تصویر صفحه از ویجت چت شناور: دکمه‌ای با چهرهٔ رباتیک درخشان، و پنل باز با یک پیام خوش‌آمد گستاخ و یک قطعه کد"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۵. تداوم چت: «به خاطر سپردن» کاربر"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "عامل بازدیدکنندگان را در سراسر نشست‌ها فقط با استفاده از localStorage «به خاطر می‌سپارد». هر جفت پیام (کاربر + دستیار) در `sin‑chat‑history‑<sessionId>` ذخیره می‌شود، که حداکثر تا ۶۰ پیام نگه می‌دارد. در بازخوانی صفحه یا بازدید مجدد، تاریخچه در حالت اولیهٔ `useChat` بازیابی می‌شود، و درخواست بعدی کل تاریخچهٔ مکالمه را به عامل می‌فرستد."
+        },
+        {
+          "type": "paragraph",
+          "text": "این یعنی اگر امروز بپرسید «زبان برنامه‌نویسی مورد علاقه‌ات چیست؟» و هفتهٔ بعد برگردید، عامل با «اوه، برگشتی. هنوز در مورد راست قانع نشدی، نه؟» به شما خوش‌آمد می‌گوید. این یک رشتهٔ پیوسته بدون هیچ ذخیره‌سازی سمت سرور ایجاد می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "پرامپت سیستم شامل قانونی است که می‌گوید: «اگر تاریخچهٔ کامل مکالمه‌ای را دیدی که از localStorage بازیابی شده، طبیعی با آن برخورد کن. این یک ویژگی است، نه یک باگ. تو داری مکالمه را ادامه می‌دهی، نه اینکه یکی جدید شروع کنی.» این باعث می‌شود عامل گیج نشود یا موضوع را از نو شروع نکند."
+        },
+        {
+          "type": "paragraph",
+          "text": "سقف ۶۰ پیام یک انتخاب عملی است – پنجرهٔ زمینهٔ مدل ۸ هزار توکن است، و ۶۰ پیام به‌علاوهٔ پرامپت سیستم و پرونده حدود ۶‑۷ هزار توکن می‌شود. این فضا برای پاسخ مناسب باقی می‌گذارد بدون اینکه به محدودیت برخورد کند."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۶. دانش پست‌های زنده"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "ویجت نمونه‌کار یک اندپوینت PHP سبک (`/api/get_posts_index.php`) را دریافت می‌کند که ۲۵ پست اخیر را از دیتابیس CMS به‌صورت متادیتای فشرده (اسلاگ، عنوان، آدرس، تاریخ) برمی‌گرداند. این نمایه به‌عنوان `context` با هر درخواست چت ارسال می‌شود، بنابراین عامل همیشه از تازه‌ترین پست‌ها مطلع است."
+        },
+        {
+          "type": "paragraph",
+          "text": "اگر API در دسترس نباشد (مثلاً در توسعهٔ محلی)، به یک `feed.json` استاتیک که هنگام بیلد تولید می‌شود بازمی‌گردد. پروندهٔ عامل به‌صراحت می‌گوید: «زمینهٔ زنده بر هر لیست سخت‌کدشده‌ای در پروندهٔ تو مقدم است.» بنابراین اگر پست جدیدی منتشر کنم، عامل در عرض چند ثانیه از آن مطلع می‌شود."
+        },
+        {
+          "type": "paragraph",
+          "text": "این قطعه، عامل را از یک چت‌بات عمومی به یک دستیار واقعاً مفید سایت تبدیل می‌کند. بازدیدکنندگان می‌توانند بپرسند «دربارهٔ Cline چه نوشتی؟» و عامل مقالات اخیر را فهرست می‌کند، مرتبط‌ترین را نام می‌برد، و حتی به آن لینک می‌دهد. انگار که عامل واقعاً وبلاگ را می‌خواند – حتی اگر فقط متادیتا دارد."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۷. لاگینگ پژوهشی (آنچه از چت‌های شما یاد گرفتم)"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "می‌خواستم بدانم مردم واقعاً چه می‌پرسند. نه برای آنالیتیکس یا ردیابی – سؤال‌های واقعی می‌خواستم تا پرونده و شخصیت را بهبود بخشم. بنابراین یک اندپوینت جداگانه `/api/log` در بک‌اند عامل ساختم که داده‌های تبادل ناشناس را پس ا�� اتمام هر چت دریافت می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "داده‌ها در دو جدول Postgres نئون ذخیره می‌شوند: `sessions` (نوع دستگاه، جغرافیا از هدرهای Vercel، مرجع، اندازهٔ صفحه، تعداد پیام، مجموع توکن‌ها) و `messages` (نوبت‌های جداگانه با نقش، محتوا، توکن‌ها، تأخیر). طرح‌واره در اولین درخواست به‌طور خودکار ایجاد می‌شود، و برای مدیریت مهاجرت‌ها از `ALTER TABLE ADD COLUMN IF NOT EXISTS` استفاده می‌کنم تا تغییرات مستقل از وضعیت باشند."
+        },
+        {
+          "type": "paragraph",
+          "text": "از `@neondatabase/serverless` (درایور مبتنی بر HTTP) استفاده می‌کنم چون درایور خام `postgres` (TCP) در سرورلس ورسل قفل می‌کند – درسی که به سختی یاد گرفتم. این درایور با اندپوینت HTTP نئون بی‌نقص کار می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "لاگینگ کاملاً ناشناس است: فقط شناسهٔ نشست (که یک UUID است) ذخیره می‌شود – بدون IP، بدون کوکی، بدون اطلاعات کاربری. متن پیام به ۸٬۰۰۰ کاراکتر در هر ردیف محدود شده تا جدول قابل‌مدیریت بماند."
+        },
+        {
+          "type": "paragraph",
+          "text": "همچنین یک اسکریپت CLI نوشتم (`scripts/research-stats.mjs`) که به دیتابیس متصل می‌شود و حجم، نشست‌های یکتا، میانگین تأخیر، تفکیک دستگاه‌ها، و مکالمات اخیر را نشان می‌دهد. این یک پنجره به دغدغه‌های بازدیدکنندگان است – و چشم‌گشا بوده. مردم دربارهٔ پشتهٔ فنی من، نظر من در مورد ابزارهای هوش مصنوعی می‌پرسند، و گاهی فقط سعی می‌کنند عامل را با پرامپت‌های عجیب بشکنند. عاشقش هستم."
+        },
+        {
+          "type": "image",
+          "src": "/api/uploads/20260908-164824-a77bf5e092ee728d.webp",
+          "alt": "خروجی خط فرمان آمار پژوهشی: کل نشست‌ها، میانگین پیام در هر نشست، دستگاه‌های برتر، و نمونه‌ای از سؤال‌های اخیر",
+          "caption": "شکل ۳: CLI پژوهشی – خام، ناشناس، و پر از سؤال‌های غافل‌گیرکننده.",
+          "altText": "خروجی خط فرمان آمار پژوهشی: کل نشست‌ها، میانگین پیام در هر نشست، دستگاه‌های برتر، و نمونه‌ای از سؤال‌های اخیر"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۸. سیستم طراحی"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "ویجت از ویژگی‌های سفارشی CSS برای تم‌سازی استفاده می‌کند – حالت تاریک یک سر ربات زغالی (`#1a1a1a`) دارد، حالت روشن یک سر روشن یخ‌زده (`#dde3ea` → `#c3ccd8`). رنگ تأکیدی (چشم‌ها، دهان، لینک‌ها) از توکن اسید سایت (`--rgb-accent`) از طریق `currentColor` پیروی می‌کند، بنابراین ویجت همیشه با تم فعلی نمونه‌کار مطابقت دارد."
+        },
+        {
+          "type": "paragraph",
+          "text": "همهٔ انیمیشن‌ها فقط transform/opacity هستند و پشت `prefers‑reduced‑motion` قرار می‌گیرند. پنل به RTL برای فارسی احترام می‌گذارد – جهت Flask آینه‌ای می‌شود و شعاع گوشه‌ها برعکس می‌شود. حباب‌های ربات padding انتهایی اضافی دارند تا جای دکمهٔ کپی هاور را بدهند."
+        },
+        {
+          "type": "paragraph",
+          "text": "از یک `useEffect` واحد برای مدیریت تغییرات تم استفاده کردم – `document.documentElement.style.getPropertyValue('--rgb-accent')` را می‌خواند و رنگ تأکیدی ویجت را به‌روز می‌کند. بدون وابستگی اضافی، بدون چشمک‌زدن استایل‌های بی‌نشانی."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۹. چه کارهایی را متفاوت انجام می‌دادم"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "هر ساخت چیزی به شما می‌آموزد. در اینجا زخم‌هایی است که جمع کردم."
+        },
+        {
+          "type": "paragraph",
+          "text": "**فراخوانی `onFinish` در `streamText` در سرورلس غیرقابل‌اعتماد است** – ورسل نمونهٔ تابع را قبل از اجرای فراخوانی فریز می‌کند. با یک اندپوینت صریح `/api/log` که از کلاینت پس از پایان پاسخ صدا زده می‌شود، دور این مشکل زدم. کلاینت شناسهٔ نشست و آخرین پیام دستیار را می‌فرستد و سرور آن را لاگ می‌کند. این یعنی لاگینگ توسط کلاینت آغاز می‌شود، اما هر بار کار می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "**درایور خام `postgres` (TCP) در سرورلس ورسل قفل می‌کند** – یک روز را صرف دیباگ کردم که چرا اتصال نئون گاهی تایم‌اوت می‌خورد. تغییر به `@neondatabase/serverless` (مبتنی بر HTTP) آن را فوراً حل کرد. درس: همیشه وقتی روی ورسل اجرا می‌کنید از درایور سازگار با سرورلس استفاده کنید."
+        },
+        {
+          "type": "paragraph",
+          "text": "**طرح‌وارهٔ جدول `sessions` در طول تکرارها دچار انحراف شد** – با `CREATE TABLE IF NOT EXISTS` شروع کردم و ستون‌ها را دستی اضافه کردم. در نهایت با مجموعه‌ای نامرتب از طرح‌واره‌های متفاوت مواجه شدم. اکنون از مهاجرت‌های `ALTER TABLE` مستقل از وضعیت در اندپوینت لاگ استفاده می‌کنم و قبل از افزودن، وجود ستون را بررسی می‌کنم. زشت است اما کار می‌کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "**عامل هنوز گاهی با وجود محافظ، حقایق را آرایش می‌کند** – محافظ توهم کمک می‌کند، اما کامل نیست. بهبود آینده پیاده‌سازی RAG بر روی محتوای واقعی پست‌ها به‌جای متادیتا است. به این ترتیب، عامل می‌تواند متن کامل یک پست وبلاگ را بازیابی کرده و با نقل‌قول‌های دقیق پاسخ دهد. این یک پروژه برای آخر هفتهٔ دیگر است."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه رایج‌ترین خطاهای Ollama را برطرف کنیم (و چرا رخ می‌دهند)",
+          "text": "اگر برای قدرت‌دهی به عامل‌های هوش مصنوعی خود از LLMهای محلی استفاده می‌کنید، احتمالاً بیش از یک بار با خطای «آدرس از قبل در حال استفاده است» مواجه شده‌اید. این راهنما ۹ علت ریشه‌ای را پوشش می‌دهد و همه را رفع می‌کند.",
+          "buttonText": "مطالعهٔ راهنمای عیب‌یابی اولاما",
+          "buttonUrl": "/fa/blog/how-to-fix-ollamas-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "۱۰. نتیجه"
+        },
+        {
+          "type": "paragraph",
+          "style": "lead",
+          "text": "بازدیدکنندهٔ نمونه‌کار اکنون می‌تواند بپرسد «آخرین پست وبلاگ چیست؟» و پاسخ درست را دریافت کند (که به‌روز از دیتابیس دریافت شده). می‌تواند بپرسد «تب یا فاصله؟» و یک جدول اقتصاد در سطح بایت با یک نظر داغ دریافت کند. می‌تواند دربارهٔ مهارت‌های من بپرسد و یک تفکیک سطح‌بندی‌شده با پرونده به‌عنوان حقیقت پایه دریافت کند."
+        },
+        {
+          "type": "paragraph",
+          "text": "و هر تبادل به‌صورت ناشناس لاگ می‌شود تا ببینم مردم واقعاً چه می‌پرسند – که معلوم می‌شود بسیار جالب‌تر از چیزی است که تصور می‌کردم. مردم می‌خواهند بدانند آیا استخدام می‌کنم، زبان برنامه‌نویسی مورد علاقه‌ام چیست، آیا از ابزار خاصی استفاده کرده‌ام، و گاهی فقط «سلام» می‌گویند تا ببینند ربات چگونه پاسخ می‌دهد."
+        },
+        {
+          "type": "paragraph",
+          "text": "عامل نمونه‌کار من را به یک چیز زنده تبدیل کرده است. فقط یک بروشور نیست – یک مکالمه است. و دقیقاً همان چیزی است که می‌خواستم."
+        },
+        {
+          "type": "paragraph",
+          "text": "اگر می‌خواهید چیزی مشابه بسازید، از شخصیت شروع کنید. یک کاراکتر بنویسید که واقعاً از حرف زدن با آن لذت ببرید. سپس آن را در یک API ساده بپیچید، به آن یک چهره بدهید، و رهایش کنید. فناوری بخش آسان است – شخصیت چیزی است که آن را ماندگار می‌کند."
+        },
+        {
+          "type": "cta",
+          "title": "چگونه رایج‌ترین خطاهای Cline را برطرف کنیم (و چرا رخ می‌دهند)",
+          "text": "اگر عامل نمونه‌کار خود را با Cline برای توسعهٔ محلی جفت می‌کنید، ممکن است با محدودیت‌های توکن یا ناهماهنگی مدل مواجه شوید. این راهنما رایج‌ترین خطاهای Cline و نحوهٔ رفع آن‌ها را پوشش می‌دهد.",
+          "buttonText": "مطالعهٔ راهنمای عیب‌یابی Cline",
+          "buttonUrl": "/fa/blog/how-to-fix-clines-most-common-errors-and-why-they-happen/"
+        },
+        {
+          "type": "cta",
+          "title": "مستندات Vercel AI SDK",
+          "text": "مستندات رسمی Vercel AI SDK بهترین مرجع برای ساخت رابط‌های چت جریانی است. من از هوک `useChat` و `streamText` آن‌ها بسیار استفاده کردم – به‌شدت توصیه می‌شود.",
+          "buttonText": "مشاهدهٔ مستندات AI SDK",
+          "buttonUrl": "https://sdk.vercel.ai/docs"
+        }
+      ],
+      "faq": [
+        {
+          "question": "عامل چگونه من را در بازدیدهای مختلف بدون دیتابیس «به خاطر می‌سپارد»؟",
+          "answer": "ویجت تاریخچهٔ مکالمهٔ شما را در localStorage مرورگرتان تحت کلیدی که شامل شناسهٔ نشست ناشناس شماست ذخیره می‌کند. در هر بازدید بعدی، آن تاریخچه را بازیابی کرده و به عامل بازمی‌فرستد، بنابراین مدل کل مکالمهٔ قبلی را به‌عنوان زمینه می‌بیند."
+        },
+        {
+          "question": "عامل از چه مدلی استفاده می‌کند و چرا گروک را انتخاب کردید؟",
+          "answer": "از مدل `gpt-oss-120b` گروک از طریق Vercel AI SDK استفاده می‌کنم. گروک را انتخاب کردم چون روی سرورلس فوق‌العاده سریع است – مدل ۱۲۰ بیلیونی با صدها توکن در ثانیه تولید می‌کند و چت را حتی در شروع سرد پاسخ‌گو می‌کند. همچنین نسبت به API اوپن‌ای‌آی مقرون‌به‌صرفه‌تر است."
+        },
+        {
+          "question": "آیا تاریخچهٔ چت در جایی غیر از مرورگر من ذخیره می‌شود؟",
+          "answer": "خیر. تنها ذخیره‌سازی سمت سرور، لاگینگ پژوهشی ناشناس است (شناسهٔ نشست، دستگاه، جغرافیا، تعداد پیام، و پیام‌های جداگانه با محدودیت ۸ هزار کاراکتر). ما IP، کوکی یا هیچ اطلاعات شخصی قابل‌شناسایی را ذخیره نمی‌کنیم."
+        },
+        {
+          "question": "چگونه از تکرار همان جوک یا شروع‌صحبت توسط عامل جلوگیری می‌کنید؟",
+          "answer": "پرامپت سیستم شامل مجموعه‌ای از قوانین ضد تکرار است: یک لیست عبارات ممنوعه، قانونی برای تنوع ساختار جملهٔ شروع، و یک «حافظهٔ نهان» ذهنی از انواع جوک که عامل باید پیگیری کند. به مدل دستور داده شده هرگز در یک نشست از یک الگو دوبار استفاده نکند."
+        },
+        {
+          "question": "آیا عامل می‌تواند به سؤال‌های مربوط به پست‌های خاص وبلاگ من پاسخ دهد؟",
+          "answer": "می‌تواند دربارهٔ متادیتا (عنوان‌ها، تاریخ‌ها، موضوعات) پاسخ دهد چون ما یک نمایهٔ زنده از ۲۵ پست اخیر را با هر درخواست می‌فرستیم. با این حال، به محتوای کامل پست دسترسی ندارد، بنابراین نمی‌تواند فراتر از اطلاعات متا نقل‌قول یا خلاصه کند. بهبود آینده اضافه کردن RAG برای بازیابی متن کامل است."
+        },
+        {
+          "question": "چگونه با شروع‌های سرد سرورلس برخورد می‌کنید؟",
+          "answer": "شروع‌های سرد در اولین درخواست پس از یک دورهٔ بی‌عملی محسوس هستند. برای کاهش، تابع را با هم‌روندی داخلی ورسل گرم نگه می‌دارم و با پینگ دوره‌ای از یک کرون جاب، اندپوینت را گرم می‌کنم. سرعت بالای تولید مدل گروک نیز به پنهان‌کردن تأخیر کمک می‌کند."
+        },
+        {
+          "question": "آیا شخصیت عامل قابل پیکربندی است؟",
+          "answer": "بله – شخصیت در یک ماژول جداگانه (`src/lib/ai/persona.ts`) تعریف شده است. می‌توانم کل فایل پرامپت را عوض کنم تا نسخه‌های مختلف بسازم (مثلاً یک دستیار دوستانه، یک مربی انگیزشی) بدون دست زدن به فراخوانی مدل یا ویجت. قصد دارم در آینده شخصیت‌ها را A/B تست کنم."
+        }
+      ],
+      "seo": {
+        "title": "عامل هوش مصنوعی نمونه‌کار من به بازدیدکنندگان توهین می‌کند، به خاطر می‌سپارد و جوک را تکرار نمی‌کند — راهنمای کامل ساخت",
+        "metaDescription": "چگونه یک عامل هوش مصنوعی بی‌پروا برای نمونه‌کارم ساختم که بازدیدکنندگان را به خاطر می‌سپارد، پست‌های زنده را دریافت می‌کند، داده‌های پژوهشی ناشناس لاگ می‌کند و هیچ‌وقت یک جوک را دو بار نمی‌گوید. معماری کامل و کد.",
+        "canonical": "https://sinisteroid.ir/fa/blog/my-portfolio-ai-agent-insults-visitors-remembers-them-and-never-repeats-a-joke",
+        "openGraph": {
+          "title": "عامل هوش مصنوعی نمونه‌کار من به بازدیدکنندگان توهین می‌کند، آن‌ها را به خاطر می‌سپارد و هیچ‌وقت یک جوک را تکرار نمی‌کند. این‌طور ساختمش",
+          "description": "یک مرور فنی کامل از ساخت یک عامل هوش مصنوعی شخصیت‌محور برای یک نمونه‌کار – با Next.js، Vercel، Groq و یک پرامپت شخصیت سفارشی.",
+          "image": "/api/uploads/20260908-ai-agent-portfolio-og-fa.webp"
+        },
+        "twitter": {
+          "title": "عامل هوش مصنوعی نمونه‌کار من به بازدیدکنندگان توهین می‌کند، به خاطر می‌سپارد و جوک را تکرار نمی‌کند — لاگ ساخت",
+          "description": "یک عامل هوش مصنوعی گستاخ برای نمونه‌کارم ساختم که شما را به خاطر می‌سپارد، پست‌های زنده را دریافت می‌کند و داده‌های پژوهشی را ناشناس لاگ می‌کند. ا��ن‌طور.",
+          "image": "/api/uploads/20260908-ai-agent-portfolio-twitter-fa.webp"
+        },
+        "keywords": "عامل هوش مصنوعی, هوش مصنوعی نمونه‌کار, Next.js هوش مصنوعی, Vercel AI SDK, Groq, سرورلس هوش مصنوعی, تداوم چت, پرامپت شخصیت, لاگینگ پژوهشی, دیتابیس نئون, ویجت چت RTL",
+        "focusKeyword": "عامل هوش مصنوعی نمونه‌کار"
+      }
+    }
+  }
+}
