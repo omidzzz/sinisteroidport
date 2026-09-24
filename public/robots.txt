@@ -25,10 +25,16 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: Claude-User
+Allow: /
+
 User-agent: anthropic-ai
 Allow: /
 
 User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
 Allow: /
 
 User-agent: Google-Extended
@@ -55,12 +61,24 @@ Allow: /
 User-agent: Meta-ExternalAgent
 Allow: /
 
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
 User-agent: Diffbot
 Allow: /
 
-# Sitemaps
+# Sitemaps — this directive must name real sitemap XML, nothing else. The
+# LLM profiles below are plain-text Markdown, so they are NOT listed here:
+# Google Search Console reports non-XML <Sitemap:> entries as invalid
+# sitemaps (they cost crawl budget and produce noise in the report).
 Sitemap: https://sinisteroid.ir/sitemap.xml
 
-# LLM/AI-readable plain-text indexes (GEO)
-Sitemap: https://sinisteroid.ir/llms.txt
-Sitemap: https://sinisteroid.ir/llms-full.txt
+# AI-readable plain-text profiles (GEO) — fixed, guessable paths:
+#   https://sinisteroid.ir/llms.txt
+#   https://sinisteroid.ir/llms-full.txt
