@@ -1,10 +1,23 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { Dictionary } from "@/lib/i18n";
 import { routeFilePath } from "@/lib/nav/commands";
 import { CONSOLE_IDS } from "@/lib/nav/constants";
 import type { ConsoleItem } from "@/lib/nav/types";
+import { useRef } from "react";
+
+/** A touch/pen gesture armed by pointerdown. Only a real tap commits. */
+type PendingTap = {
+  item: ConsoleItem;
+  pointerId: number;
+  startX: number;
+  startY: number;
+  moved: boolean;
+};
+
+/** Movement (px) after which a touch is a scroll/drag and must not commit. */
+const TAP_SLOP = 10;
 
 /** Custom properties have no place in React's CSSProperties type. */
 const vars = (entries: Record<string, string | number>): CSSProperties =>
@@ -35,6 +48,40 @@ export default function ConsoleTree({
   onHover: (index: number) => void;
   onCommit: (item: ConsoleItem) => void;
 }) {
+  const pendingTap = useRef<PendingTap | null>(null);
+
+  const cancelPending = (pointerId?: number) => {
+    const pending = pendingTap.current;
+    if (pending && (pointerId === undefined || pending.pointerId === pointerId)) {
+      pendingTap.current = null;
+    }
+  };
+
+  const onPointerMove = (event: ReactPointerEvent<HTMLUListElement>) => {
+    const pending = pendingTap.current;
+    if (!pending || pending.pointerId !== event.pointerId) return;
+    const distance = Math.hypot(
+      event.clientX - pending.startX,
+      event.clientY - pending.startY
+    );
+    if (distance > TAP_SLOP) {
+      pending.moved = true;
+      pendingTap.current = null;
+    }
+  };
+
+  const onPointerUp = (event: ReactPointerEvent<HTMLUListElement>) => {
+    const pending = pendingTap.current;
+    if (!pending || pending.pointerId !== event.pointerId) return;
+    pendingTap.current = null;
+    if (pending.moved) return;
+    onCommit(pending.item);
+  };
+
+  const onPointerCancel = (event: ReactPointerEvent<HTMLUListElement>) => {
+    cancelPending(event.pointerId);
+  };
+
   // The listbox NEVER unmounts. The field and the disclosure button both
   // aria-controls its id, and axe fails (aria-valid-attr-value) the moment
   // that reference resolves to nothing — which is exactly what happened when
@@ -67,6 +114,9 @@ export default function ConsoleTree({
       className="craft-tree"
       role="listbox"
       aria-label={dict.console.label}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerCancel}
     >
       {items.map((item, index) => {
         const active = index === activeIndex;
@@ -80,11 +130,34 @@ export default function ConsoleTree({
             data-kind={item.kind}
             data-active={active || undefined}
             style={vars({ "--row-i": index })}
-            onPointerEnter={() => onHover(index)}
+            onPointerEnter={(event) => {
+              // Touch pointers: a vertical drag is a scroll, never a hover.
+              // Hover routing is for mouse cursors only.
+              if (event.pointerType !== "mouse") return;
+              onHover(index);
+            }}
             onPointerDown={(event) => {
-              // Commit on press: no click-through, no focus theft.
-              event.preventDefault();
-              onCommit(item);
+              // A touch/finger touch may be the start of a scroll gesture.
+              // Committing on pointerdown would navigate the instant the
+              // finger touches the list — making it impossible to scroll
+              // the overlay menu on mobile. Instead: remember where the
+              // finger landed, wait for the real tap (pointerup). If a
+              // drag/scroll happens in between, cancel the pending commit.
+              if (event.pointerType === "mouse") {
+                // Mouse clicks: commit on press — no click-through, no focus theft.
+                event.preventDefault();
+                onCommit(item);
+                return;
+              }
+              // Touch/pen: arm a pending tap. The container listens for
+              // pointerup/pointercancel and only commits when it is a real tap.
+              pendingTap.current = {
+                item,
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                moved: false,
+              };
             }}
           >
             <span className="craft-row-idx" aria-hidden>
