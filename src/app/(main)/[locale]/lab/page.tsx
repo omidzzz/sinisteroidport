@@ -7,7 +7,7 @@ import LabSwatch from "@/components/lab/LabSwatch";
 import { getDict, isLocale, loc, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { itemListJsonLd } from "@/lib/schema";
+import { itemListJsonLd, breadcrumbJsonLd } from "@/lib/schema";
 
 /** The archive: every illustration prop the site ships, with its FIG. no.
  *  Captions stay in the dictionaries' spirit — one line, technical, dry. */
@@ -133,6 +133,10 @@ export default async function LabPage({
             })),
             locale
           ),
+          breadcrumbJsonLd([
+            { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
+            { name: locale === "fa" ? "آزمایشگاه گرافیک" : "Graphics Lab", url: `https://sinisteroid.ir/${locale}/lab/` },
+          ]),
         ]}
       />
     </div>

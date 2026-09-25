@@ -5,6 +5,8 @@ import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import skillsData from "@/data/skills.json";
 import { seoAlternates } from "@/lib/seo";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 export async function generateMetadata({
   params,
@@ -51,6 +53,12 @@ export default async function SkillsPage({
 
   return (
     <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
+          { name: locale === "fa" ? "مهارت‌ها" : "Skills", url: `https://sinisteroid.ir/${locale}/skills/` },
+        ])}
+      />
       <Reveal>
         <PageHero
           index={locale === "fa" ? "۰۳" : "03"}

@@ -6,6 +6,8 @@ import Reveal from "@/components/ui/Reveal";
 import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 export async function generateMetadata({
   params,
@@ -57,6 +59,12 @@ export default async function WorkPage({
 
   return (
     <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
+          { name: locale === "fa" ? "سوابق کاری" : "Work", url: `https://sinisteroid.ir/${locale}/work/` },
+        ])}
+      />
       <Reveal>
         <PageHero
           index={locale === "fa" ? "۰۲" : "02"}

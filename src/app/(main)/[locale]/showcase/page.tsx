@@ -3,7 +3,7 @@ import PageHero from "@/components/ui/PageHero";
 import Reveal from "@/components/ui/Reveal";
 import ProjectIndex from "@/components/ui/ProjectIndex";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { itemListJsonLd } from "@/lib/schema";
+import { itemListJsonLd, breadcrumbJsonLd } from "@/lib/schema";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 
@@ -58,10 +58,16 @@ export default async function ShowcasePage({
   return (
     <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
       <JsonLd
-        data={itemListJsonLd(
-          localized.map((p) => ({ name: p.name, description: p.description, tags: p.tags })),
-          locale
-        )}
+        data={[
+          itemListJsonLd(
+            localized.map((p) => ({ name: p.name, description: p.description, tags: p.tags })),
+            locale
+          ),
+          breadcrumbJsonLd([
+            { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
+            { name: locale === "fa" ? "نمونه‌کارها" : "Showcase", url: `https://sinisteroid.ir/${locale}/showcase/` },
+          ]),
+        ]}
       />
       <Reveal>
         <PageHero

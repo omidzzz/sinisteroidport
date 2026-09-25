@@ -8,6 +8,8 @@ import { getAllPosts } from "@/lib/blog/repository";
 import { getDict, isLocale, loc, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
 import { normalizeTags, tagLabel, usedTags } from "@/lib/tags";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 export async function generateMetadata({
   params,
@@ -53,6 +55,12 @@ export default async function BlogPage({
 
   return (
     <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
+          { name: locale === "fa" ? "نوشته‌ها" : "Writing", url: `https://sinisteroid.ir/${locale}/blog/` },
+        ])}
+      />
       <Reveal>
         <PageHero
           index={locale === "fa" ? "۰۶" : "06"}

@@ -21,6 +21,29 @@ import { trackEvent } from "@/lib/analytics";
  */
 export function AnalyticsEvents() {
   useEffect(() => {
+    // Detect AI engine referrals (ChatGPT, Perplexity, Claude, Gemini, Copilot)
+    try {
+      const ref = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : "";
+      if (ref) {
+        let aiEngine = "";
+        if (ref.includes("chatgpt.com") || ref.includes("openai.com")) aiEngine = "ChatGPT";
+        else if (ref.includes("perplexity.ai")) aiEngine = "Perplexity";
+        else if (ref.includes("claude.ai") || ref.includes("anthropic.com")) aiEngine = "Claude";
+        else if (ref.includes("gemini.google.com")) aiEngine = "Gemini";
+        else if (ref.includes("copilot.microsoft.com")) aiEngine = "Copilot";
+
+        if (aiEngine) {
+          trackEvent("ai_referral", {
+            engine: aiEngine,
+            referrer: ref,
+            landing_path: window.location.pathname,
+          });
+        }
+      }
+    } catch {
+      /* ignore invalid referrer */
+    }
+
     const onClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       const anchor = target?.closest?.("a");

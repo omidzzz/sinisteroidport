@@ -38,7 +38,23 @@ export function personJsonLd(locale: Locale) {
     name: "Omid",
     ...(locale === "fa" ? { alternateName: "امید" } : {}),
     url: SITE,
-    jobTitle: "Frontend Developer",
+    image: `${SITE}/apple-touch-icon.png`,
+    description:
+      locale === "fa"
+        ? "توسعه‌دهنده فرانت‌اند و مترجم فنی مقیم تهران، متخصص در React.js، تایپ‌اسکریپت، معماری وب و بهینه‌سازی برای موتورهای هوش مصنوعی (GEO)."
+        : "Tehran-based frontend developer and technical writer specializing in React.js, TypeScript, modern web architecture, and Generative Engine Optimization (GEO).",
+    jobTitle: "Frontend Developer & Technical Writer",
+    worksFor: {
+      "@type": "Organization",
+      name: "Freelance",
+    },
+    alumniOf: [
+      {
+        "@type": "CollegeOrUniversity",
+        name: "Shahid Chamran University of Ahvaz",
+        sameAs: "https://scu.ac.ir",
+      },
+    ],
     address: {
       "@type": "PostalAddress",
       addressLocality: "Tehran",
@@ -47,7 +63,11 @@ export function personJsonLd(locale: Locale) {
     knowsLanguage: ["en", "fa"],
     knowsAbout: [
       "React.js",
+      "Next.js",
+      "TypeScript",
       "JavaScript",
+      "Generative Engine Optimization (GEO)",
+      "Search Engine Optimization (SEO)",
       "HTML5",
       "CSS3",
       "Tailwind CSS",
@@ -55,6 +75,8 @@ export function personJsonLd(locale: Locale) {
       "Elementor",
       "Content Strategy",
       "English-Persian Translation",
+      "AI Coding Agents (Cline, Claude Code)",
+      "Local LLMs (Ollama, Open WebUI)",
     ],
     sameAs: [
       "https://github.com/omidzzz",
@@ -180,5 +202,33 @@ export function breadcrumbJsonLd(
       name: item.name,
       item: item.url,
     })),
+  };
+}
+
+export function contactPageJsonLd(locale: Locale) {
+  const url = `${SITE}/${locale}/contact/`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: locale === "fa" ? "تماس و ارتباط با امید" : "Contact & Availability — Omid",
+    url,
+    description:
+      locale === "fa"
+        ? "راه‌های تماس مستقیم با امید — ایمیل، گیت‌هاب، تلگرام یا تلفن. پاسخگویی در ۲۴ ساعت."
+        : "Direct contact channels for Omid — email, GitHub, Telegram or phone. Replies within 24 hours.",
+    mainEntity: {
+      "@type": "Person",
+      "@id": `${SITE}/#omid`,
+      name: "Omid",
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          email: "ghadamgahi.omid@gmail.com",
+          telephone: "+989367471992",
+          availableLanguage: ["en", "fa"],
+        },
+      ],
+    },
   };
 }

@@ -17,6 +17,7 @@
     "audit": "node scripts/tools/audit3.mjs",
     "verify:nav": "node scripts/tools/verify-nav-machine.mjs",
     "verify:craft": "node scripts/tools/verify-craft.mjs",
+    "verify:seo": "node scripts/tools/seo-guard.mjs",
     "prune:css": "node scripts/tools/prune-dead-css.mjs",
     "probe:pages": "node scripts/tools/probe-pages.mjs",
     "verify-laptop": "node scripts/tools/verify-laptop-timing.mjs",

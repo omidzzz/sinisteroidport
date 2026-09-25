@@ -8,6 +8,8 @@ import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import { ArrowIcon, SparkIcon } from "@/components/ui/icons";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { contactPageJsonLd, breadcrumbJsonLd } from "@/lib/schema";
 
 export async function generateMetadata({
   params,
@@ -172,6 +174,15 @@ export default async function ContactPage({
 
   return (
     <div className="contact-stage">
+      <JsonLd
+        data={[
+          contactPageJsonLd(locale),
+          breadcrumbJsonLd([
+            { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
+            { name: locale === "fa" ? "تماس" : "Contact", url: `https://sinisteroid.ir/${locale}/contact/` },
+          ]),
+        ]}
+      />
       <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
         <Reveal>
           <PageHero

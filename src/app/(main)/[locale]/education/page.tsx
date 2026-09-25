@@ -4,6 +4,8 @@ import Tilt from "@/components/ui/Tilt";
 import Reveal from "@/components/ui/Reveal";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { seoAlternates } from "@/lib/seo";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 export async function generateMetadata({
   params,
@@ -51,6 +53,12 @@ export default async function EducationPage({
   return (
     <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
       <Reveal>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
+          { name: locale === "fa" ? "تحصیلات" : "Education", url: `https://sinisteroid.ir/${locale}/education/` },
+        ])}
+      />
         <PageHero
           index={locale === "fa" ? "۰۴" : "04"}
           kicker={t.education.kicker}

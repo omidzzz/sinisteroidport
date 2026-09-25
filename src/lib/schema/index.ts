@@ -8,5 +8,6 @@ export {
   blogPostingJsonLd,
   faqJsonLd,
   breadcrumbJsonLd,
+  contactPageJsonLd,
   type BlogPostingMeta,
 } from "./builders";
