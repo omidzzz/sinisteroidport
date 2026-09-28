@@ -153,15 +153,33 @@ function ShellNotice({
 }) {
   if (status === "loading") {
     return (
-      <article className="mx-auto max-w-3xl px-5 py-16 sm:px-6">
-        <p className="mt-10 animate-pulse font-mono text-xs uppercase tracking-[0.2em] text-muted">
-          {locale === "fa" ? "در حال بارگذاری…" : "loading…"}
+      <article
+        className="craft-article mx-auto max-w-3xl px-5 py-16 sm:px-6"
+        aria-busy="true"
+      >
+        {/* One line for assistive tech, geometry for the eye: the skeleton
+            reserves the real article's blocks so nothing shifts when the
+            payload lands (styles: blog-post.css). */}
+        <p role="status" className="sr-only">
+          {locale === "fa" ? "در حال بارگذاری…" : "Loading…"}
         </p>
+        <div className="post-skeleton" aria-hidden>
+          <span className="sk-kicker" />
+          <span className="sk-title" />
+          <span className="sk-title sk-title-short" />
+          <span className="sk-meta" />
+          <span className="sk-line" />
+          <span className="sk-line" />
+          <span className="sk-line sk-line-short" />
+          <span className="sk-block" />
+          <span className="sk-line" />
+          <span className="sk-line sk-line-short" />
+        </div>
       </article>
     );
   }
   return (
-    <article className="mx-auto max-w-3xl px-5 py-16 sm:px-6">
+    <article className="craft-article mx-auto max-w-3xl px-5 py-16 sm:px-6">
       <h1 className="mt-8 text-3xl font-bold leading-tight text-ink sm:text-4xl">
         {status === "missing"
           ? locale === "fa"

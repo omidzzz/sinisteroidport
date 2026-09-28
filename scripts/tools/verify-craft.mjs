@@ -77,6 +77,67 @@ check("Persian face not inlined (saves ~40K per EN page)", !/font-family:Cairo[^
 check("Persian face served as a file", /media\/[\w-]+\.woff2/.test(css));
 check("reduced-motion net shipped", /prefers-reduced-motion:\s*reduce/.test(css));
 
+console.log("\n=== PROGRESSIVE / TIER-1 PASS ===");
+// Spring physics is an UPGRADE, never a dependency: the linear() curves must
+// sit behind @supports so engines without the syntax keep the beziers (and
+// every ring in the system reads the same focus tokens).
+check("spring easings shipped", /--ease-spring:/.test(css) && /--ease-spring-snap:/.test(css));
+check(
+  "spring linear() upgrade is @supports-gated",
+  /@supports\s*\(transition-timing-function:\s*linear\(/.test(css)
+);
+check("reduced-transparency honoured (blur off)", /prefers-reduced-transparency/.test(css));
+check("reduced-data honoured (decorative payloads off)", /prefers-reduced-data/.test(css));
+check(
+  "standard scrollbar props shipped for Firefox",
+  /scrollbar-color:/.test(css) && /scrollbar-width:/.test(css)
+);
+check("accent scopes shipped ([data-accent])", /\[data-accent=/.test(css));
+check(
+  "focus ring tokens shipped",
+  /--focus-ring:/.test(css) && /--focus-ring-double:/.test(css)
+);
+// Footer-redesign pass: the mobile act labels fold flat (the rotated strip
+// was ~1,050px of dead space on phones) and the dock carries the switches.
+check("act labels fold flat on mobile", /writing-mode:\s*horizontal-tb/.test(css));
+check(
+  "dock bar carries the switches",
+  css.includes(".craft-dock-bar") && css.includes(".craft-tool-lang")
+);
+check("new footer shell styled", css.includes(".craft-footer-index"));
+
+console.log("\n=== TIER-2 POLISH ===");
+// Dynamic-shell skeleton: geometry placeholders with a transform-only sheen
+// (a background-position sweep would repaint the whole block each frame).
+check(
+  "post skeleton shipped",
+  css.includes(".post-skeleton") && /sk-sheen/.test(css)
+);
+check(
+  "skeleton sheen animates transform only",
+  !/sk-sheen[\s\S]{0,200}background-position/.test(css)
+);
+check(
+  "skeleton reserves the code block",
+  /class="sk-block"|sk-block/.test(css)
+);
+// Wide-viewport editorial breakout (one-sided: the TOC rail owns the end side).
+check(
+  "prose breakout shipped",
+  /\.prose-post blockquote/.test(css) &&
+    /margin-inline-start:\s*-6rem/.test(css)
+);
+// One view timeline per skill cell instead of one per tick.
+check(
+  "skill meter shares one timeline per cell",
+  /view-timeline:\s*--cell/.test(css) && /animation-timeline:\s*--cell/.test(css)
+);
+// initial-letter is an UPGRADE behind @supports (the float stays the base).
+check(
+  "initial-letter upgrade is @supports-gated",
+  /@supports\s*\(initial-letter/.test(css)
+);
+
 console.log("\n=== CONSOLE (nav) ===");
 check("console prompt styled", css.includes(".craft-prompt"));
 check("tree + rows styled", css.includes(".craft-tree") && css.includes(".craft-row"));
@@ -114,6 +175,18 @@ if (home) {
   check("no legacy printed-edition copy", !home.includes("printed, not built"));
   check("colophon speaks the console register", home.includes("working console"));
   check("legacy dock chrome gone", !home.includes("dock-wrap") && !home.includes("mob-dock"));
+  // Footer redesign: a structured index replaces the prose sitemap, and the
+  // chrome switches live in the dock instead of being repeated in the footer.
+  check("footer ships the 3-column index", home.includes("craft-footer-index"));
+  check(
+    `footer index lists every route (${(home.match(/craft-footer-link/g) || []).length} links found)`,
+    (home.match(/craft-footer-link/g) || []).length >= 8
+  );
+  check("footer no longer duplicates the chrome switches", !home.includes("colophon-marginalia"));
+  check(
+    "nav carries the theme + language switches",
+    home.includes("craft-tools") && home.includes("craft-tool-lang")
+  );
   // Fonts are inlined into the STYLESHEET (the config no longer inlines CSS
   // into the HTML), so the data-URI assertion lives in the CSS section above.
   check("no render-blocking font preload", !/<link[^>]+as="font"/.test(home));
@@ -324,11 +397,88 @@ const educationEn = read("out/en/education/index.html");
 const showcaseEn = read("out/en/showcase/index.html");
 if (educationEn) check("education renders the record deck", educationEn.includes("edu-card"));
 if (showcaseEn) check("showcase renders the bento wall", showcaseEn.includes("bento-frame"));
+// Tier‑1 accent scoping: a route root may declare its act accent; the scope
+// sheet must stay wired for the attribute to mean anything.
+if (workEn) check('work declares data-accent="teal"', workEn.includes('data-accent="teal"'));
+if (showcaseEn) check('showcase declares data-accent="warm"', showcaseEn.includes('data-accent="warm"'));
 const contactEn = read("out/en/contact/index.html");
 const blogEn = read("out/en/blog/index.html");
 if (contactEn) check("contact renders the channel board", contactEn.includes("contact-value"));
 if (blogEn) check("blog renders the issue grid", blogEn.includes("issue-card"));
-for (const cls of [".craft-page-hero", ".craft-title", ".timeline", ".tl-card", ".tl-period", ".skill-grid", ".skill-cell", ".skill-orbit i", ".edu-card", ".edu-degree", ".bento", ".bento-frame", ".bento-name", ".bento-tags", ".bento-up", ".contact-hero", ".contact-value", ".contact-copy", ".contact-console", ".live-dot", ".issue-grid", ".issue-card", ".issue-title", ".issue-tags"]) {
+// Card → article morph: the per-slug names must be in the markup on BOTH
+// ends, and the shared group styling in the CSS.
+if (blogEn) check("blog cards carry the morph names", /post-cover-/.test(blogEn));
+const postSlug = fs
+  .readdirSync("out/en/blog", { withFileTypes: true })
+  .find((d) => d.isDirectory() && fs.existsSync(`out/en/blog/${d.name}/index.html`))?.name;
+const postEn = postSlug ? read(`out/en/blog/${postSlug}/index.html`) : null;
+if (postEn && postSlug)
+  check(
+    `article hero carries the matching morph name (${postSlug.slice(0, 24)}…)`,
+    postEn.includes(`post-cover-${postSlug}`)
+  );
+// An article is the one route family with no PageHero, so the ambient wash
+// rides on the article box itself (craft/pages.css). If a template edit drops
+// the class, the top of every post goes flat again with nothing else failing.
+if (postEn) check("article shell carries the ambient wash", postEn.includes("craft-article"));
+
+/* ---- Act numbering: the ghost numeral and the kicker are the same fact ----
+   Every route hero states its act number TWICE — the giant ghost numeral and
+   the "(NN)" in the eyebrow — and the console's route list states it a third
+   time. They are written by hand in three places, and the blog hero drifted:
+   it said 06 while its own kicker said "(07) Notes & essays" and the console
+   said 07, which is also why 06 appeared twice (lab and writing) and 09 never
+   appeared at all. Nothing failed, because each copy was internally valid.
+
+   So the assertion is the CROSS-CHECK, not a hardcoded list: on every act
+   page, the ghost numeral must equal the number in its own kicker. Persian
+   digits are translated by value (۰۷ -> 7) so one rule covers both locales. */
+console.log("\n=== ACT NUMBERING ===");
+const ACT_DIGITS = { "۰": 0, "۱": 1, "۲": 2, "۳": 3, "۴": 4, "۵": 5, "۶": 6, "۷": 7, "۸": 8, "۹": 9 };
+/** "۰۷" / "07" -> 7, so a Persian and a Latin numeral compare equal. */
+const toLatin = (s) =>
+  [...s].reduce((n, ch) => (ch in ACT_DIGITS ? n * 10 + ACT_DIGITS[ch] : n), 0) ||
+  Number(s);
+for (const route of [
+  "work",
+  "skills",
+  "education",
+  "showcase",
+  "lab",
+  "blog",
+  "tags",
+  "contact",
+]) {
+  for (const locale of ["en", "fa"]) {
+    const html = read(`out/${locale}/${route}/index.html`);
+    if (!html) continue;
+    const ghost = (html.match(/craft-page-index[^>]*>([^<]*)</) || [])[1];
+    const kicker = (html.match(/craft-eyebrow[^>]*>\s*\(?([۰-۹0-9]{2})\)?/) || [])[1];
+    check(
+      `${route} (${locale}): hero numeral matches its kicker`,
+      ghost && kicker && toLatin(ghost.trim()) === toLatin(kicker),
+      `ghost ${JSON.stringify(ghost?.trim())} vs kicker ${JSON.stringify(kicker)}`
+    );
+  }
+}
+// The ambient wash must reach every viewport and both reading directions. Two
+// silent failure modes are guarded here, both of which look fine in a
+// screenshot of the English/dark edition:
+//   1. the wash box must be viewport-sized (100vw x 100dvh), or a short hero
+//      leaves the lower screen flat;
+//   2. `data-theme` and `dir` are both attributes of <html>, so a DESCENDANT
+//      selector between them matches nothing — the light edition under RTL
+//      then falls back to the dark recipe and paints with the dark-olive ink.
+check(
+  "ambient wash fills the viewport (100vw x 100dvh)",
+  /width:\s*100vw/.test(css) && /height:\s*100dvh/.test(css)
+);
+check(
+  "light+RTL wash re-ink compounds on <html>",
+  /\[data-theme=["']?light["']?\]\[dir=["']?rtl["']?\]/.test(css) &&
+    !/\[data-theme=["']?light["']?\]\s+\[dir=/.test(css)
+);
+for (const cls of [".craft-page-hero", ".craft-article", ".craft-title", ".timeline", ".tl-card", ".tl-period", ".skill-grid", ".skill-cell", ".skill-orbit i", ".edu-card", ".edu-degree", ".bento", ".bento-frame", ".bento-name", ".bento-tags", ".bento-up", ".contact-hero", ".contact-value", ".contact-copy", ".contact-console", ".live-dot", ".issue-grid", ".issue-card", ".issue-title", ".issue-tags"]) {
   check(`body rule shipped ${cls}`, css.includes(cls));
 }
 

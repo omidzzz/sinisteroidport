@@ -42,6 +42,7 @@ export type ConsoleAction =
   | { type: "highlight"; index: number }
   | { type: "routes"; routes: readonly NavRoute[] }
   | { type: "commands"; commands: readonly ConsoleItem[] }
+  | { type: "posts"; posts: readonly ConsoleItem[] }
   | { type: "history-up" }
   | { type: "history-down" };
 
@@ -51,6 +52,14 @@ export interface ConsoleState {
   routes: readonly NavRoute[];
   /** Command rows (locale labels), appended after the routes. */
   commands: readonly ConsoleItem[];
+  /**
+   * Live blog posts from the DB index (lib/nav/search.ts). Deliberately a
+   * SEPARATE registry from routes/commands rather than a third kind of thing
+   * in `commands`: posts arrive asynchronously long after mount, and the
+   * resting tree must show the eight routes whether or not the content index
+   * has landed yet.
+   */
+  posts: readonly ConsoleItem[];
   /** The typed filter — also what the prompt renders. */
   buffer: string;
   /** Index into the FILTERED item list (see selectItems). */
@@ -65,15 +74,22 @@ export interface ConsoleState {
   lastCommand: string;
 }
 
-/** One row in the console tree: either a route link or a command verb. */
+/** One row in the console tree: a route link, a command verb, or a post. */
 export interface ConsoleItem {
-  kind: "route" | "command";
+  kind: "route" | "command" | "post";
   /** Accessible label of the row. */
   label: string;
-  /** Secondary text — the path for routes, the verb for commands. */
+  /** Secondary text — the path for routes, the verb for commands, the date
+   *  for posts. */
   sub: string;
-  /** The route path (kind "route") or the verb (kind "command"). */
+  /** The route path (route), the verb (command) or the slug (post). */
   value: string;
   /** Two-digit ordinal shown in the gutter (routes only). */
   index?: string;
+  /**
+   * Extra lowercased text the filter also matches against — for posts, the
+   * title + slug + excerpt + tags. Pre-lowercased at BUILD time so filtering
+   * stays a cheap substring test per keystroke.
+   */
+  haystack?: string;
 }

@@ -93,3 +93,48 @@
   --color-ink-dim: #a8a7b1;
 }
 
+/* ---- Light-edition structural re-inks ------------------------------
+   1. --edge-hi: the machined top-edge line was tuned for charcoal
+      (light line on dark); on white cards it needs to be a faint
+      DARK line or it is invisible.
+   2. Ambient washes: the dark edition paints them with rgb-accent —
+      which in THIS edition is the dark olive ink channel and would
+      smudge. Both hero washes re-ink with the warm fill (fills never
+      flip) at a light-ground-safe alpha. */
+[data-theme="light"] {
+  --edge-hi: rgba(39, 39, 39, 0.05);
+}
+[data-theme="light"] .craft-hero::before,
+[data-theme="light"] .craft-page-hero::before,
+[data-theme="light"] .craft-article::before {
+  background: radial-gradient(
+    42% 54% at 30% 32%,
+    rgba(254, 215, 102, 0.2),
+    transparent 72%
+  );
+}
+/* Mirrored with the dark edition's RTL variant in craft/pages.css: the
+   glow has to sit over the copy, which is flush right under RTL. Without
+   this the light edition would light the empty gutter.
+
+   The two attributes COMPOUND on one element, and that is the whole point
+   of the line. `data-theme` and `dir` are both written onto <html> — by
+   THEME_INIT in the locale layout and by the server-rendered dir attribute
+   — so a descendant selector (`[data-theme] [dir]` …, with a space) asks
+   for an element carrying dir="rtl" NESTED INSIDE the themed element, and
+   nothing in this document is ever nested inside <html>. The rule silently
+   matched nothing, and the consequence was invisible: in the light edition
+   under RTL every wash fell through to the dark-edition recipe one rule
+   above, painting with `rgb-accent` — which in THIS edition is the dark
+   olive ink channel the comment above warns about (and the teal on /work/).
+   Persian + light got a smudge exactly where the warm fill was meant to be. */
+[data-theme="light"][dir="rtl"] .craft-hero::before,
+[data-theme="light"][dir="rtl"] .craft-page-hero::before,
+[data-theme="light"][dir="rtl"] .craft-article::before {
+  background: radial-gradient(
+    42% 54% at 70% 32%,
+    rgba(254, 215, 102, 0.2),
+    transparent 72%
+  );
+}
+

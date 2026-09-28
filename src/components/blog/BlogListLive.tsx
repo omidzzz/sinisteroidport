@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Reveal from "../ui/Reveal";
 import { ArrowIcon } from "../ui/icons";
 import type { Post } from "@/lib/blog/types";
@@ -107,6 +107,11 @@ export default function BlogListLive({
                   height={240}
                   decoding="async"
                   loading="lazy"
+                  /* Shared-element morph target: the same name is carried by
+                     the article's cover, so a card tap animates the thumbnail
+                     into the article hero (cross-document transition — live
+                     where the ≤48rem @view-transition rule lives). */
+                  style={{ viewTransitionName: `post-cover-${post.slug}` } as CSSProperties}
                   onError={(e) =>
                     (e.currentTarget.closest(".post-thumb") as HTMLElement | null)?.classList.add(
                       "no-cover"

@@ -25,6 +25,14 @@ export default function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    /* No IntersectionObserver (very old engines) — show immediately.
+       The opacity-zero trap must never outlive its own trigger; see the
+       @media (scripting: none) net in fx-modern.css for the no-JS case.
+       Deferred a microtask so the effect body stays setState-free. */
+    if (typeof IntersectionObserver === "undefined") {
+      queueMicrotask(() => setVisible(true));
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

@@ -1,0 +1,1069 @@
+/* ============================================================
+   CODE & CRAFT — HOMEPAGE REFINEMENT
+   ------------------------------------------------------------
+   Final art-direction pass loaded after the component sheets.
+   Principles: solid surfaces before glass; yellow is the focal
+   action; teal is interaction/status; mono is metadata; and
+   interaction cues never disappear on touch or reduced motion.
+   ============================================================ */
+
+/* ---------- Shared surfaces + motion ---------- */
+
+.craft-card {
+  background: var(--color-panel);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.craft-panel {
+  background: var(--color-panel);
+}
+
+.craft-btn:hover,
+.craft-btn--ghost:hover {
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+
+.craft-btn--ghost:hover {
+  background: color-mix(in srgb, var(--color-panel) 82%, transparent);
+}
+
+.reveal {
+  transform: translateY(18px) scale(0.99);
+  transition-duration: 0.52s;
+}
+
+/* ---------- Hero: one column, identity first ---------- */
+
+/* The status panel that used to sit beside the copy is the static facts line
+   under the CTAs now, so the hero is a single reading column — the grid just
+   keeps the shared wash geometry (craft/pages.css owns the ::before). */
+.craft-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  width: min(100% - 2.5rem, 86rem);
+  max-width: none;
+  margin-inline: auto;
+  padding-block: clamp(2.5rem, 7vw, 6rem) 2.5rem;
+}
+
+/* The wash geometry is no longer restated. This sheet used to override it
+   with a second, differently-shaped version of the same gradient, which
+   meant the home hero and the interior route heroes opened with visibly
+   different light. craft/pages.css owns the single shared rule now. */
+
+.craft-hero-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.craft-hero-kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.craft-label {
+  color: var(--color-accent-2-ink);
+}
+
+/* The pulsing live dot (and the equaliser that shared its 2.4s loop) died
+   with the status panel. Nothing in the hero animates on its own now. */
+
+/* The identity block (name + subtitle + service roles) collapsed into the
+   wordmark + intro pair. The wordmark's size ladder lives in craft/home.css
+   with the rule it belongs to — one clamp, one source, nothing to drift. */
+
+.craft-hero-desc {
+  /* Two sentences, one comfortable measure. */
+  max-width: 54ch;
+  margin: 1.15rem 0 0;
+  color: var(--color-ink);
+  font-size: clamp(1rem, 1.5vw, 1.18rem);
+  line-height: 1.62;
+}
+
+.craft-hero-ctas {
+  gap: 0.7rem;
+  margin-top: 1.6rem;
+}
+
+.craft-cta-primary,
+.craft-cta-ghost {
+  min-height: 3rem;
+  padding: 0.75rem 1.15rem;
+  border-radius: var(--radius-1);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.craft-cta-primary {
+  border-color: var(--color-accent-fill);
+  box-shadow: none;
+}
+
+.craft-cta-primary:hover {
+  background: color-mix(in srgb, var(--color-accent-fill) 92%, white);
+  box-shadow: none;
+}
+
+.craft-cta-ghost {
+  color: var(--color-ink);
+  background: transparent;
+  border-color: var(--color-line-strong);
+}
+
+.craft-cta-ghost:hover {
+  color: var(--color-accent-2-ink);
+  background: var(--color-panel);
+  border-color: var(--color-accent-2-fill);
+}
+
+.craft-cta-ghost .craft-cta-arrow {
+  color: currentColor;
+}
+
+/* The ticker always travels. It used to sit at animation-play-state:paused
+   until :hover, and be `animation:none` entirely on coarse pointers — which
+   meant on a phone the services rule never moved at all, and on desktop it
+   only moved while the pointer happened to be on it. A marquee is a
+   background element, not an interaction: it should read as motion without
+   demanding a hover.
+   The cost is one transform animation on a single compositor layer, and
+   home.css keeps will-change:transform on the track for exactly that. Two
+   guards keep it honest:
+     - .tf-paused is toggled by an IntersectionObserver (HeroSection), so a
+       ticker scrolled past the fold stops animating instead of burning a
+       frame budget nobody can see.
+     - motion.css's reduced-motion net still zeroes it, and
+       ticker.css:92 has its own @media guard for the legacy sheet. */
+.craft-ticker-track {
+  animation-play-state: running;
+}
+
+.craft-ticker-bleed.tf-paused .craft-ticker-track {
+  animation-play-state: paused;
+}
+
+/* The band itself. It shipped with no background at all, so the marquee
+   read as loose type floating on the ground rather than a rule — and with
+   the ticker now moving on load, an unanchored strip of moving text is much
+   more noticeable than a still one. This gives it the same furniture as
+   every other surface in the register: hairline top and bottom, and a wash
+   of the two signature hues at very low alpha so it reads as one band.
+   All static paint, no per-frame cost. */
+.craft-ticker-band {
+  border-block: 1px solid var(--color-line);
+  background: linear-gradient(
+    90deg,
+    rgba(var(--rgb-accent), 0.07),
+    rgba(var(--rgb-accent-2), 0.05) 50%,
+    rgba(var(--rgb-accent), 0.07)
+  );
+  /* Soften the two ends so items dissolve in and out instead of being
+     guillotined by the band's edge. A static mask — the compositor applies
+     it once, it is not animated. */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* A hairline dot between services, in the interaction hue — the same
+   separator the role list uses, so the two read as one vocabulary. The
+   row's own 2.5rem gap supplies the spacing either side of the dot, so no
+   negative margin is needed to balance it. */
+.craft-ticker-item + .craft-ticker-item::before {
+  content: "";
+  width: 0.2rem;
+  height: 0.2rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-accent-2-fill);
+  opacity: 0.55;
+}
+
+/* Hover is an accelerator, not a trigger. The duration lives in home.css and
+   must NOT be changed here — the comment above .craft-ticker-track explains
+   that swapping duration mid-flight restarts the marquee at the copy seam.
+   So hover only lifts the band's own surface tint, which is a one-off paint
+   on a short strip rather than a per-frame filter over moving text. The
+   track itself is never filtered: brightness() on a 200vw strip of type
+   would re-rasterise every glyph on every frame. */
+.craft-ticker-bleed:hover .craft-ticker-band {
+  box-shadow:
+    0 0 20px rgba(var(--rgb-accent), 0.16),
+    0 0 48px rgba(var(--rgb-accent-2), 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .craft-ticker-track {
+    animation: none;
+  }
+}
+
+/* ---------- Services: borderless two-column capability ledger ---------- */
+
+.module-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  border-top: 1px solid var(--color-line);
+}
+
+.service-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.25rem minmax(0, 1fr);
+  gap: 1rem;
+  min-height: 15rem;
+  padding: 2rem 0;
+  overflow: visible;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset-block: -1px;
+  inset-inline-start: 0;
+  width: 2px;
+  background: var(--color-accent-2-fill);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.service-card:hover {
+  border-color: var(--color-line);
+  background: color-mix(in srgb, var(--color-panel) 52%, transparent);
+  box-shadow: none;
+  transform: none;
+}
+
+.service-card:hover::before {
+  transform: scaleY(1);
+}
+
+/* The hover tell is the accent rail plus these two quiet shifts: the index
+   numeral warms to the signature yellow and the title leans a hair into the
+   column. Both are transform/colour on already-composited text, so the card
+   responds without a reflow or a repaint of the card's own box. */
+.service-card .service-idx,
+.service-card .service-tag {
+  transition:
+    color var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.service-card:hover .service-idx {
+  color: var(--color-accent-ink);
+  transform: translateX(2px);
+}
+
+[dir="rtl"] .service-card:hover .service-idx {
+  transform: translateX(-2px);
+}
+
+.service-card .service-title {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.service-card:hover .service-title {
+  transform: translateX(4px);
+}
+
+[dir="rtl"] .service-card:hover .service-title {
+  transform: translateX(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card .service-idx,
+  .service-card .service-tag,
+  .service-card .service-title {
+    transition: none;
+  }
+}
+
+.service-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.service-idx {
+  color: var(--color-accent-ink);
+  font-family: var(--font-display);
+  font-size: 2.35rem;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.service-tag {
+  padding: 0;
+  color: var(--color-muted);
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.service-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.service-title {
+  max-width: 22ch;
+  font-size: clamp(1.65rem, 2.8vw, 2.35rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.service-desc {
+  max-width: 54ch;
+  color: var(--color-ink-dim);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.service-stack {
+  gap: 0;
+  margin-top: 0.25rem;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.service-stack > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.service-stack > span + span::before {
+  content: "/";
+  color: var(--color-accent-2-ink);
+}
+
+/* ---------- Writing: one lead, two supporting texts ---------- */
+
+.sig-heading {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.25rem;
+}
+
+.sig-all-posts {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.8rem;
+  color: var(--color-ink);
+  border-bottom: 1px solid var(--color-line-strong);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.sig-all-posts svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.sig-all-posts:hover {
+  color: var(--color-accent-2-ink);
+  border-color: var(--color-accent-2-fill);
+}
+
+.sig-all-posts:hover svg {
+  transform: translateX(3px);
+}
+
+[dir="rtl"] .sig-all-posts:hover svg {
+  transform: scaleX(-1) translateX(3px);
+}
+
+.post-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  border-top: 1px solid var(--color-line);
+}
+
+.post-card-grid {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 12rem;
+  flex-direction: column;
+  padding: 1.6rem 0;
+  overflow: hidden;
+  color: inherit;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-decoration: none;
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.post-card-grid:hover {
+  border-color: var(--color-line);
+  background: color-mix(in srgb, var(--color-panel) 48%, transparent);
+  box-shadow: none;
+  transform: none;
+}
+
+.post-idx {
+  margin-bottom: 1.1rem;
+  color: var(--color-accent-2-ink);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+}
+
+.post-thumb {
+  position: relative;
+  min-height: 11rem;
+  margin: 0 0 1.25rem;
+  overflow: hidden;
+  border-radius: var(--radius-1);
+  background: linear-gradient(
+      135deg,
+      rgba(var(--rgb-accent), 0.1),
+      transparent 60%
+    ),
+    var(--color-panel);
+}
+
+.post-thumb img,
+.post-thumb-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.post-thumb img {
+  z-index: 1;
+  object-fit: cover;
+  /* The desaturate reads as "not yet hovered" and the hover state lifts it
+     back. That was a TRANSITION on `filter`, which re-runs a full-image
+     colour operation on every frame of the 520ms — the most expensive
+     per-frame repaint in the writing strip. The shift is subtle enough to
+     land instantly, so the transition is dropped and only the compositor-
+     cheap transform animates. */
+  filter: saturate(0.78) contrast(1.04);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.post-thumb img.image-failed {
+  display: none;
+}
+
+.post-card-grid:hover .post-thumb img {
+  filter: saturate(0.95) contrast(1.04);
+  transform: scale(1.025);
+}
+
+.post-thumb-fallback {
+  display: grid;
+  place-items: center;
+  color: var(--color-muted);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  opacity: 0.28;
+}
+
+.post-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.7rem;
+}
+
+.post-date,
+.post-read {
+  padding: 0;
+  color: var(--color-muted);
+  background: none;
+  border: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.post-date::after {
+  content: "/";
+  margin-inline-start: 0.8rem;
+  color: var(--color-accent-2-ink);
+}
+
+.post-card-grid .label {
+  align-self: flex-start;
+  margin-bottom: 0.8rem;
+  padding: 0;
+  color: var(--color-muted);
+  background: none;
+  border: 0;
+  font-size: 0.68rem;
+}
+
+.post-card-title {
+  margin-top: 0;
+  color: var(--color-ink);
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+.post-card-grid:hover .post-card-title {
+  color: var(--color-accent-2-ink);
+}
+
+.post-card-excerpt {
+  max-width: 62ch;
+  margin: 0.85rem 0 0;
+  color: var(--color-ink-dim);
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+.post-card-action {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding: 0;
+  color: var(--color-accent-2-ink);
+  opacity: 0.72;
+  transform: none;
+}
+
+.post-card-action::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-line);
+}
+
+.post-card-grid:hover .post-card-action {
+  opacity: 1;
+  transform: none;
+}
+
+.post-action-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.post-arrow {
+  color: currentColor;
+}
+
+/* ---------- Contact: bold, spacious closing panel ---------- */
+
+.sys-close {
+  gap: 1.25rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-block: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-panel) 42%, transparent);
+}
+
+.sys-quote {
+  max-width: 70ch;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.sys-quote blockquote {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+
+.sys-quote figcaption {
+  border-color: var(--color-line);
+}
+
+.sys-channels {
+  background: var(--color-panel);
+}
+
+.sys-channel {
+  min-height: 3.5rem;
+}
+
+.sys-channel:hover {
+  background: color-mix(
+    in srgb,
+    var(--color-accent-2-fill) 8%,
+    var(--color-panel)
+  );
+}
+
+.sys-more {
+  justify-content: flex-start;
+}
+
+.craft-contact-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 3.25rem;
+  padding: 0.8rem 1.1rem;
+  color: var(--color-accent-on);
+  background: var(--color-accent-fill);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.craft-contact-cta:hover {
+  background: color-mix(in srgb, var(--color-accent-fill) 92%, white);
+  transform: translateY(-2px);
+}
+
+.craft-contact-cta svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ---------- Skill canvas + telemetry: one live idea per section ---------- */
+
+.net-stage {
+  border-radius: var(--radius-1);
+  background: var(--color-panel);
+  box-shadow: none;
+}
+
+.net-stage::before,
+.net-stage::after {
+  opacity: 0.28;
+}
+
+.net-hud {
+  background: var(--color-panel);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.net-legend-dot,
+.tele-strip-indicator {
+  box-shadow: none;
+}
+
+.ledger-orbital-ring {
+  animation: none;
+}
+
+.ledger-orbital-dot,
+.tele-strip-indicator {
+  animation: none;
+}
+
+.ledger-cell,
+.net-stage {
+  transition-duration: var(--dur-fast);
+}
+
+.ledger-num,
+.ledger-cell[data-primary="true"] .ledger-num {
+  text-shadow: none;
+}
+
+.ledger-label {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.ledger-idx,
+.ledger-title,
+.tele-strip-item,
+.net-legend {
+  font-size: 0.7rem;
+}
+
+.ledger-grid {
+  border-radius: var(--radius-1);
+}
+
+.tele-strip {
+  background: var(--color-panel);
+}
+
+/* ---------- Fixed chrome: less glow, same identity ---------- */
+
+.craft-prompt[data-open],
+.craft-menu-btn:hover,
+.craft-menu-btn:focus-visible {
+  box-shadow: var(--elev-1);
+}
+
+.craft-prompt[data-open] {
+  border-color: var(--color-accent-2-fill);
+}
+
+.craft-prompt[data-open]::before,
+.craft-console:not([data-open]) .craft-ring,
+.craft-row[data-active] {
+  animation: none;
+}
+
+.craft-rail-link[data-active] {
+  background: color-mix(in srgb, var(--color-accent-fill) 11%, transparent);
+  box-shadow: none;
+}
+
+/* The assistant joins the accent family, not the secondary one. It used to be
+   the only control in the corner column inked in --color-accent-2-ink (teal),
+   which made the stack read as two systems: three yellow discs and one teal.
+   The menu disclosure owns the yellow — it is the way in — so the assistant
+   now wears the same accent and stays distinct through its plate and its
+   position rather than through a second hue. */
+.sin-chat-fab {
+  color: var(--color-accent-ink);
+  background: var(--color-panel);
+  border-color: var(--color-line-strong);
+  box-shadow: var(--elev-1);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* The same inner plate the menu glyph uses (craft/nav.css §8), so both discs
+   are drawn by one rule instead of two that happen to agree today. */
+.sin-chat-fab-plate {
+  background: rgba(var(--rgb-accent), 0.16);
+}
+
+.sin-chat-fab::after {
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+.sin-chat-fab:hover,
+.sin-chat-fab:focus-visible {
+  border-color: var(--color-accent-2-ink);
+  box-shadow: var(--elev-1);
+}
+
+/* Progress is already a thread: one hairline is enough. */
+.thread {
+  height: 1px;
+}
+
+.thread b {
+  background: var(--color-accent-fill);
+  box-shadow: none;
+}
+
+/* ---------- Section rules draw themselves in as you reach them ----------
+   The [NN] LABEL ───── rules between home acts were static hairlines. They
+   now draw on scroll, which gives each act a visible "arrival" without a
+   single line of JS: animation-timeline: view() binds the keyframe to the
+   element's own position in the scrollport, and it is transform-only, so
+   the compositor does the work.
+   Engines without scroll-driven animation just render the final state
+   (the `from` is the only thing that needs a fallback) — the rule is
+   visible either way. motion.css stops it under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .sys-rule i {
+      transform-origin: left center;
+      animation: sys-rule-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 32%;
+    }
+
+    [dir="rtl"] .sys-rule i {
+      transform-origin: right center;
+    }
+  }
+}
+
+@keyframes sys-rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- Fixed chrome: the blur is the most expensive thing on screen ----
+   The dock is position:fixed and ALWAYS on screen, so its backdrop-filter
+   re-rasterises on every scroll frame — it is the single costliest
+   declaration on the site, and it is invisible in practice: nav.css keeps
+   the tint at 95% panel, so there is almost nothing behind the glass to
+   blur. Same direction as .craft-card / .craft-panel above (solid before
+   glass), extended here to the prompt, the tree panel, the menu button and
+   the status rail. The 95% tints become fully opaque --color-panel, which
+   is also one less color-mix() per element per frame. */
+.craft-prompt,
+.craft-panel,
+.craft-menu-btn,
+.craft-rail {
+  background: var(--color-panel);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ---------- Responsive composition ---------- */
+
+@media (min-width: 48rem) {
+  .module-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .service-card {
+    padding: 2.25rem clamp(1rem, 3vw, 2rem);
+  }
+
+  .service-card:first-child {
+    padding-inline-start: 0;
+  }
+
+  .service-card:nth-child(2n) {
+    border-inline-start: 1px solid var(--color-line);
+  }
+
+  .post-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: clamp(1.5rem, 4vw, 3rem) !important;
+  }
+
+  .post-card-grid--lead {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+    grid-template-rows: auto auto auto 1fr auto;
+    column-gap: clamp(1.5rem, 4vw, 3rem);
+    min-height: 24rem;
+    padding: 2rem 0;
+  }
+
+  .post-card-grid--lead .post-idx {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .post-card-grid--lead .post-thumb {
+    grid-column: 1;
+    grid-row: 2 / span 4;
+    min-height: 18rem;
+    margin: 0;
+  }
+
+  .post-card-grid--lead .post-card-meta {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+  }
+
+  .post-card-grid--lead .label {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .post-card-grid--lead .post-card-title {
+    grid-column: 2;
+    grid-row: 3;
+    margin-top: 0;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+  }
+
+  .post-card-grid--lead .post-card-excerpt {
+    grid-column: 2;
+    grid-row: 4;
+    align-self: start;
+    margin-top: 1rem;
+  }
+
+  .post-card-grid--lead .post-card-action {
+    grid-column: 2;
+    grid-row: 5;
+    margin-top: 1.25rem;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .craft-hero {
+    width: min(100% - 2rem, 86rem);
+    padding-block: 2rem 1.5rem;
+  }
+
+  .craft-hero::before {
+    /* Narrower screens have less room to bleed, so the wash tightens to
+       the viewport instead of stretching past it. This is a SIZE
+       adjustment only: the shape, the alpha and the reading-edge position
+       all still come from the one shared rule in craft/pages.css. */
+    inset-block: -14% -22%;
+  }
+
+  .craft-hero-ctas > span,
+  .craft-hero-ctas .craft-cta-primary,
+  .craft-hero-ctas .craft-cta-ghost {
+    width: 100%;
+  }
+
+  .craft-hero-ctas .craft-cta-primary,
+  .craft-hero-ctas .craft-cta-ghost {
+    justify-content: space-between;
+  }
+
+  .service-card {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    min-height: 0;
+    padding: 1.75rem 0;
+  }
+
+  .service-title {
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+
+  .post-card-grid {
+    min-height: 11rem;
+    padding: 1.4rem 0;
+  }
+
+  .post-thumb {
+    min-height: 13rem;
+  }
+
+  .post-card-title {
+    font-size: clamp(1.35rem, 7vw, 1.7rem);
+  }
+
+  .sys-close {
+    padding: 1.5rem 0;
+    border-block: 0;
+    background: transparent;
+  }
+
+  .craft-contact-cta {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sin-chat-fab {
+    width: var(--corner-fab);
+    height: var(--corner-fab);
+  }
+
+  /* The first-visit prompt competes with page content on a phone. Keep the
+     assistant itself; let the affordance live in its accessible label. */
+  .sin-chat-fab-hint {
+    display: none;
+  }
+}
+
+/* ---------- The corner column: one diameter, one edge, ≤48rem ----------
+   Two jobs, both consequences of the dock unifying its discs:
+
+   1. POSITION. The menu disclosure is now the bottom of the column (it is the
+      way in, so it belongs nearest the thumb), which pushes the assistant up
+      by one disc + gap. agent-chat.css pins it with `bottom`, so the token
+      ladder is re-asserted here for both axes — the assistant and the menu
+      then read the same --corner-inset and cannot drift apart.
+   2. SIZE. agent-chat.css grows the assistant to 4.4rem at ≤640px and leaves
+      it on the 3.9rem desktop seal everywhere else, so between 641px and the
+      47.99rem breakpoint in the block above it was still 62px — a third
+      diameter in the middle of a column the dock had just unified. That rule
+      cannot simply be widened to 48rem: it would drag every other phone rule
+      in that block (hero width, post-card grid, contact CTA) across the
+      boundary too, so the FAB gets its own size-only block.
+
+   The PLATE rides along, and it is what makes the two discs read as one set.
+   On a phone the menu glyph drops its desktop 16% tint and goes solid accent
+   with ink on top (craft/nav.css §9b) because the label is gone and that disc
+   is now the "press me" cue. The assistant takes the identical treatment, so
+   the bottom two discs of the column are the same object drawn twice over —
+   same plate, same diameter, same ink-on-fill. The plate is sized in rem
+   rather than as a percentage of the disc so the mark keeps one absolute
+   size across the whole column instead of tracking each disc. */
+@media (max-width: 48rem) {
+  .sin-chat-fab {
+    width: var(--corner-fab);
+    height: var(--corner-fab);
+    inset-inline-end: var(--corner-inset);
+    bottom: calc(var(--corner-inset) + var(--corner-fab) + var(--corner-gap));
+  }
+  .sin-chat-fab-plate {
+    inline-size: 2rem;
+    block-size: 2rem;
+    background: color-mix(in srgb, var(--color-accent-fill) 88%, transparent);
+    color: var(--color-accent-on);
+  }
+}
+
+/* The .craft-dock margin-block-end that used to sit in a ≤30rem block here is
+   gone: it was a hand-copied duplicate of nav.css's, and since refinement.css
+   loads AFTER nav.css it silently won — so once the dock's margin became the
+   full column clearance (menu + assistant + two switches), this stale value
+   would have overridden it and let the open panel slide back under the discs.
+   The dock's own margin is the single source now, and it reads the token. */
+
+html[lang="fa"] .service-tag,
+html[lang="fa"] .service-idx,
+html[lang="fa"] .service-title,
+html[lang="fa"] .service-desc,
+html[lang="fa"] .service-stack,
+html[lang="fa"] .sig-all-posts,
+html[lang="fa"] .post-card-title,
+html[lang="fa"] .post-card-excerpt,
+html[lang="fa"] .sys-quote blockquote,
+html[lang="fa"] .craft-contact-cta {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card::before,
+  .post-card-action,
+  .craft-contact-cta {
+    transition: none;
+  }
+}

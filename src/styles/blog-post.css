@@ -25,6 +25,69 @@
   to { transform: scaleX(1); }
 }
 
+/* ---------- Dynamic-shell skeleton (terminal voice) ------------------
+   The DB-only post route renders a shell while /api/get_post.php answers.
+   These placeholders reserve the real geometry — kicker, title, metadata,
+   paragraph run, one code block — so the swap costs no layout shift, and
+   the sheen is a transform-only sweep on a clipped layer: no background
+   position animation, nothing recomputing layout while it runs. */
+.post-skeleton {
+  display: grid;
+  gap: 0.85rem;
+  margin-block-start: 2.5rem;
+}
+.post-skeleton span {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-1);
+  background: rgba(var(--rgb-ink), 0.07);
+}
+.sk-kicker { inline-size: 10rem; block-size: 0.6rem; }
+.sk-title { block-size: 1.9rem; }
+.sk-title-short { inline-size: 58%; }
+.sk-meta { inline-size: 15rem; block-size: 0.65rem; }
+.sk-line { block-size: 0.85rem; }
+.sk-line-short { inline-size: 74%; }
+.sk-block { block-size: 7.5rem; border-radius: var(--radius-2); }
+.post-skeleton span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--rgb-accent-2), 0.16),
+    transparent
+  );
+  transform: translateX(-100%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .post-skeleton span::after {
+    animation: sk-sheen 1.7s var(--ease-in-out) infinite;
+  }
+}
+[dir="rtl"] .post-skeleton span::after {
+  animation-direction: reverse;
+}
+@keyframes sk-sheen {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* ---------- Wide-viewport editorial breakout -------------------------
+   Above 75rem, pull quotes and figures extend into the START margin so
+   they interrupt the measure instead of sitting politely inside it. The
+   TOC rail owns the END side, so the breakout is deliberately one-sided —
+   the two can never collide, in either writing direction. */
+@media (min-width: 75rem) {
+  .prose-post blockquote,
+  .prose-post figure {
+    inline-size: calc(100% + 6rem);
+    margin-inline-start: -6rem;
+  }
+}
+
 /* TL;DR — holo panel with corner brackets */
 .post-tldr {
   position: relative;

@@ -55,6 +55,8 @@ export default function CopyEmailButton({
       type="button"
       onClick={copy}
       aria-label={`${copyLabel}: ${email}`}
+      aria-live="polite"
+      data-copied={copied ? "true" : "false"}
       className="contact-copy"
     >
       {copied ? copiedLabel : copyLabel}

@@ -221,6 +221,12 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const reducedMotion = reducedQuery.matches;
     setReduced(reducedMotion);
+    /* The network is an interaction, not ambient wallpaper. It moves on entry,
+       wakes for pointer work, then stops scheduling frames until the next
+       interaction. This preserves the living diagram without a permanent rAF. */
+    let activeUntil = performance.now() + 5000;
+    canvas.style.fontFamily = "var(--font-display)";
+    const labelFont = getComputedStyle(canvas).fontFamily;
 
     /* ── Glow sprites ───────────────────────────────────────────────
        The per-frame createRadialGradient on every node (29×/frame) is the
@@ -377,6 +383,13 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
       p: Math.random() * Math.PI * 2,
     }));
 
+    const wake = (duration = 1800) => {
+      activeUntil = performance.now() + duration;
+      if (!rafRef.current && !hiddenRef.current && !document.hidden) {
+        rafRef.current = requestAnimationFrame(step);
+      }
+    };
+
     /* ── Interaction ─────────────────────────────────────────────── */
     const toCanvas = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -394,6 +407,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     };
 
     const onPointerMove = (e: PointerEvent) => {
+      wake();
       const p = toCanvas(e);
       pointersRef.current = [{ x: p.x, y: p.y }];
       /* Dragged node follows the pointer 1:1 — no physics fight. */
@@ -421,6 +435,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
       }
     };
     const onPointerDown = (e: PointerEvent) => {
+      wake(2600);
       const p = toCanvas(e);
       const h = hit(p.x, p.y);
       downAtRef.current = performance.now();
@@ -432,6 +447,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
       }
     };
     const onPointerUp = (e: PointerEvent) => {
+      wake(2200);
       const p = toCanvas(e);
       const dist = Math.hypot(p.x - downPtRef.current.x, p.y - downPtRef.current.y);
       const h = hit(p.x, p.y);
@@ -472,7 +488,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           cancelAnimationFrame(rafRef.current);
           rafRef.current = 0;
         } else if (!rafRef.current && !document.hidden) {
-          rafRef.current = requestAnimationFrame(step);
+          wake(5000);
         }
       },
       { rootMargin: "80px" },
@@ -480,6 +496,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     io.observe(canvas);
 
     const onResize = () => {
+      wake(1200);
       sizeCanvas();
       const ncx = wRef.current / 2;
       const ncy = hRef.current / 2;
@@ -496,19 +513,16 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
     let pingT = -10; // time (t) the current hover sonar ping was armed
     const step = () => {
       rafRef.current = 0;
-      /* Fully parked when offscreen or the tab is hidden — zero per-frame JS.
-         (The previous loop re-queued itself every frame even while "paused",
-         which kept a rAF heartbeat — and its wakeups — alive through the
-         entire page-load window Lighthouse measures.) The IO and the
-         visibility handler below restart it when the canvas returns. */
+      /* Parked when offscreen, the tab is hidden, or the interaction window
+         expires — zero per-frame JS in every case. IO, visibility, pointer,
+         drag, resize and theme changes restart it with a bounded wake. */
       if (hiddenRef.current || document.hidden) return;
-      rafRef.current = requestAnimationFrame(step);
       const w = wRef.current;
       const h = hRef.current;
       const ncx = w / 2;
       const ncy = h / 2;
 
-      if (!reducedMotion) {
+      if (!reducedMotion && performance.now() < activeUntil) {
         t += 1 / 60;
 
         /* Springs: hub→cat tight ring, cat→leaf softer. */
@@ -787,7 +801,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
           /* Label. */
           const fs = isHub ? 13 : n.kind === "cat" ? 11 : 10;
           const weight = isHub || isHot ? "700" : n.kind === "cat" ? "600" : "600";
-          ctx.font = `${weight} ${fs}px "Vazirmatn", "Archivo", ui-sans-serif, sans-serif`;
+          ctx.font = `${weight} ${fs}px ${labelFont}`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillStyle = isHub
@@ -799,6 +813,9 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
         }
       };
       draw();
+      if (!reducedMotion && performance.now() < activeUntil) {
+        rafRef.current = requestAnimationFrame(step);
+      }
     };
     rafRef.current = requestAnimationFrame(step);
 
@@ -807,7 +824,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = 0;
       } else if (!hiddenRef.current && !rafRef.current) {
-        rafRef.current = requestAnimationFrame(step);
+        wake(5000);
       }
     };
     document.addEventListener("visibilitychange", onVis);
@@ -820,6 +837,7 @@ export default function SkillNetwork({ locale }: { locale: Locale }) {
       /* Rebuild the glow tiles from the new palette so the very next frame
          repaints in the flipped theme (no stale-color ghost frame). */
       glow = { acid: makeGlowSprite(A()), cyan: makeGlowSprite(Y()) };
+      wake(0);
     });
     themeObs.observe(document.documentElement, {
       attributes: true,

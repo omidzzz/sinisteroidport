@@ -37,7 +37,7 @@ export default async function HomePage({
   const { locale: raw } = await params;
   const locale = (isLocale(raw) ? raw : "en") as Locale;
   const fa = locale === "fa";
-  // PERF: the strip renders title + date + cover only. Passing the FULL posts
+  // The editorial grid renders title, excerpt, date and cover only. Passing the FULL posts
   // serialized every post's content blocks (~84 KiB of JSON for three posts)
   // into the RSC flight payload embedded in the HTML - paid on transfer AND
   // parse AND hydration at the 4x-throttled mobile CPU. Slim to what the strip
@@ -51,14 +51,14 @@ export default async function HomePage({
     translations: {
       en: {
         title: p.translations?.en?.title ?? p.title,
-        excerpt: "",
+        excerpt: p.translations?.en?.excerpt ?? p.excerpt ?? "",
         content: [],
       },
       ...(p.translations?.fa
         ? {
             fa: {
               title: p.translations.fa.title,
-              excerpt: "",
+              excerpt: p.translations.fa.excerpt ?? "",
               content: [],
             },
           }

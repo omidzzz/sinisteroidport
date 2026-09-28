@@ -25,14 +25,14 @@ export default function SignalsSection({
       <section className="shell-grid relative mx-auto mt-6 max-w-[86rem] px-5 sm:px-8">
         <Rail label={sig} icon={<SignalIcon />} />
         <div className="sig-grid relative min-w-0">
-          <div className="mb-5 flex justify-end">
+          <div className="sig-heading">
             <Link
               href={loc(locale, "/blog")}
               prefetch={false}
-              className="group font-mono text-xs text-muted transition-colors hover:text-acid"
+              className="sig-all-posts group"
             >
-              {t.allPosts}
-              <ArrowIcon className="ms-1.5 inline align-[-2px] transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+              <span>{t.allPosts}</span>
+              <ArrowIcon className="rtl:-scale-x-100" />
             </Link>
           </div>
           <Spotlight className="min-w-0">

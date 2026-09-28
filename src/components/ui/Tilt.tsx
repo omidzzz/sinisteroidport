@@ -40,11 +40,16 @@ export default function Tilt({
   };
 
   return (
+    /* No will-change in the class. It would promote a permanent compositor
+       layer on every device, including the touch visitors for whom onMove
+       returns on line 28 and the card never tilts at all. The transform is
+       written imperatively in the handler, and the browser promotes for the
+       duration of the interaction on its own. */
     <div
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className={`will-change-transform ${className}`}
+      className={className}
       style={{ transition: "transform 0.16s ease-out" }}
     >
       {children}

@@ -52,7 +52,7 @@ export default async function SkillsPage({
   const total = skillsData.reduce((n, g) => n + g.skills.length, 0);
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },

@@ -33,7 +33,7 @@
   border: 1px solid var(--glass-line);
   border-block-start: 2px solid var(--color-accent-fill);
   border-radius: var(--radius-2);
-  box-shadow: var(--elev-1);
+  box-shadow: var(--elev-1), inset 0 1px 0 var(--edge-hi);
   backdrop-filter: blur(var(--glass-blur));
   transition:
     transform var(--dur-base) var(--ease-out),
@@ -45,7 +45,7 @@
 .edu-card:focus-within {
   transform: translateY(-2px);
   border-block-start-color: var(--color-accent-2-fill);
-  box-shadow: var(--elev-2), var(--glow-accent);
+  box-shadow: var(--elev-2), var(--glow-accent), inset 0 1px 0 var(--edge-hi);
 }
 
 /* Year: mono, boxed like the work route's period chip */

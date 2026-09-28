@@ -49,7 +49,27 @@ const COMMANDS = [
   { kind: "command", label: "Copy email", sub: "mail", value: "mail" },
 ];
 
+/* Post rows as lib/nav/search.ts projects them: pre-lowercased haystack, date
+   in the gutter slot. */
+const POSTS = [
+  {
+    kind: "post",
+    label: "Zero-Click Search Is Here",
+    sub: "2026-09-21",
+    value: "zero-click-search",
+    haystack: "zero-click search is here ai overviews click-through rate seo",
+  },
+  {
+    kind: "post",
+    label: "Color Psychology in Branding",
+    sub: "2026-04-02",
+    value: "color-psychology",
+    haystack: "color psychology in branding research design",
+  },
+];
+
 const base = () => createConsoleState(ROUTES, COMMANDS);
+const withPosts = () => createConsoleState(ROUTES, COMMANDS, POSTS);
 
 /* ── Initial state ───────────────────────────────────────────────────── */
 
@@ -281,6 +301,84 @@ test("a new verb list is applied and resets the cursor", () => {
   s = consoleReducer(s, { type: "commands", commands: verbs });
   assert.equal(s.activeIndex, 0);
   assert.equal(allItems(s).length, ROUTES.length + 1);
+});
+
+/* ── Live post search ───────────────────────────────────────────────── */
+
+console.log("\n=== POST SEARCH ===");
+test("posts are absent from the RESTING tree (navigation is not drowned)", () => {
+  assert.equal(
+    allItems(withPosts()).length,
+    ROUTES.length + COMMANDS.length,
+    "an empty buffer must show routes + verbs only",
+  );
+  assert.equal(
+    allItems(withPosts()).some((i) => i.kind === "post"),
+    false,
+  );
+});
+test("posts join the tree as soon as a filter exists", () => {
+  let s = consoleReducer(withPosts(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "z" });
+  assert.equal(
+    allItems(s).filter((i) => i.kind === "post").length,
+    POSTS.length,
+    "both posts contain a 'z' in their haystack",
+  );
+});
+test("a post is findable by a TITLE word", () => {
+  let s = consoleReducer(withPosts(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "psychology" });
+  const rows = selectItems(s);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].kind, "post");
+  assert.equal(rows[0].value, "color-psychology");
+});
+test("a post is findable by a TAG/EXCERPT word absent from its title", () => {
+  // "overviews" appears only in the haystack, never in the label — this is
+  // the case that makes the index worth more than a title scan.
+  let s = consoleReducer(withPosts(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "overviews" });
+  const rows = selectItems(s);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].value, "zero-click-search");
+});
+test("post search is case-insensitive", () => {
+  let s = consoleReducer(withPosts(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "BRANDING" });
+  assert.equal(selectItems(s).filter((i) => i.kind === "post").length, 1);
+});
+test("routes still win: a post never displaces a matching route", () => {
+  let s = consoleReducer(withPosts(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "work" });
+  const rows = selectItems(s);
+  assert.equal(rows[0].kind, "route", "routes are ordered first");
+  assert.equal(rows[0].value, "/work");
+});
+test("the posts action applies the index and resets the cursor", () => {
+  let s = consoleReducer(withPosts(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "z" });
+  s = consoleReducer(s, { type: "move", delta: 2 });
+  const next = [];
+  s = consoleReducer(s, { type: "posts", posts: next });
+  assert.equal(s.posts, next);
+  assert.equal(s.activeIndex, 0);
+});
+test("re-delivering the same post reference is a no-op", () => {
+  const s = consoleReducer(withPosts(), { type: "open" });
+  assert.equal(consoleReducer(s, { type: "posts", posts: s.posts }), s);
+});
+test("the cursor cannot escape into the post block", () => {
+  let s = consoleReducer(withPosts(), { type: "open" });
+  s = consoleReducer(s, { type: "replace", value: "z" });
+  const total = selectItems(s).length;
+  s = consoleReducer(s, { type: "move", delta: 999 });
+  assert.equal(s.activeIndex, total - 1);
+});
+test("a post row keeps its date in the gutter slot, not an ordinal", () => {
+  const post = POSTS[0];
+  assert.equal(post.index, undefined, "posts must not claim a route ordinal");
+  assert.equal(post.sub, "2026-09-21");
 });
 
 /* ── Report ──────────────────────────────────────────────────────────── */

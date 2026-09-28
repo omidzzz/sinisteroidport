@@ -92,19 +92,65 @@
   --glow-accent-2: 0 0 0 1px rgba(0, 159, 183, 0.4),
     0 0 24px rgba(0, 159, 183, 0.25);
 
+  /* ---- The signature gradient --------------------------------------
+     Yellow -> teal, the one colour MOVEMENT the system makes. Fills
+     keep their hue in both editions (fills never flip), so this exact
+     gradient is safe on any ground; --gradient-signature-ink swaps in
+     the AA-safe text roles for when it is clipped to glyphs. */
+  --gradient-signature: linear-gradient(
+    90deg,
+    var(--color-accent-fill),
+    var(--color-accent-2-fill)
+  );
+  --gradient-signature-fade: linear-gradient(
+    90deg,
+    var(--color-accent-fill),
+    var(--color-accent-2-fill) 38%,
+    transparent 90%
+  );
+  --gradient-signature-ink: linear-gradient(
+    90deg,
+    var(--color-accent-ink),
+    var(--color-accent-2-ink)
+  );
+
+  /* Machined top-edge highlight shared by every card family — one
+     value, remapped per edition in themes.css. */
+  --edge-hi: rgba(239, 241, 243, 0.06);
+
   /* ---- Radius ---- */
   --radius-1: 6px;
   --radius-2: 12px;
   --radius-3: 20px;
   --radius-pill: 999px;
 
-  /* ---- Motion (one vocabulary for the whole system) ---- */
+  /* ---- Motion (one vocabulary for the whole system) ----
+     The two spring eases ship as cubic-beziers first so every engine gets a
+     usable curve; fx-modern.css §1b UPGRADES them to real damped-spring
+     curves (linear()) where the engine understands that syntax. Nothing
+     consumes the raw beziers directly, so the upgrade is all-or-nothing per
+     engine and older browsers simply keep these values. */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast: 140ms;
   --dur-base: 260ms;
   --dur-slow: 520ms;
+
+  /* ---- Keyboard focus ring (WCAG 2.4.13) ----
+     One vocabulary for every :focus-visible ring. The default sits in the
+     secondary-interaction hue — --color-accent-2-ink is the measured AA text
+     value in BOTH editions (7.63:1 dark / 5.12:1 light), so the ring never
+     needs a per-theme override. Rings drawn ON a saturated fill double
+     themselves with the page ink so they read on any surface. */
+  --focus-ring-color: var(--color-accent-2-ink);
+  --focus-ring-ink: var(--color-ink);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring: var(--focus-ring-width) solid var(--focus-ring-color);
+  --focus-ring-double: 0 0 0 var(--focus-ring-width) var(--focus-ring-color),
+    0 0 0 calc(var(--focus-ring-width) * 2) var(--focus-ring-ink);
 
   /* ---- Layers (the console is chrome: it sits under overlays) ---- */
   --z-base: 1;
@@ -119,11 +165,26 @@
   --nav-h: 3.25rem;
   /* Height the always-visible console dock occupies at the viewport bottom:
      rail 40 + gap 8 + prompt 48 + notice 18 + gap 8 + safe-area padding ≈
-     136px. The footer reserves MORE than the dock's height so the mark's
-     CENTER clears the dock's top edge when the page is scrolled to the end —
-     at 9rem the center still landed inside the dock band (found by
+     136px, with the dock bar (menu chip + the two switches) on the row the
+     menu button already occupied — no extra height anywhere. The footer
+     reserves MORE than the dock's height so the mark's CENTER clears the
+     dock's top edge when the page is scrolled to the end — at 9rem the
+     center still landed inside the dock band (found by
      scripts/tools/verify-mobile-chrome.mjs with elementFromPoint). */
   --console-h: 10.5rem;
+  /* Diameter of EVERY disc in the phone corner column — the edition and
+     language switches, the menu disclosure and the assistant — so the stack
+     reads as one control set instead of three unrelated circles.
+     3.5rem is the assistant's own phone size, i.e. the largest of the four,
+     so unifying on it made nothing smaller: the menu button actually GAINED
+     8px of touch target. Sized once here because the three live in three
+     different sheets (agent-chat.css sizes the assistant, craft/nav.css the
+     rest) and had drifted to 56 / 48 / 62px. */
+  --corner-fab: 3.5rem;
+  /* The air between two discs in the column. One value so the stack reads as
+     an even set rather than a tight pair and a loose join. */
+  --corner-gap: 0.4rem;
+  --corner-inset: 1.25rem;
   --rail-w: 7.5rem;
   --sidebar-w: 7.5rem;
   --station-ink: var(--color-ink);
@@ -150,6 +211,22 @@
   --font-fraunces-var: var(--font-grotesk-var);
   --font-archivo-var: var(--font-inter-var);
   --font-amiri-var: var(--font-cairo-var);
+}
+
+/* The phone corner column's inset from the screen edge. agent-chat.css steps
+   the assistant's inset 1.25rem → 1rem at ≤640px → 0.9rem at ≤480px; this is
+   the same ladder, hoisted to a token so the assistant, the menu disclosure
+   and the switch stack can all read one number instead of three sheets
+   hand-copying each other's breakpoints. */
+@media (max-width: 40rem) {
+  :root {
+    --corner-inset: 1rem;
+  }
+}
+@media (max-width: 30rem) {
+  :root {
+    --corner-inset: 0.9rem;
+  }
 }
 
 html[lang="fa"] {

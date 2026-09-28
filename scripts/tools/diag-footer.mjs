@@ -3,7 +3,7 @@
  *
  * Serves out/, drives headless Chrome (puppeteer-core) to the very bottom of
  * a locale's home page, then reports, as text:
- *   - the computed background of html / body / main / footer / .colophon-rule
+ *   - the computed background of html / body / main / footer / .craft-footer-signal
  *   - the footer's box, its gap to the document end, and anything rendering
  *     below it
  *   - a downsampled colour map of the bottom viewport (sampled through a
@@ -57,7 +57,7 @@ const facts = await page.evaluate(() => {
     return `${cs.backgroundColor} | ${cs.backgroundImage.slice(0, 90)}`;
   };
   const foot = document.querySelector("footer");
-  const rule = document.querySelector(".colophon-rule");
+  const rule = document.querySelector(".craft-footer-signal");
   const doc = document.documentElement;
   const footRect = foot?.getBoundingClientRect();
   const footTopDoc = footRect ? footRect.top + window.scrollY : null;

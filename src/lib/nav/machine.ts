@@ -25,12 +25,14 @@ export const MAX_HISTORY = 8;
  *  dispatches them (server-rendered data crosses on mount). */
 export function createConsoleState(
   routes: readonly NavRoute[] = [],
-  commands: readonly ConsoleItem[] = []
+  commands: readonly ConsoleItem[] = [],
+  posts: readonly ConsoleItem[] = []
 ): ConsoleState {
   return {
     status: "collapsed",
     routes,
     commands,
+    posts,
     buffer: "",
     activeIndex: 0,
     lastTransition: null,
@@ -47,7 +49,11 @@ function matches(item: ConsoleItem, buffer: string): boolean {
   return (
     item.label.toLowerCase().includes(needle) ||
     item.sub.toLowerCase().includes(needle) ||
-    (item.index?.startsWith(needle) ?? false)
+    (item.index?.startsWith(needle) ?? false) ||
+    // Posts carry their excerpt + tags + slug here, pre-lowercased at build
+    // time — so a search for a tag, a slug fragment, or a phrase inside an
+    // article finds that article, not just exact title words.
+    (item.haystack?.includes(needle) ?? false)
   );
 }
 
@@ -55,6 +61,8 @@ function matches(item: ConsoleItem, buffer: string): boolean {
 export function allItems(state: {
   routes: readonly NavRoute[];
   commands: readonly ConsoleItem[];
+  posts?: readonly ConsoleItem[];
+  buffer?: string;
 }): ConsoleItem[] {
   return [
     ...state.routes.map((r) => ({
@@ -64,6 +72,13 @@ export function allItems(state: {
       value: r.path,
       index: r.index,
     })),
+    // The post index joins the tree ONLY once the visitor has typed. It is
+    // ~40 rows; appending it unconditionally would bury the eight routes and
+    // six verbs under a wall of articles the moment the menu opened, and the
+    // menu's job is navigation. With an empty buffer the console navigates;
+    // the moment a filter exists it also searches content. No extra UI, and
+    // nothing for a visitor to learn.
+    ...(state.buffer ? (state.posts ?? []) : []),
     ...state.commands,
   ];
 }
@@ -186,6 +201,15 @@ export function consoleReducer(
     case "commands": {
       if (state.commands === action.commands) return state;
       return { ...state, commands: action.commands, activeIndex: 0 };
+    }
+
+    case "posts": {
+      // The index lands asynchronously, usually after the console has already
+      // been opened and typed into. Reference-equal short-circuit keeps it a
+      // no-op on a re-delivery, and the cursor resets because the row set
+      // under it may have just changed shape.
+      if (state.posts === action.posts) return state;
+      return { ...state, posts: action.posts, activeIndex: 0 };
     }
 
     case "history-up": {

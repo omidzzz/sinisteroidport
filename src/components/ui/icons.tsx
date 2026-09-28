@@ -233,3 +233,78 @@ export function XIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/** Hamburger — the universal "this opens a menu" mark.
+ *
+ *  Three bars rather than a glyph character, because the console's own
+ *  rule is that no UI affordance is a text symbol (the prompt caret is the
+ *  one exception, and it means "type here", not "press me"). On a phone the
+ *  disclosure button is a bare circle with its label clipped away, so this
+ *  mark is the ONLY thing telling a visitor the button opens a menu — it has
+ *  to be the one everybody already recognises.
+ *
+ *  The bars are addressed individually as .menu-bar and morphed into the
+ *  same X as XIcon above, by CSS off aria-expanded (craft/nav.css §8). The
+ *  whole state change is transform/opacity with no second icon swapping in,
+ *  and no React state. */
+export function MenuIcon({ className }: { className?: string }) {
+  return (
+    <svg {...MONOLINE} width="16" height="16" className={className}>
+      <path className="menu-bar" d="M4 7.5h16" />
+      <path className="menu-bar" d="M4 12h16" />
+      <path className="menu-bar" d="M4 16.5h16" />
+    </svg>
+  );
+}
+
+/** The assistant's mark — the floating widget's only glyph.
+ *
+ *  More articulated than a plain robot head, because at the size it actually
+ *  renders (20px inside a 2rem plate) a bare head-plus-two-dots is three
+ *  blobs with no character. What earns the detail, and why each piece:
+ *
+ *    - a CHAMFERED crown. Flat top with angled shoulders reads as machined;
+ *      a plain rounded rect reads as a toy.
+ *    - side TABS. They break the head's silhouette outward, which is what
+ *      stops the mark collapsing into a dot-within-a-circle at small sizes.
+ *    - two large solid optics, held far enough apart to stay two eyes. A
+ *      narrow gap here is the whole ballgame: bring them together and they
+ *      fuse into a single lozenge and the face is gone.
+ *    - a jaw grille, to give the lower half something to say.
+ *
+ *  Drawn after one bad revision: the first attempt put a pair of broadcast
+ *  arcs beside the emitter ball, and at 20px those arcs collided with the
+ *  ball into two unidentifiable blobs while the optics fused. Signal arcs are
+ *  the classic detail that only survives at sizes this control never gets,
+ *  so the reception idea moved into the tabs instead of being drawn.
+ *
+ *  The viewBox is cropped tight to the art (18.6 units of canvas for ~16.5 of
+ *  ink) — with a full 24x24 grid most of the box is empty padding, so
+ *  raising the percentage in agent-chat.css would only enlarge that padding.
+ *  Inherits `color` from the plate, so it re-inks per edition for free. */
+export function AgentIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      {...MONOLINE}
+      viewBox="2.7 0.85 18.6 18.6"
+      width="20"
+      height="20"
+      className={className}
+    >
+      {/* antenna: emitter ball on a stem into the crown */}
+      <circle cx="12" cy="3.4" r="1.35" fill="currentColor" />
+      <path d="M12 6.5V4.7" />
+      {/* side tabs — the silhouette breakers */}
+      <rect x="4.9" y="10.9" width="1.5" height="2.8" rx="0.75" />
+      <rect x="17.6" y="10.9" width="1.5" height="2.8" rx="0.75" />
+      {/* chassis: flat crown, chamfered shoulders, rounded jaw */}
+      <path d="M8.3 6.7h7.4L18 9.1v7.2a2.3 2.3 0 0 1-2.3 2.3H8.3A2.3 2.3 0 0 1 6 16.3V9.1z" />
+      {/* optic sensors — kept wide apart so they never merge */}
+      <circle cx="9.5" cy="12.2" r="1.7" fill="currentColor" />
+      <circle cx="14.5" cy="12.2" r="1.7" fill="currentColor" />
+      {/* jaw grille */}
+      <path d="M10.3 15.9h3.4" />
+    </svg>
+  );
+}
+

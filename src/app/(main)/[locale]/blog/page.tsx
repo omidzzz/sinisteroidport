@@ -54,7 +54,7 @@ export default async function BlogPage({
   }));
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
@@ -63,7 +63,7 @@ export default async function BlogPage({
       />
       <Reveal>
         <PageHero
-          index={locale === "fa" ? "۰۶" : "06"}
+          index={locale === "fa" ? "۰۷" : "07"}
           kicker={t.blog.kicker}
           title={t.blog.title}
           intro={t.blog.intro}

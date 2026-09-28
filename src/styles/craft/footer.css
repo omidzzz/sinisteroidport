@@ -1,13 +1,11 @@
 /* ============================================================
    CODE & CRAFT — the colophon (footer) · END OF TRANSMISSION
    ------------------------------------------------------------
-   The colophon closes the site like a console shutdown: a signal
-   bar over the masthead rule, the prose sitemap in a measured
-   column, and — on wide screens — the controls (feeds, agent,
-   language, edition, technical line) stacked in a hairline-ruled
-   rail beside it. The closing lockup scales up as the signature,
-   and the back-to-top mark becomes an outlined circle that fills
-   with the signature on hover.
+   Redesign v2. The prose sentence that used to BE the sitemap
+   became a scannable index — Index / Reach / Elsewhere — under a
+   one-line lede, with a mono metadata rail closing the page. The
+   edition and language switches moved to the dock (nav.css §1b),
+   so each control has exactly one home.
 
    Untouched on purpose: the transparent ground (no seam — see
    scripts/tools/diag-footer.mjs), the --console-h tail reserve
@@ -16,145 +14,173 @@
    content-visibility (verify-craft).
    ============================================================ */
 
-[data-register="code-craft"] footer {
+[data-register="code-craft"] .craft-footer {
   position: relative;
   margin-block-start: 7rem;
   /* The console dock is fixed to the viewport bottom, so the footer's last
      row would otherwise sit under it whenever the page is scrolled to the
      end — the back-to-top mark became untappable (found by
      scripts/tools/verify-mobile-chrome.mjs). Reserve the dock's footprint. */
-  padding-block-end: var(--console-h, 9rem);
+  padding-block-end: var(--console-h, 11rem);
   overflow: hidden;
   /* Transparent: the body's background flows through so there is no
      gradient-to-solid seam where the footer ends. */
   background: transparent;
-}
-
-/* ---------- Masthead: a signal bar over the rule ---------- */
-
-[data-register="code-craft"] .colophon-rule {
   border-block-start: 1px solid var(--color-line-strong);
 }
-[data-register="code-craft"] .colophon-rule::before {
-  content: "";
-  display: block;
+
+/* The signal bar: 3px of signature gradient across the full bleed. */
+[data-register="code-craft"] .craft-footer-signal {
   block-size: 3px;
-  background: linear-gradient(
-    90deg,
-    var(--color-accent-fill),
-    var(--color-accent-2-fill) 38%,
-    transparent 90%
-  );
+  background: var(--gradient-signature-fade);
 }
 
-/* ---------- The layout: prose + a controls rail on wide screens ---------- */
-
-[data-register="code-craft"] .colophon-rule > div {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2.25rem;
+[data-register="code-craft"] .craft-footer-inner {
+  max-inline-size: 86rem;
+  margin-inline: auto;
+  padding: 2.75rem 1.25rem 3rem;
+}
+@media (min-width: 40rem) {
+  [data-register="code-craft"] .craft-footer-inner {
+    padding-inline: 2rem;
+  }
 }
 
-[data-register="code-craft"] .colophon-body {
-  max-width: 68ch;
+/* ---------- The lede: one line of console voice ---------- */
+
+[data-register="code-craft"] .craft-footer-lede {
+  max-inline-size: 56ch;
+}
+[data-register="code-craft"] .craft-footer-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-block-end: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+[data-register="code-craft"] .craft-footer-eyebrow span {
+  color: var(--color-accent-2-ink);
+}
+[data-register="code-craft"] .craft-footer-line {
   color: var(--color-ink-dim);
   font-size: 0.95rem;
-  line-height: 1.9;
+  line-height: 1.8;
 }
-[data-register="code-craft"] .colophon-body b {
+[data-register="code-craft"] .craft-footer-line b {
   color: var(--color-ink);
   font-weight: 600;
 }
-[data-register="code-craft"] .colophon-body a {
-  color: var(--color-accent-2-ink);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-decoration-color: rgba(var(--rgb-accent-2), 0.4);
-  text-underline-offset: 4px;
-  padding-inline: 0.15rem;
-  margin-inline: -0.15rem;
-  border-radius: 3px;
-  transition:
-    color var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out),
-    text-decoration-color var(--dur-fast) var(--ease-out);
-}
-[data-register="code-craft"] .colophon-body a:hover {
-  color: var(--color-ink);
-  background-color: color-mix(
-    in srgb,
-    var(--color-accent-2-fill) 14%,
-    transparent
-  );
-  text-decoration-color: transparent;
-}
-
-@media (min-width: 80rem) {
-  [data-register="code-craft"] .colophon-rule > div {
-    grid-template-columns: minmax(0, 1fr) minmax(19rem, 24rem);
-    column-gap: 5rem;
-  }
-  [data-register="code-craft"] .colophon-body {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-  }
-  [data-register="code-craft"] .colophon-marginalia {
-    grid-column: 2;
-  }
-  [data-register="code-craft"] .colophon-marginalia:first-of-type {
-    align-self: end;
-  }
-}
-
-/* ---------- Marginalia: the controls rail ---------- */
-
-[data-register="code-craft"] .colophon-marginalia {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.65rem 1.25rem;
-  margin-block-start: 0;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-/* The two rows read as sections of one rail, hairline-separated */
-[data-register="code-craft"] .colophon-marginalia + .colophon-marginalia {
-  border-block-start: 1px solid var(--color-line);
-  padding-block-start: 1.6rem;
-}
-html[lang="fa"] [data-register="code-craft"] .colophon-marginalia {
+html[lang="fa"] [data-register="code-craft"] .craft-footer-eyebrow {
   letter-spacing: 0;
   text-transform: none;
 }
 
-[data-register="code-craft"] .colophon-note {
-  color: var(--color-ink-dim);
+/* ---------- The index: three columns of destinations ---------- */
+
+[data-register="code-craft"] .craft-footer-index {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.9rem 2rem;
+  margin-block-start: 2.6rem;
 }
-[data-register="code-craft"] a.colophon-note:hover {
-  color: var(--color-accent-ink);
+@media (min-width: 34rem) {
+  [data-register="code-craft"] .craft-footer-index {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 64rem) {
+  [data-register="code-craft"] .craft-footer-index {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem 4rem;
+  }
 }
 
-/* The closing lockup scales up as the footer's signature */
-[data-register="code-craft"] .colophon-marginalia .logo-type {
-  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
-  line-height: 1;
+[data-register="code-craft"] .craft-footer-head {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
 }
-
-/* Edition toggle: a hairline chip in the rail */
-[data-register="code-craft"] .colophon-marginalia .icon-toggle {
-  border: 1px solid var(--color-line-strong);
-  border-radius: var(--radius-pill);
-  color: var(--color-ink-dim);
+html[lang="fa"] [data-register="code-craft"] .craft-footer-head {
+  letter-spacing: 0;
+  text-transform: none;
+}
+[data-register="code-craft"] .craft-footer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+[data-register="code-craft"] .craft-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem;
+  margin-inline: -0.3rem;
+  border-radius: 3px;
+  color: var(--color-ink);
+  font-size: 0.9rem;
+  text-decoration: none;
   transition:
     color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+    background-color var(--dur-fast) var(--ease-out);
 }
-[data-register="code-craft"] .colophon-marginalia .icon-toggle:hover,
-[data-register="code-craft"] .colophon-marginalia .icon-toggle:focus-visible {
+/* Console marker: none. The redesign lists links plainly — the earlier
+   slash/arrow glyphs read as clutter, so hierarchy comes from the column
+   heading and type alone. */
+[data-register="code-craft"] .craft-footer-link:hover,
+[data-register="code-craft"] .craft-footer-link:focus-visible {
   color: var(--color-accent-ink);
-  border-color: var(--color-accent-fill);
+  background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+/* ---------- The metadata rail ---------- */
+
+[data-register="code-craft"] .craft-footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.9rem 2rem;
+  margin-block-start: 2.75rem;
+  padding-block-start: 1.4rem;
+  border-block-start: 1px solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+html[lang="fa"] [data-register="code-craft"] .craft-footer-meta {
+  letter-spacing: 0;
+  text-transform: none;
+}
+[data-register="code-craft"] .craft-footer-note {
+  color: var(--color-ink-dim);
+}
+/* Two groups, so a wrap can never orphan the seal: legal + tech lines wrap
+   among themselves on the start side, lockup + end-mark stay one unit on the
+   end side (the auto margin is what keeps them there once the rail wraps). */
+[data-register="code-craft"] .craft-footer-legal,
+[data-register="code-craft"] .craft-footer-sign {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+}
+[data-register="code-craft"] .craft-footer-sign {
+  margin-inline-start: auto;
+}
+[data-register="code-craft"] .craft-footer-lockup {
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  line-height: 1;
 }
 
 /* ---------- Back to top ---------- */

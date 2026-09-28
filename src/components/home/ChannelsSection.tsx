@@ -90,10 +90,10 @@ export default function ChannelsSection({ locale }: { locale: Locale }) {
             <Link
               href={loc(locale, "/contact")}
               prefetch={false}
-              className="group brk font-mono text-xs text-muted transition-colors hover:text-acid"
+              className="craft-contact-cta group"
             >
-              {fa ? "همه‌ی کانال‌ها · صفحه تماس" : "The full contact board"}
-              <ArrowIcon className="ms-2 inline align-[-2px] transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+              <span>{fa ? "گفتگو را شروع کنیم" : "Start a conversation"}</span>
+              <ArrowIcon className="rtl:-scale-x-100" />
             </Link>
           </div>
         </div>

@@ -19,6 +19,23 @@
   animation: none;
 }
 
+/* ── CARD → ARTICLE COVER MORPH (shared element) ─────────────────────────
+   The blog grid navigates with plain anchors on purpose (the static-export
+   router swallowed clicks there), so this morph rides the CROSS-DOCUMENT
+   transition the ≤48rem rule above enables — the name is per-slug and
+   therefore lives in the markup (inline style), while this class lets one
+   rule style every morph. Engines without view-transition-class ignore the
+   selector; engines without cross-document transitions never animate it.
+   Desktop keeps its immediate document loads. */
+.post-thumb img,
+.post-cover-img {
+  view-transition-class: post-cover;
+}
+::view-transition-group(.post-cover) {
+  animation-duration: 340ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* ── THE CHOREOGRAPHY — visible, not polite ──────────────────────────────
    Old page sinks away under a dark wash with a neon acid sweep crossing
    the overlay; new page rises in with an eased bloom. 320–380ms: long

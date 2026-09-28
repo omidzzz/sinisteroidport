@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import type { Post } from "@/lib/blog/types";
 import ContentRenderer from "./ContentRenderer";
@@ -201,7 +201,7 @@ export default function BlogPostLive({
         </div>
       )}
 
-      <article className="mx-auto max-w-3xl px-5 py-16 sm:px-6">
+      <article className="craft-article mx-auto max-w-3xl px-5 py-16 sm:px-6">
         <Link
           href={loc(locale, "/blog")}
           className="post-back group"
@@ -282,6 +282,9 @@ export default function BlogPostLive({
             width={1024}
             height={576}
             className="post-cover-img"
+            /* The other end of the blog-card morph: same name, so the tapped
+               card's thumbnail grows into this hero. */
+            style={{ viewTransitionName: `post-cover-${effective.slug}` } as CSSProperties}
           />
           <span aria-hidden className="post-cover-scan" />
         </div>

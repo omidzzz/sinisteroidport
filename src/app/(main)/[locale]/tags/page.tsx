@@ -41,7 +41,7 @@ export default async function TagsIndexPage({
   const tags = usedTags(getAllPosts());
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },

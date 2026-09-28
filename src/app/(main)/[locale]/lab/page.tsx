@@ -69,7 +69,12 @@ export default async function LabPage({
 
   return (
     <div className="craft-lab cv-auto">
-      <div className="mx-auto max-w-[86rem] px-5 pt-6 sm:px-8">
+      {/* No pt-* here, like every other interior route: the hero owns the
+          dock clearance in its own padding (craft/pages.css), so this box
+          starts at the top of the page and the ambient wash covers the full
+          screen. It also used to open at pt-6, which put its eyebrow a full
+          hero-height above the other routes. */}
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <PageHero
           index="06"
           kicker={t.lab.kicker}

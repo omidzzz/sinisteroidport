@@ -98,7 +98,7 @@
   border: 1px solid var(--glass-line);
   border-inline-start: 2px solid var(--color-accent-2-fill);
   border-radius: var(--radius-2);
-  box-shadow: var(--elev-1);
+  box-shadow: var(--elev-1), inset 0 1px 0 var(--edge-hi);
   backdrop-filter: blur(var(--glass-blur));
   transition:
     transform var(--dur-base) var(--ease-out),
@@ -114,7 +114,7 @@
      leading edge only. */
   border-color: color-mix(in srgb, var(--color-accent-2-fill) 45%, transparent);
   border-inline-start-color: var(--color-accent-fill);
-  box-shadow: var(--elev-2), var(--glow-accent-2);
+  box-shadow: var(--elev-2), var(--glow-accent-2), inset 0 1px 0 var(--edge-hi);
 }
 .tl-item:hover .tl-node,
 .tl-item:focus-within .tl-node {

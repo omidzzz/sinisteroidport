@@ -2,6 +2,8 @@
 // in scripts/build/prepare-cpanel.mjs. Guards the path-scoped caching fix:
 // sw.js must never be immutable, _next/static must be, and API/HTML/media get
 // their own tiers.
+// Also guards the CSP ↔ GA4 contract: the .htaccess Google carve-outs and the
+// GoogleTag.tsx Signals switch must stay in sync (checks 8–10).
 import fs from "node:fs";
 import path from "node:path";
 
@@ -110,12 +112,29 @@ check(
   /connect-src [^;]*https:\/\/analytics\.google\.com[^;]*https:\/\/www\.google\.com/.test(actualContent),
 );
 
-// 9. GA4 audience image beacons require Google image sources.
+// 9. GA4 image beacons: tag-diagnostics /td on googletagmanager.com, the
+//    /g/collect image fallback on *.google-analytics.com (both prescribed by
+//    Google's CSP guide) and the regional-domain audience pixels.
 check(
-  "CSP permits GA4 audience image beacons",
-  /img-src [^;]*https:\/\/\*\.google\.com[^;]*https:\/\/\*\.google\.de/.test(actualContent),
+  "CSP permits GA4 image beacons",
+  /img-src [^;]*https:\/\/\*\.googletagmanager\.com[^;]*https:\/\/\*\.google-analytics\.com[^;]*https:\/\/\*\.google\.com[^;]*https:\/\/\*\.google\.de/.test(actualContent),
 );
 
-console.log(fails === 0 ? "\n✓ all Cache-Control checks passed" : `\n✗ ${fails} check(s) failed`);
+// 10. The CSP above deliberately omits Google's ad hosts
+//     (stats.g.doubleclick.net, www.google.<TLD>/ads/ga-audiences). With
+//     Google Signals on, GA4 fires exactly those two beacons on every
+//     session — and every one of them logged a CSP violation in the console.
+//     The fix is client-side, so the switch is part of this contract: it must
+//     never be dropped from GoogleTag.tsx.
+const googleTag = fs.readFileSync(
+  path.resolve("src/components/analytics/GoogleTag.tsx"),
+  "utf8",
+);
+check(
+  "GA4 disables Google Signals (no CSP-blocked ad beacons)",
+  googleTag.includes("allow_google_signals:false"),
+);
+
+console.log(fails === 0 ? "\n✓ all .htaccess / CSP checks passed" : `\n✗ ${fails} check(s) failed`);
 
 if (fails > 0) process.exit(1);

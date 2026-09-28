@@ -20,9 +20,14 @@ body {
   background-color: var(--color-bg);
   color: var(--color-ink);
   overflow-x: clip;
-  text-wrap: pretty;
 }
 
+/* `text-wrap: pretty` used to sit on <body>, which handed it to EVERY text
+   node on the site — including 34 long-form posts, where the ragged-last-
+   line improvement is invisible on a 2,000-word article but the cost is
+   not: the engine runs several line-breaking passes to find it. It is now
+   scoped to the short display copy where it actually reads (see the
+   h1/h2/label block below and .prose-post p for article body copy). */
 h1,
 h2,
 .mod-title,
@@ -37,6 +42,37 @@ h2,
 ::selection {
   background: var(--color-accent-fill);
   color: var(--color-accent-on);
+}
+
+/* ---------- Static film grain --------------------------------------
+   The GL grain retired with the paper register; this is the quiet
+   replacement — one STATIC (never animated) desaturated noise tile
+   so the flat charcoal reads as material instead of fill.
+
+   z-index: -1, not 35. It used to sit ABOVE the content (z 35) so
+   every scroll frame composited a full-viewport noise layer over
+   the moving page. Behind the content it tints the ground — which
+   is all it ever did at 3.5% opacity — and the compositor can
+   discard it entirely instead of blending it every frame.
+   pointer-events:none keeps it out of hit-testing either way
+   (elementFromPoint in verify-mobile-chrome skips it). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+[data-theme="light"] body::before {
+  opacity: 0.045;
+}
+@media print {
+  body::before {
+    display: none;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -55,6 +91,19 @@ h2,
   background: var(--color-ink-dim);
 }
 
+/* Firefox has no ::-webkit-scrollbar, so it was falling back to the OS bar
+   while every WebKit engine got the hand-styled one. The standard pair
+   below gives Firefox the same ink. The @supports guard is load-bearing:
+   engines that DO understand the WebKit pseudo (Chrome 121+ also honours
+   scrollbar-color) would otherwise ignore the rules above in favour of
+   this block — the guard keeps each engine on exactly one code path. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: var(--color-muted) var(--color-bg);
+    scrollbar-width: thin;
+  }
+}
+
 /* ---------- Typography helpers ---------- */
 
 .label {
@@ -63,6 +112,9 @@ h2,
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-ink-dim);
+  /* Short mono runs — the orphaned-last-word rag is visible at this size,
+     and the block is a line or two, so the breaking passes are cheap. */
+  text-wrap: pretty;
 }
 
 /* Persian kickers must not be tracked — spacing breaks cursive joins. */
@@ -75,6 +127,14 @@ h2,
   direction: ltr;
   unicode-bidi: isolate;
   font-family: var(--font-mono);
+}
+
+/* Display-voice numerals (stats, ledger counters, CountUp outputs) use
+   tabular figures so ticking digits never reflow the line they sit on. */
+.craft-stats b,
+.ledger-num,
+.gauge-num {
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 /* Hollow display text with a soft accent halo */
@@ -208,6 +268,36 @@ h2,
   font-weight: 600;
 }
 
+/* Drop cap — the ARTICLE's opening paragraph only (ContentRenderer marks
+   it .prose-dropcap). EN only: a floated initial suits the Latin
+   editorial voice, while a Persian drop cap would break the cursive
+   joins and has no typographic precedent. Sized off the lead's own
+   measure so it sits inside the accent rule without fighting it. */
+html[lang="en"] .prose-post .prose-dropcap::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 3.3em;
+  font-weight: 800;
+  line-height: 0.82;
+  color: var(--color-accent-ink);
+  margin-block-start: 0.08em;
+  margin-inline-end: 0.1em;
+}
+
+/* Progressive upgrade: engines that implement initial-letter (Chrome 110+,
+   Safari) size and sink the cap against the text baseline themselves — the
+   float above stays the fallback everywhere else. Same glyph, better fit,
+   zero runtime cost. */
+@supports (initial-letter: 3) {
+  html[lang="en"] .prose-post .prose-dropcap::first-letter {
+    float: none;
+    initial-letter: 3;
+    font-size: 1em;
+    line-height: 1;
+    margin-inline-end: 0.12em;
+  }
+}
+
 /* Inline code inside posts */
 .prose-post code:not(pre code) {
   font-family: var(--font-mono);
@@ -251,12 +341,7 @@ h2,
   width: 34%;
   min-width: 8rem;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--color-accent-fill),
-    var(--color-accent-2-fill),
-    transparent
-  );
+  background: var(--gradient-signature-fade);
   box-shadow: 0 0 12px rgba(var(--rgb-accent), 0.4);
   transform-origin: left center;
 }
@@ -319,9 +404,10 @@ h2,
 }
 
 /* Default keyboard ring for everything outside the hand-styled set.
-   Teal = the secondary-interaction hue the system reserves for links. */
+   Values live in tokens.css (--focus-ring / --focus-ring-offset) so the
+   ring can never drift between the two editions or the hand-styled set. */
 :focus-visible {
-  outline: 2px solid var(--color-accent-2-ink);
-  outline-offset: 2px;
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
   border-radius: 2px;
 }

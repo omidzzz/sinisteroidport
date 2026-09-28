@@ -26,6 +26,11 @@
 /* ---------- 2 · craft foundation ---------- */
 @import "../styles/craft/tokens.css";
 @import "../styles/craft/themes.css";
+/* accents.css — per-act accent scoping: [data-accent="teal"|"warm"] on a
+   route root re-maps only the accent ROLES (see the sheet's header for the
+   safety rules). Loaded right after themes so the scopes resolve against
+   whichever edition is active. */
+@import "../styles/craft/accents.css";
 @import "../styles/craft/base.css";
 
 /* ---------- 3 · legacy component sheets (retiring phase by phase) ---- */
@@ -36,12 +41,15 @@
    spine-rail.css and console.css were retired the same way afterwards:
    their surviving rules (the home ticker, the Spotlight wrap, the live
    posts strip) were extracted verbatim into craft/ticker.css,
-   craft/spotlight.css and craft/posts-strip.css. */
+   craft/spotlight.css and craft/posts-strip.css. contact.css joined them
+   when craft/contact.css was rebuilt around the channel ledger: every
+   class it carried (.contact-deck-wild, .ch-hero, .ch-display, .ch-ghost,
+   .ch-orbit, .ch-tilt-*, .contact-float, .contact-cross) became
+   unreachable, so the sheet went with them. */
 @import "../styles/controls.css";
 @import "../styles/logotype.css";
 @import "../styles/home.css";
 @import "../styles/pages.css";
-@import "../styles/contact.css";
 @import "../styles/acid-rave.css";
 @import "../styles/showcase.css";
 @import "../styles/console-bay.css";
@@ -102,8 +110,11 @@
 @import "../styles/craft/home.css";
 /* home-advanced.css — Synapse, Ledger, Telemetry rework with advanced minimal styling */
 @import "../styles/craft/home-advanced.css";
-/* module-service.css — Clean service cards for ModuleBay */
+/* module-service.css — editorial capability ledger + writing grid. */
 @import "../styles/craft/module-service.css";
+/* refinement.css — final homepage art direction: flatter surfaces,
+   clearer hierarchy, disciplined accents and calmer motion. */
+@import "../styles/craft/refinement.css";
 
 /* ---------- 6 · motion net — MUST STAY LAST ---------- */
 @import "../styles/craft/motion.css";

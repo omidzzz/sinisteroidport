@@ -2,7 +2,7 @@
 
 > Professional frontend developer specializing in React.js, JavaScript, modern web development, accessible interfaces, and bilingual technical writing. Based in Tehran, Iran.
 
-Last updated: 2026-09-24
+Last updated: 2026-09-28
 
 ## Key Pages
 - [Home](https://sinisteroid.ir/en/) · [فارسی](https://sinisteroid.ir/fa/)
@@ -105,4 +105,4 @@ The site has 34 published articles. The complete current index is in [llms-full.
 - Phone: +989367471992
 
 ---
-Last updated: 2026-09-24
+Last updated: 2026-09-28

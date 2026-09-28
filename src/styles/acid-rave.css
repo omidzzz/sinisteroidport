@@ -309,12 +309,40 @@ html[data-theme="light"] .icon-toggle .icon-moon { display: grid; }
   .shell-grid.rev { grid-template-columns: minmax(0, 1fr) 6rem; }
 }
 .sec-label { position: sticky; top: calc(5.5rem + env(safe-area-inset-top)); align-self: start; display: flex; align-items: center; gap: 0.6rem; }
-@media (max-width: 1023px){ .sec-label { position: static; margin-bottom: 1rem; } }
 .sec-label .vert {
   font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.26em; text-transform: uppercase;
   color: var(--color-muted); writing-mode: vertical-rl; rotate: 180deg;
 }
 [dir="rtl"] .sec-label .vert { rotate: 0deg; }
+/* Persian act labels carry no tracking (it breaks cursive joins) — same rule
+   the nav chrome follows. */
+html[lang="fa"] .sec-label .vert { letter-spacing: 0; }
+
+/* ---------- Mobile: the rail folds FLAT ----------
+   The rotated caption was the single biggest source of dead space on phones:
+   measured at 390px it stood 159–247px tall in a 15px column PER ACT — five
+   acts ≈ 1,050px of empty page before any content. Under 1024px the label
+   becomes a compact one-line act rule instead: same words, same mono voice,
+   with a hairline that carries the console's section-rule language through
+   to the small screen. Desktop keeps the sticky vertical rail.
+   MUST sit after the base .sec-label .vert rules above: same specificity, so
+   the fold is a source-order win, not a specificity trick. */
+@media (max-width: 1023px){
+  .shell-grid { gap: 1.5rem 0; }
+  .sec-label { position: static; margin-bottom: 0.15rem; }
+  .sec-label .vert {
+    writing-mode: horizontal-tb;
+    rotate: 0deg;
+    letter-spacing: 0.2em;
+  }
+  .sec-label::after {
+    content: "";
+    flex: 1;
+    block-size: 1px;
+    margin-inline-start: 0.4rem;
+    background: var(--color-line);
+  }
+}
 
 /* Scroll-linked drift for giant outline words (progressive enhancement) */
 .scrub-word {

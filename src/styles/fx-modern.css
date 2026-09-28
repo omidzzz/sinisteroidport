@@ -6,6 +6,7 @@
    ------------------------------------------------------------
    Contents:
      §1  Registered brand colors + smooth theme crossfade
+     §1b Spring physics — linear() upgrade for --ease-spring*
      §2  Scroll-scrubbed display type (wght pump + letter-spacing
          deconstriction via view() timelines)
      §3  text-box-trim / optical alignment of giant type
@@ -27,7 +28,7 @@
      §18 Conic plasma ring on sec-ico chips
      §19 clip-path seam utilities (hazard zigzag)
      §20 content-visibility + contain perfs
-     §21 print / forced-colors / prefers-contrast
+     §21 print / forced-colors / contrast / reduced-transparency / reduced-data
      §22 CTA-block hover contrast fix (.cta-btn)
    ============================================================ */
 
@@ -115,6 +116,36 @@ html {
     --color-accent-2 0.5s ease,
     --color-accent-3 0.5s ease,
     --color-acid 0.5s ease;
+}
+
+/* ------------------------------------------------------------
+   §1b SPRING PHYSICS — the linear() upgrade.
+   tokens.css ships both spring eases as cubic-beziers (works
+   everywhere); this block replaces them with real damped-spring
+   curves sampled at 2.5% steps wherever the engine understands
+   linear() (Chrome/Edge 113+, Safari 17.2+). Every consumer keeps
+   its existing transition — same properties, same compositor
+   cost — it just settles like a physical spring now:
+     --ease-spring       ζ0.62 ω12 → 8% overshoot, settles ~0.55s
+     --ease-spring-snap  ζ0.72 ω20 → 4% overshoot, settles ~0.25s
+   Firefox < 112 and older Safari keep the bezier values untouched
+   (the block simply never matches). Curves generated from
+   x(t)=1-e^(-ζωt)(cos ω_d t + ζω/ω_d sin ω_d t).
+   ------------------------------------------------------------ */
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --ease-spring: linear(
+      0, 0.044, 0.151, 0.294, 0.448, 0.597, 0.731, 0.843, 0.932, 0.998,
+      1.042, 1.069, 1.081, 1.083, 1.077, 1.067, 1.055, 1.042, 1.03, 1.019,
+      1.01, 1.004, 0.999, 0.996, 0.994, 0.993, 0.993, 0.994, 0.995, 0.996,
+      0.997, 0.998, 0.999, 0.999, 1, 1, 1, 1.001, 1.001
+    );
+    --ease-spring-snap: linear(
+      0, 0.129, 0.382, 0.631, 0.821, 0.943, 1.008, 1.035, 1.038, 1.031,
+      1.021, 1.012, 1.005, 1.001, 0.999, 0.999, 0.999, 0.999, 0.999, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+    );
+  }
 }
 
 /* ------------------------------------------------------------
@@ -531,6 +562,44 @@ samp {
   .text-outline,
   .stroke-line {
     -webkit-text-stroke-width: 1.5px;
+  }
+}
+
+/* ------------------------------------------------------------
+   §21b REDUCED TRANSPARENCY / REDUCED DATA.
+   The glass is decoration, and the blur is the single most
+   expensive compositing op on the site — so when the OS says the
+   user wants solid surfaces, every backdrop-filter is dropped
+   wholesale (same trade the (pointer: coarse) downgrade in
+   tokens.css makes for phones). Text contrast does not move: the
+   glass surfaces are already 94–95% opaque panel colors, and the
+   few that ride --glass-bg sit on the page ground the contrast
+   pair was measured against.
+   Reduced data drops only the two purely decorative payloads —
+   the film-grain tile and the console-bay prop SVGs. Every
+   content image is untouched. Both features are dormant in
+   engines that do not implement them (nothing matches).
+   ------------------------------------------------------------ */
+@media (prefers-reduced-transparency: reduce) {
+  *,
+  *::before,
+  *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  :root {
+    --glass-blur: 0px;
+  }
+}
+@media (prefers-reduced-data: reduce) {
+  body::before {
+    display: none;
+  }
+  .lp-svg,
+  .plt-svg,
+  .frg-svg,
+  .drn-svg {
+    display: none;
   }
 }
 

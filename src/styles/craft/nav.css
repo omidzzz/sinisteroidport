@@ -40,11 +40,71 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  pointer-events: auto;
+  /* The dock's own BOX is inert — only its controls take pointer events.
+     With `auto` here the 46rem-wide (24rem on phones) empty band swallowed
+     every tap that landed in it, which read as "the row reaches across the
+     screen". Children opt back in below. */
+  pointer-events: none;
   /* Pointer offset written by usePointerRing (never through React state) */
   --ring-x: 0px;
   --ring-y: 0px;
   --ring-a: 0;
+}
+.craft-dock > .craft-dock-bar,
+.craft-dock > .craft-panel,
+.craft-dock > .craft-prompt,
+.craft-dock > .craft-rail {
+  pointer-events: auto;
+}
+
+/* ---------- 1b · Dock bar: the edition + language switches ---------- */
+
+/* The chrome switches the footer used to carry now sit in ONE row with the
+   disclosure, styled as chips (44px, hairline border, raised panel, pill
+   radius) so the row reads as a deliberate control bar instead of stray
+   glyphs floating in empty space. The cluster is end-aligned, so the menu
+   FAB keeps the corner alignment verify-mobile-chrome asserts, and the row
+   occupies the height the button already had — --console-h does not move at
+   either breakpoint. */
+.craft-dock-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+.craft-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.craft-tool {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-panel) 80%, transparent);
+  color: var(--color-ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.craft-tool:hover,
+.craft-tool:focus-visible {
+  color: var(--color-accent-ink);
+  border-color: var(--color-accent-2-ink);
+}
+/* The Latin "EN" pill on a Persian page is code, not prose: no tracking. */
+html[lang="fa"] .craft-tool-lang {
+  letter-spacing: 0.04em;
 }
 
 /* ---------- 2 · The prompt ---------- */
@@ -64,9 +124,8 @@
   box-shadow: var(--elev-2);
   -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
-  transition:
-    border-color var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-base) var(--ease-out);
+  /* border-color only — see the note on .craft-menu-btn below. */
+  transition: border-color var(--dur-fast) var(--ease-out);
 }
 .craft-prompt[data-open] {
   border-color: color-mix(in srgb, var(--color-accent-fill) 55%, transparent);
@@ -333,6 +392,21 @@ html[lang="fa"] .craft-prompt-host {
   color: var(--color-accent-2-ink);
 }
 
+/* Post rows are CONTENT, so they must not borrow the command voice: the teal
+   mono label is reserved for "this row runs a verb". A post keeps the reading
+   face and the ink colour — the only thing that marks it as a row type is the
+   date now sitting in the gutter where a route's ordinal would be. */
+.craft-row[data-kind="post"] .craft-row-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+.craft-row[data-kind="post"] .craft-row-idx {
+  color: var(--color-ink-dim);
+}
+.craft-row[data-kind="post"][data-active] .craft-row-idx {
+  color: var(--color-accent-ink);
+}
+
 /* Empty state — styled as a stderr line, because that is what it is. */
 .craft-tree-empty {
   margin: 0;
@@ -379,9 +453,10 @@ html[lang="fa"] .craft-notice {
   pointer-events: none;
 }
 
-/* Subtle ring glow when active */
+/* Active ring: no drop-shadow filter. State is carried by the
+   border-color rule in nav-enhance.css (loaded after this sheet). */
 .craft-console[data-open] .craft-ring {
-  filter: drop-shadow(0 0 12px rgba(var(--rgb-accent), 0.2));
+  filter: none;
 }
 
 .craft-node {
@@ -466,9 +541,11 @@ html[lang="fa"] .craft-node-label {
   pointer-events: auto;
   -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
-  transition:
-    border-color var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) var(--ease-out);
+  /* border-color only: refinement.css settles the hover/focus shadow at
+     var(--elev-1), which is already this element's resting value, so
+     transitioning box-shadow repainted the button on every hover frame to
+     arrive at the shadow it already had. */
+  transition: border-color var(--dur-fast) var(--ease-out);
 }
 .craft-menu-btn:hover,
 .craft-menu-btn:focus-visible {
@@ -476,19 +553,45 @@ html[lang="fa"] .craft-node-label {
   box-shadow: var(--elev-1), var(--glow-accent-2);
 }
 
+/* The glyph is a hamburger, not a text character: a monoline SVG whose three
+   bars are addressed individually, so the open state can MORPH them into the
+   close X instead of swapping a second icon in. The plate behind it stays
+   (it is the button's only accent), but the type is gone — hence no
+   font-family/font-size here. */
 .craft-menu-glyph {
   display: inline-grid;
   place-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
   border-radius: 50%;
   background: rgba(var(--rgb-accent), 0.16);
   color: var(--color-accent-ink);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
 }
-[dir="rtl"] .craft-menu-glyph {
-  transform: scaleX(-1);
+/* The bars rotate about their own midpoint, so each path needs its own box
+   as the transform origin — the default (the SVG viewport) would swing the
+   outer bars around the icon's centre and fling them off the plate. */
+.craft-menu-glyph .menu-bar {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+/* Open: the top and bottom bars fold onto the centre line and cross, and the
+   middle bar clears out. Driven off aria-expanded — the attribute the button
+   already carries — so this adds no React state and cannot disagree with the
+   panel's real state. transform/opacity only. The rotation direction is the
+   same in both writing directions: an X is symmetric, so there is no RTL
+   variant to write (and mirroring it would just be a no-op). */
+.craft-menu-btn[aria-expanded="true"] .menu-bar:nth-child(1) {
+  transform: translateY(4.5px) rotate(45deg);
+}
+.craft-menu-btn[aria-expanded="true"] .menu-bar:nth-child(2) {
+  transform: scaleX(0.2);
+  opacity: 0;
+}
+.craft-menu-btn[aria-expanded="true"] .menu-bar:nth-child(3) {
+  transform: translateY(-4.5px) rotate(-45deg);
 }
 
 .craft-menu-text {
@@ -562,35 +665,59 @@ html[lang="fa"] .craft-menu-label {
   }
 }
 
-/* ---------- 9b · Mobile: the console collapses to ONE menu FAB ---------- */
-/* On a phone the full dock (button + status rail + prompt ≈ 210px of fixed
+/* ---------- 9b · Mobile: the console collapses to the corner COLUMN ------
+   On a phone the full dock (button + status rail + prompt ≈ 210px of fixed
    chrome, and eight nowrap rail labels colliding at ≤412px) is too much.
-   The collapsed console becomes a single menu button stacked directly
-   ABOVE the floating assistant (.sin-chat-fab, agent-chat.css — mirror its
-   inset/size values below); everything else — filter field, nav links,
-   verbs — lives behind the tap and grows upward from the corner.
-   column-reverse flips only the visual stack: the DOM keeps the button
-   first, so tab order and the landmark reading order stay put. */
+   What survives is a COLUMN of four equal discs up the inline-end edge, one
+   per control, and nothing else — the filter field, the nav links and the
+   verbs all live behind the menu tap and grow upward from the corner.
+
+   Bottom-up, the order is deliberate:
+     1. the menu disclosure  (the way in — nearest the resting thumb, and the
+                              reason the column exists at all)
+     2. the assistant        (a shortcut, not the way in)
+     3. the edition switch
+     4. the language switch  (rarest, so furthest from the thumb)
+   Every disc is --corner-fab and shares the column's inline edge, so the set
+   reads as one control group rather than four unrelated circles.
+
+   The lower three are position:fixed against the screen corner. The assistant
+   is a SEPARATE overlay (agent-chat.css) already pinned to the same corner,
+   so it cannot be interleaved into the dock's own stack — which is why the
+   MENU had to leave the dock rather than the assistant joining it. The dock is
+   left carrying only the panel + prompt, which must clear the whole column so
+   the open tree never slides under a disc.
+
+   column-reverse on the dock flips the panel/prompt stack so the menu grows
+   upward; the DOM keeps the button first, so tab order and the landmark
+   reading order stay put. */
 @media (max-width: 48rem) {
   .craft-console {
-    /* The assistant hardcodes z-index 74; the two now share a corner, so
-       the console's chrome must win (panel, button, not the FAB disc). */
+    /* The assistant FAB hardcodes z-index 74 and the two share a corner, so
+       the console's chrome must outrank the DISC — which it does, because
+       both are body-level stacks and the console mounts AFTER the assistant,
+       so 75 beats 74 on the tie. The assistant's OPEN sheet is the
+       deliberate exception: agent-chat.css keeps the panel at 76 so the
+       corner discs can never cover an open chat or steal its taps. */
     z-index: 75;
     align-items: flex-end;
     padding-inline: 0;
   }
   .craft-dock {
     flex-direction: column-reverse;
-    /* Children stretch to the dock's card width; the FAB keeps its base
-       align-self:flex-end and explicit width, so it stays a corner circle. */
     align-items: stretch;
     gap: 0.5rem;
     width: min(24rem, calc(100vw - 2.5rem));
-    /* The button's right edge lands on the assistant's right edge … */
-    margin-inline-end: 1.25rem;
-    /* … and its bottom clears the assistant's top (1.25rem inset + a
-       3.9rem disc). The shell's own safe-area padding is the air between. */
-    margin-block-end: calc(1.25rem + 3.9rem);
+    /* The dock carries only the panel + prompt, and both have to sit ABOVE
+       the whole fixed column: menu + gap + assistant + gap + the two switch
+       discs + gap. Clearing it here — rather than letting the panel slide
+       under the discs — is what keeps the open tree tappable. */
+    margin-inline-end: var(--corner-inset);
+    margin-block-end: calc(
+      var(--corner-inset) + var(--corner-fab) + var(--corner-gap) +
+        var(--corner-fab) + var(--corner-gap) + 2 * var(--corner-fab) +
+        var(--corner-gap)
+    );
   }
   /* Collapsed = the button alone. The rail retires here (eight labels only
      fit as a desktop status line); prompt + notice join the open menu. */
@@ -603,19 +730,116 @@ html[lang="fa"] .craft-menu-label {
   .craft-console[data-open] .craft-prompt {
     display: flex;
   }
+  /* On a phone this pill is the ONLY search entry in the entire UI — there is
+     no other text field on the page — so it has to read as a field, not as a
+     strip of chrome with a caret. Three things were working against that:
+
+       1. No edge of its own. The pill is the only box, so the typing area
+          was invisible; a hairline well inside the pill gives the input the
+          boundary a text field is expected to have.
+       2. A 50%-opacity placeholder. On a 13px mono line over a lit panel
+          that is not a hint, it is noise — and it is the only sentence
+          telling a first-time phone user that this thing accepts typing.
+       3. 13.12px type. Under 16px, iOS Safari zooms the ENTIRE page when the
+          field takes focus. The console is fixed to the screen corner, so the
+          zoom that was meant to reveal the keyboard instead shoved the
+          console off-screen at the exact moment the user asked for it — the
+          most likely reason a phone user concluded the menu had no search
+          field at all. 16px costs two pixels of pill width and ends it.
+
+     Scoped to ≤48rem: the desktop prompt sits inline with a mouse-driven
+     terminal aesthetic where the small mono voice is deliberate. */
+  .craft-prompt-input {
+    font-size: 1rem;
+    line-height: 1.4;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-1);
+    background: color-mix(in srgb, var(--color-bg) 55%, transparent);
+  }
+  .craft-prompt-input::placeholder {
+    color: var(--color-ink-dim);
+    opacity: 0.9;
+  }
+  .craft-prompt-input:focus {
+    border-color: color-mix(in srgb, var(--color-accent-fill) 55%, transparent);
+  }
+  /* The decorative sub-column retires on a phone. It is a file path for a
+     route and `blog/<slug>` for a post, and on a 390px screen it competes with
+     the one thing that matters — the row's own text — for the 1fr track.
+     Collapsing the grid to [gutter, label, mark] gives the title the full
+     width, and a post's publish date is already in the gutter, so nothing
+     factual is lost. It is already aria-hidden, so removing it from layout
+     costs a screen-reader user nothing. */
+  .craft-row-sub {
+    display: none;
+  }
+  .craft-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
   .craft-console[data-open] .craft-notice {
     display: block;
   }
-  /* The button reads as a FAB: circle, glyph only — label + current route
-     stay clipped (never display:none) so the accessible name still answers
-     "Menu, <route>" at every viewport. */
-  .craft-menu-btn {
-    width: 3rem;
-    height: 3rem;
-    min-height: 3rem;
+  /* The bar is now only a DOM wrapper: both its children are position:fixed,
+     so it has no box of its own to contribute, and the column is positioned
+     straight off the screen corner. That is the whole point — the corner no
+     longer has to be squeezed inside the dock's card, which is what used to
+     push the switches up toward the middle of the screen. */
+  .craft-dock-bar {
+    display: contents;
+  }
+
+  /* Discs 3 and 4 — the two switches, stacked above the assistant. Their
+     pointer-events are restated here because the bar that used to opt them
+     back in (the shell is pointer-events:none) no longer generates a box. */
+  .craft-tools {
+    position: fixed;
+    inset-inline-end: var(--corner-inset);
+    bottom: calc(
+      var(--corner-inset) + var(--corner-fab) + var(--corner-gap) +
+        var(--corner-fab) + var(--corner-gap)
+    );
+    flex-direction: column;
+    gap: var(--corner-gap);
+    pointer-events: auto;
+  }
+  /* ONE SIZE for every disc in the corner column: the two switches, the menu
+     button and the assistant. They are the same control seen from different
+     angles, so they get the same diameter (--corner-fab) and the same
+     circular shape. Grouping only the top pair — which is what a bordered
+     plate around just the switches used to do — is what made the column read
+     as two unrelated clusters; four equal discs read as one set. */
+  .craft-tools .craft-tool {
+    inline-size: var(--corner-fab);
+    block-size: var(--corner-fab);
+    min-inline-size: 0;
+    min-block-size: 0;
+    border-radius: 50%;
+  }
+
+  /* Disc 1 — the menu disclosure, the BOTTOM of the column, nearest the
+     thumb. nav-enhance.css sets position:relative on this button (its hover
+     sheen needs a containing block), so the selector carries an extra class to
+     outrank it: 0,2,0 beats 0,1,0 regardless of sheet order. */
+  .craft-console .craft-menu-btn {
+    position: fixed;
+    inset-inline-end: var(--corner-inset);
+    bottom: var(--corner-inset);
+    width: var(--corner-fab);
+    height: var(--corner-fab);
+    min-height: var(--corner-fab);
     padding: 0;
     justify-content: center;
     border-radius: 50%;
+    pointer-events: auto;
+  }
+  .craft-menu-glyph {
+    inline-size: 2rem;
+    block-size: 2rem;
+    /* The plate is the accent that says "press me" now that the label is
+       gone, so it goes solid rather than the 16% desktop tint. */
+    background: color-mix(in srgb, var(--color-accent-fill) 88%, transparent);
+    color: var(--color-accent-on);
   }
   .craft-menu-text {
     position: absolute;
@@ -626,17 +850,13 @@ html[lang="fa"] .craft-menu-label {
     white-space: nowrap;
   }
 }
-/* agent-chat.css grows the assistant to 4rem at ≤640px — mirror the stack. */
-@media (max-width: 40rem) {
-  .craft-dock {
-    margin-block-end: calc(1.25rem + 4rem);
-  }
-}
-/* … and pulls it in to a 0.9rem inset at ≤480px — mirror both numbers. */
+/* The two inset steps below now live on the --corner-inset token (tokens.css),
+   so the dock only has to narrow its own card to match the assistant's 0.9rem
+   pull-in at ≤480px. The block's margin-inline-end is deliberately NOT
+   restated: reading the token there is what keeps the dock, the menu and the
+   assistant on one number. */
 @media (max-width: 30rem) {
   .craft-dock {
-    margin-inline-end: 0.9rem;
-    margin-block-end: calc(0.9rem + 4rem);
     width: min(24rem, calc(100vw - 1.8rem));
   }
 }
@@ -654,7 +874,10 @@ html[lang="fa"] .craft-menu-label {
 
 /* The global net in craft/motion.css collapses durations; these two would
    still be *present* (a decorative ring implying motion, a staggered
-   entrance), so they are removed outright. */
+   entrance), so they are removed outright. The hamburger→X morph is not in
+   that set: it is the control reporting its own state, and a visitor who
+   asked for less motion still needs to see that the panel opened. It runs on
+   the fast/base durations, which the net already shortens. */
 @media (prefers-reduced-motion: reduce) {
   .craft-ring {
     display: none;

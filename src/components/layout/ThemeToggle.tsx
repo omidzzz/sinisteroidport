@@ -54,7 +54,14 @@ function MoonIcon() {
  * incoming icon spin-pops via a CSS animation that starts whenever it
  * begins matching the [data-theme] selector — zero React state.
  */
-export default function ThemeToggle({ locale }: { locale: Locale }) {
+export default function ThemeToggle({
+  locale,
+  className,
+}: {
+  locale: Locale;
+  /** Extra classes from the host (the dock styles its copy as a chip). */
+  className?: string;
+}) {
   const onClick = () => {
     toggleTheme();
   };
@@ -66,7 +73,10 @@ export default function ThemeToggle({ locale }: { locale: Locale }) {
       aria-label={
         locale === "fa" ? "تغییر حالت روشن/تیره" : "Toggle light/dark mode"
       }
-      className="icon-toggle inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-muted transition-colors hover:text-accent"
+      className={
+        "icon-toggle inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-muted transition-colors hover:text-accent" +
+        (className ? ` ${className}` : "")
+      }
     >
       <span aria-hidden className="icon-sun">
         <SunIcon />

@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import { trackEvent } from "@/lib/analytics";
-import { SparkIcon } from "@/components/ui/icons";
+import { AgentIcon, SparkIcon } from "@/components/ui/icons";
 import SelectionAsk from "./SelectionAsk";
 
 // The chat panel pulls in the AI SDK runtime — never load it until the
@@ -200,28 +200,13 @@ export default function AgentChatLazy({ locale }: { locale: Locale }) {
         onPointerLeave={() => setPressed(false)}
         onClick={() => (visible ? close() : open())}
       >
-        {/* Robot face — rounded-rect head, antenna with ball on top, two large
-            filled optic-sensor circles. The three features that read as "machine"
-            at any size: the boxy head, the antenna ball, and the optic sensors.
-            The viewBox is cropped tight (2 0 20 20) around the art: with a full
-            24x24 canvas ~60% of the box was empty padding, so even a larger
-            percentage only enlarged the padding. Same shapes, same 1.5 stroke,
-            just the face filling its frame. Inherits the button's `color`. */}
-        <svg
-          viewBox="2 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden
-        >
-          <rect x="3" y="7" width="18" height="12" rx="3" />
-          <line x1="12" y1="7" x2="12" y2="3" />
-          <circle cx="12" cy="2.3" r="1.5" fill="currentColor" />
-          <circle cx="8.5" cy="12" r="2" fill="currentColor" />
-          <circle cx="15.5" cy="12" r="2" fill="currentColor" />
-        </svg>
+        {/* The mark lives in icons.tsx beside every other glyph in the system,
+            so it is drawn in the same monoline language and inherits the
+            plate's `color` — which is what lets the assistant re-ink with the
+            edition instead of carrying its own hardcoded art. */}
+        <span className="sin-chat-fab-plate" aria-hidden>
+          <AgentIcon />
+        </span>
         {/* unread-response dot — lit while the panel is hidden and SINISTER
             has finished scheming */}
         <span className="sin-chat-fab-dot" aria-hidden />

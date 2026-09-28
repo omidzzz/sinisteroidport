@@ -23,12 +23,26 @@ import { GA_ID } from "@/lib/analytics";
  * Privacy defaults — this site has no consent banner, so we lean minimal:
  * anonymize_ip, no ad personalization, measurement only (analytics_storage
  * stays granted so Realtime + standard reports record).
+ *
+ * `allow_google_signals:false` is load-bearing beyond privacy: with Signals
+ * on, GA4 keeps firing its ad-side beacons even though ad_storage,
+ * ad_user_data and ad_personalization are all 'denied' and
+ * allow_ad_personalization_signals is false, so the browser made two
+ * requests on every session —
+ *   POST https://stats.g.doubleclick.net/g/collect
+ *   GET  https://www.google.<TLD>/ads/ga-audiences
+ * — and the site's CSP (scripts/build/prepare-cpanel.mjs) intentionally does
+ * NOT allow Google's ad hosts, so both were blocked and logged CSP
+ * violations in the console. Signals off stops the beacons at the source:
+ * Realtime/standard reports are unaffected and no ad endpoint is contacted.
+ * (Verified in Chrome against the live property: with the flag only
+ * google-analytics.com/g/collect measurement hits remain.)
  */
 const BOOTSTRAP = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};window.gtag=gtag;`;
 
 const LOADER = `(function(){var id=${JSON.stringify(
     GA_ID
-  )};function load(){if(window.__gtagLoaded)return;window.__gtagLoaded=1;EVS.forEach(function(t){window.removeEventListener(t,load,true)});var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id='+id;s.async=true;document.head.appendChild(s);var c=document.createElement('script');c.text="window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','"+id+"',{anonymize_ip:true,allow_ad_personalization_signals:false,ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'})";document.head.appendChild(c)}var EVS=['pointerdown','keydown','touchstart','scroll'];EVS.forEach(function(t){window.addEventListener(t,load,{capture:true,passive:true})});})();`;
+  )};function load(){if(window.__gtagLoaded)return;window.__gtagLoaded=1;EVS.forEach(function(t){window.removeEventListener(t,load,true)});var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id='+id;s.async=true;document.head.appendChild(s);var c=document.createElement('script');c.text="window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','"+id+"',{anonymize_ip:true,allow_google_signals:false,allow_ad_personalization_signals:false,ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'})";document.head.appendChild(c)}var EVS=['pointerdown','keydown','touchstart','scroll'];EVS.forEach(function(t){window.addEventListener(t,load,{capture:true,passive:true})});})();`;
 
 export function GoogleTag() {
   return (

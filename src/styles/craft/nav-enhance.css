@@ -43,11 +43,13 @@
   }
 }
 
-/* ---------- Enhanced node ring glow ---------- */
+/* ---------- Console ring state ---------- */
+/* Open state carried by border color alone — no drop-shadow filter, so the
+   ring never forces an offscreen filter paint while the tree is open. */
 
 .craft-console[data-open] .craft-ring {
-  filter: drop-shadow(0 0 12px rgba(var(--rgb-accent), 0.2));
-  transition: filter var(--dur-base) var(--ease-out);
+  border-color: color-mix(in srgb, var(--color-accent-fill) 45%, transparent);
+  transition: border-color var(--dur-base) var(--ease-out);
 }
 
 /* ---------- Magnetic node hover ---------- */
@@ -79,7 +81,7 @@
 }
 
 .craft-row[data-active]:hover {
-  box-shadow: 0 0 16px rgba(var(--rgb-accent), 0.2);
+  border-color: color-mix(in srgb, var(--color-accent-fill) 45%, transparent);
 }
 
 /* ---------- Status rail hover sweep ---------- */
@@ -127,7 +129,6 @@
 
 .craft-rail-link[data-active] {
   border-color: color-mix(in srgb, var(--color-accent-fill) 30%, transparent);
-  box-shadow: 0 0 8px rgba(var(--rgb-accent), 0.15);
 }
 
 .craft-rail-link:hover {
@@ -154,7 +155,14 @@
 
 .craft-prompt[data-open]::before {
   opacity: 1;
-  animation: prompt-scan-line 2.5s linear infinite;
+}
+
+/* Scan-line travel is motion: fine pointers that opted in only. Touch and
+   reduced-motion keep the static accent wash above with zero compositors. */
+@media (prefers-reduced-motion: no-preference) and (pointer: fine) {
+  .craft-prompt[data-open]::before {
+    animation: prompt-scan-line 2.5s linear infinite;
+  }
 }
 
 @keyframes prompt-scan-line {
@@ -166,33 +174,28 @@
   }
 }
 
-/* ---------- Caret glow enhancement ---------- */
+/* ---------- Caret mark ---------- */
+/* Solid caret: the blink is already handled by the steps() caret in
+   home.css; a text-shadow glow here would repaint glyphs every frame. */
 
 .craft-prompt-caret {
-  text-shadow: 0 0 8px rgba(var(--rgb-accent), 0.6);
+  text-shadow: none;
 }
 
-/* ---------- Ring idle animation (subtle breathing) ---------- */
+/* ---------- Ring idle state (static) ---------- */
+/* The breathing loop ran even when the console sat idle offscreen.
+   Idle state is a static dimmed ring now; open-state border above marks
+   attention. Transform/opacity budget: zero always-on compositors here. */
 
 @media (prefers-reduced-motion: no-preference) {
   .craft-console:not([data-open]) .craft-ring {
-    animation: ring-breathe 6s ease-in-out infinite;
-  }
-}
-
-@keyframes ring-breathe {
-  0%, 100% {
-    opacity: calc(var(--ring-a, 0) * 0.6);
-  }
-  50% {
-    opacity: calc(var(--ring-a, 0) * 0.9);
+    opacity: var(--ring-a, 0);
   }
 }
 
 /* ---------- Command row teal glow ---------- */
 
 .craft-row[data-kind="command"][data-active] {
-  box-shadow: 0 0 12px rgba(var(--rgb-accent-2), 0.2);
   border-color: color-mix(in srgb, var(--color-accent-2-fill) 30%, transparent);
 }
 

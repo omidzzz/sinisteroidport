@@ -14,7 +14,9 @@
   position: fixed;
   inset-inline-end: 1.25rem;
   bottom: 1.25rem;
-  z-index: 74; /* above chrome (≤62), below cursor/overlays (90+) */
+  z-index: 74; /* above the desktop chrome (≤62); on phones the corner
+                  chrome (75) and the OPEN panel (76) outrank it, as do
+                  cursor/overlays (90+) */
   display: grid;
   place-items: center;
   overflow: visible;
@@ -89,10 +91,9 @@
   }
 }
 
-/* Mobile: larger tap target AND larger glyph. The robot head + antenna fill
-   more of the seal than the old chat glyph did, so the button grows to 4.4rem
-   and (in the override below, after the general 48% rule) the glyph grows to
-   54% — the head + antenna fill the seal instead of floating in dead space. */
+/* Mobile: larger tap target AND larger plate. Placed in the legacy sheet
+   because this is the sheet that owns the FAB's own box; the corner column
+   unifies the diameter afterwards via --corner-fab (craft/refinement.css). */
 @media (max-width: 640px){
   .sin-chat-fab {
     width: 4.4rem;
@@ -100,28 +101,40 @@
     inset-inline-end: 1rem;
     bottom: 1rem;
   }
+  .sin-chat-fab-plate {
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+  }
 }
 
-/* One glyph rule for EVERY device: the knocked-out glyph reads at ~48% of
-   the button (about 30px inside the 3.9rem seal - the canonical
-   icon-button ratio) and grid centering keeps it optically centered at
-   both breakpoints. The skull art needed per-breakpoint optical fudge (it
-   filled the circle and was scaled 2x under 640px); one stroke on a 24x24
-   grid needs none. display:block guards against any inline baseline gap. */
-.sin-chat-fab svg {
-  display: block;
-  width: 48%;
-  height: 48%;
-  transition: transform 0.25s ease;
+/* The glyph sits in its own PLATE inside the disc, exactly like the menu
+   button's hamburger does (craft/nav.css .craft-menu-glyph). One reason:
+   the two controls share the corner column on a phone, and a disc with a
+   tinted inner disc is the system's established way of drawing "an icon
+   button" — the assistant wearing the same shape as the menu is what makes
+   the stack read as one set. The plate is a plain span rather than a
+   pseudo-element because ::before/::after on this button are already taken
+   by the attention pulse and the glow. */
+.sin-chat-fab-plate {
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 50%;
+  background: rgba(var(--rgb-acid), 0.16);
 }
-/* Mobile glyph override: 54% so the robot head + antenna actually fill the
-   seal on phones. Placed AFTER the general 48% rule so it wins at <=640px
-   (same specificity — source-order tiebreak). */
-@media (max-width: 640px){
-  .sin-chat-fab svg {
-    width: 54%;
-    height: 54%;
-  }
+
+/* One glyph rule for EVERY device: the mark reads at ~62% of the plate
+   (about 20px inside the 2rem disc - the canonical icon-button ratio) and
+   grid centering keeps it optically centered at both breakpoints. The art
+   needs no per-breakpoint optical fudge: its viewBox is already cropped tight
+   around the drawing, so there is no hidden padding to compensate for.
+   display:block guards against any inline baseline gap. */
+.sin-chat-fab-plate svg {
+  display: block;
+  width: 62%;
+  height: 62%;
+  transition: transform 0.25s ease;
 }
 
 
@@ -189,7 +202,13 @@
   position: fixed;
   inset-inline-end: 1.25rem;
   bottom: 1.25rem;
-  z-index: 75;
+  /* 76, not 75: at ≤48rem the console hardcodes z-index 75 for its fixed
+     corner chrome (nav.css §9b) and the console mounts AFTER this panel in
+     the layout DOM, so on a tie the menu disc and the two switch discs
+     painted over the open sheet and swallowed its taps. One step above the
+     console keeps the corner column below the sheet while it is open — and
+     the closed FAB (74) still loses to the same chrome, as intended. */
+  z-index: 76;
   display: flex;
   flex-direction: column;
   width: min(23rem, calc(100vw - 2.5rem));

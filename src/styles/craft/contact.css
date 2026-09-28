@@ -1,231 +1,375 @@
 /* ============================================================
-   CODE & CRAFT — 07 CONTACT · the uplink board
+   CODE & CRAFT — 08 CONTACT · the open channel
    ------------------------------------------------------------
-   The transmission deck became a calm comms board: flat hairline
-   panels on the dark ground, mono values, teal signal accents —
-   no glass, no tilts, no ghost @, no sonar rings. The email
-   channel is the primary uplink (full-width), GitHub and
-   Telegram are equal tiles under it, the phone number closes as
-   a full-width strip, and the availability console ends the
-   page as a status line.
+   Four routes, read in the order they actually get used. The
+   email is the UPLINK: one full-width plate carrying the
+   signature crown, with the address itself as the centerpiece and
+   the two ways to act on it (write / copy) side by side.
 
-   Every rule is scoped to .contact-stage and restates the
-   properties legacy contact.css / pages.css set on these classes
-   with equal-or-higher specificity — craft loads later, so equal
-   counts win; higher counts beat legacy's `.contact-card X`
-   (0,2,0) and its hover states outright.
+   GitHub, Telegram and the telephone number close as a LEDGER —
+   full-width bands ruled by hairlines, the same grammar the
+   education route uses, because they are the same kind of fact: a
+   record, not a card. The page then answers the four questions
+   every enquiry starts with (the terms strip) and ends on a
+   status line that can hand the first message to the agent.
+
+   Flat hairlines and solid panels — no glass, no tilts, no ghost
+   @, no sonar rings. Yellow is the one focal moment (the write
+   button); teal carries interaction (hover, the closing end-rule).
+
+   Every rule is scoped under .contact-stage. craft loads after
+   the legacy sheets, so equal-specificity rules here win on order;
+   where legacy is more specific (.contact-card .contact-value,
+   0,2,0) the scoped selectors match that count and win the same way.
    ============================================================ */
 
-/* The primary uplink keeps a thicker crown than the sibling tiles */
-.contact-stage .contact-hero {
-  border-block-start-width: 3px;
+.contact-stage {
+  overflow-x: clip;
+  padding-block-end: 3rem;
 }
 
-/* ---------- The mantra bands: hairlines, not lightbars ---------- */
+/* ---------- Shared: the mono value, the eyebrow, the mark ---------- */
 
-.contact-stage .contact-cross {
-  margin-block: 1.6rem 0.4rem;
+/* Addresses, handles and numbers are code, not prose. One rule, so the
+   uplink's address and every ledger handle can never drift apart. */
+.contact-stage .contact-value {
+  font-family: var(--font-mono);
+  color: var(--color-ink);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color var(--dur-base) var(--ease-out);
 }
-.contact-stage .contact-cross .ticker-band {
-  background: none;
-  border-block: 1px solid var(--color-line);
-  box-shadow: none;
+
+.contact-stage .contact-section-label {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--color-ink-dim);
 }
-.contact-stage .contact-cross .ticker-band + .ticker-band {
-  border-block-start: 0;
-}
 
-/* ---------- The board: hero full-width, two equal tiles, tel strip ---------- */
-
-@media (min-width: 64rem) {
-  .contact-stage .contact-deck-wild {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .contact-stage .ch-hero-wrap {
-    grid-column: 1 / -1;
-    grid-row: auto;
-  }
-  .contact-stage .ch-tel {
-    grid-column: 1 / -1;
-  }
-}
-
-/* Decorative leftovers from the deck era: off the board entirely */
-.contact-stage .contact-float,
-.contact-stage .ch-ghost,
-.contact-stage .ch-orbit {
-  display: none;
-}
-
-/* ---------- Panels: flat hairlines, teal crown, no glass ---------- */
-
-.contact-stage .edu-card {
-  background: none;
-  box-shadow: none;
-  backdrop-filter: none;
-  border-color: var(--color-line);
-  border-block-start-color: var(--color-accent-2-fill);
-}
-.contact-stage .edu-card:hover,
-.contact-stage .edu-card:focus-within {
-  transform: none;
-  box-shadow: none;
-  border-color: color-mix(in srgb, var(--color-accent-2-fill) 55%, transparent);
-  border-block-start-color: var(--color-accent-fill);
-}
-
-/* Hero: display line solid ink, address as the centerpiece */
-.contact-stage .ch-hero {
-  gap: 0.9rem;
-  padding: 1.8rem 1.6rem;
-  min-height: 15rem;
-}
-.contact-stage .ch-display {
-  margin: 0.6rem 0 0;
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-/* The glitch/stroke register retired: the words stand as ink */
-.contact-stage .ch-display .stroke-line {
-  color: var(--color-ink);
-  -webkit-text-stroke: 0;
-}
-.contact-stage .ch-display .glitchy,
-.contact-stage .ch-display .glitchy:hover,
-.contact-stage .ch-display .glitchy:focus-visible {
-  transition: none;
-  text-shadow: none;
-  animation: none;
-}
-.contact-stage .ch-address {
-  color: var(--color-ink);
-  font-size: clamp(0.9rem, 2vw, 1.15rem);
-}
-.contact-stage .ch-address:hover,
-.contact-stage .ch-address:focus-visible {
-  color: var(--color-accent-2-ink);
-}
-
-/* Head row + icon plates: flat squares, teal glyphs, no sonar */
-.contact-stage .contact-head {
-  justify-content: space-between;
-  margin-block-end: 0.8rem;
-}
-.contact-stage .contact-icon {
+/* The channel mark: a flat framed plate, teal glyph, no sonar ring. */
+.contact-stage .contact-row-mark {
+  display: grid;
+  place-items: center;
+  flex: none;
   inline-size: 2.75rem;
   block-size: 2.75rem;
   padding: 0.55rem;
-  border: 1px solid var(--color-line-strong);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius-2);
   background: none;
   color: var(--color-accent-2-ink);
-}
-.contact-stage .ch-hero .contact-icon {
-  inline-size: 3.4rem;
-  block-size: 3.4rem;
-  padding: 0.7rem;
-}
-.contact-stage .contact-icon::after {
-  content: none;
-}
-.contact-stage a.contact-card:hover .contact-icon,
-.contact-stage a.contact-card:focus-visible .contact-icon {
-  border-color: var(--color-accent-fill);
-  color: var(--color-accent-ink);
-  box-shadow: none;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
 }
 
-/* ---------- Values: mono throughout, teal on hover ---------- */
+/* ---------- 1 · The uplink: the page's one focal plate ---------- */
 
-.contact-stage .contact-value {
+.contact-stage .contact-hero {
+  position: relative;
+  overflow: hidden;
+  margin-block: 2.5rem 3.5rem;
+  padding: 2.1rem 1.75rem 1.75rem;
+  border: 1px solid var(--color-line);
+  /* The crown is a pseudo-element so it can carry the signature gradient;
+     the plate therefore has no top border to fight with. */
+  border-block-start: 0;
+  border-radius: var(--radius-2);
+  background:
+    radial-gradient(
+      120% 130% at 100% 0%,
+      rgba(var(--rgb-accent), 0.08),
+      transparent 60%
+    ),
+    var(--color-panel);
+}
+.contact-stage .contact-hero::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  background: var(--gradient-signature);
+}
+
+.contact-stage .contact-hero-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.contact-stage .contact-hero .contact-row-mark {
+  inline-size: 3.25rem;
+  block-size: 3.25rem;
+  padding: 0.65rem;
+}
+.contact-stage .contact-hero-tag {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: var(--color-ink);
-}
-.contact-stage .ch-tel-num {
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent-ink);
 }
-.contact-stage a.contact-card:hover .contact-value,
-.contact-stage a.contact-card:focus-visible .contact-value {
-  color: var(--color-accent-2-ink);
-}
-
-/* The go arrow keeps legacy's absolute perch; the color language is ours */
-.contact-stage .contact-card .contact-go {
-  color: var(--color-ink-dim);
-}
-.contact-stage a.contact-card:hover .contact-go,
-.contact-stage a.contact-card:focus-visible .contact-go {
-  color: var(--color-accent-2-ink);
-  transform: translateX(3px);
-}
-[dir="rtl"] .contact-stage a.contact-card:hover .contact-go,
-[dir="rtl"] .contact-stage a.contact-card:focus-visible .contact-go {
-  transform: translateX(-3px);
-}
-
-/* Tilts retired — the board is flat (classes kept for the contract) */
-.contact-stage .ch-tilt-a,
-.contact-stage .ch-tilt-b {
-  rotate: none;
-}
-
-/* ---------- Tel strip: the board's closing rail ---------- */
-
-.contact-stage .ch-strip {
-  min-height: 6.5rem;
-  gap: 0.9rem 1.4rem;
-}
-.contact-stage .ch-strip .contact-value {
-  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-  max-inline-size: 100%;
-}
-.contact-stage .contact-utc {
-  margin-block-start: 0.5rem;
-  padding: 0.2rem 0.6rem;
-  border: 1px solid var(--color-line-strong);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  color: var(--color-ink-dim);
-}
-
-/* ---------- Copy chip: hairline until it's used ---------- */
-
-.contact-stage .contact-copy {
-  margin-block-start: 0.7rem;
+.contact-stage .contact-hero-label {
+  margin: 1.4rem 0 0.55rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-ink-dim);
-  background: transparent;
+}
+
+/* The address IS the hero type. anywhere-wrap is what keeps a 26-char
+   address off the horizontal scrollbar on a 320px phone. */
+.contact-stage .contact-hero-address {
+  display: block;
+  font-size: clamp(1.15rem, 4.4vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.contact-stage .contact-hero-address:hover,
+.contact-stage .contact-hero-address:focus-visible {
+  color: var(--color-accent-2-ink);
+}
+
+.contact-stage .contact-hero-note {
+  max-inline-size: 42ch;
+  margin: 0.9rem 0 0;
+  color: var(--color-ink-dim);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.contact-stage .contact-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-block-start: 1.6rem;
+}
+
+/* The write button is the page's single yellow moment, so it is the only
+   .craft-btn here — the copy chip beside it stays a hairline outline. */
+
+/* ---------- The copy chip: a hairline until it is used ---------- */
+
+.contact-stage .contact-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  padding: 0.55rem 1.1rem;
   border: 1px solid var(--color-line-strong);
-  border-radius: var(--radius-pill);
-  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-1);
+  background: none;
+  color: var(--color-ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
   transition:
     color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
 }
-html[lang="fa"] .contact-stage .contact-copy {
-  letter-spacing: 0;
-  text-transform: none;
-  font-size: 0.82rem;
-}
 .contact-stage .contact-copy:hover,
 .contact-stage .contact-copy:focus-visible {
   color: var(--color-accent-ink);
   border-color: var(--color-accent-fill);
-  box-shadow: none;
 }
 
-/* ---------- Foot console: the page ends on a status line ---------- */
+/* Success: the chip wears the signature while the address is on the
+   clipboard, with one spring pop (transform only — the motion net
+   freezes it for reduced-motion visitors). */
+.contact-stage .contact-copy[data-copied="true"] {
+  color: var(--color-accent-on);
+  background: var(--color-accent-fill);
+  border-color: var(--color-accent-fill);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .contact-stage .contact-copy[data-copied="true"] {
+    animation: ct-copy-pop 0.32s var(--ease-spring-snap);
+  }
+}
+@keyframes ct-copy-pop {
+  40% {
+    transform: scale(1.06);
+  }
+}
+
+/* ---------- 2 · The ledger: three ruled bands, no cards ---------- */
+
+.contact-stage .contact-rows {
+  border-block-start: 1px solid var(--color-line);
+}
+/* Reveal owns the entrance; it must not add a box of its own between the
+   rules, or the hairlines break into segments. */
+.contact-stage .contact-rows > .reveal {
+  display: block;
+}
+
+.contact-stage .contact-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "mark text  go"
+    "mark value go";
+  align-items: center;
+  column-gap: 1.1rem;
+  row-gap: 0.15rem;
+  min-block-size: 4.5rem;
+  padding: 1.1rem 0.4rem;
+  border-block-end: 1px solid var(--color-line);
+  text-decoration: none;
+  /* The whole band is the target, so the generous inline inset is the only
+     affordance a phone needs — no per-element hit targets to line up. */
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+.contact-stage .contact-row-mark {
+  grid-area: mark;
+}
+.contact-stage .contact-row-text {
+  grid-area: text;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-inline-size: 0;
+}
+.contact-stage .contact-row-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-ink);
+  transition: color var(--dur-base) var(--ease-out);
+}
+.contact-stage .contact-row-note {
+  color: var(--color-ink-dim);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.contact-stage .contact-row-value {
+  grid-area: value;
+  font-size: 0.9rem;
+}
+.contact-stage .contact-row-go {
+  grid-area: go;
+  display: grid;
+  place-items: center;
+  color: var(--color-ink-dim);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+/* The arrow points the way the row reads, so it mirrors with the document. */
+[dir="rtl"] .contact-stage .contact-row-go {
+  transform: scaleX(-1);
+}
+
+@media (min-width: 48rem) {
+  .contact-stage .contact-row {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: "mark text value go";
+    column-gap: 1.4rem;
+    row-gap: 0;
+    padding-inline: 0.75rem;
+  }
+  .contact-stage .contact-row-value {
+    justify-self: end;
+  }
+}
+
+/* Hover: the band washes teal toward its end-rule. Rows do not lift —
+   nothing on a ledger moves when you read it. */
+.contact-stage .contact-row:hover,
+.contact-stage .contact-row:focus-visible {
+  background-color: color-mix(
+    in srgb,
+    var(--color-accent-2-fill) 8%,
+    transparent
+  );
+  border-block-end-color: var(--color-accent-2-fill);
+}
+.contact-stage .contact-row:hover .contact-row-mark,
+.contact-stage .contact-row:focus-visible .contact-row-mark {
+  border-color: var(--color-accent-fill);
+  color: var(--color-accent-ink);
+}
+.contact-stage .contact-row:hover .contact-row-name,
+.contact-stage .contact-row:focus-visible .contact-row-name {
+  color: var(--color-accent-ink);
+}
+.contact-stage .contact-row:hover .contact-row-value,
+.contact-stage .contact-row:focus-visible .contact-row-value {
+  color: var(--color-accent-2-ink);
+}
+.contact-stage .contact-row:hover .contact-row-go,
+.contact-stage .contact-row:focus-visible .contact-row-go {
+  color: var(--color-accent-2-ink);
+  transform: translateX(3px);
+}
+[dir="rtl"] .contact-stage .contact-row:hover .contact-row-go,
+[dir="rtl"] .contact-stage .contact-row:focus-visible .contact-row-go {
+  transform: scaleX(-1) translateX(3px);
+}
+
+/* The telephone row closes the board. A teal end-rule says "and then it
+   stops here" without spending a whole extra panel on the statement. */
+.contact-stage .contact-row.ch-strip {
+  border-block-end: 2px solid var(--color-accent-2-fill);
+}
+
+/* ---------- 3 · The terms strip ---------- */
+
+.contact-stage .contact-terms {
+  margin-block-start: 3.5rem;
+}
+/* A 1px gap over a line-coloured ground draws the grid's own hairlines,
+   so four cells cost one border rather than eight. */
+.contact-stage .contact-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2);
+  background: var(--color-line);
+  overflow: hidden;
+}
+.contact-stage .contact-fact {
+  padding: 1.05rem 1.15rem;
+  background: var(--color-bg);
+}
+.contact-stage .contact-fact dt {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-2-ink);
+}
+.contact-stage .contact-fact dd {
+  margin: 0.35rem 0 0;
+  color: var(--color-ink);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 48rem) {
+  .contact-stage .contact-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ---------- 4 · The console: the page ends on a status line ---------- */
 
 .contact-stage .contact-console {
   display: flex;
@@ -233,14 +377,10 @@ html[lang="fa"] .contact-stage .contact-copy {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-block: 3rem 0;
-  padding: 1.15rem 0;
-  border: 0;
+  margin-block: 3.5rem 0;
+  padding-block: 1.2rem;
   border-block: 1px solid var(--color-line);
-  border-radius: 0;
-  background: none;
 }
-
 .contact-stage .contact-status {
   display: inline-flex;
   align-items: center;
@@ -248,52 +388,80 @@ html[lang="fa"] .contact-stage .contact-copy {
   margin: 0;
   font-family: var(--font-mono);
   font-size: 0.76rem;
-  letter-spacing: 0.08em;
-  text-transform: none;
+  letter-spacing: 0.06em;
   color: var(--color-ink-dim);
+}
+
+.contact-stage .live-dot {
+  flex: none;
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  border-radius: 50%;
+  background: var(--color-accent-2-fill);
+  box-shadow: 0 0 10px rgba(var(--rgb-accent-2), 0.6);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .contact-stage .live-dot {
+    animation: ct-live 2.4s ease-in-out infinite;
+  }
+  @keyframes ct-live {
+    0%,
+    100% {
+      box-shadow: 0 0 8px rgba(var(--rgb-accent-2), 0.5);
+    }
+    50% {
+      box-shadow: 0 0 14px rgba(var(--rgb-accent-2), 0.9);
+    }
+  }
+}
+
+/* ---------- Persian: tracking breaks cursive joins ---------- */
+
+html[lang="fa"] .contact-stage .contact-section-label,
+html[lang="fa"] .contact-stage .contact-hero-tag,
+html[lang="fa"] .contact-stage .contact-hero-label,
+html[lang="fa"] .contact-stage .contact-copy,
+html[lang="fa"] .contact-stage .contact-fact dt {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-fa-menu);
+  font-size: 0.84rem;
+}
+html[lang="fa"] .contact-stage .contact-hero-label,
+html[lang="fa"] .contact-stage .contact-fact dt {
+  font-size: 0.78rem;
 }
 html[lang="fa"] .contact-stage .contact-status {
   letter-spacing: 0;
   font-family: var(--font-fa-menu);
-  font-size: 0.86rem;
+  font-size: 0.88rem;
 }
 
-.contact-stage .live-dot {
-  inline-size: 0.55rem;
-  block-size: 0.55rem;
-  flex: none;
-  border-radius: 50%;
-  background: var(--color-accent-fill);
-  box-shadow: 0 0 10px rgba(var(--rgb-accent), 0.65);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .contact-stage .live-dot {
-    animation: ch-live 2.4s ease-in-out infinite;
+/* ---------- Narrow phones: the two actions go full width ---------- */
+
+@media (max-width: 30rem) {
+  .contact-stage .contact-hero {
+    padding: 1.8rem 1.25rem 1.4rem;
   }
-  @keyframes ch-live {
-    0%,
-    100% {
-      box-shadow: 0 0 8px rgba(var(--rgb-accent), 0.55);
-    }
-    50% {
-      box-shadow: 0 0 14px rgba(var(--rgb-accent), 0.95);
-    }
+  .contact-stage .contact-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .contact-stage .contact-hero-actions > * {
+    justify-content: center;
+    inline-size: 100%;
   }
 }
 
-/* Span helpers: channel variants that stretch across the grid */
-.contact-span,
-.contact-strip {
-  grid-column: 1 / -1;
-}
+/* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .contact-stage .edu-card,
+  .contact-stage .contact-value,
+  .contact-stage .contact-row,
+  .contact-stage .contact-row-mark,
+  .contact-stage .contact-row-name,
+  .contact-stage .contact-row-go,
   .contact-stage .contact-copy {
     transition: none;
-  }
-  .contact-stage .edu-card:hover,
-  .contact-stage .edu-card:focus-within {
-    transform: none;
   }
 }

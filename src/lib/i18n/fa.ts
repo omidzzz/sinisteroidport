@@ -14,10 +14,10 @@ const fa: Dictionary = {
   ],
   site: "/ sinisteroid.ir",
   city: "تهران، ایران",
-  heroName: "امید",
+  heroTitle: "SINISTEROID",
   heroKicker: "(نمونه‌کار) توسعه‌دهنده فرانت‌اند — از ۲۰۱۲",
-  heroDesc:
-    "توسعهدهنده چابک فرانت‌اند — ری‌اکت، جاوااسکریپت و وب مدرن. پیشینه مطالعات ترجمه دقتی زبانی به مهندسی تمیز و کاربرپسند اضافه می‌کند.",
+  heroIntro:
+    "من امید هستم — توسعه‌دهنده فرانت‌اند در تهران. رابط‌های وب سریع و دسترس‌پذیر و تجربه‌های عامل هوش مصنوعی می‌سازم؛ از معماری رابط تا عملکرد نهایی محصول.",
   ctaWork: "نمونه‌کارهای منتخب",
   ctaWriting: "خواندن نوشته‌ها",
   servicesLabel: "(خدمات) /۰۴",
@@ -85,13 +85,55 @@ const fa: Dictionary = {
     kicker: "(۰۸) کانال ارتباطی",
     title: "تماس",
     intro: "چهار مسیر مستقیم به یک صندوق ایمیل — بدون فرم، بدون ربات، بدون اتاق انتظار.",
+    /* PageHero's two readouts */
+    channels: "کانال",
+    response: "زمان پاسخ",
+    /* The uplink — the email is the primary route, not a fourth tile */
+    uplinkTag: "(خط اصلی)",
+    uplinkLabel: "مستقیم — یک صندوق، که یک آدم می‌خواند",
+    write: "نامه به امید",
+    copy: "کپی نشانی",
+    copied: "کپی شد ✓",
+    /* The ledger — the other three routes, one ruled row each */
+    ledgerLabel: "(کانال‌های دیگر)",
+    /* The terms strip — the facts you would otherwise have to ask for */
+    termsLabel: "(شرایط همکاری)",
+    /* The closing console */
+    status: "آماده همکاری دورکاری در سراسر جهان — تهران، ایران (UTC+3:30)",
+    ask: "از سینیستر بخواه اولین پیامت رو بنویسه",
+    askPrompt:
+      "اولین پیام من به امید رو بنویس — کوتاه، تیز، انسانی. کمک فرانت‌اند می‌خوام.",
+    voice: {
+      email: {
+        name: "ایمیل",
+        note: "سریع‌ترین مسیر — پاسخ معمولاً زیر ۲۴ ساعت.",
+      },
+      github: {
+        name: "گیت‌هاب",
+        note: "کد، آزمایش‌ها و کارهای متن‌باز.",
+      },
+      telegram: {
+        name: "تلگرام",
+        note: "پیام مستقیم — معمولاً همان روز.",
+      },
+      tel: {
+        name: "تلفن",
+        note: "تماس صوتی — تهران، UTC+3:30.",
+      },
+    },
+    facts: [
+      { k: "پاسخ", v: "معمولاً زیر ۲۴ ساعت" },
+      { k: "زبان‌ها", v: "انگلیسی · فارسی" },
+      { k: "منطقه زمانی", v: "UTC+3:30 · تهران" },
+      { k: "نوع همکاری", v: "دورکاری · قراردادی · تمام‌وقت" },
+    ],
   },
   console: {
     label: "ناوبری اصلی",
     rail: "میان‌بر بخش‌ها",
     openMenu: "منو",
     hint: "تایپ کنید تا فیلتر شود · Ctrl+K",
-    placeholder: "فیلتر مسیرها…",
+    placeholder: "جستجوی مسیرها و نوشته‌ها…",
     askPrompt: "چه چیزی از دستیار بپرسم؟",
     copied: "کپی شد",
     empty: "چیزی پیدا نشد — /work یا /lab یا ask",

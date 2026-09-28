@@ -216,9 +216,18 @@ const htaccessContent = `<IfModule mod_rewrite.c>
   # domains only): script-src allows the gtag.js loader from
   # googletagmanager.com; connect-src allows GA4 collect beacons from
   # google-analytics.com / analytics.google.com (incl. EU region
-  # subdomains such as region1.* and the analytics.google.com apex);
-  # img-src allows GA4 audiences image beacons from Google regional domains.
-  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google.com https://*.google.de; font-src 'self' data:; connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://analytics.google.com https://www.google.com https://sinister-mu.vercel.app; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" env=!SINISTEROID_API
+  # subdomains such as region1.* and the analytics.google.com apex).
+  # img-src covers GA4's image beacons as prescribed by Google's CSP
+  # guide: googletagmanager.com (the tag-diagnostics pixel /td) and
+  # *.google-analytics.com (the image fallback GA4 uses for /g/collect
+  # when sendBeacon/fetch keepalive is unavailable).
+  # Google's AD hosts stay out on purpose: GoogleTag.tsx sets
+  # allow_google_signals:false so a compliant tag never calls
+  # stats.g.doubleclick.net or www.google.<TLD>/ads/ga-audiences (those
+  # two were what the browser used to block here). The google.com /
+  # google.de img-src entries are the fallback pixels for regional
+  # audiences if Signals is ever re-enabled property-side.
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.googletagmanager.com https://*.google-analytics.com https://*.google.com https://*.google.de; font-src 'self' data:; connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://analytics.google.com https://www.google.com https://sinister-mu.vercel.app; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'" env=!SINISTEROID_API
 
   # ── Keep the JSON endpoints out of search indexes ─────────────────
   Header set X-Robots-Tag "noindex, nofollow" env=SINISTEROID_API

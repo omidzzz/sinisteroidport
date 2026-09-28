@@ -161,16 +161,26 @@ export default function ConsoleTree({
             }}
           >
             <span className="craft-row-idx" aria-hidden>
-              {item.index ?? "··"}
+              {/* Routes carry their two-digit ordinal. A post carries its
+                  publish date instead — the gutter is the same slot and the
+                  date is the one piece of metadata worth showing before you
+                  open it. */}
+              {item.index ?? (item.kind === "post" ? item.sub : "··")}
             </span>
             <span className="craft-row-label">{item.label}</span>
             <span className="craft-row-sub" dir="ltr" aria-hidden>
               {item.kind === "route"
                 ? routeFilePath(item.value)
-                : `$ ${item.sub}`}
+                : item.kind === "post"
+                  ? `blog/${item.value}`
+                  : `$ ${item.sub}`}
             </span>
             <span className="craft-row-mark" aria-hidden>
-              {item.kind === "route" ? "↵" : "⏎"}
+              {/* Posts navigate exactly like routes do, so they take the same
+                  mark. No third glyph is introduced: this codebase's rule is
+                  that the mark column says HOW the row commits, and both of
+                  these go somewhere. */}
+              {item.kind === "command" ? "⏎" : "↵"}
             </span>
           </li>
         );

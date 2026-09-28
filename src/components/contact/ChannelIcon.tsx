@@ -14,11 +14,15 @@
  * Every color routes through the theme tokens (--color-accent /
  * --color-acid), so light/dark flip for free. Namespaced defs
  * (ci-<kind>-*) keep the four instances collision-free on one page.
+ *
+ * The `ChannelKind` vocabulary itself belongs to lib/contact.ts, beside the
+ * destinations that produce these kinds — this module only draws them.
  */
 
 import type { ReactNode } from "react";
+import type { ChannelKind } from "@/lib/contact";
 
-export type ChannelKind = "email" | "github" | "telegram" | "tel";
+export type { ChannelKind };
 
 function GlowFilter({ id }: { id: string }) {
   return (

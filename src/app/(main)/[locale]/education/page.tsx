@@ -51,7 +51,7 @@ export default async function EducationPage({
   const items = EDUCATION[locale];
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8">
       <Reveal>
       <JsonLd
         data={breadcrumbJsonLd([

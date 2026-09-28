@@ -1,0 +1,46 @@
+/* ============================================================
+   CODE & CRAFT — per-act accent scoping
+   ------------------------------------------------------------
+   An act re-inks itself by re-mapping ONLY accent ROLES — never
+   the surfaces, never the signature FILL. Every sheet that paints
+   through var(--color-accent-ink) / var(--rgb-accent) follows the
+   act without a single component rule changing:
+
+     [data-accent="teal"]   /work/     — the timeline/console hue
+     [data-accent="warm"]   /showcase/ — amber, one step off the signature
+
+   Every value below resolves to one that was ALREADY measured for
+   AA in both editions (tokens.css / themes.css own contrast):
+   teal ink 7.63:1 dark / 5.12:1 light, warn 8.44:1 dark / ink form
+   light. No new colour pairing is introduced.
+
+   Two deliberate limits:
+   1. --color-accent-fill / --color-accent-on stay the signature
+      yellow everywhere — "one focal moment per view" is the
+      system's rule, and CTAs must not change voice per route.
+   2. The `teal` scope also moves --color-accent (its ink form is
+      fill-safe: #4fc9dc behind --color-accent-on = 7.5:1), while
+      `warm` does NOT (the light edition's warm ink #8a5c00 fails
+      as a fill) — so warm only re-inks text/tints/glows. That
+      asymmetry is the safety rule, not an oversight.
+
+   Hard-coded literals in legacy sheets stay signature yellow on
+   purpose: the scope shifts the ROLE voice, not the brand.
+   ============================================================ */
+
+[data-accent="teal"] {
+  --color-accent: var(--color-accent-2-ink);
+  --color-accent-ink: var(--color-accent-2-ink);
+  --color-acid: var(--color-accent-2-ink);
+  --color-acid-ink: var(--color-accent-2-ink);
+  --rgb-accent: var(--rgb-accent-2);
+  --rgb-acid: var(--rgb-accent-2);
+  --glow-accent: var(--glow-accent-2);
+}
+
+[data-accent="warm"] {
+  --color-accent-ink: var(--warn);
+  --color-acid-ink: var(--warn);
+  --rgb-accent: var(--rgb-warn);
+  --rgb-acid: var(--rgb-warn);
+}

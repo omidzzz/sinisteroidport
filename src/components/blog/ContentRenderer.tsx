@@ -45,13 +45,19 @@ export default function ContentRenderer({
   let calloutIndex = 0;
   const nodes: ReactNode[] = [];
 
+  /* The article's opening paragraph — identified once so the drop cap
+     lands only there, never on later lead-styled paragraphs. */
+  const firstPara = blocks.findIndex((b) => b.type === "paragraph");
+
   blocks.forEach((block, i) => {
     switch (block.type) {
       case "heading":
         nodes.push(<HeadingBlock key={i} block={block} index={i} />);
         break;
       case "paragraph":
-        nodes.push(<ParagraphBlock key={i} block={block} />);
+        nodes.push(
+          <ParagraphBlock key={i} block={block} first={i === firstPara} />
+        );
         break;
       case "list":
         nodes.push(<ListBlock key={i} block={block} />);

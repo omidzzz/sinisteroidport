@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import ScrambleText from "../ui/ScrambleText";
+import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/blog/types";
 import {
   isFallbackTranslation,
   postHref,
   postTitle,
+  postExcerpt,
   postDateKey,
 } from "@/lib/blog/format";
 import { type Locale } from "@/lib/i18n";
@@ -21,7 +21,7 @@ type ApiRow = {
 };
 
 /**
- * Home-page "Latest writings" — a horizontal, snap-scrolling strip of cards.
+ * Home-page "Latest writings" — one lead essay and two compact secondary links.
  * Prerendered from the content snapshot for SEO, then refreshed from MySQL via
  * /api/get_posts.php so newly published posts appear without rebuilding.
  */
@@ -33,14 +33,15 @@ export default function LatestPostsLive({
   initial: Post[];
 }) {
   const [items, setItems] = useState<Post[]>(initial);
+  const initialRef = useRef(initial);
 
   useEffect(() => {
     let cancelled = false;
     const start = () => {
       if (cancelled) return;
-      // ?limit=3 — the strip only renders three cards; the unbounded payload
-      // (full content_json for every post, ~475 KiB) used to land mid-load
-      // and compete with the LCP image for bandwidth.
+      // ?limit=3 — the editorial grid renders one lead and two supporting cards;
+      // the unbounded payload (full content_json for every post, ~475 KiB)
+      // would compete with visible media inside the measurement window.
       fetch("/api/get_posts.php?limit=3")
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("not ok"))))
       .then((rows: ApiRow[]) => {
@@ -59,7 +60,7 @@ export default function LatestPostsLive({
             ...r,
             // API rows may omit the cover — keep the prerendered one by slug
             featuredImage: r.featuredImage ??
-              initial.find((p) => p.slug === r.slug)?.featuredImage,
+              initialRef.current.find((p) => p.slug === r.slug)?.featuredImage,
           }));
         setItems(latest as unknown as Post[]);
         // Broadcast the live published-count so hero stats stay in sync
@@ -71,7 +72,7 @@ export default function LatestPostsLive({
         /* keep prerendered/fallback data */
       });
     };
-    // The prerendered strip is already on screen — the live sync must never
+    // The prerendered writing grid is already on screen — the live sync must never
     // compete with the LCP image for bandwidth inside the measurement window.
     // requestIdleCallback is the wrong tool: on an otherwise-fast page the
     // main thread goes idle ~2 s in (inside the PSI trace), which is exactly
@@ -104,19 +105,21 @@ export default function LatestPostsLive({
     <div className="post-grid">
       {items.map((post, i) => {
         const title = postTitle(post, locale);
-        const cover = post.featuredImage?.src || "";
+        const excerpt = postExcerpt(post, locale);
+        const cover = post.featuredImage?.src || `/og/${post.slug}.jpg`;
         const fallback = isFallbackTranslation(post, locale);
         const date = postDateKey(post.date);
         const href = postHref(post, locale);
-        const cls = "post-card-grid";
+        const lead = i === 0;
+        const cls = `post-card-grid${lead ? " post-card-grid--lead" : ""}`;
         const card = (
           <>
             <span dir="ltr" aria-hidden className="post-idx">
               PK.0{i + 1}
             </span>
-            {cover && (
-              <div className="bento-frame post-thumb">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+            <div className="bento-frame post-thumb">
+              {cover && (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={cover}
                   alt=""
@@ -124,15 +127,22 @@ export default function LatestPostsLive({
                   height={240}
                   decoding="async"
                   loading="lazy"
-                  onError={(e) =>
-                    (e.currentTarget.closest(".post-thumb") as HTMLElement | null)?.classList.add(
-                      "no-cover"
-                    )
-                  }
+                  onError={(e) => {
+                    const image = e.currentTarget;
+                    if (image.dataset.fallbackApplied) {
+                      image.classList.add("image-failed");
+                      return;
+                    }
+                    image.dataset.fallbackApplied = "true";
+                    image.src = `/og/${post.slug}.jpg`;
+                  }}
                 />
-                <span aria-hidden className="bento-scan" />
-              </div>
-            )}
+              )}
+              <span className="post-thumb-fallback" aria-hidden="true">
+                PK.0{i + 1}
+              </span>
+              <span aria-hidden className="bento-scan" />
+            </div>
             <div className="post-card-meta">
               <span dir="ltr" className="post-date">
                 {date || `00${i + 1}`}
@@ -148,9 +158,8 @@ export default function LatestPostsLive({
                   : "— published in English"}
               </span>
             )}
-            <span className="post-card-title">
-              <ScrambleText text={title} />
-            </span>
+            <span className="post-card-title">{title}</span>
+            {lead && excerpt && <p className="post-card-excerpt">{excerpt}</p>}
             <span className="post-card-action">
               <ArrowIcon className="post-arrow" />
               <span dir="ltr" className="post-action-label">

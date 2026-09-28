@@ -1,5 +1,4 @@
 import VTLink from "@/components/shell/ViewTransition";
-import ThemeToggle from "./ThemeToggle";
 import LogoType from "./LogoType";
 import { ArrowIcon } from "../ui/icons";
 import AskSinisterButton from "../blog/AskSinisterButton";
@@ -7,178 +6,180 @@ import { getDict, loc, type Locale } from "@/lib/i18n";
 import { NAV_PATHS } from "@/lib/nav";
 
 /**
- * FOOTER — COLOPHON (Code & Craft).
+ * FOOTER — COLOPHON (Code & Craft) · END OF TRANSMISSION
  *
- * One measure of prose whose words ARE the sitemap; reach routes, feeds,
- * the assistant, the language swap and the theme toggle ride as marginalia
- * beneath it. The yellow end-mark returns to the top — zero-JS smooth
- * anchor. Styled by craft/footer.css, scoped to this register.
+ * Redesign v2. The prose sentence that used to BE the sitemap became a
+ * scannable index — Index (the eight routes), Reach (the four contact
+ * marks) and Elsewhere (feeds, the agent, support) — under a one-line lede.
+ * A mono metadata rail closes the page, and the edition/language switches
+ * moved OUT of here into the dock tools, so every control has exactly one
+ * home instead of two.
+ *
+ * Kept on purpose: the transparent ground (no seam — diag-footer.mjs), the
+ * --console-h tail reserve that keeps the end-mark tappable under the fixed
+ * dock (verify-mobile-chrome.mjs), the eager render — no content-visibility
+ * (verify-craft.mjs) — and the 5.6rem inline-end clearance that parks the
+ * seal clear of the assistant FAB at every width. The EN lede must keep the
+ * words "a working console": verify-craft asserts the console register.
  */
 export default function Footer({ locale }: { locale: Locale }) {
   const t = getDict(locale);
   const fa = locale === "fa";
   const year = new Date().getFullYear();
 
-  /* Reach routes — same contacts as before, resolved as footnote marks. */
-  const reach: Array<[string, string]> = [
-    ["Email", "mailto:ghadamgahi.omid@gmail.com"],
-    ["GitHub", "https://github.com/omidzzz"],
-    ["Telegram", "https://t.me/simplyeffedup"],
-    ["Tel · +98 936 747 1992", "tel:+989367471992"],
+  /* Reach — the same four contact marks the prose carried as footnotes. */
+  const reach: Array<{
+    label: string;
+    href: string;
+    external?: boolean;
+    ltr?: boolean;
+  }> = [
+    { label: fa ? "رایانامه" : "Email", href: "mailto:ghadamgahi.omid@gmail.com" },
+    { label: fa ? "گیت‌هاب" : "GitHub", href: "https://github.com/omidzzz", external: true },
+    { label: fa ? "تلگرام" : "Telegram", href: "https://t.me/simplyeffedup", external: true },
+    { label: fa ? "تلفن" : "Telephone", href: "tel:+989367471992", ltr: true },
   ];
-  const foot = (i: number) => ["¹", "²", "³", "⁴"][i] ?? "";
+
+  const tech = [
+    "SET IN SPACE GROTESK · INTER · JETBRAINS MONO · CAIRO",
+    "NEXT.JS × REACT",
+    `${t.city} · ${year} · SINISTEROID.IR`,
+  ];
 
   return (
-    /* NO content-visibility here, deliberately: a skipped footer renders as a
-       blank band at the page end and then paints abruptly, and the document
-       jumps by the placeholder's error (the real colophon measures ~514px,
-       the `auto 720px` guess reserved 720px). The 30 KiB Arabic face the
-       "فا" pill pulls on /en/ is by far the cheaper cost. */
-    <footer className="relative mt-32 overflow-hidden">
-      <div className="colophon-rule">
-        <div className="mx-auto max-w-[86rem] px-5 pb-14 pt-10">
-          {/* ── the sentence: the sitemap, set as prose ── */}
-          <p className="colophon-body">
+    <footer className="craft-footer">
+      <div className="craft-footer-signal" aria-hidden />
+      <div className="craft-footer-inner">
+        {/* ── lede: the console signs off ── */}
+        <header className="craft-footer-lede">
+          <p className="craft-footer-eyebrow">
+            <span dir="ltr" aria-hidden>
+              [eof]
+            </span>
+            {fa ? "پایان انتقال" : "End of transmission"}
+          </p>
+          <p className="craft-footer-line">
             {fa ? (
               <>
-                این سایت یک <b>کنسول کاری</b> است — هر جا تایپ کنید
-                تا حرکت کنید، یا از میان‌برهای نوار وضعیت استفاده کنید. بخش‌هایش:{" "}
-                {t.nav.map((item, i) => (
-                  <span key={NAV_PATHS[i]}>
-                    <VTLink
-                      href={loc(locale, NAV_PATHS[i])}
-                      className="transition-colors"
-                    >
-                      {item.label}
-                    </VTLink>
-                    {i < t.nav.length - 1 ? " · " : ""}
-                  </span>
-                ))}
-                . سفارش و اصلاح از راه{" "}
-                <a href={reach[0][1]}>رایانامه</a> می‌رسد؛ اصل متن روی{" "}
-                <a href={reach[1][1]} target="_blank" rel="noopener noreferrer">
-                  گیت‌هاب
-                </a>{" "}
-                باز است؛ پیام از{" "}
-                <a href={reach[2][1]} target="_blank" rel="noopener noreferrer">
-                  تلگرام
-                </a>{" "}
-                یا{" "}
-                <a href={reach[3][1]} dir="ltr">
-                  تلفن
-                </a>{" "}
-                می‌گذرد؛ و{" "}
-                <a
-                  href="https://donatr.ee/sinisteroid/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  حمایت
-                </a>{" "}
-                با روشن ماندنش همراهی می‌کند.
+                این سایت یک <b>کنسول کاری</b> است — هر جا تایپ کنید تا حرکت
+                کنید، یا از میان‌برهای نوار وضعیت استفاده کنید.
               </>
             ) : (
               <>
-                This site is <b>a working console</b> — start typing
-                anywhere to navigate, or take the shortcuts in the status
-                rail. Its sections are{" "}
-                {t.nav.map((item, i) => (
-                  <span key={NAV_PATHS[i]}>
-                    <VTLink
-                      href={loc(locale, NAV_PATHS[i])}
-                      className="transition-colors"
-                    >
-                      {item.label}
-                    </VTLink>
-                    {i < t.nav.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-                . Corrections and commissions reach{" "}
-                <a href={reach[0][1]}>Email{foot(0)}</a>; the source stays open
-                on{" "}
-                <a href={reach[1][1]} target="_blank" rel="noopener noreferrer">
-                  GitHub{foot(1)}
+                This site is <b>a working console</b> — start typing anywhere to
+                navigate, or take the shortcuts in the status rail.
+              </>
+            )}
+          </p>
+        </header>
+
+        {/* ── the index: every destination, one hop away ── */}
+        <nav
+          className="craft-footer-index"
+          aria-label={fa ? "نقشه سایت" : "Sitemap"}
+        >
+          <section className="craft-footer-col">
+            <h2 className="craft-footer-head">{fa ? "(فهرست)" : "(Index)"}</h2>
+            <ul className="craft-footer-list">
+              {t.nav.map((item, i) => (
+                <li key={NAV_PATHS[i]}>
+                  <VTLink
+                    href={loc(locale, NAV_PATHS[i])}
+                    className="craft-footer-link"
+                  >
+                    {item.label}
+                  </VTLink>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section className="craft-footer-col">
+            <h2 className="craft-footer-head">{fa ? "(تماس)" : "(Reach)"}</h2>
+            <ul className="craft-footer-list">
+              {reach.map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className="craft-footer-link"
+                    dir={item.ltr ? "ltr" : undefined}
+                    {...(item.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="craft-footer-col">
+            <h2 className="craft-footer-head">
+              {fa ? "(بیشتر)" : "(Elsewhere)"}
+            </h2>
+            <ul className="craft-footer-list">
+              <li>
+                <a
+                  href={fa ? "/fa/feed.xml" : "/feed.xml"}
+                  className="craft-footer-link"
+                  aria-label={`${t.rss} ${fa ? "خوراک" : "feed"}`}
+                >
+                  {t.rss}
                 </a>
-                ; word travels over{" "}
-                <a href={reach[2][1]} target="_blank" rel="noopener noreferrer">
-                  Telegram{foot(2)}
-                </a>{" "}
-                or{" "}
-                <a href={reach[3][1]}>telephone{foot(3)}</a>; and{" "}
+              </li>
+              <li>
+                <a
+                  href={fa ? "/fa/feed.json" : "/feed.json"}
+                  className="craft-footer-link"
+                  aria-label={t.jsonFeed}
+                >
+                  {t.jsonFeed}
+                </a>
+              </li>
+              <li>
+                <AskSinisterButton
+                  locale={locale}
+                  className="craft-footer-link"
+                  label={fa ? "سینستر" : "SINISTER"}
+                  prompt={
+                    fa
+                      ? "خودت رو معرفی کن — این‌جا چه‌کارهایی ازت برمیاد؟"
+                      : "Introduce yourself — what can you do around here?"
+                  }
+                />
+              </li>
+              <li>
                 <a
                   href="https://donatr.ee/sinisteroid/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="craft-footer-link"
                 >
-                  the presses
+                  {fa ? "حمایت" : "Support"}
                 </a>
-                keep running on support.
-              </>
-            )}
-          </p>
+              </li>
+            </ul>
+          </section>
+        </nav>
 
-          {/* ── marginalia: feeds, assistant, language, edition ── */}
-          <div className="colophon-marginalia mt-9">
-            <span className="label">{t.follow}</span>
-            <a
-              href={fa ? "/fa/feed.xml" : "/feed.xml"}
-              aria-label={`${t.rss} ${fa ? "خوراک" : "feed"}`}
-              className="colophon-note transition-colors hover:text-acid"
-            >
-              {t.rss}
-            </a>
-            <a
-              href={fa ? "/fa/feed.json" : "/feed.json"}
-              aria-label={t.jsonFeed}
-              className="colophon-note transition-colors hover:text-acid"
-            >
-              {t.jsonFeed}
-            </a>
-            <AskSinisterButton
-              locale={locale}
-              className="colophon-note transition-colors hover:text-acid"
-              label={fa ? "سینستر" : "SINISTER"}
-              prompt={
-                fa
-                  ? "خودت رو معرفی کن — این‌جا چه‌کارهایی ازت برمیاد؟"
-                  : "Introduce yourself — what can you do around here?"
-              }
-            />
-            <span aria-hidden className="h-px w-8 bg-line" />
-            <span className="colophon-note">
-              {fa ? (
-                <VTLink href="/en" className="transition-colors hover:text-acid">
-                  EN
-                </VTLink>
-              ) : (
-                <VTLink href="/fa" className="lang-switch-fa transition-colors hover:text-acid">
-                  فا
-                </VTLink>
-              )}
-            </span>
-            <ThemeToggle locale={locale} />
-          </div>
-
-          {/* ── technical line + end-mark ── */}
-          <div className="colophon-marginalia mt-4">
-            <p className="colophon-note" suppressHydrationWarning>
+        {/* ── the rail: legal + tech on the start, lockup + seal on the end ── */}
+        <div className="craft-footer-meta">
+          <div className="craft-footer-legal">
+            <p className="craft-footer-note" suppressHydrationWarning>
               © {year} {t.rights}
             </p>
-            <p aria-hidden dir="ltr" className="colophon-note">
-              SET IN SPACE GROTESK · INTER · JETBRAINS MONO · CAIRO
-            </p>
-            <p aria-hidden dir="ltr" className="colophon-note">
-              NEXT.JS × REACT
-            </p>
-            <p aria-hidden dir="ltr" className="colophon-note">
-              {t.city} · {year} · SINISTEROID.IR
-            </p>
-            {/* easter egg lives here too — the lockup accepts 7 secret clicks */}
-            <LogoType variant="full" activate className="text-base" />
+            {tech.map((line) => (
+              <p key={line} dir="ltr" className="craft-footer-note" aria-hidden>
+                {line}
+              </p>
+            ))}
+          </div>
+          <div className="craft-footer-sign">
+            <LogoType variant="full" activate className="craft-footer-lockup" />
             <a
               href="#top"
               aria-label={fa ? "بازگشت به بالای صفحه" : "Back to top"}
-              className="end-mark ms-auto"
+              className="end-mark"
             >
               <ArrowIcon className="size-4 -rotate-90" />
             </a>

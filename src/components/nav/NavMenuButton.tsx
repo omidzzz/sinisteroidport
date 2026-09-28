@@ -1,6 +1,7 @@
 "use client";
 
 import type { RefObject } from "react";
+import { MenuIcon } from "@/components/ui/icons";
 import type { Dictionary } from "@/lib/i18n";
 
 /**
@@ -15,6 +16,15 @@ import type { Dictionary } from "@/lib/i18n";
  * current route so the chrome always answers "where am I?" even when the
  * tree is collapsed — at every viewport, including the phones that clip the
  * route line out of the visual layout (see nav.css ≤30rem).
+ *
+ * The mark is a hamburger, and on a phone that mark is doing all the work:
+ * at ≤48rem the label and the route line are clipped to 1px (visually gone,
+ * still in the accessible name), leaving a bare 3rem circle. A play triangle
+ * there reads as media; three bars read as "menu" in any culture, which is
+ * the whole point of a disclosure button nobody has been taught. It morphs
+ * into a close X while the panel is open — that motion is CSS, keyed off the
+ * aria-expanded this component already writes (craft/nav.css §8), so the
+ * open/close state keeps exactly one home.
  */
 export default function NavMenuButton({
   dict,
@@ -45,7 +55,7 @@ export default function NavMenuButton({
       onClick={onToggle}
     >
       <span className="craft-menu-glyph" aria-hidden>
-        {open ? "×" : "▸"}
+        <MenuIcon />
       </span>
       <span className="craft-menu-text">
         <span className="craft-menu-label">{dict.console.openMenu}</span>

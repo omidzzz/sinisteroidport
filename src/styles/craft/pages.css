@@ -10,7 +10,127 @@
 
 .craft-page-hero {
   position: relative;
-  padding-block: 4.5rem 2.5rem;
+  /* The clearance for the fixed console dock lives HERE, inside the hero, and
+     not as `pt-28` on each route's outer container. That placement is what
+     makes the ambient wash work.
+
+     The wash is this element's own ::before, so it is anchored to this box.
+     While the 7rem clearance sat on the container, the hero began 7rem down
+     the page and so did the light — leaving a flat charcoal band across the
+     top of every interior route, exactly where the home page already had
+     its glow. That is the "empty strip above the navbar" this removes.
+
+     Owning the spacing makes this box the top of the page, the wash now
+     covers the full screen on every route, and the content lands at exactly
+     the same place it did before (7rem + 4.5rem = 11.5rem from the page top).
+     The nine route containers therefore drop their `pt-28` entirely. */
+  padding-block: 11.5rem 2.5rem;
+}
+
+/* ---------- The ambient wash, shared by BOTH hero families ----------
+   The home hero (.craft-hero) and every interior route hero
+   (.craft-page-hero) used to carry their own copy of this wash, in three
+   places (home.css, refinement.css, and here), with three different
+   geometries and three different alphas. They are now ONE rule.
+
+   Full-bleed, and that is the whole point. The wash is a background, not
+   a panel: sized to its container it terminated at the max-w-6xl edge, so
+   on a wide screen the glow visibly STOPPED short of both screen edges —
+   a hard vertical cut roughly 140px from each side, which read as a
+   rendering fault rather than a light. `left: 50%` + `translateX(-50%)`
+   re-centres a 100vw box on the viewport regardless of how narrow the
+   container is, and physical properties are used deliberately: the same
+   logical-property trick would resolve to `right: 50%` under RTL and
+   then walk the wash off the opposite edge.
+
+   The negative block insets let the ellipse start above the eyebrow and
+   finish below the stats, so the falloff happens off-box and the visible
+   edge of the element is never the visible edge of the gradient. The
+   vertical radii are generous for the same reason — an ellipse that
+   reaches `transparent` before the viewport edge cannot show a seam. */
+.craft-page-hero::before,
+.craft-hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  inset-block: -22% -34%;
+  /* Belt and braces for "fill the whole screen": the box is sized from the
+     hero, and a short hero (a route with a one-line intro) would otherwise
+     leave the lower part of a tall viewport flat. min-height guarantees the
+     wash always covers at least one viewport, anchored to the top of the
+     page. dvh with a vh fallback so a mobile browser's collapsing URL bar
+     cannot reveal an unpainted strip. */
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    42% 54% at 30% 32%,
+    rgba(var(--rgb-accent), 0.085),
+    transparent 72%
+  );
+}
+/* The light source belongs over the text, so it follows the reading edge:
+   under RTL the copy is flush right and an unmirrored glow would sit in
+   the empty gutter. */
+[dir="rtl"] .craft-page-hero::before,
+[dir="rtl"] .craft-hero::before {
+  background: radial-gradient(
+    42% 54% at 70% 32%,
+    rgba(var(--rgb-accent), 0.085),
+    transparent 72%
+  );
+}
+
+/* ---------- The article page: same light, no hero to hang it on ----------
+   An article is the one route family with no PageHero — it is a reading
+   template, not an index — so it inherited the flat charcoal top band the
+   route heroes just lost. It gets the SAME light, anchored to the same
+   place, by giving the article box the wash directly.
+
+   Anchoring, not inheriting: the hero wash is sized with percentage insets
+   off its own box, which is safe for a box roughly one viewport tall. An
+   article box is 5-10 viewports tall, so the same `inset-block: -22% -34%`
+   would push the ellipse more than a viewport above the page and the light
+   would vanish off the top. Hence a viewport-height box pinned to the top
+   of the article instead: same centre (30% 32% of one screen), same alpha,
+   so the light lands on the title exactly where it lands on every other
+   route, and the reading column below simply fades to the bare ground.
+
+   No padding moves — the article keeps `py-16` and its content lands
+   exactly where it did. */
+.craft-article {
+  position: relative;
+}
+.craft-article::before {
+  content: "";
+  position: absolute;
+  /* Physical, to match the translateX(-50%) re-centring above: the same
+     logical-property spelling would resolve to `right: 50%` under RTL and
+     walk the wash off the opposite edge. */
+  left: 50%;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  transform: translateX(-50%);
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    42% 54% at 30% 32%,
+    rgba(var(--rgb-accent), 0.085),
+    transparent 72%
+  );
+}
+/* Mirrors the hero RTL variant: the light follows the reading edge. */
+[dir="rtl"] .craft-article::before {
+  background: radial-gradient(
+    42% 54% at 70% 32%,
+    rgba(var(--rgb-accent), 0.085),
+    transparent 72%
+  );
 }
 
 /* Ghost numeral — the route's ordinal, bleeding off the inline edge */
@@ -73,6 +193,32 @@ html[lang="fa"] .craft-eyebrow {
 html[lang="fa"] .craft-title {
   letter-spacing: 0;
   line-height: 1.15;
+}
+
+/* Signature rule under the route title — the gradient's first
+   in-flow appearance, so every interior page opens the same way.
+   Scroll-drawn via view() like .x-rule (motion net covers reduce). */
+.craft-title::after {
+  content: "";
+  display: block;
+  width: clamp(5rem, 18vw, 9rem);
+  height: 3px;
+  margin-block-start: 1.1rem;
+  background: var(--gradient-signature);
+  box-shadow: 0 0 14px rgba(var(--rgb-accent), 0.35);
+  transform-origin: left center;
+}
+[dir="rtl"] .craft-title::after {
+  transform-origin: right center;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .craft-title::after {
+      animation: x-grow linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 32%;
+    }
+  }
 }
 
 .craft-intro {

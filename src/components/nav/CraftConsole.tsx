@@ -12,6 +12,7 @@ import { getDict, loc, type Locale } from "@/lib/i18n";
 import { buildCommands } from "@/lib/nav/commands";
 import { CONSOLE_EVENTS, CONSOLE_IDS } from "@/lib/nav/constants";
 import { buildRoutes } from "@/lib/nav/routes";
+import { buildPostItems, loadPostRows } from "@/lib/nav/search";
 import type { ConsoleItem, ConsoleVerb } from "@/lib/nav/types";
 import { useConsole } from "@/lib/nav/use-console";
 import { usePointerRing } from "@/lib/nav/use-pointer-ring";
@@ -20,6 +21,7 @@ import ConsolePrompt from "./ConsolePrompt";
 import ConsoleRail from "./ConsoleRail";
 import ConsoleRing from "./ConsoleRing";
 import ConsoleTree from "./ConsoleTree";
+import DockTools from "./DockTools";
 import NavMenuButton from "./NavMenuButton";
 
 /** How long a verb's feedback line stays on screen. */
@@ -67,6 +69,51 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
     commands
   );
   const open = state.status === "open";
+
+  /* ── Live post index ────────────────────────────────────────────────
+     Fetched ONCE per page view, on idle, and handed to the machine as a
+     third registry. Three things this deliberately is not:
+
+     • Not during render. A fetch in the body would put a network round-trip
+       between the visitor and their first paint of the page.
+     • Not on menu open. The index is ~8KB and the menu is reachable by tap;
+       a visitor who opens the menu to pick a route should never wait for
+       content search they did not ask for.
+     • Not awaited before first paint. It resolves whenever it resolves, and
+       the console is fully usable the whole time — it simply gains post rows
+       a moment later.
+
+     requestIdleCallback is used when available (with a timeout so a busy main
+     thread still gets it done); setTimeout is the Safari fallback. */
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => {
+      loadPostRows(locale).then((rows) => {
+        if (cancelled) return;
+        dispatch({ type: "posts", posts: buildPostItems(rows) });
+      });
+    };
+    const idleHost = window as Window & {
+      requestIdleCallback?: (
+        cb: () => void,
+        opts?: { timeout: number },
+      ) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    // Tested by PRESENCE, not truthiness: the compiler knows the DOM lib
+    // declares requestIdleCallback as always defined, so `if (idle)` is
+    // flagged as a tautology. Safari is the case that matters, and there the
+    // property is genuinely absent.
+    const hasIdle = typeof idleHost.requestIdleCallback === "function";
+    const handle = hasIdle
+      ? idleHost.requestIdleCallback!(load, { timeout: 2000 })
+      : window.setTimeout(load, 1200);
+    return () => {
+      cancelled = true;
+      if (hasIdle) idleHost.cancelIdleCallback?.(handle);
+      else window.clearTimeout(handle);
+    };
+  }, [locale, dispatch]);
 
   const shellRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -171,11 +218,12 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
           close();
           break;
         }
-        case "sudo":
+        case "sudo": {
           // The one command that exists purely to be refused.
           announce(dict.console.verbs.sudo);
           dispatch({ type: "clear" });
           break;
+        }
       }
     },
     [announce, close, dict, dispatch, locale, pathname, router, state.buffer]
@@ -186,6 +234,17 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
       if (item.kind === "route") {
         close();
         router.push(loc(locale, item.value));
+        return;
+      }
+      if (item.kind === "post") {
+        // A live article from the DB index. Handled here rather than in
+        // runVerb because a post row carries a SLUG in `value`, not one of the
+        // six verbs — so it can never appear in that switch at all. The route
+        // is not prerendered: a post published after the last build exists only
+        // via the PHP shell, which resolves /blog/<slug>/ for any published
+        // slug, so this is a plain navigation and the shell takes over.
+        close();
+        router.push(loc(locale, `/blog/${item.value}/`));
         return;
       }
       runVerb(item.value as ConsoleVerb);
@@ -303,17 +362,23 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
       data-open={open || undefined}
     >
       <div className="craft-dock">
-        {/* The disclosure lives INSIDE the dock: one surface, DOM order =
-            visual order, and the button aligns with the rail/prompt edge
-            instead of floating at the viewport padding. */}
-        <NavMenuButton
-          dict={dict}
-          current={currentRoute?.label ?? ""}
-          open={open}
-          controls={CONSOLE_IDS.list}
-          buttonRef={menuRef}
-          onToggle={toggle}
-        />
+        {/* The dock's top row: the chrome switches and the disclosure as one
+            chip cluster. DOM order is [tools, menu] so the flex row puts the
+            FAB at the inline-END in both writing directions (and the mobile
+            column-reverse stack lifts the whole bar to the bottom row, keeping
+            the FAB's corner alignment with the assistant below it). */}
+        <div className="craft-dock-bar">
+          <DockTools locale={locale} pathname={pathname} />
+
+          <NavMenuButton
+            dict={dict}
+            current={currentRoute?.label ?? ""}
+            open={open}
+            controls={CONSOLE_IDS.list}
+            buttonRef={menuRef}
+            onToggle={toggle}
+          />
+        </div>
 
         <ConsoleRing routes={routes} hotId={hotId} />
 

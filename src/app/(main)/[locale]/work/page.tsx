@@ -58,7 +58,7 @@ export default async function WorkPage({
   const jobs = JOBS[locale];
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8" data-accent="teal">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },

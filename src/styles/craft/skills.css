@@ -76,6 +76,7 @@ html[lang="fa"] .skill-cat-count {
   background: var(--glass-bg);
   border: 1px solid var(--glass-line);
   border-radius: var(--radius-2);
+  box-shadow: inset 0 1px 0 var(--edge-hi);
   transition:
     transform var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
@@ -86,7 +87,7 @@ html[lang="fa"] .skill-cat-count {
 .skill-cell:focus-within {
   transform: translateY(-1px);
   border-color: rgba(var(--rgb-accent-2), 0.55);
-  box-shadow: var(--elev-1), var(--glow-accent-2);
+  box-shadow: var(--elev-1), var(--glow-accent-2), inset 0 1px 0 var(--edge-hi);
 }
 
 .skill-cell-name {
@@ -114,6 +115,49 @@ html[lang="fa"] .skill-cat-count {
 .skill-orbit i.on {
   background: var(--color-accent-fill);
   box-shadow: 0 0 7px rgba(var(--rgb-accent), 0.45);
+}
+
+/* Scroll-driven meter fill — the lit ticks sweep in as their cell crosses
+   the viewport (the .x-rule pattern: zero JS, motion-safe).
+   ONE timeline per CELL: every tick reads --cell (the cell's own view()
+   timeline) instead of each computing its own, so five timelines per meter
+   collapse into one and the sweep is exactly synchronized. The definition
+   sits on an ancestor of the consumers, so no timeline-scope plumbing is
+   needed; the per-tick range offsets below keep the tick-by-tick stagger.
+   Engines without view() timelines and reduced-motion visitors get the
+   ticks fully drawn (no animation applied = the natural end state). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .skill-cell {
+      view-timeline: --cell;
+    }
+    .skill-orbit i.on {
+      transform-origin: left center;
+      animation: skill-fill linear both;
+      animation-timeline: --cell;
+      animation-range: entry 15% cover 40%;
+    }
+    .skill-orbit i.on:nth-child(2) {
+      animation-range: entry 18% cover 43%;
+    }
+    .skill-orbit i.on:nth-child(3) {
+      animation-range: entry 21% cover 46%;
+    }
+    .skill-orbit i.on:nth-child(4) {
+      animation-range: entry 24% cover 49%;
+    }
+    .skill-orbit i.on:nth-child(5) {
+      animation-range: entry 27% cover 52%;
+    }
+  }
+}
+@keyframes skill-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,11 +1,11 @@
-﻿import { Rail } from "@/components/ui/Section";
+import { Rail } from "@/components/ui/Section";
 import SysRule from "./SysRule";
 import { ArrowIcon } from "@/components/ui/icons";
 import { getDict, type Locale } from "@/lib/i18n";
 
 /**
  * HOME ACT III — MODULE BAY.
- * Clean, styled service cards with hover effects.
+ * Editorial capability ledger; services are descriptive, not links.
  */
 const STACKS_EN = [
   ["React", "Next.js", "Motion"],
@@ -35,22 +35,25 @@ export default function ModuleBay({ locale }: { locale: Locale }) {
               key={service.title}
               className={`service-card ${i % 2 === 0 ? "even" : "odd"}`}
             >
-              <div className="service-glow" aria-hidden />
+              <div className="service-header">
+                <span className="service-idx">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="service-tag">
+                  {fa ? "توانمندی" : "CAPABILITY"}
+                </span>
+              </div>
               <div className="service-content">
-                <div className="service-header">
-                  <span className="service-idx">M.{String(i + 1).padStart(2, "0")}</span>
-                  <span className="service-tag">{fa ? "سرویس" : "SERVICE"}</span>
-                </div>
                 <h2 className="service-title">{service.title}</h2>
                 <p className="service-desc">{service.description}</p>
-                <div className="service-stack">
+                <div
+                  className="service-stack"
+                  aria-label={fa ? "پشته فنی" : "Technology stack"}
+                >
                   {(fa ? STACKS_FA[i] : STACKS_EN[i]).map((tech) => (
-                    <span key={tech} className="service-chip">{tech}</span>
+                    <span key={tech}>{tech}</span>
                   ))}
                 </div>
-              </div>
-              <div className="service-action">
-                <ArrowIcon className="service-arrow" />
               </div>
             </article>
           ))}

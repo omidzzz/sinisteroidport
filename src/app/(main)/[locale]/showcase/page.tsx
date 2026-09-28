@@ -56,7 +56,7 @@ export default async function ShowcasePage({
   }));
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pt-28 sm:px-8">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8" data-accent="warm">
       <JsonLd
         data={[
           itemListJsonLd(
