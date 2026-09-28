@@ -190,6 +190,27 @@
   --station-ink: var(--color-ink);
   --measure: 68ch;
 
+  /* ---- Safe-area insets -----------------------------------------------
+     These only resolve to real numbers because the locale layout exports a
+     `viewport` with viewportFit: "cover". That pairing is the whole point:
+     WITHOUT the meta every env() below is silently 0 and the fixed corner
+     column (assistant, menu disclosure, switch stack) sits inside the iPhone
+     home-indicator strip with the most-tapped control closest to the gesture
+     bar; WITH the meta but no clearance, a landscape phone would slide
+     content under the cutout instead. Asserted by verify-craft.
+
+     --safe-b / --safe-i are ADDED to the corner offsets, never max()ed
+     against them: the inset is clearance on top of the design gap, not an
+     alternative to it, so a device with a 34px indicator keeps the gap AND
+     clears the bar. --safe-i takes the larger of the two physical insets
+     rather than the logical `inline-end` name — logical env() keywords are
+     newer than the physical ones, and max() is the safe direction to err:
+     over-clearing by a few px on the non-notched edge is invisible, while
+     under-clearing puts a control under a cutout. */
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-i: max(env(safe-area-inset-right, 0px), env(safe-area-inset-left, 0px));
+  --safe-t: env(safe-area-inset-top, 0px);
+
   /* ---- Font chains ----------------------------------------------
      Latin display is Space Grotesk (distinctive, engineered); body is
      Inter; the terminal voice is JetBrains Mono. Persian is Cairo —

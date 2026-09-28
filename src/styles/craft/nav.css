@@ -28,7 +28,12 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  padding-block-end: max(0.9rem, env(safe-area-inset-bottom));
+  /* The dock is inset-block-end:0, so on a notched phone its bottom padding
+     is the only thing standing between the menu disc and the home indicator.
+     The old `max(0.9rem, env(...))` could never do that job: without
+     viewport-fit=cover the env() is 0 (so it was dead), and even with it, max()
+     only ever picks ONE of the two values instead of adding them. */
+  padding-block-end: calc(0.9rem + var(--safe-b));
   padding-inline: 1rem;
   /* The dock itself is inert; only its controls take pointer events. */
   pointer-events: none;
@@ -794,9 +799,9 @@ html[lang="fa"] .craft-menu-label {
      back in (the shell is pointer-events:none) no longer generates a box. */
   .craft-tools {
     position: fixed;
-    inset-inline-end: var(--corner-inset);
+    inset-inline-end: calc(var(--corner-inset) + var(--safe-i));
     bottom: calc(
-      var(--corner-inset) + var(--corner-fab) + var(--corner-gap) +
+      var(--safe-b) + var(--corner-inset) + var(--corner-fab) + var(--corner-gap) +
         var(--corner-fab) + var(--corner-gap)
     );
     flex-direction: column;
@@ -823,8 +828,8 @@ html[lang="fa"] .craft-menu-label {
      outrank it: 0,2,0 beats 0,1,0 regardless of sheet order. */
   .craft-console .craft-menu-btn {
     position: fixed;
-    inset-inline-end: var(--corner-inset);
-    bottom: var(--corner-inset);
+    inset-inline-end: calc(var(--corner-inset) + var(--safe-i));
+    bottom: calc(var(--corner-inset) + var(--safe-b));
     width: var(--corner-fab);
     height: var(--corner-fab);
     min-height: var(--corner-fab);

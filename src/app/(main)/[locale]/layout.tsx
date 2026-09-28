@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   Space_Grotesk,
   Inter,
@@ -28,11 +28,39 @@ import "../../globals.css";
 // a theme the user has explicitly saved ("light"), and ignores the OS
 // color-scheme (which would otherwise light-wash the whole site on
 // light-OS machines). Every edition is explicit: data-theme is always set.
-const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.dataset.theme=t}catch(e){}`;
+const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m){m.content=t==="light"?"#eff1f3":"#272727"}}catch(e){}`;
 
 // With output: "export", only render locales listed in generateStaticParams.
 // Any other value (e.g. /admin/) → 404 instead of a runtime crash.
 export const dynamicParams = false;
+
+/**
+ * VIEWPORT — the one tag that makes the safe-area insets real.
+ *
+ * viewportFit: "cover" extends the layout viewport under the notch/home
+ * indicator, which is the *only* thing that makes env(safe-area-inset-*)
+ * resolve to anything but 0. The corner chrome is position:fixed against the
+ * screen edge (assistant, menu disclosure, switch stack), so without it the
+ * dock's bottom padding and all four discs sit in the iPhone gesture strip —
+ * the most-tapped control on the site closest to the bar. craft/tokens.css
+ * owns the matching --safe-* tokens and adds them to those offsets.
+ *
+ * The two halves are deliberately inseparable: cover WITHOUT clearance slides
+ * content under a landscape cutout, and clearance WITHOUT cover is dead CSS.
+ * Both are asserted in verify-craft so neither half can be dropped alone.
+ *
+ * maximumScale/userScalable are deliberately absent — pinch-zoom is an
+ * accessibility requirement (WCAG 1.4.4), not a layout setting.
+ */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  // The charcoal ground, i.e. the edition a first-time visitor gets. THEME_INIT
+  // re-points this at the light ground before first paint when the saved
+  // edition is light, so the Safari URL bar never flashes the wrong colour.
+  themeColor: "#272727",
+};
 
 // CODE & CRAFT type voices. Latin: Space Grotesk drives --font-display
 // (a distinctive engineered grotesque), Inter carries the body, JetBrains

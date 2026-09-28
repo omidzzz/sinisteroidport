@@ -1028,8 +1028,12 @@
   .sin-chat-fab {
     width: var(--corner-fab);
     height: var(--corner-fab);
-    inset-inline-end: var(--corner-inset);
-    bottom: calc(var(--corner-inset) + var(--corner-fab) + var(--corner-gap));
+    /* Same safe-area pair as the two discs below it, so the column keeps one
+       edge and one baseline instead of drifting per control. */
+    inset-inline-end: calc(var(--corner-inset) + var(--safe-i));
+    bottom: calc(
+      var(--safe-b) + var(--corner-inset) + var(--corner-fab) + var(--corner-gap)
+    );
   }
   .sin-chat-fab-plate {
     inline-size: 2rem;

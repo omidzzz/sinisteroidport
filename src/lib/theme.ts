@@ -20,6 +20,14 @@ export function setTheme(next: Theme): void {
   const root = document.documentElement;
   if (root.dataset.theme === next) return;
   root.dataset.theme = next;
+  // The Safari/Android URL bar and the add-to-home-screen chrome are painted
+  // from this meta, not from the page, so a flip has to re-point it or the
+  // system chrome keeps the old edition's ground. THEME_INIT does the same for
+  // the first paint; the tag is null-safe in case a route omits the viewport
+  // export, hence the optional chain.
+  document
+    .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    ?.setAttribute("content", next === "light" ? "#eff1f3" : "#272727");
   try {
     localStorage.setItem("theme", next);
   } catch {

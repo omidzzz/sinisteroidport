@@ -156,6 +156,43 @@ console.log("\n=== SHELL (EN) ===");
 check("home prerendered", home !== null, missing(HOME));
 if (home) {
   check('register is code-craft', home.includes('data-register="code-craft"'));
+  // The safe-area pairing. The corner chrome is position:fixed against the
+  // screen edge (assistant, menu disclosure, switch stack), so the insets are
+  // load-bearing on notched phones — and env() resolves at all ONLY when the
+  // viewport opts into viewport-fit=cover. Either half alone is a regression,
+  // so both are gated here instead of left to code review.
+  check(
+    "viewport opts into the safe area (viewport-fit=cover)",
+    /<meta name="viewport"[^>]*viewport-fit=cover/.test(home),
+    "no viewport-fit=cover: every env(safe-area-inset-*) is 0 and the fixed corner column sits in the home-indicator strip"
+  );
+  check(
+    "viewport does not block pinch-zoom (WCAG 1.4.4)",
+    !/maximum-scale|user-scalable/i.test(home)
+  );
+  check("theme-color meta shipped", /<meta name="theme-color"/.test(home));
+  check(
+    "first paint re-points theme-color for the saved edition",
+    /#eff1f3/.test(home)
+  );
+  check(
+    "safe-area tokens defined",
+    /--safe-b:\s*env\(/.test(css) && /--safe-i:\s*max\(env\(/.test(css)
+  );
+  check(
+    "the assistant's corner offsets read the safe-area token",
+    /\.sin-chat-fab\{[^}]*var\(--safe-b\)/.test(css) &&
+      /\.sin-chat-panel\{[^}]*var\(--safe-b\)/.test(css)
+  );
+  check(
+    "the dock's bottom padding reads the safe-area token",
+    /\.craft-console\{[^}]*var\(--safe-b\)/.test(css)
+  );
+  check(
+    "the menu disclosure and switch stack clear the indicator too",
+    /\.craft-console \.craft-menu-btn\{[^}]*var\(--safe-b\)/.test(css) &&
+      /\.craft-tools\{[^}]*var\(--safe-b\)/.test(css)
+  );
   check("theme init defaults to dark", home.includes('"dark"'));
   check("skip link present", home.includes("skip-link"));
   check("console prompt rendered", home.includes("craft-prompt"));

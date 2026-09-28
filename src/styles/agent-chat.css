@@ -12,8 +12,13 @@
      with it). `color` tracks the acid token in the neon registers and
      --color-ink on paper (quire.css restyles the button itself). */
   position: fixed;
-  inset-inline-end: 1.25rem;
-  bottom: 1.25rem;
+  /* The corner offsets carry the safe-area pair (craft/tokens.css). These are
+     the only numbers between the assistant and the iPhone home indicator, and
+     they are the reason the layout exports viewport-fit=cover: without that
+     meta both tokens resolve to 0 and the most-tapped control on the site
+     sits in the gesture-bar strip. */
+  inset-inline-end: calc(1.25rem + var(--safe-i));
+  bottom: calc(1.25rem + var(--safe-b));
   z-index: 74; /* above the desktop chrome (≤62); on phones the corner
                   chrome (75) and the OPEN panel (76) outrank it, as do
                   cursor/overlays (90+) */
@@ -98,8 +103,8 @@
   .sin-chat-fab {
     width: 4.4rem;
     height: 4.4rem;
-    inset-inline-end: 1rem;
-    bottom: 1rem;
+    inset-inline-end: calc(1rem + var(--safe-i));
+    bottom: calc(1rem + var(--safe-b));
   }
   .sin-chat-fab-plate {
     inline-size: 2.25rem;
@@ -200,8 +205,10 @@
    pre-prune file: this geometry is exactly what b8b3325^ shipped. */
 .sin-chat-panel {
   position: fixed;
-  inset-inline-end: 1.25rem;
-  bottom: 1.25rem;
+  /* Matches the FAB's insets so the sheet does not jump sideways or upward
+     when it replaces the button in the same corner. */
+  inset-inline-end: calc(1.25rem + var(--safe-i));
+  bottom: calc(1.25rem + var(--safe-b));
   /* 76, not 75: at ≤48rem the console hardcodes z-index 75 for its fixed
      corner chrome (nav.css §9b) and the console mounts AFTER this panel in
      the layout DOM, so on a tie the menu disc and the two switch discs
@@ -212,7 +219,10 @@
   display: flex;
   flex-direction: column;
   width: min(23rem, calc(100vw - 2.5rem));
-  height: min(34rem, calc(100dvh - 4.5rem));
+  /* The viewport cap subtracts the safe-area bottom too: with the indicator
+     included in 100dvh, keeping the old 4.5rem reserve would let the sheet run
+     its composer under the home indicator. */
+  height: min(34rem, calc(100dvh - 4.5rem - var(--safe-b)));
   overflow: hidden;
   background: color-mix(in srgb, var(--color-panel) 92%, transparent);
   border: 1px solid rgba(var(--rgb-accent), 0.4);
@@ -644,17 +654,28 @@
   opacity: 0.4;
 }
 
-/* Mobile: let the panel breathe on small screens */
+/* Mobile: let the panel breathe on small screens.
+
+   The FAB used to be re-pinned here too (0.9rem on both axes), but that was a
+   hand-copied duplicate that could never win: agent-chat.css loads at
+   globals.css line 58, refinement.css at line 117, and the corner column there
+   owns the assistant's phone box for the whole ≤48rem range (30rem ⊂ 48rem).
+   A stale copy that silently loses is worse than no copy — it is the trap the
+   refinement.css comments keep warning about — so the FAB is gone from here and
+   --corner-fab / --corner-inset / --safe-b in refinement.css are the one source.
+
+   The panel, by contrast, is set ONLY here, so this rule is live: at 0.6rem off
+   the bottom edge it put the composer under the iPhone home indicator, and the
+   100dvh cap counted the indicator as usable height. Both take the safe-area
+   pair now. inset-inline takes the token on both sides, which is correct in RTL
+   too — --safe-i is the max of the two physical insets, so the reserved margin
+   is symmetric and the sheet never sits against the cutout. */
 @media (max-width: 480px){
-  .sin-chat-fab {
-    inset-inline-end: 0.9rem;
-    bottom: 0.9rem;
-  }
   .sin-chat-panel {
-    inset-inline: 0.6rem;
-    bottom: 0.6rem;
+    inset-inline: calc(0.6rem + var(--safe-i));
+    bottom: calc(0.6rem + var(--safe-b));
     width: auto;
-    height: min(30rem, calc(100dvh - 5rem));
+    height: min(30rem, calc(100dvh - 5rem - var(--safe-b)));
   }
 }
 
@@ -1110,8 +1131,8 @@
 /* ── First-visit FAB hint ─────────────────────────────────── */
 .sin-chat-fab-hint {
   position: fixed;
-  inset-inline-end: 5.6rem;
-  bottom: 2rem;
+  inset-inline-end: calc(5.6rem + var(--safe-i));
+  bottom: calc(2rem + var(--safe-b));
   z-index: 74;
   display: inline-flex;
   align-items: center;
