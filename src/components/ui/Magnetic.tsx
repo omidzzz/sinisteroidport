@@ -84,8 +84,7 @@ export default function Magnetic({
     /* No will-change here. The pull only runs on (pointer: fine) with motion
        enabled, but this span is in the static markup on EVERY device — so a
        permanent class would promote a compositor layer for the touch and
-       reduced-motion visitors who never move it. Same reasoning as
-       HeroPlate, which sets will-change imperatively after hydration. */
+       reduced-motion visitors who never move it. */
     <span ref={ref} onMouseMove={onMove} onMouseLeave={onLeave} className="inline-block">
       {children}
     </span>

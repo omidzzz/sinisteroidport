@@ -5,6 +5,7 @@ export {
   personJsonLd,
   websiteJsonLd,
   itemListJsonLd,
+  blogIndexJsonLd,
   blogPostingJsonLd,
   faqJsonLd,
   breadcrumbJsonLd,

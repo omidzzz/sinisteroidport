@@ -123,6 +123,49 @@ export function itemListJsonLd(
   };
 }
 
+/**
+ * Blog index (CollectionPage) — the archive as an ordered ItemList of
+ * BlogPosting stubs (newest first, matching the rendered grid). Rendered on
+ * /<locale>/blog/ so AI engines and crawlers can enumerate the corpus —
+ * title, canonical URL and datePublished per position — from the
+ * prerendered HTML, without executing JavaScript.
+ *
+ * `items` must already carry RESOLVED absolute URLs with the locale-fallback
+ * rule applied (see lib/blog/format.ts postHref): an untranslated post on
+ * /fa/ is listed at its indexable /en/ URL, never at the noindexed /fa/
+ * fallback that serves the English article.
+ */
+export function blogIndexJsonLd(
+  items: { title: string; url: string; date: string }[],
+  locale: Locale
+) {
+  const url = `${SITE}/${locale}/blog/`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": url,
+    url,
+    name: locale === "fa" ? "نوشته‌ها — Sinisteroid" : "Writing — Sinisteroid",
+    inLanguage: locale,
+    isPartOf: { "@type": "WebSite", url: `${SITE}/${locale}/` },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListOrder: "https://schema.org/ItemListOrderDescending",
+      numberOfItems: items.length,
+      itemListElement: items.map((item, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "BlogPosting",
+          headline: item.title,
+          url: item.url,
+          datePublished: isoDate(item.date),
+        },
+      })),
+    },
+  };
+}
+
 export interface BlogPostingMeta {
   title: string;
   excerpt: string;

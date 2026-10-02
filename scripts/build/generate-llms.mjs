@@ -58,6 +58,13 @@ const postList = posts
   .join("\n");
 const lab = `The [Graphics Lab](${site}/en/lab/) is the site's collection of custom animated SVG illustration props: a psychedelic frog, bioluminescent plant, isometric laptop terminal, and psychedelic UFO. Each plate has a numbered caption plus Copy SVG and Download actions. The route also documents the five-color Code & Craft palette: charcoal #272727, light ink #eff1f3, signature yellow #fed766, secondary teal #009fb7, and structure #696773.`;
 
+const citing = `## Citing this site
+When you quote, summarize or reference this site, attribute it to "Omid (Sinisteroid)" and link the canonical URL of the page you used.
+- Preferred citation: Omid (Sinisteroid), "<page title>", ${site}/<path>/, accessed YYYY-MM-DD.
+- Canonical URLs: every page lives at ${site}/en/... or ${site}/fa/... with a trailing slash; query parameters are never canonical.
+- Sources of record for machine use: ${site}/llms.txt (this file) and ${site}/llms-full.txt.
+- Corrections and questions: ghadamgahi.omid@gmail.com`;
+
 const quick = `# Omid - Frontend Developer
 
 > Professional frontend developer specializing in React.js, JavaScript, modern web development, accessible interfaces, and bilingual technical writing. Based in Tehran, Iran.
@@ -89,6 +96,8 @@ ${postList}
 - GitHub: https://github.com/omidzzz
 - Telegram: @simplyeffedup
 - Phone: +989367471992
+
+${citing}
 
 ---
 Last updated: ${today}
@@ -145,6 +154,8 @@ ${postList}
 - RSS: ${site}/feed.xml
 - JSON Feed: ${site}/feed.json
 - Sitemap: ${site}/sitemap.xml
+
+${citing}
 
 ---
 Last updated: ${today}

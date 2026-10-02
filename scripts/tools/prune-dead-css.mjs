@@ -53,6 +53,17 @@ function buildLiveSet() {
     for (const m of text.matchAll(/classList\.(?:add|remove|toggle)\(([^)]*)\)/g)) {
       for (const q of m[1].matchAll(/["'`]([^"'`]+)["'`]/g)) addTokens(q[1]);
     }
+    // JSX class EXPRESSIONS — `className={cond ? "a" : "b"}` and
+    // `className={`base${on ? " base--on" : ""}`}`. The quoted-string pass
+    // above cannot tokenize a template literal (it stops at the first quote
+    // inside the `${…}`), so a class built ONLY inside one never reaches the
+    // live set. That is exactly how the pruner once dropped AgentChat's base
+    // `.sin-chat-panel` while keeping its `--hidden` modifier — the panel lost
+    // its geometry but kept the hidden-state transform. Tokenize the whole
+    // expression body, quotes and all.
+    for (const m of text.matchAll(/class(?:Name)?\s*=\s*\{([\s\S]{0,600}?)\}/g)) {
+      for (const t of m[1].matchAll(/-?[a-zA-Z][\w-]*/g)) addTokens(t[0]);
+    }
     for (const m of text.matchAll(/["'`]([^"'`\n]{1,80})["'`]/g)) {
       const s = m[1].trim();
       if (!/^-?[a-zA-Z][\w-]*$/.test(s)) continue;
@@ -167,6 +178,36 @@ function pruneContent(text, start, end, ctx) {
 
 const LIVE = buildLiveSet();
 const USED_VARS = buildUsedVars();
+/**
+ * Classes that verify-craft.mjs asserts MUST ship (its "live legacy rule
+ * shipped" list). The pruner must never remove a rule one of these lives in:
+ * otherwise the contract and the tool disagree, and a "successful" prune fails
+ * the craft gate. Duplicated here deliberately — both files stay standalone
+ * scripts — with a comment on each side pointing at the other. When a class
+ * leaves that contract list (e.g. .gauge-fill / .mani-block after the ledger
+ * and channel rebuilds retired them), drop it from BOTH lists in one change.
+ */
+const PROTECTED = new Set([
+  "bento-frame",
+  "bento-tag",
+  "issue-card",
+  "post-toc",
+  "reading-progress",
+  "prose-post",
+  "sin-chat-panel",
+  "sin-tok-c",
+  "contact-value",
+  "ch-strip",
+  "logo-sinister",
+  "prop-float",
+  "ticker-track",
+  "post-strip",
+  "sig-wave",
+  "module-card",
+  "net-legend",
+  "lab-plate",
+  "craft-prompt",
+]);
 const sheets = (only.length ? only : fs.readdirSync(STYLES).filter((f) => f.endsWith(".css"))).sort();
 
 let totalBefore = 0;
@@ -186,6 +227,7 @@ for (const sheet of sheets) {
       const tokens = classTokens(prelude);
       if (tokens.length === 0) return true; // element / id / attribute selectors
       if (tokens.some((t) => LIVE.has(t))) return true;
+      if (tokens.some((t) => PROTECTED.has(t))) return true; // craft contract
       if (tokens.some((t) => STATE_HOOK.test(t))) return true;
       for (const m of body.matchAll(/(--[\w-]+)\s*:/g)) if (USED_VARS.has(m[1])) return true;
       return false;

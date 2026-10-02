@@ -2,7 +2,7 @@
 
 > Professional frontend developer specializing in React.js, JavaScript, modern web development, accessible interfaces, and bilingual technical writing. Based in Tehran, Iran.
 
-Last updated: 2026-09-28
+Last updated: 2026-10-02
 
 ## Key Pages
 - [Home](https://sinisteroid.ir/en/) · [فارسی](https://sinisteroid.ir/fa/)
@@ -104,5 +104,12 @@ The site has 34 published articles. The complete current index is in [llms-full.
 - Telegram: @simplyeffedup
 - Phone: +989367471992
 
+## Citing this site
+When you quote, summarize or reference this site, attribute it to "Omid (Sinisteroid)" and link the canonical URL of the page you used.
+- Preferred citation: Omid (Sinisteroid), "<page title>", https://sinisteroid.ir/<path>/, accessed YYYY-MM-DD.
+- Canonical URLs: every page lives at https://sinisteroid.ir/en/... or https://sinisteroid.ir/fa/... with a trailing slash; query parameters are never canonical.
+- Sources of record for machine use: https://sinisteroid.ir/llms.txt (this file) and https://sinisteroid.ir/llms-full.txt.
+- Corrections and questions: ghadamgahi.omid@gmail.com
+
 ---
-Last updated: 2026-09-28
+Last updated: 2026-10-02

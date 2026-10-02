@@ -1,5 +1,4 @@
-/* ============ V16 — Console Bay (in-flow acid laptop deck) ============ */
-.console-bay { position: relative; margin: clamp(2rem, 6vw, 4rem) 0; padding: clamp(1.5rem, 4vw, 2.5rem) 0; isolation: isolate; }
+
 .console-bay-deck .lp-root { flex: 0 0 clamp(19rem, 34vw, 27rem); }
 /* prop SVGs share the laptop's presentation (block, pointer-none, glow) */
 .lp-svg { display: block; width: 100%; height: auto; pointer-events: none; filter: drop-shadow(0 0 20px rgba(255, 194, 74, 0.14)) drop-shadow(0 0 40px rgba(216, 255, 77, 0.09)); }

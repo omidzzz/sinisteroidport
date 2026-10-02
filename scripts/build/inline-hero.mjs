@@ -13,7 +13,13 @@
  * browser can skip laying them out until they scroll into view — reduces
  * the main-thread cost of the first paint.
  *
- * Wired into `npm run build` (after inline-fonts). English pages only.
+ * NOT WIRED into `npm run build` any more (removed 2026-10-02). The Code &
+ * Craft home hero is TEXT-ONLY (see components/home/HeroSection.tsx) — it
+ * renders no raster image, HeroPlate/HeroPlateFrame are unmounted, and the
+ * generated /hero-image.webp is referenced by nothing, so this pass walked
+ * every /en/ document (93 files) for zero matches. Kept on disk because it is
+ * correct and idempotent if a raster hero ever returns: re-add
+ * `&& node scripts/build/inline-hero.mjs` after inline-fonts.
  */
 import fs from "node:fs";
 import path from "node:path";

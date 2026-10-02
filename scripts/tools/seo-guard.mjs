@@ -10,6 +10,9 @@
  *  4. Proper reciprocal hreflang tags on multi-locale routes.
  *  5. Consistency between sitemap.xml, llms.txt, and content/posts.
  *  6. No bare un-canonical internal blog links (/blog/... without locale prefix).
+ *  7. FAQ coverage: every post carrying FAQ items ships FAQPage JSON-LD.
+ *  8. Blog index exposes its archive as CollectionPage/ItemList, and llms.txt
+ *     carries the citation-guidance block.
  */
 
 import fs from "node:fs";
@@ -86,8 +89,10 @@ assert(
 
 const blogEn = fs.readFileSync(path.join(outDir, "en", "blog", "index.html"), "utf8");
 assert(
-  "Blog index embeds BreadcrumbList JSON-LD",
-  blogEn.includes('"@type":"BreadcrumbList"')
+  "Blog index embeds BreadcrumbList, CollectionPage and ItemList JSON-LD",
+  blogEn.includes('"@type":"BreadcrumbList"') &&
+    blogEn.includes('"@type":"CollectionPage"') &&
+    blogEn.includes('"@type":"ItemList"')
 );
 
 // 5. Check all HTML files for bare un-prefixed blog links
@@ -110,6 +115,33 @@ function walkHtml(dir) {
 walkHtml(outDir);
 
 assert("No bare un-prefixed /blog/ links in compiled HTML", bareLinksCount === 0, `Found ${bareLinksCount}`);
+
+// 7. FAQ coverage — a post whose chosen translation (locale content, or the
+// EN fallback the route serves) carries FAQ items must publish FAQPage
+// JSON-LD in the matching locale document.
+const faqGaps = [];
+for (const file of postFiles) {
+  const post = JSON.parse(fs.readFileSync(path.join(postsDir, file), "utf8"));
+  if (!post.slug) continue;
+  for (const locale of ["en", "fa"]) {
+    const translation = post.translations?.[locale] ?? post.translations?.en;
+    if (!(Array.isArray(translation?.faq) && translation.faq.length > 0)) continue;
+    const htmlPath = path.join(outDir, locale, "blog", post.slug, "index.html");
+    const html = fs.existsSync(htmlPath) ? fs.readFileSync(htmlPath, "utf8") : "";
+    if (!html.includes('"@type":"FAQPage"')) faqGaps.push(`${locale}/blog/${post.slug}/`);
+  }
+}
+assert(
+  "Every FAQ-bearing post ships FAQPage JSON-LD",
+  faqGaps.length === 0,
+  faqGaps.slice(0, 5).join(", ")
+);
+
+// 8. llms.txt carries the citation-guidance block (GEO attribution)
+assert(
+  "llms.txt explains how to cite the site",
+  llms.includes("## Citing this site")
+);
 
 console.log("\n=================================");
 if (fails > 0) {

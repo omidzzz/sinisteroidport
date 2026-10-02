@@ -62,7 +62,7 @@
   );
   transform: translateX(-100%);
 }
-@media (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference){
   .post-skeleton span::after {
     animation: sk-sheen 1.7s var(--ease-in-out) infinite;
   }
@@ -70,7 +70,7 @@
 [dir="rtl"] .post-skeleton span::after {
   animation-direction: reverse;
 }
-@keyframes sk-sheen {
+@keyframes sk-sheen{
   from { transform: translateX(-100%); }
   to { transform: translateX(100%); }
 }
@@ -80,7 +80,7 @@
    they interrupt the measure instead of sitting politely inside it. The
    TOC rail owns the END side, so the breakout is deliberately one-sided —
    the two can never collide, in either writing direction. */
-@media (min-width: 75rem) {
+@media (min-width: 75rem){
   .prose-post blockquote,
   .prose-post figure {
     inline-size: calc(100% + 6rem);

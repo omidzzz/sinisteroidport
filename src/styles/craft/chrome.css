@@ -222,18 +222,11 @@
   background: rgba(39, 39, 39, 0.85);
 }
 
-[data-theme="dark"] .hero-plate-img {
-  filter: grayscale(0.85) contrast(1.05);
-}
-
 [data-theme="dark"] .prism-panel::before {
   opacity: 0.12;
 }
 
 /* Small seal labels ride the AA-safe ink roles in both editions. */
-.sig-badge {
-  color: var(--color-acid-ink);
-}
 .logo-id {
   color: color-mix(
     in srgb,

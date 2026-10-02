@@ -6,10 +6,11 @@ import BlogListLive from "@/components/blog/BlogListLive";
 import PostsCountStat from "@/components/blog/PostsCountStat";
 import { getAllPosts } from "@/lib/blog/repository";
 import { getDict, isLocale, loc, type Locale } from "@/lib/i18n";
-import { seoAlternates } from "@/lib/seo";
+import { seoAlternates, SITE } from "@/lib/seo";
 import { normalizeTags, tagLabel, usedTags } from "@/lib/tags";
+import { postHref, postTitle } from "@/lib/blog/format";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { breadcrumbJsonLd } from "@/lib/schema";
+import { blogIndexJsonLd, breadcrumbJsonLd } from "@/lib/schema";
 
 export async function generateMetadata({
   params,
@@ -52,14 +53,56 @@ export default async function BlogPage({
     label: tagLabel(tag.slug, locale),
     count: posts.filter((p) => normalizeTags(p.tags).includes(tag.slug)).length,
   }));
+  // The issue grid renders title, excerpt, date, tags and cover only — and its
+  // live sync replaces the list with /api/get_posts.php rows that carry exactly
+  // that subset. Passing the full Post[] serialized every article's content
+  // blocks (~1.7 MB of JSON for 34 posts) into the RSC flight payload embedded
+  // in the HTML — paid on transfer AND parse AND hydration at the 4x-throttled
+  // mobile CPU. Slim to what the grid reads (an empty `content` is a valid
+  // PostTranslation — zero behavior change); this is the same rule the home
+  // page applies in src/app/(main)/[locale]/page.tsx.
+  const listPosts = posts.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    date: p.date,
+    tags: p.tags,
+    featuredImage: p.featuredImage ? { src: p.featuredImage.src } : undefined,
+    translations: {
+      en: {
+        title: p.translations?.en?.title ?? p.title,
+        excerpt: p.translations?.en?.excerpt ?? p.excerpt ?? "",
+        content: [],
+      },
+      ...(p.translations?.fa
+        ? {
+            fa: {
+              title: p.translations.fa.title,
+              excerpt: p.translations.fa.excerpt ?? "",
+              content: [],
+            },
+          }
+        : {}),
+    },
+  }));
+  // Archive as data: title + canonical URL + date per post. URLs use the SAME
+  // locale-fallback rule the grid renders (postHref), so an untranslated post
+  // is listed at its indexable /en/ URL — never at the noindexed /fa/ fallback.
+  const archiveItems = posts.map((p) => ({
+    title: postTitle(p, locale),
+    url: `${SITE}${postHref(p, locale)}/`,
+    date: p.date,
+  }));
 
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8">
       <JsonLd
-        data={breadcrumbJsonLd([
-          { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
-          { name: locale === "fa" ? "نوشته‌ها" : "Writing", url: `https://sinisteroid.ir/${locale}/blog/` },
-        ])}
+        data={[
+          breadcrumbJsonLd([
+            { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
+            { name: locale === "fa" ? "نوشته‌ها" : "Writing", url: `https://sinisteroid.ir/${locale}/blog/` },
+          ]),
+          blogIndexJsonLd(archiveItems, locale),
+        ]}
       />
       <Reveal>
         <PageHero
@@ -101,7 +144,7 @@ export default async function BlogPage({
         </nav>
       )}
       {/* Prerendered list refreshes from MySQL via /api/get_posts.php */}
-      <BlogListLive locale={locale} initial={posts} />
+      <BlogListLive locale={locale} initial={listPosts} />
     </div>
   );
 }

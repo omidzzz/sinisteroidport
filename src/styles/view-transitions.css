@@ -10,7 +10,7 @@
 
 /* Cross-document transitions (Chromium 126+, Safari 18+) are limited to
    mobile. Desktop document loads stay immediate and interactive. */
-@media (max-width: 47.99rem) {
+@media (max-width: 47.99rem){
   @view-transition {
     navigation: auto;
   }

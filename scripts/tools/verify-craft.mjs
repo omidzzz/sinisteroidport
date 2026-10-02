@@ -55,6 +55,50 @@ check("role tokens shipped", /--color-accent-fill/.test(css) && /--color-accent-
 check("AA-safe ink roles shipped", /--color-accent-ink/.test(css) && /--color-accent-2-ink/.test(css));
 check("muted kept out of the text path", /--color-ink-dim/.test(css));
 
+// ── Dark-edition WCAG AA guard ──────────────────────────────────────
+// The dark edition lifts the two grey roles that carry small text on
+// charcoal (see craft/themes.css). The ratios are computed here from the
+// SHIPPED values — not eyeballed — so a future token tweak that drops either
+// role under 4.5:1 fails this check instead of silently shipping, the same
+// way the colour-contrast audit found it the first time.
+{
+  let darkBody = "";
+  for (const m of css.matchAll(/\[data-theme=["']?dark["']?\]\{([^}]*)\}/g)) {
+    if (m[1].includes("--color-muted")) darkBody = m[1];
+  }
+  const pick = (name) => {
+    const m = darkBody.match(new RegExp(`${name}:\\s*(#[0-9a-fA-F]{6})`));
+    return m ? m[1].toLowerCase() : null;
+  };
+  const muted = pick("--color-muted");
+  const inkDim = pick("--color-ink-dim");
+  const lum = (hex) => {
+    const channels = [0, 2, 4].map((i) => parseInt(hex.slice(1 + i, 3 + i), 16) / 255);
+    const lin = channels.map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+  };
+  const ratio = (a, b) => {
+    const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const assertRatio = (name, value, surface) =>
+    check(
+      `${name} ${value ?? "?"} >= 4.5:1 on dark ${surface}`,
+      Boolean(value) && ratio(value, surface) >= 4.5,
+      value ? `measured ${ratio(value, surface).toFixed(2)}:1` : "token not found in [data-theme=dark]"
+    );
+  check(
+    "dark edition lifts --color-muted",
+    Boolean(muted),
+    "no [data-theme=dark] block carrying --color-muted in the shipped CSS"
+  );
+  check("dark edition lifts --color-ink-dim", Boolean(inkDim));
+  for (const surface of ["#272727", "#2f2f31"]) {
+    assertRatio("dark muted contrast", muted, surface);
+    assertRatio("dark ink-dim contrast", inkDim, surface);
+  }
+}
+
 console.log("\n=== TYPE ===");
 check("Space Grotesk face shipped", /font-family:\s*[\"']?Space Grotesk/i.test(css));
 check("Inter face shipped", /font-family:\s*[\"']?Inter[\"']?\s*;/.test(css) || /font-family:Inter/.test(css));
@@ -545,10 +589,8 @@ for (const sel of [
   ".ch-strip",
   ".logo-sinister",
   ".prop-float",
-  ".gauge-fill",
   ".ticker-track",
   ".post-strip",
-  ".mani-block",
   ".sig-wave",
   ".module-card",
   ".net-legend",

@@ -69,38 +69,6 @@
   }
 }
 @keyframes eh-energize{ to { rotate: 360deg; } }
-/* §3 GHOST-CTA SHEEN — mirrors the btn-neon shine so every CTA
-   family speaks the same language. Hover-only, transform/opacity,
-   clipped inside the button (box-shadow still paints outside). */
-.btn-ghost {
-  position: relative;
-  overflow: clip;
-}
-.btn-ghost::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  inset-block: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(var(--rgb-accent), 0.16) 44%,
-    rgba(var(--rgb-acid), 0.1) 52%,
-    transparent 100%
-  );
-}
-@media (hover: hover) and (pointer: fine){
-  @media (prefers-reduced-motion: no-preference){
-    .btn-ghost:hover::after {
-      opacity: 1;
-      animation: eh-ghost-sheen 0.8s ease forwards;
-    }
-  }
-}
 @keyframes eh-ghost-sheen{
   from { translate: -130% 0; }
   to { translate: 130% 0; }

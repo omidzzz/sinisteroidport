@@ -124,5 +124,12 @@ All 34 current posts are listed below. Dates use the most recent publication/upd
 - JSON Feed: https://sinisteroid.ir/feed.json
 - Sitemap: https://sinisteroid.ir/sitemap.xml
 
+## Citing this site
+When you quote, summarize or reference this site, attribute it to "Omid (Sinisteroid)" and link the canonical URL of the page you used.
+- Preferred citation: Omid (Sinisteroid), "<page title>", https://sinisteroid.ir/<path>/, accessed YYYY-MM-DD.
+- Canonical URLs: every page lives at https://sinisteroid.ir/en/... or https://sinisteroid.ir/fa/... with a trailing slash; query parameters are never canonical.
+- Sources of record for machine use: https://sinisteroid.ir/llms.txt (this file) and https://sinisteroid.ir/llms-full.txt.
+- Corrections and questions: ghadamgahi.omid@gmail.com
+
 ---
-Last updated: 2026-09-28
+Last updated: 2026-10-02

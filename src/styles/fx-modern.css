@@ -132,7 +132,7 @@ html {
    (the block simply never matches). Curves generated from
    x(t)=1-e^(-ζωt)(cos ω_d t + ζω/ω_d sin ω_d t).
    ------------------------------------------------------------ */
-@supports (transition-timing-function: linear(0, 1)) {
+@supports (transition-timing-function: linear(0, 1)){
   :root {
     --ease-spring: linear(
       0, 0.044, 0.151, 0.294, 0.448, 0.597, 0.731, 0.843, 0.932, 0.998,
@@ -433,9 +433,6 @@ body {
 .chip-start .logo-type {
   view-transition-name: brand-lockup;
 }
-.hero-plate {
-  view-transition-name: hero-plate;
-}
 ::view-transition-new(root) {
   animation: vt-new-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -492,21 +489,6 @@ body {
     --ring-angle: 360deg;
   }
 }
-
-/* ------------------------------------------------------------
-   §20 containment — only the hero plate frame gets `contain:
-   paint` (it already clips to its own border box via overflow,
-   so this is a pure GPU hint, never a visible clip).
-   content-visibility is deliberately NOT used here: it implies
-   paint containment, and any child that lifts/glows outside its
-   box (hover pop on cards, glow pseudos, reveal offsets) would
-   get clipped — exactly the "cards clipped from top" bug we are
-   fixing. Prose already uses .cv-auto in base.css where every
-   child stays inside its box.
-   ------------------------------------------------------------ */
-.hero-plate-frame {
-  contain: paint;
-}
 pre,
 code,
 kbd,
@@ -559,10 +541,6 @@ samp {
     --color-line: rgba(23, 21, 18, 0.4);
     --color-muted: #565248;
   }
-  .text-outline,
-  .stroke-line {
-    -webkit-text-stroke-width: 1.5px;
-  }
 }
 
 /* ------------------------------------------------------------
@@ -580,7 +558,7 @@ samp {
    content image is untouched. Both features are dormant in
    engines that do not implement them (nothing matches).
    ------------------------------------------------------------ */
-@media (prefers-reduced-transparency: reduce) {
+@media (prefers-reduced-transparency: reduce){
   *,
   *::before,
   *::after {
@@ -591,7 +569,7 @@ samp {
     --glass-blur: 0px;
   }
 }
-@media (prefers-reduced-data: reduce) {
+@media (prefers-reduced-data: reduce){
   body::before {
     display: none;
   }
