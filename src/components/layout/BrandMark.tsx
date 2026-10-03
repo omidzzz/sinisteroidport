@@ -1,11 +1,12 @@
 /**
  * BRAND MARK — the SINISTER "S" tile.
  *
- * A rounded-square tile carrying a bold acid→magenta→violet gradient "S",
- * with a live orbit dot circling the mark. Theme-aware (uses the site's
- * color variables) and server-safe — pure SVG, no hooks, no client JS.
- * The same geometry drives the generated favicon set
- * (scripts/tools/generate-brand-icons.mjs → public/brand-mark.svg).
+ * A rounded-square tile carrying a bold signature-gradient "S": yellow at
+ * both stops into the secondary teal — the two Code & Craft signature roles,
+ * NOT the retired acid-rave magenta/violet sweep. The orbit dot is the same
+ * yellow. Theme-aware (uses the site's color variables) and server-safe —
+ * pure SVG, no hooks, no client JS. The same geometry drives the generated
+ * favicon set (scripts/tools/generate-brand-icons.mjs → public/brand-mark.svg).
  */
 export default function BrandMark({ className = "" }: { className?: string }) {
   return (

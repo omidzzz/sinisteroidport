@@ -16,7 +16,7 @@ import { buildPostItems, loadPostRows } from "@/lib/nav/search";
 import type { ConsoleItem, ConsoleVerb } from "@/lib/nav/types";
 import { useConsole } from "@/lib/nav/use-console";
 import { usePointerRing } from "@/lib/nav/use-pointer-ring";
-import { SITE } from "@/lib/site";
+import { BRAND } from "@/lib/brand";
 import ConsolePrompt from "./ConsolePrompt";
 import ConsoleRail from "./ConsoleRail";
 import ConsoleRing from "./ConsoleRing";
@@ -192,7 +192,7 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
           break;
         }
         case "mail": {
-          void navigator.clipboard?.writeText(SITE.email).catch(() => {
+          void navigator.clipboard?.writeText(BRAND.contact.email).catch(() => {
             /* clipboard blocked — the address stays visible on /contact */
           });
           announce(dict.console.copied);
@@ -214,7 +214,7 @@ export default function CraftConsole({ locale }: { locale: Locale }) {
           break;
         }
         case "donate": {
-          window.open(SITE.donate, "_blank", "noopener");
+          window.open(BRAND.contact.donate, "_blank", "noopener");
           close();
           break;
         }

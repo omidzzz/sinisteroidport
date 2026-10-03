@@ -6,6 +6,8 @@ import type { Post } from "@/lib/blog/types";
 import { postHref, postTitle } from "@/lib/blog/format";
 import { type Locale } from "@/lib/i18n";
 import { toggleTheme } from "@/lib/theme";
+import { BRAND } from "@/lib/brand";
+import { DONATE_LABEL } from "@/lib/contact";
 
 export interface CmdEntry {
   id: string;
@@ -161,9 +163,9 @@ export default function CommandPalette({
     const donate: CmdEntry = {
       id: "a-donate",
       label: locale === "fa" ? "حمایت مالی — دونیت" : "Donate — support the work",
-      sub: "donatr.ee/sinisteroid",
+      sub: DONATE_LABEL,
       group: locale === "fa" ? "عملیات" : "Action",
-      href: "https://donatr.ee/sinisteroid/",
+      href: BRAND.contact.donate,
       external: true,
     };
     return [toggleTheme, switchLang, donate];

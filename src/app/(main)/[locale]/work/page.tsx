@@ -5,7 +5,8 @@ import Spotlight from "@/components/ui/Spotlight";
 import Reveal from "@/components/ui/Reveal";
 import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
-import { seoAlternates } from "@/lib/seo";
+import { seoAlternates, SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/schema";
 
@@ -20,8 +21,7 @@ export async function generateMetadata({
       isLocale(locale) && locale === "fa"
         ? "سوابق کاری"
         : "Work Experience",
-    description:
-      "Discover the professional background and roles held by Omid, including translation, customer support, and service leadership.",
+    description: `Discover the professional background and roles held by ${BRAND.person}, including translation, customer support, and service leadership.`,
     ...(isLocale(locale)
       ? { alternates: seoAlternates("work", locale) }
       : {}),
@@ -61,8 +61,8 @@ export default async function WorkPage({
     <div className="mx-auto max-w-6xl px-5 sm:px-8" data-accent="teal">
       <JsonLd
         data={breadcrumbJsonLd([
-          { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
-          { name: locale === "fa" ? "سوابق کاری" : "Work", url: `https://sinisteroid.ir/${locale}/work/` },
+          { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },
+          { name: locale === "fa" ? "سوابق کاری" : "Work", url: `${SITE}/${locale}/work/` },
         ])}
       />
       <Reveal>

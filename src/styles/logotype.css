@@ -12,7 +12,10 @@
 .logo-sinister {
   font-weight: 800;
   letter-spacing: 0.04em;
-  /* Eye-catching gradient register — acid → magenta → violet sweep */
+  /* Eye-catching gradient register — the Code & Craft signature sweep:
+     acid yellow → accent yellow → secondary teal. (This comment used to
+     say "magenta → violet"; those stops were retired with the acid-rave
+     palette and the gradient below has not carried them since.) */
   background: linear-gradient(
     97deg,
     var(--color-acid) 8%,
@@ -40,13 +43,71 @@
   color: var(--color-accent-2);
   padding-inline: 0.06em;
 }
+
+/* ---- HERO REGISTER -----------------------------------------------------
+   The hero used to print the bare handle as flat display text, so the first
+   thing on the page and the footer masthead were two different marks in two
+   different colour strategies. This register fixes that WITHOUT importing the
+   footer's art direction: the word stays flat ink (the "less glow, same
+   identity" decision in home.css), and only the bracketed suffix arrives —
+   in the mono accent, dropped to 0.46em so the display word keeps its weight.
+
+   Every length here is em-relative, so the h1's clamp() ladder governs the
+   whole lockup: one number to tune, and the suffix can never drift out of
+   proportion when the headline scale changes. */
+.logo-type--hero .logo-hero-word {
+  color: var(--color-ink);
+}
+
+/* The accent on the leading S — the one deliberate rhyme between the hero and
+   the brand mark. Moved off the h1 (which no longer holds a bare text node)
+   and onto the word span, so it survives the markup change. */
+.logo-type--hero .logo-hero-word::first-letter {
+  color: var(--color-accent-ink);
+}
+
+.logo-type--hero .logo-glyph,
+.logo-type--hero .logo-oid {
+  font-size: 0.46em;
+  /* Baseline-aligned to the display word rather than centred: at 0.46em a
+     centred suffix floats optically high against a 800-weight line. */
+  align-self: baseline;
+}
+
+.logo-type--hero .logo-oid {
+  margin-inline: 0.02em;
+}
+
+.logo-type--hero .logo-glyph {
+  padding-inline: 0.04em;
+  color: var(--color-accent-2);
+}
+
+.logo-type--hero .logo-ring {
+  /* Keep the outline at hero scale without it turning into a filled blob:
+     the em stroke scales with the suffix, so this only sets the weight. */
+  -webkit-text-stroke-width: 0.07em;
+}
+
+.logo-type--hero .logo-id {
+  font-weight: 700;
+  color: var(--color-accent);
+}
 .logo-oid {
   display: inline-flex;
   align-items: baseline;
 }
 .logo-ring {
   color: transparent;
-  -webkit-text-stroke: 2px var(--color-acid);
+  /* Stroke is RELATIVE (em), not a flat 2px. This lockup renders at two
+     very different sizes — ~1rem in the footer and clamp(2rem,7vw,5.5rem) in
+     the easter egg — and a fixed 2px outline reads as a hairline on the
+     giant one and as a twice-heavy outline on the small one, so the same
+     brand mark looked like two different marks depending on where you met
+     it. Longhand rather than the `text-stroke` shorthand so the width can be
+     relative while the colour still comes from the theme token. */
+  -webkit-text-stroke-width: 0.055em;
+  -webkit-text-stroke-color: var(--color-acid);
   text-shadow:
     0 0 16px rgba(var(--rgb-acid), 0.6),
     0 0 42px rgba(var(--rgb-accent), 0.35);

@@ -7,6 +7,7 @@ import SysRule from "./SysRule";
 import { ArrowIcon, SparkIcon } from "@/components/ui/icons";
 import { trackEvent } from "@/lib/analytics";
 import { loc, type Locale } from "@/lib/i18n";
+import { BRAND } from "@/lib/brand";
 import skillsData from "@/data/skills.json";
 
 /**
@@ -128,8 +129,25 @@ const PALETTES: Record<
   "dark" | "light",
   { acid: string; cyan: string; violet: string; ink: string }
 > = {
-  dark: { acid: "#009fb7", cyan: "#fed766", violet: "#a1a0ab", ink: "#eff1f3" },
-  light: { acid: "#00707f", cyan: "#7a5c00", violet: "#52525e", ink: "#272727" },
+  // `ink` is the cross-paired ground: the dark edition draws its labels in
+  // the LIGHT ground and vice versa, which is why these read "backwards"
+  // against the edition they belong to. Grounds and inks come from the brand
+  // so the canvas, the CSS tokens and the manifest ground can never diverge.
+  // The two light-edition accents are darkened cousins (teal → #00707f,
+  // yellow → #7a5c00) chosen for contrast on the light ground; they are
+  // deliberately NOT brand.inks, which are the dark-ground values.
+  dark: {
+    acid: BRAND.inks.secondary,
+    cyan: BRAND.inks.signature,
+    violet: "#a1a0ab",
+    ink: BRAND.themeColors.light,
+  },
+  light: {
+    acid: "#00707f",
+    cyan: "#7a5c00",
+    violet: "#52525e",
+    ink: BRAND.themeColors.dark,
+  },
 };
 
 /**

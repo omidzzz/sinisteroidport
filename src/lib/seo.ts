@@ -1,7 +1,13 @@
 import { locales, type Locale } from "./i18n";
+import { SITE_URL } from "./brand";
 
-const SITE = "https://sinisteroid.ir";
-
+/**
+ * Canonical origin, re-exported from the brand source (Option A) so every
+ * sitemap / feed / guard that builds URLs from this module reads the same
+ * constant the brand owns. `lib/site.ts` is gone: with brand.json in place a
+ * second module holding the same facts could only drift from them.
+ */
+const SITE = SITE_URL;
 export { SITE };
 
 /**

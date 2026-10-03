@@ -5,7 +5,8 @@ import ProjectIndex from "@/components/ui/ProjectIndex";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { itemListJsonLd, breadcrumbJsonLd } from "@/lib/schema";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
-import { seoAlternates } from "@/lib/seo";
+import { seoAlternates, SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 
 export async function generateMetadata({
   params,
@@ -15,12 +16,13 @@ export async function generateMetadata({
   const { locale } = await params;
   const fa = isLocale(locale) && locale === "fa";
   return {
-    title: fa
-      ? "نمونه‌کارها و پروژه‌ها – امید"
-      : "Showcase – Web development & content projects | Omid",
+    // Bare title, no person: the locale layout appends " – <person>" from the
+    // brand (BRAND.person / personFa). Spelling it here too rendered
+    // "… – امید – امید" in the SERP.
+    title: fa ? "نمونه‌کارها و پروژه‌ها" : "Showcase – Web development & content projects",
     description: fa
-      ? "پروژه‌های وب و محتوایی امید — توسعه فرانت‌اند، وردپرس، طراحی و استراتژی محتوا."
-      : "A selection of live web projects, client sites and content work by Omid — frontend development, WordPress, design and content strategy.",
+      ? `پروژه‌های وب و محتوایی ${BRAND.personFa} — توسعه فرانت‌اند، وردپرس، طراحی و استراتژی محتوا.`
+      : `A selection of live web projects, client sites and content work by ${BRAND.person} — frontend development, WordPress, design and content strategy.`,
     ...(isLocale(locale)
       ? { alternates: seoAlternates("showcase", locale) }
       : {}),
@@ -28,7 +30,9 @@ export async function generateMetadata({
 }
 
 const PROJECTS = [
-  { name: "My Portfolio", image: "/images/projects/sin.webp", description: "Sinisteroid — personal portfolio with a dynamic blog system, bilingual EN/FA.", descriptionFa: "سینستروئید — نمونه‌کار شخصی با سیستم وبلاگ پویا، دوزبانه (فارسی/انگلیسی).", tags: ["React", "Framer Motion", "Tailwind CSS"] },
+  // The Persian row keeps the handle LATIN (Option A: the site name is never
+  // transliterated), so the two locales describe one project under one name.
+  { name: "My Portfolio", image: "/images/projects/sin.webp", description: `${BRAND.site} — personal portfolio with a dynamic blog system, bilingual EN/FA.`, descriptionFa: `${BRAND.site} — نمونه‌کار شخصی با سیستم وبلاگ پویا، دوزبانه (فارسی/انگلیسی).`, tags: ["React", "Framer Motion", "Tailwind CSS"] },
   { name: "Moblshuyi", image: "/images/projects/mobl.webp", description: "Premium upholstery & carpet cleaning — complete WordPress design and content strategy.", descriptionFa: "خدمات مبلمان و فرش — طراحی کامل وردپرس و استراتژی محتوا.", tags: ["WordPress", "Elementor", "Content Strategy"] },
   { name: "CarpetDey", image: "/images/projects/carpet.webp", description: "Professional carpet cleaning services — web design and SEO content.", descriptionFa: "خدمات حرفه‌ای قالیشویی — طراحی وب و محتوای سئو شده.", tags: ["Web Design", "SEO Content"] },
   { name: "Tamir Center", image: "/images/projects/tamir.webp", description: "Fridge & freezer repairs — appliance repair site with a local SEO focus.", descriptionFa: "تعمیر یخچال و فریزر — سایت تعمیرات با تمرکز سئوی محلی.", tags: ["Web Design", "Local SEO"] },
@@ -64,8 +68,8 @@ export default async function ShowcasePage({
             locale
           ),
           breadcrumbJsonLd([
-            { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
-            { name: locale === "fa" ? "نمونه‌کارها" : "Showcase", url: `https://sinisteroid.ir/${locale}/showcase/` },
+            { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },
+            { name: locale === "fa" ? "نمونه‌کارها" : "Showcase", url: `${SITE}/${locale}/showcase/` },
           ]),
         ]}
       />

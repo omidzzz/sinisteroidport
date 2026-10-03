@@ -4,7 +4,8 @@ import { Rail } from "@/components/ui/Section";
 import SysRule from "./SysRule";
 import { ArrowIcon } from "@/components/ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
-import { SITE } from "@/lib/site";
+import { BRAND } from "@/lib/brand";
+import { GITHUB_HANDLE, TELEGRAM_HANDLE } from "@/lib/contact";
 
 /**
  * HOME — CHANNELS (the close).
@@ -18,21 +19,23 @@ export default function ChannelsSection({ locale }: { locale: Locale }) {
   const t = getDict(locale);
   const fa = locale === "fa";
 
+  // Display forms come from lib/contact (derived from the brand URLs), so a
+  // printed handle can never disagree with the link beside it.
   const rows = [
     {
       key: "email",
-      value: SITE.email,
-      href: `mailto:${SITE.email}`,
+      value: BRAND.contact.email,
+      href: `mailto:${BRAND.contact.email}`,
     },
     {
       key: "github",
-      value: SITE.github.replace(/^https:\/\/(?:www\.)?/, ""),
-      href: SITE.github,
+      value: GITHUB_HANDLE,
+      href: BRAND.contact.github,
     },
     {
       key: "telegram",
-      value: SITE.telegram.replace(/^https:\/\/t\.me\//, "@"),
-      href: SITE.telegram,
+      value: TELEGRAM_HANDLE,
+      href: BRAND.contact.telegram,
     },
   ];
 
@@ -65,7 +68,7 @@ export default function ChannelsSection({ locale }: { locale: Locale }) {
                       {row.value}
                     </a>
                     <CopyEmailButton
-                      email={SITE.email}
+                      email={BRAND.contact.email}
                       copyLabel={fa ? "کپی" : "Copy"}
                       copiedLabel={fa ? "کپی شد ✓" : "Copied ✓"}
                     />

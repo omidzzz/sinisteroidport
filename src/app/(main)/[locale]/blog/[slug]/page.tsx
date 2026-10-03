@@ -103,7 +103,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: meta.title,
       description: meta.excerpt,
-      url: `https://sinisteroid.ir/${locale}/blog/${slug}/`,
+      url: `${SITE}/${locale}/blog/${slug}/`,
       type: "article",
       publishedTime: meta.date,
       modifiedTime: isoDate(post.updated ?? meta.date),

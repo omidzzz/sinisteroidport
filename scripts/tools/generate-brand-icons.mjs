@@ -12,14 +12,14 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { BRAND, root } from "../lib/brand.mjs";
 
-const root = path.resolve(import.meta.dirname, "..", "..");
 const svg = fs.readFileSync(path.join(root, "public", "brand-mark.svg"), "utf8");
 
 // Opaque backing plate (the charcoal site ground) for touch icons.
 const opaque = svg.replace(
   "<rect ",
-  '<rect width="48" height="48" fill="#272727"/><rect '
+  `<rect width="48" height="48" fill="${BRAND.themeColors.dark}"/><rect `
 );
 
 const sharp = (await import("sharp")).default;

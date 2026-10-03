@@ -5,7 +5,8 @@ import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import LabPlate from "@/components/lab/LabPlate";
 import LabSwatch from "@/components/lab/LabSwatch";
 import { getDict, isLocale, loc, type Locale } from "@/lib/i18n";
-import { seoAlternates } from "@/lib/seo";
+import { seoAlternates, SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { itemListJsonLd, breadcrumbJsonLd } from "@/lib/schema";
 
@@ -19,13 +20,41 @@ const PLATES: { prop: string; no: string; en: string; fa: string }[] = [
 ];
 
 /** The palette the whole edition is mixed from — rendered from the same
- *  five values the tokens define, so the page cannot drift from the CSS. */
+ *  five values the tokens define, so the page cannot drift from the CSS.
+ *  All FIVE read from the brand source (two grounds + three inks); the CSS
+ *  token sheet and the @property initial-values are the styling side of the
+ *  same values, and verify-craft asserts the hexes agree in both. */
 const SWATCHES = [
-  { hex: "#272727", token: "--color-bg", role: "ground", roleFa: "زمینه" },
-  { hex: "#eff1f3", token: "--color-surface", role: "cards", roleFa: "کارت‌ها" },
-  { hex: "#fed766", token: "--color-accent", role: "signature", roleFa: "امضا" },
-  { hex: "#009fb7", token: "--color-accent-2", role: "secondary", roleFa: "فرعی" },
-  { hex: "#696773", token: "--color-muted", role: "structure", roleFa: "ساختار" },
+  {
+    hex: BRAND.themeColors.dark,
+    token: "--color-bg",
+    role: "ground",
+    roleFa: "زمینه",
+  },
+  {
+    hex: BRAND.themeColors.light,
+    token: "--color-surface",
+    role: "cards",
+    roleFa: "کارت‌ها",
+  },
+  {
+    hex: BRAND.inks.signature,
+    token: "--color-accent",
+    role: "signature",
+    roleFa: "امضا",
+  },
+  {
+    hex: BRAND.inks.secondary,
+    token: "--color-accent-2",
+    role: "secondary",
+    roleFa: "فرعی",
+  },
+  {
+    hex: BRAND.inks.structure,
+    token: "--color-muted",
+    role: "structure",
+    roleFa: "ساختار",
+  },
 ];
 
 export function generateStaticParams() {
@@ -139,8 +168,8 @@ export default async function LabPage({
             locale
           ),
           breadcrumbJsonLd([
-            { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
-            { name: locale === "fa" ? "آزمایشگاه گرافیک" : "Graphics Lab", url: `https://sinisteroid.ir/${locale}/lab/` },
+            { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },
+            { name: locale === "fa" ? "آزمایشگاه گرافیک" : "Graphics Lab", url: `${SITE}/${locale}/lab/` },
           ]),
         ]}
       />

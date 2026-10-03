@@ -2,6 +2,11 @@
 
 import { useEffect } from "react";
 import { trackEvent } from "@/lib/analytics";
+import { BRAND } from "@/lib/brand";
+
+/** Hostname of the canonical donate URL — used to classify clicks as
+ *  donate_click without re-declaring the vendor's domain. */
+const DONATE_HOST = new URL(BRAND.contact.donate).hostname;
 
 /**
  * Zero-point event wiring for the static export — a single delegated click
@@ -64,7 +69,7 @@ export function AnalyticsEvents() {
           trackEvent("contact_click", { method: "email", text });
         } else if (href.startsWith("tel:")) {
           trackEvent("contact_click", { method: "phone", text });
-        } else if (href.includes("donatr.ee")) {
+        } else if (href.includes(DONATE_HOST)) {
           trackEvent("donate_click", { url: href, text });
         } else if (/^https?:/.test(href)) {
           // Skip internal navigation (next/link resolves to our own origin).

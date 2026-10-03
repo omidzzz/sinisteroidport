@@ -5,6 +5,8 @@ import Link from "next/link";
 import Magnetic from "@/components/ui/Magnetic";
 import { ArrowIcon } from "@/components/ui/icons";
 import { getDict, loc, type Locale } from "@/lib/i18n";
+import { BRAND } from "@/lib/brand";
+import LogoType from "@/components/layout/LogoType";
 
 /** ONE shared observer for every ticker, reused across mounts. */
 let tickerObserver: IntersectionObserver | null = null;
@@ -33,10 +35,10 @@ function observeTicker(el: Element, onChange: (visible: boolean) => void) {
 /**
  * HOME ACT I — CRAFT CONSOLE HERO
  *
- * The wordmark is the HANDLE, not the legal name: SINISTEROID is what the
- * site, the posts and the resident agent all answer to, and the two sentences
- * under it are where the person is introduced. Everything else the old hero
- * carried — a live clock, an equaliser, the status card around them — was
+ * The wordmark is the HANDLE, not the legal name: Sinisteroid is what the
+ * site, the posts and the resident agent all answer to (see lib/brand.ts),
+ * and the two sentences under it are where the person is introduced.
+ * Everything else the old hero carried — a live clock, an equaliser, the status card around them — was
  * furniture that spent a frame budget on information four words of mono hold.
  *
  * Performance is part of the design here, so the omissions are deliberate:
@@ -85,10 +87,23 @@ export default function HeroSection({ locale }: { locale: Locale }) {
             <span className="craft-label">{t.heroKicker}</span>
           </p>
 
-          {/* dir="ltr": the wordmark is a Latin brand name, so it must not
-              inherit the RTL paragraph direction on /fa/. */}
+          {/* The wordmark IS the brand lockup, not a bare text handle: the
+              first thing on the page and the footer masthead were previously
+              two different marks. LogoType renders SINISTER[OID] from
+              brand.json, and `hero` keeps this flat-ink art direction — no
+              gradient, no glow. The brackets/suffix scale in `em`, so the
+              h1's clamp() ladder below still governs the whole lockup.
+
+              dir="ltr" on the h1 as well as inside LogoType: the lockup is
+              ASCII and must not inherit RTL paragraph direction on /fa/.
+              The visually-hidden "Sinisteroid" carries the accessible name
+              and the crawlable h1 text, so assistive tech and crawlers read
+              the handle rather than "SINISTER bracket OID bracket". */}
           <h1 className="craft-hero-name" dir="ltr">
-            {t.heroTitle}
+            <span className="sr-only">{BRAND.site}</span>
+            <span aria-hidden="true">
+              <LogoType variant="hero" />
+            </span>
           </h1>
 
           <p className="craft-hero-desc">{t.heroIntro}</p>

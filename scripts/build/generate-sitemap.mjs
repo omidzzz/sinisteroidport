@@ -21,12 +21,8 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { BRAND, root, SITE } from "../lib/brand.mjs";
 import { execFileSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..", "..");
-const SITE = "https://sinisteroid.ir";
 
 const today = new Date().toISOString().slice(0, 10);
 

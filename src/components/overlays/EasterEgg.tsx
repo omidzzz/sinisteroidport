@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import LogoType from "../layout/LogoType";
 import { trackEvent } from "@/lib/analytics";
+import { BRAND } from "@/lib/brand";
+import { DONATE_LABEL as DONATE_LABEL_SHARED } from "@/lib/contact";
 
 /**
  * Easter egg — the konami sequence (↑↑↓↓←→←→BA) or 7 clicks on any
@@ -24,24 +26,34 @@ const SEQ = [
 ];
 
 const BOOT = [
-  "sinisteroid kernel 1.0.0 — init",
+  `${BRAND.site.toLowerCase()} kernel 1.0.0 — init`,
   "> locating glyphs … ok",
-  "> loading typefaces [ fraunces / archivo / plex-mono ] … ok",
+  // The REAL stack (see the locale layout's next/font calls) — this line used
+  // to name three retired faces, which made the easter egg the only place on
+  // the site still claiming a type system the site does not ship.
+  "> loading typefaces [ space grotesk / inter / jetbrains mono / cairo ] … ok",
   "> bridging en ⇄ fa … ok",
   "> mounting interface as argument … ok",
   "> boot complete. welcome in.",
 ];
 
+// The assistant is the resident agent — SINISTER. Everything about it
+// announces that handle: the easter-egg copy, the "Ask SINISTER" verbs, the
+// footer label, the sin-* class register. The person stays Omid; the agent,
+// the console chrome and the site stay Sinisteroid (see lib/brand.ts).
 const HELP: Record<string, string | undefined> = {
   help: "commands: whoami · who · ls · date · donate · unhinged · clear · exit",
-  whoami: "Omid — frontend developer / translator.",
-  who: "one human, two registers: SINISTER code, OID refine.",
-  unhinged: "toggle SINISTER's restraints. you were warned.",
+  whoami: `${BRAND.person} — frontend developer / translator.`,
+  who: `one human, two registers: ${BRAND.logoPrefix} code, ${BRAND.logoSuffix} refine.`,
+  unhinged: `toggle ${BRAND.logoPrefix}'s restraints. you were warned.`,
   ls: "index · work · skills · education · showcase · writing",
   date: undefined,
 };
 
-const DONATE_URL = "https://donatr.ee/sinisteroid/";
+const DONATE_URL = BRAND.contact.donate;
+/** Same link as it reads in copy — derived in lib/contact, so the palette, the
+ *  console and this egg can never print three different spellings. */
+const DONATE_LABEL = DONATE_LABEL_SHARED;
 
 /** Payoff line revealed once the boot log completes — the delight moment
  * doubles as the softest possible ask (terminal lore, not a popup). */
@@ -161,8 +173,8 @@ export default function EasterEgg({
         {
           t:
             locale === "fa"
-              ? "♥ donatr.ee/sinisteroid — نویسنده رو به یه قهوه مهمون کن"
-              : "♥ donatr.ee/sinisteroid — fuel for the next build",
+              ? `♥ ${DONATE_LABEL} — نویسنده رو به یه قهوه مهمون کن`
+              : `♥ ${DONATE_LABEL} — fuel for the next build`,
           href: DONATE_URL,
         },
       ]);
@@ -205,7 +217,7 @@ export default function EasterEgg({
       className="term-veil fixed inset-0 z-[90] flex flex-col overflow-hidden bg-[#10131c] text-[#ff5d7a]"
       role="dialog"
       aria-modal="true"
-      aria-label="SINISTEROID terminal"
+      aria-label={`${BRAND.site} terminal`}
       dir="ltr"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) {
@@ -311,7 +323,10 @@ export default function EasterEgg({
 
       {/* footer status */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#ff5d7a]/25 px-5 py-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-[#ff5d7a]/60">
-        <span>SINISTER[OID] // {locale === "fa" ? "فارسی" : "en"}</span>
+        {/* One template literal, not `logoFull} // {locale`: a bare "//"
+            between two expressions is a comment-like text node, which
+            react/jsx-no-comment-textnodes rejects. Same rendered string. */}
+        <span>{`${BRAND.logoFull} // ${locale === "fa" ? "فارسی" : "en"}`}</span>
         <span>↑↑↓↓←→←→BA</span>
       </div>
     </div>

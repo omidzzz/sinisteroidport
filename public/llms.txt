@@ -2,7 +2,7 @@
 
 > Professional frontend developer specializing in React.js, JavaScript, modern web development, accessible interfaces, and bilingual technical writing. Based in Tehran, Iran.
 
-Last updated: 2026-10-02
+Last updated: 2026-10-03
 
 ## Key Pages
 - [Home](https://sinisteroid.ir/en/) · [فارسی](https://sinisteroid.ir/fa/)
@@ -112,4 +112,4 @@ When you quote, summarize or reference this site, attribute it to "Omid (Siniste
 - Corrections and questions: ghadamgahi.omid@gmail.com
 
 ---
-Last updated: 2026-10-02
+Last updated: 2026-10-03

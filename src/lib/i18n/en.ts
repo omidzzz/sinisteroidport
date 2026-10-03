@@ -10,9 +10,11 @@ const en = {
     { index: "07", label: "Writing" },
     { index: "08", label: "Contact" },
   ] as { index: string; label: string }[],
-  site: "/ sinisteroid.ir",
   city: "Tehran, Iran",
-  heroTitle: "SINISTEROID",
+  /* heroTitle is gone: the wordmark is the brand lockup now, rendered from
+     brand.json by <LogoType variant="hero">. A per-locale copy of the handle
+     was a second place the site name lived, and it would have silently drifted
+     from brand.json the moment either changed. */
   heroKicker: "(Portfolio) Frontend Developer — career est. 2012",
   heroIntro:
     "I'm Omid — a frontend developer in Tehran. I build fast, accessible interfaces and AI-agent experiences, from interface architecture to production performance.",
@@ -104,7 +106,7 @@ const en = {
     ask: "Ask SINISTER to draft your first message",
     askPrompt:
       "Draft my first message to Omid — short, sharp, human. I need frontend help.",
-    /* Per-channel voice. The destinations themselves live in lib/site.ts —
+    /* Per-channel voice. The destinations themselves live in lib/brand.ts —
        this is only what each channel is CALLED and what it is FOR. */
     voice: {
       email: {

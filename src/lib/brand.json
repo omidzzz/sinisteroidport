@@ -1,0 +1,30 @@
+{
+  "person": "Omid",
+  "personFa": "امید",
+  "personSlug": "omid",
+  "promptHost": "omid@sinisteroid",
+  "site": "Sinisteroid",
+  "logoPrefix": "SINISTER",
+  "logoSuffix": "OID",
+  "logoFull": "SINISTER[OID]",
+  "domain": "https://sinisteroid.ir",
+  "host": "sinisteroid.ir",
+  "socialHandle": "@sinisteroid",
+  "contact": {
+    "email": "ghadamgahi.omid@gmail.com",
+    "phone": "+989367471992",
+    "phoneLabel": "+98 936 747 1992",
+    "github": "https://github.com/omidzzz",
+    "telegram": "https://t.me/simplyeffedup",
+    "donate": "https://donatr.ee/sinisteroid/"
+  },
+  "themeColors": {
+    "light": "#eff1f3",
+    "dark": "#272727"
+  },
+  "inks": {
+    "signature": "#fed766",
+    "secondary": "#009fb7",
+    "structure": "#696773"
+  }
+}

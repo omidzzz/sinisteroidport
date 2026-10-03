@@ -18,7 +18,8 @@ import { AnalyticsEvents } from "@/components/analytics/AnalyticsEvents";
 import { EasterEggLazy } from "@/components/overlays/CommandPaletteLazy";
 import AgentChatLazy from "@/components/overlays/AgentChatLazy";
 import { isLocale, locales, loc, getDict, type Locale } from "@/lib/i18n";
-import { seoAlternates } from "@/lib/seo";
+import { seoAlternates, SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { personJsonLd, websiteJsonLd } from "@/lib/schema";
 import "../../globals.css";
@@ -28,7 +29,7 @@ import "../../globals.css";
 // a theme the user has explicitly saved ("light"), and ignores the OS
 // color-scheme (which would otherwise light-wash the whole site on
 // light-OS machines). Every edition is explicit: data-theme is always set.
-const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m){m.content=t==="light"?"#eff1f3":"#272727"}}catch(e){}`;
+const THEME_INIT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m){m.content=t==="light"?"${BRAND.themeColors.light}":"${BRAND.themeColors.dark}"}}catch(e){}`;
 
 // With output: "export", only render locales listed in generateStaticParams.
 // Any other value (e.g. /admin/) → 404 instead of a runtime crash.
@@ -59,7 +60,7 @@ export const viewport: Viewport = {
   // The charcoal ground, i.e. the edition a first-time visitor gets. THEME_INIT
   // re-points this at the light ground before first paint when the saved
   // edition is light, so the Safari URL bar never flashes the wrong colour.
-  themeColor: "#272727",
+  themeColor: BRAND.themeColors.dark,
 };
 
 // CODE & CRAFT type voices. Latin: Space Grotesk drives --font-display
@@ -152,18 +153,20 @@ export async function generateMetadata({
   const { locale } = await params;
   const fa = isLocale(locale) && locale === "fa";
   return {
-    metadataBase: new URL("https://sinisteroid.ir"),
+    metadataBase: new URL(BRAND.domain),
     // Children (blog posts, section pages) only set a bare title —
-    // this template appends the site-wide suffix for them.
+    // this template appends the site-wide person suffix for them
+    // (BRAND Option A: Omid the person, Sinisteroid the website).
     title: {
-      template: fa ? "%s – امید" : "%s – Omid",
+      template: `%s – ${fa ? BRAND.personFa : BRAND.person}`,
       default: fa
-        ? "امید – نمونه‌کار توسعه‌دهنده فرانت‌اند"
-        : "Omid – Frontend Developer Portfolio",
+        ? `${BRAND.personFa} – نمونه‌کار توسعه‌دهنده فرانت‌اند`
+        : `${BRAND.person} – Frontend Developer Portfolio`,
     },
-    description:
-      "Personal portfolio of Omid – adaptive frontend developer with skills in React, CSS, and JavaScript. Based in Tehran, Iran.",
-    authors: [{ name: "Omid" }],
+    description: fa
+      ? `${BRAND.personFa} — پورتفولیوی توسعه‌دهنده فرانت‌اند با مهارت‌های React، CSS و جاوااسکریپت. ساکن تهران، ایران.`
+      : `Personal portfolio of ${BRAND.person} – adaptive frontend developer with skills in React, CSS, and JavaScript. Based in Tehran, Iran.`,
+    authors: [{ name: BRAND.person }],
     manifest: "/manifest.json",
     icons: {
       icon: [
@@ -184,11 +187,11 @@ export async function generateMetadata({
         }
       : {}),
     openGraph: {
-      siteName: "Sinisteroid",
+      siteName: BRAND.site,
       type: "website",
       // Per-locale URL: the domain root is an internal rewrite of one of the
       // two homes, so claiming it as every locale's og:url blurred them apart.
-      url: fa ? "https://sinisteroid.ir/fa/" : "https://sinisteroid.ir/en/",
+      url: fa ? `${SITE}/fa/` : `${SITE}/en/`,
       locale: fa ? "fa_IR" : "en_US",
       alternateLocale: fa ? "en_US" : "fa_IR",
       // Dedicated 1200x630 social card (og-default.jpg lives in /public)
@@ -198,15 +201,15 @@ export async function generateMetadata({
           width: 1200,
           height: 630,
           alt: fa
-            ? "امید — توسعه‌دهنده فرانت‌اند: نمونه‌کار، نوشته‌ها و آزمایشگاه گرافیک"
-            : "Omid — frontend developer: portfolio, writing and graphics lab",
+            ? `${BRAND.personFa} — توسعه‌دهنده فرانت‌اند: نمونه‌کار، نوشته‌ها و آزمایشگاه گرافیک`
+            : `${BRAND.person} — frontend developer: portfolio, writing and graphics lab`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      site: "@sinisteroid",
-      creator: "@sinisteroid",
+      site: BRAND.socialHandle,
+      creator: BRAND.socialHandle,
     },
   };
 }

@@ -1,20 +1,28 @@
 import type { Locale } from "../i18n";
 import type { FaqItem, Post } from "../blog/types";
 import { SITE } from "../seo";
+import { BRAND, PERSON_ID } from "../brand";
 
 /**
  * JSON-LD structured data builders (SEO + GEO).
  * Pure data functions — no JSX. Rendered into the SSR HTML via the
  * <JsonLd> component (src/components/ui/JsonLd.tsx) so search engines and
  * AI crawlers see them without executing JavaScript.
+ *
+ * Identity policy (Option A): the Person is Omid, the WebSite is
+ * Sinisteroid, and every author/publisher node reuses the same AUTHOR
+ * constant — one entity, one @id, everywhere. Every name, URL and handle in
+ * this file is read from lib/brand; nothing here re-declares an identity fact.
+ * PERSON_ID (imported above) is the single definition of the person's
+ * knowledge-graph node — see lib/brand.ts for why it is not derived here.
  */
 
 const AUTHOR = {
   "@type": "Person",
   // Stable node id — unifies Person / BlogPosting author / WebSite publisher
   // into a single knowledge-graph entity.
-  "@id": `${SITE}/#omid`,
-  name: "Omid",
+  "@id": PERSON_ID,
+  name: BRAND.person,
   url: SITE,
 } as const;
 
@@ -34,9 +42,9 @@ export function personJsonLd(locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
-    "@id": `${SITE}/#omid`,
-    name: "Omid",
-    ...(locale === "fa" ? { alternateName: "امید" } : {}),
+    "@id": PERSON_ID,
+    name: BRAND.person,
+    ...(locale === "fa" ? { alternateName: BRAND.personFa } : {}),
     url: SITE,
     image: `${SITE}/apple-touch-icon.png`,
     description:
@@ -78,10 +86,7 @@ export function personJsonLd(locale: Locale) {
       "AI Coding Agents (Cline, Claude Code)",
       "Local LLMs (Ollama, Open WebUI)",
     ],
-    sameAs: [
-      "https://github.com/omidzzz",
-      "https://t.me/simplyeffedup",
-    ],
+    sameAs: [BRAND.contact.github, BRAND.contact.telegram],
   };
 }
 
@@ -89,7 +94,7 @@ export function websiteJsonLd(locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Sinisteroid",
+    name: BRAND.site,
     url: `${SITE}/${locale}/`,
     inLanguage: locale,
     publisher: AUTHOR,
@@ -145,7 +150,10 @@ export function blogIndexJsonLd(
     "@type": "CollectionPage",
     "@id": url,
     url,
-    name: locale === "fa" ? "نوشته‌ها — Sinisteroid" : "Writing — Sinisteroid",
+    name:
+      locale === "fa"
+        ? `نوشته‌ها — ${BRAND.site}`
+        : `Writing — ${BRAND.site}`,
     inLanguage: locale,
     isPartOf: { "@type": "WebSite", url: `${SITE}/${locale}/` },
     mainEntity: {
@@ -250,25 +258,34 @@ export function breadcrumbJsonLd(
 
 export function contactPageJsonLd(locale: Locale) {
   const url = `${SITE}/${locale}/contact/`;
+  // Option A: the page is the PERSON's contact page (the person is who you
+  // reach), so the Persian prose uses امید and the Latin prose "Omid" — both
+  // read from the brand rather than typed into the string.
+  const person = locale === "fa" ? BRAND.personFa : BRAND.person;
   return {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: locale === "fa" ? "تماس و ارتباط با امید" : "Contact & Availability — Omid",
+    name:
+      locale === "fa"
+        ? `تماس و ارتباط با ${person}`
+        : `Contact & Availability — ${person}`,
     url,
     description:
       locale === "fa"
-        ? "راه‌های تماس مستقیم با امید — ایمیل، گیت‌هاب، تلگرام یا تلفن. پاسخگویی در ۲۴ ساعت."
-        : "Direct contact channels for Omid — email, GitHub, Telegram or phone. Replies within 24 hours.",
+        ? `راه‌های تماس مستقیم با ${person} — ایمیل، گیت‌هاب، تلگرام یا تلفن. پاسخگویی در ۲۴ ساعت.`
+        : `Direct contact channels for ${person} — email, GitHub, Telegram or phone. Replies within 24 hours.`,
     mainEntity: {
       "@type": "Person",
-      "@id": `${SITE}/#omid`,
-      name: "Omid",
+      // The same node id as the site-wide Person: the contact page describes
+      // the author, not a second, contact-specific person.
+      "@id": PERSON_ID,
+      name: BRAND.person,
       contactPoint: [
         {
           "@type": "ContactPoint",
           contactType: "customer service",
-          email: "ghadamgahi.omid@gmail.com",
-          telephone: "+989367471992",
+          email: BRAND.contact.email,
+          telephone: BRAND.contact.phone,
           availableLanguage: ["en", "fa"],
         },
       ],

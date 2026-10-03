@@ -16,12 +16,9 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { BRAND, root, SITE } from "../lib/brand.mjs";
 import sharp from "sharp";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..", "..");
-const SITE = "https://sinisteroid.ir";
 const W = 1200;
 const H = 630;
 
@@ -76,7 +73,9 @@ function wrap(text, maxChars, maxLines) {
 }
 
 /** SVG text overlay: brand mark, headline, site URL. Rendered by librsvg
- * (pango) — handles Latin + RTL Arabic-script shaping. */
+ * (pango) — handles Latin + RTL Arabic-script shaping.
+ * Option A: the eyebrow is the site handle (Latin everywhere, pinned by
+ * geometry); the byline names the person, in the post's own language. */
 function overlaySvg(title, isFa) {
   const lines = wrap(title, isFa ? 34 : 38, 3);
   const fs_ = lines.some((l) => l.length > 30) ? 56 : 68;
@@ -97,10 +96,10 @@ function overlaySvg(title, isFa) {
   </defs>
   <rect width="${W}" height="${H}" fill="url(#fade)"/>
   <rect x="80" y="64" width="56" height="6" fill="${ACID}"/>
-  <text x="152" y="76" font-size="24" letter-spacing="8" fill="${ACID}" font-weight="600">SINISTEROID</text>
-  <text x="${W - 80}" y="76" font-size="20" letter-spacing="2" fill="${CYAN}" text-anchor="end">${isFa ? "امید — فرانت‌اند" : "OMID — FRONTEND"}</text>
+  <text x="152" y="76" font-size="24" letter-spacing="8" fill="${ACID}" font-weight="600">${BRAND.site.toUpperCase()}</text>
+  <text x="${W - 80}" y="76" font-size="20" letter-spacing="2" fill="${CYAN}" text-anchor="end">${isFa ? `${BRAND.personFa} — فرانت‌اند` : `${BRAND.person.toUpperCase()} — FRONTEND`}</text>
   ${titleLines}
-  <text x="80" y="${H - 70}" font-size="24" letter-spacing="3" fill="${CYAN}">sinisteroid.ir</text>
+  <text x="80" y="${H - 70}" font-size="24" letter-spacing="3" fill="${CYAN}">${BRAND.host}</text>
 </svg>`;
 }
 

@@ -6,7 +6,7 @@
  *         npm run indexnow /en/blog/… /fa/…   (submit specific paths)
  *
  * The shared key file (public/<key>.txt) must be reachable at
- * https://sinisteroid.ir/<key>.txt — it ships with the static export.
+ * <origin>/<key>.txt — it ships with the static export.
  *
  * `npm run deploy` now chains this as its last step, so every release
  * pings the engines automatically (Bing re-crawls whatever it receives,
@@ -15,11 +15,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..", "..");
-const SITE = "https://sinisteroid.ir";
+import { BRAND, root, SITE } from "../lib/brand.mjs";
 
 const keyFile = fs
   .readdirSync(path.join(root, "public"))
@@ -52,7 +48,7 @@ const res = await fetch("https://api.indexnow.org/IndexNow", {
   method: "POST",
   headers: { "Content-Type": "application/json; charset=utf-8" },
   body: JSON.stringify({
-    host: "sinisteroid.ir",
+    host: BRAND.host,
     key,
     keyLocation: `${SITE}/${keyFile}`,
     urlList,

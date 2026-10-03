@@ -98,8 +98,8 @@ export default async function BlogPage({
       <JsonLd
         data={[
           breadcrumbJsonLd([
-            { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
-            { name: locale === "fa" ? "نوشته‌ها" : "Writing", url: `https://sinisteroid.ir/${locale}/blog/` },
+            { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },
+            { name: locale === "fa" ? "نوشته‌ها" : "Writing", url: `${SITE}/${locale}/blog/` },
           ]),
           blogIndexJsonLd(archiveItems, locale),
         ]}

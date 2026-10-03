@@ -11,6 +11,7 @@ import {
   postHref,
 } from "@/lib/blog/format";
 import { isLocale, type Locale } from "@/lib/i18n";
+import { BRAND } from "@/lib/brand";
 import { seoAlternates, SITE } from "@/lib/seo";
 import {
   normalizeTags,
@@ -46,8 +47,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: locale === "fa" ? `نوشته‌های «${label}»` : `Posts tagged “${label}”`,
     description:
       locale === "fa"
-        ? `همهٔ نوشته‌های موضوع «${label}» در وب‌لاگ امید — توسعه فرانت‌اند، هوش مصنوعی محلی و آینده جست‌وجو.`
-        : `Every post on “${label}” in Omid's writing — frontend development, local AI, and the shifting landscape of search.`,
+        ? `همهٔ نوشته‌های موضوع «${label}» در وب‌لاگ ${BRAND.personFa} — توسعه فرانت‌اند، هوش مصنوعی محلی و آینده جست‌وجو.`
+        : `Every post on “${label}” in ${BRAND.person}'s writing — frontend development, local AI, and the shifting landscape of search.`,
     alternates: seoAlternates(`tags/${tag}`, locale),
   };
 }

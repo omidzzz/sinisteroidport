@@ -5,7 +5,7 @@
   "description": "Omid – Frontend Developer Portfolio (Next.js)",
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/build/generate-og-cards.mjs && node scripts/build/generate-llms.mjs && node scripts/build/generate-sitemap.mjs && node scripts/build/generate-rss.mjs && next build --webpack && node scripts/build/fix-segment-cache-paths.mjs --prune && node scripts/build/optimize-images.mjs --out && node scripts/build/inline-fonts.mjs",
+    "build": "node scripts/build/generate-og-cards.mjs && node scripts/build/generate-llms.mjs && node scripts/build/generate-sitemap.mjs && node scripts/build/generate-rss.mjs && node scripts/build/generate-manifest.mjs && next build --webpack && node scripts/build/fix-segment-cache-paths.mjs --prune && node scripts/build/optimize-images.mjs --out && node scripts/build/inline-fonts.mjs",
     "start": "next start",
     "lint": "eslint .",
     "indexnow": "node scripts/tools/indexnow.mjs",
@@ -19,6 +19,8 @@
     "verify:craft": "node scripts/tools/verify-craft.mjs",
     "verify:ticker": "node scripts/tools/ticker-motion.mjs",
     "verify:seo": "node scripts/tools/seo-guard.mjs",
+    "verify:all": "node scripts/tools/verify-all.mjs",
+    "shots": "node scripts/tools/refresh-shots.mjs",
     "prune:css": "node scripts/tools/prune-dead-css.mjs",
     "probe:pages": "node scripts/tools/probe-pages.mjs",
     "verify-laptop": "node scripts/tools/verify-laptop-timing.mjs",

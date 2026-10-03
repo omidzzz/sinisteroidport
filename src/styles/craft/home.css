@@ -530,20 +530,21 @@ a.sys-channel-val:hover {
 .craft-hero-name {
   font-family: var(--font-display);
   font-weight: 800;
-  /* Ten glyphs, not four: the old 12.5vw / 10.5rem ladder was cut for "OMID"
-     and would overflow a 320px column with SINISTEROID. Measured worst case
-     is ~270px of word against a 288px column there. */
+  /* Ten glyphs' worth of lockup, not four: the old 12.5vw / 10.5rem ladder
+     was cut for "OMID" and would overflow a 320px column. The wordmark is now
+     SINISTER + a 0.46em [OID] suffix ≈ 10 em-widths, so this ladder still
+     fits the same column — but it was re-measured for the bracketed form, and
+     the suffix scales in `em` (logotype.css), so this one number governs the
+     whole lockup. */
   font-size: clamp(2.8rem, 9.2vw, 7.5rem);
   line-height: 0.9;
   letter-spacing: -0.022em;
   color: var(--color-ink);
 }
 
-/* The wordmark answers the route titles: the first glyph is struck in the
-   accent (the craft-hl voice, one letter instead of a whole word). No lang
-   gate any more — the title is a Latin brand name in BOTH locales, so there
-   is no Arabic-script ::first-letter reshape left to avoid. Flat ink, no
-   stroke and no glow: the "less glow, same identity" pass settled that. */
-.craft-hero-name::first-letter {
-  color: var(--color-accent-ink);
-}
+/* The accent on the leading S moved into the lockup itself
+   (logotype.css, .logo-type--hero .logo-hero-word::first-letter). It used to
+   live here, but the h1 no longer contains a bare text node — the word is
+   now a child span, and this selector was reaching into the visually-hidden
+   handle instead, where nothing would ever show it. The "flat ink, no stroke
+   and no glow" decision that this pass settled still stands. */

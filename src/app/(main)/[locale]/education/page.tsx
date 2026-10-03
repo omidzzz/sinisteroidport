@@ -3,7 +3,8 @@ import PageHero from "@/components/ui/PageHero";
 import Tilt from "@/components/ui/Tilt";
 import Reveal from "@/components/ui/Reveal";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
-import { seoAlternates } from "@/lib/seo";
+import { seoAlternates, SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/schema";
 
@@ -15,8 +16,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Education & Certifications",
-    description:
-      "Education background and online learning achievements of Omid, including university degrees and programming courses.",
+    description: `Education background and online learning achievements of ${BRAND.person}, including university degrees and programming courses.`,
     ...(isLocale(locale)
       ? { alternates: seoAlternates("education", locale) }
       : {}),
@@ -55,8 +55,8 @@ export default async function EducationPage({
       <Reveal>
       <JsonLd
         data={breadcrumbJsonLd([
-          { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
-          { name: locale === "fa" ? "تحصیلات" : "Education", url: `https://sinisteroid.ir/${locale}/education/` },
+          { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },
+          { name: locale === "fa" ? "تحصیلات" : "Education", url: `${SITE}/${locale}/education/` },
         ])}
       />
         <PageHero

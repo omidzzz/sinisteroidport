@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BlogPostDynamic from "@/components/blog/BlogPostDynamic";
 import { seoAlternates } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 import { isLocale, type Locale } from "@/lib/i18n";
 
 interface Props {
@@ -26,18 +27,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : "en";
   return {
-    title: locale === "fa" ? "نوشته‌ها — سینیسترویید" : "Writing — Sinisteroid",
+    // Option A: the website/handle stays Latin in Persian copy — never
+    // transliterated — so brand, keywords and schema agree.
+    title: locale === "fa" ? `نوشته‌ها — ${BRAND.site}` : `Writing — ${BRAND.site}`,
     description:
       locale === "fa"
-        ? "نوشته‌ای از وبلاگ سینیسترویید."
-        : "An article from the Sinisteroid blog.",
+        ? `نوشته‌ای از وبلاگ ${BRAND.site}.`
+        : `An article from the ${BRAND.site} blog.`,
     /* Placeholder exists ONLY so the prerendered shell carries a
        <meta name="keywords"> element. blog-post-template.php swaps its
        content per DB post (the hydration contract forbids ADDING head
        nodes, so the element must already exist). Direct visits to the
        reserved /blog/live/ route show this placeholder; every real
        DB-published post gets its authored keywords swapped in. */
-    keywords: "Sinisteroid",
+    keywords: BRAND.site,
     /* Self-canonical + the three hreflang links api/post.php swaps per DB
        post. Without alternates this shell inherits the layout's locale-root
        canonical, so every document served through it claimed to be a

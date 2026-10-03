@@ -1,13 +1,25 @@
 /**
- * make-icons.mjs — regenerates the brand icon set + OG card in the
- * PSIONIC ORBIT // ACID RAVE palette (acid lime / electric cyan on void).
+ * make-icons.mjs — LEGACY acid-rave generator. Superseded by
+ * scripts/tools/generate-brand-icons.mjs.
  *
- * Outputs (overwrites in /public):
- *   favicon.ico  (16/32/48/64 PNG-in-ICO) · logo192.png · logo512.png
- *   apple-touch-icon.png (180×180) · og-default.jpg (1200×630)
+ * It produced the acid-lime/cyan "orbit planet" mark. The site now ships the
+ * Code & Craft "S" tile (public/brand-mark.svg → generate-brand-icons.mjs),
+ * and BOTH scripts wrote the same five files in /public:
  *
- * Design: acid ring planet + cyan moon on the void — readable at 16px.
- * Usage: node scripts/build/make-icons.mjs
+ *     favicon.ico · logo192.png · logo512.png · apple-touch-icon.png · og-default.jpg
+ *
+ * with completely different artwork, and nothing stopped them. Whichever ran
+ * last silently won, so a re-run of this file could replace the current brand
+ * icons with a palette the site no longer uses — and nothing would say so.
+ *
+ * So this script now writes ONLY og-default.jpg (the default social card,
+ * which no other generator produces) unless you pass --legacy-icons, which
+ * re-enables the old overwrite behaviour deliberately.
+ *
+ *   node scripts/build/make-icons.mjs                # og-default.jpg only
+ *   node scripts/build/make-icons.mjs --legacy-icons # also the 4 icon files
+ *
+ * The shipped icon set belongs to generate-brand-icons.mjs. Run that one.
  */
 import sharp from "sharp";
 import fs from "node:fs";
@@ -15,6 +27,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const pub = path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", ".."), "public");
+const LEGACY_ICONS = process.argv.includes("--legacy-icons");
 const ACID = "#b8ff00";
 const CYAN = "#00e5ff";
 const VOID = "#020503";
@@ -90,24 +103,33 @@ function buildIco(frames) {
 const smallSvg = tileSvg(true);
 const largeSvg = tileSvg(false);
 
-const p512 = await png(largeSvg, 512);
-const p192 = await png(largeSvg, 192);
-const p180 = await png(largeSvg, 180);
-const p48 = await png(smallSvg, 48);
-const p32 = await png(smallSvg, 32);
-const p16 = await png(smallSvg, 16);
+/* The icon set is only rendered/written under --legacy-icons. Rendering them
+   unconditionally (then discarding) would still cost four sharp passes on
+   every run for files we intend to leave alone. */
+if (LEGACY_ICONS) {
+  const p512 = await png(largeSvg, 512);
+  const p192 = await png(largeSvg, 192);
+  const p180 = await png(largeSvg, 180);
+  const p48 = await png(smallSvg, 48);
+  const p32 = await png(smallSvg, 32);
+  const p16 = await png(smallSvg, 16);
 
-fs.writeFileSync(path.join(pub, "logo512.png"), p512);
-fs.writeFileSync(path.join(pub, "logo192.png"), p192);
-fs.writeFileSync(path.join(pub, "apple-touch-icon.png"), p180);
-fs.writeFileSync(
-  path.join(pub, "favicon.ico"),
-  buildIco([
-    { size: 16, buffer: p16 },
-    { size: 32, buffer: p32 },
-    { size: 48, buffer: p48 },
-  ])
-);
+  fs.writeFileSync(path.join(pub, "logo512.png"), p512);
+  fs.writeFileSync(path.join(pub, "logo192.png"), p192);
+  fs.writeFileSync(path.join(pub, "apple-touch-icon.png"), p180);
+  fs.writeFileSync(
+    path.join(pub, "favicon.ico"),
+    buildIco([
+      { size: 16, buffer: p16 },
+      { size: 32, buffer: p32 },
+      { size: 48, buffer: p48 },
+    ])
+  );
+} else {
+  console.log(
+    "• skipping favicon/logo192/logo512/apple-touch (owned by scripts/tools/generate-brand-icons.mjs — pass --legacy-icons to overwrite)"
+  );
+}
 
 /* ---- OG card (wordmark render check → textless fallback) ---- */
 async function makeOg(withText) {
@@ -129,6 +151,12 @@ if (flat) {
 
 fs.writeFileSync(path.join(pub, "og-default.jpg"), og);
 const kb = (f) => `${(fs.statSync(path.join(pub, f)).size / 1024).toFixed(0)}KB`;
-console.log(
-  `✓ favicon.ico ${kb("favicon.ico")} · logo192 ${kb("logo192.png")} · logo512 ${kb("logo512.png")} · apple ${kb("apple-touch-icon.png")} · og ${kb("og-default.jpg")}`
-);
+if (LEGACY_ICONS) {
+  console.log(
+    `✓ favicon.ico ${kb("favicon.ico")} · logo192 ${kb("logo192.png")} · logo512 ${kb("logo512.png")} · apple ${kb("apple-touch-icon.png")} · og ${kb("og-default.jpg")}`
+  );
+} else {
+  console.log(
+    `✓ og-default.jpg ${kb("og-default.jpg")} (legacy acid-rave card — icons left untouched)`
+  );
+}

@@ -8,6 +8,7 @@ import { getAllLivePosts, getLivePost } from "@/lib/blog/live";
 import { getRelatedPosts } from "@/lib/blog/related";
 import { blogPostingJsonLd } from "@/lib/schema";
 import { SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 import type { Locale } from "@/lib/i18n";
 
 type Status = "loading" | "ready" | "missing" | "error";
@@ -88,7 +89,10 @@ export default function BlogPostDynamic({ locale }: { locale: Locale }) {
 
   // Give DB-only posts a real <title> once loaded
   useEffect(() => {
-    if (post) document.title = `${postTitle(post, locale)} — Sinisteroid`;
+    // The handle suffix, not the person: this is a post ON the site, so it
+    // signs with the website (BRAND.site) — same as every prerendered post's
+    // server-rendered <title>.
+    if (post) document.title = `${postTitle(post, locale)} — ${BRAND.site}`;
   }, [post, locale]);
 
   /* DB-only posts get no server-rendered BlogPosting JSON-LD: the shell is

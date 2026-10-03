@@ -1071,3 +1071,161 @@ html[lang="fa"] .craft-contact-cta {
     transition: none;
   }
 }
+
+/* ============================================================
+   §8 FINISH — minimal aesthetic lift (2026-09-28)
+   ------------------------------------------------------------
+   CSS-only, additive, no new tokens / faces / JS / keyframes.
+   Rules: static paint or transform/opacity; logical props;
+   AA pairs untouched; motion net (motion.css, loaded last)
+   still wins under reduced motion.
+   ============================================================ */
+
+/* ---- §8a Coarse-pointer flat pass: glows read as blur on phones
+   and repaint on scroll. Drop them where they cost, keep the
+   hue in the fill/border so identity does not move. ---- */
+@media (pointer: coarse) {
+  .craft-title .craft-hl {
+    text-shadow: none;
+  }
+  .craft-eyebrow::before {
+    box-shadow: none;
+  }
+  /* Both ticker voices: the live craft band (its glow only exists on
+     :hover, which sticks after a tap) and the legacy ticket in
+     craft/ticker.css. Hue stays in the gradient fill. */
+  .craft-ticker-band,
+  .ticker-band,
+  .craft-ticker-bleed:hover .craft-ticker-band {
+    box-shadow: none;
+  }
+  /* The logotype, which was the one glow stack this pass used to skip: a
+     drop-shadow FILTER on gradient-clipped text (the expensive kind — it
+     repaints on every scroll tick) plus two text-shadows on the ring-O.
+     Dropped for the same reason as .craft-hl above, and identity survives
+     intact: the word keeps its yellow→teal gradient fill, the ring-O keeps
+     its outline (that is a stroke, not a shadow), and the [OID] suffix keeps
+     its accent ink. Only the halo goes. The blinking cursor is untouched —
+     it is an opacity keyframe on the compositor, not a repaint. */
+  .logo-sinister {
+    filter: none;
+  }
+  .logo-ring {
+    text-shadow: none;
+  }
+  .logo-id {
+    text-shadow: none;
+  }
+}
+
+/* ---- §8b Mobile wash dimmer: opacity ONLY. The wash box keeps its
+   100vw x 100dvh geometry (asserted in verify-craft), the light
+   just sits lower on small screens to avoid a washed-out hero. ---- */
+@media (max-width: 48rem) {
+  .craft-page-hero::before,
+  .craft-hero::before {
+    opacity: 0.75;
+  }
+  .craft-article::before {
+    opacity: 0.8;
+  }
+}
+
+/* ---- §8c Hero measure: two sentences, one comfortable line.
+   text-wrap:pretty is scoped to this short copy (never to posts). ---- */
+.craft-hero-desc {
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+
+/* ---- §8d Ledger tick strip: segmented-display finish over the
+   meter. Static repeating-gradient paint on a free pseudo, so zero
+   extra layers and zero per-frame cost. Mirrored for RTL. ---- */
+.ledger-meter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 7px,
+    rgba(0, 0, 0, 0.35) 7px 8px
+  );
+}
+[dir="rtl"] .ledger-meter::after {
+  background: repeating-linear-gradient(
+    -90deg,
+    transparent 0 7px,
+    rgba(0, 0, 0, 0.35) 7px 8px
+  );
+}
+
+/* ---- §8e Touch cue parity: hover lift sticks on tap, and the
+   slide-in actions would otherwise never appear on touch.
+   Park the lift; keep the cues visible statically. ---- */
+@media (hover: none), (pointer: coarse) {
+  .service-card:hover,
+  .post-card-grid:hover {
+    transform: none;
+  }
+  .service-action,
+  .post-card-action {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- §8f Keyboard parity: contact CTA resolves the same way for
+   keyboard as for pointer (outline stays — never removed). ---- */
+.craft-contact-cta:focus-visible {
+  background: color-mix(in srgb, var(--color-accent-fill) 92%, white);
+  transform: translateY(-2px);
+}
+
+/* ---- §8g Hero blueprint grid: one faint static grid behind the
+   copy (free ::after — only ::before is the wash). Desktop fine
+   pointers only; phones/print/reduced-data get the clean ground. ---- */
+@media (hover: hover) and (pointer: fine) {
+  @media (prefers-reduced-motion: no-preference) {
+    .craft-hero {
+      position: relative;
+    }
+    .craft-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(var(--rgb-ink), 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--rgb-ink), 0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      -webkit-mask-image: radial-gradient(
+        70% 70% at 50% 30%,
+        #000 30%,
+        transparent 75%
+      );
+      mask-image: radial-gradient(
+        70% 70% at 50% 30%,
+        #000 30%,
+        transparent 75%
+      );
+    }
+  }
+}
+@media print {
+  .ledger-meter::after,
+  .craft-hero::after {
+    display: none !important;
+  }
+}
+@media (prefers-reduced-data: reduce) {
+  .craft-hero::after {
+    display: none;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .craft-hero::after {
+    display: none;
+  }
+}

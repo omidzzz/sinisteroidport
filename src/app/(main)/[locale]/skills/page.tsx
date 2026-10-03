@@ -4,7 +4,8 @@ import Reveal from "@/components/ui/Reveal";
 import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import skillsData from "@/data/skills.json";
-import { seoAlternates } from "@/lib/seo";
+import { seoAlternates, SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/schema";
 
@@ -16,8 +17,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Skills & Competencies",
-    description:
-      "Explore the technical skills and competencies of Omid, including frameworks, tools, and technologies.",
+    description: `Explore the technical skills and competencies of ${BRAND.person}, including frameworks, tools, and technologies.`,
     ...(isLocale(locale)
       ? { alternates: seoAlternates("skills", locale) }
       : {}),
@@ -55,8 +55,8 @@ export default async function SkillsPage({
     <div className="mx-auto max-w-6xl px-5 sm:px-8">
       <JsonLd
         data={breadcrumbJsonLd([
-          { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
-          { name: locale === "fa" ? "مهارت‌ها" : "Skills", url: `https://sinisteroid.ir/${locale}/skills/` },
+          { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },
+          { name: locale === "fa" ? "مهارت‌ها" : "Skills", url: `${SITE}/${locale}/skills/` },
         ])}
       />
       <Reveal>

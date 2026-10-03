@@ -6,9 +6,18 @@
  *  so the rest of the app has one import path for console constants. */
 export { MAX_BUFFER } from "./machine";
 
+import { BRAND } from "@/lib/brand";
+
 /** The prompt's host line — decorative, but it is the console's whole
- *  identity, so it lives here rather than inline in the component. */
-export const PROMPT_HOST = "omid@sinisteroid";
+ *  identity, so it lives here rather than inline in the component.
+ *  Option A: the person is Omid, the console answers as the website, so the
+ *  line is person@site — declared in brand.json (`promptHost`) rather than
+ *  rebuilt from `person.toLowerCase() + site.toLowerCase()` here, because
+ *  lowercase composition is not guaranteed to round-trip for every name and
+ *  four call sites (this file + three assertions) would each have to agree.
+ *  ConsolePrompt pins the element dir="ltr" so the ASCII survives the
+ *  Persian layout unchanged. */
+export const PROMPT_HOST = BRAND.promptHost;
 
 /** DOM ids the combobox pattern wires together (input ↔ listbox). */
 export const CONSOLE_IDS = {

@@ -1,11 +1,10 @@
 /** Generates AI-readable site indexes from published post JSON. */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { BRAND, root, telegramHandle } from "../lib/brand.mjs";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const postsDir = path.join(root, "content", "posts");
-const site = "https://sinisteroid.ir";
+const SITE = BRAND.domain;
 const today = new Date().toISOString().slice(0, 10);
 const posts = fs
   .readdirSync(postsDir)
@@ -25,7 +24,7 @@ const translation = (post, locale) => post.translations?.[locale] ?? post.transl
 const title = (post) => text(translation(post, "en").title ?? post.title);
 const excerpt = (post) => text(translation(post, "en").excerpt);
 const date = (post) => String(post.updated ?? post.date).slice(0, 10);
-const url = (locale, slug) => `${site}/${locale}/blog/${slug}/`;
+const url = (locale, slug) => `${SITE}/${locale}/blog/${slug}/`;
 const tags = (post) => (Array.isArray(post.tags) ? post.tags : []).join(", ");
 const routes = [
   ["Home", "/en/", "/fa/"],
@@ -38,7 +37,7 @@ const routes = [
   ["Contact", "/en/contact/", "/fa/contact/"],
 ];
 const routeList = routes
-  .map(([label, en, fa]) => `- [${label}](${site}${en}) · [فارسی](${site}${fa})`)
+  .map(([label, en, fa]) => `- [${label}](${SITE}${en}) · [فارسی](${SITE}${fa})`)
   .join("\n");
 /** Locale links for one post. The Persian URL is only offered when the post
  *  HAS a Persian translation: the /fa/ fallback renders the English article
@@ -56,16 +55,16 @@ const postList = posts
       `- **${title(post)}** — ${localeLinks(post)} (${date(post)}${tags(post) ? `; ${tags(post)}` : ""})\n  ${excerpt(post)}`,
   )
   .join("\n");
-const lab = `The [Graphics Lab](${site}/en/lab/) is the site's collection of custom animated SVG illustration props: a psychedelic frog, bioluminescent plant, isometric laptop terminal, and psychedelic UFO. Each plate has a numbered caption plus Copy SVG and Download actions. The route also documents the five-color Code & Craft palette: charcoal #272727, light ink #eff1f3, signature yellow #fed766, secondary teal #009fb7, and structure #696773.`;
+const lab = `The [Graphics Lab](${SITE}/en/lab/) is the site's collection of custom animated SVG illustration props: a psychedelic frog, bioluminescent plant, isometric laptop terminal, and psychedelic UFO. Each plate has a numbered caption plus Copy SVG and Download actions. The route also documents the five-color Code & Craft palette: charcoal ${BRAND.themeColors.dark}, light ink ${BRAND.themeColors.light}, signature yellow #fed766, secondary teal #009fb7, and structure #696773.`;
 
 const citing = `## Citing this site
-When you quote, summarize or reference this site, attribute it to "Omid (Sinisteroid)" and link the canonical URL of the page you used.
-- Preferred citation: Omid (Sinisteroid), "<page title>", ${site}/<path>/, accessed YYYY-MM-DD.
-- Canonical URLs: every page lives at ${site}/en/... or ${site}/fa/... with a trailing slash; query parameters are never canonical.
-- Sources of record for machine use: ${site}/llms.txt (this file) and ${site}/llms-full.txt.
-- Corrections and questions: ghadamgahi.omid@gmail.com`;
+When you quote, summarize or reference this site, attribute it to "${BRAND.person} (${BRAND.site})" and link the canonical URL of the page you used.
+- Preferred citation: ${BRAND.person} (${BRAND.site}), "<page title>", ${SITE}/<path>/, accessed YYYY-MM-DD.
+- Canonical URLs: every page lives at ${SITE}/en/... or ${SITE}/fa/... with a trailing slash; query parameters are never canonical.
+- Sources of record for machine use: ${SITE}/llms.txt (this file) and ${SITE}/llms-full.txt.
+- Corrections and questions: ${BRAND.contact.email}`;
 
-const quick = `# Omid - Frontend Developer
+const quick = `# ${BRAND.person} - Frontend Developer
 
 > Professional frontend developer specializing in React.js, JavaScript, modern web development, accessible interfaces, and bilingual technical writing. Based in Tehran, Iran.
 
@@ -73,12 +72,12 @@ Last updated: ${today}
 
 ## Key Pages
 ${routeList}
-- [RSS feed](${site}/feed.xml) · [JSON Feed](${site}/feed.json) · [Persian RSS](${site}/fa/feed.xml)
-- [Sitemap](${site}/sitemap.xml) · [Topics index](${site}/en/tags/)
+- [RSS feed](${SITE}/feed.xml) · [JSON Feed](${SITE}/feed.json) · [Persian RSS](${SITE}/fa/feed.xml)
+- [Sitemap](${SITE}/sitemap.xml) · [Topics index](${SITE}/en/tags/)
 
 The site is served in two locales: English under /en/ and Persian (RTL) under /fa/. Routes are cross-linked with hreflang alternates and listed in the sitemap.
 
-## What Omid does
+## What ${BRAND.person} does
 - Frontend development with React.js, TypeScript, JavaScript, HTML, CSS, and modern component architecture.
 - Responsive, accessible, performance-minded interfaces, including Next.js static sites and WordPress themes/plugins.
 - Technical writing, content strategy, SEO/GEO, and English ↔ Persian translation.
@@ -88,14 +87,14 @@ The site is served in two locales: English under /en/ and Persian (RTL) under /f
 ${lab}
 
 ## Current Writing
-The site has ${posts.length} published articles. The complete current index is in [llms-full.txt](${site}/llms-full.txt).
+The site has ${posts.length} published articles. The complete current index is in [llms-full.txt](${SITE}/llms-full.txt).
 ${postList}
 
 ## Contact
-- Email: ghadamgahi.omid@gmail.com
-- GitHub: https://github.com/omidzzz
-- Telegram: @simplyeffedup
-- Phone: +989367471992
+- Email: ${BRAND.contact.email}
+- GitHub: ${BRAND.contact.github}
+- Telegram: ${telegramHandle()}
+- Phone: ${BRAND.contact.phone}
 
 ${citing}
 
@@ -103,13 +102,13 @@ ${citing}
 Last updated: ${today}
 `;
 
-const full = `# Omid - Frontend Developer (Full Profile)
+const full = `# ${BRAND.person} - Frontend Developer (Full Profile)
 
-> Complete AI-readable profile for Sinisteroid. This file is generated from the published post data and is the preferred source for current blog titles, URLs, tags, and summaries.
+> Complete AI-readable profile for ${BRAND.site}. This file is generated from the published post data and is the preferred source for current blog titles, URLs, tags, and summaries.
 
 ## Identity
-- **Name:** Omid
-- **Online handle:** Sinisteroid
+- **Name:** ${BRAND.person}
+- **Online handle:** ${BRAND.site}
 - **Role:** Frontend Developer and Technical Writer
 - **Location:** Tehran, Iran; originally from Ahvaz
 - **Experience:** Translation and development since 2012
@@ -127,7 +126,7 @@ ${routeList}
 ${lab}
 
 ## Portfolio and Work
-- Sinisteroid — bilingual React/Next.js portfolio with a static export, dynamic post renderer, RSS/JSON feeds, AI-readable indexes, and a graphics lab.
+- ${BRAND.site} — bilingual React/Next.js portfolio with a static export, dynamic post renderer, RSS/JSON feeds, AI-readable indexes, and a graphics lab.
 - Moblshuyi — WordPress website design and content strategy for upholstery cleaning services.
 - CarpetDey — carpet-cleaning website design and SEO content.
 - Tamir Center — appliance-repair website design and local SEO content.
@@ -146,14 +145,14 @@ All ${posts.length} current posts are listed below. Dates use the most recent pu
 ${postList}
 
 ## Contact and Links
-- Website: ${site}
-- Email: ghadamgahi.omid@gmail.com
-- GitHub: https://github.com/omidzzz
-- Telegram: https://t.me/simplyeffedup
-- Phone: +989367471992
-- RSS: ${site}/feed.xml
-- JSON Feed: ${site}/feed.json
-- Sitemap: ${site}/sitemap.xml
+- Website: ${SITE}
+- Email: ${BRAND.contact.email}
+- GitHub: ${BRAND.contact.github}
+- Telegram: ${BRAND.contact.telegram}
+- Phone: ${BRAND.contact.phone}
+- RSS: ${SITE}/feed.xml
+- JSON Feed: ${SITE}/feed.json
+- Sitemap: ${SITE}/sitemap.xml
 
 ${citing}
 

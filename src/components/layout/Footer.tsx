@@ -4,6 +4,7 @@ import { ArrowIcon } from "../ui/icons";
 import AskSinisterButton from "../blog/AskSinisterButton";
 import { getDict, loc, type Locale } from "@/lib/i18n";
 import { NAV_PATHS } from "@/lib/nav";
+import { BRAND } from "@/lib/brand";
 
 /**
  * FOOTER — COLOPHON (Code & Craft) · END OF TRANSMISSION
@@ -34,16 +35,16 @@ export default function Footer({ locale }: { locale: Locale }) {
     external?: boolean;
     ltr?: boolean;
   }> = [
-    { label: fa ? "رایانامه" : "Email", href: "mailto:ghadamgahi.omid@gmail.com" },
-    { label: fa ? "گیت‌هاب" : "GitHub", href: "https://github.com/omidzzz", external: true },
-    { label: fa ? "تلگرام" : "Telegram", href: "https://t.me/simplyeffedup", external: true },
-    { label: fa ? "تلفن" : "Telephone", href: "tel:+989367471992", ltr: true },
+    { label: fa ? "رایانامه" : "Email", href: `mailto:${BRAND.contact.email}` },
+    { label: fa ? "گیت‌هاب" : "GitHub", href: BRAND.contact.github, external: true },
+    { label: fa ? "تلگرام" : "Telegram", href: BRAND.contact.telegram, external: true },
+    { label: fa ? "تلفن" : "Telephone", href: `tel:${BRAND.contact.phone}`, ltr: true },
   ];
 
   const tech = [
     "SET IN SPACE GROTESK · INTER · JETBRAINS MONO · CAIRO",
     "NEXT.JS × REACT",
-    `${t.city} · ${year} · SINISTEROID.IR`,
+    `${t.city} · ${year} · ${BRAND.host.toUpperCase()}`,
   ];
 
   return (
@@ -150,7 +151,7 @@ export default function Footer({ locale }: { locale: Locale }) {
               </li>
               <li>
                 <a
-                  href="https://donatr.ee/sinisteroid/"
+                  href={BRAND.contact.donate}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="craft-footer-link"

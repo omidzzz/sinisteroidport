@@ -8,11 +8,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, "..", "..");
-const SITE = "https://sinisteroid.ir";
+import { BRAND, root, SITE } from "../lib/brand.mjs";
 
 const esc = (s) =>
   String(s ?? "")
@@ -59,8 +55,8 @@ function item(post, locale) {
 function feed(locale, selfPath) {
   const isFa = locale === "fa";
   const title = isFa
-    ? "امید – نوشته‌ها"
-    : "Omid – Writing";
+    ? `${BRAND.personFa} – نوشته‌ها`
+    : `${BRAND.person} – Writing`;
   const desc = isFa
     ? "توسعه فرانت‌اند، طراحی، ابزارهای هوش مصنوعی محلی و آینده جست‌وجو."
     : "Frontend development, design, local AI tooling, and the shifting landscape of search.";
@@ -106,19 +102,19 @@ function jsonFeed(locale, selfPath) {
       ...(p.featuredImage?.src
         ? { image: p.featuredImage.src.startsWith("/") ? `${SITE}${p.featuredImage.src}` : p.featuredImage.src }
         : {}),
-      authors: [{ name: "Omid", url: SITE }],
+      authors: [{ name: BRAND.person, url: SITE }],
     };
   });
   return {
     version: "https://jsonfeed.org/version/1.1",
-    title: isFa ? "امید – نوشته‌ها" : "Omid – Writing",
+    title: isFa ? `${BRAND.personFa} – نوشته‌ها` : `${BRAND.person} – Writing`,
     home_page_url: `${SITE}/${locale}/blog/`,
     feed_url: `${SITE}${selfPath}`,
     description: isFa
       ? "توسعه فرانت‌اند، طراحی، ابزارهای هوش مصنوعی محلی و آینده جست‌وجو."
       : "Frontend development, design, local AI tooling, and the shifting landscape of search.",
     language: isFa ? "fa-ir" : "en-us",
-    authors: [{ name: "Omid", url: SITE }],
+    authors: [{ name: BRAND.person, url: SITE }],
     items,
   };
 }

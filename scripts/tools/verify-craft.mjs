@@ -13,11 +13,36 @@
  *   node scripts/tools/verify-craft.mjs
  */
 import fs from "node:fs";
+import { BRAND } from "../lib/brand.mjs";
+
+/* The two theme GROUNDS are read from the brand source rather than typed here,
+   so a re-brand moves this guard with it instead of silently pinning the old
+   pair. */
+const GROUND_DARK = BRAND.themeColors.dark;
+const GROUND_LIGHT = BRAND.themeColors.light;
+
+/* The three signature INKS live in brand.json AND are repeated in two CSS
+   files with no other link between them: the token sheet
+   (src/styles/craft/tokens.css) and the @property initial-values
+   (src/styles/fx-modern.css), which exist so a token has a real colour
+   before its rule applies. Nothing forces those two files to agree, and a
+   re-tune that updates one but not the other is silent — #696773 already
+   sits at 2.69:1 on the charcoal ground, so a drifted ink breaks contrast
+   rather than looking obviously wrong. Cross-checked below, per ink. */
+const INKS = BRAND.inks;
 
 let passed = 0;
 const failures = [];
 
+/* Every check name is recorded so duplicates can be reported at the end. Two
+   assertions sharing a label is a silent hazard in a suite this size: the
+   output shows one green line where two checks ran, and a reader (or a
+   reviewer skimming CI) cannot tell which assertion they are looking at. It
+   also means a `grep FAIL` triage can miss one of the pair. */
+const labelCounts = new Map();
+
 function check(name, condition, detail) {
+  labelCounts.set(name, (labelCounts.get(name) ?? 0) + 1);
   if (condition) {
     passed += 1;
     console.log(`  ok   ${name}`);
@@ -43,8 +68,41 @@ const css = fs.existsSync(cssDir)
 
 console.log("\n=== TOKENS ===");
 check("stylesheet shipped", css.length > 0, missing(cssDir));
-for (const hex of ["#272727", "#eff1f3", "#fed766", "#009fb7", "#696773"]) {
+// Every palette value, straight from the brand — the shipped CSS must carry
+// all five, so a re-brand that updates brand.json but not the token sheet
+// fails here instead of shipping the old colours.
+for (const hex of [
+  GROUND_DARK,
+  GROUND_LIGHT,
+  INKS.signature,
+  INKS.secondary,
+  INKS.structure,
+]) {
   check(`ink ${hex} present`, css.toLowerCase().includes(hex));
+}
+
+/* Ink agreement across the three places each one is written down: brand.json,
+   the token sheet, and the @property initial-value in fx-modern.css (a
+   registered custom property needs a literal `initial-value`, so it cannot
+   reference a var — it is a hand-copied duplicate). A re-tune that updates
+   one or two of the three leaves the rest stale, and because #696773 already
+   measures 2.69:1 on the charcoal ground, a drifted ink fails contrast
+   rather than looking obviously wrong. */
+const tokenCss = read("src/styles/craft/tokens.css") ?? "";
+const fxCss = read("src/styles/fx-modern.css") ?? "";
+check("token sheet readable", tokenCss.length > 0, "missing src/styles/craft/tokens.css");
+check("fx-modern readable", fxCss.length > 0, "missing src/styles/fx-modern.css");
+for (const [role, hex] of Object.entries(INKS)) {
+  check(
+    `ink ${role} ${hex} agrees between brand.json and tokens.css`,
+    tokenCss.toLowerCase().includes(hex.toLowerCase()),
+    "brand and token sheet disagree — re-tune one place only"
+  );
+  check(
+    `ink ${role} ${hex} agrees between brand.json and @property initial-values`,
+    fxCss.toLowerCase().includes(hex.toLowerCase()),
+    "brand and @property initial-value disagree — a token would start at the wrong colour"
+  );
 }
 check("dark is the base (color-scheme:dark)", /color-scheme:\s*dark/i.test(css));
 check(
@@ -214,10 +272,13 @@ if (home) {
     "viewport does not block pinch-zoom (WCAG 1.4.4)",
     !/maximum-scale|user-scalable/i.test(home)
   );
-  check("theme-color meta shipped", /<meta name="theme-color"/.test(home));
   check(
-    "first paint re-points theme-color for the saved edition",
-    /#eff1f3/.test(home)
+    `theme-color meta painted from the brand (${GROUND_DARK})`,
+    new RegExp(`<meta name="theme-color" content="${GROUND_DARK}"`).test(home)
+  );
+  check(
+    `first paint re-points theme-color for the saved edition (${GROUND_LIGHT})`,
+    home.includes(`"${GROUND_LIGHT}"`)
   );
   check(
     "safe-area tokens defined",
@@ -634,9 +695,59 @@ console.log("\n=== MANIFEST ===");
 const manifest = read("out/manifest.json");
 check("manifest written", manifest !== null, missing("out/manifest.json"));
 if (manifest) {
-  check("manifest theme is charcoal", manifest.includes("#272727"));
+  check(
+    "manifest theme is the brand dark ground",
+    manifest.includes(BRAND.themeColors.dark),
+    missing(`brand ground ${BRAND.themeColors.dark}`)
+  );
   check("no paper theme left", !manifest.includes("#f3efe7"));
 }
+
+/* ── BRAND ───────────────────────────────────────────────────────────── */
+
+console.log("\n=== BRAND ===");
+/* Option A: Omid is the person, Sinisteroid the website/handle, SINISTER[OID]
+   the logotype. The lockup is a VISUAL register, so its contract is the
+   rendered markup — LogoType splits the wordmark into spans, and the brackets
+   are part of the brand, not decoration. A regression here is invisible in a
+   screenshot review ("still looks like a logo") but ships the wrong name. */
+const lockupPrefix = `<span class="logo-sinister">${BRAND.logoPrefix}</span>`;
+check(
+  `footer renders the canonical lockup ${BRAND.logoFull}`,
+  home.includes(lockupPrefix) &&
+    home.includes('<span class="logo-glyph">[</span>') &&
+    home.includes(`<span class="logo-id">${BRAND.logoSuffix.slice(1)}</span>`),
+  "the logotype lost its brackets or its brand letters"
+);
+/* The hero must carry the SAME mark, or the first thing on the page and the
+   footer masthead are two different logos. It also keeps a visually-hidden
+   plain handle in the h1, which is what assistive tech and crawlers read —
+   assert both halves so neither can be dropped unnoticed. */
+check(
+  `hero renders the canonical lockup ${BRAND.logoFull}`,
+  /<h1 class="craft-hero-name"[^>]*>[\s\S]{0,400}logo-type--hero/.test(home) &&
+    home.includes(`>${BRAND.logoPrefix}</span><span class="logo-glyph">[</span>`),
+  "the hero wordmark is not the canonical lockup"
+);
+check(
+  "hero h1 keeps a plain, crawlable handle for AT and crawlers",
+  new RegExp(
+    `<h1 class="craft-hero-name"[^>]*>\\s*<span class="sr-only">${BRAND.site}</span>`
+  ).test(home),
+  "sr-only handle missing — the h1 would read as 'SINISTER bracket OID bracket'"
+);
+check(
+  "logotype is pinned LTR (reads unchanged inside the Persian layout)",
+  /<span dir="ltr" class="logo-type/.test(home)
+);
+check(
+  `console host is the brand's declared promptHost (${BRAND.promptHost})`,
+  home.includes(`>${BRAND.promptHost}<`)
+);
+check(
+  "og:site_name is the website, not the person",
+  home.includes(`<meta property="og:site_name" content="${BRAND.site}"`)
+);
 
 /* ── Census ─────────────────────────────────────────────────────────── */
 
@@ -649,6 +760,20 @@ for (const route of ["", "work", "skills", "education", "showcase", "lab", "blog
 /* ── Report ─────────────────────────────────────────────────────────── */
 
 const total = passed + failures.length;
+
+/* Label hygiene — reported last so it covers every assertion above. A repeat
+   is a defect in this file, not a failure of the site, but it makes the suite
+   lie about coverage, so it is treated as fatal. */
+const dupes = [...labelCounts.entries()]
+  .filter(([, n]) => n > 1)
+  .map(([name, n]) => `${name} (x${n})`);
+if (dupes.length) {
+  console.error(`\n✗ ${dupes.length} duplicate check label(s):`);
+  for (const d of dupes) console.error(`  - ${d}`);
+  console.error("  Each assertion needs a distinct name — see check() above.");
+  process.exit(1);
+}
+
 console.log(`\n${passed}/${total} craft assertions passed.`);
 if (failures.length > 0) {
   console.error(`\n${failures.length} FAILED:`);

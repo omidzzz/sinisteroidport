@@ -9,7 +9,12 @@
  * a hard visual bug on some engines: flipping `color-scheme` mid-view
  * transition can leave the whole page rendering white until a later repaint.
  * A small crossfade is not worth the risk of a broken first look.
+ *
+ * Theme grounds are owned by lib/brand.ts (BRAND.themeColors) so the flip
+ * can never point the system chrome at a colour the tokens no longer ship.
  */
+import { BRAND } from "./brand";
+
 export type Theme = "light" | "dark";
 
 export function currentTheme(): Theme {
@@ -27,7 +32,7 @@ export function setTheme(next: Theme): void {
   // export, hence the optional chain.
   document
     .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-    ?.setAttribute("content", next === "light" ? "#eff1f3" : "#272727");
+    ?.setAttribute("content", next === "light" ? BRAND.themeColors.light : BRAND.themeColors.dark);
   try {
     localStorage.setItem("theme", next);
   } catch {

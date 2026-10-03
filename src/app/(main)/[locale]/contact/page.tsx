@@ -6,7 +6,8 @@ import ContactUplink from "@/components/contact/ContactUplink";
 import AskSinisterButton from "@/components/blog/AskSinisterButton";
 import { getDict, isLocale, type Locale } from "@/lib/i18n";
 import { CHANNELS, LEDGER } from "@/lib/contact";
-import { seoAlternates } from "@/lib/seo";
+import { seoAlternates, SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { contactPageJsonLd, breadcrumbJsonLd } from "@/lib/schema";
 
@@ -18,8 +19,9 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: "Contact & Availability",
-    description:
-      "Reach Omid directly — email, GitHub, Telegram or phone. Available for remote frontend work worldwide, usually replying within 24 hours.",
+    // Prose about the PERSON, so the name comes from the brand (the layout
+    // then appends the same person as the title suffix — one name, not two).
+    description: `Reach ${BRAND.person} directly — email, GitHub, Telegram or phone. Available for remote frontend work worldwide, usually replying within 24 hours.`,
     ...(isLocale(locale)
       ? { alternates: seoAlternates("contact", locale) }
       : {}),
@@ -60,8 +62,8 @@ export default async function ContactPage({
         data={[
           contactPageJsonLd(locale),
           breadcrumbJsonLd([
-            { name: locale === "fa" ? "خانه" : "Home", url: `https://sinisteroid.ir/${locale}/` },
-            { name: locale === "fa" ? "تماس" : "Contact", url: `https://sinisteroid.ir/${locale}/contact/` },
+            { name: locale === "fa" ? "خانه" : "Home", url: `${SITE}/${locale}/` },
+            { name: locale === "fa" ? "تماس" : "Contact", url: `${SITE}/${locale}/contact/` },
           ]),
         ]}
       />
